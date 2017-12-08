@@ -8,7 +8,7 @@
 import { createMapFromObject } from './utils.js';
 
 export default (sharedZones, previous, { __STATUSES }) => {
-	if (sharedZones === null) {
+	if (sharedZones === null || Object.keys(sharedZones).length === 0) {
 		__STATUSES.shared_zones.ready = false;
 		return null;
 	}

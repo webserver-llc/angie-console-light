@@ -52,7 +52,7 @@ export const zones = (zones, previous, { __STATUSES }) => {
 };
 
 export const upstreams = (upstreams, previousState, { slabs, __STATUSES }) => {
-	if (upstreams === null) {
+	if (upstreams === null || Object.keys(upstreams).length === 0) {
 		__STATUSES.tcp_upstreams.ready = false;
 		return null;
 	}
