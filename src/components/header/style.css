@@ -1,0 +1,115 @@
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 10;
+	width: 100%;
+	background: #f2f2f2;
+	padding: 0 0 0 26px;
+	height: 70px;
+	box-sizing: border-box;
+	min-width: 1250px;
+}
+
+.logo {
+	composes: logo from '../../style.css';
+	width: 220px;
+	height: 39px;
+	float: left;
+	background-size: 220px 39px;
+	padding: 18px 18px 13px 15px;
+	background-origin: content-box;
+}
+
+.logoactive {
+	composes: logo;
+	background-color: #fff;
+}
+
+.nav {
+	float: right;
+	margin-left: -100%;
+	vertical-align: top;
+}
+
+.navlink {
+	display: inline-block;
+	vertical-align: top;
+	text-decoration: none;
+	color: #333;
+	padding: 21px 20px 22px;
+	border-left: 2px solid #fff;
+	line-height: 26px;
+}
+
+.navlink:hover {
+	background-color: #fafafa;
+}
+
+.navlinkactive {
+	composes: navlink;
+}
+
+.navlinkactive,
+.navlinkactive:hover {
+	background: #fff;
+}
+
+.anchor {
+	border-bottom: 1px dashed #333;
+}
+
+.navlinkactive .anchor {
+	border-bottom: 0;
+}
+
+.status {
+	vertical-align: middle;
+	margin-right: 10px;
+	margin-left: -10px;
+	width: 26px;
+	height: 26px;
+}
+
+.settings {
+	composes: navlink;
+	padding: 0 10px 0 0;
+	width: 60px;
+	height: 70px;
+	line-height: 80px;
+	text-align: center;
+	cursor: pointer;
+	opacity: .8;
+}
+
+.amplify {
+	composes: navlink;
+	background-image: svg-load('amplify.svg');
+	background-size: 25px;
+	background-position: center;
+	background-repeat: no-repeat;
+	height: 26px;
+	width: 30px;
+}
+
+.settings:hover {
+	opacity: 1;
+}
+
+@media screen and (max-width: 1375px) {
+	.navlink {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	.status {
+		margin-left: auto;
+	}
+
+	.logo {
+		width: 190px;
+		height: 34px;
+		background-size: 190px 34px;
+		padding-bottom: 18px;
+	}
+}

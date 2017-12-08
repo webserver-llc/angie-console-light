@@ -1,0 +1,17 @@
+.gaugeindicator {
+	position: relative;
+	width: 74px;
+}
+
+.value {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	text-align: center;
+	right: 0;
+	cursor: default;
+}
+
+.canvas {
+	display: block;
+}

@@ -1,0 +1,44 @@
+.number-control {
+	display: inline-block;
+	font-size: 19px;
+	margin: 0 5px;
+	user-select: none;
+	line-height: 25px;
+}
+
+.btn {
+	display: inline-block;
+	padding: 4px 14px;
+	border: 1px solid #d9d9d9;
+	cursor: pointer;
+	color: #999;
+	width: 38px;
+	font-weight: 300;
+	box-sizing: border-box;
+}
+
+.btn::hover {
+	background-color: #ddd;
+}
+
+.btn::active {
+	background-color: #e6e6e6;
+}
+
+.inc {
+	composes: btn;
+	border-radius: 0 4px 4px 0;
+}
+
+.dec {
+	composes: btn;
+	border-radius: 4px 0 0 4px;
+}
+
+.value {
+	display: inline-block;
+	padding: 4px 14px;
+	border: 1px solid #d9d9d9;
+	border-left: 0;
+	border-right: 0;
+}

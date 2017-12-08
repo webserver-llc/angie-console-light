@@ -1,0 +1,47 @@
+.table {
+	table-layout: fixed;
+}
+
+.tabs {
+	margin-bottom: 30px;
+}
+
+.tab {
+	width: 115px;
+	display: inline-block;
+}
+
+.tab span {
+	border-bottom: 1px dashed #000000;
+	cursor: pointer;
+}
+
+.tab-active {
+	composes: tab;
+}
+
+.tab-active span {
+	font-weight: bold;
+	border-bottom: 0;
+}
+
+.counter {
+	float: right;
+	color: #929292;
+	letter-spacing: -1px;
+	font-size: 15px;
+}
+
+.table {
+	width: 100%;
+}
+
+.table td {
+	font-size: 36px;
+}
+
+.h3 {
+	font-weight: bold;
+	margin: 0 0 30px;
+	font-size: 16px;
+}

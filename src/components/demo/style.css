@@ -1,0 +1,21 @@
+.disclaimer {
+	position: relative;
+	overflow: hidden;
+}
+
+.disclaimer-close {
+	position: absolute;
+	top: 30px;
+	left: 4%;
+	margin-left: -30px;
+	padding: 4px 6px;
+	cursor: pointer;
+	font-size: 14px;
+	line-height: 14px;
+	color: #999;
+}
+
+.disclaimer-content {
+	margin: 30px 4% 10px;
+	line-height: 1.5;
+}

@@ -1,0 +1,8 @@
+.row {
+	display: flex;
+	margin: 0 -20px;
+}
+
+.connections {
+	min-width: calc(60% - 20px);
+}

@@ -1,0 +1,30 @@
+{
+	"presets": [
+		"babel-preset-react",
+		["env", {
+			"targets": {
+				"browsers": ["last 5 versions", "not ie < 11"]
+			},
+			"useBuiltIns": "usage"
+		}]
+	],
+
+	"plugins": [
+		"transform-runtime",
+		["react-css-modules", {
+			"generateScopedName": "[local]___[hash:base64:5]"
+		}]
+	],
+
+	"env": {
+		"development": {
+			"plugins": [
+				"istanbul",
+				"transform-runtime",
+				["react-css-modules", {
+					"generateScopedName": "[local]___[hash:base64:5]"
+				}]
+			]
+		}
+	}
+}

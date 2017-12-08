@@ -1,0 +1,40 @@
+.alerts {
+	font-size: 32px;
+	padding-top: 30px;
+	margin-bottom: 15px;
+}
+
+.num {
+	padding: 0 10px 0 0;
+	border-radius: 4px;
+	position: relative;
+	margin-right: 20px;
+	text-decoration: none;
+}
+
+.ok, .alert, .warning {
+	composes: num;
+	color: #ffffff;
+	margin-left: 20px;
+	padding-left: 10px;
+}
+
+.ok {
+	background-color: #6bc544;
+}
+
+.alert {
+	background-color: #ed1c24;
+}
+
+.warning {
+	background-color: #ffab08;
+}
+
+.label {
+	position: absolute;
+	top: -30px;
+	left: 0;
+	font-size: 16px;
+	color: #000;
+}

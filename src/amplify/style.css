@@ -1,0 +1,14 @@
+.iframe {
+	width: 600px;
+	height: 500px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -250px 0 0 -300px;
+	z-index: 10;
+	border: none;
+}
+
+.fader {
+	composes: fader from '../components/popup/style.css';
+}

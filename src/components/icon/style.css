@@ -1,0 +1,46 @@
+.icon {
+	display: inline-block;
+	font-size: 0;
+	background-size: 100%;
+}
+
+.sun {
+	composes: icon;
+	background-image: svg-load('sun.svg');
+	width: 21px;
+	height: 21px;
+}
+
+.snowflake {
+	composes: icon;
+	background-image: svg-load('snowflake.svg');
+	width: 21px;
+	height: 21px;
+}
+
+.ok {
+	composes: icon;
+	background-image: svg-load('ok.svg');
+}
+
+.warning {
+	composes: icon;
+	background-image: svg-load('warning.svg');
+}
+
+.danger {
+	composes: icon;
+	background-image: svg-load('danger.svg');
+}
+
+.gear {
+	composes: icon;
+	background-image: svg-load('gear.svg');
+	width: 24px;
+	height: 24px;
+}
+
+.pencil {
+	composes: icon;
+	background-image: svg-load('pencil.svg');
+}

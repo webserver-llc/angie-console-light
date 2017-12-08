@@ -1,0 +1,50 @@
+.row {
+	white-space: nowrap;
+	margin-bottom: 5px;
+}
+
+.h5 {
+	font-size: 18px;
+	margin: 0 0 5px;
+}
+
+.status {
+	padding: 0 7px;
+	border-radius: 4px
+}
+
+.status_up {
+	background-color: #8dc63f;
+	composes: status;
+}
+
+.status_unavail, .status_unhealthy {
+	background-color: #f26c4f;
+	composes: status;
+}
+
+.status_draining {
+	background-color: #55b2da;
+	composes: status;
+}
+
+.status_down {
+	color: #000000;
+	background-color: #dcdcdc;
+	composes: status;
+}
+
+.status_ok {
+	background-color: #6bc544;
+	composes: status;
+}
+
+.status_alert {
+	background-color: #ed1c24;
+	composes: status;
+}
+
+.status_warning {
+	background-color: #ffab08;
+	composes: status;
+}
