@@ -9,7 +9,6 @@ import { getSetting } from '../appsettings';
 import { STORE as _STORE, handleDataUpdate, get as getFromStore } from './store';
 
 const OBSERVED = new Map();
-OBSERVED.globalCallbacks = [];
 
 let live = true;
 
@@ -70,7 +69,6 @@ export const startObserve = function loop(force = false) {
 				}
 			});
 
-			OBSERVED.globalCallbacks.forEach(fn => fn());
 		}).catch((err) => {
 			throw err;
 		});
@@ -81,14 +79,8 @@ export const startObserve = function loop(force = false) {
 
 let immediate = null;
 
-export const subscribe = (...args) => {
-	if (args.length === 1 && typeof args[0] === 'function') {
-		OBSERVED.globalCallbacks.push(args[0]);
-		return;
-	}
-
+export const subscribe = (apis, callback) => {
 	// TODO: Throttled callback
-	const [apis, callback] = args;
 
 	apis.forEach(api => {
 		const instance = OBSERVED.get(api.toString());
@@ -109,7 +101,7 @@ export const subscribe = (...args) => {
 	});
 
 	clearImmediate(immediate);
-	immediate = setImmediate(() => {  startObserve(); } );
+	immediate = setImmediate(() => startObserve());
 };
 
 export const get = getFromStore;

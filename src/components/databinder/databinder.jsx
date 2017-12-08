@@ -9,7 +9,7 @@ import React from 'react';
 import { subscribe, unsubscribe, get } from '../../datastore';
 import { STORE } from '../../datastore/store.js';
 
-export default (ComponentToWrap, apis = [], params = {}) => class extends React.Component {
+export default (ComponentToWrap, apis = [], params = { ignoreEmpty: false }) => class extends React.Component {
 	constructor() {
 		super();
 		this.forceUpdate = this.forceUpdate.bind(this);
@@ -29,7 +29,7 @@ export default (ComponentToWrap, apis = [], params = {}) => class extends React.
 	render() {
 		let data = null;
 
-		if (apis.length) {
+		if (params.ignoreEmpty === false && apis.length) {
 			data = get(apis);
 			// TODO: Rethink
 			if (Object.values(data).every(d => d === null)) {

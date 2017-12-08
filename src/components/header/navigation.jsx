@@ -132,4 +132,6 @@ export default DataBinder(Navigation, [
 	api.stream.upstreams.process(calculateStreamUpstreams),
 	api.http.caches.process(calculateCaches),
 	api.slabs.process(calculateSharedZones)
-]);
+], {
+	ignoreEmpty: true
+});
