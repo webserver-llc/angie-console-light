@@ -34,22 +34,13 @@ export const checkApiWritePermissions = () => Promise.all([
 	streamUpstreamsApi.checkWritePermission()
 ]);
 
-export const checkApiAvailability = () =>
-	api.nginx.get().catch((err) => {
-		// if (err.status === 401) {
-		// 	// return new Promise((resolve) => {
-		// 		const el = document.createElement('iframe');
-		// 		el.style.visibility = 'hidden';
-		// 		el.src = api.nginx.getUrl();
-		// 		document.body.appendChild(el);
-		//
-		// 		el.onload = () => {
-		// 			document.body.removeChild(el);
-		//
-		// 			checkApiAvailability().then(resolve);
-		// 		};
-		// 	});
-		// }
+export const checkApiAvailability = () => {
+	const nginxApi = api.nginx;
+
+	return nginxApi.get().catch((err) => {
+		if (err.status === 401) {
+			throw { type: 'basic_auth' };
+		}
 
 		return window.fetch('/status').then((res) => {
 			if (res.status === 200) {
@@ -57,9 +48,9 @@ export const checkApiAvailability = () =>
 			}
 
 			throw { type: 'api_not_found' };
-		})
+		});
 	});
-
+};
 
 export const initialLoad = () => {
 	const apis = [

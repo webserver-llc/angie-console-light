@@ -34,7 +34,8 @@ export default class ApiProxy {
 
 	doRequest(method, data) {
 		const params = {
-			method
+			method,
+			credentials: 'same-origin'
 		};
 
 		if (data) {

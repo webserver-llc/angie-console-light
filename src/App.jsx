@@ -68,15 +68,19 @@ export default class App extends React.Component {
 		let content;
 
 		if (error) {
+			let subContent = null;
+
+			if (error === 'basic_auth') {
+				subContent = <p>BASIC AUTH</p>;
+			} else if (error === 'old_status_found') {
+				subContent = <p>No data received from /api location, but found deprecated /status location. Сheck NGINX configuration.</p>;
+			} else if (error === 'api_not_found') {
+				subContent = <p>No data received from /api location, check NGINX configuration.</p>;
+			}
+
 			content = (
 				<div styleName="error-block">
-					{
-						error === 'old_status_found' ?
-							<p>No data received from /api location, but found deprecated /status location. Сheck NGINX configuration.</p>
-							:
-							<p>No data received from /api location, check NGINX configuration.</p>
-					}
-
+					{ subContent }
 					<p>For&nbsp;more information please refer to&nbsp;the&nbsp;following <a href="https://www.nginx.com/resources/admin-guide/monitoring/">documentation.</a></p>
 				</div>
 			);
