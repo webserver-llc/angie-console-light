@@ -12,7 +12,6 @@ import UpstreamsContainer from '../../upstreams/upstreamscontainer.jsx';
 import Upstream from './upstream.jsx';
 import DataBinder from '../../databinder/databinder.jsx';
 
-
 export class Upstreams extends React.Component {
 	render() {
 		const { data: { upstreams } } = this.props;
@@ -22,7 +21,6 @@ export class Upstreams extends React.Component {
 				title="Upstreams"
 				component={Upstream}
 				upstreams={upstreams}
-				writePermission={httpUpstreamsApi.canWrite}
 				upstreamsApi={httpUpstreamsApi}
 				isStream={false}
 			/>

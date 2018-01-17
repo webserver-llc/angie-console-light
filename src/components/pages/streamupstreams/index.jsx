@@ -21,7 +21,6 @@ export class StreamUpstreams extends React.Component {
 				title="TCP/UDP Upstreams"
 				component={StreamUpstream}
 				upstreams={upstreams}
-				writePermission={streamUpstreamsApi.canWrite}
 				upstreamsApi={streamUpstreamsApi}
 				isStream={true}
 			/>

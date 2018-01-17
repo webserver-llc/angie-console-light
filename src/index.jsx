@@ -7,12 +7,13 @@
 
 import 'whatwg-fetch';
 import React from 'react';
-import App from './app.jsx';
+import App from './App.jsx';
 import { startObserve } from './datastore';
 import { init as initSettings } from './appsettings';
-import { checkApiAvailability, initialLoad, checkApiWritePermissions } from './api';
+import { checkApiAvailability, initialLoad, checkWritePermissions } from './api';
 import { initAmplify } from './amplify';
 import { initTooltips } from './tooltips/index.jsx';
+
 
 const start = () => {
 	initSettings();
@@ -30,7 +31,7 @@ const start = () => {
 	document.body.appendChild(fragment);
 
 	checkApiAvailability().then(() => {
-		checkApiWritePermissions();
+		checkWritePermissions();
 		return initialLoad();
 	}).then(() => {
 		React.render(<App />, document.body, el);

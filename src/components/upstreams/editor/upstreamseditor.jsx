@@ -37,7 +37,7 @@ export default class UpstreamsEditor extends React.Component {
 	}
 
 	static normalizeOutputData(data) {
-		data = Object.assign({}, data);
+		data = { ...data };
 
 		Object.keys(data).forEach((key) => {
 			if (key === 'fail_timeout' || key === 'slow_start') {
@@ -193,7 +193,7 @@ export default class UpstreamsEditor extends React.Component {
 			this.setState({
 				success: true,
 				successMessage: `Servers ${servers.join(', ')} successfully removed`
-			})
+			});
 		});
 	}
 

@@ -5,7 +5,6 @@
  *
  */
 
-/* eslint no-underscore-dangle: "off" */
 export default class ApiProxy {
 	constructor(apiPrefix, pathStart) {
 		this.apiPrefix = apiPrefix;
@@ -32,10 +31,11 @@ export default class ApiProxy {
 		return `${this.apiPrefix}/${this.toString()}/`;
 	}
 
-	doRequest(method, data) {
+	doRequest(method, data, fetchParams = {}) {
 		const params = {
 			method,
-			credentials: 'same-origin'
+			credentials: 'same-origin',
+			...fetchParams
 		};
 
 		if (data) {
@@ -52,20 +52,20 @@ export default class ApiProxy {
 			);
 	}
 
-	get() {
-		return this.doRequest('get');
+	get(fetchParams) {
+		return this.doRequest('GET', null, fetchParams);
 	}
 
-	post(data) {
-		return this.doRequest('post', data);
+	post(data, fetchParams) {
+		return this.doRequest('POST', data, fetchParams);
 	}
 
-	patch(data) {
-		return this.doRequest('PATCH', data);
+	patch(data, fetchParams) {
+		return this.doRequest('PATCH', data, fetchParams);
 	}
 
-	del() {
-		return this.doRequest('delete');
+	del(fetchParams) {
+		return this.doRequest('DELETE', null, fetchParams);
 	}
 
 	process(fn) {

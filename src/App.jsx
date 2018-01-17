@@ -71,11 +71,11 @@ export default class App extends React.Component {
 			let subContent = null;
 
 			if (error === 'basic_auth') {
-				subContent = <p>BASIC AUTH</p>;
+				subContent = <p>Access to /api/ location is forbidden. Check NGINX configuration.</p>;
 			} else if (error === 'old_status_found') {
-				subContent = <p>No data received from /api location, but found deprecated /status location. Сheck NGINX configuration.</p>;
+				subContent = <p>No data received from /api/ location, but found deprecated /status/ location. Сheck NGINX configuration.</p>;
 			} else if (error === 'api_not_found') {
-				subContent = <p>No data received from /api location, check NGINX configuration.</p>;
+				subContent = <p>No data received from /api/ location. Check NGINX configuration.</p>;
 			}
 
 			content = (

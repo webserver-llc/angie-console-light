@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import { isWritable, checkWritePermissions } from '../../api';
 import SortableTable from '../table/sortabletable.jsx';
 import ProgressBar from '../progressbar/progressbar.jsx';
 import { getSetting, setSetting } from '../../appsettings';
@@ -26,12 +27,13 @@ export default class UpstreamsList extends SortableTable {
 	constructor(props) {
 		super(props);
 
-		Object.assign(this.state, {
+		this.state = {
+			...this.state,
 			editMode: false,
 			editor: false,
 			selectedPeers: new Map(),
 			filtering: getSetting(this.FILTERING_SETTINGS_KEY, 'all')
-		});
+		};
 
 		this.toggleEditMode = this.toggleEditMode.bind(this);
 		this.changeFilterRule = this.changeFilterRule.bind(this);
@@ -47,6 +49,18 @@ export default class UpstreamsList extends SortableTable {
 	toggleEditMode() {
 		if (/[^\x20-\x7F]/.test(this.props.upstream.name)) {
 			alert('Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names');
+			return;
+		}
+
+		if (isWritable() === null) {
+			checkWritePermissions(true).then((result) => {
+				if (result === true) {
+					this.toggleEditMode();
+				} else if (result === false) {
+					alert('Sorry, API is read-only, please make it writable.');
+				}
+			});
+
 			return;
 		}
 
@@ -211,8 +225,9 @@ export default class UpstreamsList extends SortableTable {
 			});
 		}
 
-		return (<div styleName="styles.upstreams-list" id={`upstream-${name}`}>
+		const writePermission = isWritable() === true || isWritable() === null;
 
+		return (<div styleName="styles.upstreams-list" id={`upstream-${name}`}>
 			{
 				this.state.editor ?
 					<UpstreamsEditor
@@ -238,12 +253,12 @@ export default class UpstreamsList extends SortableTable {
 			<div styleName="styles.head">
 				<h2 styleName="styles.title">{ name }</h2>
 
-				{ this.props.writePermission ?
+				{ writePermission ?
 					<span styleName={this.state.editMode ? 'styles.edit-active' : 'styles.edit'} onClick={this.toggleEditMode} /> : null
 				}
 
 				{
-					this.props.writePermission && this.state.editMode ?
+					writePermission && this.state.editMode ?
 						[
 							<span styleName="styles.btn" key="edit" onClick={() => this.editSelectedUpstream()}>Edit selected</span>,
 							<span styleName="styles.btn" key="add" onClick={this.addUpstream}>Add server</span>

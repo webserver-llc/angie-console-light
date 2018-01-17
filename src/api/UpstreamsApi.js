@@ -7,19 +7,9 @@
 
 import api from './index.js';
 
-
 export default class UpstreamsApi {
 	constructor(apiPrefix) {
 		this.apiPrefix = apiPrefix;
-		this.canWrite = null;
-	}
-
-	checkWritePermission() {
-		// Check api for writing
-
-		return api[this.apiPrefix].upstreams['DASHBOARD_INIT'].servers['__TEST_FOR_WRITE__'].del().then((data) => {
-			this.canWrite = data.error.status !== 405;
-		});
 	}
 
 	getPeer(upstreamName, peerId) {

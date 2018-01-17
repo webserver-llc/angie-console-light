@@ -1,6 +1,6 @@
 {
   "name": "nginx-plus-dashboard",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Nginx+ dashboard",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,7 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-istanbul": "^4.1.5",
     "babel-plugin-react-css-modules": "^3.3.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",

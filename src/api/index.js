@@ -16,7 +16,7 @@ import calculateCaches from '../calculators/caches.js';
 import calculateSharedZones from '../calculators/sharedzones.js';
 import calculateConnections from '../calculators/connections.js';
 import calculateRequests from '../calculators/requests.js';
-import {subscribe, unsubscribe} from '../datastore';
+import { subscribe, unsubscribe } from '../datastore';
 
 const api = new Proxy({}, {
 	get(target, pathStart) {
@@ -25,14 +25,29 @@ const api = new Proxy({}, {
 });
 
 export default api;
-
 export const httpUpstreamsApi = new UpstreamsApi('http');
 export const streamUpstreamsApi = new UpstreamsApi('stream');
 
-export const checkApiWritePermissions = () => Promise.all([
-	httpUpstreamsApi.checkWritePermission(),
-	streamUpstreamsApi.checkWritePermission()
-]);
+let apiWritePermissions = null;
+
+export const checkWritePermissions = (sendCredentials = false) => api.http.upstreams.DASHBOARD_INIT.servers.__TEST_FOR_WRITE__.del({
+	credentials: sendCredentials ? 'same-origin' : 'omit'
+}).then(
+	({ error }) => error.status,
+	({ status }) => status
+).then((status) => {
+	if (status === 405 || status === 403) {
+		apiWritePermissions = false;
+	} else if (status === 401) {
+		apiWritePermissions = null;
+	} else {
+		apiWritePermissions = true;
+	}
+
+	return apiWritePermissions;
+});
+
+export const isWritable = () => apiWritePermissions;
 
 export const checkApiAvailability = () => {
 	const nginxApi = api.nginx;

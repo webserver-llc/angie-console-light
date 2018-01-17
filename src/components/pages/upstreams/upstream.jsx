@@ -17,10 +17,11 @@ export default class Upstream extends UpstreamsList {
 	constructor(props) {
 		super(props);
 
-		Object.assign(this.state, {
+		this.state = {
+			...this.state,
 			hoveredColumns: false,
 			columnsExpanded: getSetting(`columns-expanded-http-upstreams-${props.name}`, false)
-		});
+		};
 
 		this.toggleColumns = this.toggleColumns.bind(this);
 		this.hoverColumns = this.hoverColumns.bind(this);
