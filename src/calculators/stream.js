@@ -112,7 +112,6 @@ export const upstreams = (upstreams, previousState, { slabs, __STATUSES }) => {
 			}
 
 			if (peer.health_status === false) {
-				__STATUSES.tcp_upstreams.health_check_problems = true; //???
 				newStatus = 'danger';
 			}
 		});

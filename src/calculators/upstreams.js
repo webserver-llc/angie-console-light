@@ -82,7 +82,6 @@ export default (upstreams, previousState, { __STATUSES, slabs }) => {
 			}
 
 			if (peer.health_status === false) {
-				__STATUSES.upstreams.health_check_problems = true;
 				newStatus = 'danger';
 			}
 		});

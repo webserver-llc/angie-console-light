@@ -6,20 +6,15 @@ export default {
 		ready: false
 	},
 	upstreams: {
-		health_check_problems: false,
 		'4xx': false,
 		status: 'ok',
 		ready: false
 	},
 	caches: {
-		size_warning: false,
-		size_alert: false,
-		hit_ratio_warning: false,
 		status: 'ok',
 		ready: false
 	},
 	tcp_upstreams: {
-		health_check_problems: false,
 		status: 'ok',
 		ready: false
 	},

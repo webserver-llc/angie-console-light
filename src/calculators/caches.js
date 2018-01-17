@@ -103,19 +103,16 @@ export default (caches, previous, STORE) => {
 		let warning = false;
 
 		if (cache.hit_percents_generic !== null && cache.hit_percents_generic < 30) {
-			__STATUSES.caches['hit_ratio_warning'] = true; //???
 			newStatus = 'warning';
 			warning = true;
 		}
 
 		if (cache.used > 105) {
 			STATS.alerts++;
-			__STATUSES.caches.size_alert = true; //???
 			cache.danger = true;
 			newStatus = 'danger';
 		} else if (cache.used > 100 && cache.used <= 105) {
 			newStatus = 'warning';
-			__STATUSES.caches.size_warning = true; //???
 			cache.warning = true;
 			warning = true;
 		}
