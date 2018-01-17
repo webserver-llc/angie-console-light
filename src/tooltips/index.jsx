@@ -9,12 +9,47 @@ import React from 'react';
 import Tooltip from '../components/tooltip/tooltip.jsx';
 import styles from '../components/tooltip/style.css';
 
-
-if (!Element.prototype.matches)
+if (!Element.prototype.matches) {
 	Element.prototype.matches = Element.prototype.msMatchesSelector;
+}
 
 let tooltipContainerEl = null;
 let currentTooltip = null;
+
+let tooltipRenderInterval = null;
+
+export const closeTooltip = () => {
+	if (currentTooltip) {
+		tooltipContainerEl.removeChild(currentTooltip);
+		currentTooltip = null;
+	}
+};
+
+export const renderTooltip = (el) => {
+	closeTooltip();
+
+	let { top, left, height, width } = el.getBoundingClientRect();
+
+	top = top + height;
+	top = top + window.scrollY;
+	left = left + window.scrollX;
+
+	let align;
+	let position;
+
+	if (el.tooltipStyle === 'hint') {
+		align = 'center';
+		position = 'top';
+	} else if (el.tooltipStyle === 'hint-right') {
+		position = 'right';
+	}
+
+	currentTooltip = React.render(
+		<Tooltip top={top} left={left} anchorWidth={width} anchorHeight={height} align={align} position={position}>
+			{ el.tooltipComponent }
+		</Tooltip>, tooltipContainerEl
+	);
+};
 
 export const initTooltips = () => {
 	tooltipContainerEl = document.createElement('div');
@@ -23,36 +58,28 @@ export const initTooltips = () => {
 	document.body.appendChild(tooltipContainerEl);
 
 	window.addEventListener('mouseover', (evt) => {
-		if (evt.relatedTarget !== null && evt.relatedTarget.tooltipComponent) {
-			closeTooltip();
-		}
+		const target = evt.target.closest('[data-tooltip]');
 
-		if (evt.target.tooltipComponent) {
-			renderTooltip(evt.target);
+		clearInterval(tooltipRenderInterval);
+
+		closeTooltip();
+
+		if (target) {
+			renderTooltip(target);
+			tooltipRenderInterval = setInterval(() => renderTooltip(target), 500);
 		}
 	});
 };
 
-export const closeTooltip = () => {
-	tooltipContainerEl.removeChild(currentTooltip);
-};
+export const useTooltip = (Component, style = '') => ({
+	'data-tooltip': true,
+	ref: (ref) => {
+		if (ref) {
+			ref.tooltipComponent = Component;
 
-export const renderTooltip = (el) => {
-	let { top, left, height } = el.getBoundingClientRect();
-
-	top = top + height;
-	top = top + window.scrollY;
-	left = left + window.scrollX;
-
-	currentTooltip = React.render(
-		<Tooltip top={top} left={left}>
-			{ el.tooltipComponent }
-		</Tooltip>, tooltipContainerEl, currentTooltip
-	);
-};
-
-export const useTooltip = Component => ({ ref: (ref) => {
-	if (ref) {
-		ref.tooltipComponent = Component;
+			if (style) {
+				ref.tooltipStyle = style;
+			}
+		}
 	}
-} });
+});

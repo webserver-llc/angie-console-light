@@ -63,7 +63,7 @@
 	font-weight: normal;
 	text-align: right;
 	border: none;
-	font-size: 12px;
+	font-size: 11px;
 }
 
 .bdr {
@@ -205,6 +205,11 @@ td.status {
 	white-space: nowrap;
 	max-width: 140px;
 	display: inline-block;
+	border-bottom: 1px dotted #999;
+	cursor: default;
+}
+
+.hinted {
 	border-bottom: 1px dotted #999;
 	cursor: default;
 }

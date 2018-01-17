@@ -77,7 +77,6 @@ export const upstreams = (upstreams, previousState, { slabs, __STATUSES }) => {
 
 	let newStatus = 'ok';
 
-
 	upstreams = createMapFromObject(upstreams, (upstream, name) => {
 		let previousUpstream;
 
@@ -88,7 +87,9 @@ export const upstreams = (upstreams, previousState, { slabs, __STATUSES }) => {
 		upstream.name = name;
 
 		if (slabs) {
-			upstream.zoneSize = slabs.get(upstream.zone).percentSize;
+			const zone = slabs.get(upstream.zone);
+			upstream.zoneSize = zone.percentSize;
+			upstream.slab = zone;
 		} else {
 			upstream.zoneSize = null;
 		}

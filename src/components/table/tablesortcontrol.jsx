@@ -7,6 +7,7 @@
 
 import React from 'react';
 import styles from './style.css';
+import { useTooltip } from '../../tooltips/index.jsx';
 
 export default class TableSortControl extends React.Component {
 	constructor() {
@@ -27,10 +28,13 @@ export default class TableSortControl extends React.Component {
 	}
 
 	render() {
-		return (<th rowSpan="2" styleName="sorter" onClick={this.toggle}>
-			{
-				this.props.order === 'asc' ? '▴' : '▾'
-			}
-		</th>);
+		return (<th rowSpan="2" styleName="sorter" onClick={this.toggle}
+		            {...useTooltip(this.props.order === 'asc' ? 'Sort by status - down first' : 'Sort by conf order', 'hint-right')}
+				>
+					{
+						this.props.order === 'asc' ? '▴' : '▾'
+					}
+				</th>
+		);
 	}
 }

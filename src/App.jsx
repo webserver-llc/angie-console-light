@@ -16,7 +16,7 @@ import ServerZones from './components/pages/serverzones.jsx';
 import Upstreams from './components/pages/upstreams/index.jsx';
 import StreamZones from './components/pages/streamzones.jsx';
 import StreamUpstreams from './components/pages/streamupstreams/index.jsx';
-import Caches from './components/pages/caches.jsx';
+import Caches from './components/pages/caches/index.jsx';
 import SharedZones from './components/pages/sharedzones.jsx';
 import UpdatingControl from './components/updating-controll/updating-control.jsx';
 

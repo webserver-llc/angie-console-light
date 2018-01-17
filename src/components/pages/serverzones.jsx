@@ -12,6 +12,7 @@ import calculateServerZones from '../../calculators/serverzones.js';
 import { formatReadableBytes } from '../../utils';
 import SortableTable from '../table/sortabletable.jsx';
 import TableSortControl from '../table/tablesortcontrol.jsx';
+import { useTooltip } from '../../tooltips/index.jsx';
 import styles from '../table/style.css';
 
 export class StreamZones extends SortableTable {
@@ -84,7 +85,12 @@ export class StreamZones extends SortableTable {
 								<td>{ zone.responses['2xx'] }</td>
 								<td>{ zone.responses['3xx'] }</td>
 								<td styleName={`flash ${zone['4xxChanged'] ? 'red-flash' : null}`}>
-									{ zone.responses['4xx'] + zone.discarded }
+									<span
+										styleName="hinted"
+										{ ... useTooltip(<div>4xx: { zone.responses['4xx'] } <br /> 499/444/408: { zone.discarded }</div>, 'hint') }
+									>
+										{ zone.responses['4xx'] + zone.discarded }
+									</span>
 								</td>
 								<td styleName={`flash ${zone.alert ? 'red-flash' : null}`}>{ zone.responses['5xx'] }</td>
 								<td styleName="bdr">{ zone.responses.total }</td>

@@ -1,18 +1,19 @@
 .tooltip-container {
 	position: absolute;
-	z-index: 9;
+	z-index: 100;
 	top: 0;
 	left: 0;
 }
 
 .tooltip {
-	padding: 15px 20px 5px;
+	padding: 15px 20px 15px;
 	border-radius: 4px;
 	background: #414c57;
 	font-size: 15px;
 	position: absolute;
 	color: #fff;
 	margin-top: 10px;
+	white-space: nowrap;
 }
 
 .tooltip:before {
@@ -77,6 +78,10 @@
 	white-space: nowrap;
 }
 
+.row:last-of-type {
+	margin-bottom: 0;
+}
+
 .red {
 	border-radius: 4px;
 	background: #e37358;
@@ -85,4 +90,8 @@
 
 .green {
 	background: #9ac355;
+}
+
+.icon {
+	vertical-align: top;
 }

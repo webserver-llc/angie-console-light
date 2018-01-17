@@ -37,7 +37,9 @@ export default (upstreams, previousState, { __STATUSES, slabs }) => {
 		STATS.servers.all += upstream.peers.length;
 
 		if (slabs) {
-			upstream.zoneSize = slabs.get(upstream.zone).percentSize;
+			const zone = slabs.get(upstream.zone);
+			upstream.zoneSize = zone.percentSize;
+			upstream.slab = zone;
 		} else {
 			upstream.zoneSize = null;
 		}

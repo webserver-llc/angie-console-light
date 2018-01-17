@@ -93,7 +93,9 @@ export default (caches, previous, STORE) => {
 		}
 
 		if (slabs) {
-			cache.zoneSize = slabs.get(cacheName).percentSize;
+			const zone = slabs.get(cacheName);
+			cache.slab = zone;
+			cache.zoneSize = zone.percentSize;
 		} else {
 			cache.zoneSize = 0;
 		}

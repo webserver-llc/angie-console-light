@@ -11,9 +11,12 @@ import SortableTable from '../table/sortabletable.jsx';
 import ProgressBar from '../progressbar/progressbar.jsx';
 import { getSetting, setSetting } from '../../appsettings';
 import UpstreamsEditor from './editor/upstreamseditor.jsx';
+import { SharedZoneTooltip } from '../pages/tooltips.jsx';
 
 import styles from './style.css';
 import tableStyles from '../table/style.css';
+
+import { useTooltip } from '../../tooltips/index.jsx';
 
 const FILTER_OPTIONS = {
 	all: 'Show all',
@@ -268,7 +271,11 @@ export default class UpstreamsList extends SortableTable {
 
 				{
 					upstream.zoneSize !== null ?
-						<span styleName="styles.zone-capacity">Zone: <ProgressBar percentage={upstream.zoneSize} /></span>
+						<span styleName="styles.zone-capacity">
+								Zone: <span {...useTooltip(<SharedZoneTooltip zone={upstream.slab} />, 'hint')}>
+									<ProgressBar percentage={upstream.zoneSize} />
+								</span>
+						</span>
 					: null
 				}
 			</div>

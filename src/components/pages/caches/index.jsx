@@ -6,17 +6,20 @@
  */
 
 import React from 'react';
-import api from '../../api';
-import DataBinder from '../databinder/databinder.jsx';
-import ProgressBar from '../progressbar/progressbar.jsx';
-import GaugeIndicator from '../gaugeindicator/gaugeindicator.jsx';
-import Icon from '../icon/icon.jsx';
+import api from '../../../api';
+import DataBinder from '../../databinder/databinder.jsx';
+import ProgressBar from '../../progressbar/progressbar.jsx';
+import GaugeIndicator from '../../gaugeindicator/gaugeindicator.jsx';
+import Icon from '../../icon/icon.jsx';
 
-import cacheCalculator from '../../calculators/caches.js';
-import sharedZonesCalculator from '../../calculators/sharedzones.js';
-import { formatReadableBytes as _formatReadableBytes } from '../../utils.js';
+import cacheCalculator from '../../../calculators/caches.js';
+import sharedZonesCalculator from '../../../calculators/sharedzones.js';
+import { formatReadableBytes as _formatReadableBytes } from '../../../utils.js';
+import { useTooltip } from '../../../tooltips/index.jsx';
 
-import styles from '../table/style.css';
+import { CacheStateTooltip, SharedZoneTooltip } from '../tooltips.jsx';
+
+import styles from '../../table/style.css';
 
 export const formatReadableBytes = (value, measurementUnit) => _formatReadableBytes(
 	value,
@@ -37,11 +40,21 @@ export class Caches extends React.Component {
 				<thead>
 					<tr>
 						<th>Zone</th>
-						<th>State</th>
-						<th>Memory usage</th>
+						<th><span styleName="hinted" {...useTooltip(<CacheStateTooltip />, 'hint')}>State</span></th>
+						<th>
+							<span
+								styleName="hinted"
+								{...useTooltip('Memory usage = Used memory pages / Total memory pages', 'hint')}
+							>Memory usage</span>
+						</th>
 						<th>Max size</th>
 						<th>Used</th>
-						<th>Disk usage</th>
+						<th>
+							<span
+								styleName="hinted"
+								{...useTooltip('Disk usage = Used / Max size', 'hint')}
+							>Disk usage</span>
+						</th>
 						<th colSpan="3">Traffic</th>
 						<th>Hit Ratio</th>
 					</tr>
@@ -65,8 +78,23 @@ export class Caches extends React.Component {
 						Array.from(caches).map(([cacheName, cache]) => {
 							return (<tr>
 								<td styleName="bold bdr">{ cacheName }</td>
-								<td styleName="bdr center-align"> { cache.cold ? <Icon type="snowflake" /> : <Icon type="sun" /> }</td>
-								<td styleName="bdr"><ProgressBar percentage={cache.zoneSize} /></td>
+								<td styleName="bdr center-align">
+									{
+										cache.cold ?
+											<span {...useTooltip('Cold', 'hint')}>
+												<Icon type="snowflake" />
+											</span>
+										:
+											<span {...useTooltip('Warm', 'hint')}>
+												<Icon type="sun" />
+											</span>
+									}
+								</td>
+								<td styleName="bdr">
+									<span  {...useTooltip(<SharedZoneTooltip zone={cache.slab} />, 'hint')}>
+										<ProgressBar percentage={cache.zoneSize} />
+									</span>
+								</td>
 								<td styleName="bdr">
 									{
 										typeof cache.max_size === 'number' ?

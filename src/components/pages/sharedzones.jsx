@@ -12,6 +12,8 @@ import calculateSharedZones from '../../calculators/sharedzones.js';
 import DataBinder from '../databinder/databinder.jsx';
 import styles from '../table/style.css';
 
+import { useTooltip } from '../../tooltips/index.jsx';
+
 export class SharedZones extends React.Component {
 	render() {
 		const { slabs } = this.props.data;
@@ -25,7 +27,12 @@ export class SharedZones extends React.Component {
 						<th>Zone</th>
 						<th>Total memory pages</th>
 						<th>Used memory pages</th>
-						<th>Memory usage</th>
+						<th>
+							<span
+								styleName="hinted"
+								{...useTooltip('Memory usage = Used memory pages / Total memory pages', 'hint')}
+							>Memory usage</span>
+						</th>
 					</tr>
 				</thead>
 

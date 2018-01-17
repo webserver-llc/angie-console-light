@@ -10,6 +10,8 @@ import UpstreamsList from '../../upstreams/upstreamslist.jsx';
 import { formatReadableBytes, formatUptime, formatMs } from '../../../utils.js';
 import { useTooltip } from '../../../tooltips/index.jsx';
 import PeerTooltip from '../../upstreams/PeerTooltip.jsx';
+import ConnectionsTooltip from '../../upstreams/ConnectionsTooltip.jsx';
+
 import styles from '../../table/style.css';
 
 export default class StreamUpstream extends UpstreamsList {
@@ -39,8 +41,8 @@ export default class StreamUpstream extends UpstreamsList {
 					</tr>
 					<tr styleName="right-align sub-header">
 						<th styleName="left-align">Name</th>
-						<th>DT</th>
-						<th styleName="bdr">W</th>
+						<th styleName="left-align"><span styleName="hinted" {...useTooltip('Total downtime', 'hint')}>DT</span></th>
+						<th styleName="center-align bdr"><span styleName="hinted" {...useTooltip('Weight', 'hint')}>W</span></th>
 						<th>Total</th>
 						<th>Conn/s</th>
 						<th>Active</th>
@@ -86,7 +88,11 @@ export default class StreamUpstream extends UpstreamsList {
 
 									<td>{ formatUptime(peer.downtime, true) }</td>
 									<td styleName="bdr">{ peer.weight }</td>
-									<td>{ peer.connections }</td>
+									<td>
+										<span styleName="hinted" {...useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
+											{ peer.connections }
+										</span>
+									</td>
 									<td>{ peer.server_conn_s }</td>
 									<td>{ peer.active }</td>
 									<td styleName="bdr">
