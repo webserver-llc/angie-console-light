@@ -4,6 +4,7 @@
  * All rights reserved.
  *
  */
+/* global __ENV__ */
 
 import React from 'react';
 import createHistory from 'history/createBrowserHistory';
@@ -23,7 +24,7 @@ import UpdatingControl from './components/updating-controll/updating-control.jsx
 import Disclaimer from './components/demo/disclaimer.jsx';
 import { STORE, startObserve, play, pause } from './datastore';
 
-const history = createHistory();
+export const history = createHistory();
 
 const SECTIONS = {
 	'#': Index,

@@ -5,10 +5,10 @@
  *
  */
 
+/* global __ENV__ */
 import React from 'react';
 import Navigation from './navigation.jsx';
 import styles from './style.css';
-/* eslint no-undef: 0 */
 
 export default class Header extends React.Component {
 	render() {
