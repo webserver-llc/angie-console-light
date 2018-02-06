@@ -30,6 +30,7 @@ const plugins = [
 	new HtmlWebpackPlugin({
 		title: 'Nginx+ Dashboard',
 		alwaysWriteToDisk: true,
+		template: 'src/index.ejs',
 		filename: htmlFileName,
 		...(PRODUCTION_BUILD ? {
 			inlineSource: '.(js|css)$'
@@ -39,7 +40,8 @@ const plugins = [
 	new webpack.DefinePlugin({
 		__ENV__: JSON.stringify(ENV),
 		__APP_VERSION__: JSON.stringify(package.version),
-		__CONFIG__AMPLIFY_URL: JSON.stringify(ENV === 'production' ? 'https://amplify.nginx.com' : 'http://staging-ng1.naas.nginx.com:4000')
+		__CONFIG__AMPLIFY_URL: JSON.stringify(ENV === 'production' ? 'https://amplify.nginx.com' : 'http://staging-ng1.naas.nginx.com:4000'),
+		GA_ID: JSON.stringify('UA-27974099-10')
 	}),
 
 ];

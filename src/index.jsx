@@ -14,7 +14,7 @@ import { checkApiAvailability, initialLoad, checkWritePermissions } from './api'
 import { initAmplify } from './amplify';
 import { initTooltips } from './tooltips/index.jsx';
 
-/* global __ENV__ */
+/* global __ENV__, GA_ID */
 
 const start = () => {
 	initSettings();
@@ -41,25 +41,14 @@ const start = () => {
 		React.render(<App error={err.type} />, document.body, el);
 	});
 
-
-	// Google Analytics only for demo.nginx.com
-
 	if (__ENV__ === 'demo') {
-		const GA_ID = 'UA-27974099-10';
-
-		window.dataLayer = window.dataLayer || [];
-
-		window.gtag = (...args) => { window.dataLayer.push(args); };
-		window.gtag('js', new Date());
-		window.gtag('config', GA_ID);
-
-		const el = document.createElement('script');
-		el.async = true;
-		el.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-		document.body.appendChild(el);
+		// Google Analytics only for demo.nginx.com
+		// GA_ID defined in webpack.config.js
 
 		history.listen((location) => {
-			window.gtag('config', GA_ID, { page_path: `/${location.hash}` });
+			if (window.gtag) {
+				window.gtag('config', GA_ID, { page_path: `/${location.hash}` });
+			}
 		});
 	}
 };
