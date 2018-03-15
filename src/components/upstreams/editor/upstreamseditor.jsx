@@ -47,6 +47,13 @@ export default class UpstreamsEditor extends React.Component {
 
 		delete data.id;
 
+		/* If edit peer from DNS */
+		if ('parent' in data) {
+			delete data.parent;
+			delete data.host;
+			delete data.server;
+		}
+
 		return data;
 	}
 
@@ -61,7 +68,7 @@ export default class UpstreamsEditor extends React.Component {
 
 		if (!props.peers || props.peers.size > 1) {
 			this.state.data = {};
-		} else if (props.peers || props.peers.size === 1) {
+		} else if (props.peers && props.peers.size === 1) {
 			this.state.loading = true;
 
 			props.upstreamsApi.getPeer(props.upstream.name, Array.from(props.peers)[0][1].id).then((data) => {
@@ -130,15 +137,10 @@ export default class UpstreamsEditor extends React.Component {
 
 		this.validate(this.state.data).then(() => {
 			if (isAdd) {
-				// TODO: Check error handling
 				return upstreamsApi.createPeer(
 					this.props.upstream.name,
 					this.state.data
-				).then((res) => {
-					if (res.error) {
-						throw [res.error.text];
-					}
-
+				).then(() => {
 					this.setState({
 						success: true,
 						successMessage: 'Server added successfully'
@@ -162,17 +164,29 @@ export default class UpstreamsEditor extends React.Component {
 			this.setState({
 				loading: false
 			});
-		}).catch((errorMessages) => {
-			this.setState({
-				errorMessages,
-				loading: false
-			});
+		}).catch(data => {
+			let errorMessages;
+
+			if (data instanceof Array) {
+				errorMessages = data;
+			} else {
+				errorMessages = [data.error];
+			}
+
+			this.showErrors(errorMessages);
 		});
 	}
 
 	closeErrors() {
 		this.setState({
 			errorMessages: null
+		});
+	}
+
+	showErrors(errorMessages) {
+		this.setState({
+			errorMessages,
+			loading: false
 		});
 	}
 
@@ -194,7 +208,7 @@ export default class UpstreamsEditor extends React.Component {
 				success: true,
 				successMessage: `Servers ${servers.join(', ')} successfully removed`
 			});
-		});
+		}).catch(({ error }) => this.showErrors([ error ]));
 	}
 
 	validate(data) {
@@ -316,16 +330,16 @@ export default class UpstreamsEditor extends React.Component {
 										defaultValue="{peerToEdit.server}"
 										onKeyUp={this.validateServerName}
 										onInput={this.handleFormChange}
+										disabled={!!data.host}
 									/>
 								</div>
 
-
 								{
-									!isAdd && data.host ?
+									data.host ?
 										<div styleName="form-group">
 											<strong>Domain name:</strong> {data.host}
 										</div>
-									: null
+										: null
 								}
 
 								{
@@ -341,7 +355,7 @@ export default class UpstreamsEditor extends React.Component {
 												onInput={this.handleFormChange}
 											/>
 										</div>
-									: null
+										: null
 								}
 
 								{
@@ -358,7 +372,7 @@ export default class UpstreamsEditor extends React.Component {
 												Add as backup server
 											</label>
 										</div>
-									: null
+										: null
 								}
 							</div>
 					}
@@ -427,7 +441,7 @@ export default class UpstreamsEditor extends React.Component {
 										onInput={this.handleFormChange}
 									/>
 								</div>
-							: null
+								: null
 						}
 					</div>
 
@@ -466,7 +480,7 @@ export default class UpstreamsEditor extends React.Component {
 										checked={data.drain === true}
 									/> Drain
 								</label>
-							: null
+								: null
 						}
 					</div>
 
@@ -476,7 +490,7 @@ export default class UpstreamsEditor extends React.Component {
 								<span styleName="error-close" onClick={this.closeErrors}>×</span>
 								{ this.state.errorMessages.map((msg) => <div>{msg}</div>) }
 							</div>
-						: null
+							: null
 					}
 				</div>
 
@@ -484,7 +498,7 @@ export default class UpstreamsEditor extends React.Component {
 					{
 						!isAdd ?
 							<div styleName="remove" onClick={() => this.remove()}>Remove</div>
-						: null
+							: null
 					}
 
 					<div styleName="save" onClick={this.save}>

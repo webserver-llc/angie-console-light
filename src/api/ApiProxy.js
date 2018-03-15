@@ -43,13 +43,26 @@ export default class ApiProxy {
 		}
 
 		return window.fetch(this.getUrl(), params)
-			.then(response =>
-				response.json().catch(() => {
+			.then(response => {
+				let err = false;
+
+				if (response.status > 299) {
+					err = true;
+				}
+
+				return response.json().then(data => {
+					if (err) {
+						throw data;
+					}
+
+					return data;
+				}).catch((data) => {
 					throw ({
+						error: data.error ? `${data.error.code}: ${data.error.text}` : null,
 						status: response.status
 					});
-				})
-			);
+				});
+			});
 	}
 
 	get(fetchParams) {
