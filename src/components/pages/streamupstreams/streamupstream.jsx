@@ -111,7 +111,7 @@ export default class StreamUpstream extends UpstreamsList {
 									<td>{ peer.health_checks.checks }</td>
 									<td>{ peer.health_checks.fails }</td>
 									<td>{ peer.health_checks.unhealthy }</td>
-									<td styleName={`left-align bdr flash ${peer.health_status === false ? 'red-flash' : null}`}>
+									<td styleName={`left-align bdr flash ${peer.health_status === false ? 'red-flash' : ''}`}>
 										{ peer.health_status === null ? '–' :
 											peer.health_status ? 'passed' : 'failed' }
 									</td>

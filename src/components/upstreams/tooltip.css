@@ -8,6 +8,17 @@
 	margin: 0 0 5px;
 }
 
+.status-tag {
+	display: inline-block;
+	width: 26px;
+	height: 12px;
+	border-radius: 2px!important;
+	margin: 2px 5px 2px 0;
+	overflow: hidden;
+	padding: 0!important;
+	vertical-align: middle;
+}
+
 .status {
 	padding: 0 7px;
 	border-radius: 4px
@@ -47,4 +58,15 @@
 .status_warning {
 	background-color: #ffab08;
 	composes: status;
+}
+
+.columns {
+	display: flex;
+	flex-direction: row;
+}
+
+.column {
+	margin-right: 30px;
+	line-height: 25px;
+	min-height: 100px;
 }

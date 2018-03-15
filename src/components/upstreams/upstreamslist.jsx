@@ -5,6 +5,7 @@
  *
  */
 
+/* eslint no-alert: 0 */
 import React from 'react';
 import { isWritable, checkWritePermissions } from '../../api';
 import SortableTable from '../table/sortabletable.jsx';
@@ -12,6 +13,7 @@ import ProgressBar from '../progressbar/progressbar.jsx';
 import { getSetting, setSetting } from '../../appsettings';
 import UpstreamsEditor from './editor/upstreamseditor.jsx';
 import { SharedZoneTooltip } from '../pages/tooltips.jsx';
+import UpstreamStatsTooltip from './UpstreamStatsTooltip.jsx';
 
 import styles from './style.css';
 import tableStyles from '../table/style.css';
@@ -254,7 +256,7 @@ export default class UpstreamsList extends SortableTable {
 			</select>
 
 			<div styleName="styles.head">
-				<h2 styleName="styles.title">{ name }</h2>
+				<h2 styleName="styles.title" {...useTooltip(<UpstreamStatsTooltip upstream={upstream} />)}>{ name }</h2>
 
 				{ writePermission ?
 					<span styleName={this.state.editMode ? 'styles.edit-active' : 'styles.edit'} onClick={this.toggleEditMode} /> : null

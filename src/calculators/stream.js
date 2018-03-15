@@ -5,7 +5,7 @@
  *
  */
 
-import { calculateSpeed, calculateTraffic, processPeer, createMapFromObject } from './utils.js';
+import { calculateSpeed, calculateTraffic, createMapFromObject, upstreamsCalculatorFactory } from './utils.js';
 
 export const zones = (zones, previous, { __STATUSES }) => {
 	if (zones === null || Object.keys(zones).length === 0) {
@@ -51,80 +51,4 @@ export const zones = (zones, previous, { __STATUSES }) => {
 	return zones;
 };
 
-export const upstreams = (upstreams, previousState, { slabs, __STATUSES }) => {
-	if (upstreams === null || Object.keys(upstreams).length === 0) {
-		__STATUSES.tcp_upstreams.ready = false;
-		return null;
-	}
-
-	const STATS = {
-		total: 0,
-		servers: {
-			all: 0,
-			up: 0,
-			failed: 0
-		},
-		failures: 0,
-		warnings: 0,
-		alerts: 0
-	};
-
-	let period;
-
-	if (previousState) {
-		period = Date.now() - previousState.lastUpdate;
-	}
-
-	let newStatus = 'ok';
-
-	upstreams = createMapFromObject(upstreams, (upstream, name) => {
-		let previousUpstream;
-
-		if (previousState) {
-			previousUpstream = previousState.get(name);
-		}
-
-		upstream.name = name;
-
-		if (slabs) {
-			const zone = slabs.get(upstream.zone);
-			upstream.zoneSize = zone.percentSize;
-			upstream.slab = zone;
-		} else {
-			upstream.zoneSize = null;
-		}
-
-		upstream.peers.forEach((peer) => {
-			let previousPeer = null;
-
-			if (previousUpstream) {
-				previousPeer = previousUpstream.peers.find(prevPeer => prevPeer.id === peer.id);
-
-				if (previousPeer) {
-					peer.server_conn_s = calculateSpeed(previousPeer.connections, peer.connections, period);
-				}
-			}
-
-			processPeer(peer, previousPeer, period, STATS);
-
-			if (peer.state === 'unavail' || peer.state === 'unhealthy') {
-				upstream.hasFailedPeer = true;
-			}
-
-			if (peer.health_status === false) {
-				newStatus = 'danger';
-			}
-		});
-
-		STATS.servers.all += upstream.peers.length;
-
-		return upstream;
-	});
-
-	STATS.total = upstreams.size;
-	upstreams.__STATS = STATS;
-	__STATUSES.tcp_upstreams.ready = true;
-	__STATUSES.tcp_upstreams.status = newStatus;
-
-	return upstreams;
-};
+export const upstreams = upstreamsCalculatorFactory('tcp_upstreams');
