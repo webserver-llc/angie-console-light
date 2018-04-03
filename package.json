@@ -1,6 +1,6 @@
 {
   "name": "nginx-plus-dashboard",
-  "version": "2.0.3",
+  "version": "2.0.2",
   "description": "Nginx+ dashboard",
   "main": "index.js",
   "scripts": {
