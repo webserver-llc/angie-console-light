@@ -43,7 +43,7 @@ export default class ApiProxy {
 		}
 
 		return window.fetch(this.getUrl(), params)
-			.then(response => {
+			.then((response) => {
 				let err = false;
 
 				if (response.status > 299) {

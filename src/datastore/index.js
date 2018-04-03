@@ -47,7 +47,7 @@ export const startObserve = function loop(force = false) {
 
 		Promise.all(
 			Array.from(OBSERVED).map(([path, instance]) => {
-				return instance.api.get().then((data) => {
+				return instance.api.get().then(data => data, err => err).then((data) => {
 					if (data && data.error) {
 						data = null;
 					}
@@ -56,7 +56,7 @@ export const startObserve = function loop(force = false) {
 						data,
 						api: instance.api
 					};
-				})
+				});
 			})
 		).then((data) => {
 			data.forEach(({ api, data }) => {
@@ -68,7 +68,6 @@ export const startObserve = function loop(force = false) {
 					apiHandler.callbacks.forEach(callback => callback());
 				}
 			});
-
 		}).catch((err) => {
 			throw err;
 		});

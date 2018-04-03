@@ -36,10 +36,13 @@ export const calculateCacheHit = (cache) => {
 		cacheInHistory.pop();
 	}
 
+	console.log(cache, cachesHistory[cache.name]);
+
 	const lastIndex = cacheInHistory.length - 1;
 	const numerator = cacheInHistory[0].served - cacheInHistory[lastIndex].served;
 	const denominator = cacheInHistory[0].served + cacheInHistory[0].bypassed - cacheInHistory[lastIndex].served - cacheInHistory[lastIndex].bypassed;
-
+	console.log(`serverd: ${cacheInHistory[0].served} - ${cacheInHistory[lastIndex].served}`);
+	console.log(`all: ${cacheInHistory[0].served} + ${cacheInHistory[0].bypassed} - ${cacheInHistory[lastIndex].served} - ${cacheInHistory[lastIndex].bypassed}`);
 	return (denominator !== 0) ? Math.round((numerator / denominator) * 100) : 0;
 };
 
