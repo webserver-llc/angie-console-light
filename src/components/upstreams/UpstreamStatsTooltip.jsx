@@ -26,7 +26,7 @@ export default ({ upstream }) => {
 				<div><span styleName="status-tag status_up" /> Up: { upstream.stats.up }</div>
 				<div><span styleName="status-tag status_unhealthy" /> Failed: { upstream.stats.failed }</div>
 				<div><span styleName="status-tag status_draining" /> Drain: { upstream.stats.draining }</div>
-				<div><span styleName="status-tag status_down" /> Down: { upstream.stats.up }</div>
+				<div><span styleName="status-tag status_down" /> Down: { upstream.stats.down }</div>
 			</div>
 
 			{ queueInfo }
