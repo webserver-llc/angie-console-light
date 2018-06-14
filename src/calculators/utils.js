@@ -89,7 +89,8 @@ export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousSt
 			up: 0,
 			down: 0,
 			failed: 0,
-			draining: 0
+			draining: 0,
+			checking: 0
 		};
 
 		// Both TCP and HTTP Upstreams
@@ -133,6 +134,10 @@ export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousSt
 				case 'draining':
 					STATS.servers.draining++;
 					upstream.stats.draining++;
+					break;
+					break;
+				case 'checking':
+					upstream.stats.checking++;
 					break;
 			}
 

@@ -70,7 +70,7 @@ export default class StreamUpstream extends UpstreamsList {
 						:
 							peers.map(peer => (
 								<tr>
-									<td styleName={`${peer.state}`} />
+									<td styleName={peer.state} />
 
 									{ this.getCheckbox(peer) }
 
