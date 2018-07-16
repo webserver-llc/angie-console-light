@@ -50,7 +50,7 @@ export default class ApiProxy {
 					err = true;
 				}
 
-				return response.json().then(data => {
+				return response.json().then((data) => {
 					if (err) {
 						throw data;
 					}

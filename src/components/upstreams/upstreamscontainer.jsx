@@ -8,6 +8,8 @@
 import React from 'react';
 import styles from './style.css';
 
+const UPSTREAM_GROUP_LENGTH = 70;
+
 export default class UpstreamsContainer extends React.Component {
 	constructor(props) {
 		super(props);
@@ -20,6 +22,13 @@ export default class UpstreamsContainer extends React.Component {
 
 		this.toggleFailed = this.toggleFailed.bind(this);
 		this.toggleUpstreamsList = this.toggleUpstreamsList.bind(this);
+		this.handleLastItemShowing = this.handleLastItemShowing.bind(this);
+
+		if (this.initIntersectionObserver() === false) {
+			this.state.howManyToShow = Infinity;
+		} else {
+			this.state.howManyToShow = UPSTREAM_GROUP_LENGTH;
+		}
 	}
 
 	toggleFailed() {
@@ -34,8 +43,39 @@ export default class UpstreamsContainer extends React.Component {
 		});
 	}
 
-	scrollTo(upstreamName) {
-		document.getElementById(`upstream-${upstreamName}`).scrollIntoView();
+	initIntersectionObserver() {
+		if ('IntersectionObserver' in window) {
+			this.intersectionObserver = new IntersectionObserver(this.handleLastItemShowing, {
+				root: null,
+				threshold: 0.3
+			});
+
+			return true;
+		}
+
+		return false;
+	}
+
+	handleLastItemShowing([entry]) {
+		if (
+			entry.isIntersecting &&
+			isFinite(this.state.howManyToShow) &&
+			this.state.howManyToShow < this.props.upstreams.size
+		) {
+			this.intersectionObserver.unobserve(entry.target);
+
+			this.setState({
+				howManyToShow: this.state.howManyToShow + UPSTREAM_GROUP_LENGTH
+			});
+		}
+	}
+
+	scrollTo(upstreamName, position) {
+		this.setState({
+			howManyToShow: position + UPSTREAM_GROUP_LENGTH
+		}, () => {
+			document.getElementById(`upstream-${upstreamName}`).scrollIntoView();
+		});
 	}
 
 	render() {
@@ -45,7 +85,15 @@ export default class UpstreamsContainer extends React.Component {
 
 		upstreams = Array.from(upstreams);
 
-		upstreams.forEach(([name, upstream]) => {
+		console.log(upstreams);
+
+		let upstreamsToShow = upstreams;
+
+		if (isFinite(this.state.howManyToShow)) {
+			upstreamsToShow = upstreams.slice(0, this.state.howManyToShow);
+		}
+
+		upstreamsToShow.forEach(([name, upstream], i) => {
 			if (this.state.showOnlyFailed && upstream.hasFailedPeer || !this.state.showOnlyFailed) {
 				children.push(<this.props.component
 					upstream={upstream}
@@ -55,6 +103,11 @@ export default class UpstreamsContainer extends React.Component {
 					writePermission={this.props.writePermission}
 					upstreamsApi={this.props.upstreamsApi}
 					isStream={this.props.isStream}
+					ref={(ref) => {
+						if (i === upstreamsToShow.length - 1 && this.intersectionObserver) {
+							this.intersectionObserver.observe(ref.base);
+						}
+					}}
 				/>);
 			}
 		});
@@ -100,11 +153,11 @@ export default class UpstreamsContainer extends React.Component {
 
 						<div styleName="upstreams-navlinks">
 							{
-								upstreams.map(([name, upstream]) => {
+								upstreams.map(([name, upstream], i) => {
 									if (this.state.showOnlyFailed && upstream.hasFailedPeer || !this.state.showOnlyFailed) {
 										return (
 											<span
-												onClick={() => this.scrollTo(name)}
+												onClick={() => this.scrollTo(name, i)}
 												styleName={upstream.hasFailedPeer ? 'upstream-link-failed' : 'upstream-link'}
 												key={name}
 											>
@@ -115,7 +168,6 @@ export default class UpstreamsContainer extends React.Component {
 								})
 							}
 						</div>
-
 					</div>
 				: null
 			}
