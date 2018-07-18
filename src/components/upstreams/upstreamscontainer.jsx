@@ -85,8 +85,6 @@ export default class UpstreamsContainer extends React.Component {
 
 		upstreams = Array.from(upstreams);
 
-		console.log(upstreams);
-
 		let upstreamsToShow = upstreams;
 
 		if (isFinite(this.state.howManyToShow)) {

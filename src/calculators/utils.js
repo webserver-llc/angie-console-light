@@ -153,6 +153,7 @@ export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousSt
 
 				if (is4xxThresholdReached(peer)) {
 					__STATUSES.upstreams['4xx'] = true;
+					STATS.warnings++;
 					newStatus = 'warning';
 				}
 
@@ -180,10 +181,6 @@ export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousSt
 
 		if (upstream.hasFailedPeer) {
 			STATS.failures++;
-		}
-
-		if (newStatus === 'warning') {
-			STATS.warnings++;
 		}
 
 		return upstream;
