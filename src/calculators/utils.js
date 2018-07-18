@@ -93,6 +93,8 @@ export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousSt
 			checking: 0
 		};
 
+		let isUpstreamInDanger = false;
+
 		// Both TCP and HTTP Upstreams
 		upstream.peers.forEach((peer) => {
 			let previousPeer = null;
@@ -153,7 +155,7 @@ export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousSt
 
 				if (is4xxThresholdReached(peer)) {
 					__STATUSES.upstreams['4xx'] = true;
-					STATS.warnings++;
+					isUpstreamInDanger = true;
 					newStatus = 'warning';
 				}
 
@@ -181,6 +183,10 @@ export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousSt
 
 		if (upstream.hasFailedPeer) {
 			STATS.failures++;
+		}
+
+		if (isUpstreamInDanger) {
+			STATS.warnings++;
 		}
 
 		return upstream;
