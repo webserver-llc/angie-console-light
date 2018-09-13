@@ -91,7 +91,7 @@ export class Caches extends React.Component {
 									}
 								</td>
 								<td styleName="bdr">
-									<span  {...useTooltip(<SharedZoneTooltip zone={cache.slab} />, 'hint')}>
+									<span {...useTooltip(<SharedZoneTooltip zone={cache.slab} />, 'hint')}>
 										<ProgressBar percentage={cache.zoneSize} />
 									</span>
 								</td>
@@ -99,7 +99,7 @@ export class Caches extends React.Component {
 									{
 										typeof cache.max_size === 'number' ?
 											formatReadableBytes(cache.max_size, 'GB')
-											: '&infin;'
+											: <span>&infin;</span>
 									}
 								</td>
 								<td styleName="bdr">{ formatReadableBytes(cache.size, 'GB') }</td>
