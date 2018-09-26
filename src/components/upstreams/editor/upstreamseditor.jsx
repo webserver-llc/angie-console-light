@@ -20,7 +20,6 @@ const RGX_IPV6 = /^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f
 const RGX_SERVICE_SETTING = /^[\w-.]+$/;
 const RGX_SERVER_ADDRESS = /^([\w-]|(\.(?!\.+)))[\w-.]*\:(\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
 const RGX_HTTP_SERVER_ADDRESS = /^([\w-]|(\.(?!\.+)))[\w-.]*(\:(\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
-const RGX_GET_PARAMS = /^[0-9A-Za-z-_.!~*();,\/?:@&=+$]+$/;
 
 const isIP = (value) => RGX_IPV4.test(value) || RGX_IPV6_FULL.test(value) || RGX_IPV6.test(value);
 
@@ -240,11 +239,6 @@ export default class UpstreamsEditor extends React.Component {
 			}
 		}
 
-		if ('route' in data && RGX_GET_PARAMS.test(data.route)) {
-			valid = false;
-			errorMessages.push('Invalid server route');
-		}
-
 		if (valid && multiplePeers) {
 			const peersArray = Array.from(this.props.peers);
 
@@ -353,6 +347,7 @@ export default class UpstreamsEditor extends React.Component {
 												type="text"
 												value={data.route}
 												onInput={this.handleFormChange}
+												maxLength={32}
 											/>
 										</div>
 										: null
