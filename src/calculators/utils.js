@@ -39,6 +39,20 @@ export const createMapFromObject = (obj, fn, sort = true) => {
 	]));
 };
 
+export const handleErrors = (previousData, data) => {
+	// Flashing cell of 4xx
+	if (previousData && data.responses['4xx'] > 0 &&
+		data.responses['4xx'] !== previousData.responses['4xx']) {
+		data['4xxChanged'] = true;
+	}
+
+	// Error and flashing cell of 5xx
+	if (previousData && data.responses['5xx'] > 0 &&
+		previousData.responses['5xx'] !== data.responses['5xx']) {
+		data['5xxChanged'] = true;
+	}
+};
+
 export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousState, { slabs, __STATUSES }) => {
 	if (upstreams === null || Object.keys(upstreams).length === 0) {
 		__STATUSES[upstreamsKey].ready = false;
@@ -159,17 +173,7 @@ export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousSt
 					newStatus = 'warning';
 				}
 
-				// Flashing cell of 4xx
-				if (previousPeer && peer.responses['4xx'] > 0 &&
-					peer.responses['4xx'] !== previousPeer.responses['4xx']) {
-					peer['4xxChanged'] = true;
-				}
-
-				// Error and flashing cell of 5xx
-				if (previousPeer && peer.responses['5xx'] > 0 &&
-					previousPeer.responses['5xx'] !== peer.responses['5xx']) {
-					peer['5xxChanged'] = true;
-				}
+				handleErrors(previousPeer, peer);
 			}
 
 			if (peer.state === 'unavail' || peer.state === 'unhealthy') {

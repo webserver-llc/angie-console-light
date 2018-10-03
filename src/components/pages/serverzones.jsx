@@ -71,7 +71,7 @@ export class StreamZones extends SortableTable {
 
 							if (zone.warning) {
 								status = 'warning';
-							} else if (zone.alert) {
+							} else if (zone['5xxChanged']) {
 								status = 'alert';
 							}
 
@@ -92,7 +92,7 @@ export class StreamZones extends SortableTable {
 										{ zone.responses['4xx'] + zone.discarded }
 									</span>
 								</td>
-								<td styleName={`flash ${zone.alert ? 'red-flash' : ''}`}>{ zone.responses['5xx'] }</td>
+								<td styleName={`flash ${zone['5xxChanged'] ? 'red-flash' : ''}`}>{ zone.responses['5xx'] }</td>
 								<td styleName="bdr">{ zone.responses.total }</td>
 								<td styleName="px60">{ formatReadableBytes(zone.sent_s) }</td>
 								<td styleName="px60">{ formatReadableBytes(zone.rcvd_s) }</td>

@@ -5,7 +5,13 @@
  *
  */
 
-import { is4xxThresholdReached, calculateSpeed, calculateTraffic, createMapFromObject } from './utils.js';
+import {
+	is4xxThresholdReached,
+	calculateSpeed,
+	calculateTraffic,
+	createMapFromObject,
+	handleErrors
+} from './utils.js';
 
 export default (zones, previousState, { __STATUSES }) => {
 	if (zones === null || Object.keys(zones).length === 0) {
@@ -50,16 +56,10 @@ export default (zones, previousState, { __STATUSES }) => {
 			STATS.warnings++;
 		}
 
-		// TODO: combine with upstreams calculator
-		// Flashing cell of 4xx
-		if (previousZone && zone.responses['4xx'] > 0 && zone.responses['4xx'] !== previousZone.responses['4xx']) {
-			zone['4xxChanged'] = true;
-		}
+		handleErrors(previousZone, zone);
 
-		// Error and flashing cell of 5xx
-		if (previousZone && zone.responses['5xx'] > 0 && previousZone.responses['5xx'] !== zone.responses['5xx']) {
+		if (zone['5xxChanged'] === true) {
 			zone.alert = true;
-			__STATUSES.server_zones['5xx'] = true;
 			newStatus = 'danger';
 			STATS.alerts++;
 		}
