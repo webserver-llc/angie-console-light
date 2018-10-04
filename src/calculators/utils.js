@@ -39,16 +39,14 @@ export const createMapFromObject = (obj, fn, sort = true) => {
 	]));
 };
 
-export const handleErrors = (previousData, data) => {
+export const handleErrors = (previousData, data, key = 'responses') => {
 	// Flashing cell of 4xx
-	if (previousData && data.responses['4xx'] > 0 &&
-		data.responses['4xx'] !== previousData.responses['4xx']) {
+	if (previousData && data[key]['4xx'] > previousData[key]['4xx']) {
 		data['4xxChanged'] = true;
 	}
 
 	// Error and flashing cell of 5xx
-	if (previousData && data.responses['5xx'] > 0 &&
-		previousData.responses['5xx'] !== data.responses['5xx']) {
+	if (previousData && data[key]['5xx'] > previousData[key]['5xx']) {
 		data['5xxChanged'] = true;
 	}
 };
@@ -168,7 +166,6 @@ export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousSt
 				peer.isHttp = true;
 
 				if (is4xxThresholdReached(peer)) {
-					__STATUSES.upstreams['4xx'] = true;
 					isUpstreamInDanger = true;
 					newStatus = 'warning';
 				}

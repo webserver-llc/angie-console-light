@@ -1,12 +1,9 @@
 export default {
 	server_zones: {
-		'4xx': false,
-		'5xx': false,
 		status: 'ok',
 		ready: false
 	},
 	upstreams: {
-		'4xx': false,
 		status: 'ok',
 		ready: false
 	},
@@ -19,6 +16,7 @@ export default {
 		ready: false
 	},
 	tcp_zones: {
+		status: 'ok',
 		ready: false
 	},
 	shared_zones: {

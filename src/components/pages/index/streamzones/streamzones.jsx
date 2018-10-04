@@ -20,7 +20,7 @@ export class StreamZones extends React.Component {
 		return (
 			<IndexBox
 				title="TCP/UDP Zones"
-				status="ok"
+				status={store.__STATUSES.tcp_zones.status}
 				href="#tcp_zones"
 			>
 				<p>Conn total: { stats.conn_total }</p>

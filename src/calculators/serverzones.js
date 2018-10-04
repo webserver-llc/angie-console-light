@@ -51,7 +51,6 @@ export default (zones, previousState, { __STATUSES }) => {
 		// Warning
 		if (is4xxThresholdReached(zone)) {
 			zone.warning = true;
-			__STATUSES.server_zones['4xx'] = true;
 			newStatus = 'warning';
 			STATS.warnings++;
 		}
@@ -59,7 +58,6 @@ export default (zones, previousState, { __STATUSES }) => {
 		handleErrors(previousZone, zone);
 
 		if (zone['5xxChanged'] === true) {
-			zone.alert = true;
 			newStatus = 'danger';
 			STATS.alerts++;
 		}

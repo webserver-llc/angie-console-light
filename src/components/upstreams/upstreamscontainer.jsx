@@ -102,7 +102,7 @@ export default class UpstreamsContainer extends React.Component {
 					upstreamsApi={this.props.upstreamsApi}
 					isStream={this.props.isStream}
 					ref={(ref) => {
-						if (i === upstreamsToShow.length - 1 && this.intersectionObserver) {
+						if (i == upstreamsToShow.length - 1 && this.intersectionObserver && ref) {
 							this.intersectionObserver.observe(ref.base);
 						}
 					}}

@@ -5,7 +5,13 @@
  *
  */
 
-import { calculateSpeed, calculateTraffic, createMapFromObject, upstreamsCalculatorFactory } from './utils.js';
+import {
+	calculateSpeed,
+	calculateTraffic,
+	createMapFromObject,
+	upstreamsCalculatorFactory,
+	handleErrors
+} from './utils.js';
 
 export const zones = (zones, previous, { __STATUSES }) => {
 	if (zones === null || Object.keys(zones).length === 0) {
@@ -23,6 +29,8 @@ export const zones = (zones, previous, { __STATUSES }) => {
 		}
 	};
 
+	let newStatus = 'ok';
+
 	zones = createMapFromObject(zones, (zone, name) => {
 		const previousZone = previous ? previous.get(name) : null;
 
@@ -38,6 +46,12 @@ export const zones = (zones, previous, { __STATUSES }) => {
 			calculateTraffic(STATS, zone);
 		}
 
+		handleErrors(previousZone, zone, 'sessions');
+
+		if (zone['5xxChanged'] || zone['4xxChanged']) {
+			newStatus = 'danger';
+		}
+
 		STATS.conn_total += zone.connections;
 		STATS.conn_current += zone.processing;
 
@@ -47,6 +61,7 @@ export const zones = (zones, previous, { __STATUSES }) => {
 	zones.__STATS = STATS;
 
 	__STATUSES.tcp_zones.ready = true;
+	__STATUSES.tcp_zones.status = newStatus;
 
 	return zones;
 };

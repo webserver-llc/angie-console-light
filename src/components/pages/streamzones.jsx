@@ -50,8 +50,8 @@ export class StreamZones extends React.Component {
 								<td>{ zone.connections }</td>
 								<td styleName="bdr">{ zone.zone_conn_s }</td>
 								<td>{ zone.sessions['2xx'] }</td>
-								<td>{ zone.sessions['4xx'] }</td>
-								<td>{ zone.sessions['5xx'] }</td>
+								<td styleName={`flash ${zone['4xxChanged'] ? 'red-flash' : ''}`}>{ zone.sessions['4xx'] }</td>
+								<td styleName={`flash ${zone['5xxChanged'] ? 'red-flash' : ''}`}>{ zone.sessions['5xx'] }</td>
 								<td styleName="bdr">{ zone.sessions.total }</td>
 								<td styleName="px60">{ formatReadableBytes(zone.sent_s) }</td>
 								<td styleName="px60">{ formatReadableBytes(zone.rcvd_s) }</td>
