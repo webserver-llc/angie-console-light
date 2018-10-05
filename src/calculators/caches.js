@@ -6,7 +6,7 @@
  */
 
 import { getSetting } from '../appsettings';
-import { createMapFromObject } from './utils.js';
+import { createMapFromObject, pickZoneSize } from './utils.js';
 
 const cachesHistory = new Proxy({}, {
 	get(history, cacheName) {
@@ -94,13 +94,7 @@ export default (caches, previous, STORE) => {
 			cache.used = (cache.size > 0) ? 1 : 0;
 		}
 
-		if (slabs) {
-			const zone = slabs.get(cacheName);
-			cache.slab = zone;
-			cache.zoneSize = zone.percentSize;
-		} else {
-			cache.zoneSize = 0;
-		}
+		pickZoneSize(cache, slabs, cacheName);
 
 		let warning = false;
 

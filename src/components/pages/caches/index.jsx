@@ -92,7 +92,7 @@ export class Caches extends React.Component {
 								</td>
 								<td styleName="bdr">
 									<span {...useTooltip(<SharedZoneTooltip zone={cache.slab} />, 'hint')}>
-										<ProgressBar percentage={cache.zoneSize} />
+										<ProgressBar percentage={cache.zoneSize || 0} />
 									</span>
 								</td>
 								<td styleName="bdr">

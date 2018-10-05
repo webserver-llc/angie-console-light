@@ -51,6 +51,19 @@ export const handleErrors = (previousData, data, key = 'responses') => {
 	}
 };
 
+export const pickZoneSize = (obj, slabs, zoneName) => {
+	obj.zoneSize = null;
+
+	if (slabs) {
+		const zone = slabs.get(zoneName);
+
+		if (zone) {
+			obj.slab = zone;
+			obj.zoneSize = zone.percentSize;
+		}
+	}
+};
+
 export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousState, { slabs, __STATUSES }) => {
 	if (upstreams === null || Object.keys(upstreams).length === 0) {
 		__STATUSES[upstreamsKey].ready = false;
@@ -88,13 +101,7 @@ export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousSt
 
 		upstream.name = name;
 
-		if (slabs) {
-			const zone = slabs.get(upstream.zone);
-			upstream.zoneSize = zone.percentSize;
-			upstream.slab = zone;
-		} else {
-			upstream.zoneSize = null;
-		}
+		pickZoneSize(upstream, slabs, upstream.zone);
 
 		upstream.stats = {
 			all: 0,
