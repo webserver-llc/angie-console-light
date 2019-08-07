@@ -3,17 +3,22 @@
 }
 
 .tabs {
-	margin-bottom: 30px;
+	margin-bottom: 24px;
 }
 
 .tab {
-	width: 115px;
 	display: inline-block;
+	width: 118px;
+}
+
+.tab-s {
+	width: 45px;
 }
 
 .tab span {
 	border-bottom: 1px dashed #000000;
 	cursor: pointer;
+	white-space: nowrap;
 }
 
 .tab-active {
@@ -37,7 +42,7 @@
 }
 
 .table td {
-	font-size: 36px;
+	font-size: 24px;
 }
 
 .h3 {

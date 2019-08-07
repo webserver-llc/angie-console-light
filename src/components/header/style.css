@@ -6,19 +6,20 @@
 	width: 100%;
 	background: #f2f2f2;
 	padding: 0 0 0 26px;
-	height: 70px;
+	height: 60px;
 	box-sizing: border-box;
 	min-width: 1250px;
+	display: flex;
 }
 
 .logo {
 	composes: logo from '../../style.css';
-	width: 220px;
-	height: 39px;
-	float: left;
-	background-size: 220px 39px;
-	padding: 18px 18px 13px 15px;
+	width: 180px;
+	height: 32px;
+	background-size: contain;
+	padding: 14px 15px;
 	background-origin: content-box;
+	flex: 0 0 auto;
 }
 
 .logoactive {
@@ -27,9 +28,22 @@
 }
 
 .nav {
-	float: right;
-	margin-left: -100%;
-	vertical-align: top;
+	flex: 1 1 auto;
+	display: flex;
+	flex-wrap: nowrap;
+	overflow: hidden;
+}
+
+.nav-small {}
+
+.nav-wide {}
+
+.nav-flex {
+	flex: 1 1 auto;
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: flex-end;
+	overflow: hidden;
 }
 
 .navlink {
@@ -37,13 +51,20 @@
 	vertical-align: top;
 	text-decoration: none;
 	color: #333;
-	padding: 21px 20px 22px;
+	padding: 16px 20px 17px;
 	border-left: 2px solid #fff;
 	line-height: 26px;
 }
 
 .navlink:hover {
 	background-color: #fafafa;
+}
+
+.nav-flex .navlink {
+	flex: 0 1 auto;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .navlinkactive {
@@ -75,41 +96,68 @@
 	composes: navlink;
 	padding: 0 10px 0 0;
 	width: 60px;
-	height: 70px;
-	line-height: 80px;
+	height: 60px;
+	line-height: 70px;
 	text-align: center;
 	cursor: pointer;
 	opacity: .8;
-}
-
-.amplify {
-	composes: navlink;
-	background-image: svg-load('amplify.svg');
-	background-size: 25px;
-	background-position: center;
-	background-repeat: no-repeat;
-	height: 26px;
-	width: 30px;
+	flex: 0 0 auto;
 }
 
 .settings:hover {
 	opacity: 1;
 }
 
-@media screen and (max-width: 1375px) {
-	.navlink {
+@media screen and (max-width: 1640px) {
+	.nav-wide .navlink {
 		padding-left: 10px;
 		padding-right: 10px;
 	}
 
-	.status {
+	.nav-wide .status {
+		width: 20px;
+		height: 20px;
 		margin-left: auto;
 	}
 
+	.nav-wide .settings {
+		width: 40px;
+	}
+
+	.nav-wide .anchor {
+		font-size: 0.9em;
+	}
+}
+
+@media screen and (max-width: 1500px) {
+	.nav-small .navlink {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	.nav-small .status {
+		margin-left: auto;
+	}
+
+	.nav-small .settings {
+		width: 40px;
+	}
+}
+
+
+@media screen and (max-width: 1390px) {
 	.logo {
-		width: 190px;
-		height: 34px;
-		background-size: 190px 34px;
+		width: 127px;
+		height: 23px;
+		padding-top: 19px;
 		padding-bottom: 18px;
+	}
+
+	.nav-wide .anchor {
+		font-size: 0.8em;
+	}
+
+	.nav-small .anchor {
+		font-size: 0.9em;
 	}
 }

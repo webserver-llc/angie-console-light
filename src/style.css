@@ -23,7 +23,7 @@ th {
 }
 
 .dashboard {
-	padding-top: 70px;
+	padding-top: 60px;
 	height: 100%;
 	box-sizing: border-box;
 	width: 100%;
@@ -33,7 +33,7 @@ th {
 .content {
 	min-height: 100%;
 	box-sizing: border-box;
-	padding: 30px 30px 68px;
+	padding: 25px 30px 68px;
 }
 
 h1 {

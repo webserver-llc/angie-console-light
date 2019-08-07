@@ -10,12 +10,15 @@ import UpstreamsApi from './UpstreamsApi.js';
 import { API_PATH } from '../constants.js';
 
 import calculateServerZones from '../calculators/serverzones.js';
+import calculateLocationZones from '../calculators/locationzones.js';
 import calculateUpstreams from '../calculators/upstreams.js';
 import { zones as calculateStreamZones, upstreams as calculateStreamUpstreams } from '../calculators/stream.js';
 import calculateCaches from '../calculators/caches.js';
 import calculateSharedZones from '../calculators/sharedzones.js';
 import calculateConnections from '../calculators/connections.js';
 import calculateRequests from '../calculators/requests.js';
+import calculateZoneSync from '../calculators/zonesync.js';
+import calculateResolvers from '../calculators/resolvers.js';
 import { subscribe, unsubscribe } from '../datastore';
 
 const api = new Proxy({}, {
@@ -74,11 +77,14 @@ export const initialLoad = () => {
 		api.ssl,
 		api.http.requests.process(calculateRequests),
 		api.http.server_zones.process(calculateServerZones),
+		api.http.location_zones.process(calculateLocationZones),
 		api.http.upstreams.process(calculateUpstreams),
 		api.stream.server_zones.process(calculateStreamZones),
 		api.stream.upstreams.process(calculateStreamUpstreams),
 		api.http.caches.process(calculateCaches),
-		api.slabs.process(calculateSharedZones)
+		api.slabs.process(calculateSharedZones),
+		api.stream.zone_sync.process(calculateZoneSync),
+		api.resolvers.process(calculateResolvers)
 	];
 
 	return new Promise((resolve) => {

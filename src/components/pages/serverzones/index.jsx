@@ -1,19 +1,21 @@
 /**
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
+ * Copyright 2017-present, Igor Meleschenko
  * All rights reserved.
  *
  */
 
 import React from 'react';
-import api from '../../api';
-import DataBinder from '../databinder/databinder.jsx';
-import calculateServerZones from '../../calculators/serverzones.js';
-import { formatReadableBytes } from '../../utils';
-import SortableTable from '../table/sortabletable.jsx';
-import TableSortControl from '../table/tablesortcontrol.jsx';
-import { useTooltip } from '../../tooltips/index.jsx';
-import styles from '../table/style.css';
+import api from '../../../api';
+import DataBinder from '../../databinder/databinder.jsx';
+import calculateServerZones from '../../../calculators/serverzones.js';
+import { formatReadableBytes } from '../../../utils';
+import SortableTable from '../../table/sortabletable.jsx';
+import TableSortControl from '../../table/tablesortcontrol.jsx';
+import { useTooltip } from '../../../tooltips/index.jsx';
+import Locations from './locationzones.jsx';
+import styles from '../../table/style.css';
 
 export class StreamZones extends SortableTable {
 	get SORTING_SETTINGS_KEY() {
@@ -103,6 +105,10 @@ export class StreamZones extends SortableTable {
 					}
 				</tbody>
 			</table>
+
+			<br/>
+
+			<Locations />
 		</div>);
 	}
 }

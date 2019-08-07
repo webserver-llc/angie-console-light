@@ -11,18 +11,12 @@ import App, { history } from './App.jsx';
 import { startObserve } from './datastore';
 import { init as initSettings } from './appsettings';
 import { checkApiAvailability, initialLoad, checkWritePermissions } from './api';
-import { initAmplify } from './amplify';
 import { initTooltips } from './tooltips/index.jsx';
 
 /* global __ENV__, GA_ID */
 
 const start = () => {
 	initSettings();
-
-	if (__ENV__ !== 'demo') {
-		initAmplify();
-	}
-
 	initTooltips();
 
 	const fragment = document.createDocumentFragment();

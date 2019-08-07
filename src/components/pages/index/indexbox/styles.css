@@ -1,21 +1,22 @@
 .box {
-	padding: 15px 20px 15px;
+	padding: 10px 15px;
 	border: 1px solid #dfdfdf;
 	border-radius: 4px;
 	box-sizing: border-box;
 	flex: 1;
-	margin: 10px;
-	max-width: calc(20% - 20px);
+	margin: 8px;
+	min-width: 225px;
+	max-width: calc(20% - 16px);
 }
 
 .header {
 	position: relative;
 	background-color: #f9f9f9;
-	margin: -15px -20px 20px;
-	padding: 0 60px 0 20px;
+	margin: -10px -15px 20px;
+	padding: 0 55px 0 15px;
 	border-radius: 4px 4px 0 0;
-	height: 60px;
-	line-height: 60px;
+	height: 55px;
+	line-height: 55px;
 	font-size: 17px;
 	text-decoration: none;
 	overflow: hidden;
@@ -28,7 +29,7 @@
 .status {
 	position: absolute;
 	top: 50%;
-	right: 20px;
+	right: 15px;
 	margin-top: -15px;
 	width: 30px;
 	height: 30px;

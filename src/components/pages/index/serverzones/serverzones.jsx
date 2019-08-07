@@ -1,6 +1,7 @@
 /**
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
+ * Copyright 2017-present, Igor Meleschenko
  * All rights reserved.
  *
  */
@@ -11,12 +12,21 @@ import AlertsCount from '../alertscount/alertscount.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
 import api from '../../../../api';
 import calculateServerZones from '../../../../calculators/serverzones.js';
+import calculateLocationZones from '../../../../calculators/locationzones.js';
 import { formatReadableBytes } from '../../../../utils.js';
 
 export class ServerZones extends React.Component {
 	render() {
 		const { props: { data, store } } = this;
 		const stats = data.server_zones.__STATS;
+		let { warnings, alerts } = stats;
+
+		if (data.location_zones) {
+			const locationsStats = data.location_zones.__STATS;
+
+			warnings += locationsStats.warnings;
+			alerts += locationsStats.alerts;
+		}
 
 		return (
 			<IndexBox
@@ -27,8 +37,8 @@ export class ServerZones extends React.Component {
 				<AlertsCount
 					href="#server_zones"
 					total={stats.total}
-					warnings={stats.warnings}
-					alerts={stats.alerts}
+					warnings={warnings}
+					alerts={alerts}
 				/>
 
 				<h4>Traffic</h4>
@@ -40,5 +50,6 @@ export class ServerZones extends React.Component {
 }
 
 export default DataBinder(ServerZones, [
-	api.http.server_zones.process(calculateServerZones)
+	api.http.server_zones.process(calculateServerZones),
+	api.http.location_zones.process(calculateLocationZones)
 ]);

@@ -10,12 +10,16 @@
 	width: 100%;
 }
 
+.thin {
+	min-width: 500px;
+}
+
 .table tr:hover {
-	background: #f6f8fa;
+	background: #f7f7f7;
 }
 
 .table tr:hover td {
-	border-right-color: #f6f8fa;
+	border-right-color: #f7f7f7;
 }
 
 .table th {
@@ -25,14 +29,14 @@
 	padding: 0 8px;
 	border-right: 2px solid #fff;
 	font-weight: bold;
-	background-color: #f6f8fa;
+	background-color: #e3e3e3;
 	white-space: nowrap;
 }
 
 .table td {
 	padding: 8px;
 	vertical-align: middle;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #e3e3e3;
 	border-right: 2px solid #fff;
 	white-space: nowrap;
 }

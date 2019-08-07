@@ -29,7 +29,7 @@ export class AboutNginx extends React.Component {
 	render() {
 		const { props: { data: { nginx } } } = this;
 
-		return (<IndexBox>
+		return (<IndexBox className={this.props.className}>
 			<a href="https://www.nginx.com/resources/admin-guide/nginx-plus-releases/" target="_blank" styleName="styles.release">
 				{nginx.build} ({nginx.version})
 			</a>

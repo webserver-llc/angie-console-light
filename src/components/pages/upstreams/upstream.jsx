@@ -89,7 +89,11 @@ export default class Upstream extends UpstreamsList {
 
 				<thead>
 					<tr>
-						<TableSortControl order={this.state.sortOrder} onChange={this.changeSorting} />
+						<TableSortControl
+							secondSortLabel="Sort by status - down first"
+							order={this.state.sortOrder}
+							onChange={this.changeSorting}
+						/>
 
 						{ this.getSelectAllCheckbox(peers) }
 

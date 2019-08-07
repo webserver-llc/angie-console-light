@@ -16,8 +16,8 @@ export default class Header extends React.Component {
 			<a styleName={this.props.hash === '#' ? 'logoactive' : 'logo'} href="#" />
 
 			{
-				this.props.navigation?
-					<Navigation {...this.props} withAmplifyBtn={__ENV__ !== 'demo'} />
+				this.props.navigation ?
+					<Navigation {...this.props} />
 				: null
 			}
 		</div>);

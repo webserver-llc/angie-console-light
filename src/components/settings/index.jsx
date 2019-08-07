@@ -5,7 +5,13 @@
  *
  */
 import React from 'react';
-import {VERSION, MIN_CACHE_DATA_INTERVAL, MAX_CACHE_DATA_INTERVAL} from '../../constants.js';
+import {
+	VERSION,
+	MIN_CACHE_DATA_INTERVAL,
+	MAX_CACHE_DATA_INTERVAL,
+	DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT,
+	DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT
+} from '../../constants.js';
 import {getSetting, setSetting} from '../../appsettings'
 import NumberControl from './NumberControl.jsx';
 import NumberInput from '../numberinput/numberinput.jsx';
@@ -19,11 +25,12 @@ export default class Settings extends React.Component {
 		this.state = {
 			updatingPeriod: getSetting('updatingPeriod'),
 			warnings4xxThresholdPercent: getSetting('warnings4xxThresholdPercent'),
-			cacheDataInterval: getSetting('cacheDataInterval')
+			cacheDataInterval: getSetting('cacheDataInterval'),
+			zonesyncPendingThreshold: getSetting('zonesyncPendingThreshold', DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT),
+			resolverErrorsThreshold: getSetting('resolverErrorsThreshold', DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT)
 		};
 
 		this.changeUpdatePeriod = this.changeUpdatePeriod.bind(this);
-		this.change4xxThreshold = this.change4xxThreshold.bind(this);
 		this.changeCacheHitRatioInteval = this.changeCacheHitRatioInteval.bind(this);
 
 		this.save = this.save.bind(this);
@@ -41,17 +48,17 @@ export default class Settings extends React.Component {
 		this.setState({ updatingPeriod: updatingPeriod || 1000 });
 	}
 
-	change4xxThreshold(evt) {
-		let warnings4xxThresholdPercent = evt.target.value;
+	changePercentThreshold(prop, evt){
+		let value = evt.target.value;
 
-		if (warnings4xxThresholdPercent >= 100) {
-			warnings4xxThresholdPercent = 100;
-		} else if (warnings4xxThresholdPercent < 0) {
-			warnings4xxThresholdPercent = 0;
+		if (value >= 100) {
+			value = 100;
+		} else if (value < 0) {
+			value = 0;
 		}
 
 		this.setState({
-			warnings4xxThresholdPercent
+			[prop]: value
 		});
 	}
 
@@ -67,6 +74,8 @@ export default class Settings extends React.Component {
 	}
 
 	render() {
+		const { statuses } = this.props;
+
 		return (<div styleName="settings">
 			<h2 styleName="title">Options</h2>
 
@@ -77,7 +86,7 @@ export default class Settings extends React.Component {
 			<div styleName="section">4xx warnings threshold
 				<NumberInput
 					defaultValue={this.state.warnings4xxThresholdPercent}
-					onChange={this.change4xxThreshold}
+					onChange={this.changePercentThreshold.bind(this, 'warnings4xxThresholdPercent')}
 					styleName="input"
 				/> %
 			</div>
@@ -92,17 +101,47 @@ export default class Settings extends React.Component {
 				/> sec
 			</div>
 
+			{
+				statuses.zone_sync && statuses.zone_sync.ready ?
+					<div styleName="section">
+						Non synced data threshold
+
+						<NumberInput
+							defaultValue={this.state.zonesyncPendingThreshold}
+							onChange={this.changePercentThreshold.bind(this, 'zonesyncPendingThreshold')}
+							styleName="input"
+						/> %
+					</div>
+				: null
+			}
+
+			{
+				statuses.resolvers && statuses.resolvers.ready ?
+					<div styleName="section">
+						Resolver errors threshold
+
+						<NumberInput
+							defaultValue={this.state.resolverErrorsThreshold}
+							onChange={this.changePercentThreshold.bind(this, 'resolverErrorsThreshold')}
+							styleName="input"
+						/> %
+					</div>
+				: null
+			}
+
 			<div styleName="section">
 				<button onClick={this.save} styleName="save">Save</button>
 				<button onClick={this.props.close} styleName="cancel">Cancel</button>
 			</div>
 
-			<h3 styleName="help">Help</h3>
-
-			<div styleName="section">
+			<div styleName="section help">
 				For more information, please check
 				<br />
-				<a href="http://nginx.com/resources/admin-guide/?from-dashboard">NGINX Admin Guide</a>
+				<a
+					target="_blank"
+					href="https://docs.nginx.com/nginx/admin-guide/monitoring/live-activity-monitoring/#dashboard"
+					styleName="help-link"
+				>NGINX Admin Guide</a>
 			</div>
 
 			<span styleName="version">v{ VERSION }</span>

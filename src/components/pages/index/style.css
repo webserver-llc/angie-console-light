@@ -3,6 +3,14 @@
 	margin: 0 -20px;
 }
 
+.row-wrap {
+	flex-wrap: wrap;
+}
+
+.box {
+	min-width: calc(20% - 16px);
+}
+
 .connections {
-	min-width: calc(60% - 20px);
+	min-width: calc(60% - 16px);
 }

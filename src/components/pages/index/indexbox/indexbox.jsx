@@ -16,7 +16,11 @@ export default class IndexBox extends React.Component {
 			<div styleName="box" className={this.props.className}>
 				{
 					this.props.title ?
-						<a styleName="header" href={this.props.href}>
+						<a
+							styleName="header"
+							href={ this.props.href }
+							title={ this.props.title }
+						>
 							{ this.props.title }
 							{
 								'status' in this.props ?

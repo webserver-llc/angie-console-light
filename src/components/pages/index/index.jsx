@@ -14,6 +14,8 @@ import Upstreams from './upstreams/upstreams.jsx';
 import StreamZones from './streamzones/streamzones.jsx';
 import StreamUpstreams from './streamupstreams/streamupstreams.jsx';
 import Caches from './caches/caches.jsx';
+import ZoneSync from './zonesync.jsx';
+import Resolvers from './resolvers.jsx';
 import styles from './style.css';
 
 export default class Index extends React.Component {
@@ -23,17 +25,19 @@ export default class Index extends React.Component {
 		return (
 			<div>
 				<div styleName="row">
-					<AboutNginx />
+					<AboutNginx styleName="box" />
 					<Connections styleName="connections" />
-					<Requests />
+					<Requests styleName="box" />
 				</div>
 
-				<div styleName="row">
+				<div styleName="row row-wrap">
 					<ServerZones />
 					<Upstreams />
 					<StreamZones />
 					<StreamUpstreams />
 					<Caches />
+					<ZoneSync />
+					<Resolvers />
 				</div>
 			</div>
 		);

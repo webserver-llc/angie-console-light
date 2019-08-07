@@ -16,8 +16,7 @@ export class Requests extends React.Component {
 	render() {
 		const { data: { requests } } = this.props;
 
-		return (<IndexBox>
-
+		return (<IndexBox className={this.props.className}>
 			<span styleName="counter">Total:{ requests.total }</span>
 			<h3 styleName="h3">Requests</h3>
 

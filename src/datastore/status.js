@@ -21,5 +21,14 @@ export default {
 	},
 	shared_zones: {
 		ready: false
+	},
+	location_zones: {
+		ready: false
+	},
+	zone_sync: {
+		ready: false
+	},
+	resolvers: {
+		ready: false
 	}
 };

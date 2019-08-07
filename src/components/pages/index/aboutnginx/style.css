@@ -1,12 +1,17 @@
+.release {
+	display: inline-block;
+	margin-bottom: 12px;
+	font-weight: bold;
+}
+
 .release,
 .release:visited {
-	font-weight: bold;
 	color: #2671c6;
 }
 
 .table th,
 .table td {
-	padding: 10px 6px 10px 0;
+	padding: 0 6px 8px 0;
 }
 
 .table td {

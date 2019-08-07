@@ -28,13 +28,26 @@ export default class TableSortControl extends React.Component {
 	}
 
 	render() {
-		return (<th rowSpan="2" styleName="sorter" onClick={this.toggle}
-		            {...useTooltip(this.props.order === 'asc' ? 'Sort by status - down first' : 'Sort by conf order', 'hint-right')}
-				>
-					{
-						this.props.order === 'asc' ? '▴' : '▾'
-					}
-				</th>
+		const {
+			singleRow,
+			secondSortLabel,
+			order
+		} = this.props;
+
+		return (
+			<th
+				rowSpan={ singleRow ? null : '2' }
+				styleName="sorter"
+				onClick={ this.toggle }
+
+				{ ...useTooltip(order === 'asc' ? secondSortLabel : 'Sort by conf order', 'hint-right') }
+			>{
+				order === 'asc' ? '▴' : '▾'
+			}</th>
 		);
 	}
 }
+
+TableSortControl.defaultProps = {
+	secondSortLabel: 'Sort by status - failed first'
+};

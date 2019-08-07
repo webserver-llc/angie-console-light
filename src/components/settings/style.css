@@ -90,12 +90,15 @@
 }
 
 .help {
-	font-size: 18px;
-	font-weight: normal;
-	line-height: 50px;
-	padding: 0 35px;
-	background-color: #f1f5f7;
-	margin: 0 -35px;
+	margin: 30px -35px 0;
+	padding: 20px 35px 15px;
+	border-top: 1px solid #ddd;
+	line-height: 30px;
+}
+
+.help-link,
+.help-link:visited {
+	color: #2671c6;
 }
 
 .version {

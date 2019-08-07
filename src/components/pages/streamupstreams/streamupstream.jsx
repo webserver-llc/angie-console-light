@@ -28,7 +28,11 @@ export default class StreamUpstream extends UpstreamsList {
 			<table styleName="table wide">
 				<thead>
 					<tr>
-						<TableSortControl order={this.state.sortOrder} onChange={this.changeSorting} />
+						<TableSortControl
+							secondSortLabel="Sort by status - down first"
+							order={this.state.sortOrder}
+							onChange={this.changeSorting}
+						/>
 
 						{ this.getSelectAllCheckbox(peers) }
 

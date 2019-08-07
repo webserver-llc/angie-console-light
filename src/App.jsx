@@ -13,13 +13,15 @@ import Header from './components/header/header.jsx';
 import Footer from './components/footer/footer.jsx';
 import Loader from './components/loader/loader.jsx';
 import Index from './components/pages/index/index.jsx';
-import ServerZones from './components/pages/serverzones.jsx';
+import ServerZones from './components/pages/serverzones/index.jsx';
 import Upstreams from './components/pages/upstreams/index.jsx';
 import StreamZones from './components/pages/streamzones.jsx';
 import StreamUpstreams from './components/pages/streamupstreams/index.jsx';
 import Caches from './components/pages/caches/index.jsx';
 import SharedZones from './components/pages/sharedzones.jsx';
 import UpdatingControl from './components/updating-controll/updating-control.jsx';
+import ZoneSync from './components/pages/zonesync.jsx';
+import Resolvers from './components/pages/resolvers.jsx';
 
 import Disclaimer from './components/demo/disclaimer.jsx';
 import { STORE, startObserve, play, pause } from './datastore';
@@ -33,7 +35,9 @@ const SECTIONS = {
 	'#tcp_zones': StreamZones,
 	'#tcp_upstreams': StreamUpstreams,
 	'#caches': Caches,
-	'#shared_zones': SharedZones
+	'#shared_zones': SharedZones,
+	'#zone_sync': ZoneSync,
+	'#resolvers': Resolvers
 };
 
 export default class App extends React.Component {
