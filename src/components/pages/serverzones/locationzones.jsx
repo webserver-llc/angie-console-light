@@ -35,7 +35,7 @@ export class Locations extends SortableTable {
 			}
 
 			component = (<div>
-				<h1>Location zones</h1>
+				<h1>Location Zones</h1>
 
 				<table styleName="table wide">
 					<thead>

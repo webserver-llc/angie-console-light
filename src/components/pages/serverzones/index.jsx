@@ -38,7 +38,7 @@ export class StreamZones extends SortableTable {
 		}
 
 		return (<div>
-			<h1>Server zones</h1>
+			<h1>Server Zones</h1>
 
 			<table styleName="table wide">
 				<thead>

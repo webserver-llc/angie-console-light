@@ -45,7 +45,7 @@ export class Upstreams extends React.Component {
 
 		return (
 			<UpstreamsBox
-				title="Upstreams"
+				title="HTTP Upstreams"
 				stats={stats}
 				status={store.__STATUSES.upstreams.status}
 				href="#upstreams"

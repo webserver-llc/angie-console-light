@@ -36,7 +36,7 @@ const SECTIONS = {
 	'#tcp_upstreams': StreamUpstreams,
 	'#caches': Caches,
 	'#shared_zones': SharedZones,
-	'#zone_sync': ZoneSync,
+	'#cluster': ZoneSync,
 	'#resolvers': Resolvers
 };
 

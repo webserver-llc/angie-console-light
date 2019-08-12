@@ -20,12 +20,12 @@ export class ZoneSync extends React.Component {
 
 		return (
 			<IndexBox
-				title="Synced Zones"
+				title="Cluster"
 				status={store.__STATUSES.zone_sync.status}
-				href="#zone_sync"
+				href="#cluster"
 			>
 				<AlertsCount
-					href="#zone_sync"
+					href="#cluster"
 					total={stats.total}
 					alerts={stats.alerts}
 					warnings={stats.warnings}

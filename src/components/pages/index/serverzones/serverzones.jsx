@@ -30,7 +30,7 @@ export class ServerZones extends React.Component {
 
 		return (
 			<IndexBox
-				title="Server zones"
+				title="HTTP Zones"
 				status={store.__STATUSES.server_zones.status}
 				href="#server_zones"
 			>

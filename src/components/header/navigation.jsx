@@ -25,12 +25,12 @@ import styles from './style.css';
 
 const SECTIONS = [
 	{
-		title: 'Server zones',
+		title: 'HTTP Zones',
 		hash: '#server_zones',
 		statusKey: 'server_zones'
 	},
 	{
-		title: 'Upstreams',
+		title: 'HTTP Upstreams',
 		hash: '#upstreams',
 		statusKey: 'upstreams'
 	},
@@ -50,13 +50,13 @@ const SECTIONS = [
 		statusKey: 'caches'
 	},
 	{
-		title: 'Shared zones',
+		title: 'Shared Zones',
 		hash: '#shared_zones',
 		statusKey: 'shared_zones'
 	},
 	{
-		title: 'Synced Zones',
-		hash: '#zone_sync',
+		title: 'Cluster',
+		hash: '#cluster',
 		statusKey: 'zone_sync'
 	},
 	{

@@ -31,7 +31,7 @@ export class SharedZones extends SortableTable {
 		}
 
 		return (<div>
-			<h1>Shared zones</h1>
+			<h1>Shared Zones</h1>
 
 			<table styleName="table">
 				<thead>
