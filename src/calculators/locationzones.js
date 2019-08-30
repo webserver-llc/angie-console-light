@@ -22,6 +22,7 @@ export default (locations, previousState, { __STATUSES }) => {
 	let newStatus = 'ok';
 
 	const STATS = {
+		total: 0,
 		warnings: 0,
 		alerts: 0
 	};
@@ -57,6 +58,8 @@ export default (locations, previousState, { __STATUSES }) => {
 
 		return location;
 	}, false);
+
+	STATS.total = locations.size;
 
 	locations.__STATS = STATS;
 	__STATUSES.location_zones.ready = true;

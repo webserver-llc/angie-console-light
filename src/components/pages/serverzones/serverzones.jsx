@@ -13,38 +13,43 @@ import TableSortControl from '../../table/tablesortcontrol.jsx';
 import { useTooltip } from '../../../tooltips/index.jsx';
 import styles from '../../table/style.css';
 
-export default class Locations extends SortableTable {
+export default class StreamZones extends SortableTable {
 	get SORTING_SETTINGS_KEY() {
-		return 'locationsSortOrder';
+		return 'streamZonesSortOrder';
 	}
 
-	render(){
+	render() {
 		const { data } = this.props;
 		let component = null;
 
 		if (data) {
-			const locations = Array.from(data);
+			const zones = Array.from(data);
 
 			if (this.state.sortOrder === 'desc') {
-				locations.sort( ([nameA, a], [nameB, b]) =>
-					a.alert || a.warning ? - 1 : 1
-				);
+				zones.sort( ([nameA, a], [nameB, b]) => {
+					if (a.alert || a.warning) {
+						return -1;
+					}
+
+					return 1;
+				});
 			}
 
 			component = (<div>
-				<h1>Location Zones</h1>
+				<h1>Server Zones</h1>
 
 				<table styleName="table wide">
 					<thead>
 						<tr>
 							<TableSortControl order={this.state.sortOrder} onChange={this.changeSorting} />
 							<th>Zone</th>
-							<th colSpan="2">Requests</th>
+							<th colSpan="3">Requests</th>
 							<th colSpan="6">Responses</th>
 							<th colSpan="4">Traffic</th>
 						</tr>
 						<tr styleName="right-align sub-header">
 							<th styleName="bdr" />
+							<th>Current</th>
 							<th>Total</th>
 							<th styleName="bdr">Req/s</th>
 							<th>1xx</th>
@@ -61,37 +66,38 @@ export default class Locations extends SortableTable {
 					</thead>
 					<tbody styleName="right-align">
 						{
-							locations.map(([name, location]) => {
+							zones.map(([name, zone]) => {
 								let status = 'ok';
 
-								if (location.warning) {
+								if (zone.warning) {
 									status = 'warning';
-								} else if (location['5xxChanged']) {
+								} else if (zone['5xxChanged']) {
 									status = 'alert';
 								}
 
 								return (<tr>
 									<td styleName={ status } />
 									<td styleName="left-align bold bdr">{ name }</td>
-									<td>{ location.requests }</td>
-									<td styleName="bdr">{ location.zone_req_s }</td>
-									<td>{ location.responses['1xx'] }</td>
-									<td>{ location.responses['2xx'] }</td>
-									<td>{ location.responses['3xx'] }</td>
-									<td styleName={`flash ${location['4xxChanged'] ? 'red-flash' : ''}`}>
+									<td>{ zone.processing }</td>
+									<td>{ zone.requests }</td>
+									<td styleName="bdr">{ zone.zone_req_s }</td>
+									<td>{ zone.responses['1xx'] }</td>
+									<td>{ zone.responses['2xx'] }</td>
+									<td>{ zone.responses['3xx'] }</td>
+									<td styleName={`flash ${zone['4xxChanged'] ? 'red-flash' : ''}`}>
 										<span
 											styleName="hinted"
-											{ ... useTooltip(<div>4xx: { location.responses['4xx'] } <br /> 499/444/408: { location.discarded }</div>, 'hint') }
+											{ ... useTooltip(<div>4xx: { zone.responses['4xx'] } <br /> 499/444/408: { zone.discarded }</div>, 'hint') }
 										>
-											{ location.responses['4xx'] + location.discarded }
+											{ zone.responses['4xx'] + zone.discarded }
 										</span>
 									</td>
-									<td styleName={`flash ${location['5xxChanged'] ? 'red-flash' : ''}`}>{ location.responses['5xx'] }</td>
-									<td styleName="bdr">{ location.responses.total }</td>
-									<td styleName="px60">{ formatReadableBytes(location.sent_s) }</td>
-									<td styleName="px60">{ formatReadableBytes(location.rcvd_s) }</td>
-									<td styleName="px60">{ formatReadableBytes(location.sent) }</td>
-									<td styleName="px60">{ formatReadableBytes(location.received) }</td>
+									<td styleName={`flash ${zone['5xxChanged'] ? 'red-flash' : ''}`}>{ zone.responses['5xx'] }</td>
+									<td styleName="bdr">{ zone.responses.total }</td>
+									<td styleName="px60">{ formatReadableBytes(zone.sent_s) }</td>
+									<td styleName="px60">{ formatReadableBytes(zone.rcvd_s) }</td>
+									<td styleName="px60">{ formatReadableBytes(zone.sent) }</td>
+									<td styleName="px60">{ formatReadableBytes(zone.received) }</td>
 								</tr>);
 							})
 						}

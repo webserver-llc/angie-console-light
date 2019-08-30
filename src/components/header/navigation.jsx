@@ -98,7 +98,16 @@ export class Navigation extends React.Component {
 	render() {
 		const { statuses } = this.props;
 		const tabs = SECTIONS
-			.filter(section => statuses[section.statusKey].ready)
+			.filter(({ statusKey }) => {
+				if (statusKey === 'server_zones') {
+					return (
+						statuses.server_zones.ready ||
+						statuses.location_zones.ready
+					);
+				} else {
+					return statuses[statusKey].ready;
+				}
+			})
 			.map(section => {
 				let status = '';
 				let statusIcon = null;
