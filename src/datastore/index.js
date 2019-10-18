@@ -8,6 +8,14 @@
 import { getSetting } from '../appsettings';
 import { STORE as _STORE, handleDataUpdate, get as getFromStore } from './store';
 
+export const availableApiEndpoints = [
+	[],
+	{
+		http: [],
+		stream: []
+	}
+];
+
 const OBSERVED = new Map();
 
 let live = true;
@@ -27,10 +35,10 @@ export const unsubscribe = (apis, fn) => {
 		if (instance) {
 			instance.instacesCount--;
 			instance.callbacks = instance.callbacks.filter(callback => callback !== fn);
-		}
 
-		if (instance.instacesCount === 0) {
-			OBSERVED.delete(api.toString());
+			if (instance.instacesCount === 0) {
+				OBSERVED.delete(api.toString());
+			}
 		}
 	});
 };
@@ -82,21 +90,34 @@ export const subscribe = (apis, callback) => {
 	// TODO: Throttled callback
 
 	apis.forEach(api => {
+		let isAvailable = availableApiEndpoints[0].includes(api.path[0]);
+
 		const instance = OBSERVED.get(api.toString());
 
-		if (instance) {
-			instance.callbacks.push(callback);
-			instance.instancesCount++;
-			return;
+		if (
+			isAvailable &&
+			api.path[0] in availableApiEndpoints[1]
+		) {
+			isAvailable = availableApiEndpoints[1][api.path[0]].includes(api.path[1]);
 		}
 
-		OBSERVED.set(api.toString(), {
-			api,
-			callbacks: [
-				callback
-			],
-			instancesCount: 1
-		});
+		if (isAvailable) {
+			if (instance) {
+				instance.callbacks.push(callback);
+				instance.instancesCount++;
+				return;
+			}
+
+			OBSERVED.set(api.toString(), {
+				api,
+				callbacks: [
+					callback
+				],
+				instancesCount: 1
+			});
+		} else if (instance) {
+			OBSERVED.delete(api.toString());
+		}
 	});
 
 	clearImmediate(immediate);

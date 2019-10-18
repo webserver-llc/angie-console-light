@@ -19,7 +19,7 @@ import calculateConnections from '../calculators/connections.js';
 import calculateRequests from '../calculators/requests.js';
 import calculateZoneSync from '../calculators/zonesync.js';
 import calculateResolvers from '../calculators/resolvers.js';
-import { subscribe, unsubscribe } from '../datastore';
+import { subscribe, unsubscribe, availableApiEndpoints } from '../datastore';
 
 const api = new Proxy({}, {
 	get(target, pathStart) {
@@ -87,19 +87,55 @@ export const initialLoad = () => {
 		api.resolvers.process(calculateResolvers)
 	];
 
-	return new Promise((resolve) => {
-		let called = false;
-		subscribe(apis, (...args) => {
-			// FIXME: This callback should be called just once for this bulk of apis
-
-			if (called) {
-				return;
+	return window.fetch(`${API_PATH}/`)
+		.then(response => {
+			if (response.status <= 299) {
+				return response.json()
+					.then(data => {
+						if (data) {
+							availableApiEndpoints[0] = data;
+						}
+					})
+					.catch(err => {});
 			}
+		})
+		.then(() =>
+			Promise.all(
+				Object.keys(availableApiEndpoints[1]).map(apiKey =>
+					availableApiEndpoints[0].includes(apiKey) ?
+						window.fetch(`${API_PATH}/${apiKey}/`).then(
+							response => {
+								if (response.status <= 299) {
+									return response.json()
+										.then(data => {
+											if (data) {
+												availableApiEndpoints[1][apiKey] = data;
+											}
+										})
+										.catch(err => {});
+								}
+							}
+						)
+					: Promise.resolve()
+				)
+			)
+				.then(() =>
+					new Promise((resolve) => {
+						let called = false;
 
-			called = true;
-			unsubscribe(apis);
+						subscribe(apis, (...args) => {
+							// FIXME: This callback should be called just once for this bulk of apis
 
-			resolve();
-		});
-	});
+							if (called) {
+								return;
+							}
+
+							called = true;
+							unsubscribe(apis);
+
+							resolve();
+						});
+					})
+				)
+		);
 };
