@@ -35,7 +35,7 @@ export default class UpstreamsEditor extends React.Component {
 		return data;
 	}
 
-	static normalizeOutputData(data) {
+	static normalizeOutputData(data, initialData) {
 		data = { ...data };
 
 		Object.keys(data).forEach((key) => {
@@ -43,6 +43,10 @@ export default class UpstreamsEditor extends React.Component {
 				data[key] = `${data[key]}s`;
 			}
 		});
+
+		if (data.server === initialData.server) {
+			delete data.server;
+		}
 
 		delete data.id;
 
@@ -67,12 +71,16 @@ export default class UpstreamsEditor extends React.Component {
 
 		if (!props.peers || props.peers.size > 1) {
 			this.state.data = {};
+			this.state.initialData = {};
 		} else if (props.peers && props.peers.size === 1) {
 			this.state.loading = true;
 
 			props.upstreamsApi.getPeer(props.upstream.name, Array.from(props.peers)[0][1].id).then((data) => {
+				const normalizedData = UpstreamsEditor.normalizeInputData(data);
+
 				this.setState({
-					data: UpstreamsEditor.normalizeInputData(data),
+					data: normalizedData,
+					initialData: { ...normalizedData },
 					loading: false
 				});
 			});
@@ -151,7 +159,10 @@ export default class UpstreamsEditor extends React.Component {
 				Array.from(peers).map(([peerId]) => upstreamsApi.updatePeer(
 					this.props.upstream.name,
 					peerId,
-					UpstreamsEditor.normalizeOutputData(this.state.data)
+					UpstreamsEditor.normalizeOutputData(
+						this.state.data,
+						this.state.initialData
+					)
 				))
 			).then(() => {
 				this.setState({
