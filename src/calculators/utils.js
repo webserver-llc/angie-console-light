@@ -210,17 +210,25 @@ export const upstreamsCalculatorFactory = upstreamsKey => (upstreams, previousSt
 	return upstreams;
 };
 
-export const countResolverResponses = (responses, errorResponsesCollector) =>
-	Object.keys(responses).reduce((memo, key) => {
+export const countResolverResponses = (responses) => {
+	let allResponses = 0;
+	let errResponses = 0;
+
+	Object.keys(responses).forEach(key => {
 		if (typeof responses[key] === 'number') {
 			if (key !== 'timedout') {
-				memo += responses[key];
+				allResponses += responses[key];
 			}
 
 			if (key !== 'noerror') {
-				errorResponsesCollector += responses[key];
+				errResponses += responses[key];
 			}
 		}
+	});
 
-		return memo;
-	}, 0);
+	return {
+		allResponses,
+		errResponses
+	};
+};
+

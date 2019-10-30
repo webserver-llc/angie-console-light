@@ -53,26 +53,32 @@ export default (resolvers, previousState, { __STATUSES }) => {
 				requests: prevRequests,
 				responses: prevResponses
 			} = previousResolver;
-			const prevTotalReqs = calculateSpeed(
-				Object.keys(prevRequests).reduce((memo, key) => {
-					if (typeof prevRequests[key] === 'number') {
-						memo += prevRequests[key];
-					}
+			const prevTotalReqs = Object.keys(prevRequests).reduce((memo, key) => {
+				if (typeof prevRequests[key] === 'number') {
+					memo += prevRequests[key];
+				}
 
-					return memo;
-				}, 0),
+				return memo;
+			}, 0);
+
+			STATS.traffic.in += calculateSpeed(
+				prevTotalReqs,
 				totalReqs,
 				period
 			);
 
-			STATS.traffic.in += prevTotalReqs;
-
-			let errResponses = 0;
-			let prevErrResponses = 0;
+			const {
+				allResponses,
+				errResponses
+			} = countResolverResponses(responses);
+			const {
+				allResponses: prevAllResponses,
+				errResponses: prevErrResponses
+			} = countResolverResponses(prevResponses);
 
 			STATS.traffic.out += calculateSpeed(
-				countResolverResponses(prevResponses, prevErrResponses),
-				countResolverResponses(responses, errResponses),
+				prevAllResponses,
+				allResponses,
 				period
 			);
 
