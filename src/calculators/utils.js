@@ -232,3 +232,55 @@ export const countResolverResponses = (responses) => {
 	};
 };
 
+export const limitConnReqHistoryLimit = 1800;
+
+export const limitConnReqFactory = (historyObject, previousUpdatingPeriod) =>
+	(data, previousState, _, timeStart) => {
+		if (data === null || Object.keys(data).length === 0) {
+			return null;
+		}
+
+		const ts = timeStart / 1000;
+		const updatingPeriod = getSetting('updatingPeriod');
+
+		if (previousUpdatingPeriod !== updatingPeriod) {
+			previousUpdatingPeriod = updatingPeriod;
+
+			historyObject = {};
+		}
+
+		data = createMapFromObject(data, (zone, zoneName) => {
+			if (!historyObject[zoneName]) {
+				historyObject[zoneName] = [];
+			}
+
+			let history = historyObject[zoneName];
+			const lastItem = history[history.length - 1];
+			const needSort = lastItem && lastItem._ts > ts;
+
+			history.push({
+				...zone,
+				_ts: ts
+			});
+
+			if (history.length > limitConnReqHistoryLimit) {
+				history.shift();
+			}
+
+			if (needSort) {
+				historyObject[zoneName] = history.sort(
+					(a, b) => a._ts < b._ts ? -1 : 1
+				);
+			}
+
+			return {
+				zone,
+				history: {
+					ts,
+					data: history.slice()
+				}
+			};
+		});
+
+		return data;
+	};

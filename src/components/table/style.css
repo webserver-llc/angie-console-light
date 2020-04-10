@@ -217,3 +217,38 @@ td.status {
 	border-bottom: 1px dotted #999;
 	cursor: default;
 }
+
+.chart-active {
+	background: #f7f7f7;
+}
+
+.chart-active td {
+	border-bottom: none;
+}
+
+.chart-icon {
+	width: 20px;
+	font-size: 28px;
+	line-height: 10px;
+	vertical-align: top !important;
+	user-select: none;
+	color: #999;
+}
+
+.chart-icon:hover {
+	color: #333;
+	cursor: pointer;
+}
+
+.chart-active .chart-icon {
+	color: #333;
+	font-weight: bold;
+}
+
+.chart-row:hover {
+	background: #fff !important;
+}
+
+.chart-row td {
+	border-bottom: 2px solid #999;
+}
