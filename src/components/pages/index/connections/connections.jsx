@@ -10,6 +10,7 @@ import IndexBox from '../indexbox/indexbox.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
 import api from '../../../../api';
 import calculateConnections from '../../../../calculators/connections.js';
+import calculateSSL from '../../../../calculators/ssl.js'
 
 import styles from './style.css';
 
@@ -26,27 +27,46 @@ export class Connections extends React.Component {
 		this.setState({ tab });
 	}
 
+	getCurrentCell(value){
+		return (
+			<td styleName="current">
+				{ value }
+				{
+					typeof value == 'number' ?
+						<span styleName="current__sec">/s</span>
+					: null
+				}
+			</td>
+		);
+	}
+
 	render() {
 		const { props: { data: { connections, ssl } }, state: { tab } } = this;
+		let tabsStyleName = 'tabs';
+		let isConnsTab = this.state.tab === 'conns';
+
+		if (!isConnsTab) {
+			tabsStyleName += ' tabs_ssl';
+		}
 
 		return (<IndexBox className={this.props.className}>
 			{
-				this.state.tab === 'conns' ?
+				isConnsTab ?
 					<span styleName="counter">Accepted:{connections.accepted}</span>
 				: null
 			}
 
-			<div styleName="tabs">
-				<div styleName={tab === 'conns' ? 'tab-active' : 'tab'} onClick={() => this.changeTab('conns')}>
+			<div styleName={ tabsStyleName }>
+				<div styleName={isConnsTab ? 'tab-active' : 'tab'} onClick={() => this.changeTab('conns')}>
 					<span>Connections</span>
 				</div>
-				<div styleName={tab === 'ssl' ? 'tab-active' : 'tab'} onClick={() => this.changeTab('ssl')}>
+				<div styleName={!isConnsTab ? 'tab-active' : 'tab'} onClick={() => this.changeTab('ssl')}>
 					<span>SSL</span>
 				</div>
 			</div>
 
 			{
-				this.state.tab === 'conns' ?
+				isConnsTab ?
 					<table styleName="table">
 						<tr>
 							<th>Current</th>
@@ -64,16 +84,24 @@ export class Connections extends React.Component {
 						</tr>
 					</table>
 					:
-					<table styleName="table">
+					<table styleName="table ssl">
 						<tr>
+							<th width="16%"/>
 							<th>Handshakes</th>
 							<th>Handshakes failed</th>
 							<th>Session reuses</th>
 						</tr>
 						<tr>
+							<td>total</td>
 							<td>{ ssl.handshakes }</td>
 							<td>{ ssl.handshakes_failed }</td>
 							<td>{ ssl.session_reuses }</td>
+						</tr>
+						<tr>
+							<td>current</td>
+							{ this.getCurrentCell(ssl.handshakes_s) }
+							{ this.getCurrentCell(ssl.handshakes_failed_s) }
+							{ this.getCurrentCell(ssl.session_reuses_s) }
 						</tr>
 					</table>
 			}
@@ -83,5 +111,5 @@ export class Connections extends React.Component {
 
 export default DataBinder(Connections, [
 	api.connections.process(calculateConnections),
-	api.ssl
+	api.ssl.process(calculateSSL)
 ]);

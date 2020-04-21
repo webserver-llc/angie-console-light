@@ -11,7 +11,10 @@ export const is4xxThresholdReached = obj =>
 	obj.responses['4xx'] / obj.requests * 100 > getSetting('warnings4xxThresholdPercent');
 
 export const calculateSpeed = (previous, now, period) => {
-	if (typeof previous !== 'number') {
+	if (
+		typeof previous !== 'number' ||
+		typeof now !== 'number'
+	) {
 		return 'n/a';
 	}
 

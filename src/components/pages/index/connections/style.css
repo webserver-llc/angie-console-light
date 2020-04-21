@@ -3,7 +3,11 @@
 }
 
 .tabs {
-	margin-bottom: 24px;
+	margin-bottom: 30px;
+}
+
+.tabs_ssl {
+	margin-bottom: 11px;
 }
 
 .tab {
@@ -49,4 +53,20 @@
 	font-weight: bold;
 	margin: 0 0 30px;
 	font-size: 16px;
+}
+
+.current {}
+
+.current__sec {
+	font-size: 16px;
+}
+
+.ssl td {
+	font-size: 22px;
+}
+
+.ssl td:first-child {
+	width: 16%;
+	padding-top: 4px;
+	font-size: inherit;
 }
