@@ -92,13 +92,13 @@ export class Connections extends React.Component {
 							<th>Session reuses</th>
 						</tr>
 						<tr>
-							<td>total</td>
+							<td>Total</td>
 							<td>{ ssl.handshakes }</td>
 							<td>{ ssl.handshakes_failed }</td>
 							<td>{ ssl.session_reuses }</td>
 						</tr>
 						<tr>
-							<td>current</td>
+							<td>Current</td>
 							{ this.getCurrentCell(ssl.handshakes_s) }
 							{ this.getCurrentCell(ssl.handshakes_failed_s) }
 							{ this.getCurrentCell(ssl.session_reuses_s) }
