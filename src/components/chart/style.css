@@ -12,6 +12,11 @@
 	stroke-width: 1px;
 }
 
+.x-line {
+	stroke: #eee;
+	stroke-width: 1px;
+}
+
 .x-label {
 	font: 10px Open Sans,Arial,sans-serif;
 	fill: #888;
@@ -19,7 +24,7 @@
 }
 
 .y-label {
-	font: 12px Open Sans,Arial,sans-serif;
+	font: 13px Open Sans,Arial,sans-serif;
 	fill: #666;
 	text-anchor: end;
 }
@@ -29,6 +34,15 @@
 	stroke-linecap: round;
 	stroke-linejoin: bevel;
 	fill: none;
+}
+
+.area {
+	opacity: .5;
+	stroke-width: 0;
+}
+
+.faded {
+	opacity: .075;
 }
 
 .legend {

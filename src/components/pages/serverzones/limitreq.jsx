@@ -49,11 +49,13 @@ export default class LimitReq extends LimitConnReqConstructor {
 
 		return Array.from(this.props.data).map(
 			([name, { zone, history }]) => {
-				let styleName = '';
+				let styleName = 'chart-container';
+				let title = 'Click to view rate graph';
 				let chart = null;
 
 				if (activeCharts.includes(name)) {
-					styleName = 'chart-active';
+					styleName += ' chart-container_active';
+					title = 'Click to hide rate graph';
 					chart = (
 						<tr
 							key={ `chart_${ name }` }
@@ -77,12 +79,12 @@ export default class LimitReq extends LimitConnReqConstructor {
 					<tr
 						key={ `data_${ name }` }
 						styleName={ styleName }
+						title={ title }
+						onClick={ this.toggleChart.bind(this, name) }
 					>
-						<td
-							styleName="center-align bdr chart-icon"
-							title="Click to toggle the graph"
-							onClick={ this.toggleChart.bind(this, name) }
-						>&#x0223F;</td>
+						<td styleName="center-align bdr chart-icon">
+							<div styleName="chart-icon__icon" />
+						</td>
 						<td styleName="left-align bold bdr">{ name }</td>
 						<td styleName="bdr">{ zone.passed }</td>
 						<td styleName="bdr">{ zone.delayed }</td>

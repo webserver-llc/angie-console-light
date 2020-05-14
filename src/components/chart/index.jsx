@@ -44,12 +44,16 @@ export default class Chart extends React.Component {
 
 		this.state = {
 			disabledMetrics: [],
+			highlightedMetric: null,
 			mouseOffsetX: null,
 			selectedTimeWindow,
 			timeEnd: props.data.ts,
 			dndIsInProgress: false,
 			dndPointsIndicies: null
 		};
+
+		this.highlightMetricTimer = null;
+		this.highlightedMetric = null;
 
 		this.mouseOffsetX = null;
 		this.mouseMoveTimer = null;
@@ -64,6 +68,7 @@ export default class Chart extends React.Component {
 		this.onMouseDown = this.onMouseDown.bind(this);
 		this.onMouseUp = this.onMouseUp.bind(this);
 		this.redraw = this.redraw.bind(this);
+		this.highlightMetric = this.highlightMetric.bind(this);
 
 		this.redraw();
 	}
@@ -284,13 +289,35 @@ export default class Chart extends React.Component {
 		});
 	}
 
+	deferredHighlightMetric(metric){
+		this.highlightedMetric = metric;
+
+		if (this.highlightMetricTimer === null) {
+			this.highlightMetricTimer = setTimeout(
+				this.highlightMetric,
+				200
+			);
+		}
+	}
+
+	highlightMetric(){
+		this.highlightMetricTimer = null;
+
+		if (this.highlightedMetric !== this.state.highlightedMetric) {
+			this.redraw({
+				highlightedMetric: this.highlightedMetric
+			});
+		}
+	}
+
 	toggleMetric(name){
 		const { disabledMetrics } = this.state;
 
 		this.redraw({
 			disabledMetrics: disabledMetrics.includes(name) ?
 					disabledMetrics.filter(metric => metric !== name)
-				: disabledMetrics.concat(name)
+				: disabledMetrics.concat(name),
+			highlightedMetric: null
 		});
 	}
 
@@ -302,6 +329,7 @@ export default class Chart extends React.Component {
 		} = nextProps ? nextProps : this.props;
 		const {
 			disabledMetrics,
+			highlightedMetric,
 			selectedTimeWindow,
 			timeEnd,
 			dndPointsIndicies
@@ -316,7 +344,9 @@ export default class Chart extends React.Component {
 		this.points = [];
 		this.toRender = {
 			yMax: null,
+			yMid: null,
 			charts: [],
+			areas: [],
 			legend: [],
 			tooltipPoints: []
 		};
@@ -352,55 +382,91 @@ export default class Chart extends React.Component {
 					parsedData = data.slice(firstPointIndex);
 				}
 
-				const chartPaths = {};
+				const metrics = Array.from(colors.keys());
 
 				xStep = chartWidth / timeDiff;
 
-				const yMax = parsedData.reduce((max, item) => {
-					let newMax = max;
-
-					for (let key in item) {
-						if (
-							key !== '_ts' &&
-							!disabledMetrics.includes(key) &&
-							item[key] > newMax
-						) {
-							newMax = item[key];
+				let yMax = parsedData.reduce((max, { zone }) => {
+					const newMax = metrics.reduce((memo, key) => {
+						if (key in zone && !disabledMetrics.includes(key)) {
+							memo += zone[key];
 						}
-					}
 
-					return newMax;
+						return memo;
+					}, 0);
+
+					return newMax > max ? newMax : max;
 				}, 0);
 
 				if (yMax > 0) {
-					this.toRender.yMax = (
+					if (yMax % 2 === 1) {
+						yMax += 1;
+					}
+
+					this.toRender.yMax = [
 						<text
+							key="y-max-label"
 							styleName="y-label"
 							x={ offsetLeft - textOffset }
 							y={ offsetTop }
-						>{ yMax }</text>
-					);
+						>{ yMax }</text>,
+						<line
+							key="y-max-line"
+							styleName="x-line"
+							x1={ offsetLeft }
+							x2={ offsetLeft + chartWidth }
+							y1={ offsetTop }
+							y2={ offsetTop }
+						/>
+					];
+
+					const yMidCoord = offsetTop + chartHeight / 2;
+
+					this.toRender.yMid = [
+						<text
+							key="y-mid-label"
+							styleName="y-label"
+							x={ offsetLeft - textOffset }
+							y={ yMidCoord }
+						>{ yMax / 2 }</text>,
+						<line
+							key="y-mid-line"
+							styleName="x-line"
+							x1={ offsetLeft }
+							x2={ offsetLeft + chartWidth }
+							y1={ yMidCoord }
+							y2={ yMidCoord }
+						/>
+					];
 				}
 
 				const yStep = yMax > 0 ? (chartHeight / yMax) : 0;
+				const charts = {};
 
 				parsedData.forEach((point, i) => {
 					const x = offsetLeft + (point._ts - timeStart) * xStep;
 					const values = {};
+					let valuesStack = 0;
 
-					for (let key in point) {
-						if (colors.has(key)) {
-							const y = offsetTop + chartHeight - yStep * point[key];
+					for (let j = metrics.length - 1; j >= 0; j--) {
+						const key = metrics[j];
+
+						if (!disabledMetrics.includes(key)) {
+							const value = point.zone[key];
+							const y = offsetTop + chartHeight - yStep * (value + valuesStack);
 
 							if (i === 0) {
-								chartPaths[key] = `M ${ x } ${ y }`;
+								charts[key] = {
+									path: `M ${ x } ${ y }`,
+									coordinates: [[x, y]]
+								};
 							} else {
-								chartPaths[key] += ` L ${ x } ${ y }`;
+								charts[key].path += ` L ${ x } ${ y }`;
+								charts[key].coordinates.push([x, y]);
 							}
 
-							if (!disabledMetrics.includes(key)) {
-								values[key] = point[key];
-							}
+							valuesStack += value;
+							values[key] = value;
 						}
 					}
 
@@ -411,36 +477,82 @@ export default class Chart extends React.Component {
 					});
 				});
 
-				Object.keys(chartPaths).forEach(name => {
-					let legendItemStyleName = 'legend__item';
+				for (let i = metrics.length - 1; i >= 0; i--) {
+					const key = metrics[i];
 
-					if (disabledMetrics.includes(name)) {
-						legendItemStyleName += ' legend__item_disabled';
-					} else {
+					if (key in charts) {
+						const isFaded = highlightedMetric !== null && highlightedMetric !== key;
+
 						this.toRender.charts.push(
 							<path
-								key={ `chart_${ name }` }
-								styleName="line"
-								style={{ stroke: colors.get(name) }}
-								d={ chartPaths[name] }
+								key={ `chart_${ key }` }
+								styleName={ `line ${ isFaded ? 'faded' : '' }` }
+								style={{ stroke: colors.get(key) }}
+								d={ charts[key].path }
 							/>
 						);
+
+						let prevKey = null;
+
+						if (i < metrics.length - 1) {
+							let j = i + 1;
+
+							while (j < metrics.length && prevKey === null) {
+								if (disabledMetrics.includes(metrics[j])) {
+									j++;
+								} else {
+									prevKey = metrics[j];
+								}
+							}
+						}
+
+						if (prevKey === null) {
+							this.toRender.areas.push(
+								<path
+									key={ `chart-area_${ key }` }
+									styleName={ `area ${ isFaded ? 'faded' : '' }` }
+									style={{ fill: colors.get(key) }}
+									d={ `${ charts[key].path } V ${ offsetTop + chartHeight } H ${ charts[key].coordinates[0][0] } V ${ charts[key].coordinates[0][1] }` }
+								/>
+							);
+						} else {
+							const prevChart = charts[prevKey];
+
+							this.toRender.areas.push(
+								<path
+									key={ `chart-area_${ key }` }
+									styleName={ `area ${ isFaded ? 'faded' : '' }` }
+									style={{ fill: colors.get(key) }}
+									d={ `${ charts[key].path } V ${ prevChart.coordinates[prevChart.coordinates.length - 1][1] }${ prevChart.coordinates.reduce((memo, [x, y]) => `L ${ x } ${ y } ${ memo }`, '') } V ${ prevChart.coordinates[0][1] }` }
+								/>
+							);
+						}
+					}
+
+					const reversedKey = metrics[metrics.length - 1 - i];
+					let legendItemStyleName = 'legend__item';
+					let isDisabled = disabledMetrics.includes(reversedKey);
+
+					if (isDisabled) {
+						legendItemStyleName += ' legend__item_disabled';
 					}
 
 					this.toRender.legend.push(
 						<span
-							key={ `legend_${ name }` }
+							key={ `legend_${ reversedKey }` }
 							styleName={ legendItemStyleName }
-							onClick={ this.toggleMetric.bind(this, name) }
+							onClick={ this.toggleMetric.bind(this, reversedKey) }
+							onMouseOver={ isDisabled ? null : this.deferredHighlightMetric.bind(this, reversedKey) }
+							onMouseLeave={ isDisabled ? null : this.deferredHighlightMetric.bind(this, null) }
 						>
 							<span
 								styleName="legend__color"
-								style={{ background: colors.get(name) }}
+								style={{ background: colors.get(reversedKey) }}
 							/>
-							{ labels.has(name) ? labels.get(name) : name }
+							{ labels.has(reversedKey) ? labels.get(reversedKey) : reversedKey }
 						</span>
 					);
-				});
+				}
 			}
 
 			this.pointsIndicies = `${ firstPointIndex },${ data.length - 1 }`;
@@ -601,18 +713,23 @@ export default class Chart extends React.Component {
 		if (dndIsInProgress) {
 			mouseTrackerClass += ' mouse-tracker_dragging';
 		} else if (activePoint) {
-			this.toRender.tooltipPoints = Object.keys(activePoint.values).map(name =>
-				<div
-					key={ `tooltip_${ name }` }
-					styleName="tooltip__point"
-				>
-					<div
-						styleName="tooltip__value"
-						style={{ color: colors.get(name) }}
-					>{ activePoint.values[name] }</div>
-					<div styleName="tooltip__metric">{ labels.has(name) ? labels.get(name) : name }</div>
-				</div>
-			);
+			this.toRender.tooltipPoints = [];
+			colors.forEach((color, key) => {
+				if (key in activePoint.values) {
+					this.toRender.tooltipPoints.push(
+						<div
+							key={ `tooltip_${ key }` }
+							styleName="tooltip__point"
+						>
+							<div
+								styleName="tooltip__value"
+								style={{ color }}
+							>{ activePoint.values[key] }</div>
+							<div styleName="tooltip__metric">{ labels.has(key) ? labels.get(key) : key }</div>
+						</div>
+					);
+				}
+			});
 
 			cursorLineTransform = `translate(${ activePoint.x })`;
 		}
@@ -710,8 +827,10 @@ export default class Chart extends React.Component {
 						>{ label }</text>
 					) }
 
-					{ this.toRender.charts }
 					{ this.toRender.yMax }
+					{ this.toRender.yMid }
+					{ this.toRender.charts }
+					{ this.toRender.areas }
 				</svg>
 				<div styleName="legend">{ this.toRender.legend }</div>
 			</div>

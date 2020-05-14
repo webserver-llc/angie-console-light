@@ -262,7 +262,7 @@ export const limitConnReqFactory = (historyObject, previousUpdatingPeriod) =>
 			const needSort = lastItem && lastItem._ts > ts;
 
 			history.push({
-				...zone,
+				zone,
 				_ts: ts
 			});
 
@@ -280,7 +280,28 @@ export const limitConnReqFactory = (historyObject, previousUpdatingPeriod) =>
 				zone,
 				history: {
 					ts,
-					data: history.slice()
+					data: history.reduce((memo, { zone, _ts }, i) => {
+						const prevItem = history[i - 1];
+
+						memo.push(
+							Object.keys(zone).reduce((memo, key) => {
+								if (prevItem) {
+									memo.zone[key] = zone[key] - prevItem.zone[key];
+
+									if (memo.zone[key] < 0) memo.zone[key] = 0;
+								} else {
+									memo.zone[key] = 0;
+								}
+
+								return memo;
+							}, {
+								zone: {},
+								_ts
+							})
+						);
+
+						return memo;
+					}, [])
 				}
 			};
 		});

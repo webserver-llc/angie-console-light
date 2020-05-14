@@ -218,31 +218,35 @@ td.status {
 	cursor: default;
 }
 
-.chart-active {
+.chart-container {
+	cursor: pointer;
+}
+
+.chart-container_active {
 	background: #f7f7f7;
 }
 
-.chart-active td {
+.chart-container_active td {
 	border-bottom: none;
 }
 
 .chart-icon {
 	width: 20px;
-	font-size: 28px;
-	line-height: 10px;
+}
+
+.chart-icon__icon {
+	width: 18px;
+	height: 18px;
 	vertical-align: top !important;
-	user-select: none;
-	color: #999;
+	background-image: svg-load('chart.svg');
+	background-size: cover;
+	opacity: .7;
 }
 
-.chart-icon:hover {
-	color: #333;
-	cursor: pointer;
-}
+.chart-container:hover .chart-icon__icon,
+.chart-container_active .chart-icon__icon {
+	opacity: 1;
 
-.chart-active .chart-icon {
-	color: #333;
-	font-weight: bold;
 }
 
 .chart-row:hover {
