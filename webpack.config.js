@@ -8,7 +8,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const package = require('./package.json');
 const ENV = process.env.NODE_ENV || 'development';
-const PRODUCTION_BUILD = ENV === 'staging' || ENV === 'demo' || ENV === 'production';
+const PRODUCTION_BUILD = ENV === 'demo' || ENV === 'production';
 
 let htmlFileName;
 

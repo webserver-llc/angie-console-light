@@ -8,8 +8,7 @@
     "dev-demo": "NODE_ENV=demo webpack-dev-server --hot --port 8082",
     "build": "NODE_ENV=production webpack",
     "build-demo": "NODE_ENV=demo webpack",
-    "build-staging": "NODE_ENV=staging webpack",
-    "build-all": "npm run build && npm run build-demo && npm run build-staging",
+    "build-all": "npm run build && npm run build-demo",
     "test": "karma start"
   },
   "author": "Ivan Poluyanov <ip@nginx.com>",

@@ -2,7 +2,18 @@
 
 Live activity monitoring tool for NGINX Plus.
 
-*TBD...*
+### Build process:
+
+Ensure you have all dependencies installed:
+```
+yarn install
+```
+
+To build the dashboard run:
+```
+yarn build
+```
+The result will be placed in `dist/dashboard.html`.
 
 ### Useful links:
 * [Quick description](https://www.nginx.com/products/nginx/live-activity-monitoring/)
