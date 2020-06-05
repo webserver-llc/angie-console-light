@@ -8,12 +8,17 @@
 import React from 'react';
 import api from '../../api';
 import DataBinder from '../databinder/databinder.jsx';
+import calculateStreamLimitConn from '../../calculators/streamlimitconn.js';
+import LimitConn from './serverzones/limitconn.jsx';
 import { formatReadableBytes } from '../../utils';
 import styles from '../table/style.css';
 
 export class StreamZones extends React.Component {
 	render() {
-		const { data: { server_zones } } = this.props;
+		const { data: {
+			server_zones,
+			limit_conns
+		} } = this.props;
 
 		return (<div>
 			<h1>TCP/UDP Zones</h1>
@@ -62,10 +67,18 @@ export class StreamZones extends React.Component {
 					}
 				</tbody>
 			</table>
+			<br/>
+
+			{
+				limit_conns ?
+					<LimitConn data={ limit_conns } />
+				: null
+			}
 		</div>);
 	}
 }
 
 export default DataBinder(StreamZones, [
-	api.stream.server_zones
+	api.stream.server_zones,
+	api.stream.limit_conns.process(calculateStreamLimitConn),
 ]);

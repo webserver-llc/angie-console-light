@@ -217,3 +217,42 @@ td.status {
 	border-bottom: 1px dotted #999;
 	cursor: default;
 }
+
+.chart-container {
+	cursor: pointer;
+}
+
+.chart-container_active {
+	background: #f7f7f7;
+}
+
+.chart-container_active td {
+	border-bottom: none;
+}
+
+.chart-icon {
+	width: 20px;
+}
+
+.chart-icon__icon {
+	width: 18px;
+	height: 18px;
+	vertical-align: top !important;
+	background-image: svg-load('chart.svg');
+	background-size: cover;
+	opacity: .7;
+}
+
+.chart-container:hover .chart-icon__icon,
+.chart-container_active .chart-icon__icon {
+	opacity: 1;
+
+}
+
+.chart-row:hover {
+	background: #fff !important;
+}
+
+.chart-row td {
+	border-bottom: 2px solid #999;
+}

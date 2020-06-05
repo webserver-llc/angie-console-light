@@ -1,0 +1,200 @@
+.container {
+	position: relative;
+	display: inline-block;
+}
+
+.svg {
+	user-select: none;
+}
+
+.x-axis {
+	stroke: #ccc;
+	stroke-width: 1px;
+}
+
+.x-line {
+	stroke: #eee;
+	stroke-width: 1px;
+}
+
+.x-label {
+	font: 10px Open Sans,Arial,sans-serif;
+	fill: #888;
+	text-anchor: middle;
+}
+
+.y-label {
+	font: 13px Open Sans,Arial,sans-serif;
+	fill: #666;
+	text-anchor: end;
+}
+
+.line {
+	stroke-width: 2px;
+	stroke-linecap: round;
+	stroke-linejoin: bevel;
+	fill: none;
+}
+
+.area {
+	opacity: .5;
+	stroke-width: 0;
+}
+
+.faded {
+	opacity: .075;
+}
+
+.legend {
+	display: block;
+	margin: 0 0 5px 50px;
+}
+
+.legend__item {
+	display: inline-block;
+	vertical-align: top;
+	margin-right: 14px;
+	padding: 0 5px;
+	font-size: 12px;
+	line-height: 12px;
+	opacity: .8;
+	cursor: pointer;
+	user-select: none;
+}
+
+.legend__item:hover {
+	opacity: 1;
+}
+
+.legend__item_disabled {
+	text-decoration: line-through;
+	opacity: .6;
+}
+
+.legend__color {
+	display: inline-block;
+	width: 20px;
+	height: 12px;
+	vertical-align: top;
+	margin-right: 6px;
+}
+
+.cursor-line {
+	stroke: #ccc;
+	stroke-width: 1px;
+	stroke-dasharray: 6,6;
+	fill: none;
+}
+
+.tooltip {
+	z-index: 1;
+	position: absolute;
+	top: 2px;
+	padding: 4px 6px;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+	background: #fff;
+	font-size: 14px;
+	user-select: none;
+}
+
+.tooltip__point {
+	display: table-row;
+}
+
+.tooltip__value {
+	display: table-cell;
+	padding: 0 8px 4px 0;
+	font-size: 18px;
+	line-height: 18px;
+	text-align: right;
+}
+
+.tooltip__metric {
+	display: table-cell;
+	padding-top: 2px;
+	line-height: 18px;
+	color: #666;
+}
+
+.tooltip__time {
+	margin-top: 5px;
+	font-size: 12px;
+	color: #666;
+}
+
+.mouse-tracker {
+	z-index: 2;
+	position: absolute;
+	background: transparent;
+}
+
+.mouse-tracker_drag {
+	cursor: grab;
+}
+
+.mouse-tracker_dragging {
+	cursor: grabbing;
+}
+
+.timewindow {
+	position: absolute;
+	top: 16px;
+	right: 20px;
+	white-space: nowrap;
+}
+
+.timewindow__item {
+	display: inline-block;
+	vertical-align: top;
+	margin-right: -1px;
+	padding: 2px 8px;
+	border: 1px solid #ccc;
+	cursor: pointer;
+	user-select: none;
+}
+
+.timewindow__item:hover {
+	background: #f3f3f3;
+}
+
+.timewindow__item_selected,
+.timewindow__item_selected:hover {
+	background: #ddd;
+	cursor: default;
+}
+
+.dnd-controls {
+	position: absolute;
+	top: 16px;
+	left: 50px;
+	white-space: nowrap;
+	font-size: 20px;
+	font-weight: 100;
+	line-height: 18px;
+}
+
+.dnd-controls__control {
+	display: inline-block;
+	width: 26px;
+	vertical-align: top;
+	margin-right: -1px;
+	padding: 2px 0;
+	border: 1px solid #ccc;
+	cursor: pointer;
+	user-select: none;
+	text-align: center;
+}
+
+.dnd-controls__control:not(.dnd-controls__control_disabled):hover {
+	background: #f3f3f3;
+}
+
+.dnd-controls__control:not(.dnd-controls__control_disabled):active {
+	background: #ddd;
+}
+
+.dnd-controls__control_disabled {
+	opacity: 0.4;
+	cursor: default;
+}

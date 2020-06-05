@@ -13,7 +13,7 @@ export const STORE = {
 
 window.STORE = STORE;
 
-export const handleDataUpdate = ({ path, processors }, data) => {
+export const handleDataUpdate = ({ path, processors }, data, timeStart) => {
 	let ptr = STORE;
 
 	path.forEach((path, i, arr) => {
@@ -31,7 +31,7 @@ export const handleDataUpdate = ({ path, processors }, data) => {
 	});
 
 	processors.forEach((fn) => {
-		data = fn(data, ptr[path[path.length - 1]], STORE);
+		data = fn(data, ptr[path[path.length - 1]], STORE, timeStart);
 	});
 
 	if (data !== null) {

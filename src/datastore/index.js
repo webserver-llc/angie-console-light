@@ -33,10 +33,10 @@ export const unsubscribe = (apis, fn) => {
 		const instance = OBSERVED.get(api.toString());
 
 		if (instance) {
-			instance.instacesCount--;
+			instance.instancesCount--;
 			instance.callbacks = instance.callbacks.filter(callback => callback !== fn);
 
-			if (instance.instacesCount === 0) {
+			if (instance.instancesCount === 0) {
 				OBSERVED.delete(api.toString());
 			}
 		}
@@ -53,6 +53,8 @@ export const startObserve = function loop(force = false) {
 			play();
 		}
 
+		const timeStart = Date.now();
+
 		Promise.all(
 			Array.from(OBSERVED).map(([path, instance]) => {
 				return instance.api.get().then(data => data, err => err).then((data) => {
@@ -62,13 +64,14 @@ export const startObserve = function loop(force = false) {
 
 					return {
 						data,
-						api: instance.api
+						api: instance.api,
+						timeStart
 					};
 				});
 			})
 		).then((data) => {
-			data.forEach(({ api, data }) => {
-				handleDataUpdate(api, data);
+			data.forEach(({ api, data, timeStart }) => {
+				handleDataUpdate(api, data, timeStart);
 
 				const apiHandler = OBSERVED.get(api.toString());
 

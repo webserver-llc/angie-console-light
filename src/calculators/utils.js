@@ -11,7 +11,10 @@ export const is4xxThresholdReached = obj =>
 	obj.responses['4xx'] / obj.requests * 100 > getSetting('warnings4xxThresholdPercent');
 
 export const calculateSpeed = (previous, now, period) => {
-	if (typeof previous !== 'number') {
+	if (
+		typeof previous !== 'number' ||
+		typeof now !== 'number'
+	) {
 		return 'n/a';
 	}
 
@@ -232,3 +235,76 @@ export const countResolverResponses = (responses) => {
 	};
 };
 
+export const limitConnReqHistoryLimit = 1800;
+
+export const limitConnReqFactory = (historyObject, previousUpdatingPeriod) =>
+	(data, previousState, _, timeStart) => {
+		if (data === null || Object.keys(data).length === 0) {
+			return null;
+		}
+
+		const ts = timeStart / 1000;
+		const updatingPeriod = getSetting('updatingPeriod');
+
+		if (previousUpdatingPeriod !== updatingPeriod) {
+			previousUpdatingPeriod = updatingPeriod;
+
+			historyObject = {};
+		}
+
+		data = createMapFromObject(data, (zone, zoneName) => {
+			if (!historyObject[zoneName]) {
+				historyObject[zoneName] = [];
+			}
+
+			let history = historyObject[zoneName];
+			const lastItem = history[history.length - 1];
+			const needSort = lastItem && lastItem._ts > ts;
+
+			history.push({
+				zone,
+				_ts: ts
+			});
+
+			if (history.length > limitConnReqHistoryLimit) {
+				history.shift();
+			}
+
+			if (needSort) {
+				historyObject[zoneName] = history.sort(
+					(a, b) => a._ts < b._ts ? -1 : 1
+				);
+			}
+
+			return {
+				zone,
+				history: {
+					ts,
+					data: history.reduce((memo, { zone, _ts }, i) => {
+						const prevItem = history[i - 1];
+
+						memo.push(
+							Object.keys(zone).reduce((memo, key) => {
+								if (prevItem) {
+									memo.zone[key] = zone[key] - prevItem.zone[key];
+
+									if (memo.zone[key] < 0) memo.zone[key] = 0;
+								} else {
+									memo.zone[key] = 0;
+								}
+
+								return memo;
+							}, {
+								zone: {},
+								_ts
+							})
+						);
+
+						return memo;
+					}, [])
+				}
+			};
+		});
+
+		return data;
+	};

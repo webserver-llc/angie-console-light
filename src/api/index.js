@@ -16,6 +16,7 @@ import { zones as calculateStreamZones, upstreams as calculateStreamUpstreams } 
 import calculateCaches from '../calculators/caches.js';
 import calculateSharedZones from '../calculators/sharedzones.js';
 import calculateConnections from '../calculators/connections.js';
+import calculateSSL from '../calculators/ssl.js';
 import calculateRequests from '../calculators/requests.js';
 import calculateZoneSync from '../calculators/zonesync.js';
 import calculateResolvers from '../calculators/resolvers.js';
@@ -74,7 +75,7 @@ export const initialLoad = () => {
 	const apis = [
 		api.nginx,
 		api.connections.process(calculateConnections),
-		api.ssl,
+		api.ssl.process(calculateSSL),
 		api.http.requests.process(calculateRequests),
 		api.http.server_zones.process(calculateServerZones),
 		api.http.location_zones.process(calculateLocationZones),
