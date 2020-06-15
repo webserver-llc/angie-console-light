@@ -1,10 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const package = require('./package.json');
 const ENV = process.env.NODE_ENV || 'development';
@@ -12,7 +10,7 @@ const PRODUCTION_BUILD = ENV === 'demo' || ENV === 'production';
 
 let htmlFileName;
 
-if(ENV === 'development') {
+if (ENV === 'development') {
 	htmlFileName = 'index.html';
 } else if (ENV === 'production') {
 	htmlFileName = 'dashboard.html';
@@ -21,22 +19,20 @@ if(ENV === 'development') {
 }
 
 const plugins = [
-	// Note that the --optimize-minimize flag can be used to insert the UglifyJsPlugin as well.
-	//
 	new webpack.SourceMapDevToolPlugin({
 		test: ['.js', '.jsx'],
 		filename: 'index.js.map'
 	}),
+
 	new HtmlWebpackPlugin({
 		title: 'Nginx+ Dashboard',
-		alwaysWriteToDisk: true,
-		template: 'src/index.ejs',
 		filename: htmlFileName,
+		template: 'src/index.ejs',
 		...(PRODUCTION_BUILD ? {
 			inlineSource: '.(js|css)$'
 		} : {})
 	}),
-	new HtmlWebpackHarddiskPlugin(),
+
 	new webpack.DefinePlugin({
 		'process.env.NODE_ENV': JSON.stringify(ENV),
 		__ENV__: JSON.stringify(ENV),
@@ -47,7 +43,6 @@ const plugins = [
 
 if (PRODUCTION_BUILD) {
 	plugins.push(new HtmlWebpackInlineSourcePlugin());
-	plugins.push(new UglifyJSPlugin());
 }
 
 if (ENV === 'development') {
@@ -59,8 +54,9 @@ const cssLoaderConfiguration = (() => {
 	const use = [{
 		loader: 'css-loader',
 		options: {
-			modules: true,
-			localIdentName: '[local]___[hash:base64:5]',
+			modules: {
+				localIdentName: '[local]___[hash:base64:5]'
+			},
 			importLoaders: 1
 		}
 	},
@@ -90,18 +86,22 @@ const cssLoaderConfiguration = (() => {
 	if (ENV === 'development') {
 		use.unshift('style-loader');
 	} else {
-		plugins.push(new ExtractTextPlugin('index.css'));
+		plugins.push(
+			new MiniCssExtractPlugin({
+				filename: 'index.css',
+			})
+		);
+		use.unshift(MiniCssExtractPlugin.loader);
 	}
 
 	return {
 		test: /\.css$/,
-		use: ENV === 'development' ? use : ExtractTextPlugin.extract({
-			use
-		})
+		use
 	};
 })();
 
 const config = {
+	mode: PRODUCTION_BUILD ? 'production' : 'development',
 	entry: './src/index.js',
 	output: {
 		filename: 'index.js',
@@ -130,13 +130,17 @@ const config = {
 			},
 			cssLoaderConfiguration
 		]
+	},
+	performance: {
+		maxEntrypointSize: 1000000,
+		maxAssetSize: 1000000
 	}
 };
 
 if (ENV === 'development') {
 	config.devtool = 'inline-source-map';
 } else {
-	config.devtool = 'source-map';
+	// config.devtool = 'source-map';
 }
 
 module.exports = config;
