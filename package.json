@@ -4,11 +4,13 @@
   "description": "Nginx+ dashboard",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development webpack-dev-server --hot --port 8082",
-    "dev-demo": "NODE_ENV=demo webpack-dev-server --hot --port 8082",
-    "build": "NODE_ENV=production webpack",
-    "build-demo": "NODE_ENV=demo webpack",
-    "build-all": "npm run build && npm run build-demo",
+    "dev": "NODE_ENV=development FILE_NAME=dashboard_dev webpack-dev-server",
+    "demo": "NODE_ENV=development FILE_NAME=demo_dev DASHBOARD_TYPE=demo webpack-dev-server",
+    "prod": "NODE_ENV=production FILE_NAME=dashboard webpack-dev-server",
+    "demo-prod": "NODE_ENV=production FILE_NAME=demo DASHBOARD_TYPE=demo webpack-dev-server",
+    "build": "NODE_ENV=production FILE_NAME=dashboard webpack",
+    "build-demo": "NODE_ENV=production FILE_NAME=demo DASHBOARD_TYPE=demo webpack",
+    "build-all": "yarn build && yarn build-demo",
     "test": "karma start"
   },
   "author": "Ivan Poluyanov <ip@nginx.com>",

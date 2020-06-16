@@ -6,17 +6,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const package = require('./package.json');
 const ENV = process.env.NODE_ENV || 'development';
-const PRODUCTION_BUILD = ENV === 'demo' || ENV === 'production';
-
-let htmlFileName;
-
-if (ENV === 'development') {
-	htmlFileName = 'index.html';
-} else if (ENV === 'production') {
-	htmlFileName = 'dashboard.html';
-} else {
-	htmlFileName = `${ENV}.html`
-}
+const PRODUCTION_BUILD = ENV === 'production';
+const FILE_NAME = process.env.FILE_NAME || 'dashboard_dev';
+const DASHBOARD_TYPE = process.env.DASHBOARD_TYPE || 'dashboard';
+const PROXY_TARGET = process.env.PROXY_TARGET || 'http://demo.nginx.com';
 
 const plugins = [
 	new webpack.SourceMapDevToolPlugin({
@@ -26,7 +19,7 @@ const plugins = [
 
 	new HtmlWebpackPlugin({
 		title: 'Nginx+ Dashboard',
-		filename: htmlFileName,
+		filename: `${FILE_NAME}.html`,
 		template: 'src/index.ejs',
 		...(PRODUCTION_BUILD ? {
 			inlineSource: '.(js|css)$'
@@ -35,7 +28,7 @@ const plugins = [
 
 	new webpack.DefinePlugin({
 		'process.env.NODE_ENV': JSON.stringify(ENV),
-		__ENV__: JSON.stringify(ENV),
+		__ENV__: JSON.stringify(DASHBOARD_TYPE),
 		__APP_VERSION__: JSON.stringify(package.version),
 		GA_ID: JSON.stringify('UA-27974099-10')
 	})
@@ -43,9 +36,7 @@ const plugins = [
 
 if (PRODUCTION_BUILD) {
 	plugins.push(new HtmlWebpackInlineSourcePlugin());
-}
-
-if (ENV === 'development') {
+} else {
 	plugins.push(new webpack.HotModuleReplacementPlugin());
 }
 
@@ -83,15 +74,15 @@ const cssLoaderConfiguration = (() => {
 		}
 	}];
 
-	if (ENV === 'development') {
-		use.unshift('style-loader');
-	} else {
+	if (PRODUCTION_BUILD) {
 		plugins.push(
 			new MiniCssExtractPlugin({
 				filename: 'index.css',
 			})
 		);
 		use.unshift(MiniCssExtractPlugin.loader);
+	} else {
+		use.unshift('style-loader');
 	}
 
 	return {
@@ -109,13 +100,21 @@ const config = {
 	},
 	devServer: {
 		contentBase: './dist',
-		hot: true
+		index: `${FILE_NAME}.html`,
+		hot: true,
+		writeToDisk: true,
+		port: 8082,
+		proxy: [{
+			context: ['/api', '/status'],
+			target: PROXY_TARGET,
+			secure: false,
+			changeOrigin: true
+		}]
 	},
 	plugins,
 
 	resolve: {
 		alias: {
-			// 'react-dom': 'preact-compat-enzyme',
 			'react': 'preact'
 		}
 	},
@@ -137,10 +136,8 @@ const config = {
 	}
 };
 
-if (ENV === 'development') {
+if (!PRODUCTION_BUILD) {
 	config.devtool = 'inline-source-map';
-} else {
-	// config.devtool = 'source-map';
 }
 
 module.exports = config;
