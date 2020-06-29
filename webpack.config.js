@@ -1,3 +1,11 @@
+/**
+ * Copyright 2017-present, Nginx, Inc.
+ * Copyright 2017-present, Ivan Poluyanov
+ * Copyright 2017-present, Igor Meleshchenko
+ * All rights reserved.
+ *
+ */
+
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');

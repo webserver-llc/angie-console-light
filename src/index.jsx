@@ -15,7 +15,7 @@ import { initTooltips } from './tooltips/index.jsx';
 
 /* global __ENV__, GA_ID */
 
-const start = () => {
+export const start = () => {
 	initSettings();
 	initTooltips();
 

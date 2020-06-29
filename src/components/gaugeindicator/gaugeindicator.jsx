@@ -55,13 +55,15 @@ export default class GaugeIndicator extends Component {
 		drawArc(Math.PI * (1 + percentage / 100), percentage < 40 ? YELLOW_COLOR : GREEN_COLOR);
 	}
 
-	render(props) {
+	render() {
+		const { percentage } = this.props;
+
 		return (<div styleName="gaugeindicator">
 			<canvas ref={(ref) => { this.canvas = ref; }} styleName="canvas" />
 			{
-				this.props.percentage !== null ?
-					<span styleName="value">{ props.percentage }%</span>
-					: null
+				percentage !== null ?
+					<span styleName="value">{ percentage }%</span>
+				: null
 			}
 		</div>);
 	}

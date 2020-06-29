@@ -1,6 +1,7 @@
 /**
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
+ * Copyright 2017-present, Igor Meleshchenko
  * All rights reserved.
  *
  */
@@ -21,19 +22,17 @@ module.exports = (config) => {
 		'react': 'preact-compat-enzyme'
 	} };
 
+	webpackConfig.externals = {
+		'preact/test-utils': true
+	};
+
 	config.set({
-		browsers: ['ChromeHeadless'/* , 'ChromeCanary', 'Firefox', 'Safari' */],
-		singleRun: false,
 		frameworks: ['mocha', 'sinon-chai'],
-
-		plugins: ['karma-*'],
-
 		files: [
-			'src/**/*.test.+(js|jsx)'
+			'./karma.init.js'
 		],
-
 		preprocessors: {
-			'src/**/*.test.+(js|jsx)': ['webpack', 'sourcemap']
+			'./karma.init.js': ['webpack', 'sourcemap']
 		},
 
 		reporters: ['dots', 'progress', 'coverage-istanbul'],

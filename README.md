@@ -15,6 +15,24 @@ yarn build
 ```
 The result will be placed in `dist/dashboard.html`.
 
+### Testing:
+
+To not have tests mixed with sources all test files should be placed in related `__test__` folders in the project.
+
+```
+yarn test
+```
+Running the above command will start karma server and build the coverage report.
+
+#### Tests report:
+
+`http://0.0.0.0:9876/` – start page of karma server where your tests will run
+`http://0.0.0.0:9876/debug.html` – all tests and their statuses
+
+#### Coverage report:
+
+In the project folder check `coverage` directory – `index.html` includes everything you need.
+
 ### Useful links:
 * [Quick description](https://www.nginx.com/products/nginx/live-activity-monitoring/)
 * [Guide](https://docs.nginx.com/nginx/admin-guide/monitoring/live-activity-monitoring/#using-the-dashboard)
@@ -34,7 +52,8 @@ The result will be placed in `dist/dashboard.html`.
 * [chai](https://www.npmjs.com/package/chai) – 4.2.0
 * [css-loader](https://www.npmjs.com/package/css-loader) – 3.5.3
 * [cssnano](https://www.npmjs.com/package/cssnano) – 4.1.10
-* [enzyme](https://www.npmjs.com/package/enzyme) – 2.9.1
+* [enzyme](https://www.npmjs.com/package/enzyme) – 3.11.0
+* [enzyme-adapter-preact-pure](https://www.npmjs.com/package/enzyme-adapter-preact-pure) – 2.2.0
 * [eslint](https://www.npmjs.com/package/eslint) – 4.19.1
 * [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb) – 15.1.0
 * [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) – 2.20.2
@@ -44,15 +63,15 @@ The result will be placed in `dist/dashboard.html`.
 * [html-webpack-inline-source-plugin](https://www.npmjs.com/package/html-webpack-inline-source-plugin) – 0.0.10
 * [html-webpack-plugin](https://www.npmjs.com/package/html-webpack-plugin) – 3.2.0
 * [karma](https://github.com/karma-runner/karma) – 5.0.9
-* [karma-chrome-launcher](https://www.npmjs.com/package/karma-chrome-launcher) – 2.2.0
-* [karma-coverage](https://www.npmjs.com/package/karma-coverage) – 1.1.2
+* [karma-chrome-launcher](https://www.npmjs.com/package/karma-chrome-launcher) – 3.1.0
+* [karma-coverage](https://www.npmjs.com/package/karma-coverage) – 2.0.2
 * [karma-coverage-istanbul-reporter](https://www.npmjs.com/package/karma-coverage-istanbul-reporter) – 3.0.3
-* [karma-mocha](https://www.npmjs.com/package/karma-mocha) – 1.3.0
-* [karma-sinon-chai](https://www.npmjs.com/package/karma-sinon-chai) – 1.3.4
+* [karma-mocha](https://www.npmjs.com/package/karma-mocha) – 2.0.1
+* [karma-sinon-chai](https://www.npmjs.com/package/karma-sinon-chai) – 2.0.2
 * [karma-sourcemap-loader](https://www.npmjs.com/package/karma-sourcemap-loader) – 0.3.7
-* [karma-webpack](https://www.npmjs.com/package/karma-webpack) – 2.0.13
+* [karma-webpack](https://www.npmjs.com/package/karma-webpack) – 3.0.0
 * [mini-css-extract-plugin](https://www.npmjs.com/package/mini-css-extract-plugin) – 0.9.0
-* [mocha](https://www.npmjs.com/package/mocha) – 7.2.0
+* [mocha](https://www.npmjs.com/package/mocha) – 8.0.1
 * [npm-font-open-sans](https://github.com/dasrick/npm-font-open-sans) – 1.1.0
 * [nyc](https://www.npmjs.com/package/nyc) – 15.1.0
 * [postcss-import](https://www.npmjs.com/package/postcss-import) – 11.1.0
@@ -66,8 +85,8 @@ The result will be placed in `dist/dashboard.html`.
 * [preact-compat-enzyme](https://www.npmjs.com/package/preact-compat-enzyme) – 0.2.5
 * [preact-render-to-string](https://www.npmjs.com/package/preact-render-to-string) – 3.8.2
 * [preact-test-utils](https://www.npmjs.com/package/preact-test-utils) – 0.1.4
-* [sinon](https://www.npmjs.com/package/sinon) – 4.5.0
-* [sinon-chai](https://www.npmjs.com/package/sinon-chai) – 2.14.0
+* [sinon](https://www.npmjs.com/package/sinon) – 9.0.2
+* [sinon-chai](https://www.npmjs.com/package/sinon-chai) – 3.5.0
 * [style-loader](https://www.npmjs.com/package/style-loader) – 0.18.2
 * [webpack](https://www.npmjs.com/package/webpack) – 4.43.0
 * [webpack-cli](https://www.npmjs.com/package/webpack-cli) – 3.3.11
