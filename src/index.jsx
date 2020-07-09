@@ -8,7 +8,7 @@
 import 'whatwg-fetch';
 import React from 'react';
 import App, { history } from './App.jsx';
-import { startObserve } from './datastore';
+import * as datastore from './datastore';
 import { init as initSettings } from './appsettings';
 import { checkApiAvailability, initialLoad, checkWritePermissions } from './api';
 import { initTooltips } from './tooltips/index.jsx';
@@ -27,10 +27,10 @@ export const start = () => {
 
 	checkApiAvailability().then(() => {
 		checkWritePermissions();
-		return initialLoad();
+		return initialLoad(datastore);
 	}).then(() => {
 		React.render(<App />, document.body, el);
-		startObserve();
+		datastore.startObserve();
 	}).catch((err) => {
 		React.render(<App error={err.type} />, document.body, el);
 	});

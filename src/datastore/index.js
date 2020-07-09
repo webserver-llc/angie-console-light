@@ -1,20 +1,16 @@
 /**
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
+ * Copyright 2017-present, Igor Meleshchenko
  * All rights reserved.
  *
  */
 
 import { getSetting } from '../appsettings';
 import { STORE as _STORE, handleDataUpdate, get as getFromStore } from './store';
+import AvailableApiEndpoints from './availableApiEndpoints.js';
 
-export const availableApiEndpoints = [
-	[],
-	{
-		http: [],
-		stream: []
-	}
-];
+export const availableApiEndpoints = new AvailableApiEndpoints();
 
 const OBSERVED = new Map();
 
@@ -93,15 +89,15 @@ export const subscribe = (apis, callback) => {
 	// TODO: Throttled callback
 
 	apis.forEach(api => {
-		let isAvailable = availableApiEndpoints[0].includes(api.path[0]);
+		let isAvailable = availableApiEndpoints.firstLevelIncludes(api.path[0]);
 
 		const instance = OBSERVED.get(api.toString());
 
 		if (
 			isAvailable &&
-			api.path[0] in availableApiEndpoints[1]
+			availableApiEndpoints.secondLevelIncludes(api.path[0])
 		) {
-			isAvailable = availableApiEndpoints[1][api.path[0]].includes(api.path[1]);
+			isAvailable = availableApiEndpoints.thirdLevelIncludes(api.path[0], api.path[1]);
 		}
 
 		if (isAvailable) {
