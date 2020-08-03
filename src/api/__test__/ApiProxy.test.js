@@ -161,9 +161,8 @@ describe('ApiProxy', () => {
 						assert(key in data, `Missed "${ key }" param in response`);
 						assert(response[key] === data[key], `Wrong "${ key }" value in response`);
 					});
-
-					done();
-				});
+				})
+				.then(done, done);
 		});
 
 		it('Handles fail', done => {

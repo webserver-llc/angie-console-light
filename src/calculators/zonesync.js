@@ -6,7 +6,7 @@
  *
  */
 
-import { getSetting } from '../appsettings';
+import appsettings from '../appsettings';
 import { DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT } from '../constants.js';
 import {
 	createMapFromObject,
@@ -50,7 +50,7 @@ export default (zone_sync, previousState, { __STATUSES }) => {
 
 	zone_sync.zones = createMapFromObject(zone_sync.zones, (zone, name) => {
 		const alertThreshold = parseInt(
-			getSetting('zonesyncPendingThreshold', DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT), 10
+			appsettings.getSetting('zonesyncPendingThreshold', DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT), 10
 		);
 		const warningThreshold = 0.75 * alertThreshold;
 		let isAlert = false;

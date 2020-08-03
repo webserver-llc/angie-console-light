@@ -7,12 +7,7 @@
 
 import React from 'react';
 import styles from './style.css';
-import {
-	getSetting,
-	setSetting,
-	subscribe,
-	unsubscribe
-} from '../../appsettings';
+import appsettings from '../../appsettings';
 import { limitConnReqHistoryLimit } from '../../calculators/utils.js';
 
 const chartDimensions = {
@@ -36,7 +31,7 @@ export default class Chart extends React.Component {
 	constructor(props){
 		super(props);
 
-		let selectedTimeWindow = getSetting('timeWindow');
+		let selectedTimeWindow = appsettings.getSetting('timeWindow');
 
 		if (!selectedTimeWindow || !TimeWindows.has(selectedTimeWindow)) {
 			selectedTimeWindow = TimeWindowDefault;
@@ -74,7 +69,7 @@ export default class Chart extends React.Component {
 	}
 
 	componentDidMount(){
-		this.settingsListener = subscribe(value => {
+		this.settingsListener = appsettings.subscribe(value => {
 			this.redraw({
 				selectedTimeWindow: value,
 				dndPointsIndicies: null
@@ -83,7 +78,7 @@ export default class Chart extends React.Component {
 	}
 
 	componentWillUnmount(){
-		unsubscribe(this.settingsListener);
+		appsettings.unsubscribe(this.settingsListener);
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -100,7 +95,7 @@ export default class Chart extends React.Component {
 				dndPointsIndicies !== null &&
 				nextData.data.length === limitConnReqHistoryLimit
 			) {
-				const updatingPeriod = parseInt(getSetting('updatingPeriod'), 10) / 1000;
+				const updatingPeriod = parseInt(appsettings.getSetting('updatingPeriod'), 10) / 1000;
 				const indiciesShift = Math.round((nextData.ts - data.ts) / updatingPeriod);
 
 				nextState.dndPointsIndicies = this.state.dndPointsIndicies
@@ -352,7 +347,7 @@ export default class Chart extends React.Component {
 		};
 		this.dndAllowed = false;
 
-		const updatingPeriod = parseInt(getSetting('updatingPeriod'), 10) / 1000;
+		const updatingPeriod = parseInt(appsettings.getSetting('updatingPeriod'), 10) / 1000;
 		const chartWidth = width - offsetLeft - offsetRight;
 		const chartHeight = height - offsetTop - offsetBottom;
 		let timeDiff = TimeWindows.get(selectedTimeWindow) + 0.2 * updatingPeriod;
@@ -603,7 +598,7 @@ export default class Chart extends React.Component {
 			if (key === selectedTimeWindow) {
 				styleName += ' timewindow__item_selected';
 			} else {
-				onClick = () => setSetting('timeWindow', key);
+				onClick = () => appsettings.setSetting('timeWindow', key);
 			}
 
 			this.timeWindowControls.push(

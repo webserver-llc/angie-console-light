@@ -6,7 +6,7 @@
  *
  */
 
-import { getSetting } from '../appsettings';
+import appsettings from '../appsettings';
 import { STORE as _STORE, handleDataUpdate, get as getFromStore } from './store';
 import AvailableApiEndpoints from './availableApiEndpoints.js';
 
@@ -80,7 +80,7 @@ export const startObserve = function loop(force = false) {
 		});
 	}
 
-	timeout = setTimeout(loop, getSetting('updatingPeriod'));
+	timeout = setTimeout(loop, appsettings.getSetting('updatingPeriod'));
 };
 
 let immediate = null;

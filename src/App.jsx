@@ -1,6 +1,7 @@
 /**
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
+ * Copyright 2017-present, Igor Meleshchenko
  * All rights reserved.
  *
  */
@@ -28,7 +29,7 @@ import { STORE, startObserve, play, pause } from './datastore';
 
 export const history = createHistory();
 
-const SECTIONS = {
+export const SECTIONS = {
 	'#': Index,
 	'#server_zones': ServerZones,
 	'#upstreams': Upstreams,
@@ -38,6 +39,12 @@ const SECTIONS = {
 	'#shared_zones': SharedZones,
 	'#cluster': ZoneSync,
 	'#resolvers': Resolvers
+};
+
+export const Errors = {
+	'basic_auth': 'Access to /api/ location is forbidden. Check NGINX configuration.',
+	'old_status_found': 'No data received from /api/ location, but found deprecated /status/ location. Сheck NGINX configuration.',
+	'api_not_found': 'No data received from /api/ location. Check NGINX configuration.'
 };
 
 export default class App extends React.Component {
@@ -75,12 +82,8 @@ export default class App extends React.Component {
 		if (error) {
 			let subContent = null;
 
-			if (error === 'basic_auth') {
-				subContent = <p>Access to /api/ location is forbidden. Check NGINX configuration.</p>;
-			} else if (error === 'old_status_found') {
-				subContent = <p>No data received from /api/ location, but found deprecated /status/ location. Сheck NGINX configuration.</p>;
-			} else if (error === 'api_not_found') {
-				subContent = <p>No data received from /api/ location. Check NGINX configuration.</p>;
+			if (error in Errors) {
+				subContent = <p>{ Errors[error] }</p>;
 			}
 
 			content = (
@@ -91,6 +94,7 @@ export default class App extends React.Component {
 			);
 		} else {
 			const Page = SECTIONS[this.state.hash];
+
 			content = <Page />;
 		}
 
@@ -114,6 +118,7 @@ export default class App extends React.Component {
 
 					{ content }
 				</div>
+
 				<Footer />
 			</div>
 		);

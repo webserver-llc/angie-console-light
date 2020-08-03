@@ -5,10 +5,10 @@
  *
  */
 
-import { getSetting } from '../appsettings';
+import appsettings from '../appsettings';
 
 export const is4xxThresholdReached = obj =>
-	obj.responses['4xx'] / obj.requests * 100 > getSetting('warnings4xxThresholdPercent');
+	obj.responses['4xx'] / obj.requests * 100 > appsettings.getSetting('warnings4xxThresholdPercent');
 
 export const calculateSpeed = (previous, now, period) => {
 	if (
@@ -244,7 +244,7 @@ export const limitConnReqFactory = (historyObject, previousUpdatingPeriod) =>
 		}
 
 		const ts = timeStart / 1000;
-		const updatingPeriod = getSetting('updatingPeriod');
+		const updatingPeriod = appsettings.getSetting('updatingPeriod');
 
 		if (previousUpdatingPeriod !== updatingPeriod) {
 			previousUpdatingPeriod = updatingPeriod;

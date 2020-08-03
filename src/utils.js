@@ -46,7 +46,7 @@ export const formatReadableBytes = (bytes, maxMeasurementUnit, units = { 0: 'B',
 	if (maxMeasurementUnit) {
 		Object.keys(units).forEach((key) => {
 			if (units[key] === maxMeasurementUnit) {
-				maxUnit = units[maxMeasurementUnit];
+				maxUnit = parseInt(key, 10);
 			}
 		});
 	}
@@ -81,6 +81,8 @@ export const formatReadableBytes = (bytes, maxMeasurementUnit, units = { 0: 'B',
 export const formatMs = ms => ms === undefined ? '–' : `${ms}ms`;
 
 export const formatDate = (timestamp) => {
+	if (!timestamp) return '';
+
 	const datetime = new Date(timestamp);
 	const time = datetime.toTimeString().split(' ');
 

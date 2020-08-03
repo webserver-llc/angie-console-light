@@ -6,7 +6,7 @@
  *
  */
 
-import { getSetting } from '../appsettings';
+import appsettings from '../appsettings';
 import { DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT } from '../constants.js';
 import {
 	createMapFromObject,
@@ -83,7 +83,7 @@ export default (resolvers, previousState, { __STATUSES }) => {
 			);
 
 			const threshold = parseInt(
-				getSetting('resolverErrorsThreshold', DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT),
+				appsettings.getSetting('resolverErrorsThreshold', DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT),
 				10
 			);
 

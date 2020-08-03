@@ -10,7 +10,7 @@ import React from 'react';
 import { isWritable, checkWritePermissions } from '../../api';
 import SortableTable from '../table/sortabletable.jsx';
 import ProgressBar from '../progressbar/progressbar.jsx';
-import { getSetting, setSetting } from '../../appsettings';
+import appsettings from '../../appsettings';
 import UpstreamsEditor from './editor/upstreamseditor.jsx';
 import { SharedZoneTooltip } from '../pages/tooltips.jsx';
 import UpstreamStatsTooltip from './UpstreamStatsTooltip.jsx';
@@ -37,7 +37,7 @@ export default class UpstreamsList extends SortableTable {
 			editMode: false,
 			editor: false,
 			selectedPeers: new Map(),
-			filtering: getSetting(this.FILTERING_SETTINGS_KEY, 'all')
+			filtering: appsettings.getSetting(this.FILTERING_SETTINGS_KEY, 'all')
 		};
 
 		this.toggleEditMode = this.toggleEditMode.bind(this);
@@ -114,7 +114,7 @@ export default class UpstreamsList extends SortableTable {
 	}
 
 	changeFilterRule(evt) {
-		setSetting(this.FILTERING_SETTINGS_KEY, evt.target.value);
+		appsettings.setSetting(this.FILTERING_SETTINGS_KEY, evt.target.value);
 
 		this.setState({
 			filtering: evt.target.value

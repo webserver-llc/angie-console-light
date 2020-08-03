@@ -12,7 +12,7 @@ import {
 	DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT,
 	DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT
 } from '../../constants.js';
-import {getSetting, setSetting} from '../../appsettings'
+import appsettings from '../../appsettings';
 import NumberControl from './NumberControl.jsx';
 import NumberInput from '../numberinput/numberinput.jsx';
 
@@ -23,11 +23,11 @@ export default class Settings extends React.Component {
 		super();
 
 		this.state = {
-			updatingPeriod: getSetting('updatingPeriod'),
-			warnings4xxThresholdPercent: getSetting('warnings4xxThresholdPercent'),
-			cacheDataInterval: getSetting('cacheDataInterval'),
-			zonesyncPendingThreshold: getSetting('zonesyncPendingThreshold', DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT),
-			resolverErrorsThreshold: getSetting('resolverErrorsThreshold', DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT)
+			updatingPeriod: appsettings.getSetting('updatingPeriod'),
+			warnings4xxThresholdPercent: appsettings.getSetting('warnings4xxThresholdPercent'),
+			cacheDataInterval: appsettings.getSetting('cacheDataInterval'),
+			zonesyncPendingThreshold: appsettings.getSetting('zonesyncPendingThreshold', DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT),
+			resolverErrorsThreshold: appsettings.getSetting('resolverErrorsThreshold', DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT)
 		};
 
 		this.changeUpdatePeriod = this.changeUpdatePeriod.bind(this);
@@ -38,7 +38,7 @@ export default class Settings extends React.Component {
 
 	save() {
 		Object.keys(this.state).forEach((key) => {
-			setSetting(key, this.state[key]);
+			appsettings.setSetting(key, this.state[key]);
 		});
 
 		this.props.close();

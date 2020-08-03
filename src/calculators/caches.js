@@ -5,7 +5,7 @@
  *
  */
 
-import { getSetting } from '../appsettings';
+import appsettings from '../appsettings';
 import { createMapFromObject, pickZoneSize } from './utils.js';
 
 const cachesHistory = new Proxy({}, {
@@ -19,7 +19,10 @@ const cachesHistory = new Proxy({}, {
 });
 
 export const calculateCacheHit = (cache) => {
-	const arrLength = parseInt(getSetting('cacheDataInterval') / getSetting('updatingPeriod'), 10);
+	const arrLength = parseInt(
+		appsettings.getSetting('cacheDataInterval') / appsettings.getSetting('updatingPeriod'),
+		10
+	);
 
 	const cacheInHistory = cachesHistory[cache.name];
 

@@ -5,7 +5,7 @@
  *
  */
 import React from 'react';
-import { getSetting, setSetting } from '../../../appsettings';
+import appsettings from '../../../appsettings';
 import TableSortControl from '../../table/tablesortcontrol.jsx';
 import UpstreamsList from '../../upstreams/upstreamslist.jsx';
 import { formatReadableBytes, formatUptime, formatMs } from '../../../utils.js';
@@ -21,7 +21,7 @@ export default class Upstream extends UpstreamsList {
 		this.state = {
 			...this.state,
 			hoveredColumns: false,
-			columnsExpanded: getSetting(`columns-expanded-http-upstreams-${props.name}`, false)
+			columnsExpanded: appsettings.getSetting(`columns-expanded-http-upstreams-${props.name}`, false)
 		};
 
 		this.toggleColumns = this.toggleColumns.bind(this);
@@ -43,7 +43,7 @@ export default class Upstream extends UpstreamsList {
 			columnsExpanded
 		});
 
-		setSetting(`columns-expanded-http-upstreams-${this.props.name}`, columnsExpanded);
+		appsettings.setSetting(`columns-expanded-http-upstreams-${this.props.name}`, columnsExpanded);
 	}
 
 	hoverColumns(hoveredColumns) {
