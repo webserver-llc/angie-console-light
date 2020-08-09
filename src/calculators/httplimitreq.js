@@ -7,9 +7,13 @@
 
 import { limitConnReqFactory } from './utils.js';
 
-export default (() => {
-	let httpLimitReqHistory = {};
-	let previousUpdatingPeriod = null;
+export function buildCalculator(){
+	const httpLimitReq = {
+		history: {},
+		prevUpdatingPeriod: null
+	};
 
-	return limitConnReqFactory(httpLimitReqHistory, previousUpdatingPeriod);
-})();
+	return limitConnReqFactory(httpLimitReq);
+};
+
+export default buildCalculator();

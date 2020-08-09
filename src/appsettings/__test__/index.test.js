@@ -96,6 +96,7 @@ describe('AppSettings', () => {
 		assert(appsettings.saveSettings.calledTwice, 'saveSettings should be called twice');
 		assert(callback.calledOnce, 'Callback is expected to be called');
 
+		delete appsettings.currentSettings[key];
 		appsettings.settingChangeCallbacks.delete(callbackID);
 		appsettings.saveSettings.restore();
 	});
@@ -111,7 +112,7 @@ describe('AppSettings', () => {
 		stub(appsettings, 'saveSettings').callsFake(() => {});
 
 		value = appsettings.getSetting(existingKey);
-console.log(appsettings.currentSettings)
+
 		assert(value === DEFAULT_UPDATING_PERIOD, `Unexpected value of "${ existingKey }"`);
 		assert(
 			appsettings.setSetting.callCount === 0,
@@ -142,6 +143,7 @@ console.log(appsettings.currentSettings)
 			`Unexpected value of existing property: ${ value }. Expected: ${ newValue }`
 		);
 
+		delete appsettings.currentSettings[missedKey];
 		appsettings.setSetting.restore();
 		appsettings.saveSettings.restore();
 	});

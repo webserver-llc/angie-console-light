@@ -1,6 +1,7 @@
 /**
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
+ * Copyright 2017-present, Igor Meleschenko
  * All rights reserved.
  *
  */
@@ -237,74 +238,75 @@ export const countResolverResponses = (responses) => {
 
 export const limitConnReqHistoryLimit = 1800;
 
-export const limitConnReqFactory = (historyObject, previousUpdatingPeriod) =>
-	(data, previousState, _, timeStart) => {
-		if (data === null || Object.keys(data).length === 0) {
-			return null;
+export const limitConnReqFactory = memo => limitConnReqCalculator.bind(null, memo);
+
+export function limitConnReqCalculator(memo, data, previousState, _, timeStart) {
+	if (data === null || Object.keys(data).length === 0) {
+		return null;
+	}
+
+	const ts = timeStart / 1000;
+	const updatingPeriod = appsettings.getSetting('updatingPeriod');
+
+	if (memo.prevUpdatingPeriod !== updatingPeriod) {
+		memo.prevUpdatingPeriod = updatingPeriod;
+
+		memo.history = {};
+	}
+
+	data = createMapFromObject(data, (zone, zoneName) => {
+		if (!memo.history[zoneName]) {
+			memo.history[zoneName] = [];
 		}
 
-		const ts = timeStart / 1000;
-		const updatingPeriod = appsettings.getSetting('updatingPeriod');
+		let history = memo.history[zoneName];
+		const lastItem = history[history.length - 1];
+		const needSort = lastItem && lastItem._ts > ts;
 
-		if (previousUpdatingPeriod !== updatingPeriod) {
-			previousUpdatingPeriod = updatingPeriod;
-
-			historyObject = {};
-		}
-
-		data = createMapFromObject(data, (zone, zoneName) => {
-			if (!historyObject[zoneName]) {
-				historyObject[zoneName] = [];
-			}
-
-			let history = historyObject[zoneName];
-			const lastItem = history[history.length - 1];
-			const needSort = lastItem && lastItem._ts > ts;
-
-			history.push({
-				zone,
-				_ts: ts
-			});
-
-			if (history.length > limitConnReqHistoryLimit) {
-				history.shift();
-			}
-
-			if (needSort) {
-				historyObject[zoneName] = history.sort(
-					(a, b) => a._ts < b._ts ? -1 : 1
-				);
-			}
-
-			return {
-				zone,
-				history: {
-					ts,
-					data: history.reduce((memo, { zone, _ts }, i) => {
-						const prevItem = history[i - 1];
-
-						memo.push(
-							Object.keys(zone).reduce((memo, key) => {
-								if (prevItem) {
-									memo.zone[key] = zone[key] - prevItem.zone[key];
-
-									if (memo.zone[key] < 0) memo.zone[key] = 0;
-								} else {
-									memo.zone[key] = 0;
-								}
-
-								return memo;
-							}, {
-								zone: {},
-								_ts
-							})
-						);
-
-						return memo;
-					}, [])
-				}
-			};
+		history.push({
+			zone,
+			_ts: ts
 		});
 
-		return data;
-	};
+		if (history.length > limitConnReqHistoryLimit) {
+			history.shift();
+		}
+
+		if (needSort) {
+			memo.history[zoneName] = history.sort(
+				(a, b) => a._ts < b._ts ? -1 : 1
+			);
+		}
+
+		return {
+			zone,
+			history: {
+				ts,
+				data: history.reduce((memo, { zone, _ts }, i) => {
+					const prevItem = history[i - 1];
+
+					memo.push(
+						Object.keys(zone).reduce((memo, key) => {
+							if (prevItem) {
+								memo.zone[key] = zone[key] - prevItem.zone[key];
+
+								if (memo.zone[key] < 0) memo.zone[key] = 0;
+							} else {
+								memo.zone[key] = 0;
+							}
+
+							return memo;
+						}, {
+							zone: {},
+							_ts
+						})
+					);
+
+					return memo;
+				}, [])
+			}
+		};
+	});
+
+	return data;
+};
