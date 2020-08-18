@@ -5,7 +5,7 @@
  *
  */
 
-import { limitConnReqFactory } from './utils.js';
+import { limitConnReqFactory } from './factories.js';
 
 export function buildCalculator(){
 	const httpLimitReq = {

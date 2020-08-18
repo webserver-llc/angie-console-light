@@ -9,7 +9,7 @@ import { stub } from 'sinon';
 import calculate from '../connections.js';
 import * as utils from '../utils.js';
 
-describe('Connections calculator', () => {
+describe('Calculators – Connections', () => {
 	it('calculate()', () => {
 		const ts = 1596706703143;
 		const td = 1000;

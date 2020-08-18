@@ -14,7 +14,7 @@ import calculate, {
 import appsettings from '../../appsettings';
 import * as utils from '../utils.js';
 
-describe('Caches calculator', () => {
+describe('Calculators – Caches', () => {
 	it('cachesHistory', () => {
 		const key = 'test_cache_history';
 

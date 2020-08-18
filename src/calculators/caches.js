@@ -118,8 +118,7 @@ export default (caches, previous, STORE) => {
 		},
 		warnings: 0,
 		alerts: 0,
-		status: 'ok',
-		test: 0
+		status: 'ok'
 	};
 	const { slabs } = STORE;
 

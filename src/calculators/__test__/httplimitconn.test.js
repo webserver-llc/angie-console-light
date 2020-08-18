@@ -7,21 +7,21 @@
 
 import { spy } from 'sinon';
 import calculate, { buildCalculator } from '../httplimitconn.js';
-import * as utils from '../utils.js';
+import * as factories from '../factories.js';
 
-describe('HttpLimitConn calculator', () => {
+describe('Calculators – HttpLimitConn', () => {
 	it('buildCalculator()', () => {
-		spy(utils, 'limitConnReqFactory');
+		spy(factories, 'limitConnReqFactory');
 
 		const result = buildCalculator();
 
-		expect(utils.limitConnReqFactory.calledOnce, 'limitConnReqFactory called once').to.be.true;
-		expect(utils.limitConnReqFactory.args[0][0], 'limitConnReqFactory 1st arg').to.be.deep.equal({
+		expect(factories.limitConnReqFactory.calledOnce, 'limitConnReqFactory called once').to.be.true;
+		expect(factories.limitConnReqFactory.args[0][0], 'limitConnReqFactory 1st arg').to.be.deep.equal({
 			history: {},
 			prevUpdatingPeriod: null
 		});
 
-		utils.limitConnReqFactory.restore();
+		factories.limitConnReqFactory.restore();
 	});
 
 	it('calculate()', () => {

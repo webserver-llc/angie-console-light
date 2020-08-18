@@ -9,7 +9,7 @@ import { spy } from 'sinon';
 import calculate, { buildCalculator } from '../httplimitconn.js';
 import * as factories from '../factories.js';
 
-describe('Calculators – HttpLimitReq', () => {
+describe('Calculators – StreamLimitConn', () => {
 	it('buildCalculator()', () => {
 		spy(factories, 'limitConnReqFactory');
 

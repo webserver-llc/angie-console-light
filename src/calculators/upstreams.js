@@ -5,6 +5,6 @@
  *
  */
 
-import { upstreamsCalculatorFactory } from './utils.js';
+import { upstreamsCalculatorFactory } from './factories.js';
 
 export default upstreamsCalculatorFactory('upstreams');
