@@ -78,6 +78,21 @@ describe('Utils', () => {
 
 	it('formatDate()', () => {
 		expect(formatDate()).to.be.equal('');
-		expect(formatDate(1596096046972)).to.be.equal('2020-07-30 11:00:46 GMT+0300');
+
+		const ts = 1596096046972;
+		const date = new Date(ts);
+		const year = date.getFullYear();
+		const day = date.getDate();
+		const month = date.getMonth() + 1;
+		const hours = date.getHours();
+		const minutes = date.getMinutes();
+		const seconds = date.getSeconds();
+		const tz = date.toTimeString().split(' ')[1];
+
+		expect(formatDate(ts)).to.be.equal([
+			`${ year }-${ month < 10 ? '0' : '' }${ month }-${ day < 10 ? '0' : '' }${ day }`,
+			`${ hours < 10 ? '0' : '' }${ hours }:${ minutes < 10 ? '0' : '' }${ minutes }:${ seconds < 10 ? '0' : '' }${ seconds }`,
+			tz
+		].join(' '));
 	});
 });

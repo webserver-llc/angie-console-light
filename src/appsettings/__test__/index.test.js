@@ -55,18 +55,23 @@ describe('AppSettings', () => {
 	});
 
 	it('saveSettings()', () => {
-		stub(localStorage, 'setItem').callsFake(() => {});
+		const originSettings = appsettings.currentSettings;
+		const customSettings = {
+			'saveSettings_test': true,
+			'should_be_written': 'to localStorage'
+		};
 
+		appsettings.currentSettings = customSettings;
 		appsettings.saveSettings();
 
-		assert(localStorage.setItem.calledOnce, 'Expect to call localStorage.setItem once');
-		assert(localStorage.setItem.args[0][0] === appsettings.SETTINGS_KEY_NAME, 'Unexpected key for localStorage');
-		assert(
-			localStorage.setItem.args[0][1] === JSON.stringify(appsettings.currentSettings),
-			'Unexpected value for localStorage on first call'
-		);
+		expect(localStorage.getItem(appsettings.SETTINGS_KEY_NAME), 'write test value')
+			.to.be.equal(JSON.stringify(customSettings));
 
-		localStorage.setItem.restore();
+		appsettings.currentSettings = originSettings;
+		appsettings.saveSettings();
+
+		expect(localStorage.getItem(appsettings.SETTINGS_KEY_NAME), 'write test value')
+			.to.be.equal(JSON.stringify(originSettings));
 	});
 
 	it('setSetting()', () => {
@@ -212,19 +217,14 @@ describe('AppSettings', () => {
 	});
 
 	it('init()', () => {
-		const origSettings = Object.assign({}, appsettings.currentSettings);
+		const originSettings = appsettings.currentSettings;
 		const settings = { abc: 123, asd: '321' };
-		let settingsStr = null;
 
-		stub(localStorage, 'getItem').callsFake(() => settingsStr);
 		stub(appsettings, 'saveSettings').callsFake(() => {});
 
+		localStorage.removeItem(appsettings.SETTINGS_KEY_NAME);
 		appsettings.init();
 
-		assert(
-			localStorage.getItem.args[0][0] === appsettings.SETTINGS_KEY_NAME,
-			'Unexpected settings key to find in localStorage'
-		);
 		assert(
 			Object.keys(appsettings.defaults).length === Object.keys(appsettings.currentSettings).length,
 			'"currentSettings" should have same keys length as "defaults"'
@@ -238,16 +238,15 @@ describe('AppSettings', () => {
 		});
 		assert(appsettings.saveSettings.calledOnce, '"saveSettings" is expected to be called');
 
-		settingsStr = JSON.stringify(settings);
-
+		localStorage.setItem(appsettings.SETTINGS_KEY_NAME, JSON.stringify(settings));
 		appsettings.init();
 
 		expect(appsettings.currentSettings).to.be.deep.equal(settings);
 		assert(appsettings.saveSettings.calledOnce, '"saveSettings" should not called');
 
-		appsettings.currentSettings = Object.assign({}, origSettings);
+		appsettings.currentSettings = originSettings;
+		localStorage.setItem(appsettings.SETTINGS_KEY_NAME, JSON.stringify(originSettings));
 
-		localStorage.getItem.restore();
 		appsettings.saveSettings.restore();
 	});
 });
