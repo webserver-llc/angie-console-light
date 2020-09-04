@@ -134,6 +134,26 @@ describe('Calculators – Resolvers', () => {
 			);
 			stub(appsettings, 'getSetting').callsFake(() => 50);
 
+			previousState.set(resolverName, {
+				requests: {
+					name: 3,
+					srv: 50,
+					addr: 0,
+					test: 'not a number'
+				},
+				responses: {
+					noerror: 53,
+					formerr: 0,
+					servfail: 0,
+					nxdomain: 0,
+					notimp: 0,
+					refused: 0,
+					timedout: 0,
+					unknown: 0
+				}
+			});
+			resolver.requests.test = 'not a number as well';
+
 			const result = handleResolver(STATS, previousState, resolver, resolverName);
 
 			expect(Date.now.calledOnce, 'Date.now called once').to.be.true;

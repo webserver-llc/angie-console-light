@@ -171,7 +171,7 @@ describe('Calculators – ZoneSync', () => {
 		const previous = {
 			status: {
 				msgs_in: 5,
-				msgs_out: 5
+				msgs_out: 4
 			},
 			lastUpdate: ts - period
 		};
@@ -227,11 +227,8 @@ describe('Calculators – ZoneSync', () => {
 
 			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
 			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(STATS.traffic.in, 'STATS.traffic.in').to.be.equal(0);
-			expect(STATS.traffic.out, 'STATS.traffic.out').to.be.equal(0);
 			expect(utils.createMapFromObject.notCalled, 'createMapFromObject not called').to.be.true;
 			expect(handleZones.bind.notCalled, 'handleZones.bind not called').to.be.true;
-			expect(STATS.total, 'STATS.total').to.be.equal(0);
 			expect(STORE.__STATUSES.zone_sync.ready, '__STATUSES.zone_sync.ready').to.be.false;
 			expect(STORE.__STATUSES.zone_sync.status, '__STATUSES.zone_sync.status').to.be.an('undefined');
 			expect(result, 'returned zone_sync').to.be.a('null');
@@ -242,11 +239,8 @@ describe('Calculators – ZoneSync', () => {
 
 			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
 			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(STATS.traffic.in, 'STATS.traffic.in').to.be.equal(0);
-			expect(STATS.traffic.out, 'STATS.traffic.out').to.be.equal(0);
 			expect(utils.createMapFromObject.notCalled, 'createMapFromObject not called').to.be.true;
 			expect(handleZones.bind.notCalled, 'handleZones.bind not called').to.be.true;
-			expect(STATS.total, 'STATS.total').to.be.equal(0);
 			expect(STORE.__STATUSES.zone_sync.ready, '__STATUSES.zone_sync.ready').to.be.false;
 			expect(STORE.__STATUSES.zone_sync.status, '__STATUSES.zone_sync.status').to.be.an('undefined');
 			expect(result, 'returned zone_sync').to.be.a('null');
@@ -257,8 +251,6 @@ describe('Calculators – ZoneSync', () => {
 
 			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
 			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(STATS.traffic.in, 'STATS.traffic.in').to.be.equal(0);
-			expect(STATS.traffic.out, 'STATS.traffic.out').to.be.equal(0);
 			expect(utils.createMapFromObject.calledOnce, 'createMapFromObject called once').to.be.true;
 			expect(utils.createMapFromObject.args[0][0], 'createMapFromObject 1st arg').to.be.deep.equal({
 				test: { a: 123 },
@@ -283,7 +275,17 @@ describe('Calculators – ZoneSync', () => {
 		});
 
 		it('with previous state', () => {
+			const result = calculate(zone_sync, previous, STORE);
 
+			expect(utils.calculateSpeed.calledTwice, 'calculateSpeed called twice').to.be.true;
+			expect(utils.calculateSpeed.args[0][0], 'calculateSpeed call 1, arg 1').to.be.equal(5);
+			expect(utils.calculateSpeed.args[0][1], 'calculateSpeed call 1, arg 2').to.be.equal(10);
+			expect(utils.calculateSpeed.args[0][2], 'calculateSpeed call 1, arg 3').to.be.equal(period);
+			expect(result.__STATS.traffic.in, 'STATS.traffic.in').to.be.equal(10);
+			expect(utils.calculateSpeed.args[1][0], 'calculateSpeed call 2, arg 1').to.be.equal(4);
+			expect(utils.calculateSpeed.args[1][1], 'calculateSpeed call 2, arg 2').to.be.equal(9);
+			expect(utils.calculateSpeed.args[1][2], 'calculateSpeed call 2, arg 3').to.be.equal(period);
+			expect(result.__STATS.traffic.out, 'STATS.traffic.out').to.be.equal(9);
 		});
 	});
 });

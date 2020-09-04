@@ -762,6 +762,7 @@ describe('Calculators – factories', () => {
 			prop_2: 0,
 			prop_3: zone_1.prop_3 - 6
 		};
+		const sortSpy = spy(memo.history[zoneName], 'sort');
 
 		result = handleZone(memo, historyLimit, ts_0, zone_0, zoneName);
 
@@ -773,6 +774,9 @@ describe('Calculators – factories', () => {
 		expect(memo.history[zoneName][1], 'history 2nd item').to.be.deep.equal(
 			{ zone: zone_1, _ts: ts_1 }
 		);
+		expect(sortSpy.calledOnce, 'history.sort called once').to.be.true;
+		expect(sortSpy.args[0][0]({ _ts: 1 }, { _ts: 2 }), 'history.sort fn').to.be.equal(-1);
+		expect(sortSpy.args[0][0]({ _ts: 2 }, { _ts: 1 }), 'history.sort fn').to.be.equal(1);
 		expect(result.zone, 'result.zone').to.be.deep.equal(zone_0);
 		expect(result.history.ts, 'result.history.ts').to.be.equal(ts_0);
 		expect(result.history.data, 'result.history.data').to.be.an.instanceof(Array);
@@ -793,6 +797,8 @@ describe('Calculators – factories', () => {
 			},
 			_ts: ts_1
 		});
+
+		sortSpy.restore();
 
 		const ts_2 = ts_1 + 1;
 		const zone_2 = {

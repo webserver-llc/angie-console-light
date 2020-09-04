@@ -42,8 +42,14 @@ describe('DataBinder()', () => {
 		datastore.get.restore();
 	});
 
+	it('provides class name', () => {
+		const Component = DataBinder(TestComponent);
+
+		expect(Component.name, 'class name').to.be.equal('TestComponent_binded');
+	});
+
 	it('constructor()', () => {
-		const Component = DataBinder();
+		const Component = DataBinder(TestComponent);
 		const wrapper = shallow(<Component />);
 		const instance = wrapper.instance();
 
@@ -60,7 +66,7 @@ describe('DataBinder()', () => {
 	});
 
 	it('componentWillMount() no apis', () => {
-		const Component = DataBinder();
+		const Component = DataBinder(TestComponent);
 		const wrapper = shallow(<Component />);
 
 		expect(datastore.subscribe.apply.calledOnce, 'subscribe.apply called once').to.be.true;
@@ -74,7 +80,7 @@ describe('DataBinder()', () => {
 	});
 
 	it('componentWillMount() with apis', () => {
-		const Component = DataBinder(null, apis);
+		const Component = DataBinder(TestComponent, apis);
 		const wrapper = shallow(<Component />);
 
 		expect(datastore.subscribe.apply.calledOnce, 'subscribe.apply called once').to.be.true;
@@ -90,7 +96,7 @@ describe('DataBinder()', () => {
 	});
 
 	it('componentWillUnmount()', () => {
-		const Component = DataBinder(null, apis);
+		const Component = DataBinder(TestComponent, apis);
 		const wrapper = shallow(<Component />);
 
 		wrapper.unmount();

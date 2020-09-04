@@ -407,6 +407,17 @@ describe('Api', () => {
 			}).catch(_done);
 		});
 
+		it('catches json() errors', done => {
+			window.fetch = path => Promise.resolve({
+				status: 200,
+				json(){
+					return Promise.reject();
+				}
+			});
+
+			Api.initialLoad(datastore).then(done);
+		});
+
 		it('Defines available endpoints', done => {
 			const _secondLevelEndpoints = ['http', 'stream'];
 			const responses = [
@@ -546,6 +557,8 @@ describe('Api', () => {
 						);
 					}
 				});
+
+				datastore.subscribe.args[0][1]();
 
 				assert(datastore.unsubscribe.calledOnce, '"unsubscribe" should be called once');
 				assert(

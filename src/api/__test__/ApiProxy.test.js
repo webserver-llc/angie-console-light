@@ -173,12 +173,13 @@ describe('ApiProxy', () => {
 					text: 'ErrText'
 				}
 			};
+			let jsonResult = Promise.resolve(response);
 
 			fetchInner = () =>
 				Promise.resolve({
 					status,
 					json(){
-						return Promise.resolve(response);
+						return jsonResult;
 					}
 				});
 
@@ -188,7 +189,16 @@ describe('ApiProxy', () => {
 					assert('error' in data, '"error" property should be in fail response');
 					assert(data.error === `${ response.error.code }: ${ response.error.text }`, 'Bad error');
 
-					done();
+					jsonResult = Promise.resolve({});
+
+					api.http.upstreams['temp-name'].servers['123'].doRequest(method, params, fetchParams)
+						.catch(data => {
+							assert(data.status === status, 'Bad status');
+							assert('error' in data, '"error" property should be in fail response');
+							assert(data.error === null, 'Bad error');
+
+							done();
+						});
 				});
 		});
 
