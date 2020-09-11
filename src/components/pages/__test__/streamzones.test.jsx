@@ -15,7 +15,7 @@ import * as utils from '../../../utils';
 describe('<StreamZones Page />', () => {
 	describe('render()', () => {
 		it('return value', () => {
-			const limit_conns = 'mocked_data_for_limit_conns';
+			const limit_conns = 'test_data_for_limit_conns';
 			const wrapper = shallow(<StreamZones data={{ server_zones: [] }} />);
 
 			expect(wrapper.find(`.${ styles['table'] }`).length, 'table container').to.be.equal(1);

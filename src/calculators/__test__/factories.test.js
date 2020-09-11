@@ -24,7 +24,7 @@ describe('Calculators – factories', () => {
 	describe('handlePeer', () => {
 		const ts = 1597654154847;
 		const period = 1000;
-		const slabs = 'slabs_mock';
+		const slabs = 'slabs_test';
 		const name = 'test_upstream';
 		const previousState = new Map([
 			[ name, { peers: [
@@ -565,9 +565,9 @@ describe('Calculators – factories', () => {
 
 	it('handleUpstreams()', () => {
 		const upstreamsKey = 'upstreams_key';
-		const STATS = 'stats_mock';
-		const previousState = 'previous_state_mock';
-		const slabs = 'slabs_mock';
+		const STATS = 'stats_test';
+		const previousState = 'previous_state_test';
+		const slabs = 'slabs_test';
 		const upstream = {
 			duck_test_for_upstream: true,
 			zone: 'upstreamZone',
@@ -618,9 +618,9 @@ describe('Calculators – factories', () => {
 
 	describe('upstreamsCalculator()', () => {
 		const upstreamsKey = 'upstreams';
-		const previousState = 'previous_state_mock';
+		const previousState = 'previous_state_test';
 		const STORE = {
-			slabs: 'slabs_mock',
+			slabs: 'slabs_test',
 			__STATUSES: {
 				[upstreamsKey]: {}
 			}
@@ -999,7 +999,7 @@ describe('Calculators – factories', () => {
 
 	it('limitConnReqFactory()', () => {
 		const expectedResult = 'expectedResult';
-		const memo = 'mocked_memo';
+		const memo = 'test_memo';
 
 		stub(limitConnReqCalculator, 'bind').callsFake(() => expectedResult);
 

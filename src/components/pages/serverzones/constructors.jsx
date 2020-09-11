@@ -6,8 +6,6 @@
  */
 
 import React from 'react';
-import TableSortControl from '../../table/tablesortcontrol.jsx';
-import Chart from '../../chart/index.jsx';
 import styles from '../../table/style.css';
 
 export class LimitConnReqConstructor extends React.Component {
@@ -42,9 +40,13 @@ export class LimitConnReqConstructor extends React.Component {
 		}
 	}
 
-	getTitle(){}
+	getTitle(){
+		return null;
+	}
 
-	getHeadRow(){}
+	getHeadRow(){
+		return null;
+	}
 
 	getBody(){
 		return null;

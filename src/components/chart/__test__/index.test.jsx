@@ -119,7 +119,7 @@ describe('<Chart />', () => {
 	});
 
 	it('componentDidMount()', () => {
-		const subscribeResult = 'mocked_subscribe_result';
+		const subscribeResult = 'test_subscribe_result';
 		const wrapper = mount(
 			<Chart { ...props } />
 		);
@@ -140,7 +140,7 @@ describe('<Chart />', () => {
 	});
 
 	it('componentWillUnmount()', () => {
-		const subscribeResult = 'mocked_subscribe_result';
+		const subscribeResult = 'test_subscribe_result';
 		const wrapper = shallow(
 			<Chart { ...props } />
 		);
@@ -248,7 +248,7 @@ describe('<Chart />', () => {
 	});
 
 	it('onSettingsChange()', () => {
-		const value = 'mocked_value';
+		const value = 'test_value';
 		const wrapper = shallow(
 			<Chart { ...props } />
 		);
@@ -307,12 +307,12 @@ describe('<Chart />', () => {
 		const instance = wrapper.instance();
 		const stateSpy = spy(instance, 'setState');
 
-		instance.mouseOffsetX = 'mocked_offset_x';
+		instance.mouseOffsetX = 'test_offset_x';
 		instance.drawCursorLine();
 
 		expect(stateSpy.calledOnce, 'this.setState called').to.be.true;
 		expect(stateSpy.args[0][0], 'this.setState arg').to.be.deep.equal({
-			mouseOffsetX: 'mocked_offset_x'
+			mouseOffsetX: 'test_offset_x'
 		});
 
 		instance.setState({ dndIsInProgress: true });
@@ -1609,13 +1609,13 @@ describe('<Chart />', () => {
 			);
 			const instance = wrapper.instance();
 
-			instance.dndControls = 'dndControls__mock';
-			instance.timeWindowControls = 'timeWindowControls__mock';
-			instance.toRender.yMax = <div>toRender_yMax__mock</div>;
-			instance.toRender.yMid = <div>toRender_yMid__mock</div>;
-			instance.toRender.charts = <div>toRender_charts__mock</div>;
-			instance.toRender.areas = <div>toRender_areas__mock</div>;
-			instance.toRender.legend = 'legend__mock';
+			instance.dndControls = 'dndControls__test';
+			instance.timeWindowControls = 'timeWindowControls__test';
+			instance.toRender.yMax = <div>toRender_yMax__test</div>;
+			instance.toRender.yMid = <div>toRender_yMid__test</div>;
+			instance.toRender.charts = <div>toRender_charts__test</div>;
+			instance.toRender.areas = <div>toRender_areas__test</div>;
+			instance.toRender.legend = 'legend__test';
 			instance.ticks = [
 				{ x: 10, y: 20, label: 'tick 1' },
 				{ x: 11, y: 22, label: 'tick 2' }
@@ -1627,8 +1627,8 @@ describe('<Chart />', () => {
 			const timeWindow = container.find(`.${ styles['timewindow'] }`);
 
 			expect(container, 'container').to.have.lengthOf(1);
-			expect(dndControls.text(), 'dnd-controls inner').to.be.equal('dndControls__mock');
-			expect(timeWindow.text(), 'timewindow inner').to.be.equal('timeWindowControls__mock');
+			expect(dndControls.text(), 'dnd-controls inner').to.be.equal('dndControls__test');
+			expect(timeWindow.text(), 'timewindow inner').to.be.equal('timeWindowControls__test');
 
 			let mouseTracker = container.find(`.${ styles['mouse-tracker'] }`);
 
@@ -1684,12 +1684,12 @@ describe('<Chart />', () => {
 			expect(ticksLabels.at(1).prop('x'), 'this.ticks[1] x').to.be.equal(11);
 			expect(ticksLabels.at(1).prop('y'), 'this.ticks[1] y').to.be.equal(22);
 			expect(ticksLabels.at(1).text(), 'this.ticks[1] text').to.be.equal('tick 2');
-			expect(svg.childAt(6).text(), 'this.toRender.yMax').to.be.equal('toRender_yMax__mock');
-			expect(svg.childAt(7).text(), 'this.toRender.yMid').to.be.equal('toRender_yMid__mock');
-			expect(svg.childAt(8).text(), 'this.toRender.charts').to.be.equal('toRender_charts__mock');
-			expect(svg.childAt(9).text(), 'this.toRender.areas').to.be.equal('toRender_areas__mock');
+			expect(svg.childAt(6).text(), 'this.toRender.yMax').to.be.equal('toRender_yMax__test');
+			expect(svg.childAt(7).text(), 'this.toRender.yMid').to.be.equal('toRender_yMid__test');
+			expect(svg.childAt(8).text(), 'this.toRender.charts').to.be.equal('toRender_charts__test');
+			expect(svg.childAt(9).text(), 'this.toRender.areas').to.be.equal('toRender_areas__test');
 			expect(container.find(`div.${ styles['legend'] }`).text(), 'this.toRender.legend')
-				.to.be.equal('legend__mock');
+				.to.be.equal('legend__test');
 
 			wrapper.unmount();
 		});

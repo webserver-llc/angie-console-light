@@ -57,10 +57,10 @@ export class Connections extends React.Component {
 			}
 
 			<div styleName={ tabsStyleName }>
-				<div styleName={isConnsTab ? 'tab-active' : 'tab'} onClick={() => this.changeTab('conns')}>
+				<div styleName={isConnsTab ? 'tab-active' : 'tab'} onClick={ this.changeTab.bind(this, 'conns') }>
 					<span>Connections</span>
 				</div>
-				<div styleName={!isConnsTab ? 'tab-active' : 'tab'} onClick={() => this.changeTab('ssl')}>
+				<div styleName={!isConnsTab ? 'tab-active' : 'tab'} onClick={ this.changeTab.bind(this, 'ssl') }>
 					<span>SSL</span>
 				</div>
 			</div>

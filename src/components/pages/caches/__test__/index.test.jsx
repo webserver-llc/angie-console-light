@@ -15,9 +15,9 @@ import styles from '../../../table/style.css';
 
 describe('<Caches Page />', () => {
 	it('formatReadableBytes()', () => {
-		stub(utils, 'formatReadableBytes').callsFake(() => 'mocked_result');
+		stub(utils, 'formatReadableBytes').callsFake(() => 'test_result');
 
-		expect(Caches.formatReadableBytes(12, 'MB'), 'result').to.be.equal('mocked_result');
+		expect(Caches.formatReadableBytes(12, 'MB'), 'result').to.be.equal('test_result');
 		expect(utils.formatReadableBytes.calledOnce, 'formatReadableBytes called once').to.be.true;
 		expect(utils.formatReadableBytes.args[0][0], 'formatReadableBytes arg 1').to.be.equal(12);
 		expect(utils.formatReadableBytes.args[0][1], 'formatReadableBytes arg 2').to.be.equal('MB');
@@ -86,7 +86,7 @@ describe('<Caches Page />', () => {
 				<Caches data={{ caches: new Map([
 					['test_1', {
 						cold: false,
-						slab: 'mocked_slab_1',
+						slab: 'test_slab_1',
 						zoneSize: 30,
 						max_size: 500,
 						size: 430,
@@ -101,7 +101,7 @@ describe('<Caches Page />', () => {
 						hit_percents_generic: 10
 					}], ['test_2', {
 						cold: true,
-						slab: 'mocked_slab_2',
+						slab: 'test_slab_2',
 						zoneSize: undefined,
 						max_size: '501',
 						size: 431,
@@ -142,7 +142,7 @@ describe('<Caches Page />', () => {
 			expect(
 				hintedEl.prop('useTooltip_prop_1').attributes.zone,
 				'row 1, cell 3, useTooltip arg 1, attr'
-			).to.be.equal('mocked_slab_1');
+			).to.be.equal('test_slab_1');
 			expect(hintedEl.prop('useTooltip_prop_2'), 'row 1, cell 3, useTooltip arg 2').to.be.equal('hint');
 			expect(hintedEl.childAt(0).name(), 'row 1, cell 3, ProgressBar').to.be.equal('ProgressBar');
 			expect(hintedEl.childAt(0).prop('percentage'), 'row 1, cell 3, ProgressBar prop').to.be.equal(30);
@@ -190,7 +190,7 @@ describe('<Caches Page />', () => {
 			expect(
 				hintedEl.prop('useTooltip_prop_1').attributes.zone,
 				'row 2, cell 3, useTooltip arg 1, attr'
-			).to.be.equal('mocked_slab_2');
+			).to.be.equal('test_slab_2');
 			expect(hintedEl.prop('useTooltip_prop_2'), 'row 2, cell 3, useTooltip arg 2').to.be.equal('hint');
 			expect(hintedEl.childAt(0).name(), 'row 2, cell 3, ProgressBar').to.be.equal('ProgressBar');
 			expect(hintedEl.childAt(0).prop('percentage'), 'row 2, cell 3, ProgressBar prop').to.be.equal(0);
