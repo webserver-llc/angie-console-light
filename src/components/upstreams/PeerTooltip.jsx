@@ -11,7 +11,7 @@ import styles from './tooltip.css';
 
 import { formatUptime, formatDate } from '../../utils.js';
 
-export default ({ peer }) => {
+export default function PeerTooltip({ peer }){
 	let state = null;
 
 	if (peer.state === 'unavail') {

@@ -11,15 +11,17 @@ import styles from './tooltip.css';
 
 import { formatUptime, formatDate } from '../../utils.js';
 
-export default ({ peer }) => (
-	<div>
-		{
-			peer.selected ?
-				<div>
-					<div>Last: {formatDate(peer.selected)}</div>
-					<div>({formatUptime(new Date().getTime() - Date.parse(peer.selected))} ago)</div>
-				</div>
-				: 'Last: unknown'
-		}
-	</div>
-);
+export default function ConnectionsTooltip({ peer }){
+	return (
+		<div>
+			{
+				peer.selected ?
+					<div>
+						<div>Last: {formatDate(peer.selected)}</div>
+						<div>({formatUptime(new Date().getTime() - Date.parse(peer.selected))} ago)</div>
+					</div>
+					: 'Last: unknown'
+			}
+		</div>
+	);
+};
