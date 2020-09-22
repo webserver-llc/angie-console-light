@@ -15,9 +15,9 @@
 .logo {
 	composes: logo from '../../style.css';
 	width: 180px;
-	height: 32px;
+	height: 44px;
 	background-size: contain;
-	padding: 14px 15px;
+	padding: 8px;
 	background-origin: content-box;
 	flex: 0 0 auto;
 }
@@ -148,9 +148,9 @@
 @media screen and (max-width: 1390px) {
 	.logo {
 		width: 127px;
-		height: 23px;
-		padding-top: 19px;
-		padding-bottom: 18px;
+		height: 36px;
+		padding-top: 12px;
+		padding-bottom: 12px;
 	}
 
 	.nav-wide .anchor {
