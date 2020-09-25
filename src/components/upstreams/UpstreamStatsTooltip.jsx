@@ -8,7 +8,7 @@
 import React from 'react';
 import styles from './tooltip.css';
 
-export default ({ upstream }) => {
+export default function UpstreamStatsTooltip({ upstream }){
 	let queueInfo = null;
 
 	if (upstream.queue) {

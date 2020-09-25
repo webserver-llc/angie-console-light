@@ -158,10 +158,6 @@ td.status {
 	text-align: center;
 }
 
-.traffic-column {
-	/*Fade */
-}
-
 .hovered-expander .responses-column {
 	color: #ccc;
 }

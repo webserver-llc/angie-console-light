@@ -8,7 +8,7 @@
 import React from 'react';
 import styles from './style.css';
 
-const UPSTREAM_GROUP_LENGTH = 70;
+export const UPSTREAM_GROUP_LENGTH = 70;
 
 export default class UpstreamsContainer extends React.Component {
 	constructor(props) {
@@ -78,6 +78,12 @@ export default class UpstreamsContainer extends React.Component {
 		});
 	}
 
+	upstreamRef(isLast, ref){
+		if (isLast && this.intersectionObserver && ref) {
+			this.intersectionObserver.observe(ref.base);
+		}
+	}
+
 	render() {
 		let children = [];
 		let { upstreams } = this.props;
@@ -101,11 +107,7 @@ export default class UpstreamsContainer extends React.Component {
 					writePermission={this.props.writePermission}
 					upstreamsApi={this.props.upstreamsApi}
 					isStream={this.props.isStream}
-					ref={(ref) => {
-						if (i == upstreamsToShow.length - 1 && this.intersectionObserver && ref) {
-							this.intersectionObserver.observe(ref.base);
-						}
-					}}
+					ref={ this.upstreamRef.bind(this, i == upstreamsToShow.length - 1) }
 				/>);
 			}
 		});

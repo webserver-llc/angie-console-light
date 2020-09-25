@@ -202,8 +202,8 @@ export default class Upstream extends UpstreamsList {
 									<td styleName="center-align">{ peer.active }</td>
 									<td styleName="center-align bdr">{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }</td>
 
-									<td styleName="traffic-column px60">{ formatReadableBytes(peer.server_sent_s) }</td>
-									<td styleName="traffic-column px60">{ formatReadableBytes(peer.server_rcvd_s) }</td>
+									<td styleName="px60">{ formatReadableBytes(peer.server_sent_s) }</td>
+									<td styleName="px60">{ formatReadableBytes(peer.server_rcvd_s) }</td>
 									<td>{ formatReadableBytes(peer.sent) }</td>
 									<td>{ formatReadableBytes(peer.received) }</td>
 									<td>{ peer.fails }</td>

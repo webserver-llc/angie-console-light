@@ -20,7 +20,7 @@ import tableStyles from '../table/style.css';
 
 import { useTooltip } from '../../tooltips/index.jsx';
 
-const FILTER_OPTIONS = {
+export const FILTER_OPTIONS = {
 	all: 'Show all',
 	up: 'Up',
 	failed: 'Failed',
@@ -129,9 +129,7 @@ export default class UpstreamsList extends SortableTable {
 		</tr>);
 	}
 
-	renderPeers() {
-		throw new Error('need to declare renderPeers()');
-	}
+	renderPeers() {}
 
 	filterPeers(data, filtering = this.state.filtering) {
 		return data.filter((item) => {

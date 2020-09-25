@@ -217,7 +217,7 @@ describe('<StreamUpstream />', () => {
 		).to.be.true;
 		expect(
 			tbody.childAt(0).childAt(5).childAt(0).text(),
-			'[peer 1] address-container text'
+			'[peer 1] connections text'
 		).to.be.equal('20');
 		expect(tbody.childAt(0).childAt(6).text(), '[peer 1] server_conn_s').to.be.equal('100000');
 		expect(tbody.childAt(0).childAt(7).text(), '[peer 1] active').to.be.equal('10000');
