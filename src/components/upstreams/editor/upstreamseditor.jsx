@@ -503,7 +503,7 @@ export default class UpstreamsEditor extends React.Component {
 				<div styleName="footer">
 					{
 						!isAdd ?
-							<div styleName="remove" onClick={() => this.remove()}>Remove</div>
+							<div styleName="remove" onClick={this.remove}>Remove</div>
 							: null
 					}
 

@@ -11,6 +11,8 @@ import styles from './style.css';
 export const defaultSN = 'loader';
 export const graySN = 'gray-loader';
 
-export default ({ gray, className }) => (
-	<div className={className} styleName={gray ? graySN : defaultSN} />
-);
+export default function Loader({ gray, className }){
+	return (
+		<div className={className} styleName={gray ? graySN : defaultSN} />
+	);
+};
