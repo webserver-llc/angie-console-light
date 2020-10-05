@@ -12,9 +12,9 @@ import AvailableApiEndpoints from './availableApiEndpoints.js';
 
 export const availableApiEndpoints = new AvailableApiEndpoints();
 
-const OBSERVED = new Map();
+export const OBSERVED = new Map();
 
-let live = true;
+export let live = true;
 
 export const pause = () => {
 	live = false;
@@ -119,8 +119,9 @@ export const subscribe = (apis, callback) => {
 		}
 	});
 
-	clearImmediate(immediate);
-	immediate = setImmediate(() => startObserve());
+	window.clearImmediate(immediate);
+
+	immediate = window.setImmediate(startObserve);
 };
 
 export const get = getFromStore;

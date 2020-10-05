@@ -297,6 +297,7 @@ describe('<Chart />', () => {
 		});
 
 		stateSpy.restore();
+		clearTimeoutSpy.restore();
 		wrapper.unmount();
 	});
 

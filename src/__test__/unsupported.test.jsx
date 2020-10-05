@@ -38,5 +38,7 @@ describe('<Unsupported />', () => {
 		assert(React.render.calledOnce, 'React.render is expected to be called once');
 		assert(React.render.args[0][0].nodeName === Unsupported, '<Unsupported /> is expected to be rendered');
 		assert(React.render.args[0][1] === document.body, '<Unsupported /> is expected to be render to document.body');
+
+		React.render.restore();
 	});
 });
