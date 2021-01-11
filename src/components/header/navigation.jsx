@@ -23,7 +23,7 @@ import calculateResolvers from '../../calculators/resolvers.js';
 
 import styles from './style.css';
 
-const SECTIONS = [
+export const SECTIONS = [
 	{
 		title: 'HTTP Zones',
 		hash: '#server_zones',

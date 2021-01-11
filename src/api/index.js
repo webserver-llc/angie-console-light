@@ -1,6 +1,7 @@
 /**
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
+ * Copyright 2017-present, Igor Meleshchenko
  * All rights reserved.
  *
  */
@@ -20,7 +21,6 @@ import calculateSSL from '../calculators/ssl.js';
 import calculateRequests from '../calculators/requests.js';
 import calculateZoneSync from '../calculators/zonesync.js';
 import calculateResolvers from '../calculators/resolvers.js';
-import { subscribe, unsubscribe, availableApiEndpoints } from '../datastore';
 
 const api = new Proxy({}, {
 	get(target, pathStart) {
@@ -71,7 +71,11 @@ export const checkApiAvailability = () => {
 	});
 };
 
-export const initialLoad = () => {
+export const initialLoad = ({
+	subscribe,
+	unsubscribe,
+	availableApiEndpoints
+}) => {
 	const apis = [
 		api.nginx,
 		api.connections.process(calculateConnections),
@@ -94,7 +98,7 @@ export const initialLoad = () => {
 				return response.json()
 					.then(data => {
 						if (data) {
-							availableApiEndpoints[0] = data;
+							availableApiEndpoints.fillFirstLevel(data);
 						}
 					})
 					.catch(err => {});
@@ -102,15 +106,15 @@ export const initialLoad = () => {
 		})
 		.then(() =>
 			Promise.all(
-				Object.keys(availableApiEndpoints[1]).map(apiKey =>
-					availableApiEndpoints[0].includes(apiKey) ?
+				availableApiEndpoints.getSecondLevel().map(apiKey =>
+					availableApiEndpoints.firstLevelIncludes(apiKey) ?
 						window.fetch(`${API_PATH}/${apiKey}/`).then(
 							response => {
 								if (response.status <= 299) {
 									return response.json()
 										.then(data => {
 											if (data) {
-												availableApiEndpoints[1][apiKey] = data;
+												availableApiEndpoints.fillThirdLevel(apiKey, data);
 											}
 										})
 										.catch(err => {});

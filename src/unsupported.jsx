@@ -31,4 +31,6 @@ export default class Unsupported extends React.Component {
 	}
 }
 
-React.render(<Unsupported />, document.body);
+export const start = () => {
+	React.render(<Unsupported />, document.body);
+};

@@ -1,6 +1,7 @@
 /**
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
+ * Copyright 2017-present, Igor Meleshchenko
  * All rights reserved.
  *
  */
@@ -12,47 +13,48 @@ import {
 	DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT
 } from '../constants.js';
 
-const SETTINGS_KEY_NAME = '__NGINX_PLUS_DASHBOARD';
-
-const defaults = {
-	updatingPeriod: DEFAULT_UPDATING_PERIOD,
-	warnings4xxThresholdPercent: DEFAULT_4XX_THRESHOLD_PERCENT,
-	cacheDataInterval: DEFAULT_CACHE_DATA_INTERVAL,
-	zonesyncPendingThreshold: DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT,
-	resolverErrorsThreshold: DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT
-};
-
-const settingChangeCallbacks = new Map();
-
-let currentSettings = null;
-
-export const saveSettings = () => {
-	localStorage.setItem(SETTINGS_KEY_NAME, JSON.stringify(currentSettings));
-};
-
-export const setSetting = (propertyName, value, silent = false) => {
-	currentSettings[propertyName] = value;
-	saveSettings();
-
-	if (!silent) {
-		settingChangeCallbacks.forEach(cb => {
-			cb(propertyName, value);
-		});
-	}
-};
-
-export const getSetting = (propertyName, defaultValue) => {
-	if (!(propertyName in currentSettings)) {
-		setSetting(propertyName, defaultValue, true);
+export class AppSettings {
+	constructor(){
+		this.SETTINGS_KEY_NAME = '__NGINX_PLUS_DASHBOARD';
+		this.defaults = {
+			updatingPeriod: DEFAULT_UPDATING_PERIOD,
+			warnings4xxThresholdPercent: DEFAULT_4XX_THRESHOLD_PERCENT,
+			cacheDataInterval: DEFAULT_CACHE_DATA_INTERVAL,
+			zonesyncPendingThreshold: DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT,
+			resolverErrorsThreshold: DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT
+		};
+		this.settingChangeCallbacks = new Map();
+		this.currentSettings = null;
+		this.subscribeCounter = 0;
 	}
 
-	return currentSettings[propertyName];
-};
+	saveSettings(){
+		localStorage.setItem(
+			this.SETTINGS_KEY_NAME,
+			JSON.stringify(this.currentSettings)
+		);
+	}
 
-export const subscribe = (() => {
-	let subscribeCounter = 0;
+	setSetting(propertyName, value, silent = false){
+		this.currentSettings[propertyName] = value;
+		this.saveSettings();
 
-	return (callback, propertyName) => {
+		if (!silent) {
+			this.settingChangeCallbacks.forEach(cb => {
+				cb(propertyName, value);
+			});
+		}
+	}
+
+	getSetting(propertyName, defaultValue){
+		if (!(propertyName in this.currentSettings)) {
+			this.setSetting(propertyName, defaultValue, true);
+		}
+
+		return this.currentSettings[propertyName];
+	}
+
+	subscribe(callback, propertyName){
 		let id;
 
 		if (
@@ -60,9 +62,9 @@ export const subscribe = (() => {
 			propertyName &&
 			typeof propertyName === 'string'
 		) {
-			id = `${ subscribeCounter++ }`;
+			id = `${ this.subscribeCounter++ }`;
 
-			settingChangeCallbacks.set(id, (_propertyName, newValue) => {
+			this.settingChangeCallbacks.set(id, (_propertyName, newValue) => {
 				if (_propertyName === propertyName) {
 					callback(newValue);
 				}
@@ -70,22 +72,28 @@ export const subscribe = (() => {
 		}
 
 		return id;
-	};
-})();
+	}
 
-export const unsubscribe = id => {
-	if (settingChangeCallbacks.has(id)) {
-		settingChangeCallbacks.delete(id);
+	unsubscribe(id){
+		if (this.settingChangeCallbacks.has(id)) {
+			this.settingChangeCallbacks.delete(id);
+		}
+	}
+
+	init(){
+		try {
+			this.currentSettings = JSON.parse(
+				localStorage.getItem(this.SETTINGS_KEY_NAME)
+			);
+		} catch(e) {}
+
+		if (this.currentSettings === null) {
+			this.currentSettings = Object.assign({}, this.defaults);
+			this.saveSettings();
+		}
 	}
 };
 
-export const init = () => {
-	try {
-		currentSettings = JSON.parse(localStorage.getItem(SETTINGS_KEY_NAME));
-	} catch(e) {}
+const appsettings = new AppSettings();
 
-	if (currentSettings === null) {
-		currentSettings = defaults;
-		saveSettings();
-	}
-};
+export default appsettings;

@@ -6,16 +6,12 @@
  */
 
 import React from 'react';
+import { getYMax } from './utils.js';
 import styles from './style.css';
-import {
-	getSetting,
-	setSetting,
-	subscribe,
-	unsubscribe
-} from '../../appsettings';
-import { limitConnReqHistoryLimit } from '../../calculators/utils.js';
+import appsettings from '../../appsettings';
+import { limitConnReqHistoryLimit } from '../../calculators/factories.js';
 
-const chartDimensions = {
+export const chartDimensions = {
 	width: 1150,
 	height: 250,
 	offsetTop: 70,
@@ -25,18 +21,18 @@ const chartDimensions = {
 	textOffset: 5,
 	tickSize: 6
 };
-const TimeWindows = new Map([
+export const TimeWindows = new Map([
 	['1m', 60],
 	['5m', 5 * 60],
 	['15m', 15 * 60]
 ]);
-const TimeWindowDefault = '5m';
+export const TimeWindowDefault = '5m';
 
 export default class Chart extends React.Component {
 	constructor(props){
 		super(props);
 
-		let selectedTimeWindow = getSetting('timeWindow');
+		let selectedTimeWindow = appsettings.getSetting('timeWindow');
 
 		if (!selectedTimeWindow || !TimeWindows.has(selectedTimeWindow)) {
 			selectedTimeWindow = TimeWindowDefault;
@@ -51,6 +47,8 @@ export default class Chart extends React.Component {
 			dndIsInProgress: false,
 			dndPointsIndicies: null
 		};
+
+		this.historyLimit = limitConnReqHistoryLimit;
 
 		this.highlightMetricTimer = null;
 		this.highlightedMetric = null;
@@ -69,21 +67,17 @@ export default class Chart extends React.Component {
 		this.onMouseUp = this.onMouseUp.bind(this);
 		this.redraw = this.redraw.bind(this);
 		this.highlightMetric = this.highlightMetric.bind(this);
+		this.onSettingsChange = this.onSettingsChange.bind(this);
 
 		this.redraw();
 	}
 
-	componentDidMount(){
-		this.settingsListener = subscribe(value => {
-			this.redraw({
-				selectedTimeWindow: value,
-				dndPointsIndicies: null
-			});
-		}, 'timeWindow');
+	componentDidMount(what){
+		this.settingsListener = appsettings.subscribe(this.onSettingsChange, 'timeWindow');
 	}
 
 	componentWillUnmount(){
-		unsubscribe(this.settingsListener);
+		appsettings.unsubscribe(this.settingsListener);
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -98,9 +92,9 @@ export default class Chart extends React.Component {
 
 			if (
 				dndPointsIndicies !== null &&
-				nextData.data.length === limitConnReqHistoryLimit
+				nextData.data.length === this.historyLimit
 			) {
-				const updatingPeriod = parseInt(getSetting('updatingPeriod'), 10) / 1000;
+				const updatingPeriod = parseInt(appsettings.getSetting('updatingPeriod'), 10) / 1000;
 				const indiciesShift = Math.round((nextData.ts - data.ts) / updatingPeriod);
 
 				nextState.dndPointsIndicies = this.state.dndPointsIndicies
@@ -128,6 +122,13 @@ export default class Chart extends React.Component {
 		if (this.state.dndIsInProgress) {
 			return this.state.dndPointsIndicies !== nextState.dndPointsIndicies;
 		} else return true;
+	}
+
+	onSettingsChange(value){
+		this.redraw({
+			selectedTimeWindow: value,
+			dndPointsIndicies: null
+		});
 	}
 
 	onMouseLeave(){
@@ -352,7 +353,7 @@ export default class Chart extends React.Component {
 		};
 		this.dndAllowed = false;
 
-		const updatingPeriod = parseInt(getSetting('updatingPeriod'), 10) / 1000;
+		const updatingPeriod = parseInt(appsettings.getSetting('updatingPeriod'), 10) / 1000;
 		const chartWidth = width - offsetLeft - offsetRight;
 		const chartHeight = height - offsetTop - offsetBottom;
 		let timeDiff = TimeWindows.get(selectedTimeWindow) + 0.2 * updatingPeriod;
@@ -386,17 +387,7 @@ export default class Chart extends React.Component {
 
 				xStep = chartWidth / timeDiff;
 
-				let yMax = parsedData.reduce((max, { zone }) => {
-					const newMax = metrics.reduce((memo, key) => {
-						if (key in zone && !disabledMetrics.includes(key)) {
-							memo += zone[key];
-						}
-
-						return memo;
-					}, 0);
-
-					return newMax > max ? newMax : max;
-				}, 0);
+				let yMax = getYMax(parsedData, metrics, disabledMetrics);
 
 				if (yMax > 0) {
 					if (yMax % 2 === 1) {
@@ -603,7 +594,7 @@ export default class Chart extends React.Component {
 			if (key === selectedTimeWindow) {
 				styleName += ' timewindow__item_selected';
 			} else {
-				onClick = () => setSetting('timeWindow', key);
+				onClick = this.selectTimeWindow.bind(null, key);
 			}
 
 			this.timeWindowControls.push(
@@ -662,6 +653,10 @@ export default class Chart extends React.Component {
 		if (Object.keys(nextState).length > 0) {
 			this.setState(nextState);
 		}
+	}
+
+	selectTimeWindow(key){
+		appsettings.setSetting('timeWindow', key)
 	}
 
 	render(){
@@ -791,7 +786,7 @@ export default class Chart extends React.Component {
 					<path
 						styleName="x-axis"
 						d={ this.ticks.reduce((memo, tick) => {
-							return `${ memo }${ memo ? '' : ' ' }M ${ tick.x } ${ xAxisY } V ${ xAxisY + tickSize }`;
+							return `${ memo }${ memo ? ' ' : '' }M ${ tick.x } ${ xAxisY } V ${ xAxisY + tickSize }`;
 						}, '') }
 					/>
 					<text

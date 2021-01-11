@@ -8,7 +8,8 @@
 import { calculateSpeed } from './utils.js';
 
 export default (requests, previous) => {
-	requests.reqs = calculateSpeed(previous ? previous.total : 0,
+	requests.reqs = calculateSpeed(
+		previous ? previous.total : 0,
 		requests.total,
 		Date.now() - (previous ? previous.lastUpdate : 0)
 	);

@@ -5,14 +5,14 @@
  *
  */
 import React from 'react';
-import { getSetting, setSetting } from '../../appsettings';
+import appsettings from '../../appsettings';
 
 export default class SortableTable extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			sortOrder: getSetting(this.SORTING_SETTINGS_KEY, 'asc')
+			sortOrder: appsettings.getSetting(this.SORTING_SETTINGS_KEY, 'asc')
 		};
 
 		this.changeSorting = this.changeSorting.bind(this);
@@ -23,6 +23,6 @@ export default class SortableTable extends React.Component {
 			sortOrder
 		});
 
-		setSetting(this.SORTING_SETTINGS_KEY, sortOrder);
+		appsettings.setSetting(this.SORTING_SETTINGS_KEY, sortOrder);
 	}
 }

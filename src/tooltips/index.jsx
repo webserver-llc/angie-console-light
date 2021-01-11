@@ -9,12 +9,16 @@ import React from 'react';
 import Tooltip from '../components/tooltip/tooltip.jsx';
 import styles from '../components/tooltip/style.css';
 
-if (!Element.prototype.matches) {
-	Element.prototype.matches = Element.prototype.msMatchesSelector;
-}
+export const checkElementMatches = () => {
+	if (!Element.prototype.matches) {
+		Element.prototype.matches = Element.prototype.msMatchesSelector;
+	}
+};
 
-let tooltipContainerEl = null;
-let currentTooltip = null;
+checkElementMatches();
+
+export let tooltipContainerEl = null;
+export let currentTooltip = null;
 
 let tooltipRenderInterval = null;
 

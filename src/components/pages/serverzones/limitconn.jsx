@@ -10,12 +10,12 @@ import { LimitConnReqConstructor } from './constructors.jsx';
 import Chart from '../../chart/index.jsx';
 import styles from '../../table/style.css';
 
-const Colors = new Map([
+export const Colors = new Map([
 	['passed', '#4FA932'],
 	['rejected', '#FF2323'],
 	['rejected_dry_run', '#000ADD']
 ]);
-const Labels = new Map([
+export const Labels = new Map([
 	['passed', 'Passed'],
 	['rejected', 'Rejected'],
 	['rejected_dry_run', 'Rejected (dry_run)']

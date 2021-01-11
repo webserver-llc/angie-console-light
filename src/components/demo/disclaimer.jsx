@@ -39,4 +39,4 @@ export default class Disclaimer extends React.Component {
 			</div>
 		</div>);
 	}
-}
+};

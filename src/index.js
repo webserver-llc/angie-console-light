@@ -1,5 +1,5 @@
 if(!!(window.Proxy && window.Promise)){
-	require('./index.jsx');
+	require('./index.jsx').start();
 } else {
-	require('./unsupported.jsx');
+	require('./unsupported.jsx').start();
 }

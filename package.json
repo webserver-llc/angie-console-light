@@ -1,6 +1,6 @@
 {
   "name": "nginx-plus-dashboard",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Nginx+ dashboard",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,8 @@
     "build": "NODE_ENV=production FILE_NAME=dashboard webpack",
     "build-demo": "NODE_ENV=production FILE_NAME=demo DASHBOARD_TYPE=demo webpack",
     "build-all": "yarn build && yarn build-demo",
-    "test": "karma start"
+    "test": "karma start",
+    "test-demo": "DASHBOARD_TYPE=demo karma start"
   },
   "author": "Ivan Poluyanov <ip@nginx.com>",
   "license": "Apache-2.0",

@@ -20,7 +20,7 @@
 	"env": {
 		"development": {
 			"plugins": [
-				"istanbul",
+				["istanbul", { "exclude": ["src/**/__test__/*"] }],
 				"transform-runtime",
 				["transform-object-rest-spread", { "useBuiltIns": true }],
 				["react-css-modules", {

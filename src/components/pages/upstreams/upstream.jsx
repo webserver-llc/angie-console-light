@@ -5,7 +5,7 @@
  *
  */
 import React from 'react';
-import { getSetting, setSetting } from '../../../appsettings';
+import appsettings from '../../../appsettings';
 import TableSortControl from '../../table/tablesortcontrol.jsx';
 import UpstreamsList from '../../upstreams/upstreamslist.jsx';
 import { formatReadableBytes, formatUptime, formatMs } from '../../../utils.js';
@@ -21,7 +21,7 @@ export default class Upstream extends UpstreamsList {
 		this.state = {
 			...this.state,
 			hoveredColumns: false,
-			columnsExpanded: getSetting(`columns-expanded-http-upstreams-${props.name}`, false)
+			columnsExpanded: appsettings.getSetting(`columns-expanded-http-upstreams-${props.name}`, false)
 		};
 
 		this.toggleColumns = this.toggleColumns.bind(this);
@@ -43,7 +43,7 @@ export default class Upstream extends UpstreamsList {
 			columnsExpanded
 		});
 
-		setSetting(`columns-expanded-http-upstreams-${this.props.name}`, columnsExpanded);
+		appsettings.setSetting(`columns-expanded-http-upstreams-${this.props.name}`, columnsExpanded);
 	}
 
 	hoverColumns(hoveredColumns) {
@@ -202,8 +202,8 @@ export default class Upstream extends UpstreamsList {
 									<td styleName="center-align">{ peer.active }</td>
 									<td styleName="center-align bdr">{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }</td>
 
-									<td styleName="traffic-column px60">{ formatReadableBytes(peer.server_sent_s) }</td>
-									<td styleName="traffic-column px60">{ formatReadableBytes(peer.server_rcvd_s) }</td>
+									<td styleName="px60">{ formatReadableBytes(peer.server_sent_s) }</td>
+									<td styleName="px60">{ formatReadableBytes(peer.server_rcvd_s) }</td>
 									<td>{ formatReadableBytes(peer.sent) }</td>
 									<td>{ formatReadableBytes(peer.received) }</td>
 									<td>{ peer.fails }</td>
