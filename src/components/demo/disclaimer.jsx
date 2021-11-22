@@ -33,7 +33,7 @@ export default class Disclaimer extends React.Component {
 			<div styleName="disclaimer-close" onClick={this.close}>x</div>
 			<div styleName="disclaimer-content">
 				Below is the example of the NGINX Plus live activity monitoring. This page collects real time data from a demo instance of NGINX Plus.<br />
-				Swagger UI for the API module is available on <a href="http://demo.nginx.com/swagger-ui/">http://demo.nginx.com/swagger-ui/</a><br />
+				Swagger UI for the API module is available on <a href="https://demo.nginx.com/swagger-ui/">https://demo.nginx.com/swagger-ui/</a><br />
 				For more information on configuration please visit <a href="https://www.nginx.com/resources/admin-guide/logging-and-monitoring/">https://www.nginx.com/resources/admin-guide/logging-and-monitoring/</a><br />
 				For purchasing NGINX Plus please contact the sales team: <a href="https://www.nginx.com/contact-sales/">https://www.nginx.com/contact-sales/</a>
 			</div>

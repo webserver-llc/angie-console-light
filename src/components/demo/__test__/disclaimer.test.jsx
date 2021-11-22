@@ -58,7 +58,7 @@ describe('<Disclaimer /> (demo)', () => {
 		const links = contentEl.find('a');
 
 		expect(links.length, 'links length').to.be.equal(3);
-		expect(links.get(0).attributes.href, '1st link href').to.be.equal('http://demo.nginx.com/swagger-ui/');
+		expect(links.get(0).attributes.href, '1st link href').to.be.equal('https://demo.nginx.com/swagger-ui/');
 		expect(links.get(1).attributes.href, '2nd link href').to.be.equal('https://www.nginx.com/resources/admin-guide/logging-and-monitoring/');
 		expect(links.get(2).attributes.href, '3rd link href').to.be.equal('https://www.nginx.com/contact-sales/');
 
