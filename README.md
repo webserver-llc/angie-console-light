@@ -63,7 +63,7 @@ In the project folder check `coverage` directory – `index.html` includes every
 * [history](https://www.npmjs.com/package/history) – 4.10.1
 * [html-webpack-inline-source-plugin](https://www.npmjs.com/package/html-webpack-inline-source-plugin) – 0.0.10
 * [html-webpack-plugin](https://www.npmjs.com/package/html-webpack-plugin) – 3.2.0
-* [karma](https://github.com/karma-runner/karma) – 5.0.9
+* [karma](https://github.com/karma-runner/karma) – 6.3.9
 * [karma-chrome-launcher](https://www.npmjs.com/package/karma-chrome-launcher) – 3.1.0
 * [karma-coverage](https://www.npmjs.com/package/karma-coverage) – 2.0.2
 * [karma-coverage-istanbul-reporter](https://www.npmjs.com/package/karma-coverage-istanbul-reporter) – 3.0.3
