@@ -25,7 +25,7 @@ export default class StreamUpstream extends UpstreamsList {
 
 	renderPeers(peers) {
 		return (
-			<table styleName="table wide">
+			<table className={ `${ styles.table } ${ styles.wide }` }>
 				<thead>
 					<tr>
 						<TableSortControl
@@ -43,79 +43,83 @@ export default class StreamUpstream extends UpstreamsList {
 						<th colSpan="4">Health monitors</th>
 						<th colSpan="3">Response time</th>
 					</tr>
-					<tr styleName="right-align sub-header">
-						<th styleName="left-align">Name</th>
-						<th styleName="left-align"><span styleName="hinted" {...useTooltip('Total downtime', 'hint')}>DT</span></th>
-						<th styleName="center-align bdr"><span styleName="hinted" {...useTooltip('Weight', 'hint')}>W</span></th>
+					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
+						<th className={ styles['left-align'] }>Name</th>
+						<th className={ styles['left-align'] }>
+							<span className={ styles.hinted } {...useTooltip('Total downtime', 'hint')}>DT</span>
+						</th>
+						<th className={ `${ styles['center-align'] } ${ styles.bdr }` }>
+							<span className={ styles.hinted } {...useTooltip('Weight', 'hint')}>W</span>
+						</th>
 						<th>Total</th>
 						<th>Conn/s</th>
 						<th>Active</th>
-						<th styleName="bdr">Limit</th>
+						<th className={ styles.bdr }>Limit</th>
 						<th>Sent/s</th>
 						<th>Rcvd/s</th>
 						<th>Sent</th>
-						<th styleName="bdr">Rcvd</th>
+						<th className={ styles.bdr }>Rcvd</th>
 						<th>Fails</th>
-						<th styleName="bdr">Unavail</th>
+						<th className={ styles.bdr }>Unavail</th>
 						<th>Checks</th>
 						<th>Fails</th>
 						<th>Unhealthy</th>
-						<th styleName="bdr left-align">Last</th>
+						<th className={ `${ styles.bdr } ${ styles['left-align'] }` }>Last</th>
 						<th>Connect</th>
 						<th>First byte</th>
 						<th>Response</th>
 					</tr>
 				</thead>
 
-				<tbody styleName="right-align">
+				<tbody className={ styles['right-align'] }>
 					{
 						peers.length === 0 ?
 							this.renderEmptyList()
 						:
 							peers.map(peer => (
 								<tr>
-									<td styleName={peer.state} />
+									<td className={ styles[peer.state] } />
 
 									{ this.getCheckbox(peer) }
 
-									<td styleName="left-align bold address">
-										<span styleName="address-container" {...useTooltip(<PeerTooltip peer={peer} />)}>
+									<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.address }` }>
+										<span className={ styles['address-container'] } {...useTooltip(<PeerTooltip peer={peer} />)}>
 											{ peer.backup ? <span>b&nbsp;</span> : null }{ peer.server }
 										</span>
 
 										{
 											this.state.editMode ?
-												<span styleName="edit-peer" onClick={() => this.editSelectedUpstream(peer)} />
+												<span className={ styles['edit-peer'] } onClick={() => this.editSelectedUpstream(peer)} />
 											: null
 										}
 									</td>
 
 									<td>{ formatUptime(peer.downtime, true) }</td>
-									<td styleName="bdr">{ peer.weight }</td>
+									<td className={ styles.bdr }>{ peer.weight }</td>
 									<td>
-										<span styleName="hinted" {...useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
+										<span className={ styles.hinted } {...useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
 											{ peer.connections }
 										</span>
 									</td>
 									<td>{ peer.server_conn_s }</td>
 									<td>{ peer.active }</td>
-									<td styleName="bdr">
+									<td className={ styles.bdr}>
 										{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }
 									</td>
-									<td styleName="px60">
+									<td className={ styles.px60}>
 										{ formatReadableBytes(peer.server_sent_s) }
 									</td>
-									<td styleName="px60">
+									<td className={ styles.px60}>
 										{ formatReadableBytes(peer.server_rcvd_s) }
 									</td>
 									<td>{ formatReadableBytes(peer.sent) }</td>
-									<td styleName="bdr">{ formatReadableBytes(peer.received) }</td>
+									<td className={ styles.bdr}>{ formatReadableBytes(peer.received) }</td>
 									<td>{ peer.fails }</td>
 									<td>{ peer.unavail }</td>
 									<td>{ peer.health_checks.checks }</td>
 									<td>{ peer.health_checks.fails }</td>
 									<td>{ peer.health_checks.unhealthy }</td>
-									<td styleName={`left-align bdr flash ${peer.health_status === false ? 'red-flash' : ''}`}>
+									<td className={`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }${peer.health_status === false ? (' ' + styles['red-flash']) : ''}`}>
 										{ peer.health_status === null ? '–' :
 											peer.health_status ? 'passed' : 'failed' }
 									</td>

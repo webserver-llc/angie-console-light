@@ -37,7 +37,7 @@ export default class TableSortControl extends React.Component {
 		return (
 			<th
 				rowSpan={ singleRow ? null : '2' }
-				styleName="sorter"
+				className={ styles.sorter }
 				onClick={ this.toggle }
 
 				{ ...useTooltip(order === 'asc' ? secondSortLabel : 'Sort by conf order', 'hint-right') }

@@ -55,10 +55,19 @@ export default class Tooltip extends React.Component {
 
 	render() {
 		const { children, position = 'bottom', align = '' } = this.props;
+		let cn = styles.tooltip;
+
+		if (styles[position]) {
+			cn + ` ${ styles[position] }`;
+		}
+
+		if (styles[align]) {
+			cn + ` ${ styles[align] }`;
+		}
 
 		return (
 			<div
-				styleName={`tooltip ${position} ${align}`}
+				className={ cn }
 				ref={(ref) => { this.ref = ref; }}
 				style={{
 				     top: `${this.state.top}px`,

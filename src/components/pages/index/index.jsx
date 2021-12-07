@@ -4,7 +4,8 @@
  * All rights reserved.
  *
  */
-import 'babel-polyfill';
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import React from 'react';
 import AboutNginx from './aboutnginx/aboutnginx.jsx';
 import Connections from './connections/connections.jsx';
@@ -24,13 +25,13 @@ export default class Index extends React.Component {
 	render() {
 		return (
 			<div>
-				<div styleName="row">
-					<AboutNginx styleName="box" />
-					<Connections styleName="connections" />
-					<Requests styleName="box" />
+				<div className={ styles.row }>
+					<AboutNginx className={ styles.box } />
+					<Connections className={ styles.connections } />
+					<Requests className={ styles.box } />
 				</div>
 
-				<div styleName="row row-wrap">
+				<div className={ `${ styles.row } ${ styles['row-wrap'] }` }>
 					<ServerZones />
 					<Upstreams />
 					<StreamZones />

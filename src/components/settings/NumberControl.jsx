@@ -5,7 +5,7 @@
  *
  */
 import React from 'react';
-import style from './number-control.css';
+import styles from './number-control.css';
 
 export default class NumberControl extends React.Component {
 	constructor(props){
@@ -24,10 +24,10 @@ export default class NumberControl extends React.Component {
 	}
 
 	render() {
-		return (<div styleName="number-control">
-			<span styleName="dec" onClick={this.dec}>-</span>
-			<span styleName="value">{this.props.value / 1000}</span>
-			<span styleName="inc" onClick={this.inc}>+</span>
+		return (<div className={ styles['number-control'] }>
+			<span className={ styles.dec } onClick={this.dec}>-</span>
+			<span className={ styles.value }>{this.props.value / 1000}</span>
+			<span className={ styles.inc } onClick={this.inc}>+</span>
 		</div>);
 	}
 }

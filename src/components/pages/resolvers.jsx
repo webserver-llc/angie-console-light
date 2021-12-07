@@ -29,7 +29,7 @@ export class Resolvers extends SortableTable {
 		return (<div>
 			<h1>Resolvers</h1>
 
-			<table styleName="table wide">
+			<table className={ `${ styles.table } ${ styles.wide }` }>
 				<thead>
 					<tr>
 						<TableSortControl order={this.state.sortOrder} onChange={this.changeSorting} />
@@ -37,11 +37,11 @@ export class Resolvers extends SortableTable {
 						<th colSpan={3}>Requests</th>
 						<th colSpan={8}>Responses</th>
 					</tr>
-					<tr styleName="right-align sub-header">
-						<th styleName="bdr" />
+					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
+						<th className={ styles.bdr } />
 						<th>Name</th>
 						<th>SRV</th>
-						<th styleName="bdr">Address</th>
+						<th className={ styles.bdr }>Address</th>
 						<th>Success</th>
 						<th>Format error</th>
 						<th>Server failure</th>
@@ -52,15 +52,15 @@ export class Resolvers extends SortableTable {
 						<th>Timed out</th>
 					</tr>
 				</thead>
-				<tbody styleName="right-align">
+				<tbody className={ styles['right-align'] }>
 					{
 						resolvers.map(([resolver, { requests, responses, alert }]) =>
 							<tr>
-								<td styleName={ alert ? 'alert' : 'ok' } />
-								<td styleName="left-align bold bdr">{ resolver }</td>
+								<td className={ alert ? styles.alert : styles.ok } />
+								<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ resolver }</td>
 								<td>{ requests.name }</td>
 								<td>{ requests.srv }</td>
-								<td styleName="bdr">{ requests.addr }</td>
+								<td className={ styles.bdr }>{ requests.addr }</td>
 								<td>{ responses.noerror }</td>
 								<td>{ responses.formerr }</td>
 								<td>{ responses.servfail }</td>

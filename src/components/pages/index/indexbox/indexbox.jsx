@@ -12,19 +12,25 @@ import styles from './styles.css';
 // It is class because enzyme with preact can't render props.children
 export default class IndexBox extends React.Component {
 	render() {
+		let className = styles.box;
+
+		if (this.props.className) {
+			className += ` ${ this.props.className }`;
+		}
+
 		return (
-			<div styleName="box" className={this.props.className}>
+			<div className={ className }>
 				{
 					this.props.title ?
 						<a
-							styleName="header"
+							className={ styles.header }
 							href={ this.props.href }
 							title={ this.props.title }
 						>
 							{ this.props.title }
 							{
 								'status' in this.props ?
-									<Icon type={this.props.status} styleName="status" />
+									<Icon type={this.props.status} className={ styles.status } />
 									: null
 							}
 						</a>

@@ -76,40 +76,40 @@ export default class Settings extends React.Component {
 	render() {
 		const { statuses } = this.props;
 
-		return (<div styleName="settings">
-			<h2 styleName="title">Options</h2>
+		return (<div className={ styles.settings }>
+			<h2 className={ styles.title }>Options</h2>
 
-			<div styleName="section">
+			<div className={ styles.section }>
 				Update every <NumberControl value={this.state.updatingPeriod} onChange={this.changeUpdatePeriod} /> sec
 			</div>
 
-			<div styleName="section">4xx warnings threshold
+			<div className={ styles.section }>4xx warnings threshold
 				<NumberInput
 					defaultValue={this.state.warnings4xxThresholdPercent}
 					onChange={this.changePercentThreshold.bind(this, 'warnings4xxThresholdPercent')}
-					styleName="input"
+					className={ styles.input }
 				/> %
 			</div>
 
-			<div styleName="section">
+			<div className={ styles.section }>
 				Calculate hit ratio for the past
 
 				<NumberInput
 					defaultValue={this.state.cacheDataInterval / 1000}
-					styleName="wide-input"
+					className={ styles['wide-input'] }
 					onChange={this.changeCacheHitRatioInteval}
 				/> sec
 			</div>
 
 			{
 				statuses.zone_sync && statuses.zone_sync.ready ?
-					<div styleName="section">
+					<div className={ styles.section }>
 						Non synced data threshold
 
 						<NumberInput
 							defaultValue={this.state.zonesyncPendingThreshold}
 							onChange={this.changePercentThreshold.bind(this, 'zonesyncPendingThreshold')}
-							styleName="input"
+							className={ styles.input }
 						/> %
 					</div>
 				: null
@@ -117,34 +117,34 @@ export default class Settings extends React.Component {
 
 			{
 				statuses.resolvers && statuses.resolvers.ready ?
-					<div styleName="section">
+					<div className={ styles.section }>
 						Resolver errors threshold
 
 						<NumberInput
 							defaultValue={this.state.resolverErrorsThreshold}
 							onChange={this.changePercentThreshold.bind(this, 'resolverErrorsThreshold')}
-							styleName="input"
+							className={ styles.input }
 						/> %
 					</div>
 				: null
 			}
 
-			<div styleName="section">
-				<button onClick={this.save} styleName="save">Save</button>
-				<button onClick={this.props.close} styleName="cancel">Cancel</button>
+			<div className={ styles.section }>
+				<button onClick={this.save} className={ styles.save }>Save</button>
+				<button onClick={this.props.close} className={ styles.cancel }>Cancel</button>
 			</div>
 
-			<div styleName="section help">
+			<div className={ `${ styles.section } ${ styles.help }` }>
 				For more information, please check
 				<br />
 				<a
 					target="_blank"
 					href="https://docs.nginx.com/nginx/admin-guide/monitoring/live-activity-monitoring/#dashboard"
-					styleName="help-link"
+					className={ styles['help-link'] }
 				>NGINX Admin Guide</a>
 			</div>
 
-			<span styleName="version">v{ VERSION }</span>
+			<span className={ styles.version }>v{ VERSION }</span>
 		</div>);
 	}
 }

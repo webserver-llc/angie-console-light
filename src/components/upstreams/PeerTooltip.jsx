@@ -15,11 +15,11 @@ export default function PeerTooltip({ peer }){
 	let state = null;
 
 	if (peer.state === 'unavail') {
-		state = <span><span styleName="status_unavail">failed</span> (Passive health check failed)</span>;
+		state = <span><span className={ styles.status_unavail }>failed</span> (Passive health check failed)</span>;
 	} else if (peer.state === 'unhealthy') {
-		state = <span><span styleName="status_unavail">failed</span> (Active health check failed)</span>;
+		state = <span><span className={ styles.status_unavail }>failed</span> (Active health check failed)</span>;
 	} else {
-		state = <span styleName={`status_${peer.state}`}>{peer.state}</span>;
+		state = <span className={ styles[`status_${peer.state}`] }>{peer.state}</span>;
 	}
 
 	let lastCheck;
@@ -33,19 +33,19 @@ export default function PeerTooltip({ peer }){
 	}
 
 	return (<div>
-		{'name' in peer ? <div styleName="row">{peer.name}</div> : null}
-		<h5 styleName="h5">{peer.backup ? 'b ' : ''}{peer.server}</h5>
-		<div styleName="row">{state}</div>
+		{'name' in peer ? <div className={ styles.row }>{peer.name}</div> : null}
+		<h5 className={ styles.h5 }>{peer.backup ? 'b ' : ''}{peer.server}</h5>
+		<div className={ styles.row }>{state}</div>
 
 		{
-			peer.backup ? <div styleName="row">Type: backup</div> : null
+			peer.backup ? <div className={ styles.row }>Type: backup</div> : null
 		}
 
-		<div styleName="row">Total downtime: {formatUptime(peer.downtime)}</div>
-		<div styleName="row">Last check: {lastCheck}</div>
+		<div className={ styles.row }>Total downtime: {formatUptime(peer.downtime)}</div>
+		<div className={ styles.row }>Last check: {lastCheck}</div>
 
 		{
-			peer.isHttp && peer.downstart ? <div styleName="row">Down since: {formatDate(peer.downstart)} </div> : null
+			peer.isHttp && peer.downstart ? <div className={ styles.row }>Down since: {formatDate(peer.downstart)} </div> : null
 		}
 	</div>);
 };

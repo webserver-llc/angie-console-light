@@ -234,7 +234,7 @@ td.status {
 	width: 18px;
 	height: 18px;
 	vertical-align: top !important;
-	background-image: svg-load('chart.svg');
+	background-image: url('/img/chart.svg');
 	background-size: cover;
 	opacity: .7;
 }

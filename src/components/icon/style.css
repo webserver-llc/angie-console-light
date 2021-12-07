@@ -6,41 +6,41 @@
 
 .sun {
 	composes: icon;
-	background-image: svg-load('sun.svg');
+	background-image: url('/img/sun.svg');
 	width: 21px;
 	height: 21px;
 }
 
 .snowflake {
 	composes: icon;
-	background-image: svg-load('snowflake.svg');
-	width: 21px;
+	background-image: url('/img/snowflake.svg');
+	width: 19px;
 	height: 21px;
 }
 
 .ok {
 	composes: icon;
-	background-image: svg-load('ok.svg');
+	background-image: url('/img/ok.svg');
 }
 
 .warning {
 	composes: icon;
-	background-image: svg-load('warning.svg');
+	background-image: url('/img/warning.svg');
 }
 
 .danger {
 	composes: icon;
-	background-image: svg-load('danger.svg');
+	background-image: url('/img/danger.svg');
 }
 
 .gear {
 	composes: icon;
-	background-image: svg-load('gear.svg');
+	background-image: url('/img/gear.svg');
 	width: 24px;
 	height: 24px;
 }
 
 .pencil {
 	composes: icon;
-	background-image: svg-load('pencil.svg');
+	background-image: url('/img/pencil.svg');
 }

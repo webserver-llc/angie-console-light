@@ -18,9 +18,9 @@ import tooltipStyles from '../../../tooltip/style.css';
 export const AboutNginxTooltip = ({ data }) => {
 	return (
 		<div>
-			<div styleName="tooltipStyles.row">Last (re)load: {formatDate(data.nginx.load_timestamp)}</div>
-			<div styleName="tooltipStyles.row">Reloads: {data.nginx.generation}</div>
-			{ data.processes && <div styleName="tooltipStyles.row">Respawned: {data.processes.respawned}</div> }
+			<div className={ tooltipStyles.row }>Last (re)load: {formatDate(data.nginx.load_timestamp)}</div>
+			<div className={ tooltipStyles.row }>Reloads: {data.nginx.generation}</div>
+			{ data.processes && <div className={ tooltipStyles.row }>Respawned: {data.processes.respawned}</div> }
 		</div>
 	);
 };
@@ -30,11 +30,11 @@ export class AboutNginx extends React.Component {
 		const { props: { data: { nginx } } } = this;
 
 		return (<IndexBox className={this.props.className}>
-			<a href="https://www.nginx.com/resources/admin-guide/nginx-plus-releases/" target="_blank" styleName="styles.release">
+			<a href="https://www.nginx.com/resources/admin-guide/nginx-plus-releases/" target="_blank" className={ styles.release }>
 				{nginx.build} ({nginx.version})
 			</a>
 
-			<table styleName="styles.table">
+			<table className={ styles.table }>
 				<tr>
 					<th>Address</th>
 					<td>{nginx.address}</td>
@@ -46,7 +46,7 @@ export class AboutNginx extends React.Component {
 				<tr>
 					<th>Uptime</th>
 					<td>
-						<span styleName="styles.uptime" {...useTooltip(<AboutNginxTooltip data={this.props.data} />)}>
+						<span className={ styles.uptime } {...useTooltip(<AboutNginxTooltip data={this.props.data} />)}>
 							{ formatUptime(Date.parse(nginx.timestamp) - Date.parse(nginx.load_timestamp)) }
 						</span>
 					</td>

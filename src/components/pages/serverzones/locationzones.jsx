@@ -34,7 +34,7 @@ export default class Locations extends SortableTable {
 			component = (<div>
 				<h1>Location Zones</h1>
 
-				<table styleName="table wide">
+				<table className={ `${ styles.table } ${ styles.wide }` }>
 					<thead>
 						<tr>
 							<TableSortControl order={this.state.sortOrder} onChange={this.changeSorting} />
@@ -43,55 +43,57 @@ export default class Locations extends SortableTable {
 							<th colSpan="6">Responses</th>
 							<th colSpan="4">Traffic</th>
 						</tr>
-						<tr styleName="right-align sub-header">
-							<th styleName="bdr" />
+						<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
+							<th className={ styles.bdr } />
 							<th>Total</th>
-							<th styleName="bdr">Req/s</th>
+							<th className={ styles.bdr }>Req/s</th>
 							<th>1xx</th>
 							<th>2xx</th>
 							<th>3xx</th>
 							<th>4xx</th>
 							<th>5xx</th>
-							<th styleName="bdr">Total</th>
+							<th className={ styles.bdr }>Total</th>
 							<th>Sent/s</th>
 							<th>Rcvd/s</th>
 							<th>Sent</th>
 							<th>Rcvd</th>
 						</tr>
 					</thead>
-					<tbody styleName="right-align">
+					<tbody className={ styles['right-align'] }>
 						{
 							locations.map(([name, location]) => {
-								let status = 'ok';
+								let status = styles.ok;
 
 								if (location.warning) {
-									status = 'warning';
+									status = styles.warning;
 								} else if (location['5xxChanged']) {
-									status = 'alert';
+									status = styles.alert;
 								}
 
 								return (<tr>
-									<td styleName={ status } />
-									<td styleName="left-align bold bdr">{ name }</td>
+									<td className={ status } />
+									<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ name }</td>
 									<td>{ location.requests }</td>
-									<td styleName="bdr">{ location.zone_req_s }</td>
+									<td className={ styles.bdr }>{ location.zone_req_s }</td>
 									<td>{ location.responses['1xx'] }</td>
 									<td>{ location.responses['2xx'] }</td>
 									<td>{ location.responses['3xx'] }</td>
-									<td styleName={`flash ${location['4xxChanged'] ? 'red-flash' : ''}`}>
+									<td className={ `${ styles.flash }${ location['4xxChanged'] ? (' ' + styles['red-flash']) : '' }` }>
 										<span
-											styleName="hinted"
+											className={ styles.hinted }
 											{ ... useTooltip(<div>4xx: { location.responses['4xx'] } <br /> 499/444/408: { location.discarded }</div>, 'hint') }
 										>
 											{ location.responses['4xx'] + location.discarded }
 										</span>
 									</td>
-									<td styleName={`flash ${location['5xxChanged'] ? 'red-flash' : ''}`}>{ location.responses['5xx'] }</td>
-									<td styleName="bdr">{ location.responses.total }</td>
-									<td styleName="px60">{ formatReadableBytes(location.sent_s) }</td>
-									<td styleName="px60">{ formatReadableBytes(location.rcvd_s) }</td>
-									<td styleName="px60">{ formatReadableBytes(location.sent) }</td>
-									<td styleName="px60">{ formatReadableBytes(location.received) }</td>
+									<td className={ `${ styles.flash }${ location['5xxChanged'] ? (' ' + styles['red-flash']) : '' }` }>
+										{ location.responses['5xx'] }
+									</td>
+									<td className={ styles.bdr }>{ location.responses.total }</td>
+									<td className={ styles.px60 }>{ formatReadableBytes(location.sent_s) }</td>
+									<td className={ styles.px60 }>{ formatReadableBytes(location.rcvd_s) }</td>
+									<td className={ styles.px60 }>{ formatReadableBytes(location.sent) }</td>
+									<td className={ styles.px60 }>{ formatReadableBytes(location.received) }</td>
 								</tr>);
 							})
 						}

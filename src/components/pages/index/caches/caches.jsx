@@ -34,8 +34,8 @@ export class Caches extends React.Component {
 				/>
 
 				<h4>Caches states</h4>
-				<p><Icon type="sun" styleName="icon" />Warm: { stats.states.warm }</p>
-				<p><Icon type="snowflake" styleName="icon" />Cold: { stats.states.cold }</p>
+				<p><Icon type="sun" className={ styles.icon } />Warm: { stats.states.warm }</p>
+				<p><Icon type="snowflake" className={ `${ styles.icon } ${ styles.snowflakeIcon }` } />Cold: { stats.states.cold }</p>
 			</IndexBox>
 		);
 	}

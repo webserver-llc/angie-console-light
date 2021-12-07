@@ -52,17 +52,17 @@ export default class UpdatingControl extends React.Component {
 
 	render() {
 		return (
-			<div styleName={ this.state.expanded ? 'expanded-control' : 'updating-control' }>
-				<div styleName="toggle" onClick={this.toggle} />
+			<div className={ this.state.expanded ? styles['expanded-control'] : styles['updating-control'] }>
+				<div className={ styles.toggle } onClick={this.toggle} />
 
 				{
 					this.state.state ?
-						<div styleName="pause" onClick={this.pause} />
+						<div className={ styles.pause } onClick={this.pause} />
 					:
-						<div styleName="play" onClick={this.play} />
+						<div className={ styles.play } onClick={this.play} />
 				}
 
-				<div styleName="update" onClick={this.update} />
+				<div className={ styles.update } onClick={this.update} />
 			</div>
 		);
 	}

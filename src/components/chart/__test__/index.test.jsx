@@ -1244,7 +1244,7 @@ describe('<Chart />', () => {
 						['passed', '#4FA932'],
 						['delayed', '#EBC906'],
 						['rejected', '#FF2323'],
-						['test': '#ffffff']
+						['test', '#ffffff']
 					]) }
 					labels={ Labels }
 				/>

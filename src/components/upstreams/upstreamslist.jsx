@@ -123,7 +123,7 @@ export default class UpstreamsList extends SortableTable {
 
 	renderEmptyList() {
 		return (<tr>
-			<td styleName="tableStyles.left-align" colSpan={30}>
+			<td className={ tableStyles['left-align'] } colSpan={30}>
 				No servers with '{this.state.filtering}' state found in this upstream group.
 			</td>
 		</tr>);
@@ -181,7 +181,7 @@ export default class UpstreamsList extends SortableTable {
 
 	getSelectAllCheckbox(peers) {
 		return this.state.editMode ?
-			<th rowSpan="2" styleName="tableStyles.checkbox">
+			<th rowSpan="2" className={ tableStyles.checkbox }>
 				<input
 					type="checkbox"
 					onChange={(evt) => this.selectAllPeers(peers, evt.target.checked)}
@@ -193,7 +193,7 @@ export default class UpstreamsList extends SortableTable {
 
 	getCheckbox(peer) {
 		return this.state.editMode ?
-			<td styleName="tableStyles.checkbox">
+			<td className={ tableStyles.checkbox }>
 				<input
 					type="checkbox"
 					onChange={(evt) => this.selectPeer(peer, evt.target.checked)}
@@ -230,7 +230,7 @@ export default class UpstreamsList extends SortableTable {
 
 		const writePermission = isWritable() === true || isWritable() === null;
 
-		return (<div styleName="styles.upstreams-list" id={`upstream-${name}`}>
+		return (<div className={ styles['upstreams-list'] } id={`upstream-${name}`}>
 			{
 				this.state.editor ?
 					<UpstreamsEditor
@@ -243,7 +243,7 @@ export default class UpstreamsList extends SortableTable {
 				: null
 			}
 
-			<select name="filter" styleName="styles.filter" onChange={this.changeFilterRule}>
+			<select name="filter" className={ styles.filter } onChange={this.changeFilterRule}>
 				{
 					Object.keys(FILTER_OPTIONS).map(value => (
 						<option value={value} key={value} selected={this.state.filtering === value}>
@@ -253,25 +253,25 @@ export default class UpstreamsList extends SortableTable {
 				}
 			</select>
 
-			<div styleName="styles.head">
-				<h2 styleName="styles.title" {...useTooltip(<UpstreamStatsTooltip upstream={upstream} />)}>{ name }</h2>
+			<div className={ styles.head }>
+				<h2 className={ styles.title } {...useTooltip(<UpstreamStatsTooltip upstream={upstream} />)}>{ name }</h2>
 
 				{ writePermission ?
-					<span styleName={this.state.editMode ? 'styles.edit-active' : 'styles.edit'} onClick={this.toggleEditMode} /> : null
+					<span className={this.state.editMode ? styles['edit-active'] : styles.edit} onClick={this.toggleEditMode} /> : null
 				}
 
 				{
 					writePermission && this.state.editMode ?
 						[
-							<span styleName="styles.btn" key="edit" onClick={() => this.editSelectedUpstream()}>Edit selected</span>,
-							<span styleName="styles.btn" key="add" onClick={this.addUpstream}>Add server</span>
+							<span className={ styles.btn } key="edit" onClick={() => this.editSelectedUpstream()}>Edit selected</span>,
+							<span className={ styles.btn } key="add" onClick={this.addUpstream}>Add server</span>
 						]
 					: null
 				}
 
 				{
 					upstream.zoneSize !== null ?
-						<span styleName="styles.zone-capacity">
+						<span className={ styles['zone-capacity'] }>
 								Zone: <span {...useTooltip(<SharedZoneTooltip zone={upstream.slab} />, 'hint')}>
 									<ProgressBar percentage={upstream.zoneSize} />
 								</span>

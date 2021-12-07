@@ -1,7 +1,14 @@
 .icon {
-	vertical-align: bottom;
+	vertical-align: top;
+    margin-top: 3px;
 	margin-right: 7px;
 	width: 17px;
 	height: 17px;
+}
+
+.snowflakeIcon {
+    width: 15px;
+    margin-right: 8px;
+    margin-left: 1px;
 }
 

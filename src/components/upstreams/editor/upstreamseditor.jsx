@@ -297,40 +297,40 @@ export default class UpstreamsEditor extends React.Component {
 		const { data } = this.state;
 
 		if (this.state.loading) {
-			content = <div styleName="content">
-				<Loader styleName="loader" gray />
+			content = <div className={ styles.content }>
+				<Loader className={ styles.loader } gray />
 			</div>;
 		} else if (this.state.success) {
 			content = (<div>
-				<div styleName="content">
+				<div className={ styles.content }>
 					{ this.state.successMessage }
 				</div>
 
-				<div styleName="footer">
-					<div styleName="save" onClick={this.close}>Ok</div>
+				<div className={ styles.footer }>
+					<div className={ styles.save } onClick={this.close}>Ok</div>
 				</div>
 			</div>);
 		} else {
 			content = (<div>
-				<div styleName="content">
+				<div className={ styles.content }>
 					{
 						!isAdd && peersArray.length > 1 ?
-							<div styleName="form-group">
+							<div className={ styles['form-group'] }>
 								<label>Selected servers</label>
 
-								<ul styleName="servers-list">
+								<ul className={ styles['servers-list'] }>
 									{ peersArray.map(([peerId, peer]) => <li key={peer.id}>{ peer.server }</li>) }
 								</ul>
 							</div>
 							:
 							<div>
-								<div styleName="form-group">
+								<div className={ styles['form-group'] }>
 									<label htmlFor="server">Server address</label>
 									<input
 										id="server"
 										name="server"
 										type="text"
-										styleName="input"
+										className={ styles.input }
 										value={data.server}
 										defaultValue="{peerToEdit.server}"
 										onKeyUp={this.validateServerName}
@@ -341,7 +341,7 @@ export default class UpstreamsEditor extends React.Component {
 
 								{
 									data.host ?
-										<div styleName="form-group">
+										<div className={ styles['form-group'] }>
 											<strong>Domain name:</strong> {data.host}
 										</div>
 										: null
@@ -349,12 +349,12 @@ export default class UpstreamsEditor extends React.Component {
 
 								{
 									!isStream ?
-										<div styleName="form-group">
+										<div className={ styles['form-group'] }>
 											<label htmlFor="route">Server route</label>
 											<input
 												id="route"
 												name="route"
-												styleName="input"
+												className={ styles.input }
 												type="text"
 												value={data.route}
 												onInput={this.handleFormChange}
@@ -366,7 +366,7 @@ export default class UpstreamsEditor extends React.Component {
 
 								{
 									isAdd ?
-										<div styleName="checkbox">
+										<div className={ styles.checkbox }>
 											<label>
 												<input
 													name="backup"
@@ -383,53 +383,53 @@ export default class UpstreamsEditor extends React.Component {
 							</div>
 					}
 
-					<div styleName="forms-mini">
-						<div styleName="form-group">
+					<div className={ styles['forms-mini'] }>
+						<div className={ styles['form-group'] }>
 							<label htmlFor="weight">weight</label>
 							<NumberInput
 								id="weight"
 								name="weight"
-								styleName="input"
+								className={ styles.input }
 								onInput={this.handleFormChange}
 								value={data.weight}
 							/>
 						</div>
-						<div styleName="form-group">
+						<div className={ styles['form-group'] }>
 							<label htmlFor="max_conns">max_conns</label>
 							<NumberInput
-								styleName="input"
+								className={ styles.input }
 								id="max_conns"
 								name="max_conns"
 								value={data.max_conns}
 								onInput={this.handleFormChange}
 							/>
 						</div>
-						<div styleName="form-group">
+						<div className={ styles['form-group'] }>
 							<label htmlFor="max_fails">max_fails</label>
 							<NumberInput
 								id="max_fails"
 								name="max_fails"
-								styleName="input"
+								className={ styles.input }
 								value={data.max_fails}
 								onInput={this.handleFormChange}
 							/>
 						</div>
-						<div styleName="form-group">
+						<div className={ styles['form-group'] }>
 							<label htmlFor="fail_timeout">fail_timeout</label>
 							<NumberInput
 								id="fail_timeout"
-								styleName="input"
+								className={ styles.input }
 								name="fail_timeout"
 								value={data.fail_timeout}
 								onInput={this.handleFormChange}
 							/>
 						</div>
-						<div styleName="form-group">
+						<div className={ styles['form-group'] }>
 							<label htmlFor="slow_start">slow_start</label>
 							<NumberInput
 								id="slow_start"
 								name="slow_start"
-								styleName="input"
+								className={ styles.input }
 								value={data.slow_start}
 								onInput={this.handleFormChange}
 							/>
@@ -437,12 +437,12 @@ export default class UpstreamsEditor extends React.Component {
 
 						{
 							isAdd && !this.state.addAsDomain ?
-								<div styleName="form-group">
+								<div className={ styles['form-group'] }>
 									<label htmlFor="service">service</label>
 									<input
 										id="service"
 										name="service"
-										styleName="input"
+										className={ styles.input }
 										value={data.service}
 										onInput={this.handleFormChange}
 									/>
@@ -451,8 +451,8 @@ export default class UpstreamsEditor extends React.Component {
 						}
 					</div>
 
-					<div styleName="radio">
-						<span styleName="title">Set state</span>
+					<div className={ styles.radio }>
+						<span className={ styles.title }>Set state</span>
 
 						<label>
 							<input
@@ -492,33 +492,33 @@ export default class UpstreamsEditor extends React.Component {
 
 					{
 						this.state.errorMessages !== null ?
-							<div styleName="error">
-								<span styleName="error-close" onClick={this.closeErrors}>×</span>
+							<div className={ styles.error }>
+								<span className={ styles['error-close'] } onClick={this.closeErrors}>×</span>
 								{ this.state.errorMessages.map((msg) => <div>{msg}</div>) }
 							</div>
 							: null
 					}
 				</div>
 
-				<div styleName="footer">
+				<div className={ styles.footer }>
 					{
 						!isAdd ?
-							<div styleName="remove" onClick={this.remove}>Remove</div>
+							<div className={ styles.remove } onClick={this.remove}>Remove</div>
 							: null
 					}
 
-					<div styleName="save" onClick={this.save}>
+					<div className={ styles.save } onClick={this.save}>
 						{ isAdd ? 'Add' : 'Save' }
 					</div>
 
-					<div styleName="cancel" onClick={this.close}>Cancel</div>
+					<div className={ styles.cancel } onClick={this.close}>Cancel</div>
 				</div>
 			</div>);
 		}
 
-		return (<Popup styleName="editor">
-			<div styleName="header">{title}</div>
-			<div styleName="close" onClick={this.close}>×</div>
+		return (<Popup className={ styles.editor }>
+			<div className={ styles.header }>{title}</div>
+			<div className={ styles.close } onClick={this.close}>×</div>
 
 			{content}
 		</Popup>);

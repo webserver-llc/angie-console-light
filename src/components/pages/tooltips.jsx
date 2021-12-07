@@ -11,12 +11,12 @@ import styles from '../tooltip/style.css';
 
 export const CacheStateTooltip = () => (
 	<div>
-		<div styleName="row">
-			<Icon type="sun" styleName="icon" /> Warm &ndash; using metadata in shmem
+		<div className={ styles.row }>
+			<Icon type="sun" className={ styles.icon } /> Warm &ndash; using metadata in shmem
 		</div>
 
-		<div styleName="row">
-			<Icon type="snowflake" styleName="icon" /> Cold &ndash; loading metadata
+		<div className={ styles.row }>
+			<Icon type="snowflake" className={ styles.icon } /> Cold &ndash; loading metadata
 		</div>
 	</div>
 );

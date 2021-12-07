@@ -24,18 +24,18 @@ export default class ProgressBar extends Component {
 			toShow = `${percentage} %`;
 		}
 
-		let styleName = 'progress-bar';
+		let cn = styles['progress-bar'];
 
 		if (this.props.danger) {
-			styleName = 'progress-bar danger';
+			cn += ` ${ styles.danger }`;
 		} else if (this.props.warning) {
-			styleName = 'progress-bar warning';
+			cn += ` ${ styles.warning }`;
 		}
 
-		return (<div styleName={styleName}>
+		return (<div className={ cn }>
 			{ toShow }
 
-			<div styleName="fulfillment" style={{ width: `${percentage}%` }}>
+			<div className={ styles.fulfillment } style={{ width: `${percentage}%` }}>
 				{ toShow }
 			</div>
 		</div>);

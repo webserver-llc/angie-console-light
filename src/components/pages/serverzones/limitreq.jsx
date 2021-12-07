@@ -50,21 +50,21 @@ export default class LimitReq extends LimitConnReqConstructor {
 
 		return Array.from(this.props.data).map(
 			([name, { zone, history }]) => {
-				let styleName = 'chart-container';
+				let cn = styles['chart-container'];
 				let title = 'Click to view rate graph';
 				let chart = null;
 
 				if (activeCharts.includes(name)) {
-					styleName += ' chart-container_active';
+					cn += ` ${ styles['chart-container_active'] }`;
 					title = 'Click to hide rate graph';
 					chart = (
 						<tr
 							key={ `chart_${ name }` }
-							styleName="chart-row"
+							className={ styles['chart-row'] }
 						>
 							<td
 								colspan="7"
-								styleName="left-align"
+								className={ styles['left-align'] }
 							>
 								<Chart
 									data={ history }
@@ -79,18 +79,18 @@ export default class LimitReq extends LimitConnReqConstructor {
 				return [
 					<tr
 						key={ `data_${ name }` }
-						styleName={ styleName }
+						className={ cn }
 						title={ title }
 						onClick={ this.toggleChart.bind(this, name) }
 					>
-						<td styleName="center-align bdr chart-icon">
-							<div styleName="chart-icon__icon" />
+						<td className={ `${ styles['center-align'] } ${ styles.bdr } ${ styles['chart-icon'] }` }>
+							<div className={ styles['chart-icon__icon'] } />
 						</td>
-						<td styleName="left-align bold bdr">{ name }</td>
-						<td styleName="bdr">{ zone.passed }</td>
-						<td styleName="bdr">{ zone.delayed }</td>
-						<td styleName="bdr">{ zone.rejected }</td>
-						<td styleName="bdr">{ zone.delayed_dry_run }</td>
+						<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ name }</td>
+						<td className={ styles.bdr }>{ zone.passed }</td>
+						<td className={ styles.bdr }>{ zone.delayed }</td>
+						<td className={ styles.bdr }>{ zone.rejected }</td>
+						<td className={ styles.bdr }>{ zone.delayed_dry_run }</td>
 						<td>{ zone.rejected_dry_run }</td>
 					</tr>,
 					chart

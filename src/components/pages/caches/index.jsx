@@ -20,6 +20,7 @@ import { useTooltip } from '../../../tooltips/index.jsx';
 import { CacheStateTooltip, SharedZoneTooltip } from '../tooltips.jsx';
 
 import styles from '../../table/style.css';
+import cachesStyles from './style.css';
 
 export class Caches extends React.Component {
 	static formatReadableBytes(value, measurementUnit){
@@ -36,16 +37,16 @@ export class Caches extends React.Component {
 		return (<div>
 			<h1>Caches</h1>
 
-			<table styleName="table">
+			<table className={ styles.table }>
 				<col width="170px" />
 
 				<thead>
 					<tr>
 						<th>Zone</th>
-						<th><span styleName="hinted" {...useTooltip(<CacheStateTooltip />, 'hint')}>State</span></th>
+						<th><span className={ styles.hinted } {...useTooltip(<CacheStateTooltip />, 'hint')}>State</span></th>
 						<th>
 							<span
-								styleName="hinted"
+								className={ styles.hinted }
 								{...useTooltip('Memory usage = Used memory pages / Total memory pages', 'hint')}
 							>Memory usage</span>
 						</th>
@@ -53,7 +54,7 @@ export class Caches extends React.Component {
 						<th>Used</th>
 						<th>
 							<span
-								styleName="hinted"
+								className={ styles.hinted }
 								{...useTooltip('Disk usage = Used / Max size', 'hint')}
 							>Disk usage</span>
 						</th>
@@ -61,16 +62,16 @@ export class Caches extends React.Component {
 						<th>Hit Ratio</th>
 					</tr>
 
-					<tr styleName="right-align sub-header">
-						<th styleName="bdr" />
-						<th styleName="bdr" />
-						<th styleName="bdr" />
-						<th styleName="bdr" />
-						<th styleName="bdr" />
-						<th styleName="bdr" />
+					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
+						<th className={ styles.bdr } />
+						<th className={ styles.bdr } />
+						<th className={ styles.bdr } />
+						<th className={ styles.bdr } />
+						<th className={ styles.bdr } />
+						<th className={ styles.bdr } />
 						<th>Served</th>
 						<th>Written</th>
-						<th styleName="bdr">Bypassed</th>
+						<th className={ styles.bdr }>Bypassed</th>
 						<th />
 					</tr>
 				</thead>
@@ -79,42 +80,42 @@ export class Caches extends React.Component {
 					{
 						Array.from(caches).map(([cacheName, cache]) => {
 							return (<tr>
-								<td styleName="bold bdr">{ cacheName }</td>
-								<td styleName="bdr center-align">
+								<td className={ `${ styles.bold } ${ styles.bdr }` }>{ cacheName }</td>
+								<td className={ `${ styles.bdr } ${ styles['center-align'] }` }>
 									{
 										cache.cold ?
 											<span {...useTooltip('Cold', 'hint')}>
-												<Icon type="snowflake" />
+												<Icon type="snowflake" className={ cachesStyles.icon } />
 											</span>
 										:
 											<span {...useTooltip('Warm', 'hint')}>
-												<Icon type="sun" />
+												<Icon type="sun" className={ cachesStyles.icon } />
 											</span>
 									}
 								</td>
-								<td styleName="bdr">
+								<td className={ styles.bdr }>
 									<span {...useTooltip(<SharedZoneTooltip zone={cache.slab} />, 'hint')}>
 										<ProgressBar percentage={cache.zoneSize || 0} />
 									</span>
 								</td>
-								<td styleName="bdr">
+								<td className={ styles.bdr }>
 									{
 										typeof cache.max_size === 'number' ?
 											Caches.formatReadableBytes(cache.max_size, 'GB')
 											: <span>&infin;</span>
 									}
 								</td>
-								<td styleName="bdr">{ Caches.formatReadableBytes(cache.size, 'GB') }</td>
-								<td styleName="bdr">
+								<td className={ styles.bdr }>{ Caches.formatReadableBytes(cache.size, 'GB') }</td>
+								<td className={ styles.bdr }>
 									<ProgressBar
 										warning={cache.warning}
 										danger={cache.danger}
 										percentage={typeof cache.max_size !== 'number' ? -1 : cache.used}
 									/>
 								</td>
-								<td styleName="right-align">{ Caches.formatReadableBytes(cache.traffic.s_served) }</td>
-								<td styleName="right-align">{ Caches.formatReadableBytes(cache.traffic.s_written) }</td>
-								<td styleName="bdr right-align">{ Caches.formatReadableBytes(cache.traffic.s_bypassed) }</td>
+								<td className={ styles['right-align'] }>{ Caches.formatReadableBytes(cache.traffic.s_served) }</td>
+								<td className={ styles['right-align'] }>{ Caches.formatReadableBytes(cache.traffic.s_written) }</td>
+								<td className={ `${ styles.bdr } ${ styles['right-align'] }` }>{ Caches.formatReadableBytes(cache.traffic.s_bypassed) }</td>
 								<td>
 									{
 										<GaugeIndicator percentage={cache.hit_percents_generic} />

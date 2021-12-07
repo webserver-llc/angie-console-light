@@ -397,13 +397,13 @@ export default class Chart extends React.Component {
 					this.toRender.yMax = [
 						<text
 							key="y-max-label"
-							styleName="y-label"
+							className={ styles['y-label'] }
 							x={ offsetLeft - textOffset }
 							y={ offsetTop }
 						>{ yMax }</text>,
 						<line
 							key="y-max-line"
-							styleName="x-line"
+							className={ styles['x-line'] }
 							x1={ offsetLeft }
 							x2={ offsetLeft + chartWidth }
 							y1={ offsetTop }
@@ -416,13 +416,13 @@ export default class Chart extends React.Component {
 					this.toRender.yMid = [
 						<text
 							key="y-mid-label"
-							styleName="y-label"
+							className={ styles['y-label'] }
 							x={ offsetLeft - textOffset }
 							y={ yMidCoord }
 						>{ yMax / 2 }</text>,
 						<line
 							key="y-mid-line"
-							styleName="x-line"
+							className={ styles['x-line'] }
 							x1={ offsetLeft }
 							x2={ offsetLeft + chartWidth }
 							y1={ yMidCoord }
@@ -477,7 +477,7 @@ export default class Chart extends React.Component {
 						this.toRender.charts.push(
 							<path
 								key={ `chart_${ key }` }
-								styleName={ `line ${ isFaded ? 'faded' : '' }` }
+								className={ `${ styles.line }${ isFaded ? (' ' + styles.faded) : '' }` }
 								style={{ stroke: colors.get(key) }}
 								d={ charts[key].path }
 							/>
@@ -501,7 +501,7 @@ export default class Chart extends React.Component {
 							this.toRender.areas.push(
 								<path
 									key={ `chart-area_${ key }` }
-									styleName={ `area ${ isFaded ? 'faded' : '' }` }
+									className={ `${ styles.area }${ isFaded ? (' ' + styles.faded) : '' }` }
 									style={{ fill: colors.get(key) }}
 									d={ `${ charts[key].path } V ${ offsetTop + chartHeight } H ${ charts[key].coordinates[0][0] } V ${ charts[key].coordinates[0][1] }` }
 								/>
@@ -512,7 +512,7 @@ export default class Chart extends React.Component {
 							this.toRender.areas.push(
 								<path
 									key={ `chart-area_${ key }` }
-									styleName={ `area ${ isFaded ? 'faded' : '' }` }
+									className={ `${ styles.area }${ isFaded ? (' ' + styles.faded) : '' }` }
 									style={{ fill: colors.get(key) }}
 									d={ `${ charts[key].path } V ${ prevChart.coordinates[prevChart.coordinates.length - 1][1] }${ prevChart.coordinates.reduce((memo, [x, y]) => `L ${ x } ${ y } ${ memo }`, '') } V ${ prevChart.coordinates[0][1] }` }
 								/>
@@ -521,23 +521,23 @@ export default class Chart extends React.Component {
 					}
 
 					const reversedKey = metrics[metrics.length - 1 - i];
-					let legendItemStyleName = 'legend__item';
+					let legendItemStyleName = styles.legend__item;
 					let isDisabled = disabledMetrics.includes(reversedKey);
 
 					if (isDisabled) {
-						legendItemStyleName += ' legend__item_disabled';
+						legendItemStyleName += ` ${ styles.legend__item_disabled }`;
 					}
 
 					this.toRender.legend.push(
 						<span
 							key={ `legend_${ reversedKey }` }
-							styleName={ legendItemStyleName }
+							className={ legendItemStyleName }
 							onClick={ this.toggleMetric.bind(this, reversedKey) }
 							onMouseOver={ isDisabled ? null : this.deferredHighlightMetric.bind(this, reversedKey) }
 							onMouseLeave={ isDisabled ? null : this.deferredHighlightMetric.bind(this, null) }
 						>
 							<span
-								styleName="legend__color"
+								className={ styles.legend__color }
 								style={{ background: colors.get(reversedKey) }}
 							/>
 							{ labels.has(reversedKey) ? labels.get(reversedKey) : reversedKey }
@@ -588,11 +588,11 @@ export default class Chart extends React.Component {
 		this.timeWindowControls = [];
 
 		TimeWindows.forEach((tw, key) => {
-			let styleName = 'timewindow__item';
+			let className = styles.timewindow__item;
 			let onClick = null;
 
 			if (key === selectedTimeWindow) {
-				styleName += ' timewindow__item_selected';
+				className += ` ${ styles.timewindow__item_selected }`;
 			} else {
 				onClick = this.selectTimeWindow.bind(null, key);
 			}
@@ -600,7 +600,7 @@ export default class Chart extends React.Component {
 			this.timeWindowControls.push(
 				<div
 					key={ key }
-					styleName={ styleName }
+					className={ className }
 					onClick={ onClick }
 				>{ key }</div>
 			);
@@ -626,25 +626,25 @@ export default class Chart extends React.Component {
 		this.dndControls = [
 			<div
 				key={ 0 }
-				styleName={ `dnd-controls__control ${ backDndAllowed ? '' : 'dnd-controls__control_disabled' }` }
+				className={ `${ styles['dnd-controls__control'] }${ backDndAllowed ? '' : (' ' + styles['dnd-controls__control_disabled']) }` }
 				title="Click to view the oldest data"
 				onClick={ backDndAllowed ? this.emulateDnd.bind(this, -1, true) : null }
 			>&#171;</div>,
 			<div
 				key={ 1 }
-				styleName={ `dnd-controls__control ${ backDndAllowed ? '' : 'dnd-controls__control_disabled' }` }
+				className={ `${ styles['dnd-controls__control'] }${ backDndAllowed ? '' : (' ' + styles['dnd-controls__control_disabled']) }` }
 				title={ `Click to go back for ${ selectedTimeWindow }` }
 				onClick={ backDndAllowed ? this.emulateDnd.bind(this, -1, false) : null }
 			>&#8249;</div>,
 			<div
 				key={ 2 }
-				styleName={ `dnd-controls__control ${ forwardDndAllowed ? '' : 'dnd-controls__control_disabled' }` }
+				className={ `${ styles['dnd-controls__control'] }${ forwardDndAllowed ? '' : (' ' + styles['dnd-controls__control_disabled']) }` }
 				title={ `Click to go forward for ${ selectedTimeWindow }` }
 				onClick={ forwardDndAllowed ? this.emulateDnd.bind(this, 1, false) : null }
 			>&#8250;</div>,
 			<div
 				key={ 3 }
-				styleName={ `dnd-controls__control ${ forwardDndAllowed ? '' : 'dnd-controls__control_disabled' }` }
+				className={ `${ styles['dnd-controls__control'] }${ forwardDndAllowed ? '' : (' ' + styles['dnd-controls__control_disabled']) }` }
 				title="Click to return to live mode"
 				onClick={ forwardDndAllowed ? this.emulateDnd.bind(this, 1, true) : null }
 			>&#187;</div>
@@ -703,10 +703,10 @@ export default class Chart extends React.Component {
 			}
 		}
 
-		let mouseTrackerClass = `mouse-tracker${ this.dndAllowed ? ' mouse-tracker_drag' : '' }`;
+		let mouseTrackerClass = `${ styles['mouse-tracker'] }${ this.dndAllowed ? (' ' + styles['mouse-tracker_drag']) : '' }`;
 
 		if (dndIsInProgress) {
-			mouseTrackerClass += ' mouse-tracker_dragging';
+			mouseTrackerClass += ` ${ styles['mouse-tracker_dragging'] }`;
 		} else if (activePoint) {
 			this.toRender.tooltipPoints = [];
 			colors.forEach((color, key) => {
@@ -714,13 +714,15 @@ export default class Chart extends React.Component {
 					this.toRender.tooltipPoints.push(
 						<div
 							key={ `tooltip_${ key }` }
-							styleName="tooltip__point"
+							className={ styles.tooltip__point }
 						>
 							<div
-								styleName="tooltip__value"
+								className={ styles.tooltip__value }
 								style={{ color }}
 							>{ activePoint.values[key] }</div>
-							<div styleName="tooltip__metric">{ labels.has(key) ? labels.get(key) : key }</div>
+							<div className={ styles.tooltip__metric }>
+								{ labels.has(key) ? labels.get(key) : key }
+							</div>
 						</div>
 					);
 				}
@@ -730,14 +732,14 @@ export default class Chart extends React.Component {
 		}
 
 		return (
-			<div styleName="container">
-				<div styleName="dnd-controls">{ this.dndControls }</div>
-				<div styleName="timewindow">{ this.timeWindowControls }</div>
+			<div className={ styles.container }>
+				<div className={ styles['dnd-controls'] }>{ this.dndControls }</div>
+				<div className={ styles.timewindow }>{ this.timeWindowControls }</div>
 
 				{
 					activePoint ?
 						<div
-							styleName="tooltip"
+							className={ styles.tooltip }
 							style={ activePoint.x > chartWidth / 2 ? {
 								right: `${ width - activePoint.x + 8 }px`
 							} : {
@@ -748,7 +750,7 @@ export default class Chart extends React.Component {
 
 							<div
 								key="tooltip__time"
-								styleName="tooltip__time"
+								className={ styles.tooltip__time }
 							>{
 								new Date(activePoint._ts * 1000).toLocaleString('en-US', {
 									hour: '2-digit',
@@ -762,7 +764,7 @@ export default class Chart extends React.Component {
 				}
 
 				<div
-					styleName={ mouseTrackerClass }
+					className={ mouseTrackerClass }
 					style={{
 						width: `${ chartWidth }px`,
 						height: `${ chartHeight }px`,
@@ -781,28 +783,28 @@ export default class Chart extends React.Component {
 					width={ `${ width }` }
 					height={ `${ height }` }
 					xmlns="http://www.w3.org/2000/svg"
-					styleName="svg"
+					className={ styles.svg }
 				>
 					<path
-						styleName="x-axis"
+						className={ styles['x-axis'] }
 						d={ this.ticks.reduce((memo, tick) => {
 							return `${ memo }${ memo ? ' ' : '' }M ${ tick.x } ${ xAxisY } V ${ xAxisY + tickSize }`;
 						}, '') }
 					/>
 					<text
-						styleName="y-label"
+						className={ styles['y-label'] }
 						x={ offsetLeft - textOffset }
 						y={ height - offsetBottom }
 					>0</text>
 					<line
-						styleName="x-axis"
+						className={ styles['x-axis'] }
 						x1={ offsetLeft }
 						x2={ offsetLeft + chartWidth }
 						y1={ xAxisY }
 						y2={ xAxisY }
 					/>
 					<line
-						styleName="cursor-line"
+						className={ styles['cursor-line'] }
 						x1="0"
 						x2="0"
 						y1={ offsetTop - 10 }
@@ -816,7 +818,7 @@ export default class Chart extends React.Component {
 					{ this.ticks.map(({ x, y, label }, i) =>
 						<text
 							key={ i }
-							styleName="x-label"
+							className={ styles['x-label'] }
 							x={ x }
 							y={ y }
 						>{ label }</text>
@@ -827,7 +829,7 @@ export default class Chart extends React.Component {
 					{ this.toRender.charts }
 					{ this.toRender.areas }
 				</svg>
-				<div styleName="legend">{ this.toRender.legend }</div>
+				<div className={ styles.legend }>{ this.toRender.legend }</div>
 			</div>
 		);
 	}

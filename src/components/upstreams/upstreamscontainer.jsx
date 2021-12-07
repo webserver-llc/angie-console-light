@@ -113,26 +113,26 @@ export default class UpstreamsContainer extends React.Component {
 		});
 
 		if (children.length === 0) {
-			children = <div styleName="msg">
+			children = <div className={ styles.msg }>
 				All upstream servers appear to be just fine — nothing to show here.
 				Toggle "Failed only" to show all upstreams.
 			</div>;
 		}
 
-		return (<div styleName="upstreams-container">
-			<span styleName="toggle-failed">
+		return (<div className={ styles['upstreams-container'] }>
+			<span className={ styles['toggle-failed'] }>
 				Failed only
 				<span
-					styleName={this.state.showOnlyFailed ? 'toggler-active' : 'toggler'}
+					className={this.state.showOnlyFailed ? styles['toggler-active'] : styles.toggler}
 					onClick={this.toggleFailed}>
-					<span styleName="toggler-point" />
+					<span className={ styles['toggler-point'] } />
 				</span>
 			</span>
 
 			<h1>{ this.props.title }</h1>
 
 			<span
-				styleName={this.state.showUpstreamsList ? 'list-toggler-opened' : 'list-toggler'}
+				className={this.state.showUpstreamsList ? styles['list-toggler-opened'] : styles['list-toggler']}
 				onClick={this.toggleUpstreamsList}
 			>
 				{ this.state.showUpstreamsList ? 'Hide' : 'Show'} upstreams list
@@ -140,28 +140,28 @@ export default class UpstreamsContainer extends React.Component {
 
 			{
 				this.state.showUpstreamsList ?
-					<div styleName="upstreams-catalog">
-						<div styleName="upstreams-summary">
+					<div className={ styles['upstreams-catalog'] }>
+						<div className={ styles['upstreams-summary'] }>
 							<strong>Total:</strong> { __STATS.total } upstreams
 							({ __STATS.servers.all } servers)
 
-							<span styleName="red-text">
+							<span className={ styles['red-text'] }>
 								<strong>With problems:</strong> { __STATS.failures } upstreams
 								({ __STATS.servers.failed } servers)
 							</span>
 						</div>
 
-						<div styleName="upstreams-navlinks">
+						<div className={ styles['upstreams-navlinks'] }>
 							{
 								upstreams.map(([name, upstream], i) => {
 									if (this.state.showOnlyFailed && upstream.hasFailedPeer || !this.state.showOnlyFailed) {
 										return (
 											<span
 												onClick={() => this.scrollTo(name, i)}
-												styleName={upstream.hasFailedPeer ? 'upstream-link-failed' : 'upstream-link'}
+												className={upstream.hasFailedPeer ? styles['upstream-link-failed'] : styles['upstream-link']}
 												key={name}
 											>
-												<span styleName="dashed">{name}</span>
+												<span className={ styles.dashed }>{name}</span>
 											</span>
 										);
 									}

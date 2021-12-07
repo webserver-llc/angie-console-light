@@ -58,11 +58,11 @@ export default class GaugeIndicator extends Component {
 	render() {
 		const { percentage } = this.props;
 
-		return (<div styleName="gaugeindicator">
-			<canvas ref={(ref) => { this.canvas = ref; }} styleName="canvas" />
+		return (<div className={ styles.gaugeindicator }>
+			<canvas ref={(ref) => { this.canvas = ref; }} className={ styles.canvas } />
 			{
 				percentage !== null ?
-					<span styleName="value">{ percentage }%</span>
+					<span className={ styles.value }>{ percentage }%</span>
 				: null
 			}
 		</div>);
