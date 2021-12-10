@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { getYMax } from './utils.js';
+import utils from './utils.js';
 import styles from './style.css';
 import appsettings from '../../appsettings';
 import { limitConnReqHistoryLimit } from '../../calculators/factories.js';
@@ -387,7 +387,7 @@ export default class Chart extends React.Component {
 
 				xStep = chartWidth / timeDiff;
 
-				let yMax = getYMax(parsedData, metrics, disabledMetrics);
+				let yMax = utils.getYMax(parsedData, metrics, disabledMetrics);
 
 				if (yMax > 0) {
 					if (yMax % 2 === 1) {

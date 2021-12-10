@@ -58,11 +58,11 @@ export default class Tooltip extends React.Component {
 		let cn = styles.tooltip;
 
 		if (styles[position]) {
-			cn + ` ${ styles[position] }`;
+			cn += ` ${ styles[position] }`;
 		}
 
 		if (styles[align]) {
-			cn + ` ${ styles[align] }`;
+			cn += ` ${ styles[align] }`;
 		}
 
 		return (

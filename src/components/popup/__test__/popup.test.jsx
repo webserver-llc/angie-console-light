@@ -21,8 +21,6 @@ describe('<Popup />', () => {
 			document.documentElement.classList.contains(styles['disable-scroll']),
 			'document.documentElement class'
 		).to.be.true;
-
-		wrapper.unmount();
 	});
 
 	it('componentWillUnmount()', () => {
@@ -40,8 +38,6 @@ describe('<Popup />', () => {
 			document.documentElement.classList.contains(styles['disable-scroll']),
 			'document.documentElement class'
 		).to.be.false;
-
-		wrapper.unmount();
 	});
 
 	it('render()', () => {
@@ -68,11 +64,9 @@ describe('<Popup />', () => {
 		expect(
 			popup.prop('className'),
 			'popup className'
-		).to.be.equal(`test_class ${ styles['popup'] }`);
+		).to.be.equal(`${ styles['popup'] } test_class`);
 		expect(popup.children(), 'popup children').to.have.lengthOf(2);
 		expect(popup.childAt(0).text(), 'popup child 1').to.be.equal('test child 1');
 		expect(popup.childAt(1).text(), 'popup child 2').to.be.equal('test child 2');
-
-		wrapper.unmount();
 	});
 });

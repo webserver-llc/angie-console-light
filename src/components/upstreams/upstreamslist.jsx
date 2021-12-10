@@ -7,18 +7,16 @@
 
 /* eslint no-alert: 0 */
 import React from 'react';
-import { isWritable, checkWritePermissions } from '../../api';
+import { apiUtils } from '../../api';
 import SortableTable from '../table/sortabletable.jsx';
 import ProgressBar from '../progressbar/progressbar.jsx';
 import appsettings from '../../appsettings';
 import UpstreamsEditor from './editor/upstreamseditor.jsx';
 import { SharedZoneTooltip } from '../pages/tooltips.jsx';
 import UpstreamStatsTooltip from './UpstreamStatsTooltip.jsx';
-
 import styles from './style.css';
 import tableStyles from '../table/style.css';
-
-import { useTooltip } from '../../tooltips/index.jsx';
+import tooltips from '../../tooltips/index.jsx';
 
 export const FILTER_OPTIONS = {
 	all: 'Show all',
@@ -57,8 +55,8 @@ export default class UpstreamsList extends SortableTable {
 			return;
 		}
 
-		if (isWritable() === null) {
-			checkWritePermissions(true).then((result) => {
+		if (apiUtils.isWritable() === null) {
+			apiUtils.checkWritePermissions(true).then((result) => {
 				if (result === true) {
 					this.toggleEditMode();
 				} else if (result === false) {
@@ -228,7 +226,7 @@ export default class UpstreamsList extends SortableTable {
 			});
 		}
 
-		const writePermission = isWritable() === true || isWritable() === null;
+		const writePermission = apiUtils.isWritable() === true || apiUtils.isWritable() === null;
 
 		return (<div className={ styles['upstreams-list'] } id={`upstream-${name}`}>
 			{
@@ -254,7 +252,7 @@ export default class UpstreamsList extends SortableTable {
 			</select>
 
 			<div className={ styles.head }>
-				<h2 className={ styles.title } {...useTooltip(<UpstreamStatsTooltip upstream={upstream} />)}>{ name }</h2>
+				<h2 className={ styles.title } {...tooltips.useTooltip(<UpstreamStatsTooltip upstream={upstream} />)}>{ name }</h2>
 
 				{ writePermission ?
 					<span className={this.state.editMode ? styles['edit-active'] : styles.edit} onClick={this.toggleEditMode} /> : null
@@ -272,7 +270,7 @@ export default class UpstreamsList extends SortableTable {
 				{
 					upstream.zoneSize !== null ?
 						<span className={ styles['zone-capacity'] }>
-								Zone: <span {...useTooltip(<SharedZoneTooltip zone={upstream.slab} />, 'hint')}>
+								Zone: <span {...tooltips.useTooltip(<SharedZoneTooltip zone={upstream.slab} />, 'hint')}>
 									<ProgressBar percentage={upstream.zoneSize} />
 								</span>
 						</span>

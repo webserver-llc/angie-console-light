@@ -11,8 +11,8 @@ import { spy, stub } from 'sinon';
 import Locations from '../locationzones.jsx';
 import SortableTable from '../../../table/sortabletable.jsx';
 import styles from '../../../table/style.css';
-import * as utils from '../../../../utils';
-import * as tooltips from '../../../../tooltips/index.jsx';
+import utils from '../../../../utils';
+import tooltips from '../../../../tooltips/index.jsx';
 
 describe('<Locations />', () => {
 	it('extends SortableTable', () => {

@@ -10,24 +10,20 @@ import { shallow } from 'enzyme';
 import { spy, stub } from 'sinon';
 import TableSortControl from '../tablesortcontrol.jsx';
 import styles from '../style.css';
-import * as tooltips from '../../../tooltips/index.jsx';
+import tooltips from '../../../tooltips/index.jsx';
 
 describe('<TableSortControl />', () => {
 	it('constructor()', () => {
+		const toggleSpy = spy(TableSortControl.prototype.toggle, 'bind');
 		const wrapper = shallow(<TableSortControl />);
-		const instance = wrapper.instance();
-		const toggleSpy = spy(instance.toggle, 'bind');
-
-		instance.constructor();
 
 		expect(toggleSpy.calledOnce, 'this.toggle.bind called').to.be.true;
 		expect(
-			toggleSpy.args[0][0],
+			toggleSpy.args[0][0] instanceof TableSortControl,
 			'this.toggle.bind call arg'
-		).to.be.deep.equal(instance);
+		).to.be.true;
 
 		toggleSpy.restore();
-		wrapper.unmount();
 	});
 
 	it('toggle()', () => {

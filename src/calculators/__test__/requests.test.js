@@ -7,11 +7,10 @@
 
 import { stub } from 'sinon';
 import calculate from '../requests.js';
-import * as utils from '../utils.js';
+import utils from '../utils.js';
 
 describe('Calculators – Requests', () => {
 	describe('calculate()', () => {
-
 		const ts = 1597004040005;
 		const requests = {
 			a: 123,

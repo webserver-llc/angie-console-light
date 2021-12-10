@@ -10,7 +10,7 @@ import api from '../../api';
 import DataBinder from '../databinder/databinder.jsx';
 import calculateStreamLimitConn from '../../calculators/streamlimitconn.js';
 import LimitConn from './serverzones/limitconn.jsx';
-import { formatReadableBytes } from '../../utils';
+import utils from '../../utils';
 import styles from '../table/style.css';
 
 export class StreamZones extends React.Component {
@@ -62,10 +62,10 @@ export class StreamZones extends React.Component {
 									{ zone.sessions['5xx'] }
 								</td>
 								<td className={ styles.bdr }>{ zone.sessions.total }</td>
-								<td className={ styles.px60 }>{ formatReadableBytes(zone.sent_s) }</td>
-								<td className={ styles.px60 }>{ formatReadableBytes(zone.rcvd_s) }</td>
-								<td className={ styles.px60 }>{ formatReadableBytes(zone.sent) }</td>
-								<td className={ styles.px60 }>{ formatReadableBytes(zone.received) }</td>
+								<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent_s) }</td>
+								<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.rcvd_s) }</td>
+								<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent) }</td>
+								<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.received) }</td>
 							</tr>)
 						)
 					}

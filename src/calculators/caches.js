@@ -7,7 +7,7 @@
  */
 
 import appsettings from '../appsettings';
-import * as utils from './utils.js';
+import utils from './utils.js';
 
 export const cachesHistory = new Proxy({}, {
 	get(history, cacheName) {

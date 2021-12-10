@@ -11,7 +11,7 @@ import {
 	zones as zonesCalculate,
 	upstreams as upstreamsCalculate
 } from '../stream.js';
-import * as utils from '../utils.js';
+import utils from '../utils.js';
 
 describe('Calculators – Stream', () => {
 	describe('handleZones', () => {

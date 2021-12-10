@@ -29,6 +29,7 @@ const api = new Proxy({}, {
 });
 
 export default api;
+
 export const httpUpstreamsApi = new UpstreamsApi('http');
 export const streamUpstreamsApi = new UpstreamsApi('stream');
 
@@ -143,4 +144,11 @@ export const initialLoad = ({
 					})
 				)
 		);
+};
+
+export const apiUtils = {
+	checkWritePermissions,
+	checkApiAvailability,
+	initialLoad,
+	isWritable,
 };

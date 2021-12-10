@@ -14,7 +14,7 @@ import calculateSharedZones from '../../calculators/sharedzones.js';
 import DataBinder from '../databinder/databinder.jsx';
 import styles from '../table/style.css';
 
-import { useTooltip } from '../../tooltips/index.jsx';
+import tooltips from '../../tooltips/index.jsx';
 
 export class SharedZones extends SortableTable {
 	get SORTING_SETTINGS_KEY() {
@@ -48,7 +48,7 @@ export class SharedZones extends SortableTable {
 						<th>
 							<span
 								className={ styles.hinted }
-								{...useTooltip('Memory usage = Used memory pages / Total memory pages', 'hint')}
+								{...tooltips.useTooltip('Memory usage = Used memory pages / Total memory pages', 'hint')}
 							>Memory usage</span>
 						</th>
 					</tr>

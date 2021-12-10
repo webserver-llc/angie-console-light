@@ -9,7 +9,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { stub } from 'sinon';
 import { ServerZones } from '../serverzones.jsx';
-import * as utils from '../../../../../utils.js';
+import utils from '../../../../../utils.js';
 
 describe('<ServerZones IndexPage />', () => {
 	describe('render()', () => {

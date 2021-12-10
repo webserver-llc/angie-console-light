@@ -8,7 +8,7 @@
 import { spy, stub } from 'sinon';
 import calculate, { handleResolver } from '../resolvers.js';
 import { DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT } from '../../constants.js';
-import * as utils from '../utils.js';
+import utils from '../utils.js';
 import appsettings from '../../appsettings';
 
 describe('Calculators – Resolvers', () => {

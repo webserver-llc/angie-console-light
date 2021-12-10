@@ -17,6 +17,6 @@ export default function Loader({ gray, className }){
     cn += `${ cn ? ' ' : '' }${ gray ? graySN : defaultSN }`;
 
 	return (
-		<div className={className} />
+		<div className={ cn } />
 	);
 };

@@ -36,7 +36,6 @@ const plugins = [
         'process.env.NODE_ENV': JSON.stringify(ENV),
         __ENV__: JSON.stringify(DASHBOARD_TYPE),
         __APP_VERSION__: JSON.stringify(package.version),
-        GA_ID: JSON.stringify('UA-27974099-10')
     })
 ];
 
@@ -61,8 +60,12 @@ const cssLoaderConfiguration = (() => {
             options: {
                 postcssOptions: {
                     plugins: () => [
-                        require('autoprefixer')({ env: 'last 5 versions and not ie < 11' }),
-                        require('cssnano')({ preset: 'default' }),
+                        require('autoprefixer')({
+                            env: 'last 5 versions and not ie < 11',
+                        }),
+                        require('cssnano')({
+                            preset: 'default',
+                        }),
                     ]
                 }
             }

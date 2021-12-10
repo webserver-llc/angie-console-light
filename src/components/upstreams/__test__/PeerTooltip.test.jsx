@@ -9,7 +9,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { stub } from 'sinon';
 import PeerTooltip from '../PeerTooltip.jsx';
-import * as utils from '../../../utils.js';
+import utils from '../../../utils.js';
 import styles from '../tooltip.css';
 
 describe('<PeerTooltip />', () => {

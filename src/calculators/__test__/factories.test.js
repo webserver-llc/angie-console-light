@@ -17,7 +17,7 @@ import {
 	limitConnReqFactory,
 	limitConnReqCalculator
 } from '../factories.js';
-import * as utils from '../utils.js';
+import utils from '../utils.js';
 import appsettings from '../../appsettings';
 
 describe('Calculators – factories', () => {

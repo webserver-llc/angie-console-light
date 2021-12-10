@@ -9,7 +9,7 @@ import React from 'react';
 import IndexBox from '../indexbox/indexbox.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
 import api from '../../../../api';
-import { formatReadableBytes } from '../../../../utils.js';
+import utils from '../../../../utils.js';
 import { zones } from '../../../../calculators/stream.js';
 
 export class StreamZones extends React.Component {
@@ -28,8 +28,8 @@ export class StreamZones extends React.Component {
 				<p>Conn/s: { stats.conn_s }</p>
 
 				<h4>Traffic</h4>
-				<p>In: { stats.traffic.in ? `${formatReadableBytes(stats.traffic.in)}/s` : 0 }</p>
-				<p>Out: { stats.traffic.out ? `${formatReadableBytes(stats.traffic.out)}/s` : 0 }</p>
+				<p>In: { stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/s` : 0 }</p>
+				<p>Out: { stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/s` : 0 }</p>
 			</IndexBox>
 		);
 	}

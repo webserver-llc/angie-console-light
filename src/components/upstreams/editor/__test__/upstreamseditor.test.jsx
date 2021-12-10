@@ -69,22 +69,19 @@ describe('<UpstreamsEditor />', () => {
 	};
 
 	it('constructor()', () => {
-		const wrapper = shallow(<UpstreamsEditor { ...props } />);
-		const instance = wrapper.instance();
+		const validateServerNameSpy = spy(UpstreamsEditor.prototype.validateServerName, 'bind');
+		const handleFormChangeSpy = spy(UpstreamsEditor.prototype.handleFormChange, 'bind');
+		const handleRadioChangeSpy = spy(UpstreamsEditor.prototype.handleRadioChange, 'bind');
+		const validateSpy = spy(UpstreamsEditor.prototype.validate, 'bind');
+		const saveSpy = spy(UpstreamsEditor.prototype.save, 'bind');
+		const closeSpy = spy(UpstreamsEditor.prototype.close, 'bind');
+		const removeSpy = spy(UpstreamsEditor.prototype.remove, 'bind');
+		const closeErrorsSpy = spy(UpstreamsEditor.prototype.closeErrors, 'bind');
 
-		const validateServerNameSpy = spy(instance.validateServerName, 'bind');
-		const handleFormChangeSpy = spy(instance.handleFormChange, 'bind');
-		const handleRadioChangeSpy = spy(instance.handleRadioChange, 'bind');
-		const validateSpy = spy(instance.validate, 'bind');
-		const saveSpy = spy(instance.save, 'bind');
-		const closeSpy = spy(instance.close, 'bind');
-		const removeSpy = spy(instance.remove, 'bind');
-		const closeErrorsSpy = spy(instance.closeErrors, 'bind');
-
-		instance.constructor(
-			Object.assign({}, props, {
+		let wrapper = shallow(
+			<UpstreamsEditor { ...Object.assign({}, props, {
 				peers: null
-			})
+			}) } />
 		);
 
 		expect(wrapper.state(), '[no peers] this.state').to.be.deep.equal({
@@ -96,26 +93,26 @@ describe('<UpstreamsEditor />', () => {
 		});
 
 		expect(validateServerNameSpy.calledOnce, 'this.validateServerName.bind called once').to.be.true;
-		expect(validateServerNameSpy.args[0][0], 'this.validateServerName.bind arg').to.be.deep.equal(instance);
+		expect(validateServerNameSpy.args[0][0] instanceof UpstreamsEditor, 'this.validateServerName.bind arg').to.be.true;
 		expect(handleFormChangeSpy.calledOnce, 'this.handleFormChange.bind called once').to.be.true;
-		expect(handleFormChangeSpy.args[0][0], 'this.handleFormChange.bind arg').to.be.deep.equal(instance);
+		expect(handleFormChangeSpy.args[0][0] instanceof UpstreamsEditor, 'this.handleFormChange.bind arg').to.be.true;
 		expect(handleRadioChangeSpy.calledOnce, 'this.handleRadioChange.bind called once').to.be.true;
-		expect(handleRadioChangeSpy.args[0][0], 'this.handleRadioChange.bind arg').to.be.deep.equal(instance);
+		expect(handleRadioChangeSpy.args[0][0] instanceof UpstreamsEditor, 'this.handleRadioChange.bind arg').to.be.true;
 		expect(validateSpy.calledOnce, 'this.validate.bind called once').to.be.true;
-		expect(validateSpy.args[0][0], 'this.validate.bind arg').to.be.deep.equal(instance);
+		expect(validateSpy.args[0][0] instanceof UpstreamsEditor, 'this.validate.bind arg').to.be.true;
 		expect(saveSpy.calledOnce, 'this.save.bind called once').to.be.true;
-		expect(saveSpy.args[0][0], 'this.save.bind arg').to.be.deep.equal(instance);
+		expect(saveSpy.args[0][0] instanceof UpstreamsEditor, 'this.save.bind arg').to.be.true;
 		expect(closeSpy.calledOnce, 'this.close.bind called once').to.be.true;
-		expect(closeSpy.args[0][0], 'this.close.bind arg').to.be.deep.equal(instance);
+		expect(closeSpy.args[0][0] instanceof UpstreamsEditor, 'this.close.bind arg').to.be.true;
 		expect(removeSpy.calledOnce, 'this.remove.bind called once').to.be.true;
-		expect(removeSpy.args[0][0], 'this.remove.bind arg').to.be.deep.equal(instance);
+		expect(removeSpy.args[0][0] instanceof UpstreamsEditor, 'this.remove.bind arg').to.be.true;
 		expect(closeErrorsSpy.calledOnce, 'this.closeErrors.bind called once').to.be.true;
-		expect(closeErrorsSpy.args[0][0], 'this.closeErrors.bind arg').to.be.deep.equal(instance);
+		expect(closeErrorsSpy.args[0][0] instanceof UpstreamsEditor, 'this.closeErrors.bind arg').to.be.true;
 
-		instance.constructor(
-			Object.assign({}, props, {
+		wrapper = shallow(
+			<UpstreamsEditor { ...Object.assign({}, props, {
 				peers: new Map()
-			})
+			}) } />,
 		);
 
 		expect(wrapper.state(), '[no peers] this.state').to.be.deep.equal({
@@ -124,14 +121,14 @@ describe('<UpstreamsEditor />', () => {
 			errorMessages: null
 		});
 
-		instance.constructor(
-			Object.assign({}, props, {
+		wrapper = shallow(
+			<UpstreamsEditor { ...Object.assign({}, props, {
 				peers: new Map([
 					['test_1', {}],
 					['test_2', {}],
 					['test_3', {}]
 				])
-			})
+			}) } />
 		);
 
 		expect(wrapper.state('data'), '[peers.size > 1] this.state.data').to.be.deep.equal({});
@@ -142,12 +139,12 @@ describe('<UpstreamsEditor />', () => {
 			then: thenSpy
 		}));
 
-		instance.constructor(
-			Object.assign({}, props, {
+		wrapper = shallow(
+			<UpstreamsEditor { ...Object.assign({}, props, {
 				upstreamsApi: {
 					getPeer: getPeerSpy
 				}
-			})
+			}) } />
 		);
 
 		expect(wrapper.state('loading'), '[peers.size = 1] this.state.loading').to.be.true;
@@ -158,7 +155,7 @@ describe('<UpstreamsEditor />', () => {
 		expect(thenSpy.calledOnce, 'upstreamsApi.getPeer().then called once').to.be.true;
 		expect(thenSpy.args[0][0], 'upstreamsApi.getPeer().then call args').to.be.a('function');
 
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = spy(wrapper.instance(), 'setState');
 		const peerData = {
 			should_be_normilized: true,
 			and_passed_to: 'state'
@@ -193,7 +190,6 @@ describe('<UpstreamsEditor />', () => {
 			loading: false
 		});
 
-		setStateSpy.restore();
 		UpstreamsEditor.normalizeInputData.restore();
 
 		validateServerNameSpy.restore();
@@ -204,7 +200,6 @@ describe('<UpstreamsEditor />', () => {
 		closeSpy.restore();
 		removeSpy.restore();
 		closeErrorsSpy.restore();
-		wrapper.unmount();
 	});
 
 	it('handleFormChange()', () => {

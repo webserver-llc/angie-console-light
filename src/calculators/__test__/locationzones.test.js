@@ -7,7 +7,7 @@
 
 import { spy, stub } from 'sinon';
 import calculate, { handleZones } from '../locationzones.js';
-import * as utils from '../utils.js';
+import utils from '../utils.js';
 
 describe('Calculators – LocationZones', () => {
 	describe('handleZones()', () => {

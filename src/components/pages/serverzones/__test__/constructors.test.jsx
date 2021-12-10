@@ -16,7 +16,7 @@ describe('ServerZones Constructors', () => {
 		it('constructor()', () => {
 			const wrapper = shallow(<LimitConnReqConstructor data={{}} />);
 			const instance = wrapper.instance();
-			const bindSpy = spy(instance.toggleChart, 'bind');
+			const bindSpy = spy(LimitConnReqConstructor.prototype.toggleChart, 'bind');
 
 			instance.constructor();
 
@@ -24,7 +24,7 @@ describe('ServerZones Constructors', () => {
 				activeCharts: []
 			});
 			expect(bindSpy.calledOnce, 'this.toggleChart.bind called once').to.be.true;
-			expect(bindSpy.args[0][0], 'this.toggleChart.bind arg').to.be.deep.equal(instance);
+			expect(bindSpy.args[0][0] instanceof LimitConnReqConstructor, 'this.toggleChart.bind arg').to.be.true;
 
 			bindSpy.restore();
 			wrapper.unmount();

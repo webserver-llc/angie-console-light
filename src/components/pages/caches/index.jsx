@@ -11,12 +11,10 @@ import DataBinder from '../../databinder/databinder.jsx';
 import ProgressBar from '../../progressbar/progressbar.jsx';
 import GaugeIndicator from '../../gaugeindicator/gaugeindicator.jsx';
 import Icon from '../../icon/icon.jsx';
-
 import cacheCalculator from '../../../calculators/caches.js';
 import sharedZonesCalculator from '../../../calculators/sharedzones.js';
-import { formatReadableBytes } from '../../../utils.js';
-import { useTooltip } from '../../../tooltips/index.jsx';
-
+import utils from '../../../utils.js';
+import tooltips from '../../../tooltips/index.jsx';
 import { CacheStateTooltip, SharedZoneTooltip } from '../tooltips.jsx';
 
 import styles from '../../table/style.css';
@@ -24,7 +22,7 @@ import cachesStyles from './style.css';
 
 export class Caches extends React.Component {
 	static formatReadableBytes(value, measurementUnit){
-		return formatReadableBytes(
+		return utils.formatReadableBytes(
 			value,
 			measurementUnit,
 			{ 0: 'B', 1: 'KB', 2: 'MB', 3: 'GB', 4: 'TB' }
@@ -43,11 +41,16 @@ export class Caches extends React.Component {
 				<thead>
 					<tr>
 						<th>Zone</th>
-						<th><span className={ styles.hinted } {...useTooltip(<CacheStateTooltip />, 'hint')}>State</span></th>
 						<th>
 							<span
 								className={ styles.hinted }
-								{...useTooltip('Memory usage = Used memory pages / Total memory pages', 'hint')}
+								{...tooltips.useTooltip(<CacheStateTooltip />, 'hint')}
+							>State</span>
+						</th>
+						<th>
+							<span
+								className={ styles.hinted }
+								{...tooltips.useTooltip('Memory usage = Used memory pages / Total memory pages', 'hint')}
 							>Memory usage</span>
 						</th>
 						<th>Max size</th>
@@ -55,7 +58,7 @@ export class Caches extends React.Component {
 						<th>
 							<span
 								className={ styles.hinted }
-								{...useTooltip('Disk usage = Used / Max size', 'hint')}
+								{...tooltips.useTooltip('Disk usage = Used / Max size', 'hint')}
 							>Disk usage</span>
 						</th>
 						<th colSpan="3">Traffic</th>
@@ -84,17 +87,17 @@ export class Caches extends React.Component {
 								<td className={ `${ styles.bdr } ${ styles['center-align'] }` }>
 									{
 										cache.cold ?
-											<span {...useTooltip('Cold', 'hint')}>
+											<span {...tooltips.useTooltip('Cold', 'hint')}>
 												<Icon type="snowflake" className={ cachesStyles.icon } />
 											</span>
 										:
-											<span {...useTooltip('Warm', 'hint')}>
+											<span {...tooltips.useTooltip('Warm', 'hint')}>
 												<Icon type="sun" className={ cachesStyles.icon } />
 											</span>
 									}
 								</td>
 								<td className={ styles.bdr }>
-									<span {...useTooltip(<SharedZoneTooltip zone={cache.slab} />, 'hint')}>
+									<span {...tooltips.useTooltip(<SharedZoneTooltip zone={cache.slab} />, 'hint')}>
 										<ProgressBar percentage={cache.zoneSize || 0} />
 									</span>
 								</td>
@@ -115,7 +118,9 @@ export class Caches extends React.Component {
 								</td>
 								<td className={ styles['right-align'] }>{ Caches.formatReadableBytes(cache.traffic.s_served) }</td>
 								<td className={ styles['right-align'] }>{ Caches.formatReadableBytes(cache.traffic.s_written) }</td>
-								<td className={ `${ styles.bdr } ${ styles['right-align'] }` }>{ Caches.formatReadableBytes(cache.traffic.s_bypassed) }</td>
+								<td className={ `${ styles.bdr } ${ styles['right-align'] }` }>
+									{ Caches.formatReadableBytes(cache.traffic.s_bypassed) }
+								</td>
 								<td>
 									{
 										<GaugeIndicator percentage={cache.hit_percents_generic} />

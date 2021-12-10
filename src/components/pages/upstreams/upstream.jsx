@@ -8,8 +8,8 @@ import React from 'react';
 import appsettings from '../../../appsettings';
 import TableSortControl from '../../table/tablesortcontrol.jsx';
 import UpstreamsList from '../../upstreams/upstreamslist.jsx';
-import { formatReadableBytes, formatUptime, formatMs } from '../../../utils.js';
-import { useTooltip } from '../../../tooltips/index.jsx';
+import utils from '../../../utils.js';
+import tooltips from '../../../tooltips/index.jsx';
 import PeerTooltip from '../../upstreams/PeerTooltip.jsx';
 import ConnectionsTooltip from '../../upstreams/ConnectionsTooltip.jsx';
 import styles from '../../table/style.css';
@@ -109,10 +109,10 @@ export default class Upstream extends UpstreamsList {
 					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
 						<th className={ styles['left-align'] }>Name</th>
 						<th className={ styles['left-align'] }>
-							<span className={ styles.hinted } {...useTooltip('Total downtime', 'hint')}>DT</span>
+							<span className={ styles.hinted } {...tooltips.useTooltip('Total downtime', 'hint')}>DT</span>
 						</th>
 						<th className={ `${ styles['center-align'] } ${ styles.bdr }` }>
-							<span className={ styles.hinted } {...useTooltip('Weight', 'hint')}>W</span>
+							<span className={ styles.hinted } {...tooltips.useTooltip('Weight', 'hint')}>W</span>
 						</th>
 
 						<th>Total</th>
@@ -133,10 +133,10 @@ export default class Upstream extends UpstreamsList {
 						<th className={ styles.bdr }>5xx</th>
 
 						<th className={ styles['center-align'] }>
-							<span className={ styles.hinted } {...useTooltip('Active', 'hint')}>A</span>
+							<span className={ styles.hinted } {...tooltips.useTooltip('Active', 'hint')}>A</span>
 						</th>
 						<th className={ `${ styles['center-align'] } ${ styles.bdr }` }>
-							<span className={ styles.hinted } {...useTooltip('Limit', 'hint')}>L</span>
+							<span className={ styles.hinted } {...tooltips.useTooltip('Limit', 'hint')}>L</span>
 						</th>
 
 						<th>Sent/s</th>
@@ -166,7 +166,7 @@ export default class Upstream extends UpstreamsList {
 									{ this.getCheckbox(peer) }
 
 									<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.address }` }>
-										<div className={ styles['address-container'] } {...useTooltip(<PeerTooltip peer={peer} />)}>
+										<div className={ styles['address-container'] } {...tooltips.useTooltip(<PeerTooltip peer={peer} />)}>
 											{ peer.backup ? <span>b&nbsp;</span> : null }{ peer.server }
 										</div>
 
@@ -176,11 +176,11 @@ export default class Upstream extends UpstreamsList {
 											: null
 										}
 									</td>
-									<td className={ styles['left-align'] }>{ formatUptime(peer.downtime, true) }</td>
+									<td className={ styles['left-align'] }>{ utils.formatUptime(peer.downtime, true) }</td>
 									<td className={ `${ styles['center-align'] } ${ styles.bdr }` }>{ peer.weight }</td>
 
 									<td>
-										<span className={ styles.hinted } {...useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
+										<span className={ styles.hinted } {...tooltips.useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
 											{ peer.requests }
 										</span>
 									</td>
@@ -216,10 +216,10 @@ export default class Upstream extends UpstreamsList {
 										{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }
 									</td>
 
-									<td className={ styles.px60 }>{ formatReadableBytes(peer.server_sent_s) }</td>
-									<td className={ styles.px60 }>{ formatReadableBytes(peer.server_rcvd_s) }</td>
-									<td>{ formatReadableBytes(peer.sent) }</td>
-									<td>{ formatReadableBytes(peer.received) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(peer.server_sent_s) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(peer.server_rcvd_s) }</td>
+									<td>{ utils.formatReadableBytes(peer.sent) }</td>
+									<td>{ utils.formatReadableBytes(peer.received) }</td>
 									<td>{ peer.fails }</td>
 									<td className={ styles.bdr }>{ peer.unavail }</td>
 
@@ -231,8 +231,8 @@ export default class Upstream extends UpstreamsList {
 										{ peer.health_status === null ? '–' : peer.health_status ? 'passed' : 'failed' }
 									</td>
 
-									<td>{ formatMs(peer.header_time) }</td>
-									<td>{ formatMs(peer.response_time) }</td>
+									<td>{ utils.formatMs(peer.header_time) }</td>
+									<td>{ utils.formatMs(peer.response_time) }</td>
 								</tr>
 							))
 					}

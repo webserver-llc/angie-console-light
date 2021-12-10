@@ -13,7 +13,7 @@ import Chart, {
 	TimeWindows,
 	TimeWindowDefault
 } from '../index.jsx';
-import * as utils from '../utils.js';
+import utils from '../utils.js';
 import appsettings from '../../../appsettings';
 import { limitConnReqHistoryLimit } from '../../../calculators/utils.js';
 import styles from '../style.css';
@@ -37,24 +37,26 @@ describe('<Chart />', () => {
 	};
 
 	it('constructor()', () => {
+		stub(appsettings, 'getSetting').callsFake(() => timeWindow);
+
+		const drawCursorLineSpy = spy(Chart.prototype.drawCursorLine, 'bind');
+		const onMouseMoveSpy = spy(Chart.prototype.onMouseMove, 'bind');
+		const onMouseLeaveSpy = spy(Chart.prototype.onMouseLeave, 'bind');
+		const onMouseDownSpy = spy(Chart.prototype.onMouseDown, 'bind');
+		const onMouseUpSpy = spy(Chart.prototype.onMouseUp, 'bind');
+		const highlightMetricSpy = spy(Chart.prototype.highlightMetric, 'bind');
+		const onSettingsChangeSpy = spy(Chart.prototype.onSettingsChange, 'bind');
+		const redrawStub = stub(Chart.prototype, 'redraw').callsFake(function(){
+			this.ticks = [];
+			this.toRender = {};
+		});
+		const redrawSpy = spy(Chart.prototype.redraw, 'bind');
+
 		let timeWindow = null;
-		const wrapper = shallow(
+		let wrapper = shallow(
 			<Chart { ...props } />
 		);
 		const instance = wrapper.instance();
-		const drawCursorLineSpy = spy(instance.drawCursorLine, 'bind');
-		const onMouseMoveSpy = spy(instance.onMouseMove, 'bind');
-		const onMouseLeaveSpy = spy(instance.onMouseLeave, 'bind');
-		const onMouseDownSpy = spy(instance.onMouseDown, 'bind');
-		const onMouseUpSpy = spy(instance.onMouseUp, 'bind');
-		const highlightMetricSpy = spy(instance.highlightMetric, 'bind');
-		const onSettingsChangeSpy = spy(instance.onSettingsChange, 'bind');
-		const redrawStub = stub(instance, 'redraw').callsFake(() => {});
-		const redrawSpy = spy(instance.redraw, 'bind');
-
-		stub(appsettings, 'getSetting').callsFake(() => timeWindow);
-
-		instance.constructor(props);
 
 		expect(appsettings.getSetting.calledOnce, 'getSetting called once').to.be.true;
 		expect(appsettings.getSetting.args[0][0], 'getSetting 1st arg').to.be.equal('timeWindow');
@@ -75,21 +77,21 @@ describe('<Chart />', () => {
 		expect(instance.dndMoveX, 'this.dndMoveX').to.be.equal(0);
 		expect(instance.pointsIndicies, 'this.pointsIndicies').to.be.equal('0,0');
 		expect(drawCursorLineSpy.calledOnce, 'drawCursorLine binded').to.be.true;
-		expect(drawCursorLineSpy.args[0][0], 'drawCursorLine binded to instance').to.be.deep.equal(instance);
+		expect(drawCursorLineSpy.args[0][0] instanceof Chart, 'drawCursorLine binded to instance').to.be.true;
 		expect(onMouseMoveSpy.calledOnce, 'onMouseMove binded').to.be.true;
-		expect(onMouseMoveSpy.args[0][0], 'onMouseMove binded to instance').to.be.deep.equal(instance);
+		expect(onMouseMoveSpy.args[0][0] instanceof Chart, 'onMouseMove binded to instance').to.be.true;
 		expect(onMouseLeaveSpy.calledOnce, 'onMouseLeave binded').to.be.true;
-		expect(onMouseLeaveSpy.args[0][0], 'onMouseLeave binded to instance').to.be.deep.equal(instance);
+		expect(onMouseLeaveSpy.args[0][0] instanceof Chart, 'onMouseLeave binded to instance').to.be.true;
 		expect(onMouseDownSpy.calledOnce, 'onMouseDown binded').to.be.true;
-		expect(onMouseDownSpy.args[0][0], 'onMouseDown binded to instance').to.be.deep.equal(instance);
+		expect(onMouseDownSpy.args[0][0] instanceof Chart, 'onMouseDown binded to instance').to.be.true;
 		expect(onMouseUpSpy.calledOnce, 'onMouseUp binded').to.be.true;
-		expect(onMouseUpSpy.args[0][0], 'onMouseUp binded to instance').to.be.deep.equal(instance);
+		expect(onMouseUpSpy.args[0][0] instanceof Chart, 'onMouseUp binded to instance').to.be.true;
 		expect(redrawSpy.calledOnce, 'redraw binded').to.be.true;
-		expect(redrawSpy.args[0][0], 'redraw binded to instance').to.be.deep.equal(instance);
+		expect(redrawSpy.args[0][0] instanceof Chart, 'redraw binded to instance').to.be.true;
 		expect(highlightMetricSpy.calledOnce, 'highlightMetric binded').to.be.true;
-		expect(highlightMetricSpy.args[0][0], 'highlightMetric binded to instance').to.be.deep.equal(instance);
+		expect(highlightMetricSpy.args[0][0] instanceof Chart, 'highlightMetric binded to instance').to.be.true;
 		expect(onSettingsChangeSpy.calledOnce, 'onSettingsChange binded').to.be.true;
-		expect(onSettingsChangeSpy.args[0][0], 'onSettingsChange binded to instance').to.be.deep.equal(instance);
+		expect(onSettingsChangeSpy.args[0][0] instanceof Chart, 'onSettingsChange binded to instance').to.be.true;
 		expect(redrawStub.calledOnce, 'redraw called once').to.be.true;
 
 		drawCursorLineSpy.restore();
@@ -103,19 +105,22 @@ describe('<Chart />', () => {
 		redrawStub.restore();
 
 		timeWindow = '0m';
-		instance.constructor(props);
+		wrapper = shallow(
+			<Chart { ...props } />
+		);
 
 		expect(wrapper.state('selectedTimeWindow'), 'selectedTimeWindow state when timeWindow is unknown')
 			.to.be.equal(TimeWindowDefault);
 
 		timeWindow = '1m';
-		instance.constructor(props);
+		wrapper = shallow(
+			<Chart { ...props } />
+		);
 
 		expect(wrapper.state('selectedTimeWindow'), 'selectedTimeWindow state with timeWindow set')
 			.to.be.equal(timeWindow);
 
 		appsettings.getSetting.restore();
-		wrapper.unmount();
 	});
 
 	it('componentDidMount()', () => {
@@ -155,7 +160,6 @@ describe('<Chart />', () => {
 		expect(appsettings.unsubscribe.args[0][0], 'appsettings.unsubscribe 1st arg').to.be.equal(subscribeResult);
 
 		appsettings.unsubscribe.restore();
-		wrapper.unmount();
 	});
 
 	it('componentWillReceiveProps()', () => {
@@ -219,7 +223,6 @@ describe('<Chart />', () => {
 
 		appsettings.getSetting.restore();
 		instance.redraw.restore();
-		wrapper.unmount();
 	});
 
 	it('shouldComponentUpdate()', () => {
@@ -243,8 +246,6 @@ describe('<Chart />', () => {
 			instance.shouldComponentUpdate(null, { dndPointsIndicies: '0,100' }),
 			'dndIsInProgress = true, dndPointsIndicies not changed'
 		).to.be.false;
-
-		wrapper.unmount();
 	});
 
 	it('onSettingsChange()', () => {
@@ -265,7 +266,6 @@ describe('<Chart />', () => {
 		});
 
 		instance.redraw.restore();
-		wrapper.unmount();
 	});
 
 	it('onMouseLeave()', () => {
@@ -298,7 +298,6 @@ describe('<Chart />', () => {
 
 		stateSpy.restore();
 		clearTimeoutSpy.restore();
-		wrapper.unmount();
 	});
 
 	it('drawCursorLine()', () => {
@@ -323,7 +322,6 @@ describe('<Chart />', () => {
 		expect(stateSpy.notCalled, 'this.setState not called').to.be.true;
 
 		stateSpy.restore();
-		wrapper.unmount();
 	});
 
 	it('onMouseDown()', () => {
@@ -356,7 +354,6 @@ describe('<Chart />', () => {
 		});
 
 		instance.redraw.restore();
-		wrapper.unmount();
 	});
 
 	it('onMouseUp()', () => {
@@ -395,7 +392,6 @@ describe('<Chart />', () => {
 		});
 
 		instance.redraw.restore();
-		wrapper.unmount();
 	});
 
 	it('onMouseMove()', () => {
@@ -513,7 +509,6 @@ describe('<Chart />', () => {
 		window.setTimeout.restore();
 		instance.redraw.restore();
 		instance.drawCursorLine.restore();
-		wrapper.unmount();
 	});
 
 	it('emulateDnd()', () => {
@@ -565,7 +560,6 @@ describe('<Chart />', () => {
 			.to.be.deep.equal({ dndPointsIndicies: null });
 
 		instance.redraw.restore();
-		wrapper.unmount();
 	});
 
 	it('deferredHighlightMetric()', () => {
@@ -592,7 +586,6 @@ describe('<Chart />', () => {
 		expect(window.setTimeout.calledOnce, 'setTimeout not called').to.be.true;
 
 		window.setTimeout.restore();
-		wrapper.unmount();
 	});
 
 	it('highlightMetric()', () => {
@@ -620,7 +613,6 @@ describe('<Chart />', () => {
 		});
 
 		instance.redraw.restore();
-		wrapper.unmount();
 	});
 
 	it('toggleMetric()', () => {
@@ -649,7 +641,6 @@ describe('<Chart />', () => {
 		});
 
 		instance.redraw.restore();
-		wrapper.unmount();
 	});
 
 	describe('redraw()', () => {
@@ -716,7 +707,6 @@ describe('<Chart />', () => {
 
 			stateSpy.restore();
 			selectTWBindSpy.restore();
-			wrapper.unmount();
 		});
 
 		it('firstPointIndex < 0', () => {
@@ -735,8 +725,6 @@ describe('<Chart />', () => {
 			instance.redraw();
 
 			expect(instance.pointsIndicies, 'this.pointsIndicies').to.be.equal('-1,0');
-
-			wrapper.unmount();
 		});
 
 		it('firstPointIndex = 0, dndPointsIndicies = null', () => {
@@ -1144,7 +1132,6 @@ describe('<Chart />', () => {
 			toggleMetricBindSpy.restore();
 			deferredHighlightMetricBindSpy.restore();
 			utils.getYMax.restore();
-			wrapper.unmount();
 		});
 
 		it('firstPointIndex > 0', () => {
@@ -1205,7 +1192,6 @@ describe('<Chart />', () => {
 			});
 
 			appsettings.getSetting.restore();
-			wrapper.unmount();
 		});
 
 		it('with disabled metric', () => {
@@ -1299,7 +1285,6 @@ describe('<Chart />', () => {
 
 			deferredHighlightMetricBindSpy.restore();
 			getYMaxSpy.restore();
-			wrapper.unmount();
 		});
 
 		it('dndControls', () => {
@@ -1415,7 +1400,6 @@ describe('<Chart />', () => {
 			expect(emulateDndBindSpy.args[3][2], '[many points] emulateDnd.bind call 4, arg 3').to.be.true;
 
 			emulateDndBindSpy.restore();
-			wrapper.unmount();
 		});
 
 		it('handle the passed state', () => {
@@ -1519,7 +1503,6 @@ describe('<Chart />', () => {
 			expect(instance.points, 'this.points length').to.have.lengthOf(2);
 
 			setStateSpy.restore();
-			wrapper.unmount();
 		});
 
 		it('handle the passed props', () => {
@@ -1566,8 +1549,6 @@ describe('<Chart />', () => {
 			instance.redraw({}, nextProps);
 
 			expect(instance.toRender.legend[0].children[1], 'legend title').to.be.equal('passed');
-
-			wrapper.unmount();
 		});
 	});
 
@@ -1593,7 +1574,6 @@ describe('<Chart />', () => {
 		expect(appsettings.setSetting.args[0][1], 'setSetting 2nd arg').to.be.equal('test');
 
 		appsettings.setSetting.restore();
-		wrapper.unmount();
 	});
 
 	describe('render()', () => {
@@ -1691,8 +1671,6 @@ describe('<Chart />', () => {
 			expect(svg.childAt(9).text(), 'this.toRender.areas').to.be.equal('toRender_areas__test');
 			expect(container.find(`div.${ styles['legend'] }`).text(), 'this.toRender.legend')
 				.to.be.equal('legend__test');
-
-			wrapper.unmount();
 		});
 
 		it('mouseOffsetX, dndIsInProgress, dndAllowed', () => {
@@ -1784,8 +1762,6 @@ describe('<Chart />', () => {
 				wrapper.find(`.${ styles['mouse-tracker'] }`).prop('onMouseUp').name,
 				'mouse-tracker onMouseUp'
 			).to.be.equal('bound onMouseUp');
-
-			wrapper.unmount();
 		});
 	});
 });

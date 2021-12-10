@@ -12,21 +12,22 @@ import styles from '../styles.css';
 
 describe('<IndexBox />', () => {
 	it('render()', () => {
-		const props = {
-			className: 'test_class'
-		};
+		const props = {};
 		const wrapper = shallow(
 			<IndexBox { ...props } />
 		);
 
-		expect(wrapper.hasClass(styles['box'], 'className')).to.be.true;
-		expect(wrapper.hasClass('test_class'), 'className from props').to.be.true;
+		expect(wrapper.first().prop('className'), 'root className').to.be.equal(styles['box']);
 
 		expect(wrapper.children(), '[no title, no children] children length').to.have.lengthOf(0);
 
+		props.className = 'test_class';
 		props.title = 'Test title';
 		props.href = '#test';
 		wrapper.setProps(props);
+
+		expect(wrapper.hasClass(styles['box'], '[with className prop] root className')).to.be.true;
+		expect(wrapper.hasClass('test_class'), '[with className prop] root className from props').to.be.true;
 
 		expect(wrapper.children(), '[no title, no children] children length').to.have.lengthOf(1);
 		expect(wrapper.childAt(0).type(), '[with title] title tag').to.be.equal('a');

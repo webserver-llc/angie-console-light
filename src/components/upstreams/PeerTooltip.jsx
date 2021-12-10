@@ -8,8 +8,7 @@
 
 import React from 'react';
 import styles from './tooltip.css';
-
-import { formatUptime, formatDate } from '../../utils.js';
+import utils from '../../utils.js';
 
 export default function PeerTooltip({ peer }){
 	let state = null;
@@ -41,11 +40,11 @@ export default function PeerTooltip({ peer }){
 			peer.backup ? <div className={ styles.row }>Type: backup</div> : null
 		}
 
-		<div className={ styles.row }>Total downtime: {formatUptime(peer.downtime)}</div>
+		<div className={ styles.row }>Total downtime: {utils.formatUptime(peer.downtime)}</div>
 		<div className={ styles.row }>Last check: {lastCheck}</div>
 
 		{
-			peer.isHttp && peer.downstart ? <div className={ styles.row }>Down since: {formatDate(peer.downstart)} </div> : null
+			peer.isHttp && peer.downstart ? <div className={ styles.row }>Down since: {utils.formatDate(peer.downstart)} </div> : null
 		}
 	</div>);
 };

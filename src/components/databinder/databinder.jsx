@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { subscribe, unsubscribe, get } from '../../datastore';
+import datastore from '../../datastore';
 import { STORE } from '../../datastore/store.js';
 
 export default (ComponentToWrap, apis = [], params = { ignoreEmpty: false }) => {
@@ -17,21 +17,21 @@ export default (ComponentToWrap, apis = [], params = { ignoreEmpty: false }) => 
 		}
 
 		componentWillMount() {
-			subscribe.apply(null, [
+			datastore.subscribe.apply(null, [
 				...(apis.length ? [apis] : []),
 				this.forceUpdate
 			]);
 		}
 
 		componentWillUnmount() {
-			unsubscribe(apis);
+			datastore.unsubscribe(apis);
 		}
 
 		render() {
 			let data = null;
 
 			if (params.ignoreEmpty === false && apis.length) {
-				data = get(apis);
+				data = datastore.get(apis);
 				// TODO: Rethink
 				if (Object.values(data).every(d => d === null)) {
 					return null;

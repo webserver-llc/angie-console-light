@@ -7,10 +7,10 @@
  */
 
 import React from 'react';
-import { formatReadableBytes } from '../../../utils';
+import utils from '../../../utils';
 import SortableTable from '../../table/sortabletable.jsx';
 import TableSortControl from '../../table/tablesortcontrol.jsx';
-import { useTooltip } from '../../../tooltips/index.jsx';
+import tooltips from '../../../tooltips/index.jsx';
 import styles from '../../table/style.css';
 
 export default class StreamZones extends SortableTable {
@@ -87,7 +87,10 @@ export default class StreamZones extends SortableTable {
 									<td className={`${ styles.flash }${zone['4xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
 										<span
 											className={ styles.hinted }
-											{ ... useTooltip(<div>4xx: { zone.responses['4xx'] } <br /> 499/444/408: { zone.discarded }</div>, 'hint') }
+											{ ...tooltips.useTooltip(
+												<div>4xx: { zone.responses['4xx'] } <br /> 499/444/408: { zone.discarded }</div>,
+												'hint'
+											) }
 										>
 											{ zone.responses['4xx'] + zone.discarded }
 										</span>
@@ -96,10 +99,10 @@ export default class StreamZones extends SortableTable {
 										{ zone.responses['5xx'] }
 									</td>
 									<td className={ styles.bdr }>{ zone.responses.total }</td>
-									<td className={ styles.px60 }>{ formatReadableBytes(zone.sent_s) }</td>
-									<td className={ styles.px60 }>{ formatReadableBytes(zone.rcvd_s) }</td>
-									<td className={ styles.px60 }>{ formatReadableBytes(zone.sent) }</td>
-									<td className={ styles.px60 }>{ formatReadableBytes(zone.received) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent_s) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.rcvd_s) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.received) }</td>
 								</tr>);
 							})
 						}

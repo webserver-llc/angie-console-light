@@ -9,7 +9,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { stub } from 'sinon';
 import ConnectionsTooltip from '../ConnectionsTooltip.jsx';
-import * as utils from '../../../utils.js';
+import utils from '../../../utils.js';
 
 describe('<ConnectionsTooltip />', () => {
 	it('peer.selected = false', () => {
@@ -21,8 +21,6 @@ describe('<ConnectionsTooltip />', () => {
 
 		expect(wrapper.children(), 'children length').to.have.lengthOf(1);
 		expect(wrapper.childAt(0).text(), 'content').to.be.equal('Last: unknown');
-
-		wrapper.unmount();
 	});
 
 	it('peer.selected = true', () => {
@@ -53,6 +51,5 @@ describe('<ConnectionsTooltip />', () => {
 		utils.formatUptime.restore();
 		Date.prototype.getTime.restore();
 		Date.parse.restore();
-		wrapper.unmount();
 	});
 });

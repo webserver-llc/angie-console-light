@@ -5,7 +5,7 @@
  *
  */
 
-import { limitConnReqFactory } from './factories.js';
+import factories from './factories.js';
 
 export function buildCalculator(){
 	const httpLimitConn = {
@@ -13,7 +13,7 @@ export function buildCalculator(){
 		prevUpdatingPeriod: null
 	};
 
-	return limitConnReqFactory(httpLimitConn);
+	return factories.limitConnReqFactory(httpLimitConn);
 };
 
 export default buildCalculator();

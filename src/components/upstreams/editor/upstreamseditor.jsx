@@ -281,7 +281,7 @@ export default class UpstreamsEditor extends React.Component {
 		const { upstream, peers, isStream } = this.props;
 
 		let title = '';
-		let isAdd = !peers;
+		let isAdd = !peers || peers.size === 0;
 
 		let peersArray;
 
@@ -294,7 +294,7 @@ export default class UpstreamsEditor extends React.Component {
 
 		let content = null;
 
-		const { data } = this.state;
+		const { data = {} } = this.state;
 
 		if (this.state.loading) {
 			content = <div className={ styles.content }>

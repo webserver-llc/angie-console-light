@@ -13,7 +13,7 @@ import DataBinder from '../../../databinder/databinder.jsx';
 import api from '../../../../api';
 import calculateServerZones from '../../../../calculators/serverzones.js';
 import calculateLocationZones from '../../../../calculators/locationzones.js';
-import { formatReadableBytes } from '../../../../utils.js';
+import utils from '../../../../utils.js';
 
 export class ServerZones extends React.Component {
 	render() {
@@ -34,8 +34,8 @@ export class ServerZones extends React.Component {
 			trafficBlock = (
 				<div>
 					<h4>Traffic</h4>
-					<p>In: { stats.traffic.in ? `${formatReadableBytes(stats.traffic.in)}/s` : 0 }</p>
-					<p>Out: { stats.traffic.out ? `${formatReadableBytes(stats.traffic.out)}/s` : 0 }</p>
+					<p>In: { stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/s` : 0 }</p>
+					<p>Out: { stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/s` : 0 }</p>
 				</div>
 			);
 

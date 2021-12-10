@@ -13,37 +13,31 @@ import styles from '../style.css';
 
 describe('<UpdatingControl />', () => {
 	it('constructor()', () => {
+		const toggleBindSpy = spy(UpdatingControl.prototype.toggle, 'bind');
+		const playBindSpy = spy(UpdatingControl.prototype.play, 'bind');
+		const pauseBindSpy = spy(UpdatingControl.prototype.pause, 'bind');
+		const updateBindSpy = spy(UpdatingControl.prototype.update, 'bind');
 		const wrapper = shallow(
 			<UpdatingControl />
 		);
-		const instance = wrapper.instance();
 
 		expect(wrapper.state(), 'this.state').to.be.deep.equal({
 			expanded: false,
 			state: true
 		});
-
-		const toggleBindSpy = spy(instance.toggle, 'bind');
-		const playBindSpy = spy(instance.play, 'bind');
-		const pauseBindSpy = spy(instance.pause, 'bind');
-		const updateBindSpy = spy(instance.update, 'bind');
-
-		instance.constructor();
-
 		expect(toggleBindSpy.calledOnce, 'this.toggle.bind called').to.be.true;
-		expect(toggleBindSpy.args[0][0], 'this.toggle.bind call arg').to.be.deep.equal(instance);
+		expect(toggleBindSpy.args[0][0] instanceof UpdatingControl, 'this.toggle.bind call arg').to.be.true;
 		expect(playBindSpy.calledOnce, 'this.play.bind called').to.be.true;
-		expect(playBindSpy.args[0][0], 'this.play.bind call arg').to.be.deep.equal(instance);
+		expect(playBindSpy.args[0][0] instanceof UpdatingControl, 'this.play.bind call arg').to.be.true;
 		expect(pauseBindSpy.calledOnce, 'this.pause.bind called').to.be.true;
-		expect(pauseBindSpy.args[0][0], 'this.pause.bind call arg').to.be.deep.equal(instance);
+		expect(pauseBindSpy.args[0][0] instanceof UpdatingControl, 'this.pause.bind call arg').to.be.true;
 		expect(updateBindSpy.calledOnce, 'this.update.bind called').to.be.true;
-		expect(updateBindSpy.args[0][0], 'this.update.bind call arg').to.be.deep.equal(instance);
+		expect(updateBindSpy.args[0][0] instanceof UpdatingControl, 'this.update.bind call arg').to.be.true;
 
-		toggleBindSpy.restore();
-		playBindSpy.restore();
-		pauseBindSpy.restore();
 		updateBindSpy.restore();
-		wrapper.unmount();
+		pauseBindSpy.restore();
+		playBindSpy.restore();
+		toggleBindSpy.restore();
 	});
 
 	it('toggle()', () => {
@@ -69,7 +63,6 @@ describe('<UpdatingControl />', () => {
 		});
 
 		setStateSpy.restore();
-		wrapper.unmount();
 	});
 
 	it('play()', () => {
@@ -91,7 +84,6 @@ describe('<UpdatingControl />', () => {
 		});
 
 		setStateSpy.restore();
-		wrapper.unmount();
 	});
 
 	it('pause()', () => {
@@ -113,7 +105,6 @@ describe('<UpdatingControl />', () => {
 		});
 
 		setStateSpy.restore();
-		wrapper.unmount();
 	});
 
 	it('update()', () => {
@@ -136,7 +127,6 @@ describe('<UpdatingControl />', () => {
 		});
 
 		setStateSpy.restore();
-		wrapper.unmount();
 	});
 
 	it('render()', () => {
@@ -206,7 +196,5 @@ describe('<UpdatingControl />', () => {
 			wrapper.childAt(1).prop('onClick').name,
 			'play onClick name'
 		).to.be.equal('bound play');
-
-		wrapper.unmount();
 	});
 });

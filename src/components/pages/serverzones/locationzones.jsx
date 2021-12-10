@@ -7,10 +7,10 @@
  */
 
 import React from 'react';
-import { formatReadableBytes } from '../../../utils';
+import utils from '../../../utils';
 import SortableTable from '../../table/sortabletable.jsx';
 import TableSortControl from '../../table/tablesortcontrol.jsx';
-import { useTooltip } from '../../../tooltips/index.jsx';
+import tooltips from '../../../tooltips/index.jsx';
 import styles from '../../table/style.css';
 
 export default class Locations extends SortableTable {
@@ -81,7 +81,10 @@ export default class Locations extends SortableTable {
 									<td className={ `${ styles.flash }${ location['4xxChanged'] ? (' ' + styles['red-flash']) : '' }` }>
 										<span
 											className={ styles.hinted }
-											{ ... useTooltip(<div>4xx: { location.responses['4xx'] } <br /> 499/444/408: { location.discarded }</div>, 'hint') }
+											{ ...tooltips.useTooltip(
+												<div>4xx: { location.responses['4xx'] } <br /> 499/444/408: { location.discarded }</div>,
+												'hint'
+											) }
 										>
 											{ location.responses['4xx'] + location.discarded }
 										</span>
@@ -90,10 +93,10 @@ export default class Locations extends SortableTable {
 										{ location.responses['5xx'] }
 									</td>
 									<td className={ styles.bdr }>{ location.responses.total }</td>
-									<td className={ styles.px60 }>{ formatReadableBytes(location.sent_s) }</td>
-									<td className={ styles.px60 }>{ formatReadableBytes(location.rcvd_s) }</td>
-									<td className={ styles.px60 }>{ formatReadableBytes(location.sent) }</td>
-									<td className={ styles.px60 }>{ formatReadableBytes(location.received) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(location.sent_s) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(location.rcvd_s) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(location.sent) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(location.received) }</td>
 								</tr>);
 							})
 						}

@@ -17,3 +17,7 @@ export const getYMax = (parsedData, metrics, disabledMetrics) =>
 
 		return newMax > max ? newMax : max;
 	}, 0);
+
+export default {
+    getYMax,
+};

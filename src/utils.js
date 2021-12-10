@@ -88,3 +88,10 @@ export const formatDate = (timestamp) => {
 
 	return datetime.toISOString().slice(0, 10) + ' ' + time[0] + ' ' + time[1];
 };
+
+export default {
+	formatUptime,
+	formatReadableBytes,
+	formatMs,
+	formatDate,
+};

@@ -11,8 +11,8 @@ import { spy, stub } from 'sinon';
 import UpstreamsList, { FILTER_OPTIONS } from '../upstreamslist.jsx';
 import SortableTable from '../../table/sortabletable.jsx';
 import appsettings from '../../../appsettings';
-import * as api from '../../../api';
-import * as tooltips from '../../../tooltips/index.jsx';
+import { apiUtils } from '../../../api';
+import tooltips from '../../../tooltips/index.jsx';
 import styles from '../style.css';
 import tableStyles from '../../table/style.css';
 
@@ -28,23 +28,19 @@ describe('<UpstreamsList />', () => {
 	});
 
 	it('constructor()', () => {
+		stub(appsettings, 'getSetting').callsFake(() => 'get_settings_result');
+		UpstreamsList.prototype.FILTERING_SETTINGS_KEY = 'FILTERING_SETTINGS_KEY';
+		const toggleEditModeSpy = spy(UpstreamsList.prototype.toggleEditMode, 'bind');
+		const changeFilterRuleSpy = spy(UpstreamsList.prototype.changeFilterRule, 'bind');
+		const addUpstreamSpy = spy(UpstreamsList.prototype.addUpstream, 'bind');
+		const editSelectedUpstreamSpy = spy(UpstreamsList.prototype.editSelectedUpstream, 'bind');
+		const showEditorSpy = spy(UpstreamsList.prototype.showEditor, 'bind');
+		const closeEditorSpy = spy(UpstreamsList.prototype.closeEditor, 'bind');
+		const selectAllPeersSpy = spy(UpstreamsList.prototype.selectAllPeers, 'bind');
+		const selectPeerSpy = spy(UpstreamsList.prototype.selectPeer, 'bind');
 		const wrapper = shallow(
 			<UpstreamsList { ...props } />
 		);
-		const instance = wrapper.instance();
-		const toggleEditModeSpy = spy(instance.toggleEditMode, 'bind');
-		const changeFilterRuleSpy = spy(instance.changeFilterRule, 'bind');
-		const addUpstreamSpy = spy(instance.addUpstream, 'bind');
-		const editSelectedUpstreamSpy = spy(instance.editSelectedUpstream, 'bind');
-		const showEditorSpy = spy(instance.showEditor, 'bind');
-		const closeEditorSpy = spy(instance.closeEditor, 'bind');
-		const selectAllPeersSpy = spy(instance.selectAllPeers, 'bind');
-		const selectPeerSpy = spy(instance.selectPeer, 'bind');
-
-		stub(appsettings, 'getSetting').callsFake(() => 'get_settings_result');
-
-		instance.FILTERING_SETTINGS_KEY = 'FILTERING_SETTINGS_KEY';
-		instance.constructor();
 
 		expect(wrapper.state('editMode'), 'state editMode').to.be.false;
 		expect(wrapper.state('editor'), 'state editor').to.be.false;
@@ -58,25 +54,33 @@ describe('<UpstreamsList />', () => {
 			'getSetting call args'
 		).to.be.true;
 
-		expect(toggleEditModeSpy.calledOnce, 'this.toggleColumns.bind called once').to.be.true;
-		expect(toggleEditModeSpy.args[0][0], 'this.toggleColumns.bind arg').to.be.deep.equal(instance);
+		expect(toggleEditModeSpy.calledOnce, 'this.toggleEditMode.bind called once').to.be.true;
+		expect(toggleEditModeSpy.args[0][0] instanceof UpstreamsList, 'this.toggleEditMode.bind arg').to.be.true;
 		expect(changeFilterRuleSpy.calledOnce, 'this.changeFilterRule.bind called once').to.be.true;
-		expect(changeFilterRuleSpy.args[0][0], 'this.changeFilterRule.bind arg').to.be.deep.equal(instance);
+		expect(changeFilterRuleSpy.args[0][0] instanceof UpstreamsList, 'this.changeFilterRule.bind arg').to.be.true;
 		expect(addUpstreamSpy.calledOnce, 'this.addUpstream.bind called once').to.be.true;
-		expect(addUpstreamSpy.args[0][0], 'this.addUpstream.bind arg').to.be.deep.equal(instance);
+		expect(addUpstreamSpy.args[0][0] instanceof UpstreamsList, 'this.addUpstream.bind arg').to.be.true;
 		expect(editSelectedUpstreamSpy.calledOnce, 'this.editSelectedUpstream.bind called once').to.be.true;
-		expect(editSelectedUpstreamSpy.args[0][0], 'this.editSelectedUpstream.bind arg').to.be.deep.equal(instance);
+		expect(editSelectedUpstreamSpy.args[0][0] instanceof UpstreamsList, 'this.editSelectedUpstream.bind arg').to.be.true;
 		expect(showEditorSpy.calledOnce, 'this.showEditor.bind called once').to.be.true;
-		expect(showEditorSpy.args[0][0], 'this.showEditor.bind arg').to.be.deep.equal(instance);
+		expect(showEditorSpy.args[0][0] instanceof UpstreamsList, 'this.showEditor.bind arg').to.be.true;
 		expect(closeEditorSpy.calledOnce, 'this.closeEditor.bind called once').to.be.true;
-		expect(closeEditorSpy.args[0][0], 'this.closeEditor.bind arg').to.be.deep.equal(instance);
+		expect(closeEditorSpy.args[0][0] instanceof UpstreamsList, 'this.closeEditor.bind arg').to.be.true;
 		expect(selectAllPeersSpy.calledOnce, 'this.selectAllPeers.bind called once').to.be.true;
-		expect(selectAllPeersSpy.args[0][0], 'this.selectAllPeers.bind arg').to.be.deep.equal(instance);
+		expect(selectAllPeersSpy.args[0][0] instanceof UpstreamsList, 'this.selectAllPeers.bind arg').to.be.true;
 		expect(selectPeerSpy.calledOnce, 'this.selectPeer.bind called once').to.be.true;
-		expect(selectPeerSpy.args[0][0], 'this.selectPeer.bind arg').to.be.deep.equal(instance);
+		expect(selectPeerSpy.args[0][0] instanceof UpstreamsList, 'this.selectPeer.bind arg').to.be.true;
 
+		toggleEditModeSpy.restore();
+		changeFilterRuleSpy.restore();
+		addUpstreamSpy.restore();
+		editSelectedUpstreamSpy.restore();
+		showEditorSpy.restore();
+		closeEditorSpy.restore();
+		selectAllPeersSpy.restore();
+		selectPeerSpy.restore();
+		UpstreamsList.prototype.FILTERING_SETTINGS_KEY = undefined;
 		appsettings.getSetting.restore();
-		wrapper.unmount();
 	});
 
 	it('toggleEditMode()', () => {
@@ -106,16 +110,16 @@ describe('<UpstreamsList />', () => {
 		let isWritableResult = null;
 		let thenSpy = spy();
 
-		stub(api, 'isWritable').callsFake(() => isWritableResult);
-		stub(api, 'checkWritePermissions').callsFake(() => ({
+		stub(apiUtils, 'isWritable').callsFake(() => isWritableResult);
+		stub(apiUtils, 'checkWritePermissions').callsFake(() => ({
 			then: thenSpy
 		}));
 
 		instance.toggleEditMode();
 
-		expect(api.isWritable.calledOnce, 'isWritable called').to.be.true;
-		expect(api.checkWritePermissions.calledOnce, 'checkWritePermissions called').to.be.true;
-		expect(api.checkWritePermissions.args[0][0], 'checkWritePermissions arg').to.be.true;
+		expect(apiUtils.isWritable.calledOnce, 'isWritable called').to.be.true;
+		expect(apiUtils.checkWritePermissions.calledOnce, 'checkWritePermissions called').to.be.true;
+		expect(apiUtils.checkWritePermissions.args[0][0], 'checkWritePermissions arg').to.be.true;
 		expect(thenSpy.calledOnce, 'checkWritePermissions.then called').to.be.true;
 		expect(thenSpy.args[0][0], 'checkWritePermissions.then callback').to.be.a('function');
 
@@ -160,7 +164,7 @@ describe('<UpstreamsList />', () => {
 
 		stateSpy.restore();
 		window.alert.restore();
-		api.isWritable.restore();
+		apiUtils.isWritable.restore();
 		wrapper.unmount();
 	});
 
@@ -583,7 +587,7 @@ describe('<UpstreamsList />', () => {
 		const instance = wrapper.instance();
 		let isWritableResult = false;
 
-		stub(api, 'isWritable').callsFake(() => isWritableResult);
+		stub(apiUtils, 'isWritable').callsFake(() => isWritableResult);
 		stub(Array.prototype, 'sort').callsFake(() => 'test_sort_result');
 		stub(instance, 'filterPeers').callsFake(peers => peers);
 		stub(tooltips, 'useTooltip').callsFake(() => ({
@@ -606,7 +610,7 @@ describe('<UpstreamsList />', () => {
 			'[state.sortOrder = asc] peers.sort not called'
 		).to.be.true;
 		expect(
-			api.isWritable.calledTwice,
+			apiUtils.isWritable.calledTwice,
 			'[isWritable returns false] isWritable called twice'
 		).to.be.true;
 		expect(wrapper.prop('className'), 'wrapper className').to.be.equal(styles['upstreams-list']);
@@ -692,7 +696,7 @@ describe('<UpstreamsList />', () => {
 			'useTooltip call arg props'
 		).to.be.deep.equal(props.upstream);
 
-		api.isWritable.resetHistory();
+		apiUtils.isWritable.resetHistory();
 		isWritableResult = null;
 		wrapper.setState({
 			sortOrder: 'desc',
@@ -724,7 +728,7 @@ describe('<UpstreamsList />', () => {
 			'peers.sort call arg, check 4'
 		).to.be.equal(-1);
 		expect(
-			api.isWritable.calledTwice,
+			apiUtils.isWritable.calledTwice,
 			'[isWritable returns null] isWritable called twice'
 		).to.be.true;
 		expect(wrapper.childAt(0).name(), 'upstreams editor').to.be.equal('UpstreamsEditor');
@@ -765,7 +769,7 @@ describe('<UpstreamsList />', () => {
 			['test_1', props.upstream.peers[0]]
 		]);
 
-		api.isWritable.resetHistory();
+		apiUtils.isWritable.resetHistory();
 		isWritableResult = true;
 		wrapper.setState({
 			editor: 'edit',
@@ -774,7 +778,7 @@ describe('<UpstreamsList />', () => {
 		});
 
 		expect(
-			api.isWritable.calledOnce,
+			apiUtils.isWritable.calledOnce,
 			'[isWritable returns true] isWritable called once'
 		).to.be.true;
 		expect(

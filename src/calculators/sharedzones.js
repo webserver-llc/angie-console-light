@@ -6,7 +6,7 @@
  *
  */
 
-import { createMapFromObject } from './utils.js';
+import utils from './utils.js';
 
 export function handleZones(zone){
 	zone.pages.total = zone.pages.used + zone.pages.free;
@@ -23,6 +23,6 @@ export default (sharedZones, previous, { __STATUSES }) => {
 
 	__STATUSES.shared_zones.ready = true;
 
-	return createMapFromObject(sharedZones, handleZones);
+	return utils.createMapFromObject(sharedZones, handleZones);
 };
 

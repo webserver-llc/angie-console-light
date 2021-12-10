@@ -17,21 +17,17 @@ describe('<NumberControl />', () => {
 	};
 
 	it('constructor()', () => {
+		const incSpy = spy(NumberControl.prototype.inc, 'bind');
+		const decSpy = spy(NumberControl.prototype.dec, 'bind');
 		const wrapper = shallow(<NumberControl { ...props } />);
-		const instance = wrapper.instance();
-		const incSpy = spy(instance.inc, 'bind');
-		const decSpy = spy(instance.dec, 'bind');
-
-		instance.constructor();
 
 		expect(incSpy.calledOnce, 'this.inc.bind called').to.be.true;
-		expect(incSpy.calledWith(instance), 'this.inc.bind call arg').to.be.true;
+		expect(incSpy.args[0][0] instanceof NumberControl, 'this.inc.bind call arg').to.be.true;
 		expect(decSpy.calledOnce, 'this.dec.bind called').to.be.true;
-		expect(decSpy.calledWith(instance), 'this.dec.bind call arg').to.be.true;
+		expect(decSpy.args[0][0] instanceof NumberControl, 'this.dec.bind call arg').to.be.true;
 
-		incSpy.restore();
 		decSpy.restore();
-		wrapper.unmount();
+		incSpy.restore();
 	});
 
 	it('inc()', () => {
@@ -48,8 +44,6 @@ describe('<NumberControl />', () => {
 
 		expect(onChangeSpy.calledOnce, 'props.onChange called').to.be.true;
 		expect(onChangeSpy.calledWith(21000), 'props.onChange call arg').to.be.true;
-
-		wrapper.unmount();
 	});
 
 	it('dec()', () => {
@@ -66,8 +60,6 @@ describe('<NumberControl />', () => {
 
 		expect(onChangeSpy.calledOnce, 'props.onChange called').to.be.true;
 		expect(onChangeSpy.calledWith(19000), 'props.onChange call arg').to.be.true;
-
-		wrapper.unmount();
 	});
 
 	it('render()', () => {
@@ -110,7 +102,5 @@ describe('<NumberControl />', () => {
 			wrapper.childAt(2).prop('onClick').name,
 			'inc control onClick name'
 		).to.be.equal('bound inc');
-
-		wrapper.unmount();
 	});
 });
