@@ -7,13 +7,13 @@
 
 import factories from './factories.js';
 
-export function buildCalculator(){
+export function buildCalculator() {
 	const httpLimitReq = {
 		history: {},
 		prevUpdatingPeriod: null
 	};
 
 	return factories.limitConnReqFactory(httpLimitReq);
-};
+}
 
 export default buildCalculator();

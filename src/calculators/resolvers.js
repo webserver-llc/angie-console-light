@@ -10,7 +10,7 @@ import appsettings from '../appsettings';
 import { DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT } from '../constants.js';
 import utils from './utils.js';
 
-export function handleResolver(STATS, previousState, resolver, name){
+export function handleResolver(STATS, previousState, resolver, name) {
 	const { requests, responses } = resolver;
 	const totalReqs = Object.keys(requests).reduce((memo, key) => {
 		if (typeof requests[key] === 'number') {
@@ -19,7 +19,7 @@ export function handleResolver(STATS, previousState, resolver, name){
 
 		return memo;
 	}, 0);
-	let previousResolver = previousState && previousState.get(name);
+	const previousResolver = previousState && previousState.get(name);
 
 	if (previousResolver) {
 		const period = Date.now() - previousState.lastUpdate;
@@ -69,7 +69,7 @@ export function handleResolver(STATS, previousState, resolver, name){
 	}
 
 	return resolver;
-};
+}
 
 export default (resolvers, previousState, { __STATUSES }) => {
 	if (resolvers === null || Object.keys(resolvers).length === 0) {

@@ -52,19 +52,15 @@ export const startObserve = function loop(force = false) {
 		const timeStart = Date.now();
 
 		Promise.all(
-			Array.from(OBSERVED).map(([path, instance]) => {
-				return instance.api.get().then(data => data, err => err).then((data) => {
-					if (data && data.error) {
-						data = null;
-					}
-
-					return {
-						data,
+			Array.from(OBSERVED).map(([, instance]) =>
+				instance.api.get()
+					.then(data => data, err => err)
+					.then((data) => ({
+						data: data && data.error ? null : data,
 						api: instance.api,
 						timeStart
-					};
-				});
-			})
+					}))
+			)
 		).then((data) => {
 			data.forEach(({ api, data, timeStart }) => {
 				store.handleDataUpdate(api, data, timeStart);
@@ -124,8 +120,7 @@ export const subscribe = (apis, callback) => {
 	immediate = window.setImmediate(startObserve);
 };
 
-export const get = store.get;
-export const STORE = store.STORE;
+export const { get, STORE } = store;
 
 export default {
 	availableApiEndpoints,

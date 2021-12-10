@@ -12,6 +12,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default;
 const InlineChunkHtmlPlugin = require("react-dev-utils/InlineChunkHtmlPlugin");
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const package = require('./package.json');
 const ENV = process.env.NODE_ENV || 'development';
@@ -36,7 +37,9 @@ const plugins = [
         'process.env.NODE_ENV': JSON.stringify(ENV),
         __ENV__: JSON.stringify(DASHBOARD_TYPE),
         __APP_VERSION__: JSON.stringify(package.version),
-    })
+    }),
+
+    new ESLintPlugin(),
 ];
 
 if (PRODUCTION_BUILD) {

@@ -8,11 +8,11 @@
 
 import utils from './utils.js';
 
-export function handleZones(STATS, previousState, location, locationName){
+export function handleZones(STATS, previousState, location, locationName) {
 	const previousLocation = previousState && previousState.get(locationName);
 
 	if (previousLocation) {
-		let period = Date.now() - previousState.lastUpdate;
+		const period = Date.now() - previousState.lastUpdate;
 
 		location.sent_s = utils.calculateSpeed(previousLocation.sent, location.sent, period);
 		location.rcvd_s = utils.calculateSpeed(previousLocation.received, location.received, period);
@@ -34,7 +34,7 @@ export function handleZones(STATS, previousState, location, locationName){
 	}
 
 	return location;
-};
+}
 
 export default (locations, previousState, { __STATUSES }) => {
 	if (locations === null || Object.keys(locations).length === 0) {

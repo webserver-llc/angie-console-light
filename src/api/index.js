@@ -35,22 +35,23 @@ export const streamUpstreamsApi = new UpstreamsApi('stream');
 
 let apiWritePermissions = null;
 
-export const checkWritePermissions = (sendCredentials = false) => api.http.upstreams.DASHBOARD_INIT.servers.__TEST_FOR_WRITE__.del({
-	credentials: sendCredentials ? 'same-origin' : 'omit'
-}).then(
-	({ error }) => error.status,
-	({ status }) => status
-).then((status) => {
-	if (status === 405 || status === 403) {
-		apiWritePermissions = false;
-	} else if (status === 401) {
-		apiWritePermissions = null;
-	} else {
-		apiWritePermissions = true;
-	}
+export const checkWritePermissions = (sendCredentials = false) =>
+	api.http.upstreams.DASHBOARD_INIT.servers.__TEST_FOR_WRITE__.del({
+		credentials: sendCredentials ? 'same-origin' : 'omit'
+	}).then(
+		({ error }) => error.status,
+		({ status }) => status
+	).then((status) => {
+		if (status === 405 || status === 403) {
+			apiWritePermissions = false;
+		} else if (status === 401) {
+			apiWritePermissions = null;
+		} else {
+			apiWritePermissions = true;
+		}
 
-	return apiWritePermissions;
-});
+		return apiWritePermissions;
+	});
 
 export const isWritable = () => apiWritePermissions;
 
@@ -102,14 +103,14 @@ export const initialLoad = ({
 							availableApiEndpoints.fillFirstLevel(data);
 						}
 					})
-					.catch(err => {});
+					.catch(() => {});
 			}
 		})
 		.then(() =>
 			Promise.all(
 				availableApiEndpoints.getSecondLevel().map(apiKey =>
-					availableApiEndpoints.firstLevelIncludes(apiKey) ?
-						window.fetch(`${API_PATH}/${apiKey}/`).then(
+					availableApiEndpoints.firstLevelIncludes(apiKey)
+						? window.fetch(`${API_PATH}/${apiKey}/`).then(
 							response => {
 								if (response.status <= 299) {
 									return response.json()
@@ -118,18 +119,18 @@ export const initialLoad = ({
 												availableApiEndpoints.fillThirdLevel(apiKey, data);
 											}
 										})
-										.catch(err => {});
+										.catch(() => {});
 								}
 							}
 						)
-					: Promise.resolve()
+						: Promise.resolve()
 				)
 			)
 				.then(() =>
 					new Promise((resolve) => {
 						let called = false;
 
-						subscribe(apis, (...args) => {
+						subscribe(apis, () => {
 							// FIXME: This callback should be called just once for this bulk of apis
 
 							if (called) {

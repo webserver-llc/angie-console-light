@@ -7,13 +7,13 @@
 
 import utils from './factories.js';
 
-export function buildCalculator(){
+export function buildCalculator() {
 	const streamLimitConn = {
 		history: {},
 		prevUpdatingPeriod: null
 	};
 
 	return utils.limitConnReqFactory(streamLimitConn);
-};
+}
 
 export default buildCalculator();

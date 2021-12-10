@@ -3,12 +3,14 @@
 	"env": {
 		"browser": true
 	},
+	"ignorePatterns": ["**/__test__/"],
 	"rules": {
 		"no-tabs": 0,
-		"comma-dangle": ["error", "never"],
+		"comma-dangle": 0,
 		"indent": [
 			"error",
-			"tab"
+			"tab",
+			{ "SwitchCase": 1 }
 		],
 		"react/prop-types": 0,
 		"react/no-deprecated": 0,
@@ -16,8 +18,11 @@
 		"react/jsx-indent-props": 0,
 		"import/extensions": 0,
 		"import/no-unresolved": 0,
-		"eqeqeq": "off",
 		"import/no-extraneous-dependencies": 0,
+		"import/no-cycle": 0,
+		"import/no-named-as-default-member": 0,
+		"import/no-mutable-exports": 0,
+		"eqeqeq": "off",
 		"no-mixed-operators": 0,
 		"jsx-a11y/no-static-element-interactions": 0,
 		"jsx-a11y/label-has-for": 0,
@@ -29,7 +34,23 @@
 		"no-nested-ternary": 0,
 		"no-throw-literal": 0,
 		"no-shadow": 0,
-		"max-len": [1, 120]
+		"max-len": [1, 120],
+		"no-constructor-return": 0,
+		"arrow-parens": 0,
+		"consistent-return": 0,
+		"operator-linebreak": 0,
+		"implicit-arrow-linebreak": 0,
+		"no-confusing-arrow": 0,
+		"function-paren-newline": 0,
+		"template-curly-spacing": 0,
+		"camelcase": 0,
+		"space-before-blocks": 0,
+		"object-curly-newline": 0,
+		"no-restricted-globals": 0,
+		"array-bracket-spacing": 0,
+		"no-extra-boolean-cast": 0,
+		"global-require": 0,
+		"no-empty": ["error", { "allowEmptyCatch": true }]
 	},
 	"globals": {
 		"assert": true

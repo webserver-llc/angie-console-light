@@ -8,7 +8,7 @@
 
 import utils from './utils.js';
 
-export function handleZones(STATS, previousState, zone, zoneName){
+export function handleZones(STATS, previousState, zone, zoneName) {
 	const previousZone = previousState && previousState.get(zoneName);
 
 	if (previousZone) {
@@ -36,7 +36,7 @@ export function handleZones(STATS, previousState, zone, zoneName){
 	}
 
 	return zone;
-};
+}
 
 export default (zones, previousState, { __STATUSES }) => {
 	if (zones === null || Object.keys(zones).length === 0) {

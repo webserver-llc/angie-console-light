@@ -10,7 +10,7 @@ import appsettings from '../appsettings';
 import { DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT } from '../constants.js';
 import utils from './utils.js';
 
-export function handleZones(STATS, zone){
+export function handleZones(STATS, zone) {
 	let isAlert = false;
 	let isWarning = false;
 
@@ -43,7 +43,7 @@ export function handleZones(STATS, zone){
 	}
 
 	return zone;
-};
+}
 
 export default (zone_sync, previousState, { __STATUSES }) => {
 	if (zone_sync === null || Object.keys(zone_sync).length === 0) {

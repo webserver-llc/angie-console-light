@@ -9,7 +9,7 @@
 import utils from './utils.js';
 import { upstreamsCalculatorFactory } from './factories.js';
 
-export function handleZones(STATS, previous, zone, name){
+export function handleZones(STATS, previous, zone, name) {
 	const previousZone = previous ? previous.get(name) : null;
 
 	if (previousZone) {
@@ -34,7 +34,7 @@ export function handleZones(STATS, previous, zone, name){
 	STATS.conn_current += zone.processing;
 
 	return zone;
-};
+}
 
 export const zones = (zones, previous, { __STATUSES }) => {
 	if (zones === null || Object.keys(zones).length === 0) {

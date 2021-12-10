@@ -22,21 +22,25 @@ export const formatUptime = (ms, short = false) => {
 	const minutes = Math.floor(((sec % 86400) % 3600) / 60);
 
 	if (days) {
-		result += days + 'd ';
+		result += `${ days }d `;
 	}
 
 	if (days || hours) {
-		result += hours + 'h ';
+		result += `${ hours }h `;
 	}
 
 	if ((days || hours || minutes) && !(short && days > 0)) {
-		result += minutes + 'm';
+		result += `${ minutes }m`;
 	}
 
 	return result;
 };
 
-export const formatReadableBytes = (bytes, maxMeasurementUnit, units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB' }) => {
+export const formatReadableBytes = (
+	bytes,
+	maxMeasurementUnit,
+	units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB' }
+) => {
 	if (isNaN(parseFloat(bytes)) || !isFinite(bytes) || bytes === 0) return '0';
 
 	let maxUnit;
@@ -67,7 +71,7 @@ export const formatReadableBytes = (bytes, maxMeasurementUnit, units = { 0: 'B',
 		measure = maxUnit;
 	}
 
-	let floor = Math.floor(bytes / 1024 ** measure).toString().length;
+	const floor = Math.floor(bytes / 1024 ** measure).toString().length;
 
 	if (floor > 3) {
 		precision = 0;
@@ -86,7 +90,7 @@ export const formatDate = (timestamp) => {
 	const datetime = new Date(timestamp);
 	const time = datetime.toTimeString().split(' ');
 
-	return datetime.toISOString().slice(0, 10) + ' ' + time[0] + ' ' + time[1];
+	return `${ datetime.toISOString().slice(0, 10) } ${ time[0] } ${ time[1] }`;
 };
 
 export default {

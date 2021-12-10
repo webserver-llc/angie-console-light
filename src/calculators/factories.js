@@ -9,7 +9,7 @@
 import utils from './utils.js';
 import appsettings from '../appsettings';
 
-export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer){
+export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer) {
 	let previousPeer = null;
 
 	if (previousState) {
@@ -79,9 +79,9 @@ export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer){
 		STATS.status = 'danger';
 		STATS.alerts++;
 	}
-};
+}
 
-export function handleUpstreams(upstreamsKey, STATS, previousState, slabs, upstream, name){
+export function handleUpstreams(upstreamsKey, STATS, previousState, slabs, upstream, name) {
 	upstream.name = name;
 
 	utils.pickZoneSize(upstream, slabs, upstream.zone);
@@ -101,9 +101,9 @@ export function handleUpstreams(upstreamsKey, STATS, previousState, slabs, upstr
 	);
 
 	return upstream;
-};
+}
 
-export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { slabs, __STATUSES }){
+export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { slabs, __STATUSES }) {
 	if (upstreams === null || Object.keys(upstreams).length === 0) {
 		__STATUSES[upstreamsKey].ready = false;
 		return null;
@@ -124,7 +124,10 @@ export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { sl
 		status: 'ok'
 	};
 
-	upstreams = utils.createMapFromObject(upstreams, handleUpstreams.bind(null, upstreamsKey, STATS, previousState, slabs));
+	upstreams = utils.createMapFromObject(
+		upstreams,
+		handleUpstreams.bind(null, upstreamsKey, STATS, previousState, slabs)
+	);
 
 	STATS.total = upstreams.size;
 
@@ -134,16 +137,16 @@ export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { sl
 	__STATUSES[upstreamsKey].status = STATS.status;
 
 	return upstreams;
-};
+}
 
 export const upstreamsCalculatorFactory = upstreamsKey => upstreamsCalculator.bind(null, upstreamsKey);
 
-export function handleZone(memo, historyLimit, ts, zone, zoneName){
+export function handleZone(memo, historyLimit, ts, zone, zoneName) {
 	if (!memo.history[zoneName]) {
 		memo.history[zoneName] = [];
 	}
 
-	let history = memo.history[zoneName];
+	const history = memo.history[zoneName];
 	const lastItem = history[history.length - 1];
 	const needSort = lastItem && lastItem._ts > ts;
 
@@ -190,7 +193,7 @@ export function handleZone(memo, historyLimit, ts, zone, zoneName){
 			}, [])
 		}
 	};
-};
+}
 
 export const limitConnReqHistoryLimit = 1800;
 
@@ -211,7 +214,7 @@ export function limitConnReqCalculator(memo, data, previousState, _, timeStart) 
 		data,
 		handleZone.bind(null, memo, limitConnReqHistoryLimit, timeStart / 1000)
 	);
-};
+}
 
 export const limitConnReqFactory = memo => limitConnReqCalculator.bind(null, memo);
 

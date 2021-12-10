@@ -19,5 +19,5 @@ export const getYMax = (parsedData, metrics, disabledMetrics) =>
 	}, 0);
 
 export default {
-    getYMax,
+	getYMax,
 };
