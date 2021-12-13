@@ -42,14 +42,14 @@ In the project folder check `coverage` directory – `index.html` includes every
 ### 3rd party modules:
 * [@babel/core](https://www.npmjs.com/package/@babel/core) – 7.16.0
 * [@babel/plugin-proposal-object-rest-spread](https://www.npmjs.com/package/@babel/plugin-proposal-object-rest-spread) – 7.16.0
-* [@babel/plugin-transform-runtime]() – 7.16.4
-* [@babel/preset-env]() – 7.16.4
-* [@babel/preset-react]() – 7.16.0
+* [@babel/plugin-transform-runtime](https://www.npmjs.com/package/@babel/plugin-transform-runtime) – 7.16.4
+* [@babel/preset-env](https://www.npmjs.com/package/@babel/preset-env) – 7.16.4
+* [@babel/preset-react](https://www.npmjs.com/package/@babel/preset-react) – 7.16.0
 * [autoprefixer](https://www.npmjs.com/package/autoprefixer) – 10.4.0
 * [babel-loader](https://github.com/babel/babel-loader) – 8.2.3
 * [babel-plugin-istanbul](https://github.com/istanbuljs/babel-plugin-istanbul) – 6.1.1
 * [chai](https://www.npmjs.com/package/chai) – 4.3.4
-* [core-js]() – 3.19.3
+* [core-js](https://www.npmjs.com/package/core-js) – 3.19.3
 * [css-loader](https://www.npmjs.com/package/css-loader) – 6.5.1
 * [cssnano](https://www.npmjs.com/package/cssnano) – 5.1.18
 * [enzyme](https://www.npmjs.com/package/enzyme) – 3.11.0
@@ -59,9 +59,9 @@ In the project folder check `coverage` directory – `index.html` includes every
 * [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) – 2.25.3
 * [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y) – 6.5.1
 * [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react) – 7.27.1
-* [eslint-webpack-plugin]() – 3.1.1
+* [eslint-webpack-plugin](https://www.npmjs.com/package/eslint-webpack-plugin) – 3.1.1
 * [history](https://www.npmjs.com/package/history) – 4.10.1
-* [html-inline-css-webpack-plugin]() – 1.11.1
+* [html-inline-css-webpack-plugin](https://www.npmjs.com/package/html-inline-css-webpack-plugin) – 1.11.1
 * [html-webpack-plugin](https://www.npmjs.com/package/html-webpack-plugin) – 5.5.0
 * [karma](https://github.com/karma-runner/karma) – 6.3.9
 * [karma-chrome-launcher](https://www.npmjs.com/package/karma-chrome-launcher) – 3.1.0
@@ -75,7 +75,7 @@ In the project folder check `coverage` directory – `index.html` includes every
 * [mocha](https://www.npmjs.com/package/mocha) – 8.4.0
 * [npm-font-open-sans](https://github.com/dasrick/npm-font-open-sans) – 1.1.0
 * [nyc](https://www.npmjs.com/package/nyc) – 15.1.0
-* [postcss]() – 8.4.4
+* [postcss](https://www.npmjs.com/package/postcss) – 8.4.4
 * [postcss-loader](https://www.npmjs.com/package/postcss-loader) – 6.2.1
 * [postcss-url](https://github.com/postcss/postcss-url/) – 10.1.3
 * [preact](https://www.npmjs.com/package/preact) – 8.5.3
@@ -85,8 +85,8 @@ In the project folder check `coverage` directory – `index.html` includes every
 * [preact-render-to-string](https://www.npmjs.com/package/preact-render-to-string) – 4.1.0
 * [preact-render-to-string](https://www.npmjs.com/package/preact-render-to-string) – 3.8.2 *(this appears with old "Preact" lib and will be removed with its update)*
 * [preact-test-utils](https://www.npmjs.com/package/preact-test-utils) – 0.1.4
-* [react-dev-utils]() – 12.0.0-next.58
-* [regenerator-runtime]() – 0.13.9
+* [react-dev-utils](https://www.npmjs.com/package/react-dev-utils) – 12.0.0-next.58
+* [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime) – 0.13.9
 * [sinon](https://www.npmjs.com/package/sinon) – 9.0.2
 * [sinon-chai](https://www.npmjs.com/package/sinon-chai) – 3.7.0
 * [style-loader](https://www.npmjs.com/package/style-loader) – 3.3.1
