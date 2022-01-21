@@ -26,8 +26,10 @@ describe('<Settings />', () => {
 
 	it('constructor()', () => {
 		const getSettingStub = stub(appsettings, 'getSetting').callsFake(a => `${ a }_test`);
+		const changeUpdatePeriodSpy = spy(Settings.prototype.changeUpdatePeriod, 'bind');
+		const changeCacheHitRatioIntevalSpy = spy(Settings.prototype.changeCacheHitRatioInteval, 'bind');
+		const saveSpy = spy(Settings.prototype.save, 'bind');
 		const wrapper = shallow(<Settings { ...props } />);
-		const instance = wrapper.instance();
 
 		expect(wrapper.state(), 'this.state').to.be.deep.equal({
 			updatingPeriod: 'updatingPeriod_test',
@@ -67,42 +69,35 @@ describe('<Settings />', () => {
 			'getSetting call 5 arg 2'
 		).to.be.equal(DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT);
 
-		const changeUpdatePeriodSpy = spy(instance.changeUpdatePeriod, 'bind');
-		const changeCacheHitRatioIntevalSpy = spy(instance.changeCacheHitRatioInteval, 'bind');
-		const saveSpy = spy(instance.save, 'bind');
-
-		instance.constructor();
-
 		expect(
 			changeUpdatePeriodSpy.calledOnce,
 			'this.changeUpdatePeriod.bind called'
 		).to.be.true;
 		expect(
-			changeUpdatePeriodSpy.args[0][0],
+			changeUpdatePeriodSpy.args[0][0] instanceof Settings,
 			'this.changeUpdatePeriod.bind call arg'
-		).to.be.deep.equal(instance);
+		).to.be.true;
 		expect(
 			changeCacheHitRatioIntevalSpy.calledOnce,
 			'this.changeCacheHitRatioInteval.bind called'
 		).to.be.true;
 		expect(
-			changeCacheHitRatioIntevalSpy.args[0][0],
+			changeCacheHitRatioIntevalSpy.args[0][0] instanceof Settings,
 			'this.changeCacheHitRatioInteval.bind call arg'
-		).to.be.deep.equal(instance);
+		).to.be.true;
 		expect(
 			saveSpy.calledOnce,
 			'this.save.bind called'
 		).to.be.true;
 		expect(
-			saveSpy.args[0][0],
+			saveSpy.args[0][0] instanceof Settings,
 			'this.save.bind call arg'
-		).to.be.deep.equal(instance);
+		).to.be.true;
 
-		getSettingStub.restore();
-		changeUpdatePeriodSpy.restore();
-		changeCacheHitRatioIntevalSpy.restore();
 		saveSpy.restore();
-		wrapper.unmount();
+		changeCacheHitRatioIntevalSpy.restore();
+		changeUpdatePeriodSpy.restore();
+		getSettingStub.restore();
 	});
 
 	it('save()', () => {

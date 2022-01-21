@@ -8,8 +8,8 @@ import React from 'react';
 import appsettings from '../../../appsettings';
 import TableSortControl from '../../table/tablesortcontrol.jsx';
 import UpstreamsList from '../../upstreams/upstreamslist.jsx';
-import { formatReadableBytes, formatUptime, formatMs } from '../../../utils.js';
-import { useTooltip } from '../../../tooltips/index.jsx';
+import utils from '../../../utils.js';
+import tooltips from '../../../tooltips/index.jsx';
 import PeerTooltip from '../../upstreams/PeerTooltip.jsx';
 import ConnectionsTooltip from '../../upstreams/ConnectionsTooltip.jsx';
 import styles from '../../table/style.css';
@@ -56,7 +56,7 @@ export default class Upstream extends UpstreamsList {
 
 	renderPeers(peers) {
 		return (
-			<table styleName={`table wide ${this.state.hoveredColumns ? 'hovered-expander' : ''}`}>
+			<table className={`${ styles.table } ${ styles.wide }${this.state.hoveredColumns ? (' ' + styles['hovered-expander']) : ''}`}>
 				<col width="10px" />
 				{this.state.editMode ? <col width="1%" /> : null}
 				<col width="210px" />
@@ -106,119 +106,133 @@ export default class Upstream extends UpstreamsList {
 						<th colSpan="4">Health monitors</th>
 						<th colSpan="2">Response time</th>
 					</tr>
-					<tr styleName="right-align sub-header">
-						<th styleName="left-align">Name</th>
-						<th styleName="left-align"><span styleName="hinted" {...useTooltip('Total downtime', 'hint')}>DT</span></th>
-						<th styleName="center-align bdr"><span styleName="hinted" {...useTooltip('Weight', 'hint')}>W</span></th>
+					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
+						<th className={ styles['left-align'] }>Name</th>
+						<th className={ styles['left-align'] }>
+							<span className={ styles.hinted } {...tooltips.useTooltip('Total downtime', 'hint')}>DT</span>
+						</th>
+						<th className={ `${ styles['center-align'] } ${ styles.bdr }` }>
+							<span className={ styles.hinted } {...tooltips.useTooltip('Weight', 'hint')}>W</span>
+						</th>
 
 						<th>Total</th>
-						<th styleName="bdr">Req/s</th>
+						<th className={ styles.bdr }>Req/s</th>
 
 						{
 							this.state.columnsExpanded ?
 								[
-									<th styleName="center-align" key="empty" />,
-									<th key="1xx" styleName="responses-column">1xx</th>,
-									<th key="2xx" styleName="responses-column">2xx</th>,
-									<th key="3xx" styleName="responses-column">3xx</th>
+									<th className={ styles['center-align'] } key="empty" />,
+									<th key="1xx" className={ styles['responses-column'] }>1xx</th>,
+									<th key="2xx" className={ styles['responses-column'] }>2xx</th>,
+									<th key="3xx" className={ styles['responses-column'] }>3xx</th>
 								]
-							: <th styleName="center-align">...</th>
+							: <th className={ styles['center-align'] }>...</th>
 						}
 
 						<th>4xx</th>
-						<th styleName="bdr">5xx</th>
+						<th className={ styles.bdr }>5xx</th>
 
-						<th styleName="center-align"><span styleName="hinted" {...useTooltip('Active', 'hint')}>A</span></th>
-						<th styleName="center-align bdr"><span styleName="hinted" {...useTooltip('Limit', 'hint')}>L</span></th>
+						<th className={ styles['center-align'] }>
+							<span className={ styles.hinted } {...tooltips.useTooltip('Active', 'hint')}>A</span>
+						</th>
+						<th className={ `${ styles['center-align'] } ${ styles.bdr }` }>
+							<span className={ styles.hinted } {...tooltips.useTooltip('Limit', 'hint')}>L</span>
+						</th>
 
 						<th>Sent/s</th>
 						<th>Rcvd/s</th>
 						<th >Sent</th>
-						<th styleName="bdr">Rcvd</th>
+						<th className={ styles.bdr }>Rcvd</th>
 						<th>Fails</th>
-						<th styleName="bdr">Unavail</th>
+						<th className={ styles.bdr }>Unavail</th>
 						<th>Checks</th>
 						<th>Fails</th>
 						<th>Unhealthy</th>
-						<th styleName="bdr left-align">Last</th>
+						<th className={ `${ styles.bdr } ${ styles['left-align'] }` }>Last</th>
 						<th>Headers</th>
 						<th>Response</th>
 					</tr>
 				</thead>
 
-				<tbody styleName="right-align">
+				<tbody className={ styles['right-align'] }>
 					{
 						peers.length === 0 ?
 							this.renderEmptyList()
 						:
 							peers.map((peer, i) => (
 								<tr>
-									<td styleName={peer.state} />
+									<td className={ styles[peer.state] } />
 
 									{ this.getCheckbox(peer) }
 
-									<td styleName="left-align bold address">
-										<div styleName="address-container" {...useTooltip(<PeerTooltip peer={peer} />)}>
+									<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.address }` }>
+										<div className={ styles['address-container'] } {...tooltips.useTooltip(<PeerTooltip peer={peer} />)}>
 											{ peer.backup ? <span>b&nbsp;</span> : null }{ peer.server }
 										</div>
 
 										{
 											this.state.editMode ?
-												<span styleName="edit-peer" onClick={() => this.editSelectedUpstream(peer)} />
+												<span className={ styles['edit-peer'] } onClick={() => this.editSelectedUpstream(peer)} />
 											: null
 										}
 									</td>
-									<td styleName="left-align">{ formatUptime(peer.downtime, true) }</td>
-									<td styleName="center-align bdr">{ peer.weight }</td>
+									<td className={ styles['left-align'] }>{ utils.formatUptime(peer.downtime, true) }</td>
+									<td className={ `${ styles['center-align'] } ${ styles.bdr }` }>{ peer.weight }</td>
 
 									<td>
-										<span styleName="hinted" {...useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
+										<span className={ styles.hinted } {...tooltips.useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
 											{ peer.requests }
 										</span>
 									</td>
 
-									<td styleName="bdr">{ peer.server_req_s }</td>
+									<td className={ styles.bdr }>{ peer.server_req_s }</td>
 
 									{
 										this.state.columnsExpanded ?
 											[
-												i === 0 ? <td styleName="collapse-columns"
+												i === 0 ? <td className={ styles['collapse-columns'] }
 													rowspan={peers.length}
 													onClick={this.toggleColumns}
 													onMouseEnter={() => this.hoverColumns(true)}
 													onMouseLeave={() => this.hoverColumns(false)}
 													key="toggle"
 												>◀</td> : null,
-												<td styleName="responses-column" key="1xx">{ peer.responses['1xx'] }</td>,
-												<td styleName="responses-column" key="2xx">{ peer.responses['2xx'] }</td>,
-												<td styleName="responses-column" key="3xx">{ peer.responses['3xx'] }</td>
+												<td className={ styles['responses-column'] } key="1xx">{ peer.responses['1xx'] }</td>,
+												<td className={ styles['responses-column'] } key="2xx">{ peer.responses['2xx'] }</td>,
+												<td className={ styles['responses-column'] } key="3xx">{ peer.responses['3xx'] }</td>
 											]
-											: i === 0 ? <td styleName="collapse-columns" rowspan={peers.length} onClick={this.toggleColumns}>▶</td> : null
+											: i === 0 ? <td className={ styles['collapse-columns'] } rowspan={peers.length} onClick={this.toggleColumns}>▶</td> : null
 									}
 
-									<td styleName={`flash ${peer['4xxChanged'] ? 'red-flash' : ''}`}>{ peer.responses['4xx'] }</td>
-									<td styleName={`bdr flash ${peer['5xxChanged'] ? 'red-flash' : ''}`}>{ peer.responses['5xx'] }</td>
+									<td className={`${ styles.flash }${peer['4xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
+										{ peer.responses['4xx'] }
+									</td>
+									<td className={`${ styles.bdr } ${ styles.flash }${peer['5xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
+										{ peer.responses['5xx'] }
+									</td>
 
-									<td styleName="center-align">{ peer.active }</td>
-									<td styleName="center-align bdr">{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }</td>
+									<td className={ styles['center-align'] }>{ peer.active }</td>
+									<td className={ `${ styles['center-align'] } ${ styles.bdr }` }>
+										{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }
+									</td>
 
-									<td styleName="px60">{ formatReadableBytes(peer.server_sent_s) }</td>
-									<td styleName="px60">{ formatReadableBytes(peer.server_rcvd_s) }</td>
-									<td>{ formatReadableBytes(peer.sent) }</td>
-									<td>{ formatReadableBytes(peer.received) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(peer.server_sent_s) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(peer.server_rcvd_s) }</td>
+									<td>{ utils.formatReadableBytes(peer.sent) }</td>
+									<td>{ utils.formatReadableBytes(peer.received) }</td>
 									<td>{ peer.fails }</td>
-									<td styleName="bdr">{ peer.unavail }</td>
+									<td className={ styles.bdr }>{ peer.unavail }</td>
 
 									<td>{ peer.health_checks.checks }</td>
 									<td>{ peer.health_checks.fails }</td>
 									<td>{ peer.health_checks.unhealthy }</td>
 
-									<td styleName={`left-align bdr flash ${peer.health_status === false ? 'red-flash' : ''}`}>
+									<td className={`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }${peer.health_status === false ? (' ' + styles['red-flash']) : ''}`}>
 										{ peer.health_status === null ? '–' : peer.health_status ? 'passed' : 'failed' }
 									</td>
 
-									<td>{ formatMs(peer.header_time) }</td>
-									<td>{ formatMs(peer.response_time) }</td>
+									<td>{ utils.formatMs(peer.header_time) }</td>
+									<td>{ utils.formatMs(peer.response_time) }</td>
 								</tr>
 							))
 					}

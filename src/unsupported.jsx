@@ -13,13 +13,13 @@ import headerStyles from './components/header/style.css';
 export default class Unsupported extends React.Component {
 	render() {
 		return (
-			<div styleName="styles.dashboard">
-				<div styleName="headerStyles.header">
-					<div styleName="headerStyles.logo"></div>
+			<div className={ styles.dashboard }>
+				<div className={ headerStyles.header }>
+					<div className={ headerStyles.logo }></div>
 				</div>
 
-				<div styleName="styles.content">
-					<div styleName="styles.error-block">
+				<div className={ styles.content }>
+					<div className={ styles['error-block'] }>
 						<p>Unfortunately your browser is not supported, please use modern one.</p>
 						<p>For&nbsp;more information please refer to&nbsp;the&nbsp;following <a href="https://www.nginx.com/resources/admin-guide/monitoring/">documentation.</a></p>
 					</div>

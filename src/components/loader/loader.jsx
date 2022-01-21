@@ -8,11 +8,15 @@
 import React from 'react';
 import styles from './style.css';
 
-export const defaultSN = 'loader';
-export const graySN = 'gray-loader';
+export const defaultSN = styles.loader;
+export const graySN = styles['gray-loader'];
 
 export default function Loader({ gray, className }){
+    let cn = className || '';
+
+    cn += `${ cn ? ' ' : '' }${ gray ? graySN : defaultSN }`;
+
 	return (
-		<div className={className} styleName={gray ? graySN : defaultSN} />
+		<div className={ cn } />
 	);
 };

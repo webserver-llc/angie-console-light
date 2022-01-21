@@ -62,9 +62,9 @@ export class LimitConnReqConstructor extends React.Component {
 				<div>
 					<h1>{ this.getTitle() }</h1>
 
-					<table styleName="table wide">
+					<table className={ `${ styles.table } ${ styles.wide }` }>
 						<thead>{ this.getHeadRow() }</thead>
-						<tbody styleName="right-align">
+						<tbody className={ styles['right-align'] }>
 							{ this.getBody() }
 						</tbody>
 					</table>

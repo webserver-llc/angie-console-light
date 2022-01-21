@@ -18,18 +18,15 @@ describe('<UpstreamsContainer />', () => {
 	};
 
 	it('constructor()', () => {
-		const wrapper = shallow(
+		const toggleFailedSpy = spy(UpstreamsContainer.prototype.toggleFailed, 'bind');
+		const toggleUpstreamsListSpy = spy(UpstreamsContainer.prototype.toggleUpstreamsList, 'bind');
+		const handleLastItemShowingSpy = spy(UpstreamsContainer.prototype.handleLastItemShowing, 'bind');
+		let initIntObsResult = false;
+		const initIntOsververStub = stub(UpstreamsContainer.prototype, 'initIntersectionObserver')
+			.callsFake(() => initIntObsResult);
+		let wrapper = shallow(
 			<UpstreamsContainer { ...props } />
 		);
-		const instance = wrapper.instance();
-		const toggleFailedSpy = spy(instance.toggleFailed, 'bind');
-		const toggleUpstreamsListSpy = spy(instance.toggleUpstreamsList, 'bind');
-		const handleLastItemShowingSpy = spy(instance.handleLastItemShowing, 'bind');
-		let initIntObsResult = false;
-
-		stub(instance, 'initIntersectionObserver').callsFake(() => initIntObsResult);
-
-		instance.constructor(props);
 
 		expect(wrapper.state(), 'this.state').to.deep.equal({
 			showOnlyFailed: false,
@@ -38,26 +35,27 @@ describe('<UpstreamsContainer />', () => {
 			howManyToShow: Infinity
 		});
 		expect(toggleFailedSpy.calledOnce, 'this.toggleFailed.bind called').to.be.true;
-		expect(toggleFailedSpy.args[0][0], 'this.toggleFailed.bind arg').to.be.deep.equal(instance);
+		expect(toggleFailedSpy.args[0][0] instanceof UpstreamsContainer, 'this.toggleFailed.bind arg').to.be.true;
 		expect(toggleUpstreamsListSpy.calledOnce, 'this.toggleUpstreamsList.bind called').to.be.true;
-		expect(toggleUpstreamsListSpy.args[0][0], 'this.toggleUpstreamsList.bind arg').to.be.deep.equal(instance);
+		expect(toggleUpstreamsListSpy.args[0][0] instanceof UpstreamsContainer, 'this.toggleUpstreamsList.bind arg').to.be.true;
 		expect(handleLastItemShowingSpy.calledOnce, 'this.handleLastItemShowing.bind called').to.be.true;
-		expect(handleLastItemShowingSpy.args[0][0], 'this.handleLastItemShowing.bind arg').to.be.deep.equal(instance);
-		expect(instance.initIntersectionObserver.calledOnce, 'this.initIntersectionObserver called').to.be.true;
+		expect(handleLastItemShowingSpy.args[0][0] instanceof UpstreamsContainer, 'this.handleLastItemShowing.bind arg').to.be.true;
+		expect(initIntOsververStub.calledOnce, 'this.initIntersectionObserver called').to.be.true;
 
 		initIntObsResult = true;
-		instance.constructor(props);
+		wrapper = shallow(
+			<UpstreamsContainer { ...props } />
+		);
 
 		expect(
 			wrapper.state('howManyToShow'),
 			'[this.initIntersectionObserver() = true] this.state.howManyToShow'
 		).to.be.equal(UPSTREAM_GROUP_LENGTH);
 
-		toggleFailedSpy.restore();
-		toggleUpstreamsListSpy.restore();
+		initIntOsververStub.restore();
 		handleLastItemShowingSpy.restore();
-		instance.initIntersectionObserver.restore();
-		wrapper.unmount();
+		toggleUpstreamsListSpy.restore();
+		toggleFailedSpy.restore();
 	});
 
 	it('toggleFailed()', () => {

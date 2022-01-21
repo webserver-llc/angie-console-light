@@ -51,7 +51,7 @@
 	width: 24px;
 	padding: 0;
 	margin: 0 15px 0 20px;
-	background-image: svg-load('pencil.svg');
+	background-image: url('/img/pencil.svg');
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 14px;

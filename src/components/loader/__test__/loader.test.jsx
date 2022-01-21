@@ -34,7 +34,7 @@ describe('<Loader />', () => {
 			<Loader gray={ false } />
 		);
 
-		expect(wrapper.hasClass(styles[defaultSN])).to.be.true;
+		expect(wrapper.hasClass(defaultSN)).to.be.true;
 
 		wrapper.unmount();
 	});
@@ -44,7 +44,7 @@ describe('<Loader />', () => {
 			<Loader gray={ true } />
 		);
 
-		expect(wrapper.hasClass(styles[graySN])).to.be.true;
+		expect(wrapper.hasClass(graySN)).to.be.true;
 
 		wrapper.unmount();
 	});

@@ -6,16 +6,10 @@
  *
  */
 
-import {
-	pickZoneSize,
-	calculateSpeed,
-	is4xxThresholdReached,
-	handleErrors,
-	createMapFromObject
-} from './utils.js';
+import utils from './utils.js';
 import appsettings from '../appsettings';
 
-export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer){
+export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer) {
 	let previousPeer = null;
 
 	if (previousState) {
@@ -28,13 +22,13 @@ export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer){
 				const period = Date.now() - previousState.lastUpdate;
 
 				if (upstreamsKey === 'upstreams') {
-					peer.server_req_s = calculateSpeed(previousPeer.requests, peer.requests, period);
+					peer.server_req_s = utils.calculateSpeed(previousPeer.requests, peer.requests, period);
 				} else if (upstreamsKey === 'tcp_upstreams') {
-					peer.server_conn_s = calculateSpeed(previousPeer.connections, peer.connections, period);
+					peer.server_conn_s = utils.calculateSpeed(previousPeer.connections, peer.connections, period);
 				}
 
-				peer.server_sent_s = calculateSpeed(previousPeer.sent, peer.sent, period);
-				peer.server_rcvd_s = calculateSpeed(previousPeer.received, peer.received, period);
+				peer.server_sent_s = utils.calculateSpeed(previousPeer.sent, peer.sent, period);
+				peer.server_rcvd_s = utils.calculateSpeed(previousPeer.received, peer.received, period);
 			}
 		}
 	}
@@ -73,24 +67,24 @@ export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer){
 	if (upstreamsKey === 'upstreams') {
 		peer.isHttp = true;
 
-		if (is4xxThresholdReached(peer)) {
+		if (utils.is4xxThresholdReached(peer)) {
 			STATS.status = 'warning';
 			STATS.warnings++;
 		}
 
-		handleErrors(previousPeer, peer);
+		utils.handleErrors(previousPeer, peer);
 	}
 
 	if (peer.health_status === false) {
 		STATS.status = 'danger';
 		STATS.alerts++;
 	}
-};
+}
 
-export function handleUpstreams(upstreamsKey, STATS, previousState, slabs, upstream, name){
+export function handleUpstreams(upstreamsKey, STATS, previousState, slabs, upstream, name) {
 	upstream.name = name;
 
-	pickZoneSize(upstream, slabs, upstream.zone);
+	utils.pickZoneSize(upstream, slabs, upstream.zone);
 
 	upstream.stats = {
 		all: 0,
@@ -107,9 +101,9 @@ export function handleUpstreams(upstreamsKey, STATS, previousState, slabs, upstr
 	);
 
 	return upstream;
-};
+}
 
-export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { slabs, __STATUSES }){
+export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { slabs, __STATUSES }) {
 	if (upstreams === null || Object.keys(upstreams).length === 0) {
 		__STATUSES[upstreamsKey].ready = false;
 		return null;
@@ -130,7 +124,10 @@ export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { sl
 		status: 'ok'
 	};
 
-	upstreams = createMapFromObject(upstreams, handleUpstreams.bind(null, upstreamsKey, STATS, previousState, slabs));
+	upstreams = utils.createMapFromObject(
+		upstreams,
+		handleUpstreams.bind(null, upstreamsKey, STATS, previousState, slabs)
+	);
 
 	STATS.total = upstreams.size;
 
@@ -140,16 +137,16 @@ export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { sl
 	__STATUSES[upstreamsKey].status = STATS.status;
 
 	return upstreams;
-};
+}
 
 export const upstreamsCalculatorFactory = upstreamsKey => upstreamsCalculator.bind(null, upstreamsKey);
 
-export function handleZone(memo, historyLimit, ts, zone, zoneName){
+export function handleZone(memo, historyLimit, ts, zone, zoneName) {
 	if (!memo.history[zoneName]) {
 		memo.history[zoneName] = [];
 	}
 
-	let history = memo.history[zoneName];
+	const history = memo.history[zoneName];
 	const lastItem = history[history.length - 1];
 	const needSort = lastItem && lastItem._ts > ts;
 
@@ -196,7 +193,7 @@ export function handleZone(memo, historyLimit, ts, zone, zoneName){
 			}, [])
 		}
 	};
-};
+}
 
 export const limitConnReqHistoryLimit = 1800;
 
@@ -213,10 +210,21 @@ export function limitConnReqCalculator(memo, data, previousState, _, timeStart) 
 		memo.history = {};
 	}
 
-	return createMapFromObject(
+	return utils.createMapFromObject(
 		data,
 		handleZone.bind(null, memo, limitConnReqHistoryLimit, timeStart / 1000)
 	);
-};
+}
 
 export const limitConnReqFactory = memo => limitConnReqCalculator.bind(null, memo);
+
+export default {
+	handlePeer,
+	handleUpstreams,
+	upstreamsCalculator,
+	upstreamsCalculatorFactory,
+	handleZone,
+	limitConnReqHistoryLimit,
+	limitConnReqCalculator,
+	limitConnReqFactory,
+};

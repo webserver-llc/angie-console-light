@@ -4,6 +4,7 @@
  * All rights reserved.
  *
  */
+/* global __APP_VERSION__ */
 
 export const VERSION = __APP_VERSION__; // __APP_VERSION__ from package.json
 export const DEFAULT_UPDATING_PERIOD = 1000;
@@ -17,4 +18,3 @@ export const DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT = 3;
 export const API_CURRENT_VERSION = 6;
 export const API_PREFIX = '/api';
 export const API_PATH = `${API_PREFIX}/${API_CURRENT_VERSION}`;
-

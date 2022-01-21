@@ -5,10 +5,10 @@
  *
  */
 
-import { calculateSpeed } from './utils.js';
+import utils from './utils.js';
 
 export default (requests, previous) => {
-	requests.reqs = calculateSpeed(
+	requests.reqs = utils.calculateSpeed(
 		previous ? previous.total : 0,
 		requests.total,
 		Date.now() - (previous ? previous.lastUpdate : 0)

@@ -9,8 +9,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { stub, spy } from 'sinon';
 import appsettings from '../../../../appsettings';
-import * as tooltips from '../../../../tooltips/index.jsx';
-import * as utils from '../../../../utils.js';
+import tooltips from '../../../../tooltips/index.jsx';
+import utils from '../../../../utils.js';
 import Upstream from '../upstream.jsx';
 import styles from '../../../table/style.css';
 
@@ -23,14 +23,11 @@ describe('<Upstream />', () => {
 	};
 
 	it('constructor()', () => {
-		const wrapper = shallow(<Upstream { ...props } />);
-		const instance = wrapper.instance();
-		const toggleColumnsBindSpy = spy(instance.toggleColumns, 'bind');
-		const hoverColumnsBindSpy = spy(instance.hoverColumns, 'bind');
-
 		stub(appsettings, 'getSetting').callsFake(() => 'get_settings_result');
 
-		instance.constructor(props);
+		const toggleColumnsBindSpy = spy(Upstream.prototype.toggleColumns, 'bind');
+		const hoverColumnsBindSpy = spy(Upstream.prototype.hoverColumns, 'bind');
+		const wrapper = shallow(<Upstream { ...props } />);
 
 		expect(wrapper.state('hoveredColumns'), 'state hoveredColumns').to.be.false;
 		expect(wrapper.state('columnsExpanded'), 'state columnsExpanded').to.be.equal('get_settings_result');
@@ -40,14 +37,13 @@ describe('<Upstream />', () => {
 			'getSetting call args'
 		).to.be.true;
 		expect(toggleColumnsBindSpy.calledOnce, 'this.toggleColumns.bind called once').to.be.true;
-		expect(toggleColumnsBindSpy.args[0][0], 'this.toggleColumns.bind arg').to.be.deep.equal(instance);
+		expect(toggleColumnsBindSpy.args[0][0] instanceof Upstream, 'this.toggleColumns.bind arg').to.be.true;
 		expect(hoverColumnsBindSpy.calledOnce, 'this.hoverColumns.bind called once').to.be.true;
-		expect(hoverColumnsBindSpy.args[0][0], 'this.hoverColumns.bind arg').to.be.deep.equal(instance);
+		expect(hoverColumnsBindSpy.args[0][0] instanceof Upstream, 'this.hoverColumns.bind arg').to.be.true;
 
-		toggleColumnsBindSpy.restore();
 		hoverColumnsBindSpy.restore();
+		toggleColumnsBindSpy.restore();
 		appsettings.getSetting.restore();
-		wrapper.unmount();
 	});
 
 	it('get SORTING_SETTINGS_KEY', () => {
@@ -58,8 +54,6 @@ describe('<Upstream />', () => {
 		);
 
 		expect(wrapper.instance().SORTING_SETTINGS_KEY).to.be.equal('sorting-http-upstreams-test');
-
-		wrapper.unmount();
 	});
 
 	it('get FILTERING_SETTINGS_KEY', () => {
@@ -70,8 +64,6 @@ describe('<Upstream />', () => {
 		);
 
 		expect(wrapper.instance().FILTERING_SETTINGS_KEY).to.be.equal('filtering-http-upstreams-test');
-
-		wrapper.unmount();
 	});
 
 	it('toggleColumns()', () => {
@@ -99,7 +91,6 @@ describe('<Upstream />', () => {
 
 		instance.setState.restore();
 		appsettings.setSetting.restore();
-		wrapper.unmount();
 	});
 
 	it('hoverColumns()', () => {
@@ -124,7 +115,6 @@ describe('<Upstream />', () => {
 		expect(setStateSpy.args[0][0], 'this.setState args').to.be.deep.equal({ hoveredColumns });
 
 		setStateSpy.restore();
-		wrapper.unmount();
 	});
 
 	it('renderPeers()', () => {
@@ -686,6 +676,5 @@ describe('<Upstream />', () => {
 		utils.formatMs.restore();
 		instance.editSelectedUpstream.restore();
 		instance.hoverColumns.restore();
-		wrapper.unmount();
 	});
 });

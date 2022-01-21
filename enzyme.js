@@ -5,4 +5,4 @@ import Adapter from 'enzyme-adapter-preact-pure';
 Enzyme.configure({ adapter: new Adapter() });
 
 // Re-export all enzyme exports
-module.exports = Enzyme;
+export default Enzyme;

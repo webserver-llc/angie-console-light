@@ -20,10 +20,15 @@ export default class Popup extends React.Component {
 	}
 
 	render() {
+		let popupCN = styles.popup;
+
+		if (this.props.className) {
+			popupCN += ` ${ this.props.className }`;
+		}
 		return (<Portal into="body">
-			<div styleName="fader">
-				<div styleName="modal">
-					<div styleName="popup" className={this.props.className}>
+			<div className={ styles.fader }>
+				<div className={ styles.modal }>
+					<div className={ popupCN }>
 						{ this.props.children }
 					</div>
 				</div>

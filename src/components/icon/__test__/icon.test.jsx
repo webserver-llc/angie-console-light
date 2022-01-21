@@ -15,7 +15,8 @@ describe('<Icon />', () => {
 	it('return', () => {
 		const className = 'test';
 		const type = 'sun';
-		const wrapper = shallow(
+		// With className prop
+		let wrapper = shallow(
 			<Icon
 				className={ className }
 				type={ type }
@@ -29,6 +30,18 @@ describe('<Icon />', () => {
 		assert(wrapper.hasClass(className), 'Should have a class from "className" property');
 		assert(wrapper.hasClass(styles[type]), 'Should have a class based on "type" property');
 
-		wrapper.unmount();
+		// Without className prop
+		wrapper = shallow(
+			<Icon type={ type } />
+		);
+
+		assert(wrapper.first().prop('className') === styles[type], 'className without "className" prop provided');
+
+		// Unknown icon type
+		wrapper = shallow(
+			<Icon type='there is no such an icon' />
+		);
+
+		assert(!wrapper.first().prop('className'), 'className when icon type does not exist');
 	});
 });

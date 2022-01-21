@@ -6,47 +6,47 @@
  *
  */
 
- export default class AvailableApiEndpoints {
-	constructor(){
+export default class AvailableApiEndpoints {
+	constructor() {
 		this.firstLevel = [];
 		this.secondLevel = {
 			http: [],
 			stream: []
-		}
+		};
 	}
 
-	getFirstLevel(){
+	getFirstLevel() {
 		return this.firstLevel;
 	}
 
-	getSecondLevel(){
+	getSecondLevel() {
 		return Object.keys(this.secondLevel);
 	}
 
-	getThirdLevel(secondLevelEndpoint){
+	getThirdLevel(secondLevelEndpoint) {
 		return this.secondLevel[secondLevelEndpoint];
 	}
 
-	firstLevelIncludes(path){
+	firstLevelIncludes(path) {
 		return this.firstLevel.includes(path);
 	}
 
-	fillThirdLevel(secondLevelEndpoint, endpoints){
+	fillThirdLevel(secondLevelEndpoint, endpoints) {
 		this.secondLevel[secondLevelEndpoint] = [ ...endpoints ];
 	}
 
-	secondLevelIncludes(endpoint){
+	secondLevelIncludes(endpoint) {
 		return endpoint in this.secondLevel;
 	}
 
-	thirdLevelIncludes(secondLevelEndpoint, endpoint){
+	thirdLevelIncludes(secondLevelEndpoint, endpoint) {
 		return (
 			secondLevelEndpoint in this.secondLevel &&
 			this.secondLevel[secondLevelEndpoint].includes(endpoint)
 		);
 	}
 
-	fillFirstLevel(endpoints){
+	fillFirstLevel(endpoints) {
 		this.firstLevel = [ ...endpoints ];
 	}
-};
+}

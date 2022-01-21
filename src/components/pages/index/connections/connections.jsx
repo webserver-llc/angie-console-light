@@ -29,11 +29,11 @@ export class Connections extends React.Component {
 
 	getCurrentCell(value){
 		return (
-			<td styleName="current">
+			<td className={ styles.current }>
 				{ value }
 				{
 					typeof value == 'number' ?
-						<span styleName="current__sec">/s</span>
+						<span className={ styles.current__sec }>/s</span>
 					: null
 				}
 			</td>
@@ -42,32 +42,32 @@ export class Connections extends React.Component {
 
 	render() {
 		const { props: { data: { connections, ssl } }, state: { tab } } = this;
-		let tabsStyleName = 'tabs';
+		let tabsStyleName = styles.tabs;
 		let isConnsTab = this.state.tab === 'conns';
 
 		if (!isConnsTab) {
-			tabsStyleName += ' tabs_ssl';
+			tabsStyleName += ` ${ styles.tabs_ssl }`;
 		}
 
 		return (<IndexBox className={this.props.className}>
 			{
 				isConnsTab ?
-					<span styleName="counter">Accepted:{connections.accepted}</span>
+					<span className={ styles.counter }>Accepted:{connections.accepted}</span>
 				: null
 			}
 
-			<div styleName={ tabsStyleName }>
-				<div styleName={isConnsTab ? 'tab-active' : 'tab'} onClick={ this.changeTab.bind(this, 'conns') }>
+			<div className={ tabsStyleName }>
+				<div className={isConnsTab ? styles['tab-active'] : styles.tab} onClick={ this.changeTab.bind(this, 'conns') }>
 					<span>Connections</span>
 				</div>
-				<div styleName={!isConnsTab ? 'tab-active' : 'tab'} onClick={ this.changeTab.bind(this, 'ssl') }>
+				<div className={!isConnsTab ? styles['tab-active'] : styles.tab} onClick={ this.changeTab.bind(this, 'ssl') }>
 					<span>SSL</span>
 				</div>
 			</div>
 
 			{
 				isConnsTab ?
-					<table styleName="table">
+					<table className={ styles.table }>
 						<tr>
 							<th>Current</th>
 							<th>Accepted/s</th>
@@ -84,7 +84,7 @@ export class Connections extends React.Component {
 						</tr>
 					</table>
 					:
-					<table styleName="table ssl">
+					<table className={ `${ styles.table } ${ styles.ssl }` }>
 						<tr>
 							<th width="16%"/>
 							<th>Handshakes</th>

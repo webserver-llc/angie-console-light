@@ -6,30 +6,25 @@
  *
  */
 
-import {
-	calculateSpeed,
-	calculateTraffic,
-	createMapFromObject,
-	handleErrors
-} from './utils.js';
+import utils from './utils.js';
 import { upstreamsCalculatorFactory } from './factories.js';
 
-export function handleZones(STATS, previous, zone, name){
+export function handleZones(STATS, previous, zone, name) {
 	const previousZone = previous ? previous.get(name) : null;
 
 	if (previousZone) {
 		const period = Date.now() - previous.lastUpdate;
 
-		zone.sent_s = calculateSpeed(previousZone.sent, zone.sent, period);
-		zone.rcvd_s = calculateSpeed(previousZone.received, zone.received, period);
-		zone.zone_conn_s = calculateSpeed(previousZone.connections, zone.connections, period);
+		zone.sent_s = utils.calculateSpeed(previousZone.sent, zone.sent, period);
+		zone.rcvd_s = utils.calculateSpeed(previousZone.received, zone.received, period);
+		zone.zone_conn_s = utils.calculateSpeed(previousZone.connections, zone.connections, period);
 
 		STATS.conn_s += zone.zone_conn_s;
 
-		calculateTraffic(STATS, zone);
+		utils.calculateTraffic(STATS, zone);
 	}
 
-	handleErrors(previousZone, zone, 'sessions');
+	utils.handleErrors(previousZone, zone, 'sessions');
 
 	if (zone['5xxChanged'] || zone['4xxChanged']) {
 		STATS.status = 'danger';
@@ -39,7 +34,7 @@ export function handleZones(STATS, previous, zone, name){
 	STATS.conn_current += zone.processing;
 
 	return zone;
-};
+}
 
 export const zones = (zones, previous, { __STATUSES }) => {
 	if (zones === null || Object.keys(zones).length === 0) {
@@ -58,7 +53,7 @@ export const zones = (zones, previous, { __STATUSES }) => {
 		status: 'ok'
 	};
 
-	zones = createMapFromObject(zones, handleZones.bind(null, STATS, previous));
+	zones = utils.createMapFromObject(zones, handleZones.bind(null, STATS, previous));
 
 	zones.__STATS = STATS;
 

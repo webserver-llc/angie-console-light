@@ -14,7 +14,7 @@ import calculateSharedZones from '../../calculators/sharedzones.js';
 import DataBinder from '../databinder/databinder.jsx';
 import styles from '../table/style.css';
 
-import { useTooltip } from '../../tooltips/index.jsx';
+import tooltips from '../../tooltips/index.jsx';
 
 export class SharedZones extends SortableTable {
 	get SORTING_SETTINGS_KEY() {
@@ -33,7 +33,7 @@ export class SharedZones extends SortableTable {
 		return (<div>
 			<h1>Shared Zones</h1>
 
-			<table styleName="table">
+			<table className={ styles.table }>
 				<thead>
 					<tr>
 						<TableSortControl
@@ -47,8 +47,8 @@ export class SharedZones extends SortableTable {
 						<th>Used memory pages</th>
 						<th>
 							<span
-								styleName="hinted"
-								{...useTooltip('Memory usage = Used memory pages / Total memory pages', 'hint')}
+								className={ styles.hinted }
+								{...tooltips.useTooltip('Memory usage = Used memory pages / Total memory pages', 'hint')}
 							>Memory usage</span>
 						</th>
 					</tr>
@@ -58,8 +58,8 @@ export class SharedZones extends SortableTable {
 					{
 						slabs.map(([zoneName, zone]) => {
 							return (<tr>
-								<td styleName="status" />
-								<td styleName="bold">{ zoneName }</td>
+								<td className={ styles.status } />
+								<td className={ styles.bold }>{ zoneName }</td>
 								<td>{ zone.pages.total }</td>
 								<td>{ zone.pages.used }</td>
 								<td>

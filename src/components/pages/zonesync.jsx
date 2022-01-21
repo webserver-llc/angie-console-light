@@ -35,27 +35,27 @@ export class ZoneSync extends SortableTable {
 		return (<div>
 			<h1>Instance Status</h1>
 
-			<table styleName="table thin">
+			<table className={ `${ styles.table } ${ styles.thin }` }>
 				<thead>
 					<tr>
 						<th colSpan={2}>In</th>
 						<th colSpan={2}>Out</th>
 						<th>Nodes online</th>
 					</tr>
-					<tr styleName="right-align sub-header">
+					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
 						<th>messages</th>
-						<th styleName="bdr">bytes</th>
+						<th className={ styles.bdr }>bytes</th>
 						<th>messages</th>
-						<th styleName="bdr">bytes</th>
+						<th className={ styles.bdr }>bytes</th>
 						<th></th>
 					</tr>
 				</thead>
-				<tbody styleName="right-align">
+				<tbody className={ styles['right-align'] }>
 					<tr>
 						<td>{ status.msgs_in }</td>
-						<td styleName="bdr">{ status.bytes_in }</td>
+						<td className={ styles.bdr }>{ status.bytes_in }</td>
 						<td>{ status.msgs_out }</td>
-						<td styleName="bdr">{ status.bytes_out }</td>
+						<td className={ styles.bdr }>{ status.bytes_out }</td>
 						<td>{ status.nodes_online }</td>
 					</tr>
 				</tbody>
@@ -64,34 +64,34 @@ export class ZoneSync extends SortableTable {
 			<br/>
 			<h1>Zones</h1>
 
-			<table styleName="table thin">
+			<table className={ `${ styles.table } ${ styles.thin }` }>
 				<thead>
 					<tr>
 						<TableSortControl order={this.state.sortOrder} onChange={this.changeSorting} />
 						<th>Zone</th>
 						<th colspan={2}>Records</th>
 					</tr>
-					<tr styleName="right-align sub-header">
-						<th styleName="bdr" />
+					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
+						<th className={ styles.bdr } />
 						<th>Total</th>
 						<th>Pending</th>
 					</tr>
 				</thead>
-				<tbody styleName="right-align">
+				<tbody className={ styles['right-align'] }>
 					{
 						zones.map(([name, zone]) => {
-							let zoneStatus = 'ok';
+							let zoneStatus = styles.ok;
 
 							if (zone.alert) {
-								zoneStatus = 'alert';
+								zoneStatus = styles.alert;
 							} else if (zone.warning) {
-								zoneStatus = 'warning';
+								zoneStatus = styles.warning;
 							}
 
 							return (
 								<tr>
-									<td styleName={ zoneStatus } />
-									<td styleName="left-align bold bdr">{ name }</td>
+									<td className={ zoneStatus } />
+									<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ name }</td>
 									<td>{ zone.records_total }</td>
 									<td>{ zone.records_pending }</td>
 								</tr>

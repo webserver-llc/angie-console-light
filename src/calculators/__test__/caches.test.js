@@ -12,7 +12,7 @@ import calculate, {
 	handleCache
 } from '../caches.js';
 import appsettings from '../../appsettings';
-import * as utils from '../utils.js';
+import utils from '../utils.js';
 
 describe('Calculators – Caches', () => {
 	it('cachesHistory', () => {

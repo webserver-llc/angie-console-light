@@ -69,10 +69,10 @@ export default class App extends React.Component {
 
 		if (loading) {
 			return (
-				<div styleName="splash">
-					<span styleName="logo" />
-					<Loader styleName="loader" />
-					<span styleName="loading">Loading...</span>
+				<div className={ styles.splash }>
+					<span className={ styles.logo } />
+					<Loader className={ styles.loader } />
+					<span className={ styles.loading }>Loading...</span>
 				</div>
 			);
 		}
@@ -87,7 +87,7 @@ export default class App extends React.Component {
 			}
 
 			content = (
-				<div styleName="error-block">
+				<div className={ styles['error-block'] }>
 					{ subContent }
 					<p>For&nbsp;more information please refer to&nbsp;the&nbsp;following <a href="https://www.nginx.com/resources/admin-guide/monitoring/">documentation.</a></p>
 				</div>
@@ -99,7 +99,7 @@ export default class App extends React.Component {
 		}
 
 		return (
-			<div styleName="dashboard">
+			<div className={ styles.dashboard }>
 
 				{
 					__ENV__ === 'demo' ?
@@ -109,7 +109,7 @@ export default class App extends React.Component {
 
 				<Header hash={this.state.hash} navigation={!error} statuses={STORE.__STATUSES} />
 
-				<div styleName="content">
+				<div className={ styles.content }>
 					{
 						!this.props.error ?
 							<UpdatingControl play={play} pause={pause} update={startObserve} />

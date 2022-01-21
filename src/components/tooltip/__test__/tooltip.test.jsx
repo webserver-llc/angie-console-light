@@ -28,8 +28,6 @@ describe('<Tooltip />', () => {
 			top: 500,
 			left: 120
 		});
-
-		wrapper.unmount();
 	});
 
 	it('componentDidMount()', () => {
@@ -191,7 +189,6 @@ describe('<Tooltip />', () => {
 		expect(setStateStub.notCalled, '[no this.ref] this.setState not called').to.be.true;
 
 		setStateStub.restore();
-		wrapper.unmount();
 	});
 
 	it('render()', () => {
@@ -202,7 +199,7 @@ describe('<Tooltip />', () => {
 		);
 		const instance = wrapper.instance();
 
-		expect(wrapper.prop('className'), 'wrapper className').to.be.equal(
+		expect(wrapper.prop('className'), '[no position, no align] wrapper className').to.be.equal(
 			`${ styles['tooltip'] } ${ styles['bottom'] }`
 		);
 		expect(wrapper.prop('style'), 'wrapper prop style').to.be.deep.equal({
@@ -217,10 +214,17 @@ describe('<Tooltip />', () => {
 			align: 'center'
 		});
 
-		expect(wrapper.prop('className'), 'wrapper className').to.be.equal(
+		expect(wrapper.prop('className'), '[position, align] wrapper className').to.be.equal(
 			`${ styles['tooltip'] } ${ styles['top'] } ${ styles['center'] }`
 		);
 
-		wrapper.unmount();
+		// Unknown position
+		wrapper.setProps({
+			position: 'there is no such a position',
+		});
+
+		expect(wrapper.prop('className'), '[unknown position, align] wrapper className').to.be.equal(
+			`${ styles['tooltip'] } ${ styles['center'] }`
+		);
 	});
 });

@@ -8,8 +8,7 @@
 
 import React from 'react';
 import styles from './tooltip.css';
-
-import { formatUptime, formatDate } from '../../utils.js';
+import utils from '../../utils.js';
 
 export default function ConnectionsTooltip({ peer }){
 	return (
@@ -17,8 +16,8 @@ export default function ConnectionsTooltip({ peer }){
 			{
 				peer.selected ?
 					<div>
-						<div>Last: {formatDate(peer.selected)}</div>
-						<div>({formatUptime(new Date().getTime() - Date.parse(peer.selected))} ago)</div>
+						<div>Last: {utils.formatDate(peer.selected)}</div>
+						<div>({utils.formatUptime(new Date().getTime() - Date.parse(peer.selected))} ago)</div>
 					</div>
 					: 'Last: unknown'
 			}

@@ -47,17 +47,16 @@ describe('<Navigation />', () => {
 				hash="#"
 			/>
 		);
-		const instance = wrapper.instance();
-		const openSettingsSpy = spy(instance.openSettings, 'bind');
-		const closeSettingsSpy = spy(instance.closeSettings, 'bind');
+		const openSettingsSpy = spy(Navigation.prototype.openSettings, 'bind');
+		const closeSettingsSpy = spy(Navigation.prototype.closeSettings, 'bind');
 
-		instance.constructor();
+		wrapper.instance().constructor();
 
 		expect(wrapper.state(), 'state').to.be.deep.equal({ settings: false });
 		expect(openSettingsSpy.calledOnce, 'openSettings.bind called once').to.be.true;
-		expect(openSettingsSpy.args[0][0], 'openSettings.bind 1st arg').to.be.deep.equal(instance);
+		expect(openSettingsSpy.args[0][0] instanceof Navigation, 'openSettings.bind 1st arg').to.be.true;
 		expect(closeSettingsSpy.calledOnce, 'closeSettings.bind called once').to.be.true;
-		expect(closeSettingsSpy.args[0][0], 'closeSettings.bind 1st arg').to.be.deep.equal(instance);
+		expect(closeSettingsSpy.args[0][0] instanceof Navigation, 'closeSettings.bind 1st arg').to.be.true;
 
 		openSettingsSpy.restore();
 		closeSettingsSpy.restore();

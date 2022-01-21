@@ -5,12 +5,12 @@
  *
  */
 
-import { calculateSpeed } from './utils.js';
+import utils from './utils.js';
 
 export default (connections, previous) => {
 	connections.current = connections.active + connections.idle;
 
-	connections.accepted_s = calculateSpeed(
+	connections.accepted_s = utils.calculateSpeed(
 		previous ? previous.accepted : null,
 		connections.accepted,
 		Date.now() - (previous ? previous.lastUpdate : 0)

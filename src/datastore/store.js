@@ -65,3 +65,9 @@ export const get = (apis) => {
 
 	return res;
 };
+
+export default {
+	STORE,
+	handleDataUpdate,
+	get,
+};

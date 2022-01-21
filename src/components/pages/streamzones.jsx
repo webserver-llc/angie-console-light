@@ -10,7 +10,7 @@ import api from '../../api';
 import DataBinder from '../databinder/databinder.jsx';
 import calculateStreamLimitConn from '../../calculators/streamlimitconn.js';
 import LimitConn from './serverzones/limitconn.jsx';
-import { formatReadableBytes } from '../../utils';
+import utils from '../../utils';
 import styles from '../table/style.css';
 
 export class StreamZones extends React.Component {
@@ -23,7 +23,7 @@ export class StreamZones extends React.Component {
 		return (<div>
 			<h1>TCP/UDP Zones</h1>
 
-			<table styleName="table">
+			<table className={ styles.table }>
 				<thead>
 					<tr>
 						<th>Zone</th>
@@ -31,37 +31,41 @@ export class StreamZones extends React.Component {
 						<th colSpan={4}>Sessions</th>
 						<th colSpan={4}>Traffic</th>
 					</tr>
-					<tr styleName="right-align sub-header">
-						<th styleName="bdr" />
+					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
+						<th className={ styles.bdr } />
 						<th>Current</th>
 						<th>Total</th>
-						<th styleName="bdr">Conn/s</th>
+						<th className={ styles.bdr }>Conn/s</th>
 						<th>2xx</th>
 						<th>4xx</th>
 						<th>5xx</th>
-						<th styleName="bdr">Total</th>
+						<th className={ styles.bdr }>Total</th>
 						<th>Sent/s</th>
 						<th>Rcvd/s</th>
 						<th>Sent</th>
 						<th>Rcvd</th>
 					</tr>
 				</thead>
-				<tbody styleName="right-align">
+				<tbody className={ styles['right-align'] }>
 					{
 						Array.from(server_zones).map(([name, zone]) =>
 							(<tr>
-								<td styleName="left-align bold bdr">{ name }</td>
+								<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ name }</td>
 								<td>{ zone.processing }</td>
 								<td>{ zone.connections }</td>
-								<td styleName="bdr">{ zone.zone_conn_s }</td>
+								<td className={ styles.bdr }>{ zone.zone_conn_s }</td>
 								<td>{ zone.sessions['2xx'] }</td>
-								<td styleName={`flash ${zone['4xxChanged'] ? 'red-flash' : ''}`}>{ zone.sessions['4xx'] }</td>
-								<td styleName={`flash ${zone['5xxChanged'] ? 'red-flash' : ''}`}>{ zone.sessions['5xx'] }</td>
-								<td styleName="bdr">{ zone.sessions.total }</td>
-								<td styleName="px60">{ formatReadableBytes(zone.sent_s) }</td>
-								<td styleName="px60">{ formatReadableBytes(zone.rcvd_s) }</td>
-								<td styleName="px60">{ formatReadableBytes(zone.sent) }</td>
-								<td styleName="px60">{ formatReadableBytes(zone.received) }</td>
+								<td className={`${ styles.flash }${zone['4xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
+									{ zone.sessions['4xx'] }
+								</td>
+								<td className={`${ styles.flash }${zone['5xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
+									{ zone.sessions['5xx'] }
+								</td>
+								<td className={ styles.bdr }>{ zone.sessions.total }</td>
+								<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent_s) }</td>
+								<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.rcvd_s) }</td>
+								<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent) }</td>
+								<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.received) }</td>
 							</tr>)
 						)
 					}

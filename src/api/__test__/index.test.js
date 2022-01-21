@@ -9,7 +9,7 @@
 /* eslint-env browser, mocha */
 /* eslint no-underscore-dangle: "off" */
 
-import * as datastore from '../../datastore';
+import datastore from '../../datastore';
 import api, * as Api from '../index.js';
 import ApiProxy from '../ApiProxy.js';
 import UpstreamsApi from '../UpstreamsApi.js';

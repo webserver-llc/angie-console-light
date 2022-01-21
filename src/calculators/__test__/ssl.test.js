@@ -7,7 +7,7 @@
 
 import { stub } from 'sinon';
 import calculate from '../ssl.js';
-import * as utils from '../utils.js';
+import utils from '../utils.js';
 
 describe('Calculators – SSL', () => {
 	describe('calculate()', () => {

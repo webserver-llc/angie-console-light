@@ -87,3 +87,13 @@ export const useTooltip = (Component, style = '') => ({
 		}
 	}
 });
+
+export default {
+	checkElementMatches,
+	tooltipContainerEl,
+	currentTooltip,
+	closeTooltip,
+	renderTooltip,
+	initTooltips,
+	useTooltip,
+};

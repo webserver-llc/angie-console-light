@@ -13,16 +13,13 @@ import appsettings from '../../../appsettings';
 
 describe('<SortableTable />', () => {
 	it('constructor()', () => {
-		const wrapper = shallow(<SortableTable />);
-		const instance = wrapper.instance();
-		const changeSortingSpy = spy(instance.changeSorting, 'bind');
-
 		stub(appsettings, 'getSetting').callsFake(() => 'getSetting_result');
+		SortableTable.prototype.SORTING_SETTINGS_KEY = 'test_sortings_settings_key';
 
-		instance.SORTING_SETTINGS_KEY = 'test_sortings_settings_key';
-		instance.constructor();
+		const changeSortingSpy = spy(SortableTable.prototype.changeSorting, 'bind');
+		const wrapper = shallow(<SortableTable />);
 
-		expect(instance.state, 'this.state').to.be.deep.equal({
+		expect(wrapper.instance().state, 'this.state').to.be.deep.equal({
 			sortOrder: 'getSetting_result'
 		});
 		expect(appsettings.getSetting.calledOnce, 'getSetting called').to.be.true;
@@ -32,13 +29,13 @@ describe('<SortableTable />', () => {
 		).to.be.true;
 		expect(changeSortingSpy.calledOnce, 'this.changeSorting.bind called').to.be.true;
 		expect(
-			changeSortingSpy.args[0][0],
+			changeSortingSpy.args[0][0] instanceof SortableTable,
 			'this.changeSorting.bind call arg'
-		).to.be.deep.equal(instance);
+		).to.be.true;
 
 		changeSortingSpy.restore();
+		SortableTable.prototype.SORTING_SETTINGS_KEY = undefined;
 		appsettings.getSetting.restore();
-		wrapper.unmount();
 	});
 
 	it('changeSorting()', () => {

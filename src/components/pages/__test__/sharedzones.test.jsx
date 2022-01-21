@@ -12,7 +12,7 @@ import { SharedZones } from '../sharedzones.jsx';
 import SortableTable from '../../table/sortabletable.jsx';
 import styles from '../../table/style.css';
 import ProgressBar from '../../progressbar/progressbar.jsx';
-import * as tooltips from '../../../tooltips/index.jsx';
+import tooltips from '../../../tooltips/index.jsx';
 
 describe('<SharedZones Page />', () => {
 	it('extends SortableTable', () => {

@@ -48,6 +48,8 @@
 	margin-top: -6px;
 }
 
+.bottom {}
+
 .bottom:before {
 	bottom: 100%;
 	left: 12px;

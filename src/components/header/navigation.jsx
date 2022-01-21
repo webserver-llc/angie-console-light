@@ -129,29 +129,29 @@ export class Navigation extends React.Component {
 					}
 
 					statusIcon = (
-						<Icon styleName="status" type={status} />
+						<Icon className={ styles.status } type={status} />
 					);
 				}
 
 				return (
 					<a
-						styleName={this.props.hash === section.hash ? 'navlinkactive' : 'navlink'}
+						className={this.props.hash === section.hash ? styles.navlinkactive : styles.navlink}
 						href={section.hash}
 						title={section.title}
 					>
 						{ statusIcon }
 
-						<span styleName="anchor">{section.title}</span>
+						<span className={ styles.anchor }>{section.title}</span>
 					</a>
 				);
 			});
 
-		return (<div styleName={`nav ${tabs.length > 6 ? 'nav-wide' : 'nav-small'}`}>
-			<div styleName="nav-flex">
+		return (<div className={`${ styles.nav } ${tabs.length > 6 ? styles['nav-wide'] : styles['nav-small']}`}>
+			<div className={ styles['nav-flex'] }>
 				{ tabs }
 			</div>
 
-			<span styleName="settings" onClick={this.openSettings}>
+			<span className={ styles.settings } onClick={this.openSettings}>
 				<Icon type="gear" />
 			</span>
 

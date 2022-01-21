@@ -9,7 +9,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { spy, stub } from 'sinon';
 import DataBinder from '../databinder.jsx';
-import * as datastore from '../../../datastore';
+import datastore from '../../../datastore';
 import { STORE } from '../../../datastore/store.js';
 
 describe('DataBinder()', () => {
@@ -51,14 +51,13 @@ describe('DataBinder()', () => {
 	it('constructor()', () => {
 		const Component = DataBinder(TestComponent);
 		const wrapper = shallow(<Component />);
-		const instance = wrapper.instance();
 
-		const bindSpy = spy(instance.forceUpdate, 'bind');
+		const bindSpy = spy(Component.prototype.forceUpdate, 'bind');
 
-		instance.constructor();
+		wrapper.instance().constructor();
 
 		expect(bindSpy.calledOnce, 'forceUpdate.bind called once').to.be.true;
-		expect(bindSpy.args[0][0], 'forceUpdate.bind 1st arg').to.be.deep.equal(instance);
+		expect(bindSpy.args[0][0] instanceof Component, 'forceUpdate.bind 1st arg').to.be.true;
 
 		bindSpy.restore();
 

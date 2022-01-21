@@ -18,7 +18,7 @@ import {
 	subscribe,
 	loop
 } from '../index.js';
-import * as store from '../store';
+import store from '../store';
 
 describe('Datastore', () => {
 	it('play and pause', () => {

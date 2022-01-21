@@ -9,7 +9,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { stub } from 'sinon';
 import { StreamZones } from '../streamzones.jsx';
-import * as utils from '../../../../../utils.js';
+import utils from '../../../../../utils.js';
 
 describe('<StreamZones IndexPage />', () => {
 	it('render()', () => {

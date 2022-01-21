@@ -6,35 +6,29 @@
  *
  */
 
-import {
-	is4xxThresholdReached,
-	calculateSpeed,
-	calculateTraffic,
-	createMapFromObject,
-	handleErrors
-} from './utils.js';
+import utils from './utils.js';
 
-export function handleZones(STATS, previousState, zone, zoneName){
+export function handleZones(STATS, previousState, zone, zoneName) {
 	const previousZone = previousState && previousState.get(zoneName);
 
 	if (previousZone) {
 		const period = Date.now() - previousState.lastUpdate;
 
-		zone.sent_s = calculateSpeed(previousZone.sent, zone.sent, period);
-		zone.rcvd_s = calculateSpeed(previousZone.received, zone.received, period);
-		zone.zone_req_s = calculateSpeed(previousZone.requests, zone.requests, period);
+		zone.sent_s = utils.calculateSpeed(previousZone.sent, zone.sent, period);
+		zone.rcvd_s = utils.calculateSpeed(previousZone.received, zone.received, period);
+		zone.zone_req_s = utils.calculateSpeed(previousZone.requests, zone.requests, period);
 
-		calculateTraffic(STATS, zone);
+		utils.calculateTraffic(STATS, zone);
 	}
 
 	// Warning
-	if (is4xxThresholdReached(zone)) {
+	if (utils.is4xxThresholdReached(zone)) {
 		zone.warning = true;
 		STATS.status = 'warning';
 		STATS.warnings++;
 	}
 
-	handleErrors(previousZone, zone);
+	utils.handleErrors(previousZone, zone);
 
 	if (zone['5xxChanged'] === true) {
 		STATS.status = 'danger';
@@ -42,7 +36,7 @@ export function handleZones(STATS, previousState, zone, zoneName){
 	}
 
 	return zone;
-};
+}
 
 export default (zones, previousState, { __STATUSES }) => {
 	if (zones === null || Object.keys(zones).length === 0) {
@@ -61,7 +55,7 @@ export default (zones, previousState, { __STATUSES }) => {
 		status: 'ok'
 	};
 
-	zones = createMapFromObject(zones, handleZones.bind(null, STATS, previousState), false);
+	zones = utils.createMapFromObject(zones, handleZones.bind(null, STATS, previousState), false);
 
 	STATS.total = zones.size;
 

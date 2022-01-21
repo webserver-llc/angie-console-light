@@ -14,7 +14,7 @@ import {
 } from '../constants.js';
 
 export class AppSettings {
-	constructor(){
+	constructor() {
 		this.SETTINGS_KEY_NAME = '__NGINX_PLUS_DASHBOARD';
 		this.defaults = {
 			updatingPeriod: DEFAULT_UPDATING_PERIOD,
@@ -28,14 +28,14 @@ export class AppSettings {
 		this.subscribeCounter = 0;
 	}
 
-	saveSettings(){
+	saveSettings() {
 		localStorage.setItem(
 			this.SETTINGS_KEY_NAME,
 			JSON.stringify(this.currentSettings)
 		);
 	}
 
-	setSetting(propertyName, value, silent = false){
+	setSetting(propertyName, value, silent = false) {
 		this.currentSettings[propertyName] = value;
 		this.saveSettings();
 
@@ -46,7 +46,7 @@ export class AppSettings {
 		}
 	}
 
-	getSetting(propertyName, defaultValue){
+	getSetting(propertyName, defaultValue) {
 		if (!(propertyName in this.currentSettings)) {
 			this.setSetting(propertyName, defaultValue, true);
 		}
@@ -54,7 +54,7 @@ export class AppSettings {
 		return this.currentSettings[propertyName];
 	}
 
-	subscribe(callback, propertyName){
+	subscribe(callback, propertyName) {
 		let id;
 
 		if (
@@ -74,25 +74,25 @@ export class AppSettings {
 		return id;
 	}
 
-	unsubscribe(id){
+	unsubscribe(id) {
 		if (this.settingChangeCallbacks.has(id)) {
 			this.settingChangeCallbacks.delete(id);
 		}
 	}
 
-	init(){
+	init() {
 		try {
 			this.currentSettings = JSON.parse(
 				localStorage.getItem(this.SETTINGS_KEY_NAME)
 			);
-		} catch(e) {}
+		} catch (e) {}
 
 		if (this.currentSettings === null) {
-			this.currentSettings = Object.assign({}, this.defaults);
+			this.currentSettings = { ...this.defaults };
 			this.saveSettings();
 		}
 	}
-};
+}
 
 const appsettings = new AppSettings();
 

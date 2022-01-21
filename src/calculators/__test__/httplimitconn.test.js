@@ -7,7 +7,7 @@
 
 import { spy } from 'sinon';
 import calculate, { buildCalculator } from '../httplimitconn.js';
-import * as factories from '../factories.js';
+import factories from '../factories.js';
 
 describe('Calculators – HttpLimitConn', () => {
 	it('buildCalculator()', () => {

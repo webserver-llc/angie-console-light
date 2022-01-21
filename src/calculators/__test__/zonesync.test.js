@@ -8,7 +8,7 @@
 import { spy, stub } from 'sinon';
 import calculate, { handleZones } from '../zonesync.js';
 import { DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT } from '../../constants.js';
-import * as utils from '../utils.js';
+import utils from '../utils.js';
 import appsettings from '../../appsettings';
 
 

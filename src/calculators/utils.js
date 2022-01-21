@@ -89,3 +89,13 @@ export const countResolverResponses = (responses) => {
 		errResponses
 	};
 };
+
+export default {
+	is4xxThresholdReached,
+	calculateSpeed,
+	calculateTraffic,
+	createMapFromObject,
+	handleErrors,
+	pickZoneSize,
+	countResolverResponses,
+};

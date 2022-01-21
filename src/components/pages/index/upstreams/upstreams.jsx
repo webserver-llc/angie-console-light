@@ -32,7 +32,9 @@ export class UpstreamsBox extends React.Component {
 
 				<h4>Servers</h4>
 				<p>All: { stats.servers.all } / Up: { stats.servers.up }</p>
-				<p styleName={stats.servers.failed > 0 ? 'red' : ''}>Failed: { stats.servers.failed }</p>
+				<p className={ stats.servers.failed > 0 ? styles.red : undefined }>
+					Failed: { stats.servers.failed }
+				</p>
 			</IndexBox>
 		);
 	}

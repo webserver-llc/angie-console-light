@@ -7,7 +7,7 @@
  */
 
 import appsettings from '../appsettings';
-import { STORE as _STORE, handleDataUpdate, get as getFromStore } from './store';
+import store from './store';
 import AvailableApiEndpoints from './availableApiEndpoints.js';
 
 export const availableApiEndpoints = new AvailableApiEndpoints();
@@ -52,22 +52,18 @@ export const startObserve = function loop(force = false) {
 		const timeStart = Date.now();
 
 		Promise.all(
-			Array.from(OBSERVED).map(([path, instance]) => {
-				return instance.api.get().then(data => data, err => err).then((data) => {
-					if (data && data.error) {
-						data = null;
-					}
-
-					return {
-						data,
+			Array.from(OBSERVED).map(([, instance]) =>
+				instance.api.get()
+					.then(data => data, err => err)
+					.then((data) => ({
+						data: data && data.error ? null : data,
 						api: instance.api,
 						timeStart
-					};
-				});
-			})
+					}))
+			)
 		).then((data) => {
 			data.forEach(({ api, data, timeStart }) => {
-				handleDataUpdate(api, data, timeStart);
+				store.handleDataUpdate(api, data, timeStart);
 
 				const apiHandler = OBSERVED.get(api.toString());
 
@@ -124,5 +120,12 @@ export const subscribe = (apis, callback) => {
 	immediate = window.setImmediate(startObserve);
 };
 
-export const get = getFromStore;
-export const STORE = _STORE;
+export const { get, STORE } = store;
+
+export default {
+	availableApiEndpoints,
+	unsubscribe,
+	startObserve,
+	subscribe,
+	get,
+};

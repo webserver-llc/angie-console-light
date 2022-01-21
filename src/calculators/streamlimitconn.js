@@ -5,15 +5,15 @@
  *
  */
 
-import { limitConnReqFactory } from './factories.js';
+import utils from './factories.js';
 
-export function buildCalculator(){
+export function buildCalculator() {
 	const streamLimitConn = {
 		history: {},
 		prevUpdatingPeriod: null
 	};
 
-	return limitConnReqFactory(streamLimitConn);
-};
+	return utils.limitConnReqFactory(streamLimitConn);
+}
 
 export default buildCalculator();

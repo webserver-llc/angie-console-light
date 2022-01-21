@@ -6,14 +6,14 @@
  *
  */
 
-import { createMapFromObject } from './utils.js';
+import utils from './utils.js';
 
-export function handleZones(zone){
+export function handleZones(zone) {
 	zone.pages.total = zone.pages.used + zone.pages.free;
 	zone.percentSize = Math.ceil(zone.pages.used / zone.pages.total * 100);
 
 	return zone;
-};
+}
 
 export default (sharedZones, previous, { __STATUSES }) => {
 	if (sharedZones === null || Object.keys(sharedZones).length === 0) {
@@ -23,6 +23,5 @@ export default (sharedZones, previous, { __STATUSES }) => {
 
 	__STATUSES.shared_zones.ready = true;
 
-	return createMapFromObject(sharedZones, handleZones);
+	return utils.createMapFromObject(sharedZones, handleZones);
 };
-

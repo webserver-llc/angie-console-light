@@ -7,7 +7,7 @@
 
 import { spy, stub } from 'sinon';
 import calculate, { handleZones } from '../serverzones.js';
-import * as utils from '../utils.js';
+import utils from '../utils.js';
 import appsettings from '../../appsettings';
 
 

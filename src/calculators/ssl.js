@@ -6,7 +6,7 @@
  *
  */
 
-import { calculateSpeed } from './utils.js';
+import utils from './utils.js';
 
 export default (ssl, previous) => {
 	const _previous = previous || {
@@ -17,18 +17,18 @@ export default (ssl, previous) => {
 	};
 	const date = Date.now() - _previous.lastUpdate;
 
-	ssl.handshakes_s = calculateSpeed(
+	ssl.handshakes_s = utils.calculateSpeed(
 		_previous.handshakes,
 		ssl.handshakes,
 		date
 	);
-	ssl.handshakes_failed_s = calculateSpeed(
+	ssl.handshakes_failed_s = utils.calculateSpeed(
 		_previous.handshakes_failed,
 		ssl.handshakes_failed,
 		date
 	);
 
-	ssl.session_reuses_s = calculateSpeed(
+	ssl.session_reuses_s = utils.calculateSpeed(
 		_previous.session_reuses,
 		ssl.session_reuses,
 		date

@@ -12,8 +12,8 @@ import styles from './style.css';
 
 export default class Header extends React.Component {
 	render() {
-		return (<div styleName="header">
-			<a styleName={this.props.hash === '#' ? 'logoactive' : 'logo'} href="#" />
+		return (<div className={ styles.header }>
+			<a className={this.props.hash === '#' ? styles.logoactive : styles.logo} href="#" />
 
 			{
 				this.props.navigation ?

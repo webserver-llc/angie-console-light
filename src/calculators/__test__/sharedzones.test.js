@@ -7,7 +7,7 @@
 
 import { stub } from 'sinon';
 import calculate, { handleZones } from '../sharedzones.js';
-import * as utils from '../utils.js';
+import utils from '../utils.js';
 
 describe('Calculators – SharedZones', () => {
 	it('handleZones', () => {

@@ -8,12 +8,9 @@
 
 import appsettings from '../appsettings';
 import { DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT } from '../constants.js';
-import {
-	createMapFromObject,
-	calculateSpeed
-} from './utils.js';
+import utils from './utils.js';
 
-export function handleZones(STATS, zone){
+export function handleZones(STATS, zone) {
 	let isAlert = false;
 	let isWarning = false;
 
@@ -46,7 +43,7 @@ export function handleZones(STATS, zone){
 	}
 
 	return zone;
-};
+}
 
 export default (zone_sync, previousState, { __STATUSES }) => {
 	if (zone_sync === null || Object.keys(zone_sync).length === 0) {
@@ -68,19 +65,19 @@ export default (zone_sync, previousState, { __STATUSES }) => {
 	if (previousState) {
 		const period = Date.now() - previousState.lastUpdate;
 
-		STATS.traffic.in = calculateSpeed(
+		STATS.traffic.in = utils.calculateSpeed(
 			previousState.status.msgs_in,
 			zone_sync.status.msgs_in,
 			period
 		);
-		STATS.traffic.out = calculateSpeed(
+		STATS.traffic.out = utils.calculateSpeed(
 			previousState.status.msgs_out,
 			zone_sync.status.msgs_out,
 			period
 		);
 	}
 
-	zone_sync.zones = createMapFromObject(zone_sync.zones, handleZones.bind(null, STATS), false);
+	zone_sync.zones = utils.createMapFromObject(zone_sync.zones, handleZones.bind(null, STATS), false);
 
 	STATS.total = zone_sync.zones.size;
 

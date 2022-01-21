@@ -10,7 +10,7 @@ import { shallow } from 'enzyme';
 import { stub } from 'sinon';
 import { StreamZones } from '../streamzones.jsx';
 import styles from '../../table/style.css';
-import * as utils from '../../../utils';
+import utils from '../../../utils';
 
 describe('<StreamZones Page />', () => {
 	describe('render()', () => {

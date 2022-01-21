@@ -6,32 +6,27 @@
  *
  */
 
-import {
-	is4xxThresholdReached,
-	calculateSpeed,
-	createMapFromObject,
-	handleErrors
-} from './utils.js';
+import utils from './utils.js';
 
-export function handleZones(STATS, previousState, location, locationName){
+export function handleZones(STATS, previousState, location, locationName) {
 	const previousLocation = previousState && previousState.get(locationName);
 
 	if (previousLocation) {
-		let period = Date.now() - previousState.lastUpdate;
+		const period = Date.now() - previousState.lastUpdate;
 
-		location.sent_s = calculateSpeed(previousLocation.sent, location.sent, period);
-		location.rcvd_s = calculateSpeed(previousLocation.received, location.received, period);
-		location.zone_req_s = calculateSpeed(previousLocation.requests, location.requests, period);
+		location.sent_s = utils.calculateSpeed(previousLocation.sent, location.sent, period);
+		location.rcvd_s = utils.calculateSpeed(previousLocation.received, location.received, period);
+		location.zone_req_s = utils.calculateSpeed(previousLocation.requests, location.requests, period);
 	}
 
 	// Warning
-	if (is4xxThresholdReached(location)) {
+	if (utils.is4xxThresholdReached(location)) {
 		location.warning = true;
 		STATS.status = 'warning';
 		STATS.warnings++;
 	}
 
-	handleErrors(previousLocation, location);
+	utils.handleErrors(previousLocation, location);
 
 	if (location['5xxChanged'] === true) {
 		STATS.status = 'danger';
@@ -39,7 +34,7 @@ export function handleZones(STATS, previousState, location, locationName){
 	}
 
 	return location;
-};
+}
 
 export default (locations, previousState, { __STATUSES }) => {
 	if (locations === null || Object.keys(locations).length === 0) {
@@ -54,7 +49,11 @@ export default (locations, previousState, { __STATUSES }) => {
 		status: 'ok'
 	};
 
-	locations = createMapFromObject(locations, handleZones.bind(null, STATS, previousState), false);
+	locations = utils.createMapFromObject(
+		locations,
+		handleZones.bind(null, STATS, previousState),
+		false
+	);
 
 	STATS.total = locations.size;
 

@@ -24,13 +24,13 @@ describe('<Disclaimer /> (demo)', () => {
 	});
 
 	it('constructor()', () => {
-		const bindSpy = spy(instance.close, 'bind');
+		const bindSpy = spy(Disclaimer.prototype.close, 'bind');
 
 		instance.constructor();
 
 		expect(wrapper.state(), 'state').to.be.deep.equal({ opened: true });
 		expect(bindSpy.calledOnce, 'close.bind called once').to.be.true;
-		expect(bindSpy.args[0][0], 'close.bind 1st arg').to.be.deep.equal(instance);
+		expect(bindSpy.args[0][0] instanceof Disclaimer, 'close.bind 1st arg').to.be.true;
 
 		bindSpy.restore();
 	});

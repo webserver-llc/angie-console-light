@@ -7,7 +7,7 @@
  */
 
 import appsettings from '../appsettings';
-import * as utils from './utils.js';
+import utils from './utils.js';
 
 export const cachesHistory = new Proxy({}, {
 	get(history, cacheName) {
@@ -40,9 +40,10 @@ export const calculateCacheHit = (cache) => {
 		cacheInHistory.pop();
 	}
 
-	const lastIndex = cacheInHistory.length - 1;
-	const numerator = cacheInHistory[0].served - cacheInHistory[lastIndex].served;
-	const denominator = cacheInHistory[0].served + cacheInHistory[0].bypassed - cacheInHistory[lastIndex].served - cacheInHistory[lastIndex].bypassed;
+	const first = cacheInHistory[0];
+	const last = cacheInHistory[cacheInHistory.length - 1];
+	const numerator = first.served - last.served;
+	const denominator = first.served + first.bypassed - last.served - last.bypassed;
 
 	return (denominator !== 0) ? Math.round((numerator / denominator) * 100) : 0;
 };
@@ -100,10 +101,10 @@ export function handleCache(STATS, slabs, cache, cacheName) {
 	}
 
 	return cache;
-};
+}
 
 export default (caches, previous, STORE) => {
-	const __STATUSES = STORE.__STATUSES;
+	const { __STATUSES } = STORE;
 
 	if (caches === null || Object.keys(caches).length === 0) {
 		__STATUSES.caches.ready = false;

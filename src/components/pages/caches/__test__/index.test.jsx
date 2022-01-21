@@ -9,8 +9,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { stub } from 'sinon';
 import { Caches } from '../index.jsx';
-import * as utils from '../../../../utils.js';
-import * as tooltips from '../../../../tooltips/index.jsx';
+import utils from '../../../../utils.js';
+import tooltips from '../../../../tooltips/index.jsx';
 import styles from '../../../table/style.css';
 
 describe('<Caches Page />', () => {

@@ -14,8 +14,8 @@ import {
 } from '../aboutnginx.jsx';
 import styles from '../style.css';
 import tooltipStyles from '../../../../tooltip/style.css';
-import * as utils from '../../../../../utils.js';
-import * as tooltips from '../../../../../tooltips/index.jsx';
+import utils from '../../../../../utils.js';
+import tooltips from '../../../../../tooltips/index.jsx';
 
 describe('<AboutNginxTooltip IndexPage />', () => {
 	it('returning component', () => {

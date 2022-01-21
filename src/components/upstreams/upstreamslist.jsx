@@ -7,18 +7,16 @@
 
 /* eslint no-alert: 0 */
 import React from 'react';
-import { isWritable, checkWritePermissions } from '../../api';
+import { apiUtils } from '../../api';
 import SortableTable from '../table/sortabletable.jsx';
 import ProgressBar from '../progressbar/progressbar.jsx';
 import appsettings from '../../appsettings';
 import UpstreamsEditor from './editor/upstreamseditor.jsx';
 import { SharedZoneTooltip } from '../pages/tooltips.jsx';
 import UpstreamStatsTooltip from './UpstreamStatsTooltip.jsx';
-
 import styles from './style.css';
 import tableStyles from '../table/style.css';
-
-import { useTooltip } from '../../tooltips/index.jsx';
+import tooltips from '../../tooltips/index.jsx';
 
 export const FILTER_OPTIONS = {
 	all: 'Show all',
@@ -57,8 +55,8 @@ export default class UpstreamsList extends SortableTable {
 			return;
 		}
 
-		if (isWritable() === null) {
-			checkWritePermissions(true).then((result) => {
+		if (apiUtils.isWritable() === null) {
+			apiUtils.checkWritePermissions(true).then((result) => {
 				if (result === true) {
 					this.toggleEditMode();
 				} else if (result === false) {
@@ -123,7 +121,7 @@ export default class UpstreamsList extends SortableTable {
 
 	renderEmptyList() {
 		return (<tr>
-			<td styleName="tableStyles.left-align" colSpan={30}>
+			<td className={ tableStyles['left-align'] } colSpan={30}>
 				No servers with '{this.state.filtering}' state found in this upstream group.
 			</td>
 		</tr>);
@@ -181,7 +179,7 @@ export default class UpstreamsList extends SortableTable {
 
 	getSelectAllCheckbox(peers) {
 		return this.state.editMode ?
-			<th rowSpan="2" styleName="tableStyles.checkbox">
+			<th rowSpan="2" className={ tableStyles.checkbox }>
 				<input
 					type="checkbox"
 					onChange={(evt) => this.selectAllPeers(peers, evt.target.checked)}
@@ -193,7 +191,7 @@ export default class UpstreamsList extends SortableTable {
 
 	getCheckbox(peer) {
 		return this.state.editMode ?
-			<td styleName="tableStyles.checkbox">
+			<td className={ tableStyles.checkbox }>
 				<input
 					type="checkbox"
 					onChange={(evt) => this.selectPeer(peer, evt.target.checked)}
@@ -228,9 +226,9 @@ export default class UpstreamsList extends SortableTable {
 			});
 		}
 
-		const writePermission = isWritable() === true || isWritable() === null;
+		const writePermission = apiUtils.isWritable() === true || apiUtils.isWritable() === null;
 
-		return (<div styleName="styles.upstreams-list" id={`upstream-${name}`}>
+		return (<div className={ styles['upstreams-list'] } id={`upstream-${name}`}>
 			{
 				this.state.editor ?
 					<UpstreamsEditor
@@ -243,7 +241,7 @@ export default class UpstreamsList extends SortableTable {
 				: null
 			}
 
-			<select name="filter" styleName="styles.filter" onChange={this.changeFilterRule}>
+			<select name="filter" className={ styles.filter } onChange={this.changeFilterRule}>
 				{
 					Object.keys(FILTER_OPTIONS).map(value => (
 						<option value={value} key={value} selected={this.state.filtering === value}>
@@ -253,26 +251,26 @@ export default class UpstreamsList extends SortableTable {
 				}
 			</select>
 
-			<div styleName="styles.head">
-				<h2 styleName="styles.title" {...useTooltip(<UpstreamStatsTooltip upstream={upstream} />)}>{ name }</h2>
+			<div className={ styles.head }>
+				<h2 className={ styles.title } {...tooltips.useTooltip(<UpstreamStatsTooltip upstream={upstream} />)}>{ name }</h2>
 
 				{ writePermission ?
-					<span styleName={this.state.editMode ? 'styles.edit-active' : 'styles.edit'} onClick={this.toggleEditMode} /> : null
+					<span className={this.state.editMode ? styles['edit-active'] : styles.edit} onClick={this.toggleEditMode} /> : null
 				}
 
 				{
 					writePermission && this.state.editMode ?
 						[
-							<span styleName="styles.btn" key="edit" onClick={() => this.editSelectedUpstream()}>Edit selected</span>,
-							<span styleName="styles.btn" key="add" onClick={this.addUpstream}>Add server</span>
+							<span className={ styles.btn } key="edit" onClick={() => this.editSelectedUpstream()}>Edit selected</span>,
+							<span className={ styles.btn } key="add" onClick={this.addUpstream}>Add server</span>
 						]
 					: null
 				}
 
 				{
 					upstream.zoneSize !== null ?
-						<span styleName="styles.zone-capacity">
-								Zone: <span {...useTooltip(<SharedZoneTooltip zone={upstream.slab} />, 'hint')}>
+						<span className={ styles['zone-capacity'] }>
+								Zone: <span {...tooltips.useTooltip(<SharedZoneTooltip zone={upstream.slab} />, 'hint')}>
 									<ProgressBar percentage={upstream.zoneSize} />
 								</span>
 						</span>
