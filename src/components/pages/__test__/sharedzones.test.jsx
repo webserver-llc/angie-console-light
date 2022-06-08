@@ -84,7 +84,7 @@ describe('<SharedZones Page />', () => {
 			const table = wrapper.find(`.${ styles['table'] }`);
 			const sortControl = table.find('TableSortControl');
 
-			expect(wrapper.getElement().nodeName, 'wrapper html tag').to.be.equal('div');
+			expect(wrapper.getElement().type, 'wrapper html tag').to.be.equal('div');
 			expect(table.length, 'table container').to.be.equal(1);
 			expect(sortControl.length, 'TableSortControl length').to.be.equal(1);
 			expect(sortControl.prop('singleRow'), 'TableSortControl "singleRow" prop').to.be.true;

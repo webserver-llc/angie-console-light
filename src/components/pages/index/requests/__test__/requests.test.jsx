@@ -28,7 +28,7 @@ describe('<Requests IndexPage />', () => {
 
 		expect(indexBox.prop('className'), 'IndexBox className from props').to.be.equal('test_class');
 
-		indexBox = indexBox.childAt(0);
+		indexBox = indexBox;
 
 		expect(indexBox.childAt(0).prop('className'), 'total row, className').to.be.equal(styles['counter']);
 		expect(indexBox.childAt(0).text(), 'total row, text').to.be.equal('Total:1000');

@@ -31,14 +31,18 @@ describe('<Unsupported />', () => {
 	});
 
 	it('start()', () => {
-		stub(React, 'render').callsFake(() => {});
+		stub(document.body, 'appendChild').callsFake(() => {});
 
 		start();
 
-		assert(React.render.calledOnce, 'React.render is expected to be called once');
-		assert(React.render.args[0][0].nodeName === Unsupported, '<Unsupported /> is expected to be rendered');
-		assert(React.render.args[0][1] === document.body, '<Unsupported /> is expected to be render to document.body');
+		const Wrapper = document.body.appendChild.args[0][0];
 
-		React.render.restore();
+		assert(Wrapper.children.length === 1, 'Wrapper children length');
+		assert(
+			Wrapper.textContent.includes('Unfortunately your browser is not supported, please use modern one.'),
+			'Wrapper content'
+		);
+
+		document.body.appendChild.restore();
 	});
 });

@@ -9,6 +9,7 @@
 
 import React from 'react';
 import createHistory from 'history/createBrowserHistory';
+
 import styles from './style.css';
 import Header from './components/header/header.jsx';
 import Footer from './components/footer/footer.jsx';
@@ -23,9 +24,9 @@ import SharedZones from './components/pages/sharedzones.jsx';
 import UpdatingControl from './components/updating-controll/updating-control.jsx';
 import ZoneSync from './components/pages/zonesync.jsx';
 import Resolvers from './components/pages/resolvers.jsx';
-
 import Disclaimer from './components/demo/disclaimer.jsx';
-import { STORE, startObserve, play, pause } from './datastore';
+import datastore, { STORE, startObserve, play, pause } from './datastore';
+import { apiUtils } from './api';
 
 export const history = createHistory();
 
@@ -47,12 +48,14 @@ export const Errors = {
 	'api_not_found': 'No data received from /api/ location. Check NGINX configuration.'
 };
 
-export default class App extends React.Component {
+export class App extends React.Component {
 	constructor() {
 		super();
 
 		this.state = {
-			hash: history.location.hash || '#'
+			hash: history.location.hash || '#',
+			loading: true,
+			error: undefined,
 		};
 	}
 
@@ -62,10 +65,20 @@ export default class App extends React.Component {
 				hash: hash || '#'
 			});
 		});
+
+		apiUtils.checkApiAvailability().then(() => {
+			apiUtils.checkWritePermissions();
+			return apiUtils.initialLoad(datastore);
+		}).then(() => {
+			this.setState({ loading: false });
+			datastore.startObserve();
+		}).catch((err) => {
+			this.setState({ error: err.type });
+		});
 	}
 
 	render() {
-		const { error, loading } = this.props;
+		const { error, loading } = this.state;
 
 		if (loading) {
 			return (
@@ -111,7 +124,7 @@ export default class App extends React.Component {
 
 				<div className={ styles.content }>
 					{
-						!this.props.error ?
+						!this.state.error ?
 							<UpdatingControl play={play} pause={pause} update={startObserve} />
 						: null
 					}
@@ -124,3 +137,7 @@ export default class App extends React.Component {
 		);
 	}
 }
+
+export default {
+	Component: App,
+};

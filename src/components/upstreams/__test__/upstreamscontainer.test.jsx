@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { spy, stub } from 'sinon';
 import UpstreamsContainer, { UPSTREAM_GROUP_LENGTH } from '../upstreamscontainer.jsx';
 import styles from '../style.css';
@@ -127,9 +127,15 @@ describe('<UpstreamsContainer />', () => {
 	});
 
 	it('handleLastItemShowing()', () => {
-		const wrapper = shallow(
+		const Component = () => {
+			return (
+				<div>Test</div>
+			);
+		};
+		const wrapper = mount(
 			<UpstreamsContainer
 				{ ...props }
+				component={ Component }
 				upstreams={ new Map([
 					['test_1', {}],
 					['test_2', {}]
@@ -153,6 +159,7 @@ describe('<UpstreamsContainer />', () => {
 		).to.be.true;
 
 		wrapper.setState({ howManyToShow: Infinity });
+		wrapper.update();
 		setStateSpy.resetHistory();
 		instance.handleLastItemShowing([{ isIntersecting: true }]);
 
@@ -166,6 +173,7 @@ describe('<UpstreamsContainer />', () => {
 		).to.be.true;
 
 		wrapper.setState({ howManyToShow: 70 });
+		wrapper.update();
 		setStateSpy.resetHistory();
 		instance.handleLastItemShowing([{ isIntersecting: true }]);
 
@@ -179,16 +187,14 @@ describe('<UpstreamsContainer />', () => {
 		).to.be.true;
 
 		wrapper.setState({ howManyToShow: 1 });
+		wrapper.update();
 		setStateSpy.resetHistory();
 		instance.handleLastItemShowing([{
 			isIntersecting: true,
 			target: 'test_target'
 		}]);
 
-		expect(
-			instance.intersectionObserver.unobserve.calledOnce,
-			'this.intersectionObserver.unobserve called once'
-		).to.be.true;
+		expect(instance.intersectionObserver.unobserve).to.be.calledOnce;
 		expect(
 			instance.intersectionObserver.unobserve.args[0][0],
 			'this.intersectionObserver.unobserve call arg'
@@ -292,7 +298,7 @@ describe('<UpstreamsContainer />', () => {
 		function TestComponent(){
 			return <div />;
 		};
-		const wrapper = shallow(
+		const wrapper = mount(
 			<UpstreamsContainer
 				title="test_title"
 				upstreams={ upstreams }
@@ -311,68 +317,70 @@ describe('<UpstreamsContainer />', () => {
 
 		instance.render();
 
-		expect(wrapper.prop('className'), 'wrapper className').to.be.equal(styles['upstreams-container']);
-		expect(wrapper.children(), 'wrapper children length').to.have.lengthOf(5);
-		expect(wrapper.childAt(0).prop('className'), 'toggle-failed, className').to.be.equal(styles['toggle-failed']);
+		let root = wrapper.childAt(0);
+
+		expect(root.hasClass(styles['upstreams-container']), 'wrapper className').to.be.true;
+		expect(root.children(), 'wrapper children length').to.have.lengthOf(5);
+		expect(root.childAt(0).prop('className'), 'toggle-failed, className').to.be.equal(styles['toggle-failed']);
 		expect(
-			wrapper.childAt(0).childAt(1).prop('className'),
+			root.childAt(0).childAt(1).prop('className'),
 			'[showOnlyFailed = false] toggle-failed child 1, className'
 		).to.be.equal(styles['toggler']);
 		expect(
-			wrapper.childAt(0).childAt(1).prop('onClick').name,
+			root.childAt(0).childAt(1).prop('onClick').name,
 			'toggle-failed child 1, onClick'
 		).to.be.equal('bound toggleFailed');
 		expect(
-			wrapper.childAt(0).childAt(1).childAt(0).prop('className'),
+			root.childAt(0).childAt(1).childAt(0).prop('className'),
 			'toggle-failed child 2, className'
 		).to.be.equal(styles['toggler-point']);
-		expect(wrapper.childAt(1).name(), 'title, html tag').to.be.equal('h1');
-		expect(wrapper.childAt(1).text(), 'title, text').to.be.equal('test_title');
+		expect(root.childAt(1).name(), 'title, html tag').to.be.equal('h1');
+		expect(root.childAt(1).text(), 'title, text').to.be.equal('test_title');
 		expect(
-			wrapper.childAt(2).prop('className'),
+			root.childAt(2).prop('className'),
 			'[showUpstreamsList = false] toggle upstreams list, className'
 		).to.be.equal(styles['list-toggler']);
 		expect(
-			wrapper.childAt(2).prop('onClick').name,
+			root.childAt(2).prop('onClick').name,
 			'toggle upstreams list, onClick'
 		).to.be.equal('bound toggleUpstreamsList');
 		expect(
-			wrapper.childAt(2).text(),
+			root.childAt(2).text(),
 			'toggle upstreams list, text'
 		).to.be.equal('Show upstreams list');
-		expect(wrapper.childAt(3).name(), 'upstream 1, component').to.be.equal('TestComponent');
+		expect(root.childAt(3).name(), 'upstream 1, component').to.be.equal('TestComponent');
 		expect(
-			wrapper.childAt(3).prop('upstream'),
+			root.childAt(3).prop('upstream'),
 			'upstream 1, upstream'
 		).to.be.deep.equal(upstreams.get('test_1'));
-		expect(wrapper.childAt(3).prop('name'), 'upstream 1, name').to.be.equal('test_1');
-		expect(wrapper.childAt(3).prop('showOnlyFailed'), 'upstream 1, showOnlyFailed').to.be.false;
+		expect(root.childAt(3).prop('name'), 'upstream 1, name').to.be.equal('test_1');
+		expect(root.childAt(3).prop('showOnlyFailed'), 'upstream 1, showOnlyFailed').to.be.false;
 		expect(
-			wrapper.childAt(3).prop('writePermission'),
+			root.childAt(3).prop('writePermission'),
 			'upstream 1, writePermission'
 		).to.be.equal('writePermission_test');
 		expect(
-			wrapper.childAt(3).prop('upstreamsApi'),
+			root.childAt(3).prop('upstreamsApi'),
 			'upstream 1, upstreamsApi'
 		).to.be.equal('upstreamsApi_test');
-		expect(wrapper.childAt(3).prop('isStream'), 'upstream 1, isStream').to.be.true;
+		expect(root.childAt(3).prop('isStream'), 'upstream 1, isStream').to.be.true;
 
-		expect(wrapper.childAt(4).name(), 'upstream 2, component').to.be.equal('TestComponent');
+		expect(root.childAt(4).name(), 'upstream 2, component').to.be.equal('TestComponent');
 		expect(
-			wrapper.childAt(4).prop('upstream'),
+			root.childAt(4).prop('upstream'),
 			'upstream 2, upstream'
 		).to.be.deep.equal(upstreams.get('test_2'));
-		expect(wrapper.childAt(4).prop('name'), 'upstream 2, name').to.be.equal('test_2');
-		expect(wrapper.childAt(4).prop('showOnlyFailed'), 'upstream 2, showOnlyFailed').to.be.false;
+		expect(root.childAt(4).prop('name'), 'upstream 2, name').to.be.equal('test_2');
+		expect(root.childAt(4).prop('showOnlyFailed'), 'upstream 2, showOnlyFailed').to.be.false;
 		expect(
-			wrapper.childAt(4).prop('writePermission'),
+			root.childAt(4).prop('writePermission'),
 			'upstream 2, writePermission'
 		).to.be.equal('writePermission_test');
 		expect(
-			wrapper.childAt(4).prop('upstreamsApi'),
+			root.childAt(4).prop('upstreamsApi'),
 			'upstream 2, upstreamsApi'
 		).to.be.equal('upstreamsApi_test');
-		expect(wrapper.childAt(4).prop('isStream'), 'upstream 2, isStream').to.be.true;
+		expect(root.childAt(4).prop('isStream'), 'upstream 2, isStream').to.be.true;
 
 		expect(instance.upstreamRef.bind.calledTwice, 'this,upstreamRef.bind called twice').to.be.true;
 		expect(
@@ -403,46 +411,48 @@ describe('<UpstreamsContainer />', () => {
 			showUpstreamsList: true,
 			howManyToShow: Infinity
 		});
+		wrapper.update();
+		root = wrapper.childAt(0);
 
-		expect(wrapper.children(), 'wrapper children length').to.have.lengthOf(5);
+		expect(root.children(), 'wrapper children length').to.have.lengthOf(5);
 		expect(
-			wrapper.childAt(0).childAt(1).prop('className'),
+			root.childAt(0).childAt(1).prop('className'),
 			'[showOnlyFailed = true] toggle-failed child 1, className'
 		).to.be.equal(styles['toggler-active']);
 		expect(
-			wrapper.childAt(2).prop('className'),
+			root.childAt(2).prop('className'),
 			'[showUpstreamsList = true] toggle upstreams list, className'
 		).to.be.equal(styles['list-toggler-opened']);
 		expect(
-			wrapper.childAt(2).text(),
+			root.childAt(2).text(),
 			'toggle upstreams list, text'
 		).to.be.equal('Hide upstreams list');
 		expect(
-			wrapper.childAt(3).prop('className'),
+			root.childAt(3).prop('className'),
 			'upstreams catalog, className'
 		).to.be.equal(styles['upstreams-catalog']);
 		expect(
-			wrapper.childAt(3).childAt(0).prop('className'),
+			root.childAt(3).childAt(0).prop('className'),
 			'upstreams catalog, summary, className'
 		).to.be.equal(styles['upstreams-summary']);
 		expect(
-			wrapper.childAt(3).childAt(0).childAt(2).prop('className'),
+			root.childAt(3).childAt(0).find(`.${styles['red-text']}`),
 			'upstreams catalog, summary, with problems, className'
-		).to.be.equal(styles['red-text']);
+		).to.have.lengthOf(1);
 		expect(
-			wrapper.childAt(3).childAt(0).text(),
+			root.childAt(3).childAt(0).text(),
 			'upstreams catalog, summary text'
 		).to.be.equal('Total: total_num upstreams (all_num servers)With problems: failures_num upstreams (failed_num servers)');
 		expect(
-			wrapper.childAt(3).childAt(1).prop('className'),
+			root.childAt(3).childAt(1).prop('className'),
 			'upstreams catalog, navlinks, className'
 		).to.be.equal(styles['upstreams-navlinks']);
 		expect(
-			wrapper.childAt(3).childAt(1).children(),
+			root.childAt(3).childAt(1).children(),
 			'[no failed upstreams] upstreams catalog, navlinks, children length'
 		).to.have.lengthOf(0);
 		expect(
-			wrapper.childAt(4).prop('className'),
+			root.childAt(4).prop('className'),
 			'[no upstreams to display] upstreams, className'
 		).to.be.equal(styles['msg']);
 
@@ -452,21 +462,22 @@ describe('<UpstreamsContainer />', () => {
 			hasFailedPeer: true
 		});
 		wrapper.setProps({ upstreams });
+		root = wrapper.childAt(0);
 
 		expect(
-			wrapper.childAt(3).childAt(1).children(),
+			root.childAt(3).childAt(1).children(),
 			'[with failed upstreams] upstreams catalog, navlinks, children length'
 		).to.have.lengthOf(1);
 		expect(
-			wrapper.childAt(3).childAt(1).childAt(0).prop('className'),
+			root.childAt(3).childAt(1).childAt(0).prop('className'),
 			'upstreams catalog, navlink, className'
 		).to.be.equal(styles['upstream-link-failed']);
 		expect(
-			wrapper.childAt(3).childAt(1).childAt(0).prop('onClick'),
+			root.childAt(3).childAt(1).childAt(0).prop('onClick'),
 			'upstreams catalog, navlink, onClick'
 		).to.be.a('function');
 		expect(
-			wrapper.childAt(3).childAt(1).childAt(0).prop('onClick')(),
+			root.childAt(3).childAt(1).childAt(0).prop('onClick')(),
 			'upstreams catalog, navlink, onClick returns'
 		).to.be.equal('scrollTo_result');
 		expect(
@@ -478,28 +489,30 @@ describe('<UpstreamsContainer />', () => {
 			'this.scrollTo call from navlink onClick prop, arguments'
 		).to.be.true;
 		expect(
-			wrapper.childAt(3).childAt(1).childAt(0).childAt(0).prop('className'),
+			root.childAt(3).childAt(1).childAt(0).childAt(0).prop('className'),
 			'upstreams catalog, navlink, name className'
 		).to.be.equal(styles['dashed']);
 		expect(
-			wrapper.childAt(3).childAt(1).childAt(0).text(),
+			root.childAt(3).childAt(1).childAt(0).text(),
 			'upstreams catalog, navlink, text'
 		).to.be.equal('test_2');
 
 		wrapper.setState({
 			showOnlyFailed: false
 		});
+		wrapper.update();
+		root = wrapper.childAt(0);
 
 		expect(
-			wrapper.childAt(3).childAt(1).children(),
+			root.childAt(3).childAt(1).children(),
 			'[showOnlyFailed = false] upstreams catalog, navlinks, children length'
 		).to.have.lengthOf(2);
 		expect(
-			wrapper.childAt(3).childAt(1).childAt(0).prop('className'),
+			root.childAt(3).childAt(1).childAt(0).prop('className'),
 			'[showOnlyFailed = false] upstreams catalog, navlink 1, className'
 		).to.be.equal(styles['upstream-link']);
 		expect(
-			wrapper.childAt(3).childAt(1).childAt(0).text(),
+			root.childAt(3).childAt(1).childAt(0).text(),
 			'upstreams catalog, navlink, text'
 		).to.be.equal('test_1');
 

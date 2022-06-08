@@ -36,6 +36,10 @@ describe('<Resolvers Page />', () => {
 					requests: {},
 					responses: {},
 					alert: true
+				}], ['test_3', {
+					requests: {},
+					responses: {},
+					alert: false
 				}]
 			]);
 			const wrapper = shallow(
@@ -45,19 +49,13 @@ describe('<Resolvers Page />', () => {
 
 			expect(rows.at(0).find('td').at(1).text(), 'row 1, title').to.be.equal('test');
 			expect(rows.at(1).find('td').at(1).text(), 'row 2, title').to.be.equal('test_2');
-
-			let sortSpy = spy(Array.prototype, 'sort');
+			expect(rows.at(2).find('td').at(1).text(), 'row 3, title').to.be.equal('test_3');
 
 			wrapper.setState({ sortOrder: 'desc' });
 			rows = wrapper.find('tbody tr');
 
 			expect(rows.at(0).find('td').at(1).text(), 'row 1, title [desc]').to.be.equal('test_2');
-			expect(rows.at(1).find('td').at(1).text(), 'row 2, title [desc]').to.be.equal('test');
-			expect(sortSpy.calledOnce, 'Array sort called once').to.be.true;
-			expect(sortSpy.args[0][0](['', { alert: true }], []), 'Array sort fn').to.be.equal(-1);
-			expect(sortSpy.args[0][0](['', { alert: false }], []), 'Array sort fn').to.be.equal(1);
 
-			sortSpy.restore();
 			wrapper.unmount();
 		});
 
@@ -66,7 +64,7 @@ describe('<Resolvers Page />', () => {
 			const table = wrapper.find(`.${ styles['table'] }`);
 			const sortControl = table.find('TableSortControl');
 
-			expect(wrapper.getElement().nodeName, 'wrapper html tag').to.be.equal('div');
+			expect(wrapper.getElement().type, 'wrapper html tag').to.be.equal('div');
 			expect(table.length, 'table container').to.be.equal(1);
 			expect(table.hasClass(styles['wide']), 'table has class "wide"').to.be.true;
 			expect(sortControl.length, 'TableSortControl length').to.be.equal(1);

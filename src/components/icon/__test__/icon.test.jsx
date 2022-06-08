@@ -24,8 +24,8 @@ describe('<Icon />', () => {
 		);
 		const rootEl = wrapper.getElement();
 
-		assert(rootEl.nodeName === 'span', 'Should be a "span" html tag');
-		assert(rootEl.children === undefined, 'Should not have any children');
+		assert(rootEl.type === 'span', 'Should be a "span" html tag');
+		assert(rootEl.props.children === undefined, 'Should not have any children');
 
 		assert(wrapper.hasClass(className), 'Should have a class from "className" property');
 		assert(wrapper.hasClass(styles[type]), 'Should have a class based on "type" property');

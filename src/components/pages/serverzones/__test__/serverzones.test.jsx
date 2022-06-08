@@ -51,6 +51,10 @@ describe('<ServerZones />', () => {
 						alert: false,
 						warning: true,
 						responses: {}
+					}], ['test_4', {
+						alert: false,
+						warning: false,
+						responses: {}
 					}]
 				]) } />
 			);
@@ -59,19 +63,28 @@ describe('<ServerZones />', () => {
 			expect(rows.at(0).find('td').at(1).text(), 'row 1, title').to.be.equal('test');
 			expect(rows.at(1).find('td').at(1).text(), 'row 2, title').to.be.equal('test_2');
 			expect(rows.at(2).find('td').at(1).text(), 'row 3, title').to.be.equal('test_3');
-
-			let sortSpy = spy(Array.prototype, 'sort');
+			expect(rows.at(3).find('td').at(1).text(), 'row 4, title').to.be.equal('test_4');
 
 			wrapper.setState({ sortOrder: 'desc' });
 			rows = wrapper.find('tbody tr');
 
-			expect(rows.at(2).find('td').at(1).text(), 'row 3, title [desc]').to.be.equal('test');
-			expect(sortSpy.calledOnce, 'Array sort called once').to.be.true;
-			expect(sortSpy.args[0][0](['', { alert: true, warning: false }], []), 'Array sort fn').to.be.equal(-1);
-			expect(sortSpy.args[0][0](['', { alert: false, warning: true }], []), 'Array sort fn').to.be.equal(-1);
-			expect(sortSpy.args[0][0](['', { alert: false, warning: false }], []), 'Array sort fn').to.be.equal(1);
+			assert(
+				['test_2', 'test_3'].includes(rows.at(0).find('td').at(1).text()),
+				'row 1, title [desc]'
+			);
+			assert(
+				['test_2', 'test_3'].includes(rows.at(1).find('td').at(1).text()),
+				'row 2, title [desc]'
+			);
+			assert(
+				['test', 'test_4'].includes(rows.at(2).find('td').at(1).text()),
+				'row 3, title [desc]'
+			);
+			assert(
+				['test', 'test_4'].includes(rows.at(3).find('td').at(1).text()),
+				'row 4, title [desc]'
+			);
 
-			sortSpy.restore();
 			wrapper.unmount();
 		});
 
@@ -82,7 +95,7 @@ describe('<ServerZones />', () => {
 			const table = wrapper.find(`.${ styles['table'] }`);
 			const sortControl = table.find('TableSortControl');
 
-			expect(wrapper.getElement().nodeName, 'wrapper html tag').to.be.equal('div');
+			expect(wrapper.getElement().type, 'wrapper html tag').to.be.equal('div');
 			expect(table.length, 'table container').to.be.equal(1);
 			expect(table.hasClass(styles['wide']), 'table has class "wide"').to.be.true;
 			expect(sortControl.length, 'TableSortControl length').to.be.equal(1);
@@ -356,32 +369,56 @@ describe('<ServerZones />', () => {
 
 			expect(tooltips.useTooltip.calledThrice, 'useTooltip called').to.be.true;
 			expect(
-				tooltips.useTooltip.args[0][0].children[0],
-				'useTooltip call 1, arg 1, children 1'
-			).to.be.equal('4xx: 5 ');
+				tooltips.useTooltip.args[0][0].props.children[0],
+				'useTooltip call 1'
+			).to.contain('4xx:');
 			expect(
-				tooltips.useTooltip.args[0][0].children[2],
-				'useTooltip call 1, arg 1, children 3'
-			).to.be.equal(' 499/444/408: 2');
-			expect(tooltips.useTooltip.args[0][1], 'useTooltip call 1, arg 2').to.be.equal('hint');
+				tooltips.useTooltip.args[0][0].props.children[1],
+				'useTooltip call 1'
+			).to.be.equal(5);
 			expect(
-				tooltips.useTooltip.args[1][0].children[0],
-				'useTooltip call 2, arg 1, children 1'
-			).to.be.equal('4xx: 50 ');
+				tooltips.useTooltip.args[0][0].props.children[4],
+				'useTooltip call 1'
+			).to.contain('499/444/408:');
 			expect(
-				tooltips.useTooltip.args[1][0].children[2],
-				'useTooltip call 2, arg 1, children 3'
-			).to.be.equal(' 499/444/408: 3');
-			expect(tooltips.useTooltip.args[1][1], 'useTooltip call 2, arg 2').to.be.equal('hint');
+				tooltips.useTooltip.args[0][0].props.children[5],
+				'useTooltip call 1'
+			).to.be.equal(2);
+			expect(tooltips.useTooltip.args[0][1], 'useTooltip call 1').to.be.equal('hint');
 			expect(
-				tooltips.useTooltip.args[2][0].children[0],
-				'useTooltip call 3, arg 1, children 1'
-			).to.be.equal('4xx: 0 ');
+				tooltips.useTooltip.args[1][0].props.children[0],
+				'useTooltip call 2'
+			).to.contain('4xx:');
 			expect(
-				tooltips.useTooltip.args[2][0].children[2],
-				'useTooltip call 3, arg 1, children 3'
-			).to.be.equal(' 499/444/408: 4');
-			expect(tooltips.useTooltip.args[2][1], 'useTooltip call 3, arg 2').to.be.equal('hint');
+				tooltips.useTooltip.args[1][0].props.children[1],
+				'useTooltip call 2'
+			).to.be.equal(50);
+			expect(
+				tooltips.useTooltip.args[1][0].props.children[4],
+				'useTooltip call 2'
+			).to.contain('499/444/408:');
+			expect(
+				tooltips.useTooltip.args[1][0].props.children[5],
+				'useTooltip call 2'
+			).to.be.equal(3);
+			expect(tooltips.useTooltip.args[1][1], 'useTooltip call 2').to.be.equal('hint');
+			expect(
+				tooltips.useTooltip.args[2][0].props.children[0],
+				'useTooltip call 3'
+			).to.contain('4xx:');
+			expect(
+				tooltips.useTooltip.args[2][0].props.children[1],
+				'useTooltip call 3'
+			).to.be.equal(0);
+			expect(
+				tooltips.useTooltip.args[2][0].props.children[4],
+				'useTooltip call 3'
+			).to.contain('499/444/408:');
+			expect(
+				tooltips.useTooltip.args[2][0].props.children[5],
+				'useTooltip call 3'
+			).to.be.equal(4);
+			expect(tooltips.useTooltip.args[2][1], 'useTooltip call 3').to.be.equal('hint');
 
 			expect(utils.formatReadableBytes.callCount, 'useTooltip called').to.be.equal(12);
 			expect(utils.formatReadableBytes.args[0][0], 'useTooltip call 1 arg').to.be.equal(1);

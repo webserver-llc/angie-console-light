@@ -33,9 +33,6 @@ describe('<UpstreamsBox IndexPage />', () => {
 		expect(indexBox.prop('title'), 'IndexBox title').to.be.equal('test_title');
 		expect(indexBox.prop('status'), 'IndexBox status').to.be.equal('ok');
 		expect(indexBox.prop('href'), 'IndexBox href').to.be.equal('#test_block');
-
-		indexBox = indexBox.childAt(0);
-
 		expect(indexBox.childAt(0).name(), 'AlertsCount').to.be.equal('AlertsCount');
 		expect(indexBox.childAt(0).prop('total'), 'AlertsCount total').to.be.equal(99);
 		expect(indexBox.childAt(0).prop('warnings'), 'AlertsCount warnings').to.be.equal(0);
@@ -48,7 +45,7 @@ describe('<UpstreamsBox IndexPage />', () => {
 		props.stats.servers.up = 2;
 		props.stats.servers.failed = 1;
 		wrapper.setProps(props);
-		indexBox = wrapper.find('IndexBox').childAt(0);
+		indexBox = wrapper.find('IndexBox');
 
 		expect(indexBox.childAt(2).text(), 'all / up row').to.be.equal('All: 3 / Up: 2');
 		expect(indexBox.childAt(3).prop('className'), 'failed row className').to.be.equal(styles['red']);

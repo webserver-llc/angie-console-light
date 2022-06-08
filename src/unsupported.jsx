@@ -32,5 +32,9 @@ export default class Unsupported extends React.Component {
 }
 
 export const start = () => {
-	React.render(<Unsupported />, document.body);
+	const fragment = document.createDocumentFragment();
+
+	React.render(<Unsupported />, fragment);
+
+	document.body.appendChild(fragment);
 };

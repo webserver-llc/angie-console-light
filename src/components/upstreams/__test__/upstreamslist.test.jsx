@@ -148,6 +148,7 @@ describe('<UpstreamsList />', () => {
 
 		isWritableResult = true;
 		instance.toggleEditMode();
+		wrapper.update();
 
 		expect(stateSpy.calledOnce, 'this.setState called once').to.be.true;
 		expect(stateSpy.args[0][0], 'this.setState call 1, args').to.be.deep.equal({
@@ -191,6 +192,7 @@ describe('<UpstreamsList />', () => {
 		const peer = { id: 'peer_1' };
 
 		instance.editSelectedUpstream(peer);
+		wrapper.update();
 
 		expect(
 			stateSpy.calledOnce,
@@ -588,7 +590,6 @@ describe('<UpstreamsList />', () => {
 		let isWritableResult = false;
 
 		stub(apiUtils, 'isWritable').callsFake(() => isWritableResult);
-		stub(Array.prototype, 'sort').callsFake(() => 'test_sort_result');
 		stub(instance, 'filterPeers').callsFake(peers => peers);
 		stub(tooltips, 'useTooltip').callsFake(() => ({
 			prop_from_useTooltip: true
@@ -604,10 +605,6 @@ describe('<UpstreamsList />', () => {
 		expect(
 			instance.filterPeers.calledWith(props.upstream.peers),
 			'[showOnlyFailed = false] this.filterPeers call args'
-		).to.be.true;
-		expect(
-			Array.prototype.sort.notCalled,
-			'[state.sortOrder = asc] peers.sort not called'
 		).to.be.true;
 		expect(
 			apiUtils.isWritable.calledTwice,
@@ -681,52 +678,37 @@ describe('<UpstreamsList />', () => {
 		).to.have.lengthOf(1);
 		expect(wrapper.childAt(2).text(), 'this.renderPeers result').to.be.equal('renderPeers_result');
 		expect(instance.renderPeers.calledOnce, 'this.renderPeers called once').to.be.true;
-		expect(
-			instance.renderPeers.args[0][0],
-			'this.renderPeers call args'
-		).to.be.deep.equal(props.upstream.peers);
+		expect(instance.renderPeers.args[0][0][0].id, '[1] peers order').to.be.equal('test_1');
+		expect(instance.renderPeers.args[0][0][1].id, '[1] peers order').to.be.equal('test_2');
+		expect(instance.renderPeers.args[0][0][2].id, '[1] peers order').to.be.equal('test_3');
+		expect(instance.renderPeers.args[0][0][3].id, '[1] peers order').to.be.equal('test_4');
+		expect(instance.renderPeers.args[0][0][4].id, '[1] peers order').to.be.equal('test_5');
 
 		expect(tooltips.useTooltip.calledOnce, 'useTooltip called once').to.be.true;
 		expect(
-			tooltips.useTooltip.args[0][0].nodeName.prototype.displayName,
+			tooltips.useTooltip.args[0][0].type.displayName,
 			'useTooltip call arg'
 		).to.be.equal('UpstreamStatsTooltip');
 		expect(
-			tooltips.useTooltip.args[0][0].attributes.upstream,
+			tooltips.useTooltip.args[0][0].props.upstream,
 			'useTooltip call arg props'
 		).to.be.deep.equal(props.upstream);
 
 		apiUtils.isWritable.resetHistory();
+		instance.renderPeers.resetHistory();
 		isWritableResult = null;
 		wrapper.setState({
 			sortOrder: 'desc',
 			editor: 'test_editor'
 		});
+		wrapper.update();
+		expect(instance.renderPeers).to.be.calledOnce;
+		expect(instance.renderPeers.args[0][0][0].id, '[2] peers order').to.be.equal('test_5');
+		expect(instance.renderPeers.args[0][0][1].id, '[2] peers order').to.be.equal('test_3');
+		expect(instance.renderPeers.args[0][0][2].id, '[2] peers order').to.be.equal('test_2');
+		expect(instance.renderPeers.args[0][0][3].id, '[2] peers order').to.be.equal('test_1');
+		expect(instance.renderPeers.args[0][0][4].id, '[2] peers order').to.be.equal('test_4');
 
-		expect(
-			Array.prototype.sort.calledOnce,
-			'[state.sortOrder = desc] peers.sort called'
-		).to.be.true;
-		expect(
-			Array.prototype.sort.getCall(0).thisValue,
-			'peers.sort called on peers'
-		).to.be.deep.equal(props.upstream.peers);
-		expect(
-			Array.prototype.sort.args[0][0]({ state: 'up' }),
-			'peers.sort call arg, check 1'
-		).to.be.equal(1);
-		expect(
-			Array.prototype.sort.args[0][0]({ state: 'down' }),
-			'peers.sort call arg, check 2'
-		).to.be.equal(-1);
-		expect(
-			Array.prototype.sort.args[0][0]({ state: 'unhealthy' }),
-			'peers.sort call arg, check 3'
-		).to.be.equal(-1);
-		expect(
-			Array.prototype.sort.args[0][0]({ state: 'unavail' }),
-			'peers.sort call arg, check 4'
-		).to.be.equal(-1);
 		expect(
 			apiUtils.isWritable.calledTwice,
 			'[isWritable returns null] isWritable called twice'
@@ -844,11 +826,11 @@ describe('<UpstreamsList />', () => {
 
 		expect(tooltips.useTooltip.calledTwice, 'useTooltip called twice').to.be.true;
 		expect(
-			tooltips.useTooltip.args[1][0].nodeName.prototype.displayName,
+			tooltips.useTooltip.args[1][0].type.displayName,
 			'useTooltip call 2, arg 1'
 		).to.be.equal('SharedZoneTooltip');
 		expect(
-			tooltips.useTooltip.args[1][0].attributes.zone,
+			tooltips.useTooltip.args[1][0].props.zone,
 			'useTooltip call 2, arg 1, props'
 		).to.be.equal('slab_test');
 		expect(
@@ -876,7 +858,6 @@ describe('<UpstreamsList />', () => {
 			'[showOnlyFailed = true, this.filterPeers returns empty array] render result'
 		).to.be.a('null');
 
-		Array.prototype.sort.restore();
 		instance.filterPeers.restore();
 		tooltips.useTooltip.restore();
 		instance.renderPeers.restore();

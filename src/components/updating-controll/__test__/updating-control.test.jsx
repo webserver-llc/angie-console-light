@@ -54,6 +54,7 @@ describe('<UpdatingControl />', () => {
 			expanded: true
 		});
 
+		wrapper.update();
 		setStateSpy.resetHistory();
 		instance.toggle();
 

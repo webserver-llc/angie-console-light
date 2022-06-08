@@ -193,7 +193,7 @@ describe('<Chart />', () => {
 		});
 		expect(instance.redraw.args[0][1], 'this.redraw 2nd arg').to.be.deep.equal(nextData);
 
-		instance.setState({ dndPointsIndicies: '0,100' });
+		wrapper.setState({ dndPointsIndicies: '0,100' });
 		instance.componentWillReceiveProps(nextData);
 
 		expect(appsettings.getSetting.notCalled, 'getSetting not called').to.be.true;
@@ -206,7 +206,7 @@ describe('<Chart />', () => {
 		nextData.data.data = ['test'];
 		instance.componentWillReceiveProps(nextData);
 
-		expect(appsettings.getSetting.calledOnce, 'getSetting called once').to.be.true;
+		expect(appsettings.getSetting).to.be.calledOnce;
 		expect(appsettings.getSetting.args[0][0], 'getSetting 1st arg').to.be.equal('updatingPeriod');
 		expect(instance.redraw.callCount, 'this.redraw called').to.be.equal(3);
 		expect(instance.redraw.args[2][0], 'this.redraw 1st arg')
@@ -214,7 +214,7 @@ describe('<Chart />', () => {
 			.to.be.equal('0,100');
 		expect(instance.redraw.args[2][1], 'this.redraw 2nd arg').to.be.deep.equal(nextData);
 
-		instance.setState({ dndPointsIndicies: '10,110' });
+		wrapper.setState({ dndPointsIndicies: '10,110' });
 		instance.componentWillReceiveProps(nextData);
 
 		expect(instance.redraw.callCount, 'this.redraw called').to.be.equal(4);
@@ -233,14 +233,14 @@ describe('<Chart />', () => {
 
 		expect(instance.shouldComponentUpdate(), 'default behaviour').to.be.true;
 
-		instance.setState({ dndIsInProgress: true });
+		wrapper.setState({ dndIsInProgress: true });
 
 		expect(
 			instance.shouldComponentUpdate(null, { dndPointsIndicies: '0,100' }),
 			'dndIsInProgress = true, dndPointsIndicies changed'
 		).to.be.true;
 
-		instance.setState({ dndPointsIndicies: '0,100' });
+		wrapper.setState({ dndPointsIndicies: '0,100' });
 
 		expect(
 			instance.shouldComponentUpdate(null, { dndPointsIndicies: '0,100' }),
@@ -315,7 +315,7 @@ describe('<Chart />', () => {
 			mouseOffsetX: 'test_offset_x'
 		});
 
-		instance.setState({ dndIsInProgress: true });
+		wrapper.setState({ dndIsInProgress: true });
 		stateSpy.resetHistory();
 		instance.drawCursorLine();
 
@@ -344,7 +344,7 @@ describe('<Chart />', () => {
 			dndPointsIndicies: '0,0'
 		});
 
-		instance.setState({ dndPointsIndicies: '0,0' });
+		wrapper.setState({ dndPointsIndicies: '0,0' });
 		instance.onMouseDown({ offsetX });
 
 		expect(instance.redraw.calledTwice, 'this.redraw called twice').to.be.true;
@@ -374,7 +374,7 @@ describe('<Chart />', () => {
 			dndIsInProgress: false
 		});
 
-		instance.setState({ dndPointsIndicies: '0,1' });
+		wrapper.setState({ dndPointsIndicies: '0,1' });
 		instance.onMouseUp();
 
 		expect(instance.redraw.calledTwice, 'this.redraw called twice').to.be.true;
@@ -382,7 +382,7 @@ describe('<Chart />', () => {
 			dndIsInProgress: false
 		});
 
-		instance.setState({ dndPointsIndicies: '0,2' });
+		wrapper.setState({ dndPointsIndicies: '0,2' });
 		instance.onMouseUp();
 
 		expect(instance.redraw.calledThrice, 'this.redraw called thrice').to.be.true;
@@ -428,7 +428,7 @@ describe('<Chart />', () => {
 		expect(instance.drawCursorLine.calledOnce, 'this.drawCursorLine called once').to.be.true;
 		expect(instance.mouseMoveTimer, 'this.mouseMoveTimer').to.be.a('null');
 
-		instance.setState({
+		wrapper.setState({
 			dndIsInProgress: true,
 			dndPointsIndicies: '0,14'
 		});
@@ -439,21 +439,21 @@ describe('<Chart />', () => {
 		expect(instance.dndStartX, 'this.dndStartX').to.be.equal(100);
 		expect(instance.dndMoveX, 'this.dndMoveX').to.be.equal(100);
 
-		instance.setState({ selectedTimeWindow: '15m' });
+		wrapper.setState({ selectedTimeWindow: '15m' });
 		instance.dndMoveX = 120;
 		instance.onMouseMove({ offsetX: 140 });
 
 		expect(instance.dndMoveX, 'this.dndMoveX [selectedTW 15m]').to.be.equal(140);
 		expect(instance.dndStartX, 'this.dndStartX [selectedTW 15m]').to.be.equal(260);
 
-		instance.setState({ selectedTimeWindow: '5m' });
+		wrapper.setState({ selectedTimeWindow: '5m' });
 		instance.dndMoveX = 280;
 		instance.onMouseMove({ offsetX: 200 });
 
 		expect(instance.dndMoveX, 'this.dndMoveX [selectedTW 5m]').to.be.equal(200);
 		expect(instance.dndStartX, 'this.dndStartX [selectedTW 5m]').to.be.equal(140);
 
-		instance.setState({ selectedTimeWindow: '1m' });
+		wrapper.setState({ selectedTimeWindow: '1m' });
 		instance.dndMoveX = 160;
 		instance.onMouseMove({ offsetX: 200 });
 
@@ -476,7 +476,7 @@ describe('<Chart />', () => {
 
 		expect(instance.redraw.notCalled, 'this.redraw not called [path > 0, right border]').to.be.true;
 
-		instance.setState({ dndPointsIndicies: '0,5' });
+		wrapper.setState({ dndPointsIndicies: '0,5' });
 		instance.onMouseMove({ offsetX: 100 });
 
 		expect(instance.dndMoveX, 'this.dndMoveX [going forward]').to.be.equal(100);
@@ -486,7 +486,7 @@ describe('<Chart />', () => {
 			dndPointsIndicies: '2,7'
 		});
 
-		instance.setState({ dndPointsIndicies: '2,7' });
+		wrapper.setState({ dndPointsIndicies: '2,7' });
 		instance.onMouseMove({ offsetX: 1000 });
 
 		expect(instance.dndMoveX, 'this.dndMoveX [going forward, limit reached]').to.be.equal(1000);
@@ -496,7 +496,7 @@ describe('<Chart />', () => {
 			dndPointsIndicies: '0,5'
 		});
 
-		instance.setState({ dndPointsIndicies: '0,5' });
+		wrapper.setState({ dndPointsIndicies: '0,5' });
 		instance.onMouseMove({ offsetX: 0 });
 
 		expect(instance.dndMoveX, 'this.dndMoveX [going forward, limit reached]').to.be.equal(0);
@@ -535,25 +535,25 @@ describe('<Chart />', () => {
 		expect(instance.redraw.args[1][0], 'this.redraw arg [going forward, catching toBorder]')
 			.to.be.deep.equal({ dndPointsIndicies: null });
 
-		instance.setState({ dndPointsIndicies: '7,9' });
+		wrapper.setState({ dndPointsIndicies: '7,9' });
 		instance.emulateDnd(-1);
 
 		expect(instance.redraw.args[2][0], 'this.redraw arg [going back]')
 			.to.be.deep.equal({ dndPointsIndicies: '5,7' });
 
-		instance.setState({ dndPointsIndicies: '4,6' });
+		wrapper.setState({ dndPointsIndicies: '4,6' });
 		instance.emulateDnd(1);
 
 		expect(instance.redraw.args[3][0], 'this.redraw arg [going forward]')
 			.to.be.deep.equal({ dndPointsIndicies: '6,8' });
 
-		instance.setState({ dndPointsIndicies: '4,6' });
+		wrapper.setState({ dndPointsIndicies: '4,6' });
 		instance.emulateDnd(-1, true);
 
 		expect(instance.redraw.args[4][0], 'this.redraw arg [going back, toBorder]')
 			.to.be.deep.equal({ dndPointsIndicies: '0,2' });
 
-		instance.setState({ dndPointsIndicies: '4,6' });
+		wrapper.setState({ dndPointsIndicies: '4,6' });
 		instance.emulateDnd(1, true);
 
 		expect(instance.redraw.args[5][0], 'this.redraw arg [going forward, toBorder]')
@@ -598,7 +598,7 @@ describe('<Chart />', () => {
 
 		instance.highlightMetricTimer = 2;
 		instance.highlightedMetric = 'test_metric';
-		instance.setState({ highlightedMetric: 'test_metric' });
+		wrapper.setState({ highlightedMetric: 'test_metric' });
 		instance.highlightMetric();
 
 		expect(instance.highlightMetricTimer, 'this.highlightMetricTimer').to.be.a('null');
@@ -631,7 +631,7 @@ describe('<Chart />', () => {
 			highlightedMetric: null
 		});
 
-		instance.setState({ disabledMetrics: ['test_metric'] });
+		wrapper.setState({ disabledMetrics: ['test_metric'] });
 		instance.toggleMetric('test_metric');
 
 		expect(instance.redraw.calledTwice, 'this.redraw call 2').to.be.true;
@@ -680,19 +680,19 @@ describe('<Chart />', () => {
 			TimeWindows.forEach((tw, key) => {
 				const el = instance.timeWindowControls[i];
 
-				expect(el.nodeName, `[el ${ i }] nodeName`).to.be.equal('div');
-				expect(el.attributes.key, `[el ${ i }] key attr`).to.be.equal(key);
+				expect(el.type, `[el ${ i }] type`).to.be.equal('div');
+				expect(el.key, `[el ${ i }] key attr`).to.be.equal(key);
 
 				if (key === selectedTimeWindow) {
-					expect(el.attributes.className, `[el ${ i }] className attr`)
+					expect(el.props.className, `[el ${ i }] className attr`)
 						.to.be.equal(`${ styles['timewindow__item'] } ${ styles['timewindow__item_selected'] }`);
-					expect(el.attributes.onClick, `[el ${ i }] onClick attr`).to.be.a('null');
+					expect(el.props.onClick, `[el ${ i }] onClick attr`).to.be.an.undefined;
 				} else {
-					expect(el.attributes.className, `[el ${ i }] className attr`).to.be.equal(styles['timewindow__item']);
-					expect(el.attributes.onClick.name, `[el ${ i }] onClick attr`).to.be.equal('bound selectTimeWindow');
+					expect(el.props.className, `[el ${ i }] className attr`).to.be.equal(styles['timewindow__item']);
+					expect(el.props.onClick.name, `[el ${ i }] onClick attr`).to.be.equal('bound selectTimeWindow');
 				}
 
-				expect(el.attributes.children, `[el ${ i }] children attr`).to.be.deep.equal([key]);
+				expect(el.props.children, `[el ${ i }] children attr`).to.be.deep.equal(key);
 
 				i++;
 			});
@@ -767,7 +767,7 @@ describe('<Chart />', () => {
 
 			stub(utils, 'getYMax').callsFake(() => yMax);
 
-			instance.setState({ highlightedMetric: 'passed' });
+			wrapper.setState({ highlightedMetric: 'passed' });
 			instance.redraw();
 
 			expect(utils.getYMax.calledOnce, 'getYMax called once').to.be.true;
@@ -797,145 +797,145 @@ describe('<Chart />', () => {
 				rejected: 2
 			});
 			expect(instance.points[2].x, 'this.points[2].x').to.be.equal(770.2398402781427);
-			expect(instance.toRender.charts[0].nodeName, 'this.toRender.charts[0] nodeName')
+			expect(instance.toRender.charts[0].type, 'this.toRender.charts[0] type')
 				.to.be.equal('path');
-			expect(instance.toRender.charts[0].attributes.key, 'this.toRender.charts[0] key')
+			expect(instance.toRender.charts[0].key, 'this.toRender.charts[0] key')
 				.to.be.equal('chart_rejected');
-			expect(instance.toRender.charts[0].attributes.className, 'this.toRender.charts[0] className')
+			expect(instance.toRender.charts[0].props.className, 'this.toRender.charts[0] className')
 				.to.be.equal(`${ styles['line'] } ${ styles['faded'] }`);
-			expect(instance.toRender.charts[0].attributes.style, 'this.toRender.charts[0] style')
+			expect(instance.toRender.charts[0].props.style, 'this.toRender.charts[0] style')
 				.to.be.deep.equal({ stroke: '#FF2323' });
-			expect(instance.toRender.charts[0].attributes.d, 'this.toRender.charts[0] d')
+			expect(instance.toRender.charts[0].props.d, 'this.toRender.charts[0] d')
 				.to.be.equal('M 50.719520491333824 220 L 410.47968038473823 220 L 770.2398402781427 220');
-			expect(instance.toRender.charts[1].nodeName, 'this.toRender.charts[1] nodeName')
+			expect(instance.toRender.charts[1].type, 'this.toRender.charts[1] type')
 				.to.be.equal('path');
-			expect(instance.toRender.charts[1].attributes.key, 'this.toRender.charts[1] key')
+			expect(instance.toRender.charts[1].key, 'this.toRender.charts[1] key')
 				.to.be.equal('chart_delayed');
-			expect(instance.toRender.charts[1].attributes.className, 'this.toRender.charts[1] className')
+			expect(instance.toRender.charts[1].props.className, 'this.toRender.charts[1] className')
 				.to.be.equal(`${ styles['line'] } ${ styles['faded'] }`);
-			expect(instance.toRender.charts[1].attributes.style, 'this.toRender.charts[1] style')
+			expect(instance.toRender.charts[1].props.style, 'this.toRender.charts[1] style')
 				.to.be.deep.equal({ stroke: '#EBC906' });
-			expect(instance.toRender.charts[1].attributes.d, 'this.toRender.charts[1] d')
+			expect(instance.toRender.charts[1].props.d, 'this.toRender.charts[1] d')
 				.to.be.equal('M 50.719520491333824 220 L 410.47968038473823 220 L 770.2398402781427 220');
-			expect(instance.toRender.charts[2].nodeName, 'this.toRender.charts[2] nodeName')
+			expect(instance.toRender.charts[2].type, 'this.toRender.charts[2] type')
 				.to.be.equal('path');
-			expect(instance.toRender.charts[2].attributes.key, 'this.toRender.charts[2] key')
+			expect(instance.toRender.charts[2].key, 'this.toRender.charts[2] key')
 				.to.be.equal('chart_passed');
-			expect(instance.toRender.charts[2].attributes.className, 'this.toRender.charts[2] className')
+			expect(instance.toRender.charts[2].props.className, 'this.toRender.charts[2] className')
 				.to.be.equal(styles['line']);
-			expect(instance.toRender.charts[2].attributes.style, 'this.toRender.charts[2] style')
+			expect(instance.toRender.charts[2].props.style, 'this.toRender.charts[2] style')
 				.to.be.deep.equal({ stroke: '#4FA932' });
-			expect(instance.toRender.charts[2].attributes.d, 'this.toRender.charts[2] d')
+			expect(instance.toRender.charts[2].props.d, 'this.toRender.charts[2] d')
 				.to.be.equal('M 50.719520491333824 220 L 410.47968038473823 220 L 770.2398402781427 220');
 
-			expect(instance.toRender.areas[0].nodeName, 'this.toRender.areas[0] nodeName')
+			expect(instance.toRender.areas[0].type, 'this.toRender.areas[0] type')
 				.to.be.equal('path');
-			expect(instance.toRender.areas[0].attributes.key, 'this.toRender.areas[0] key')
+			expect(instance.toRender.areas[0].key, 'this.toRender.areas[0] key')
 				.to.be.equal('chart-area_rejected');
-			expect(instance.toRender.areas[0].attributes.className, 'this.toRender.areas[0] className')
+			expect(instance.toRender.areas[0].props.className, 'this.toRender.areas[0] className')
 				.to.be.equal(`${ styles['area'] } ${ styles['faded'] }`);
-			expect(instance.toRender.areas[0].attributes.style, 'this.toRender.areas[0] style')
+			expect(instance.toRender.areas[0].props.style, 'this.toRender.areas[0] style')
 				.to.be.deep.equal({ fill: '#FF2323' });
-			expect(instance.toRender.areas[0].attributes.d, 'this.toRender.areas[0] d')
+			expect(instance.toRender.areas[0].props.d, 'this.toRender.areas[0] d')
 				.to.be.equal('M 50.719520491333824 220 L 410.47968038473823 220 L 770.2398402781427 220 V 220 H 50.719520491333824 V 220');
-			expect(instance.toRender.areas[1].nodeName, 'this.toRender.areas[1] nodeName')
+			expect(instance.toRender.areas[1].type, 'this.toRender.areas[1] type')
 				.to.be.equal('path');
-			expect(instance.toRender.areas[1].attributes.key, 'this.toRender.areas[1] key')
+			expect(instance.toRender.areas[1].key, 'this.toRender.areas[1] key')
 				.to.be.equal('chart-area_delayed');
-			expect(instance.toRender.areas[1].attributes.className, 'this.toRender.areas[1] className')
+			expect(instance.toRender.areas[1].props.className, 'this.toRender.areas[1] className')
 				.to.be.equal(`${ styles['area'] } ${ styles['faded'] }`);
-			expect(instance.toRender.areas[1].attributes.style, 'this.toRender.areas[1] style')
+			expect(instance.toRender.areas[1].props.style, 'this.toRender.areas[1] style')
 				.to.be.deep.equal({ fill: '#EBC906' });
-			expect(instance.toRender.areas[1].attributes.d, 'this.toRender.areas[1] d')
+			expect(instance.toRender.areas[1].props.d, 'this.toRender.areas[1] d')
 				.to.be.equal('M 50.719520491333824 220 L 410.47968038473823 220 L 770.2398402781427 220 V 220L 770.2398402781427 220 L 410.47968038473823 220 L 50.719520491333824 220  V 220');
-			expect(instance.toRender.areas[2].nodeName, 'this.toRender.areas[2] nodeName')
+			expect(instance.toRender.areas[2].type, 'this.toRender.areas[2] type')
 				.to.be.equal('path');
-			expect(instance.toRender.areas[2].attributes.key, 'this.toRender.areas[2] key')
+			expect(instance.toRender.areas[2].key, 'this.toRender.areas[2] key')
 				.to.be.equal('chart-area_passed');
-			expect(instance.toRender.areas[2].attributes.className, 'this.toRender.areas[2] className')
+			expect(instance.toRender.areas[2].props.className, 'this.toRender.areas[2] className')
 				.to.be.equal(styles['area']);
-			expect(instance.toRender.areas[2].attributes.style, 'this.toRender.areas[2] style')
+			expect(instance.toRender.areas[2].props.style, 'this.toRender.areas[2] style')
 				.to.be.deep.equal({ fill: '#4FA932' });
-			expect(instance.toRender.areas[2].attributes.d, 'this.toRender.areas[2] d')
+			expect(instance.toRender.areas[2].props.d, 'this.toRender.areas[2] d')
 				.to.be.equal('M 50.719520491333824 220 L 410.47968038473823 220 L 770.2398402781427 220 V 220L 770.2398402781427 220 L 410.47968038473823 220 L 50.719520491333824 220  V 220');
 
-			expect(instance.toRender.legend[0].nodeName, 'this.toRender.legend[0] nodeName')
+			expect(instance.toRender.legend[0].type, 'this.toRender.legend[0] type')
 				.to.be.equal('span');
-			expect(instance.toRender.legend[0].attributes.key, 'this.toRender.legend[0] key')
+			expect(instance.toRender.legend[0].key, 'this.toRender.legend[0] key')
 				.to.be.equal('legend_passed');
-			expect(instance.toRender.legend[0].attributes.className, 'this.toRender.legend[0] className')
+			expect(instance.toRender.legend[0].props.className, 'this.toRender.legend[0] className')
 				.to.be.equal(styles['legend__item']);
-			expect(instance.toRender.legend[0].attributes.onClick.name, 'this.toRender.legend[0] onClick')
+			expect(instance.toRender.legend[0].props.onClick.name, 'this.toRender.legend[0] onClick')
 				.to.be.equal('bound toggleMetric');
-			expect(instance.toRender.legend[0].attributes.onMouseLeave.name, 'this.toRender.legend[0] onMouseLeave')
+			expect(instance.toRender.legend[0].props.onMouseLeave.name, 'this.toRender.legend[0] onMouseLeave')
 				.to.be.equal('bound deferredHighlightMetric');
-			expect(instance.toRender.legend[0].attributes.onMouseOver.name, 'this.toRender.legend[0] onMouseOver')
+			expect(instance.toRender.legend[0].props.onMouseOver.name, 'this.toRender.legend[0] onMouseOver')
 				.to.be.equal('bound deferredHighlightMetric');
-			expect(instance.toRender.legend[0].children[0].nodeName, 'this.toRender.legend[0] children 1 nodeName')
+			expect(instance.toRender.legend[0].props.children[0].type, 'this.toRender.legend[0] children 1 type')
 				.to.be.equal('span');
 			expect(
-				instance.toRender.legend[0].children[0].attributes.className,
+				instance.toRender.legend[0].props.children[0].props.className,
 				'this.toRender.legend[0] children 1 className'
 			).to.be.equal(styles['legend__color']);
 			expect(
-				instance.toRender.legend[0].children[0].attributes.style,
+				instance.toRender.legend[0].props.children[0].props.style,
 				'this.toRender.legend[0] children 1 style'
 			).to.be.deep.equal({
 				background: '#4FA932'
 			});
-			expect(instance.toRender.legend[0].children[1], 'this.toRender.legend[0] children 2')
+			expect(instance.toRender.legend[0].props.children[1], 'this.toRender.legend[0] children 2')
 				.to.be.equal('Passed');
-			expect(instance.toRender.legend[1].nodeName, 'this.toRender.legend[1] nodeName')
+			expect(instance.toRender.legend[1].type, 'this.toRender.legend[1] type')
 				.to.be.equal('span');
-			expect(instance.toRender.legend[1].attributes.key, 'this.toRender.legend[1] key')
+			expect(instance.toRender.legend[1].key, 'this.toRender.legend[1] key')
 				.to.be.equal('legend_delayed');
-			expect(instance.toRender.legend[1].attributes.className, 'this.toRender.legend[1] className')
+			expect(instance.toRender.legend[1].props.className, 'this.toRender.legend[1] className')
 				.to.be.equal(styles['legend__item']);
-			expect(instance.toRender.legend[1].attributes.onClick.name, 'this.toRender.legend[1] onClick')
+			expect(instance.toRender.legend[1].props.onClick.name, 'this.toRender.legend[1] onClick')
 				.to.be.equal('bound toggleMetric');
-			expect(instance.toRender.legend[1].attributes.onMouseLeave.name, 'this.toRender.legend[1] onMouseLeave')
+			expect(instance.toRender.legend[1].props.onMouseLeave.name, 'this.toRender.legend[1] onMouseLeave')
 				.to.be.equal('bound deferredHighlightMetric');
-			expect(instance.toRender.legend[1].attributes.onMouseOver.name, 'this.toRender.legend[1] onMouseOver')
+			expect(instance.toRender.legend[1].props.onMouseOver.name, 'this.toRender.legend[1] onMouseOver')
 				.to.be.equal('bound deferredHighlightMetric');
-			expect(instance.toRender.legend[1].children[0].nodeName, 'this.toRender.legend[1] children 1 nodeName')
+			expect(instance.toRender.legend[1].props.children[0].type, 'this.toRender.legend[1] children 1 type')
 				.to.be.equal('span');
 			expect(
-				instance.toRender.legend[1].children[0].attributes.className,
+				instance.toRender.legend[1].props.children[0].props.className,
 				'this.toRender.legend[1] children 1 className'
 			).to.be.equal(styles['legend__color']);
 			expect(
-				instance.toRender.legend[1].children[0].attributes.style,
+				instance.toRender.legend[1].props.children[0].props.style,
 				'this.toRender.legend[1] children 1 style'
 			).to.be.deep.equal({
 				background: '#EBC906'
 			});
-			expect(instance.toRender.legend[1].children[1], 'this.toRender.legend[1] children 2')
+			expect(instance.toRender.legend[1].props.children[1], 'this.toRender.legend[1] children 2')
 				.to.be.equal('Delayed');
-			expect(instance.toRender.legend[2].nodeName, 'this.toRender.legend[2] nodeName')
+			expect(instance.toRender.legend[2].type, 'this.toRender.legend[2] type')
 				.to.be.equal('span');
-			expect(instance.toRender.legend[2].attributes.key, 'this.toRender.legend[2] key')
+			expect(instance.toRender.legend[2].key, 'this.toRender.legend[2] key')
 				.to.be.equal('legend_rejected');
-			expect(instance.toRender.legend[2].attributes.className, 'this.toRender.legend[2] className')
+			expect(instance.toRender.legend[2].props.className, 'this.toRender.legend[2] className')
 				.to.be.equal(styles['legend__item']);
-			expect(instance.toRender.legend[2].attributes.onClick.name, 'this.toRender.legend[2] onClick')
+			expect(instance.toRender.legend[2].props.onClick.name, 'this.toRender.legend[2] onClick')
 				.to.be.equal('bound toggleMetric');
-			expect(instance.toRender.legend[2].attributes.onMouseLeave.name, 'this.toRender.legend[2] onMouseLeave')
+			expect(instance.toRender.legend[2].props.onMouseLeave.name, 'this.toRender.legend[2] onMouseLeave')
 				.to.be.equal('bound deferredHighlightMetric');
-			expect(instance.toRender.legend[2].attributes.onMouseOver.name, 'this.toRender.legend[2] onMouseOver')
+			expect(instance.toRender.legend[2].props.onMouseOver.name, 'this.toRender.legend[2] onMouseOver')
 				.to.be.equal('bound deferredHighlightMetric');
-			expect(instance.toRender.legend[2].children[0].nodeName, 'this.toRender.legend[2] children 1 nodeName')
+			expect(instance.toRender.legend[2].props.children[0].type, 'this.toRender.legend[2] children 1 type')
 				.to.be.equal('span');
 			expect(
-				instance.toRender.legend[2].children[0].attributes.className,
+				instance.toRender.legend[2].props.children[0].props.className,
 				'this.toRender.legend[2] children 1 className'
 			).to.be.equal(styles['legend__color']);
 			expect(
-				instance.toRender.legend[2].children[0].attributes.style,
+				instance.toRender.legend[2].props.children[0].props.style,
 				'this.toRender.legend[2] children 1 style'
 			).to.be.deep.equal({
 				background: '#FF2323'
 			});
-			expect(instance.toRender.legend[2].children[1], 'this.toRender.legend[1] children 2')
+			expect(instance.toRender.legend[2].props.children[1], 'this.toRender.legend[1] children 2')
 				.to.be.equal('Rejected');
 
 			expect(toggleMetricBindSpy.calledThrice, 'this.toggleMetric.bind called thrice').to.be.true;
@@ -993,94 +993,94 @@ describe('<Chart />', () => {
 
 			expect(instance.pointsIndicies, 'this.pointsIndicies').to.be.equal('0,2');
 
-			instance.setState({ dndPointsIndicies: '0,2' });
+			wrapper.setState({ dndPointsIndicies: '0,2' });
 
 			([30, 29]).forEach(y => {
 				yMax = y;
 				instance.redraw();
 
-				expect(instance.toRender.yMax[0].nodeName, 'this.toRender.yMax[0] nodeName')
+				expect(instance.toRender.yMax[0].type, 'this.toRender.yMax[0] type')
 					.to.be.equal('text');
-				expect(instance.toRender.yMax[0].attributes.key, 'this.toRender.yMax[0] key')
+				expect(instance.toRender.yMax[0].key, 'this.toRender.yMax[0] key')
 					.to.be.equal('y-max-label');
-				expect(instance.toRender.yMax[0].attributes.className, 'this.toRender.yMax[0] className')
+				expect(instance.toRender.yMax[0].props.className, 'this.toRender.yMax[0] className')
 					.to.be.equal(styles['y-label']);
-				expect(instance.toRender.yMax[0].attributes.x, 'this.toRender.yMax[0] x')
+				expect(instance.toRender.yMax[0].props.x, 'this.toRender.yMax[0] x')
 					.to.be.equal(45);
-				expect(instance.toRender.yMax[0].attributes.y, 'this.toRender.yMax[0] y')
+				expect(instance.toRender.yMax[0].props.y, 'this.toRender.yMax[0] y')
 					.to.be.equal(70);
-				expect(instance.toRender.yMax[0].children[0], 'this.toRender.yMax[0] children')
-					.to.be.equal('30');
-				expect(instance.toRender.yMax[1].nodeName, 'this.toRender.yMax[1] nodeName')
+				expect(instance.toRender.yMax[0].props.children, 'this.toRender.yMax[0] children')
+					.to.be.equal(30);
+				expect(instance.toRender.yMax[1].type, 'this.toRender.yMax[1] type')
 					.to.be.equal('line');
-				expect(instance.toRender.yMax[1].attributes.key, 'this.toRender.yMax[1] key')
+				expect(instance.toRender.yMax[1].key, 'this.toRender.yMax[1] key')
 					.to.be.equal('y-max-line');
-				expect(instance.toRender.yMax[1].attributes.className, 'this.toRender.yMax[1] className')
+				expect(instance.toRender.yMax[1].props.className, 'this.toRender.yMax[1] className')
 					.to.be.equal(styles['x-line']);
-				expect(instance.toRender.yMax[1].attributes.x1, 'this.toRender.yMax[1] x1')
+				expect(instance.toRender.yMax[1].props.x1, 'this.toRender.yMax[1] x1')
 					.to.be.equal(50);
-				expect(instance.toRender.yMax[1].attributes.x2, 'this.toRender.yMax[1] x2')
+				expect(instance.toRender.yMax[1].props.x2, 'this.toRender.yMax[1] x2')
 					.to.be.equal(1130);
-				expect(instance.toRender.yMax[1].attributes.y1, 'this.toRender.yMax[1] y1')
+				expect(instance.toRender.yMax[1].props.y1, 'this.toRender.yMax[1] y1')
 					.to.be.equal(70);
-				expect(instance.toRender.yMax[1].attributes.y2, 'this.toRender.yMax[1] y2')
+				expect(instance.toRender.yMax[1].props.y2, 'this.toRender.yMax[1] y2')
 					.to.be.equal(70);
 
-				expect(instance.toRender.yMid[0].nodeName, 'this.toRender.yMid[0] nodeName')
+				expect(instance.toRender.yMid[0].type, 'this.toRender.yMid[0] type')
 					.to.be.equal('text');
-				expect(instance.toRender.yMid[0].attributes.key, 'this.toRender.yMid[0] key')
+				expect(instance.toRender.yMid[0].key, 'this.toRender.yMid[0] key')
 					.to.be.equal('y-mid-label');
-				expect(instance.toRender.yMid[0].attributes.className, 'this.toRender.yMid[0] className')
+				expect(instance.toRender.yMid[0].props.className, 'this.toRender.yMid[0] className')
 					.to.be.equal(styles['y-label']);
-				expect(instance.toRender.yMid[0].attributes.x, 'this.toRender.yMid[0] x')
+				expect(instance.toRender.yMid[0].props.x, 'this.toRender.yMid[0] x')
 					.to.be.equal(45);
-				expect(instance.toRender.yMid[0].attributes.y, 'this.toRender.yMid[0] y')
+				expect(instance.toRender.yMid[0].props.y, 'this.toRender.yMid[0] y')
 					.to.be.equal(145);
-				expect(instance.toRender.yMid[0].children[0], 'this.toRender.yMid[0] children')
-					.to.be.equal('15');
-				expect(instance.toRender.yMid[1].nodeName, 'this.toRender.yMid[1] nodeName')
+				expect(instance.toRender.yMid[0].props.children, 'this.toRender.yMid[0] children')
+					.to.be.equal(15);
+				expect(instance.toRender.yMid[1].type, 'this.toRender.yMid[1] type')
 					.to.be.equal('line');
-				expect(instance.toRender.yMid[1].attributes.key, 'this.toRender.yMid[1] key')
+				expect(instance.toRender.yMid[1].key, 'this.toRender.yMid[1] key')
 					.to.be.equal('y-mid-line');
-				expect(instance.toRender.yMid[1].attributes.className, 'this.toRender.yMid[1] className')
+				expect(instance.toRender.yMid[1].props.className, 'this.toRender.yMid[1] className')
 					.to.be.equal(styles['x-line']);
-				expect(instance.toRender.yMid[1].attributes.x1, 'this.toRender.yMid[1] x1')
+				expect(instance.toRender.yMid[1].props.x1, 'this.toRender.yMid[1] x1')
 					.to.be.equal(50);
-				expect(instance.toRender.yMid[1].attributes.x2, 'this.toRender.yMid[1] x2')
+				expect(instance.toRender.yMid[1].props.x2, 'this.toRender.yMid[1] x2')
 					.to.be.equal(1130);
-				expect(instance.toRender.yMid[1].attributes.y1, 'this.toRender.yMid[1] y1')
+				expect(instance.toRender.yMid[1].props.y1, 'this.toRender.yMid[1] y1')
 					.to.be.equal(145);
-				expect(instance.toRender.yMid[1].attributes.y2, 'this.toRender.yMid[1] y2')
+				expect(instance.toRender.yMid[1].props.y2, 'this.toRender.yMid[1] y2')
 					.to.be.equal(145);
 
-				expect(instance.toRender.charts[0].attributes.key, 'this.toRender.charts[0] key')
+				expect(instance.toRender.charts[0].key, 'this.toRender.charts[0] key')
 					.to.be.equal('chart_rejected');
-				expect(instance.toRender.charts[0].attributes.d, 'this.toRender.charts[0] d')
+				expect(instance.toRender.charts[0].props.d, 'this.toRender.charts[0] d')
 					.to.be.equal('M 50 220 L 1130 215');
-				expect(instance.toRender.charts[1].attributes.key, 'this.toRender.charts[1] key')
+				expect(instance.toRender.charts[1].key, 'this.toRender.charts[1] key')
 					.to.be.equal('chart_delayed');
-				expect(instance.toRender.charts[1].attributes.d, 'this.toRender.charts[1] d')
+				expect(instance.toRender.charts[1].props.d, 'this.toRender.charts[1] d')
 					.to.be.equal('M 50 215 L 1130 205');
-				expect(instance.toRender.charts[2].attributes.key, 'this.toRender.charts[2] key')
+				expect(instance.toRender.charts[2].key, 'this.toRender.charts[2] key')
 					.to.be.equal('chart_passed');
-				expect(instance.toRender.charts[2].attributes.d, 'this.toRender.charts[2] d')
+				expect(instance.toRender.charts[2].props.d, 'this.toRender.charts[2] d')
 					.to.be.equal('M 50 165 L 1130 105');
 
-				expect(instance.toRender.areas[0].attributes.key, 'this.toRender.areas[0] key')
+				expect(instance.toRender.areas[0].key, 'this.toRender.areas[0] key')
 					.to.be.equal('chart-area_rejected');
-				expect(instance.toRender.areas[0].attributes.d, 'this.toRender.areas[0] d')
+				expect(instance.toRender.areas[0].props.d, 'this.toRender.areas[0] d')
 					.to.be.equal('M 50 220 L 1130 215 V 220 H 50 V 220');
-				expect(instance.toRender.areas[1].attributes.key, 'this.toRender.areas[1] key')
+				expect(instance.toRender.areas[1].key, 'this.toRender.areas[1] key')
 					.to.be.equal('chart-area_delayed');
-				expect(instance.toRender.areas[1].attributes.d, 'this.toRender.areas[1] d')
+				expect(instance.toRender.areas[1].props.d, 'this.toRender.areas[1] d')
 					.to.be.equal('M 50 215 L 1130 205 V 215L 1130 215 L 50 220  V 220');
-				expect(instance.toRender.areas[2].attributes.key, 'this.toRender.areas[2] key')
+				expect(instance.toRender.areas[2].key, 'this.toRender.areas[2] key')
 					.to.be.equal('chart-area_passed');
-				expect(instance.toRender.areas[2].attributes.d, 'this.toRender.areas[2] d')
+				expect(instance.toRender.areas[2].props.d, 'this.toRender.areas[2] d')
 					.to.be.equal('M 50 165 L 1130 105 V 205L 1130 205 L 50 215  V 215');
 			});
 
-			instance.setState({ selectedTimeWindow: '15m' });
+			wrapper.setState({ selectedTimeWindow: '15m' });
 			instance.redraw();
 
 			expect(instance.ticks, 'this.ticks length').to.have.lengthOf(1);
@@ -1102,7 +1102,7 @@ describe('<Chart />', () => {
 				colors: Colors,
 				labels: Labels
 			});
-			instance.setState({ selectedTimeWindow: '1m' });
+			wrapper.setState({ selectedTimeWindow: '1m' });
 			instance.redraw();
 
 			expect(instance.ticks, 'this.ticks length').to.have.lengthOf(11);
@@ -1239,7 +1239,7 @@ describe('<Chart />', () => {
 			const getYMaxSpy = spy(utils, 'getYMax');
 			const deferredHighlightMetricBindSpy = spy(instance.deferredHighlightMetric, 'bind');
 
-			instance.setState({ disabledMetrics: ['passed'] });
+			wrapper.setState({ disabledMetrics: ['passed'] });
 			instance.redraw();
 
 			expect(getYMaxSpy.calledOnce, 'getYMax called once').to.be.true;
@@ -1260,27 +1260,27 @@ describe('<Chart />', () => {
 				rejected: 2
 			});
 			expect(
-				instance.toRender.charts.findIndex(chart => chart.attributes.key === 'chart_passed'),
+				instance.toRender.charts.findIndex(chart => chart.key === 'chart_passed'),
 				'this.toRender.charts'
 			).to.be.equal(-1);
 			expect(
-				instance.toRender.areas.findIndex(area => area.attributes.key === 'chart-area_passed'),
+				instance.toRender.areas.findIndex(area => area.key === 'chart-area_passed'),
 				'this.toRender.areas'
 			).to.be.equal(-1);
 			expect(deferredHighlightMetricBindSpy.callCount, 'this.deferredHighlightMetric.bind call count')
 				.to.be.equal(6);
 
 			const disabledLegendItem = instance.toRender.legend.find(
-				legend => legend.attributes.key === 'legend_passed'
+				legend => legend.key === 'legend_passed'
 			);
 
-			expect(disabledLegendItem.attributes.className, 'legend disabled className').to.be.equal(
+			expect(disabledLegendItem.props.className, 'legend disabled className').to.be.equal(
 				`${ styles['legend__item'] } ${ styles['legend__item_disabled'] }`
 			);
-			expect(disabledLegendItem.attributes.onMouseOver, 'legend disabled onMouseOver').to.be.a('null');
-			expect(disabledLegendItem.attributes.onMouseLeave, 'legend disabled onMouseLeave').to.be.a('null');
+			expect(disabledLegendItem.props.onMouseOver, 'legend disabled onMouseOver').to.be.an.undefined;
+			expect(disabledLegendItem.props.onMouseLeave, 'legend disabled onMouseLeave').to.be.an.undefined;
 
-			instance.setState({ disabledMetrics: ['rejected'] });
+			wrapper.setState({ disabledMetrics: ['rejected'] });
 			instance.redraw();
 
 			deferredHighlightMetricBindSpy.restore();
@@ -1326,11 +1326,11 @@ describe('<Chart />', () => {
 			instance.redraw();
 
 			instance.dndControls.forEach((el, i) => {
-				expect(el.nodeName, `[no data, el ${ i }] nodeName`).to.be.equal('div');
-				expect(el.attributes.key, `[no data, el ${ i }] key attr`).to.be.equal(i);
-				expect(el.attributes.className, `[no data, el ${ i }] className attr`)
+				expect(el.type, `[no data, el ${ i }] nodeName`).to.be.equal('div');
+				expect(el.key, `[no data, el ${ i }] key attr`).to.be.equal(i);
+				expect(el.props.className, `[no data, el ${ i }] className attr`)
 					.to.be.equal(`${ styles['dnd-controls__control'] } ${ styles['dnd-controls__control_disabled'] }`);
-				expect(el.attributes.onClick, `[no data, el ${ i }] onClick attr`).to.be.a('null');
+				expect(el.props.onClick, `[no data, el ${ i }] onClick attr`).to.be.an.undefined;
 			});
 
 			expect(emulateDndBindSpy.notCalled, 'emulateDnd.bind not called').to.be.true;
@@ -1340,11 +1340,11 @@ describe('<Chart />', () => {
 			instance.redraw();
 
 			instance.dndControls.forEach((el, i) => {
-				expect(el.nodeName, `[data, el ${ i }] nodeName`).to.be.equal('div');
-				expect(el.attributes.key, `[data, el ${ i }] key attr`).to.be.equal(i);
-				expect(el.attributes.className, `[data, el ${ i }] className attr`)
+				expect(el.type, `[data, el ${ i }] nodeName`).to.be.equal('div');
+				expect(el.key, `[data, el ${ i }] key attr`).to.be.equal(i);
+				expect(el.props.className, `[data, el ${ i }] className attr`)
 					.to.be.equal(`${ styles['dnd-controls__control'] } ${ styles['dnd-controls__control_disabled'] }`);
-				expect(el.attributes.onClick, `[data, el ${ i }] onClick attr`).to.be.a('null');
+				expect(el.props.onClick, `[data, el ${ i }] onClick attr`).to.be.an.undefined;
 			});
 
 			expect(emulateDndBindSpy.notCalled, 'emulateDnd.bind not called').to.be.true;
@@ -1367,16 +1367,16 @@ describe('<Chart />', () => {
 				}
 			});
 			wrapper.setProps({ data: { ts: 1598707000, data } });
-			instance.setState({ dndPointsIndicies: '1,3' });
+			wrapper.setState({ dndPointsIndicies: '1,3' });
 			instance.redraw();
 
 			instance.dndControls.forEach((el, i) => {
-				expect(el.nodeName, `[many points, el ${ i }] nodeName`).to.be.equal('div');
-				expect(el.attributes.key, `[many points, el ${ i }] key attr`).to.be.equal(i);
-				expect(el.attributes.className, `[many points, el ${ i }] className attr`).to.be.equal(
+				expect(el.type, `[many points, el ${ i }] nodeName`).to.be.equal('div');
+				expect(el.key, `[many points, el ${ i }] key attr`).to.be.equal(i);
+				expect(el.props.className, `[many points, el ${ i }] className attr`).to.be.equal(
 					styles['dnd-controls__control']
 				);
-				expect(el.attributes.onClick.name, `[many points, el ${ i }] onClick attr`).to.be.equal(
+				expect(el.props.onClick.name, `[many points, el ${ i }] onClick attr`).to.be.equal(
 					'bound emulateDnd'
 				);
 			});
@@ -1456,19 +1456,20 @@ describe('<Chart />', () => {
 			const setStateSpy = spy(instance, 'setState');
 
 			instance.redraw(state);
+			wrapper.update();
 
 			expect(
 				instance.toRender.legend.find(
-					legend => legend.attributes.key === 'legend_passed'
-				).attributes.className,
+					legend => legend.key === 'legend_passed'
+				).props.className,
 				'legend disabled className'
 			).to.be.equal(
 				`${ styles['legend__item'] } ${ styles['legend__item_disabled'] }`
 			);
 			expect(
 				instance.toRender.charts.find(
-					chart => chart.attributes.key === 'chart_rejected'
-				).attributes.className,
+					chart => chart.key === 'chart_rejected'
+				).props.className,
 				'chart faded className'
 			).to.be.equal(
 				`${ styles['line'] } ${ styles['faded'] }`
@@ -1483,6 +1484,7 @@ describe('<Chart />', () => {
 			expect(setStateSpy.args[0][0], 'this.setState arg').to.be.deep.equal(state);
 
 			instance.redraw({ selectedTimeWindow: '15m' });
+			wrapper.update();
 
 			expect(instance.points, 'this.points length').to.have.lengthOf(4);
 			expect(instance.points[0].x, '[timeWindow 15m] this.points[0].x').to.be.equal(770.0799822833796);
@@ -1491,6 +1493,7 @@ describe('<Chart />', () => {
 			expect(instance.points[3].x, '[timeWindow 15m] this.points[3].x').to.be.equal(1489.9200178310357);
 
 			instance.redraw({ timeEnd: 1598706700 });
+			wrapper.update();
 
 			expect(instance.points, 'this.points length').to.have.lengthOf(4);
 			expect(instance.points[0].x, '[timeWindow 15m] this.points[0].x').to.be.equal(1130.0000000572077);
@@ -1499,6 +1502,7 @@ describe('<Chart />', () => {
 			expect(instance.points[3].x, '[timeWindow 15m] this.points[3].x').to.be.equal(1849.8400356048637);
 
 			instance.redraw({ dndPointsIndicies: '1,3' });
+			wrapper.update();
 
 			expect(instance.points, 'this.points length').to.have.lengthOf(2);
 
@@ -1537,10 +1541,10 @@ describe('<Chart />', () => {
 
 			instance.redraw({}, nextProps);
 
-			expect(instance.toRender.charts[0].attributes.style.stroke, 'chart color').to.be.equal(
+			expect(instance.toRender.charts[0].props.style.stroke, 'chart color').to.be.equal(
 				nextProps.colors.get('passed')
 			);
-			expect(instance.toRender.legend[0].children[1], 'legend title').to.be.equal(
+			expect(instance.toRender.legend[0].props.children[1], 'legend title').to.be.equal(
 				nextProps.labels.get('passed')
 			);
 			expect(instance.points, 'this.points length').to.have.lengthOf(1);
@@ -1548,7 +1552,7 @@ describe('<Chart />', () => {
 			nextProps.labels = new Map();
 			instance.redraw({}, nextProps);
 
-			expect(instance.toRender.legend[0].children[1], 'legend title').to.be.equal('passed');
+			expect(instance.toRender.legend[0].props.children[1], 'legend title').to.be.equal('passed');
 		});
 	});
 
@@ -1628,8 +1632,8 @@ describe('<Chart />', () => {
 			expect(mouseTracker.prop('onMouseLeave').name, 'mouse-tracker onMouseLeave').to.be.equal(
 				'bound onMouseLeave'
 			);
-			expect(mouseTracker.prop('onMouseDown'), 'mouse-tracker onMouseDown').to.be.a('null');
-			expect(mouseTracker.prop('onMouseUp'), 'mouse-tracker onMouseUp').to.be.a('null');
+			expect(mouseTracker.prop('onMouseDown'), 'mouse-tracker onMouseDown').to.be.an.undefined;
+			expect(mouseTracker.prop('onMouseUp'), 'mouse-tracker onMouseUp').to.be.an.undefined;
 
 			const svg = container.find(`svg.${ styles['svg'] }`);
 			const ticksLines = svg.find(`path.${ styles['x-axis'] }`);
@@ -1649,7 +1653,7 @@ describe('<Chart />', () => {
 			expect(xAxis.prop('y2'), 'x-axis y2').to.be.equal(220);
 			expect(cursorLine.prop('y1'), 'cursor-line y1').to.be.equal(60);
 			expect(cursorLine.prop('y2'), 'cursor-line y2').to.be.equal(226);
-			expect(cursorLine.prop('transform'), 'cursor-line y2').to.be.a('null');
+			expect(cursorLine.prop('transform'), 'cursor-line y2').to.be.an.undefined;
 			expect(cursorLine.prop('style'), 'cursor-line y2').to.be.deep.equal({
 				opacity: 0
 			});
@@ -1690,21 +1694,21 @@ describe('<Chart />', () => {
 				{ x: 10, values: { passed: 45 } },
 				{ x: 900, values: { passed: 51 } }
 			];
-			instance.setState({ mouseOffsetX: 10 });
+			wrapper.setState({ mouseOffsetX: 10 });
 
 			const tooltipPoints = wrapper.instance().toRender.tooltipPoints[0];
 
-			expect(tooltipPoints.attributes.key, 'tooltip points key').to.be.equal('tooltip_passed');
-			expect(tooltipPoints.attributes.className, 'tooltip points className')
+			expect(tooltipPoints.key, 'tooltip points key').to.be.equal('tooltip_passed');
+			expect(tooltipPoints.props.className, 'tooltip points className')
 				.to.be.equal(styles['tooltip__point']);
-			expect(tooltipPoints.children[0].attributes.className, 'tooltip points child 1, className')
+			expect(tooltipPoints.props.children[0].props.className, 'tooltip points child 1, className')
 				.to.be.equal(styles['tooltip__value']);
-			expect(tooltipPoints.children[0].attributes.style, 'tooltip points child 1, style')
+			expect(tooltipPoints.props.children[0].props.style, 'tooltip points child 1, style')
 				.to.be.deep.equal({ color: '#4FA932' });
-			expect(tooltipPoints.children[0].children[0], 'tooltip points child 1, text').to.be.equal('45');
-			expect(tooltipPoints.children[1].attributes.className, 'tooltip points child 2, className')
+			expect(tooltipPoints.props.children[0].props.children, 'tooltip points child 1, text').to.be.equal(45);
+			expect(tooltipPoints.props.children[1].props.className, 'tooltip points child 2, className')
 				.to.be.equal(styles['tooltip__metric']);
-			expect(tooltipPoints.children[1].children[0], 'tooltip points child 2, text').to.be.equal('Passed');
+			expect(tooltipPoints.props.children[1].props.children, 'tooltip points child 2, text').to.be.equal('Passed');
 
 			const tooltip = wrapper.find(`div.${ styles['tooltip'] }`);
 
@@ -1727,28 +1731,28 @@ describe('<Chart />', () => {
 			});
 
 			expect(
-				wrapper.instance().toRender.tooltipPoints[0].children[1].children[0],
+				wrapper.instance().toRender.tooltipPoints[0].props.children[1].props.children,
 				'[no labels] tooltip child 2, text'
 			).to.be.equal('passed');
 
-			instance.setState({ mouseOffsetX: 890 });
+			wrapper.setState({ mouseOffsetX: 890 });
 
 			expect(
-				wrapper.instance().toRender.tooltipPoints[0].children[0].children[0],
+				wrapper.instance().toRender.tooltipPoints[0].props.children[0].props.children,
 				'[mouseOffsetX: 890] tooltip child 1, text'
-			).to.be.equal('51');
+			).to.be.equal(51);
 			expect(wrapper.find(`div.${ styles['tooltip'] }`).prop('style'), 'tooltip style')
 				.to.be.deep.equal({ right: '258px' });
 
-			instance.setState({ mouseOffsetX: 40 });
+			wrapper.setState({ mouseOffsetX: 40 });
 
 			expect(
-				wrapper.instance().toRender.tooltipPoints[0].children[0].children[0],
+				wrapper.instance().toRender.tooltipPoints[0].props.children[0].props.children,
 				'[mouseOffsetX: 40] tooltip child 1, text'
-			).to.be.equal('45');
+			).to.be.equal(45);
 
 			instance.dndAllowed = true;
-			instance.setState({ dndIsInProgress: true });
+			wrapper.setState({ dndIsInProgress: true });
 
 			expect(wrapper.find(`.${ styles['mouse-tracker_drag'] }`), 'mouse-tracker_drag')
 				.to.have.lengthOf(1);

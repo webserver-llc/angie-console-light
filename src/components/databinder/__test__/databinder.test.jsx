@@ -72,8 +72,8 @@ describe('DataBinder()', () => {
 		expect(datastore.subscribe.apply.args[0][0], 'subscribe.apply 1st arg').to.be.a('null');
 		expect(datastore.subscribe.apply.args[0][1], 'subscribe.apply 2nd arg type').to.be.an.instanceof(Array);
 		expect(datastore.subscribe.apply.args[0][1], 'subscribe.apply 2nd arg length').to.have.lengthOf(1);
-		expect(datastore.subscribe.apply.args[0][1][0].name, 'subscribe.apply 2nd arg name')
-			.to.be.equal('bound forceUpdate');
+		expect(datastore.subscribe.apply.args[0][1][0], 'subscribe.apply 2nd arg name')
+			.to.be.equal(wrapper.instance().forceUpdate);
 
 		wrapper.unmount();
 	});
@@ -88,8 +88,8 @@ describe('DataBinder()', () => {
 		expect(datastore.subscribe.apply.args[0][1], 'subscribe.apply 2nd arg length').to.have.lengthOf(2);
 		expect(datastore.subscribe.apply.args[0][1][0], 'subscribe.apply 1st arg name')
 			.to.be.deep.equal(apis);
-		expect(datastore.subscribe.apply.args[0][1][1].name, 'subscribe.apply 2nd arg name')
-			.to.be.equal('bound forceUpdate');
+		expect(datastore.subscribe.apply.args[0][1][1], 'subscribe.apply 2nd arg name')
+			.to.be.equal(wrapper.instance().forceUpdate);
 
 		wrapper.unmount();
 	});

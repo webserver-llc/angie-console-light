@@ -56,11 +56,11 @@ describe('<Caches IndexPage />', () => {
 		expect(states.at(0).childAt(0).name(), 'Icon 1').to.be.equal('Icon');
 		expect(states.at(0).childAt(0).prop('type'), 'Icon 1, type').to.be.equal('sun');
 		expect(states.at(0).childAt(0).prop('className'), 'Icon 1, className').to.be.equal(styles['icon']);
-		expect(states.at(0).childAt(1).text(), 'state label 1').to.be.equal('Warm: 10');
+		expect(states.at(0).text(), 'state label 1').to.contain('Warm: 10');
 		expect(states.at(1).childAt(0).name(), 'Icon 2').to.be.equal('Icon');
 		expect(states.at(1).childAt(0).prop('type'), 'Icon 2, type').to.be.equal('snowflake');
 		expect(states.at(1).childAt(0).prop('className'), 'Icon 2, className').to.be.equal(`${ styles['icon'] } ${ styles['snowflakeIcon'] }`);
-		expect(states.at(1).childAt(1).text(), 'state label 2').to.be.equal('Cold: 30');
+		expect(states.at(1).text(), 'state label 2').to.contain('Cold: 30');
 
 		wrapper.unmount();
 	});
