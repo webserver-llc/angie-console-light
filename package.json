@@ -19,14 +19,20 @@
   },
   "author": "Ivan Poluyanov <ip@nginx.com>",
   "license": "Apache-2.0",
+  "overrides": {
+    "minimist": "1.2.6"
+  },
+  "resolutions": {
+    "cheerio": "1.0.0-rc.10"
+  },
   "dependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.16.0",
-    "@babel/plugin-transform-runtime": "^7.16.4",
-    "@babel/preset-env": "^7.16.4",
-    "@babel/preset-react": "^7.16.0",
+    "@babel/core": "^7.18.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.18.0",
+    "@babel/plugin-transform-runtime": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
+    "@babel/preset-react": "^7.17.12",
     "autoprefixer": "^10.4.0",
-    "babel-loader": "^8.2.3",
+    "babel-loader": "^8.2.5",
     "babel-plugin-istanbul": "^6.1.1",
     "core-js": "^3.19.2",
     "css-loader": "^6.5.1",
@@ -57,7 +63,7 @@
     "chai": "^4.2.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^4.0.1",
-    "karma": "^6.3.9",
+    "karma": "^6.3.20",
     "karma-chrome-launcher": "3.1.0",
     "karma-coverage": "2.0.2",
     "karma-coverage-istanbul-reporter": "3.0.3",
@@ -65,10 +71,10 @@
     "karma-sinon-chai": "2.0.2",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "^5.0.0",
-    "mocha": "^8.0.1",
+    "mocha": "^10.0.0",
     "nyc": "15.1.0",
     "sinon": "9.0.2",
     "sinon-chai": "^3.5.0",
-    "webpack-dev-server": "^4.6.0"
+    "webpack-dev-server": "^4.9.2"
   }
 }
