@@ -40,20 +40,20 @@ In the project folder check `coverage` directory – `index.html` includes every
 * [Live demo](https://demo.nginx.com/)
 
 ### 3rd party modules:
-* [@babel/core](https://www.npmjs.com/package/@babel/core) – 7.16.0
-* [@babel/plugin-proposal-object-rest-spread](https://www.npmjs.com/package/@babel/plugin-proposal-object-rest-spread) – 7.16.0
-* [@babel/plugin-transform-runtime](https://www.npmjs.com/package/@babel/plugin-transform-runtime) – 7.16.4
-* [@babel/preset-env](https://www.npmjs.com/package/@babel/preset-env) – 7.16.4
-* [@babel/preset-react](https://www.npmjs.com/package/@babel/preset-react) – 7.16.0
+* [@babel/core](https://www.npmjs.com/package/@babel/core) – 7.18.2
+* [@babel/plugin-proposal-object-rest-spread](https://www.npmjs.com/package/@babel/plugin-proposal-object-rest-spread) – 7.18.0
+* [@babel/plugin-transform-runtime](https://www.npmjs.com/package/@babel/plugin-transform-runtime) – 7.18.2
+* [@babel/preset-env](https://www.npmjs.com/package/@babel/preset-env) – 7.18.2
+* [@babel/preset-react](https://www.npmjs.com/package/@babel/preset-react) – 7.17.12
 * [autoprefixer](https://www.npmjs.com/package/autoprefixer) – 10.4.0
-* [babel-loader](https://github.com/babel/babel-loader) – 8.2.3
+* [babel-loader](https://github.com/babel/babel-loader) – 8.2.5
 * [babel-plugin-istanbul](https://github.com/istanbuljs/babel-plugin-istanbul) – 6.1.1
 * [chai](https://www.npmjs.com/package/chai) – 4.3.4
 * [core-js](https://www.npmjs.com/package/core-js) – 3.19.3
 * [css-loader](https://www.npmjs.com/package/css-loader) – 6.5.1
 * [cssnano](https://www.npmjs.com/package/cssnano) – 5.1.18
 * [enzyme](https://www.npmjs.com/package/enzyme) – 3.11.0
-* [enzyme-adapter-preact-pure](https://www.npmjs.com/package/enzyme-adapter-preact-pure) – 2.3.0
+* [enzyme-adapter-preact-pure](https://www.npmjs.com/package/enzyme-adapter-preact-pure) – 4.0.1
 * [eslint](https://www.npmjs.com/package/eslint) – 8.4.1
 * [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb) – 19.0.2
 * [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) – 2.25.3
@@ -63,7 +63,7 @@ In the project folder check `coverage` directory – `index.html` includes every
 * [history](https://www.npmjs.com/package/history) – 4.10.1
 * [html-inline-css-webpack-plugin](https://www.npmjs.com/package/html-inline-css-webpack-plugin) – 1.11.1
 * [html-webpack-plugin](https://www.npmjs.com/package/html-webpack-plugin) – 5.5.0
-* [karma](https://github.com/karma-runner/karma) – 6.3.9
+* [karma](https://github.com/karma-runner/karma) – 6.3.20
 * [karma-chrome-launcher](https://www.npmjs.com/package/karma-chrome-launcher) – 3.1.0
 * [karma-coverage](https://www.npmjs.com/package/karma-coverage) – 2.0.2
 * [karma-coverage-istanbul-reporter](https://www.npmjs.com/package/karma-coverage-istanbul-reporter) – 3.0.3
@@ -72,19 +72,13 @@ In the project folder check `coverage` directory – `index.html` includes every
 * [karma-sourcemap-loader](https://www.npmjs.com/package/karma-sourcemap-loader) – 0.3.7
 * [karma-webpack](https://www.npmjs.com/package/karma-webpack) – 5.0.0
 * [mini-css-extract-plugin](https://www.npmjs.com/package/mini-css-extract-plugin) – 2.4.5
-* [mocha](https://www.npmjs.com/package/mocha) – 8.4.0
+* [mocha](https://www.npmjs.com/package/mocha) – 10.0.0
 * [npm-font-open-sans](https://github.com/dasrick/npm-font-open-sans) – 1.1.0
 * [nyc](https://www.npmjs.com/package/nyc) – 15.1.0
 * [postcss](https://www.npmjs.com/package/postcss) – 8.4.4
 * [postcss-loader](https://www.npmjs.com/package/postcss-loader) – 6.2.1
 * [postcss-url](https://github.com/postcss/postcss-url/) – 10.1.3
-* [preact](https://www.npmjs.com/package/preact) – 8.5.3
-* [preact-compat](https://www.npmjs.com/package/preact-compat) – 3.19.0
-* [preact-compat-enzyme](https://www.npmjs.com/package/preact-compat-enzyme) – 0.2.5
-* [preact-portal](https://www.npmjs.com/package/preact-portal) – 1.1.3
-* [preact-render-to-string](https://www.npmjs.com/package/preact-render-to-string) – 4.1.0
-* [preact-render-to-string](https://www.npmjs.com/package/preact-render-to-string) – 3.8.2 *(this appears with old "Preact" lib and will be removed with its update)*
-* [preact-test-utils](https://www.npmjs.com/package/preact-test-utils) – 0.1.4
+* [preact](https://www.npmjs.com/package/preact) – 10.7.2
 * [react-dev-utils](https://www.npmjs.com/package/react-dev-utils) – 12.0.0-next.58
 * [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime) – 0.13.9
 * [sinon](https://www.npmjs.com/package/sinon) – 9.0.2
@@ -92,5 +86,5 @@ In the project folder check `coverage` directory – `index.html` includes every
 * [style-loader](https://www.npmjs.com/package/style-loader) – 3.3.1
 * [webpack](https://www.npmjs.com/package/webpack) – 5.65.0
 * [webpack-cli](https://www.npmjs.com/package/webpack-cli) – 4.9.1
-* [webpack-dev-server](https://www.npmjs.com/package/webpack-dev-server) – 4.6.0
+* [webpack-dev-server](https://www.npmjs.com/package/webpack-dev-server) – 4.9.2
 * [whatwg-fetch](https://www.npmjs.com/package/whatwg-fetch) – 2.0.4

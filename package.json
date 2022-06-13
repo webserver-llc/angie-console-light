@@ -20,9 +20,7 @@
   "author": "Ivan Poluyanov <ip@nginx.com>",
   "license": "Apache-2.0",
   "overrides": {
-    "minimist": "1.2.6"
-  },
-  "resolutions": {
+    "minimist": "1.2.6",
     "cheerio": "1.0.0-rc.10"
   },
   "dependencies": {
