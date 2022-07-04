@@ -40,9 +40,6 @@ describe('<StreamZones IndexPage />', () => {
 		expect(indexBox.prop('title'), 'IndexBox title').to.be.equal('TCP/UDP Zones');
 		expect(indexBox.prop('status'), 'IndexBox status').to.be.equal('danger');
 		expect(indexBox.prop('href'), 'IndexBox href').to.be.equal('#tcp_zones');
-
-		indexBox = indexBox.childAt(0);
-
 		expect(indexBox.childAt(0).text(), 'total row').to.be.equal('Conn total: 10');
 		expect(indexBox.childAt(1).text(), 'current row').to.be.equal('Conn current: 1');
 		expect(indexBox.childAt(2).text(), 'conn/s row').to.be.equal('Conn/s: 3');
@@ -54,7 +51,7 @@ describe('<StreamZones IndexPage />', () => {
 			out: 2
 		};
 		wrapper.setProps(props);
-		indexBox = wrapper.find('IndexBox').childAt(0);
+		indexBox = wrapper.find('IndexBox');
 
 		expect(indexBox.childAt(4).text(), 'traffic in row').to.be.equal('In: 3/s');
 		expect(indexBox.childAt(5).text(), 'traffic out row').to.be.equal('Out: 2/s');

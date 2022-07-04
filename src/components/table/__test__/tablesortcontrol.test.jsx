@@ -88,7 +88,10 @@ describe('<TableSortControl />', () => {
 			order: 'desc'
 		});
 
-		expect(wrapper.prop('rowSpan'), '[prop.singleRow = true] wrapper prop rowSpan').to.be.a('null');
+		expect(
+			wrapper.prop('rowSpan'),
+			'[prop.singleRow = true] wrapper prop rowSpan'
+		).to.be.an.undefined;
 		expect(
 			tooltips.useTooltip.calledOnce,
 			'[props.order = desc] useTooltip called'

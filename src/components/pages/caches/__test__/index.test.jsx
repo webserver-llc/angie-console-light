@@ -40,7 +40,7 @@ describe('<Caches Page />', () => {
 			let hintedEl;
 
 			expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(3);
-			expect(tooltips.useTooltip.args[0][0].nodeName.displayName, 'useTooltip call 1, arg 1')
+			expect(tooltips.useTooltip.args[0][0].type.displayName, 'useTooltip call 1, arg 1')
 				.to.be.equal('CacheStateTooltip');
 			expect(tooltips.useTooltip.args[0][1], 'useTooltip call 1, arg 2').to.be.equal('hint');
 
@@ -136,11 +136,11 @@ describe('<Caches Page />', () => {
 			expect(cells.at(2).prop('className'), 'row 1, cell 3, className').to.be.equal(styles['bdr']);
 			hintedEl = cells.at(2).childAt(0);
 			expect(
-				hintedEl.prop('useTooltip_prop_1').nodeName.displayName,
+				hintedEl.prop('useTooltip_prop_1').type.displayName,
 				'row 1, cell 3, useTooltip arg 1'
 			).to.be.equal('SharedZoneTooltip');
 			expect(
-				hintedEl.prop('useTooltip_prop_1').attributes.zone,
+				hintedEl.prop('useTooltip_prop_1').props.zone,
 				'row 1, cell 3, useTooltip arg 1, attr'
 			).to.be.equal('test_slab_1');
 			expect(hintedEl.prop('useTooltip_prop_2'), 'row 1, cell 3, useTooltip arg 2').to.be.equal('hint');
@@ -184,11 +184,11 @@ describe('<Caches Page />', () => {
 			expect(cells.at(2).prop('className'), 'row 2, cell 3, className').to.be.equal(styles['bdr']);
 			hintedEl = cells.at(2).childAt(0);
 			expect(
-				hintedEl.prop('useTooltip_prop_1').nodeName.displayName,
+				hintedEl.prop('useTooltip_prop_1').type.displayName,
 				'row 2, cell 3, useTooltip arg 1'
 			).to.be.equal('SharedZoneTooltip');
 			expect(
-				hintedEl.prop('useTooltip_prop_1').attributes.zone,
+				hintedEl.prop('useTooltip_prop_1').props.zone,
 				'row 2, cell 3, useTooltip arg 1, attr'
 			).to.be.equal('test_slab_2');
 			expect(hintedEl.prop('useTooltip_prop_2'), 'row 2, cell 3, useTooltip arg 2').to.be.equal('hint');

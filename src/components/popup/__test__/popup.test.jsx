@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import Popup from '../popup.jsx';
 import styles from '../style.css';
 
@@ -41,32 +41,27 @@ describe('<Popup />', () => {
 	});
 
 	it('render()', () => {
-		const wrapper = shallow(
+		const wrapper = mount(
 			<Popup className="test_class">
 				<div>test child 1</div>
 				<div>test child 2</div>
 			</Popup>
 		);
 		const instance = wrapper.instance();
+		const rootElement = instance.rootElementRef;
 
-		expect(wrapper.childAt(0).prop('component'), 'wrapper component').to.be.equal('Portal');
-		expect(
-			wrapper.childAt(0).childAt(0).prop('className'),
-			'fader className'
-		).to.be.equal(styles['fader']);
-		expect(
-			wrapper.childAt(0).childAt(0).childAt(0).prop('className'),
-			'modal className'
-		).to.be.equal(styles['modal']);
+		expect(wrapper.hasClass('test_class')).to.be.true;
+		expect(rootElement.className, 'fader className').to.be.equal(styles['fader']);
+		expect(rootElement.children[0].className, 'modal className').to.be.equal(styles['modal']);
 
-		const popup = wrapper.childAt(0).childAt(0).childAt(0).childAt(0);
+		const popup = rootElement.children[0].children[0];
 
-		expect(
-			popup.prop('className'),
-			'popup className'
-		).to.be.equal(`${ styles['popup'] } test_class`);
-		expect(popup.children(), 'popup children').to.have.lengthOf(2);
-		expect(popup.childAt(0).text(), 'popup child 1').to.be.equal('test child 1');
-		expect(popup.childAt(1).text(), 'popup child 2').to.be.equal('test child 2');
+		expect(popup.className, 'popup className')
+			.to.be.equal(`${ styles['popup'] } test_class`);
+		expect(popup.children, 'popup children').to.have.lengthOf(2);
+		expect(popup.children[0].innerHTML, 'popup child 1').to.be.equal('test child 1');
+		expect(popup.children[1].innerHTML, 'popup child 2').to.be.equal('test child 2');
+
+		wrapper.unmount();
 	});
 });

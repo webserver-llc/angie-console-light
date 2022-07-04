@@ -33,7 +33,7 @@ describe('Tooltips', () => {
 		const rows = wrapper.find(`.${ styles['row'] }`);
 		let icon;
 
-		expect(wrapper.getElement().nodeName, 'wrapper html tag').to.be.equal('div');
+		expect(wrapper.getElement().type, 'wrapper html tag').to.be.equal('div');
 		expect(rows, 'rows length').to.have.lengthOf(2);
 		icon = rows.at(0).find('Icon');
 		expect(icon.hasClass(styles['icon']), 'row 1, icon className').to.be.true;

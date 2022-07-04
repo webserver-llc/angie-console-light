@@ -149,7 +149,7 @@ const config = {
 
     resolve: {
         alias: {
-            'react': 'preact'
+            'react': path.resolve(__dirname, 'src/preact-exports.js'),
         }
     },
     module: {

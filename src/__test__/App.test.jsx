@@ -6,65 +6,97 @@
  */
 
 import React from 'react';
-import { spy } from 'sinon';
+import { spy, stub } from 'sinon';
 import { shallow } from 'enzyme';
+
 import App, { history, SECTIONS, Errors } from '../App.jsx';
-import { STORE, startObserve, play, pause } from '../datastore';
+import datastore, { STORE, startObserve, play, pause } from '../datastore';
 import styles from '../style.css';
+import { apiUtils } from '../api';
 
 describe('<App />', () => {
 	afterEach(() => {
 		history.replace({ hash: '' });
 	});
 
-	it('constructor()', () => {
+	it('Listen history', () => {
+		stub(apiUtils, 'checkApiAvailability').callsFake(
+			() => Promise.reject({ type: '' })
+		);
+
 		const newHash = '#new_hash';
-		let wrapper = shallow(<App />);
+		let wrapper = shallow(<App.Component />);
 
 		expect(wrapper.state('hash')).to.equal(history.location.hash || '#');
 
 		history.replace({ hash: newHash });
 
-		wrapper = shallow(<App />);
+		wrapper = shallow(<App.Component />);
 
 		expect(wrapper.state('hash')).to.equal(newHash);
+
+		apiUtils.checkApiAvailability.restore();
 	});
 
-	it('componentDidMount()', () => {
-		const newHash = '#new_hash';
+	describe('componentDidMount()', () => {
+		it('Default flow', async () => {
+			stub(apiUtils, 'checkApiAvailability').callsFake(() => Promise.resolve());
+			stub(apiUtils, 'checkWritePermissions').callsFake(() => {});
+			stub(apiUtils, 'initialLoad').callsFake(() => Promise.resolve());
+			stub(datastore, 'startObserve').callsFake(() => {});
 
-		spy(history, 'listen');
+			const wrapper = shallow(<App.Component />);
+			const instance = wrapper.instance();
 
-		const wrapper = shallow(<App />);
-		const instance = wrapper.instance();
+			await new Promise(resolve => {
+				stub(instance, 'setState').callsFake(state => resolve(state));
+			});
 
-		expect(history.listen.calledOnce).to.be.true;
+			expect(apiUtils.checkApiAvailability).to.be.calledOnce;
+			expect(apiUtils.checkWritePermissions).to.be.calledOnce;
+			expect(apiUtils.initialLoad).to.be.calledOnce;
+			expect(apiUtils.initialLoad.args[0][0]).to.deep.equal(datastore);
+			expect(instance.setState).to.be.calledOnce;
+			expect(instance.setState.args[0][0]).to.deep.equal({ loading: false });
+			expect(datastore.startObserve).to.be.calledOnce;
 
-		spy(instance, 'setState');
-
-		history.push({
-			hash: newHash
+			apiUtils.checkApiAvailability.restore();
+			apiUtils.checkWritePermissions.restore();
+			apiUtils.initialLoad.restore();
+			datastore.startObserve.restore();
 		});
 
-		expect(instance.setState.calledOnce).to.be.true;
-		expect(instance.setState.args[0][0]).to.deep.equal({ hash: newHash });
-		expect(wrapper.state('hash')).to.equal(newHash);
+		it('"initialLoad" returns error', async () => {
+			const error = "test_error";
 
-		history.push({
-			hash: ''
+			stub(apiUtils, 'checkApiAvailability').callsFake(() => Promise.reject({ type: error }));
+			stub(apiUtils, 'checkWritePermissions').callsFake(() => {});
+			stub(apiUtils, 'initialLoad').callsFake(() => Promise.resolve());
+
+			const wrapper = shallow(<App.Component />);
+			const instance = wrapper.instance();
+
+			await new Promise(resolve => {
+				stub(instance, 'setState').callsFake(resolve);
+			});
+
+			expect(instance.setState).to.be.calledOnce;
+			expect(instance.setState.args[0][0]).to.deep.equal({ error });
+
+			apiUtils.checkApiAvailability.restore();
+			apiUtils.checkWritePermissions.restore();
+			apiUtils.initialLoad.restore();
 		});
-
-		expect(instance.setState.calledTwice).to.be.true;
-		expect(instance.setState.args[1][0]).to.deep.equal({ hash: '#' });
-		expect(wrapper.state('hash')).to.equal('#');
-
-		history.listen.restore();
-		instance.setState.restore();
 	});
 
 	describe('render()', () => {
-		it('Loading', () => {
-			const wrapper = shallow(<App loading={ true } />);
+		it('Loading', async () => {
+			stub(apiUtils, 'checkApiAvailability').callsFake(
+				() => Promise.reject({ type: '' })
+			);
+
+			const wrapper = shallow(<App.Component />);
+			const instance = wrapper.instance();
 
 			expect(wrapper.prop('className')).to.equal(styles['splash']);
 			expect(wrapper.find(`.${ styles['logo'] }`)).to.have.lengthOf(1);
@@ -73,12 +105,18 @@ describe('<App />', () => {
 
 			expect(loader).to.have.lengthOf(1);
 			expect(loader.hasClass(styles['loader'])).to.be.true;
-
 			expect(wrapper.find(`.${ styles['loading'] }`)).to.have.lengthOf(1);
+
+			apiUtils.checkApiAvailability.restore();
 		});
 
 		it('Loaded', () => {
-			const wrapper = shallow(<App />);
+			stub(apiUtils, 'checkApiAvailability').callsFake(
+				() => Promise.reject({ type: '' })
+			);
+
+			const wrapper = shallow(<App.Component />);
+			wrapper.setState({ loading: false });
 
 			expect(wrapper.prop('className')).to.equal(styles['dashboard']);
 			expect(wrapper.find('Disclaimer')).to.have.lengthOf(__ENV__ === 'demo' ? 1 : 0);
@@ -104,15 +142,22 @@ describe('<App />', () => {
 			});
 
 			expect(wrapper.find('Footer')).to.have.lengthOf(1);
+
+			apiUtils.checkApiAvailability.restore();
 		});
 
 		it('Errors', () => {
-			const wrapper = shallow(<App />);
+			stub(apiUtils, 'checkApiAvailability').callsFake(
+				() => Promise.reject({ type: '' })
+			);
+
+			const wrapper = shallow(<App.Component />);
+			wrapper.setState({ loading: false });
 			const errBlockSelector = `.${ styles['error-block'] }`;
 
 			expect(wrapper.find(errBlockSelector)).to.be.lengthOf(0);
 
-			wrapper.setProps({ error: 'some_unknown_error' });
+			wrapper.setState({ error: 'some_unknown_error' });
 
 			expect(wrapper.find(errBlockSelector)).to.be.lengthOf(1);
 			expect(wrapper.find(`${ errBlockSelector } p`)).to.be.lengthOf(1);
@@ -120,13 +165,15 @@ describe('<App />', () => {
 			expect(wrapper.find('UpdatingControl')).to.have.lengthOf(0);
 
 			Object.keys(Errors).forEach(error => {
-				wrapper.setProps({ error });
+				wrapper.setState({ error });
 
 				const p = wrapper.find(`${ errBlockSelector } p`);
 
 				expect(p).to.be.lengthOf(2);
 				expect(p.first().text()).to.be.equal(Errors[error]);
 			});
+
+			apiUtils.checkApiAvailability.restore();
 		});
 	});
 });

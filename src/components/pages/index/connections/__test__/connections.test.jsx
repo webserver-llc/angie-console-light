@@ -46,16 +46,14 @@ describe('<Connections IndexPage />', () => {
 		const instance = wrapper.instance();
 		let cell = instance.getCurrentCell('not_a_number');
 
-		expect(cell.nodeName, '[value is a string] cell nodeName').to.be.equal('td');
-		expect(cell.children, '[value is a string] cell children length').to.have.lengthOf(1);
-		expect(cell.children[0], '[value is a string] cell child 1').to.be.equal('not_a_number');
+		expect(cell.type, '[value is a string] cell nodeName').to.be.equal('td');
+		expect(cell.props.children[0], '[value is a string] cell child 1').to.be.equal('not_a_number');
 
 		cell = instance.getCurrentCell(125);
 
-		expect(cell.nodeName, '[value is a number] cell nodeName').to.be.equal('td');
-		expect(cell.children, '[value is a number] cell children length').to.have.lengthOf(2);
-		expect(cell.children[0], '[value is a number] cell child 1').to.be.equal('125');
-		expect(cell.children[1].attributes.className, '[value is a number] cell child 2 className')
+		expect(cell.type, '[value is a number] cell nodeName').to.be.equal('td');
+		expect(cell.props.children[0], '[value is a number] cell child 1').to.be.equal(125);
+		expect(cell.props.children[1].props.className, '[value is a number] cell child 2 className')
 			.to.be.equal(styles['current__sec']);
 
 		wrapper.unmount();
@@ -93,7 +91,7 @@ describe('<Connections IndexPage />', () => {
 		let indexBox = wrapper.find('IndexBox');
 
 		expect(indexBox.prop('className'), 'IndexBox className').to.be.equal('test');
-		indexBox = indexBox.childAt(0);
+		// indexBox = indexBox.childAt(0);
 		expect(indexBox.children(), 'IndexBox children length').to.have.lengthOf(3);
 		expect(
 			indexBox.childAt(0).prop('className'),
@@ -129,7 +127,7 @@ describe('<Connections IndexPage />', () => {
 			'[Conns tab] SSL tab text'
 		).to.be.equal('SSL');
 
-		expect(changeTabBindSpy.calledTwice, 'changeTab called twice').to.be.true;
+		expect(changeTabBindSpy, 'changeTab called twice').to.be.calledTwice;
 		expect(changeTabBindSpy.args[0][0], 'changeTab call 1 arg 1').to.be.deep.equal(instance);
 		expect(changeTabBindSpy.args[0][1], 'changeTab call 1 arg 2').to.be.equal('conns');
 		expect(changeTabBindSpy.args[1][0], 'changeTab call 2 arg 1').to.be.deep.equal(instance);
@@ -163,7 +161,7 @@ describe('<Connections IndexPage />', () => {
 
 		stub(instance, 'getCurrentCell').callsFake(a => <td>test_getCurrentCell_{ a }</td>);
 		wrapper.setState({ tab: 'ssl' });
-		indexBox = wrapper.find('IndexBox').childAt(0);
+		indexBox = wrapper.find('IndexBox');
 
 		expect(
 			indexBox.childAt(0).prop('className'),

@@ -13,18 +13,10 @@ const webpackConfig = require('./webpack.config.js');
 module.exports = (config) => {
 	/* Overrides for Enzyme+preact */
 	webpackConfig.resolve = { alias: {
-		'react-dom/server': 'preact-render-to-string',
-		'react-dom/test-utils': 'preact-test-utils',
-		'react-dom': 'preact-compat-enzyme',
-		'react-test-renderer/shallow': 'preact-test-utils',
-		'react-test-renderer': 'preact-test-utils',
-		'react-addons-test-utils': 'preact-test-utils',
-		'react': 'preact-compat-enzyme'
+		...webpackConfig.resolve.alias,
+		'react-dom/test-utils': 'preact/test-utils',
+		'react-dom': 'preact/compat',
 	} };
-
-	webpackConfig.externals = {
-		'preact/test-utils': true
-	};
 
 	config.set({
 		frameworks: ['mocha', 'sinon-chai'],

@@ -796,20 +796,20 @@ describe('<UpstreamsEditor />', () => {
 
 		let popup = wrapper.childAt(0);
 
-		expect(popup.childAt(0).prop('className'), 'title className').to.be.equal(
+		expect(wrapper.childAt(0).prop('className'), 'title className').to.be.equal(
 			styles['header']
 		);
-		expect(popup.childAt(0).text(), 'title text').to.be.equal('Add server to "upstream_test"');
-		expect(popup.childAt(1).prop('className'), 'close el className').to.be.equal(
+		expect(wrapper.childAt(0).text(), 'title text').to.be.equal('Add server to "upstream_test"');
+		expect(wrapper.childAt(1).prop('className'), 'close el className').to.be.equal(
 			styles['close']
 		);
-		expect(popup.childAt(1).prop('onClick'), 'close el onClick').to.be.a('function');
+		expect(wrapper.childAt(1).prop('onClick'), 'close el onClick').to.be.a('function');
 		expect(
-			popup.childAt(1).prop('onClick').name,
+			wrapper.childAt(1).prop('onClick').name,
 			'close el onClick name'
 		).to.be.equal('bound close');
 
-		let content = popup.childAt(2).childAt(0);
+		let content = wrapper.childAt(2).childAt(0);
 
 		expect(content.prop('className'), 'content className').to.be.equal(styles['content']);
 		expect(
@@ -1230,7 +1230,7 @@ describe('<UpstreamsEditor />', () => {
 			'radio, state down input, prop checked'
 		).to.be.true;
 
-		let footer = popup.childAt(2).childAt(1);
+		let footer = wrapper.childAt(2).childAt(1);
 
 		expect(footer.prop('className'), 'footer className').to.be.equal(styles['footer']);
 		expect(footer.children(), '[isAdd = true] footer childs count').to.have.lengthOf(2);
@@ -1270,7 +1270,7 @@ describe('<UpstreamsEditor />', () => {
 			addAsDomain: true
 		});
 
-		content = wrapper.childAt(0).childAt(2).childAt(0);
+		content = wrapper.childAt(2).childAt(0);
 		serversGroup = content.childAt(0);
 
 		expect(
@@ -1401,7 +1401,7 @@ describe('<UpstreamsEditor />', () => {
 			'[peers.length = 1] title text'
 		).to.be.equal('Edit server test_server_1 "upstream_test"');
 
-		content = wrapper.childAt(0).childAt(2).childAt(0);
+		content = wrapper.childAt(2).childAt(0);
 
 		expect(
 			content.children(),
@@ -1447,7 +1447,7 @@ describe('<UpstreamsEditor />', () => {
 			'error messages, error 2'
 		).to.be.equal('error_2');
 
-		footer = wrapper.childAt(0).childAt(2).childAt(1);
+		footer = wrapper.childAt(2).childAt(1);
 
 		expect(footer.children(), '[isAdd = false] footer childs count').to.have.lengthOf(3);
 		expect(
@@ -1482,7 +1482,7 @@ describe('<UpstreamsEditor />', () => {
 			'[peers.length = 1] title text'
 		).to.be.equal('Edit servers "upstream_test"');
 
-		content = wrapper.childAt(0).childAt(2).childAt(0);
+		content = wrapper.childAt(2).childAt(0);
 		serversGroup = content.childAt(0);
 
 		expect(
@@ -1524,7 +1524,7 @@ describe('<UpstreamsEditor />', () => {
 
 		wrapper.setState({ loading: true });
 
-		content = wrapper.childAt(0).childAt(2);
+		content = wrapper.childAt(2);
 
 		expect(
 			content.prop('className'),
@@ -1546,7 +1546,7 @@ describe('<UpstreamsEditor />', () => {
 			successMessage: 'success message test'
 		});
 
-		content = wrapper.childAt(0).childAt(2).childAt(0);
+		content = wrapper.childAt(2).childAt(0);
 
 		expect(
 			content.prop('className'),
@@ -1557,7 +1557,7 @@ describe('<UpstreamsEditor />', () => {
 			'[state.success = true] content text'
 		).to.be.equal('success message test');
 
-		footer = wrapper.childAt(0).childAt(2).childAt(1);
+		footer = wrapper.childAt(2).childAt(1);
 
 		expect(
 			footer.prop('className'),

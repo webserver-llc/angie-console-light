@@ -40,11 +40,11 @@ describe('<NumberInput />', () => {
 		);
 		const rootEl = wrapper.getElement();
 
-		expect(rootEl.nodeName, 'check html tag').to.be.equal('input');
-		expect(rootEl.children, 'check children').to.be.an('undefined');
-		expect(rootEl.attributes.onKeyPress.name, '"onKeyPress" prop').to.be.equal('onKeyPress');
-		expect(rootEl.attributes.prop_1, '"prop_1" prop').to.be.equal(prop_1);
-		expect(rootEl.attributes.prop_2, '"prop_2" prop').to.be.equal(prop_2);
+		expect(rootEl.type, 'check html tag').to.be.equal('input');
+		expect(rootEl.props.children, 'check children').to.be.an('undefined');
+		expect(rootEl.props.onKeyPress.name, '"onKeyPress" prop').to.be.equal('onKeyPress');
+		expect(rootEl.props.prop_1, '"prop_1" prop').to.be.equal(prop_1);
+		expect(rootEl.props.prop_2, '"prop_2" prop').to.be.equal(prop_2);
 
 		wrapper.unmount();
 	});

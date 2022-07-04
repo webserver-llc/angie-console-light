@@ -45,6 +45,9 @@ describe('<ZoneSync Page />', () => {
 					}], ['test_3', {
 						alert: false,
 						warning: true
+					}], ['test_4', {
+						alert: false,
+						warning: false
 					}]
 				])
 			};
@@ -56,19 +59,28 @@ describe('<ZoneSync Page />', () => {
 			expect(rows.at(0).find('td').at(1).text(), 'row 1, title').to.be.equal('test');
 			expect(rows.at(1).find('td').at(1).text(), 'row 2, title').to.be.equal('test_2');
 			expect(rows.at(2).find('td').at(1).text(), 'row 3, title').to.be.equal('test_3');
-
-			let sortSpy = spy(Array.prototype, 'sort');
+			expect(rows.at(3).find('td').at(1).text(), 'row 4, title').to.be.equal('test_4');
 
 			wrapper.setState({ sortOrder: 'desc' });
 			rows = wrapper.find('table').at(1).find('tbody tr');
 
-			expect(rows.at(2).find('td').at(1).text(), 'row 3, title [desc]').to.be.equal('test');
-			expect(sortSpy.calledOnce, 'Array sort called once').to.be.true;
-			expect(sortSpy.args[0][0](['', { alert: true, warning: false }], []), 'Array sort fn').to.be.equal(-1);
-			expect(sortSpy.args[0][0](['', { alert: false, warning: true }], []), 'Array sort fn').to.be.equal(-1);
-			expect(sortSpy.args[0][0](['', { alert: false, warning: false }], []), 'Array sort fn').to.be.equal(1);
+			assert(
+				['test_2', 'test_3'].includes(rows.at(0).find('td').at(1).text()),
+				'row 1, title [desc]'
+			);
+			assert(
+				['test_2', 'test_3'].includes(rows.at(1).find('td').at(1).text()),
+				'row 2, title [desc]'
+			);
+			assert(
+				['test', 'test_4'].includes(rows.at(2).find('td').at(1).text()),
+				'row 3, title [desc]'
+			);
+			assert(
+				['test', 'test_4'].includes(rows.at(3).find('td').at(1).text()),
+				'row 4, title [desc]'
+			);
 
-			sortSpy.restore();
 			wrapper.unmount();
 		});
 
@@ -86,7 +98,7 @@ describe('<ZoneSync Page />', () => {
 				} }} />
 			);
 
-			expect(wrapper.getElement().nodeName, 'wrapper html tag').to.be.equal('div');
+			expect(wrapper.getElement().type, 'wrapper html tag').to.be.equal('div');
 
 			const tables = wrapper.find(`.${ styles['table'] }`);
 

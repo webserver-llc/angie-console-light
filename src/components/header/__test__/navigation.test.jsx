@@ -76,8 +76,9 @@ describe('<Navigation />', () => {
 		const closeStub = stub(instance, 'closeSettings').callsFake(() => {});
 
 		instance.openSettings();
+		wrapper.update();
 
-		expect(stateSpy.calledOnce, 'setState called once').to.be.true;
+		expect(stateSpy, 'setState called once').to.be.calledOnce;
 		expect(stateSpy.args[0][0], 'setState 1st arg').to.be.deep.equal({
 			settings: true
 		});
@@ -85,8 +86,8 @@ describe('<Navigation />', () => {
 
 		instance.openSettings();
 
-		expect(stateSpy.calledOnce, 'setState called once').to.be.true;
-		expect(closeStub.calledOnce, 'closeSettings called once').to.be.true;
+		expect(stateSpy, 'setState called once').to.be.calledOnce;
+		expect(closeStub, 'closeSettings called once').to.be.calledOnce;
 
 		stateSpy.restore();
 		closeStub.restore();

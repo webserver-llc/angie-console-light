@@ -21,8 +21,8 @@ describe('<Loader />', () => {
 		);
 		const rootEl = wrapper.getElement();
 
-		assert(rootEl.nodeName === 'div', 'Should be a "div" html tag');
-		assert(rootEl.children === undefined, 'Should not have any children');
+		assert(rootEl.type === 'div', 'Should be a "div" html tag');
+		assert(rootEl.props.children === undefined, 'Should not have any children');
 
 		assert(wrapper.hasClass(className), 'Should have a class from "className" property');
 

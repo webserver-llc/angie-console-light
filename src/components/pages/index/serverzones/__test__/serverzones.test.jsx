@@ -15,14 +15,11 @@ describe('<ServerZones IndexPage />', () => {
 	describe('render()', () => {
 		it('empty data', () => {
 			const wrapper = shallow(<ServerZones data={{}} />);
-			let indexBox = wrapper.find('IndexBox');
+			const indexBox = wrapper.find('IndexBox');
 
 			expect(indexBox.prop('title'), 'IndexBox title').to.be.equal('HTTP Zones');
 			expect(indexBox.prop('status'), 'IndexBox status').to.be.equal('ok');
 			expect(indexBox.prop('href'), 'IndexBox href').to.be.equal('#server_zones');
-
-			indexBox = indexBox.childAt(0);
-
 			expect(indexBox.children(), 'IndexBox children length').to.have.lengthOf(1);
 			expect(indexBox.childAt(0).name(), 'AlertsCount').to.be.equal('AlertsCount');
 			expect(indexBox.childAt(0).prop('href'), 'AlertsCount href').to.be.equal('#server_zones');
@@ -61,9 +58,6 @@ describe('<ServerZones IndexPage />', () => {
 			let indexBox = wrapper.find('IndexBox');
 
 			expect(indexBox.prop('status'), 'IndexBox status').to.be.equal('warning');
-
-			indexBox = indexBox.childAt(0);
-
 			expect(indexBox.children(), 'IndexBox children length').to.have.lengthOf(2);
 			expect(indexBox.childAt(0).prop('total'), 'AlertsCount total').to.be.equal(200);
 			expect(indexBox.childAt(0).prop('warnings'), 'AlertsCount warnings').to.be.equal(5);
@@ -77,7 +71,7 @@ describe('<ServerZones IndexPage />', () => {
 				out: 45
 			};
 			wrapper.setProps(props);
-			indexBox = wrapper.find('IndexBox').childAt(0);
+			indexBox = wrapper.find('IndexBox');
 
 			expect(indexBox.childAt(1).childAt(1).text(), 'trafficBlock, row 2, text').to.be.equal('In: 50/s');
 			expect(indexBox.childAt(1).childAt(2).text(), 'trafficBlock, row 3, text').to.be.equal('Out: 45/s');
@@ -121,12 +115,9 @@ describe('<ServerZones IndexPage />', () => {
 					}}
 				/>
 			);
-			let indexBox = wrapper.find('IndexBox');
+			const indexBox = wrapper.find('IndexBox');
 
 			expect(indexBox.prop('status'), 'IndexBox status').to.be.equal('danger');
-
-			indexBox = indexBox.childAt(0);
-
 			expect(indexBox.childAt(0).prop('total'), 'AlertsCount total').to.be.equal(1200);
 			expect(indexBox.childAt(0).prop('warnings'), 'AlertsCount warnings').to.be.equal(35);
 			expect(indexBox.childAt(0).prop('alerts'), 'AlertsCount alerts').to.be.equal(22);

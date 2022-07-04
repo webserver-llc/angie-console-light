@@ -102,9 +102,9 @@ describe('<AboutNginx IndexPage />', () => {
 		expect(tooltip.prop('className'), 'tooltip className').to.be.equal(styles['uptime']);
 		expect(tooltip.prop('prop_from_useTooltip'), 'tooltip prop from useTooltip').to.be.true;
 		expect(tooltips.useTooltip.calledOnce, 'useTooltip called once').to.be.true;
-		expect(tooltips.useTooltip.args[0][0].nodeName.displayName, 'useTooltip arg')
+		expect(tooltips.useTooltip.args[0][0].type.displayName, 'useTooltip arg')
 			.to.be.equal('AboutNginxTooltip');
-		expect(tooltips.useTooltip.args[0][0].attributes.data, 'useTooltip arg prop')
+		expect(tooltips.useTooltip.args[0][0].props.data, 'useTooltip arg prop')
 			.to.be.deep.equal(data);
 		expect(tooltip.text(), 'tooltip text').to.be.equal('test_formatUptime_result');
 		expect(Date.parse.calledTwice, 'formatUptime called twice').to.be.true;

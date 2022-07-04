@@ -108,10 +108,11 @@ describe('<Upstream />', () => {
 		expect(setStateSpy.notCalled, 'this.setState not called').to.be.true;
 
 		instance.setState({ columnsExpanded: true });
+		wrapper.update();
 		setStateSpy.resetHistory();
 		instance.hoverColumns(hoveredColumns);
 
-		expect(setStateSpy.calledOnce, 'this.setState called once').to.be.true;
+		expect(setStateSpy, 'this.setState called once').to.be.calledOnce;
 		expect(setStateSpy.args[0][0], 'this.setState args').to.be.deep.equal({ hoveredColumns });
 
 		setStateSpy.restore();
@@ -417,53 +418,53 @@ describe('<Upstream />', () => {
 
 		expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(10);
 		expect(
-			tooltips.useTooltip.args[4][0].nodeName.prototype.displayName,
+			tooltips.useTooltip.args[4][0].type.name,
 			'useTooltip, call 5, arg 1'
 		).to.be.equal('PeerTooltip');
 		expect(
-			tooltips.useTooltip.args[4][0].attributes.peer,
+			tooltips.useTooltip.args[4][0].props.peer,
 			'useTooltip, call 5, arg 1, attr peer'
 		).to.be.deep.equal(peers[0]);
 		expect(
-			tooltips.useTooltip.args[5][0].nodeName.prototype.displayName,
+			tooltips.useTooltip.args[5][0].type.name,
 			'useTooltip, call 6, arg 1'
 		).to.be.equal('ConnectionsTooltip');
 		expect(
-			tooltips.useTooltip.args[5][0].attributes.peer,
+			tooltips.useTooltip.args[5][0].props.peer,
 			'useTooltip, call 6, arg 1, attr peer'
 		).to.be.deep.equal(peers[0]);
 		expect(tooltips.useTooltip.args[5][1], 'useTooltip, call 6, arg 2').to.be.equal('hint');
 		expect(
-			tooltips.useTooltip.args[6][0].nodeName.prototype.displayName,
+			tooltips.useTooltip.args[6][0].type.name,
 			'useTooltip, call 7, arg 1'
 		).to.be.equal('PeerTooltip');
 		expect(
-			tooltips.useTooltip.args[6][0].attributes.peer,
+			tooltips.useTooltip.args[6][0].props.peer,
 			'useTooltip, call 7, arg 1, attr peer'
 		).to.be.deep.equal(peers[1]);
 		expect(
-			tooltips.useTooltip.args[7][0].nodeName.prototype.displayName,
+			tooltips.useTooltip.args[7][0].type.name,
 			'useTooltip, call 8, arg 1'
 		).to.be.equal('ConnectionsTooltip');
 		expect(
-			tooltips.useTooltip.args[7][0].attributes.peer,
+			tooltips.useTooltip.args[7][0].props.peer,
 			'useTooltip, call 8, arg 1, attr peer'
 		).to.be.deep.equal(peers[1]);
 		expect(tooltips.useTooltip.args[7][1], 'useTooltip, call 8, arg 2').to.be.equal('hint');
 		expect(
-			tooltips.useTooltip.args[8][0].nodeName.prototype.displayName,
+			tooltips.useTooltip.args[8][0].type.name,
 			'useTooltip, call 9, arg 1'
 		).to.be.equal('PeerTooltip');
 		expect(
-			tooltips.useTooltip.args[8][0].attributes.peer,
+			tooltips.useTooltip.args[8][0].props.peer,
 			'useTooltip, call 9, arg 1, attr peer'
 		).to.be.deep.equal(peers[2]);
 		expect(
-			tooltips.useTooltip.args[9][0].nodeName.prototype.displayName,
+			tooltips.useTooltip.args[9][0].type.name,
 			'useTooltip, call 10, arg 1'
 		).to.be.equal('ConnectionsTooltip');
 		expect(
-			tooltips.useTooltip.args[9][0].attributes.peer,
+			tooltips.useTooltip.args[9][0].props.peer,
 			'useTooltip, call 10, arg 1, attr peer'
 		).to.be.deep.equal(peers[2]);
 		expect(tooltips.useTooltip.args[9][1], 'useTooltip, call 10, arg 2').to.be.equal('hint');

@@ -32,8 +32,8 @@ describe('<LimitConn />', () => {
 		const wrapper = shallow(<LimitConn />);
 		const headRow = wrapper.instance().getHeadRow();
 
-		expect(headRow.nodeName, 'html tag').to.be.equal('tr');
-		expect(headRow.children, 'cells count').to.have.lengthOf(5);
+		expect(headRow.type, 'html tag').to.be.equal('tr');
+		expect(headRow.props.children, 'cells count').to.have.lengthOf(5);
 
 		wrapper.unmount();
 	});
@@ -69,94 +69,94 @@ describe('<LimitConn />', () => {
 
 		let row = body[0][0];
 
-		expect(row.nodeName, '[group 1, row 1] html tag').to.be.equal('tr');
-		expect(row.attributes.key, '[group 1, row 1] attr key').to.be.equal('data_test');
-		expect(row.attributes.className, '[group 1, row 1] attr className').to.be.equal(
+		expect(row.type, '[group 1, row 1] html tag').to.be.equal('tr');
+		expect(row.key, '[group 1, row 1] attr key').to.be.equal('data_test');
+		expect(row.props.className, '[group 1, row 1] attr className').to.be.equal(
 			`${ styles['chart-container'] } ${ styles['chart-container_active'] }`
 		);
-		expect(row.attributes.title, '[group 1, row 1] attr title').to.be.equal('Click to hide rate graph');
-		expect(row.attributes.onClick, '[group 1, row 1] attr onClick').to.be.equal('toggleChart_bind_test');
-		expect(row.children, '[group 1, row 1] children length').to.have.lengthOf(5);
-		expect(row.children[0].nodeName, '[group 1, row 1] child 1, nodeName').to.be.equal('td');
-		expect(row.children[0].attributes.className, '[group 1, row 1] child 1, className').to.be.equal(
+		expect(row.props.title, '[group 1, row 1] attr title').to.be.equal('Click to hide rate graph');
+		expect(row.props.onClick, '[group 1, row 1] attr onClick').to.be.equal('toggleChart_bind_test');
+		expect(row.props.children, '[group 1, row 1] children length').to.have.lengthOf(5);
+		expect(row.props.children[0].type, '[group 1, row 1] child 1, nodeName').to.be.equal('td');
+		expect(row.props.children[0].props.className, '[group 1, row 1] child 1, className').to.be.equal(
 			`${ styles['center-align'] } ${ styles['bdr'] } ${ styles['chart-icon'] }`
 		);
-		expect(row.children[0].children[0].nodeName, '[group 1, row 1] child 1, child nodeName').to.be.equal('div');
+		expect(row.props.children[0].props.children.type, '[group 1, row 1] child 1, child nodeName').to.be.equal('div');
 		expect(
-			row.children[0].children[0].attributes.className,
+			row.props.children[0].props.children.props.className,
 			'[group 1, row 1] child 1, child className'
 		).to.be.equal(styles['chart-icon__icon']);
-		expect(row.children[1].nodeName, '[group 1, row 1] child 2, nodeName').to.be.equal('td');
-		expect(row.children[1].attributes.className, '[group 1, row 1] child 2, className').to.be.equal(
+		expect(row.props.children[1].type, '[group 1, row 1] child 2, nodeName').to.be.equal('td');
+		expect(row.props.children[1].props.className, '[group 1, row 1] child 2, className').to.be.equal(
 			`${ styles['left-align'] } ${ styles['bold'] } ${ styles['bdr'] }`
 		);
-		expect(row.children[1].children[0], '[group 1, row 1] child 2, child').to.be.equal('test');
-		expect(row.children[2].nodeName, '[group 1, row 1] child 3, nodeName').to.be.equal('td');
-		expect(row.children[2].attributes.className, '[group 1, row 1] child 3, className')
+		expect(row.props.children[1].props.children, '[group 1, row 1] child 2, child').to.be.equal('test');
+		expect(row.props.children[2].type, '[group 1, row 1] child 3, nodeName').to.be.equal('td');
+		expect(row.props.children[2].props.className, '[group 1, row 1] child 3, className')
 			.to.be.equal(styles['bdr']);
-		expect(row.children[2].children[0], '[group 1, row 1] child 3, child').to.be.equal('78');
-		expect(row.children[3].nodeName, '[group 1, row 1] child 4, nodeName').to.be.equal('td');
-		expect(row.children[3].attributes.className, '[group 1, row 1] child 4, className')
+		expect(row.props.children[2].props.children, '[group 1, row 1] child 3, child').to.be.equal(78);
+		expect(row.props.children[3].type, '[group 1, row 1] child 4, nodeName').to.be.equal('td');
+		expect(row.props.children[3].props.className, '[group 1, row 1] child 4, className')
 			.to.be.equal(styles['bdr']);
-		expect(row.children[3].children[0], '[group 1, row 1] child 4, child').to.be.equal('9');
-		expect(row.children[4].nodeName, '[group 1, row 1] child 5, nodeName').to.be.equal('td');
-		expect(row.children[4].children[0], '[group 1, row 1] child 5, child').to.be.equal('13');
+		expect(row.props.children[3].props.children, '[group 1, row 1] child 4, child').to.be.equal(9);
+		expect(row.props.children[4].type, '[group 1, row 1] child 5, nodeName').to.be.equal('td');
+		expect(row.props.children[4].props.children, '[group 1, row 1] child 5, child').to.be.equal(13);
 
 		row = body[0][1];
 
-		expect(row.nodeName, '[group 1, row 2] html tag').to.be.equal('tr');
-		expect(row.attributes.key, '[group 1, row 2] attr key').to.be.equal('chart_test');
-		expect(row.attributes.className, '[group 1, row 2] attr className').to.be.equal(
+		expect(row.type, '[group 1, row 2] html tag').to.be.equal('tr');
+		expect(row.key, '[group 1, row 2] attr key').to.be.equal('chart_test');
+		expect(row.props.className, '[group 1, row 2] attr className').to.be.equal(
 			styles['chart-row']
 		);
-		expect(row.children[0].nodeName, '[group 1, row 2] child nodeName').to.be.equal('td');
-		expect(row.children[0].attributes.colspan, '[group 1, row 2] child colspan').to.be.equal('5');
+		expect(row.props.children.type, '[group 1, row 2] child nodeName').to.be.equal('td');
+		expect(row.props.children.props.colspan, '[group 1, row 2] child colspan').to.be.equal('5');
 		expect(
-			row.children[0].attributes.className,
+			row.props.children.props.className,
 			'[group 1, row 2] child className'
 		).to.be.equal(styles['left-align']);
-		expect(row.children[0].children[0].nodeName.name, '[group 1, row 2] Chart in open row').to.be.equal('Chart');
-		expect(row.children[0].children[0].attributes.data, '[group 1, row 2] Chart attr data')
+		expect(row.props.children.props.children.type.name, '[group 1, row 2] Chart in open row').to.be.equal('Chart');
+		expect(row.props.children.props.children.props.data, '[group 1, row 2] Chart attr data')
 			.to.be.equal('test__history');
-		expect(row.children[0].children[0].attributes.colors, '[group 1, row 2] Chart attr colors')
+		expect(row.props.children.props.children.props.colors, '[group 1, row 2] Chart attr colors')
 			.to.be.deep.equal(Colors);
-		expect(row.children[0].children[0].attributes.labels, '[group 1, row 2] Chart attr labels')
+		expect(row.props.children.props.children.props.labels, '[group 1, row 2] Chart attr labels')
 			.to.be.deep.equal(Labels);
 
 		row = body[1][0];
 
-		expect(row.nodeName, '[group 2, row 1] html tag').to.be.equal('tr');
-		expect(row.attributes.key, '[group 2, row 1] attr key').to.be.equal('data_test_1');
-		expect(row.attributes.className, '[group 2, row 1] attr className')
+		expect(row.type, '[group 2, row 1] html tag').to.be.equal('tr');
+		expect(row.key, '[group 2, row 1] attr key').to.be.equal('data_test_1');
+		expect(row.props.className, '[group 2, row 1] attr className')
 			.to.be.equal(styles['chart-container']);
-		expect(row.attributes.title, '[group 2, row 1] attr title').to.be.equal('Click to view rate graph');
+		expect(row.props.title, '[group 2, row 1] attr title').to.be.equal('Click to view rate graph');
 
-		expect(row.attributes.onClick, '[group 2, row 1] attr onClick').to.be.equal('toggleChart_bind_test');
-		expect(row.children, '[group 2, row 1] children length').to.have.lengthOf(5);
-		expect(row.children[0].nodeName, '[group 2, row 1] child 1, nodeName').to.be.equal('td');
-		expect(row.children[0].attributes.className, '[group 2, row 1] child 1, className').to.be.equal(
+		expect(row.props.onClick, '[group 2, row 1] attr onClick').to.be.equal('toggleChart_bind_test');
+		expect(row.props.children, '[group 2, row 1] children length').to.have.lengthOf(5);
+		expect(row.props.children[0].type, '[group 2, row 1] child 1, nodeName').to.be.equal('td');
+		expect(row.props.children[0].props.className, '[group 2, row 1] child 1, className').to.be.equal(
 			`${ styles['center-align'] } ${ styles['bdr'] } ${ styles['chart-icon'] }`
 		);
-		expect(row.children[0].children[0].nodeName, '[group 2, row 1] child 1, child nodeName').to.be.equal('div');
+		expect(row.props.children[0].props.children.type, '[group 2, row 1] child 1, child nodeName').to.be.equal('div');
 		expect(
-			row.children[0].children[0].attributes.className,
+			row.props.children[0].props.children.props.className,
 			'[group 2, row 1] child 1, child className'
 		).to.be.equal(styles['chart-icon__icon']);
-		expect(row.children[1].nodeName, '[group 2, row 1] child 2, nodeName').to.be.equal('td');
-		expect(row.children[1].attributes.className, '[group 2, row 1] child 2, className').to.be.equal(
+		expect(row.props.children[1].type, '[group 2, row 1] child 2, nodeName').to.be.equal('td');
+		expect(row.props.children[1].props.className, '[group 2, row 1] child 2, className').to.be.equal(
 			`${ styles['left-align'] } ${ styles['bold'] } ${ styles['bdr'] }`
 		);
-		expect(row.children[1].children[0], '[group 2, row 1] child 2, child').to.be.equal('test_1');
-		expect(row.children[2].nodeName, '[group 2, row 1] child 3, nodeName').to.be.equal('td');
-		expect(row.children[2].attributes.className, '[group 2, row 1] child 3, className')
+		expect(row.props.children[1].props.children, '[group 2, row 1] child 2, child').to.be.equal('test_1');
+		expect(row.props.children[2].type, '[group 2, row 1] child 3, nodeName').to.be.equal('td');
+		expect(row.props.children[2].props.className, '[group 2, row 1] child 3, className')
 			.to.be.equal(styles['bdr']);
-		expect(row.children[2].children[0], '[group 2, row 1] child 3, child').to.be.equal('1');
-		expect(row.children[3].nodeName, '[group 2, row 1] child 4, nodeName').to.be.equal('td');
-		expect(row.children[3].attributes.className, '[group 2, row 1] child 4, className')
+		expect(row.props.children[2].props.children, '[group 2, row 1] child 3, child').to.be.equal(1);
+		expect(row.props.children[3].type, '[group 2, row 1] child 4, nodeName').to.be.equal('td');
+		expect(row.props.children[3].props.className, '[group 2, row 1] child 4, className')
 			.to.be.equal(styles['bdr']);
-		expect(row.children[3].children[0], '[group 2, row 1] child 4, child').to.be.equal('0');
-		expect(row.children[4].nodeName, '[group 2, row 1] child 5, nodeName').to.be.equal('td');
-		expect(row.children[4].children[0], '[group 2, row 1] child 5, child').to.be.equal('0');
+		expect(row.props.children[3].props.children, '[group 2, row 1] child 4, child').to.be.equal(0);
+		expect(row.props.children[4].type, '[group 2, row 1] child 5, nodeName').to.be.equal('td');
+		expect(row.props.children[4].props.children, '[group 2, row 1] child 5, child').to.be.equal(0);
 
 		expect(body[1][1], '[group 2, row 2] Chart in hidden row').to.be.a('null');
 

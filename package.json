@@ -19,14 +19,18 @@
   },
   "author": "Ivan Poluyanov <ip@nginx.com>",
   "license": "Apache-2.0",
+  "overrides": {
+    "minimist": "1.2.6",
+    "cheerio": "1.0.0-rc.10"
+  },
   "dependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.16.0",
-    "@babel/plugin-transform-runtime": "^7.16.4",
-    "@babel/preset-env": "^7.16.4",
-    "@babel/preset-react": "^7.16.0",
+    "@babel/core": "^7.18.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.18.0",
+    "@babel/plugin-transform-runtime": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
+    "@babel/preset-react": "^7.17.12",
     "autoprefixer": "^10.4.0",
-    "babel-loader": "^8.2.3",
+    "babel-loader": "^8.2.5",
     "babel-plugin-istanbul": "^6.1.1",
     "core-js": "^3.19.2",
     "css-loader": "^6.5.1",
@@ -45,9 +49,7 @@
     "postcss": "^8.4.4",
     "postcss-loader": "^6.2.1",
     "postcss-url": "^10.1.3",
-    "preact": "^8.2.5",
-    "preact-compat": "^3.17.0",
-    "preact-portal": "^1.1.2",
+    "preact": "^10.7.2",
     "react-dev-utils": "^12.0.0-next.58",
     "regenerator-runtime": "^0.13.9",
     "style-loader": "^3.3.1",
@@ -58,8 +60,8 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-preact-pure": "^2.2.0",
-    "karma": "^6.3.9",
+    "enzyme-adapter-preact-pure": "^4.0.1",
+    "karma": "^6.3.20",
     "karma-chrome-launcher": "3.1.0",
     "karma-coverage": "2.0.2",
     "karma-coverage-istanbul-reporter": "3.0.3",
@@ -67,13 +69,10 @@
     "karma-sinon-chai": "2.0.2",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "^5.0.0",
-    "mocha": "^8.0.1",
+    "mocha": "^10.0.0",
     "nyc": "15.1.0",
-    "preact-compat-enzyme": "^0.2.5",
-    "preact-render-to-string": "^3.6.3",
-    "preact-test-utils": "^0.1.3",
     "sinon": "9.0.2",
     "sinon-chai": "^3.5.0",
-    "webpack-dev-server": "^4.6.0"
+    "webpack-dev-server": "^4.9.2"
   }
 }

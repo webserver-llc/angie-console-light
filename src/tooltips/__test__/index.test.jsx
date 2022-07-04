@@ -11,12 +11,12 @@ import { spy, stub } from 'sinon';
 import {
 	checkElementMatches,
 	tooltipContainerEl,
-	closeTooltip,
-	renderTooltip,
+	TooltipsUtils,
 	initTooltips,
-	useTooltip
+	useTooltip,
+	tooltipRendered,
 } from '../index.jsx';
-import styles from '../../components/tooltip/style.css';
+import Tooltip from '../../components/tooltip';
 
 describe('Tooltips', () => {
 	it('checkElementMatches()', () => {
@@ -44,18 +44,18 @@ describe('Tooltips', () => {
 	});
 
 	it('initTooltips()', () => {
-		spy(document, 'createElement');
+		const setIntervalResult = 'setInterval_result';
+
 		stub(window, 'addEventListener').callsFake(() => {});
 		stub(window, 'clearInterval').callsFake(() => {});
-		stub(window, 'setInterval').callsFake(() => 'setInterval_result');
-		stub(React, 'render').callsFake(() => {});
+		stub(window, 'setInterval').callsFake(() => setIntervalResult);
+		stub(TooltipsUtils, 'closeTooltip').callsFake(() => {});
+		stub(TooltipsUtils, 'renderTooltip').callsFake(() => {});
 
 		initTooltips();
 
-		expect(document.createElement.calledOnce, 'document.createElement called').to.be.true;
-		expect(document.createElement.calledWith('div'), 'document.createElement call arg').to.be.true;
 		expect(
-			document.querySelectorAll(`body .${ styles['tooltip-container'] }`),
+			document.querySelectorAll(`body > .${ Tooltip.styles['tooltip-container'] }`),
 			'tooltipContainerEl pasted to body'
 		).to.have.lengthOf(1);
 		expect(window.addEventListener.calledOnce, 'window.addEventListener called').to.be.true;
@@ -63,194 +63,141 @@ describe('Tooltips', () => {
 			window.addEventListener.args[0][0],
 			'window.addEventListener call arg 1'
 		).to.be.equal('mouseover');
-		expect(
-			window.addEventListener.args[0][1],
-			'window.addEventListener call arg 2'
-		).to.be.a('function');
 
-		const getBoundingClientRectSpy = spy(() => ({}));
-		let closestResult = {
-			getBoundingClientRect: getBoundingClientRectSpy
-		};
-		const closestSpy = spy(() => closestResult);
+		const onMouseOver = window.addEventListener.args[0][1];
 
-		window.addEventListener.args[0][1]({
-			target: {
-				closest: closestSpy
-			}
-		});
+		expect(onMouseOver).to.be.a('function');
 
-		expect(closestSpy.calledOnce, 'evt.target.closest called').to.be.true;
+		let target = 'test_target';
+		const closestSpy = spy(() => target);
+
+		onMouseOver({ target: { closest: closestSpy } });
+
+		expect(closestSpy).to.be.calledOnce;
 		expect(closestSpy.calledWith('[data-tooltip]'), 'evt.target.closest call arg').to.be.true;
-		expect(window.clearInterval.calledOnce, '[1] window.clearInterval called').to.be.true;
-		expect(getBoundingClientRectSpy.calledOnce, '[renderTooltip] getBoundingClientRect called').to.be.true;
-		expect(window.setInterval.calledOnce, 'window.setInterval called').to.be.true;
+		expect(window.clearInterval, '[1]').to.be.calledOnce;
+		expect(TooltipsUtils.closeTooltip, '[1]').to.be.calledOnce;
+		expect(TooltipsUtils.renderTooltip, '[1]').to.be.calledOnce;
+		expect(TooltipsUtils.renderTooltip.args[0][0], '[1]').to.be.equal(target);
+		expect(window.setInterval).to.be.calledOnce;
 		expect(window.setInterval.args[0][0], 'window.setInterval call arg 1').to.be.a('function');
+		expect(window.setInterval.args[0][1], 'window.setInterval call arg 2').to.be.equal(500);
 
 		window.setInterval.args[0][0]();
 
-		expect(
-			getBoundingClientRectSpy.calledTwice,
-			'[renderTooltip] getBoundingClientRect called from setInterval'
-		).to.be.true;
+		expect(TooltipsUtils.renderTooltip, '[1]').to.be.calledTwice;
 
-		expect(window.setInterval.args[0][1], 'window.setInterval call arg 2').to.be.equal(500);
-
-		closestResult = null;
+		target = null;
 		window.clearInterval.resetHistory();
-		getBoundingClientRectSpy.resetHistory();
 		window.setInterval.resetHistory();
-		window.addEventListener.args[0][1]({
-			target: {
-				closest: closestSpy
-			}
-		});
 
-		expect(window.clearInterval.calledOnce, 'window.clearInterval called').to.be.true;
-		expect(
-			window.clearInterval.calledWith('setInterval_result'),
-			'[2] window.clearInterval called'
-		).to.be.true;
-		expect(getBoundingClientRectSpy.notCalled, '[renderTooltip] getBoundingClientRect not called').to.be.true;
+		onMouseOver({ target: { closest: closestSpy } });
+
+		expect(window.clearInterval, '[2]').to.be.calledOnce;
+		expect(window.clearInterval.calledWith(setIntervalResult), '[2]').to.be.true;
 		expect(window.setInterval.notCalled, 'window.setInterval not called').to.be.true;
 
-		document.createElement.restore();
 		window.addEventListener.restore();
 		window.clearInterval.restore();
 		window.setInterval.restore();
-		React.render.restore();
+		TooltipsUtils.closeTooltip.restore();
+		TooltipsUtils.renderTooltip.restore();
 	});
 
 	it('closeTooltip()', () => {
-		stub(React, 'render').callsFake(() => {
-			const el = document.createElement('div');
+		expect(tooltipContainerEl.children).to.be.lengthOf(0);
 
-			el.setAttribute('id', 'test_tooltip');
-			tooltipContainerEl.appendChild(el);
-
-			return el;
+		TooltipsUtils.renderTooltip({
+			getBoundingClientRect: () => ({}),
+			tooltipComponent: 'Test Element',
 		});
+		expect(tooltipContainerEl.children).to.be.lengthOf(1);
 
-		renderTooltip({
-			getBoundingClientRect(){ return {} }
-		});
-
-		expect(document.querySelectorAll('#test_tooltip'), 'tooltip exists').to.have.lengthOf(1);
-
-		closeTooltip();
-
-		expect(document.querySelectorAll('#test_tooltip'), 'tooltip removed').to.have.lengthOf(0);
-
-		React.render.restore();
+		TooltipsUtils.closeTooltip();
+		expect(tooltipContainerEl.children).to.be.lengthOf(0);
 	});
 
+	// TODO: Cannot stub React.render, so need to reconsider the test
 	it('renderTooltip()', () => {
-		let id = 'test_tooltip_1';
+		window.scrollY = 100;
+		window.scrollX = 100;
 
-		stub(React, 'render').callsFake(() => {
-			const el = document.createElement('div');
-
-			el.setAttribute('id', id);
-			tooltipContainerEl.appendChild(el);
-
-			return el;
-		});
-
-		const getBoundingClientRectSpy = spy(() => ({
+		const getBoundingClientRect = () => ({
 			top: 10,
 			left: 20,
 			height: 30,
 			width: 40
-		}));
+		});
+		const tooltipComponent = 'tooltipComponent_test';
+		const TooltipResult = 'Tooltip_result';
 
-		renderTooltip({
-			getBoundingClientRect: getBoundingClientRectSpy,
-			tooltipComponent: 'tooltipComponent_test'
+		spy(TooltipsUtils, 'closeTooltip');
+		stub(Tooltip, 'Component').callsFake(() => <div>{TooltipResult}</div>);
+
+		TooltipsUtils.renderTooltip({
+			getBoundingClientRect,
+			tooltipComponent,
 		});
 
-		expect(getBoundingClientRectSpy.calledOnce, 'el.getBoundingClientRect called').to.be.true;
-		expect(React.render.calledOnce, 'React.render called').to.be.true;
+		expect(TooltipsUtils.closeTooltip).to.be.calledOnce;
+		expect(tooltipContainerEl.children, 'Tooltip is rendered').to.be.lengthOf(1);
+		expect(tooltipContainerEl.children[0].innerHTML, 'Tooltip content').to.be.equal(TooltipResult);
+		expect(Tooltip.Component).to.be.calledOnce;
+		expect(
+			Tooltip.Component.args[0][0],
+			'Tooltip args, align and position are undefined, window scroll > 0'
+		).to.deep.equal({
+			align: undefined,
+			anchorHeight: 30,
+			anchorWidth: 40,
+			children: tooltipComponent,
+			left: 120,
+			position: undefined,
+			top: 140,
+		});
 
-		let Tooltip = React.render.args[0][0];
-
-		expect(Tooltip.nodeName.name, 'React.render arg 1').to.be.equal('Tooltip');
-		expect(
-			Tooltip.attributes.top,
-			'React.render arg 1, attr top'
-		).to.be.equal(40);
-		expect(
-			Tooltip.attributes.left,
-			'React.render arg 1, attr left'
-		).to.be.equal(20);
-		expect(
-			Tooltip.attributes.anchorWidth,
-			'React.render arg 1, attr anchorWidth'
-		).to.be.equal(40);
-		expect(
-			Tooltip.attributes.anchorHeight,
-			'React.render arg 1, attr anchorHeight'
-		).to.be.equal(30);
-		expect(
-			Tooltip.attributes.align,
-			'[no tooltipStyle] React.render arg 1, attr align'
-		).to.be.an('undefined');
-		expect(
-			Tooltip.attributes.position,
-			'[no tooltipStyle] React.render arg 1, attr position'
-		).to.be.an('undefined');
-		expect(
-			Tooltip.children,
-			'React.render arg 1, children'
-		).to.be.deep.equal(['tooltipComponent_test']);
-
-		expect(React.render.args[0][1], 'React.render arg 2').to.be.equal(tooltipContainerEl);
-
-		React.render.resetHistory();
-		id = 'test_tooltip_2';
-		renderTooltip({
-			getBoundingClientRect: getBoundingClientRectSpy,
+		window.scrollY = 0;
+		window.scrollX = 0;
+		TooltipsUtils.closeTooltip.resetHistory();
+		Tooltip.Component.resetHistory();
+		TooltipsUtils.renderTooltip({
+			getBoundingClientRect,
+			tooltipComponent,
 			tooltipStyle: 'hint-right'
 		});
 
+		expect(TooltipsUtils.closeTooltip).to.be.calledOnce;
 		expect(
-			document.querySelectorAll('#test_tooltip_1'),
-			'previous tooltip removed'
-		).to.have.lengthOf(0);
+			Tooltip.Component.args[0][0],
+			'Tooltip args, align: undefined, position: right, window scroll = 0'
+		).to.contain({
+			align: undefined,
+			left: 20,
+			position: 'right',
+			top: 40,
+		});
 
-		Tooltip = React.render.args[0][0];
-
-		expect(
-			Tooltip.attributes.align,
-			'[tooltipStyle = hint-right] React.render arg 1, attr align'
-		).to.be.an('undefined');
-		expect(
-			Tooltip.attributes.position,
-			'[tooltipStyle = hint-right] React.render arg 1, attr position'
-		).to.be.equal('right');
-
-		React.render.resetHistory();
-		renderTooltip({
-			getBoundingClientRect: getBoundingClientRectSpy,
+		TooltipsUtils.closeTooltip.resetHistory();
+		Tooltip.Component.resetHistory();
+		TooltipsUtils.renderTooltip({
+			getBoundingClientRect,
+			tooltipComponent,
 			tooltipStyle: 'hint'
 		});
 
+		expect(TooltipsUtils.closeTooltip).to.be.calledOnce;
 		expect(
-			document.querySelectorAll('#test_tooltip_1'),
-			'previous tooltip removed'
-		).to.have.lengthOf(0);
+			Tooltip.Component.args[0][0],
+			'Tooltip args, align: undefined, position: right'
+		).to.contain({
+			align: 'center',
+			position: 'top',
+		});
 
-		Tooltip = React.render.args[0][0];
+		TooltipsUtils.closeTooltip();
 
-		expect(
-			Tooltip.attributes.align,
-			'[tooltipStyle = hint] React.render arg 1, attr align'
-		).to.be.equal('center');
-		expect(
-			Tooltip.attributes.position,
-			'[tooltipStyle = hint] React.render arg 1, attr position'
-		).to.be.equal('top');
-
-		React.render.restore();
+		TooltipsUtils.closeTooltip.restore();
+		Tooltip.Component.restore();
 	});
 
 	it('useTooltip()', () => {

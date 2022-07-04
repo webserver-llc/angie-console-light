@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import Portal from 'preact-portal';
+import { createPortal } from 'preact/compat';
 
 import styles from './style.css';
 
@@ -25,14 +25,19 @@ export default class Popup extends React.Component {
 		if (this.props.className) {
 			popupCN += ` ${ this.props.className }`;
 		}
-		return (<Portal into="body">
-			<div className={ styles.fader }>
+
+		return createPortal(
+			<div
+				ref={(ref) => { this.rootElementRef = ref; }}
+				className={ styles.fader }
+			>
 				<div className={ styles.modal }>
 					<div className={ popupCN }>
 						{ this.props.children }
 					</div>
 				</div>
-			</div>
-		</Portal>);
+			</div>,
+			document.body
+		);
 	}
 }

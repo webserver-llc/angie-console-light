@@ -51,32 +51,24 @@ describe('ServerZones Constructors', () => {
 		});
 
 		it('toggleChart()', () => {
-			const wrapper = shallow(<LimitConnReqConstructor />);
+			const wrapper = shallow(<LimitConnReqConstructor data={{}} />);
 			const instance = wrapper.instance();
-			const stateSpy = spy(instance, 'setState');
 
 			instance.toggleChart('limit_req');
-
-			expect(stateSpy.calledOnce, '[1] this.setState called').to.be.true;
-			expect(stateSpy.args[0][0], '[1] this.setState arg').to.be.deep.equal({
+			expect(wrapper.state(), '[1] state').to.deep.equal({
 				activeCharts: ['limit_req']
 			});
 
 			instance.toggleChart('limit_conn');
-
-			expect(stateSpy.calledTwice, '[1] this.setState called').to.be.true;
-			expect(stateSpy.args[1][0], '[1] this.setState arg').to.be.deep.equal({
+			expect(wrapper.state(), '[2] state').to.deep.equal({
 				activeCharts: ['limit_req', 'limit_conn']
 			});
 
 			instance.toggleChart('limit_req');
-
-			expect(stateSpy.calledThrice, '[1] this.setState called').to.be.true;
-			expect(stateSpy.args[2][0], '[1] this.setState arg').to.be.deep.equal({
+			expect(wrapper.state(), '[3] state').to.deep.equal({
 				activeCharts: ['limit_conn']
 			});
 
-			stateSpy.restore();
 			wrapper.unmount();
 		});
 
@@ -125,7 +117,7 @@ describe('ServerZones Constructors', () => {
 				stub(instance, 'getHeadRow').callsFake(() => 'test__headRow');
 				stub(instance, 'getBody').callsFake(() => 'test__body');
 
-				instance.forceUpdate();
+				wrapper.setProps({ data: {} });
 
 				expect(instance.getTitle.calledOnce, 'this.getTitle called once').to.be.true;
 				expect(wrapper.find('h1').text(), 'title').to.be.equal('test__title');
