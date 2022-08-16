@@ -6,10 +6,10 @@
  */
 
 export const getYMax = (parsedData, metrics, disabledMetrics) =>
-	parsedData.reduce((max, { zone }) => {
+	parsedData.reduce((max, { obj }) => {
 		const newMax = metrics.reduce((memo, key) => {
-			if (key in zone && !disabledMetrics.includes(key)) {
-				memo += zone[key];
+			if (key in obj && !disabledMetrics.includes(key)) {
+				memo += obj[key];
 			}
 
 			return memo;

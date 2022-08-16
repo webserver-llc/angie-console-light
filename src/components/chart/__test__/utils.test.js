@@ -11,19 +11,19 @@ import {
 
 describe('Chart utils', () => {
 	const data = [{
-		zone: {
+		obj: {
 			a: 12,
 			b: 3,
 			c: 0
 		}
 	}, {
-		zone: {
+		obj: {
 			a: 0,
 			b: 35,
 			c: 0
 		}
 	}, {
-		zone: {
+		obj: {
 			a: 1,
 			b: 14,
 			c: 3

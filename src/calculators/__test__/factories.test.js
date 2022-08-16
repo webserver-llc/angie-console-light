@@ -12,7 +12,7 @@ import {
 	handleUpstreams,
 	upstreamsCalculator,
 	upstreamsCalculatorFactory,
-	handleZone,
+	addHistory,
 	limitConnReqHistoryLimit,
 	limitConnReqFactory,
 	limitConnReqCalculator
@@ -724,7 +724,7 @@ describe('Calculators – factories', () => {
 		upstreamsCalculator.bind.restore();
 	});
 
-	it('handleZone()', () => {
+	it('addHistory()', () => {
 		const memo = {
 			history: {}
 		};
@@ -736,19 +736,19 @@ describe('Calculators – factories', () => {
 			prop_3: 8
 		};
 		const zoneName = 'test_zone';
-		let result = handleZone(memo, historyLimit, ts_1, zone_1, zoneName);
+		let result = addHistory(memo, historyLimit, ts_1, zone_1, zoneName);
 
 		expect(memo.history[zoneName], 'history type').to.be.an.instanceof(Array);
 		expect(memo.history[zoneName], 'history length').to.have.lengthOf(1);
 		expect(memo.history[zoneName][0], 'history 1st item').to.be.deep.equal(
-			{ zone: zone_1, _ts: ts_1 }
+			{ obj: zone_1, _ts: ts_1 }
 		);
-		expect(result.zone, 'result.zone').to.be.deep.equal(zone_1);
+		expect(result.obj, 'result.obj').to.be.deep.equal(zone_1);
 		expect(result.history.ts, 'result.history.ts').to.be.equal(ts_1);
 		expect(result.history.data, 'result.history.data').to.be.an.instanceof(Array);
 		expect(result.history.data, 'result.history.data').to.have.lengthOf(1);
 		expect(result.history.data[0], 'result.history.data 1st item').to.be.deep.equal({
-			zone: {
+			obj: {
 				prop_1: 0,
 				prop_2: 0,
 				prop_3: 0
@@ -764,25 +764,25 @@ describe('Calculators – factories', () => {
 		};
 		const sortSpy = spy(memo.history[zoneName], 'sort');
 
-		result = handleZone(memo, historyLimit, ts_0, zone_0, zoneName);
+		result = addHistory(memo, historyLimit, ts_0, zone_0, zoneName);
 
 		expect(memo.history[zoneName], 'history type').to.be.an.instanceof(Array);
 		expect(memo.history[zoneName], 'history length').to.have.lengthOf(2);
 		expect(memo.history[zoneName][0], 'history 1st item').to.be.deep.equal(
-			{ zone: zone_0, _ts: ts_0 }
+			{ obj: zone_0, _ts: ts_0 }
 		);
 		expect(memo.history[zoneName][1], 'history 2nd item').to.be.deep.equal(
-			{ zone: zone_1, _ts: ts_1 }
+			{ obj: zone_1, _ts: ts_1 }
 		);
 		expect(sortSpy.calledOnce, 'history.sort called once').to.be.true;
 		expect(sortSpy.args[0][0]({ _ts: 1 }, { _ts: 2 }), 'history.sort fn').to.be.equal(-1);
 		expect(sortSpy.args[0][0]({ _ts: 2 }, { _ts: 1 }), 'history.sort fn').to.be.equal(1);
-		expect(result.zone, 'result.zone').to.be.deep.equal(zone_0);
+		expect(result.obj, 'result.obj').to.be.deep.equal(zone_0);
 		expect(result.history.ts, 'result.history.ts').to.be.equal(ts_0);
 		expect(result.history.data, 'result.history.data').to.be.an.instanceof(Array);
 		expect(result.history.data, 'result.history.data').to.have.lengthOf(2);
 		expect(result.history.data[0], 'result.history.data 1st item').to.be.deep.equal({
-			zone: {
+			obj: {
 				prop_1: 0,
 				prop_2: 0,
 				prop_3: 0
@@ -790,7 +790,7 @@ describe('Calculators – factories', () => {
 			_ts: ts_0
 		});
 		expect(result.history.data[1], 'result.history.data 2nd item').to.be.deep.equal({
-			zone: {
+			obj: {
 				prop_1: 5,
 				prop_2: 0,
 				prop_3: 6
@@ -807,25 +807,25 @@ describe('Calculators – factories', () => {
 			prop_3: zone_1.prop_3
 		};
 
-		result = handleZone(memo, historyLimit, ts_2, zone_2, zoneName);
+		result = addHistory(memo, historyLimit, ts_2, zone_2, zoneName);
 
 		expect(memo.history[zoneName], 'history type').to.be.an.instanceof(Array);
 		expect(memo.history[zoneName], 'history length').to.have.lengthOf(3);
 		expect(memo.history[zoneName][0], 'history 1st item').to.be.deep.equal(
-			{ zone: zone_0, _ts: ts_0 }
+			{ obj: zone_0, _ts: ts_0 }
 		);
 		expect(memo.history[zoneName][1], 'history 2nd item').to.be.deep.equal(
-			{ zone: zone_1, _ts: ts_1 }
+			{ obj: zone_1, _ts: ts_1 }
 		);
 		expect(memo.history[zoneName][2], 'history 3rd item').to.be.deep.equal(
-			{ zone: zone_2, _ts: ts_2 }
+			{ obj: zone_2, _ts: ts_2 }
 		);
-		expect(result.zone, 'result.zone').to.be.deep.equal(zone_2);
+		expect(result.obj, 'result.obj').to.be.deep.equal(zone_2);
 		expect(result.history.ts, 'result.history.ts').to.be.equal(ts_2);
 		expect(result.history.data, 'result.history.data').to.be.an.instanceof(Array);
 		expect(result.history.data, 'result.history.data').to.have.lengthOf(3);
 		expect(result.history.data[0], 'result.history.data 1st item').to.be.deep.equal({
-			zone: {
+			obj: {
 				prop_1: 0,
 				prop_2: 0,
 				prop_3: 0
@@ -833,7 +833,7 @@ describe('Calculators – factories', () => {
 			_ts: ts_0
 		});
 		expect(result.history.data[1], 'result.history.data 2nd item').to.be.deep.equal({
-			zone: {
+			obj: {
 				prop_1: 5,
 				prop_2: 0,
 				prop_3: 6
@@ -841,7 +841,7 @@ describe('Calculators – factories', () => {
 			_ts: ts_1
 		});
 		expect(result.history.data[2], 'result.history.data 3rd item').to.be.deep.equal({
-			zone: {
+			obj: {
 				prop_1: 0,
 				prop_2: 10,
 				prop_3: 0
@@ -856,25 +856,25 @@ describe('Calculators – factories', () => {
 			prop_3: zone_2.prop_3 + 3
 		};
 
-		result = handleZone(memo, historyLimit, ts_3, zone_3, zoneName);
+		result = addHistory(memo, historyLimit, ts_3, zone_3, zoneName);
 
 		expect(memo.history[zoneName], 'history type').to.be.an.instanceof(Array);
 		expect(memo.history[zoneName], 'history length').to.have.lengthOf(3);
 		expect(memo.history[zoneName][0], 'history 1st item').to.be.deep.equal(
-			{ zone: zone_1, _ts: ts_1 }
+			{ obj: zone_1, _ts: ts_1 }
 		);
 		expect(memo.history[zoneName][1], 'history 2nd item').to.be.deep.equal(
-			{ zone: zone_2, _ts: ts_2 }
+			{ obj: zone_2, _ts: ts_2 }
 		);
 		expect(memo.history[zoneName][2], 'history 3rd item').to.be.deep.equal(
-			{ zone: zone_3, _ts: ts_3 }
+			{ obj: zone_3, _ts: ts_3 }
 		);
-		expect(result.zone, 'result.zone').to.be.deep.equal(zone_3);
+		expect(result.obj, 'result.obj').to.be.deep.equal(zone_3);
 		expect(result.history.ts, 'result.history.ts').to.be.equal(ts_3);
 		expect(result.history.data, 'result.history.data').to.be.an.instanceof(Array);
 		expect(result.history.data, 'result.history.data').to.have.lengthOf(3);
 		expect(result.history.data[0], 'result.history.data 1st item').to.be.deep.equal({
-			zone: {
+			obj: {
 				prop_1: 0,
 				prop_2: 0,
 				prop_3: 0
@@ -882,7 +882,7 @@ describe('Calculators – factories', () => {
 			_ts: ts_1
 		});
 		expect(result.history.data[1], 'result.history.data 2nd item').to.be.deep.equal({
-			zone: {
+			obj: {
 				prop_1: 0,
 				prop_2: 10,
 				prop_3: 0
@@ -890,7 +890,7 @@ describe('Calculators – factories', () => {
 			_ts: ts_2
 		});
 		expect(result.history.data[2], 'result.history.data 3rd item').to.be.deep.equal({
-			zone: {
+			obj: {
 				prop_1: 1,
 				prop_2: 2,
 				prop_3: 3
@@ -902,7 +902,7 @@ describe('Calculators – factories', () => {
 	describe('limitConnReqCalculator()', () => {
 		let updatingPeriod = 1000;
 		const expectedResult = 'expected_result';
-		const handleZoneBound = 'bound handleZone';
+		const addHistoryBound = 'bound addHistory';
 		let memo;
 		const timeStart = 1597739942000;
 		const data = {
@@ -913,13 +913,13 @@ describe('Calculators – factories', () => {
 		before(() => {
 			stub(appsettings, 'getSetting').callsFake(() => updatingPeriod);
 			stub(utils, 'createMapFromObject').callsFake(() => expectedResult);
-			stub(handleZone, 'bind').callsFake(() => handleZoneBound);
+			stub(addHistory, 'bind').callsFake(() => addHistoryBound);
 		});
 
 		beforeEach(() => {
 			appsettings.getSetting.resetHistory();
 			utils.createMapFromObject.resetHistory();
-			handleZone.bind.resetHistory();
+			addHistory.bind.resetHistory();
 
 			memo = {
 				prevUpdatingPeriod: 5000
@@ -929,7 +929,7 @@ describe('Calculators – factories', () => {
 		after(() => {
 			appsettings.getSetting.restore();
 			utils.createMapFromObject.restore();
-			handleZone.bind.restore();
+			addHistory.bind.restore();
 		});
 
 		it('no data', () => {
@@ -937,7 +937,7 @@ describe('Calculators – factories', () => {
 
 			expect(appsettings.getSetting.notCalled, 'getSetting not called').to.be.true;
 			expect(utils.createMapFromObject.notCalled, 'createMapFromObject not called').to.be.true;
-			expect(handleZone.bind.notCalled, 'handleZone.bind not called').to.be.true;
+			expect(addHistory.bind.notCalled, 'addHistory.bind not called').to.be.true;
 			expect(memo, 'memo').to.be.deep.equal({
 				prevUpdatingPeriod: 5000
 			});
@@ -949,7 +949,7 @@ describe('Calculators – factories', () => {
 
 			expect(appsettings.getSetting.notCalled, 'getSetting not called').to.be.true;
 			expect(utils.createMapFromObject.notCalled, 'createMapFromObject not called').to.be.true;
-			expect(handleZone.bind.notCalled, 'handleZone.bind not called').to.be.true;
+			expect(addHistory.bind.notCalled, 'addHistory.bind not called').to.be.true;
 			expect(memo, 'memo').to.be.deep.equal({
 				prevUpdatingPeriod: 5000
 			});
@@ -965,14 +965,14 @@ describe('Calculators – factories', () => {
 				prevUpdatingPeriod: updatingPeriod,
 				history: {}
 			});
-			expect(handleZone.bind.calledOnce, 'handleZone.bind called once').to.be.true;
-			expect(handleZone.bind.args[0][0], 'handleZone.bind 1st arg').to.be.a('null');
-			expect(handleZone.bind.args[0][1], 'handleZone.bind 2nd arg').to.be.deep.equal(memo);
-			expect(handleZone.bind.args[0][2], 'handleZone.bind 3rd arg').to.be.equal(limitConnReqHistoryLimit);
-			expect(handleZone.bind.args[0][3], 'handleZone.bind 4th arg').to.be.equal(1597739942);
+			expect(addHistory.bind.calledOnce, 'addHistory.bind called once').to.be.true;
+			expect(addHistory.bind.args[0][0], 'addHistory.bind 1st arg').to.be.a('null');
+			expect(addHistory.bind.args[0][1], 'addHistory.bind 2nd arg').to.be.deep.equal(memo);
+			expect(addHistory.bind.args[0][2], 'addHistory.bind 3rd arg').to.be.equal(limitConnReqHistoryLimit);
+			expect(addHistory.bind.args[0][3], 'addHistory.bind 4th arg').to.be.equal(1597739942);
 			expect(utils.createMapFromObject.calledOnce, 'createMapFromObject called once').to.be.true;
 			expect(utils.createMapFromObject.args[0][0], 'createMapFromObject 1st arg').to.be.deep.equal(data);
-			expect(utils.createMapFromObject.args[0][1], 'createMapFromObject 2nd arg').to.be.equal(handleZoneBound);
+			expect(utils.createMapFromObject.args[0][1], 'createMapFromObject 2nd arg').to.be.equal(addHistoryBound);
 			expect(result, 'returned data').to.be.equal(expectedResult);
 		});
 
@@ -985,14 +985,14 @@ describe('Calculators – factories', () => {
 			expect(memo, 'memo').to.be.deep.equal({
 				prevUpdatingPeriod: updatingPeriod
 			});
-			expect(handleZone.bind.calledOnce, 'handleZone.bind called once').to.be.true;
-			expect(handleZone.bind.args[0][0], 'handleZone.bind 1st arg').to.be.a('null');
-			expect(handleZone.bind.args[0][1], 'handleZone.bind 2nd arg').to.be.deep.equal(memo);
-			expect(handleZone.bind.args[0][2], 'handleZone.bind 3rd arg').to.be.equal(limitConnReqHistoryLimit);
-			expect(handleZone.bind.args[0][3], 'handleZone.bind 4th arg').to.be.equal(1597739942);
+			expect(addHistory.bind.calledOnce, 'addHistory.bind called once').to.be.true;
+			expect(addHistory.bind.args[0][0], 'addHistory.bind 1st arg').to.be.a('null');
+			expect(addHistory.bind.args[0][1], 'addHistory.bind 2nd arg').to.be.deep.equal(memo);
+			expect(addHistory.bind.args[0][2], 'addHistory.bind 3rd arg').to.be.equal(limitConnReqHistoryLimit);
+			expect(addHistory.bind.args[0][3], 'addHistory.bind 4th arg').to.be.equal(1597739942);
 			expect(utils.createMapFromObject.calledOnce, 'createMapFromObject called once').to.be.true;
 			expect(utils.createMapFromObject.args[0][0], 'createMapFromObject 1st arg').to.be.deep.equal(data);
-			expect(utils.createMapFromObject.args[0][1], 'createMapFromObject 2nd arg').to.be.equal(handleZoneBound);
+			expect(utils.createMapFromObject.args[0][1], 'createMapFromObject 2nd arg').to.be.equal(addHistoryBound);
 			expect(result, 'returned data').to.be.equal(expectedResult);
 		});
 	});

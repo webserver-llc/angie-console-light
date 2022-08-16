@@ -443,7 +443,7 @@ export default class Chart extends React.Component {
 						const key = metrics[j];
 
 						if (!disabledMetrics.includes(key)) {
-							const value = point.zone[key];
+							const value = point.obj[key];
 							const y = offsetTop + chartHeight - yStep * (value + valuesStack);
 
 							if (i === 0) {

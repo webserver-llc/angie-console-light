@@ -730,21 +730,21 @@ describe('<Chart />', () => {
 		it('firstPointIndex = 0, dndPointsIndicies = null', () => {
 			const data = [{
 				_ts: 1598706700,
-				zone: {
+				obj: {
 					passed: 10,
 					delayed: 1,
 					rejected: 0
 				}
 			}, {
 				_ts: 1598706800,
-				zone: {
+				obj: {
 					passed: 20,
 					delayed: 2,
 					rejected: 1
 				}
 			}, {
 				_ts: 1598706900,
-				zone: {
+				obj: {
 					passed: 30,
 					delayed: 3,
 					rejected: 2
@@ -1092,7 +1092,7 @@ describe('<Chart />', () => {
 					ts: 1598707000,
 					data: data.concat([{
 						_ts: 1598707000,
-						zone: {
+						obj: {
 							passed: 100,
 							delayed: 0,
 							rejected: 0
@@ -1137,28 +1137,28 @@ describe('<Chart />', () => {
 		it('firstPointIndex > 0', () => {
 			const data = [{
 				_ts: 1598700000,
-				zone: {
+				obj: {
 					passed: 1,
 					delayed: 0,
 					rejected: 1
 				}
 			}, {
 				_ts: 1598706700,
-				zone: {
+				obj: {
 					passed: 10,
 					delayed: 1,
 					rejected: 0
 				}
 			}, {
 				_ts: 1598706800,
-				zone: {
+				obj: {
 					passed: 20,
 					delayed: 2,
 					rejected: 1
 				}
 			}, {
 				_ts: 1598706900,
-				zone: {
+				obj: {
 					passed: 30,
 					delayed: 3,
 					rejected: 2
@@ -1197,7 +1197,7 @@ describe('<Chart />', () => {
 		it('with disabled metric', () => {
 			const data = [{
 				_ts: 1598706700,
-				zone: {
+				obj: {
 					passed: 10,
 					delayed: 1,
 					test: 0,
@@ -1205,7 +1205,7 @@ describe('<Chart />', () => {
 				}
 			}, {
 				_ts: 1598706800,
-				zone: {
+				obj: {
 					passed: 20,
 					delayed: 2,
 					test: 0,
@@ -1213,7 +1213,7 @@ describe('<Chart />', () => {
 				}
 			}, {
 				_ts: 1598706900,
-				zone: {
+				obj: {
 					passed: 30,
 					delayed: 3,
 					test: 0,
@@ -1290,21 +1290,21 @@ describe('<Chart />', () => {
 		it('dndControls', () => {
 			const data = [{
 				_ts: 1598706700,
-				zone: {
+				obj: {
 					passed: 10,
 					delayed: 1,
 					rejected: 0
 				}
 			}, {
 				_ts: 1598706800,
-				zone: {
+				obj: {
 					passed: 20,
 					delayed: 2,
 					rejected: 1
 				}
 			}, {
 				_ts: 1598706900,
-				zone: {
+				obj: {
 					passed: 30,
 					delayed: 3,
 					rejected: 2
@@ -1352,7 +1352,7 @@ describe('<Chart />', () => {
 
 			data.unshift({
 				_ts: 1598700000,
-				zone: {
+				obj: {
 					passed: 1,
 					delayed: 0,
 					rejected: 1
@@ -1360,7 +1360,7 @@ describe('<Chart />', () => {
 			});
 			data.push({
 				_ts: 1598707300,
-				zone: {
+				obj: {
 					passed: 100,
 					delayed: 10,
 					rejected: 9
@@ -1409,35 +1409,35 @@ describe('<Chart />', () => {
 						ts: 1598707000,
 						data: [{
 							_ts: 1598700000,
-							zone: {
+							obj: {
 								passed: 1,
 								delayed: 0,
 								rejected: 1
 							}
 						}, {
 							_ts: 1598706700,
-							zone: {
+							obj: {
 								passed: 10,
 								delayed: 1,
 								rejected: 0
 							}
 						}, {
 							_ts: 1598706800,
-							zone: {
+							obj: {
 								passed: 20,
 								delayed: 2,
 								rejected: 1
 							}
 						}, {
 							_ts: 1598706900,
-							zone: {
+							obj: {
 								passed: 30,
 								delayed: 3,
 								rejected: 2
 							}
 						}, {
 							_ts: 1598707300,
-							zone: {
+							obj: {
 								passed: 100,
 								delayed: 10,
 								rejected: 9
@@ -1526,7 +1526,7 @@ describe('<Chart />', () => {
 					ts: 1598707000,
 					data: [{
 						_ts: 1598706700,
-						zone: {
+						obj: {
 							passed: 10
 						}
 					}]

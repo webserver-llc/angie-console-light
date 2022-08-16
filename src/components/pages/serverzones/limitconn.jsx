@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { LimitConnReqConstructor } from './constructors.jsx';
+import ChartsTable from '../../charts-table/index.jsx';
 import Chart from '../../chart/index.jsx';
 import styles from '../../table/style.css';
 
@@ -21,7 +21,7 @@ export const Labels = new Map([
 	['rejected_dry_run', 'Rejected (dry_run)']
 ]);
 
-export default class LimitConn extends LimitConnReqConstructor {
+export default class LimitConn extends ChartsTable {
 	getTitle(){
 		return 'Limit Conn';
 	}
@@ -42,7 +42,7 @@ export default class LimitConn extends LimitConnReqConstructor {
 		const { activeCharts } = this.state;
 
 		return Array.from(this.props.data).map(
-			([name, { zone, history }]) => {
+			([name, { obj: zone, history }]) => {
 				let cn = styles['chart-container'];
 				let title = 'Click to view rate graph';
 				let chart = null;
