@@ -8,7 +8,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { stub } from 'sinon';
-import { LimitConnReqConstructor } from '../constructors.jsx';
+import ChartsTable from '../../../charts-table/index.jsx';
 import LimitConn, {
 	Colors,
 	Labels
@@ -16,8 +16,8 @@ import LimitConn, {
 import styles from '../../../table/style.css';
 
 describe('<LimitConn />', () => {
-	it('extends LimitConnReqConstructor', () => {
-		expect(LimitConn.prototype).to.be.an.instanceOf(LimitConnReqConstructor);
+	it('extends ChartsTable', () => {
+		expect(LimitConn.prototype).to.be.an.instanceOf(ChartsTable);
 	});
 
 	it('getTitle()', () => {
@@ -42,14 +42,14 @@ describe('<LimitConn />', () => {
 		const wrapper = shallow(
 			<LimitConn data={ new Map([
 				['test', {
-					zone: {
+					obj: {
 						passed: 78,
 						rejected: 9,
 						rejected_dry_run: 13
 					},
 					history: 'test__history'
 				}], ['test_1', {
-					zone: {
+					obj: {
 						passed: 1,
 						rejected: 0,
 						rejected_dry_run: 0

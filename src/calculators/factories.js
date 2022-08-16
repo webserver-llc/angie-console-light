@@ -141,17 +141,17 @@ export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { sl
 
 export const upstreamsCalculatorFactory = upstreamsKey => upstreamsCalculator.bind(null, upstreamsKey);
 
-export function handleZone(memo, historyLimit, ts, zone, zoneName) {
-	if (!memo.history[zoneName]) {
-		memo.history[zoneName] = [];
+export function addHistory(memo, historyLimit, ts, obj, objName) {
+	if (!memo.history[objName]) {
+		memo.history[objName] = [];
 	}
 
-	const history = memo.history[zoneName];
+	const history = memo.history[objName];
 	const lastItem = history[history.length - 1];
 	const needSort = lastItem && lastItem._ts > ts;
 
 	history.push({
-		zone,
+		obj,
 		_ts: ts
 	});
 
@@ -160,31 +160,31 @@ export function handleZone(memo, historyLimit, ts, zone, zoneName) {
 	}
 
 	if (needSort) {
-		memo.history[zoneName] = history.sort(
+		memo.history[objName] = history.sort(
 			(a, b) => a._ts < b._ts ? -1 : 1
 		);
 	}
 
 	return {
-		zone,
+		obj,
 		history: {
 			ts,
-			data: history.reduce((memo, { zone, _ts }, i) => {
+			data: history.reduce((memo, { obj, _ts }, i) => {
 				const prevItem = history[i - 1];
 
 				memo.push(
-					Object.keys(zone).reduce((memo, key) => {
+					Object.keys(obj).reduce((memo, key) => {
 						if (prevItem) {
-							memo.zone[key] = zone[key] - prevItem.zone[key];
+							memo.obj[key] = obj[key] - prevItem.obj[key];
 
-							if (memo.zone[key] < 0) memo.zone[key] = 0;
+							if (memo.obj[key] < 0) memo.obj[key] = 0;
 						} else {
-							memo.zone[key] = 0;
+							memo.obj[key] = 0;
 						}
 
 						return memo;
 					}, {
-						zone: {},
+						obj: {},
 						_ts
 					})
 				);
@@ -212,7 +212,7 @@ export function limitConnReqCalculator(memo, data, previousState, _, timeStart) 
 
 	return utils.createMapFromObject(
 		data,
-		handleZone.bind(null, memo, limitConnReqHistoryLimit, timeStart / 1000)
+		addHistory.bind(null, memo, limitConnReqHistoryLimit, timeStart / 1000)
 	);
 }
 
@@ -223,7 +223,7 @@ export default {
 	handleUpstreams,
 	upstreamsCalculator,
 	upstreamsCalculatorFactory,
-	handleZone,
+	addHistory,
 	limitConnReqHistoryLimit,
 	limitConnReqCalculator,
 	limitConnReqFactory,
