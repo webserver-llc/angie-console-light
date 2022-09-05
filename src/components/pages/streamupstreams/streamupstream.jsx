@@ -5,13 +5,13 @@
  *
  */
 import React from 'react';
+
 import TableSortControl from '../../table/tablesortcontrol.jsx';
 import UpstreamsList from '../../upstreams/upstreamslist.jsx';
-import utils from '../../../utils.js';
-import tooltips from '../../../tooltips/index.jsx';
+import utils from '#/utils.js';
+import tooltips from '#/tooltips/index.jsx';
 import PeerTooltip from '../../upstreams/PeerTooltip.jsx';
 import ConnectionsTooltip from '../../upstreams/ConnectionsTooltip.jsx';
-
 import styles from '../../table/style.css';
 
 export default class StreamUpstream extends UpstreamsList {

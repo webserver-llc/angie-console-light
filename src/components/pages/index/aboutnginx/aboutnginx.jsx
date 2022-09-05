@@ -6,12 +6,12 @@
  */
 
 import React from 'react';
+
 import IndexBox from '../indexbox/indexbox.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
-import api from '../../../../api';
-import utils from '../../../../utils.js';
-import tooltips from '../../../../tooltips/index.jsx';
-
+import api from '#/api';
+import utils from '#/utils.js';
+import tooltips from '#/tooltips/index.jsx';
 import styles from './style.css';
 import tooltipStyles from '../../../tooltip/style.css';
 

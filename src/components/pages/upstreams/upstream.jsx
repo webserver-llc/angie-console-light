@@ -1,18 +1,17 @@
 /**
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
+ * Copyright 2022-present, Igor Meleshchenko
  * All rights reserved.
  *
  */
 import React from 'react';
-import appsettings from '../../../appsettings';
-import TableSortControl from '../../table/tablesortcontrol.jsx';
-import UpstreamsList from '../../upstreams/upstreamslist.jsx';
-import utils from '../../../utils.js';
-import tooltips from '../../../tooltips/index.jsx';
-import PeerTooltip from '../../upstreams/PeerTooltip.jsx';
-import ConnectionsTooltip from '../../upstreams/ConnectionsTooltip.jsx';
-import styles from '../../table/style.css';
+
+import appsettings from '#/appsettings';
+import utils from '#/utils.js';
+import { TableSortControl, tableUtils, styles } from '#/components/table';
+import { UpstreamsList, PeerTooltip, ConnectionsTooltip } from '#/components/upstreams';
+import tooltips from '#/tooltips/index.jsx';
 
 export default class Upstream extends UpstreamsList {
 	constructor(props) {
@@ -40,7 +39,8 @@ export default class Upstream extends UpstreamsList {
 		const columnsExpanded = !this.state.columnsExpanded;
 
 		this.setState({
-			columnsExpanded
+			columnsExpanded,
+			hoveredColumns: false,
 		});
 
 		appsettings.setSetting(`columns-expanded-http-upstreams-${this.props.name}`, columnsExpanded);
@@ -121,7 +121,7 @@ export default class Upstream extends UpstreamsList {
 						{
 							this.state.columnsExpanded ?
 								[
-									<th className={ styles['center-align'] } key="empty" />,
+									<th key="empty" className={ styles['center-align'] } />,
 									<th key="1xx" className={ styles['responses-column'] }>1xx</th>,
 									<th key="2xx" className={ styles['responses-column'] }>2xx</th>,
 									<th key="3xx" className={ styles['responses-column'] }>3xx</th>
@@ -159,82 +159,92 @@ export default class Upstream extends UpstreamsList {
 						peers.length === 0 ?
 							this.renderEmptyList()
 						:
-							peers.map((peer, i) => (
-								<tr>
-									<td className={ styles[peer.state] } />
+							peers.map((peer, i) => {
+								const { codes } = peer.responses;
 
-									{ this.getCheckbox(peer) }
+								return (
+									<tr>
+										<td className={ styles[peer.state] } />
 
-									<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.address }` }>
-										<div className={ styles['address-container'] } {...tooltips.useTooltip(<PeerTooltip peer={peer} />)}>
-											{ peer.backup ? <span>b&nbsp;</span> : null }{ peer.server }
-										</div>
+										{ this.getCheckbox(peer) }
+
+										<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.address }` }>
+											<div className={ styles['address-container'] } {...tooltips.useTooltip(<PeerTooltip peer={peer} />)}>
+												{ peer.backup ? <span>b&nbsp;</span> : null }{ peer.server }
+											</div>
+
+											{
+												this.state.editMode ?
+													<span className={ styles['edit-peer'] } onClick={() => this.editSelectedUpstream(peer)} />
+												: null
+											}
+										</td>
+										<td className={ styles['left-align'] }>{ utils.formatUptime(peer.downtime, true) }</td>
+										<td className={ `${ styles['center-align'] } ${ styles.bdr }` }>{ peer.weight }</td>
+
+										<td>
+											<span className={ styles.hinted } {...tooltips.useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
+												{ peer.requests }
+											</span>
+										</td>
+
+										<td className={ styles.bdr }>{ peer.server_req_s }</td>
 
 										{
-											this.state.editMode ?
-												<span className={ styles['edit-peer'] } onClick={() => this.editSelectedUpstream(peer)} />
-											: null
+											this.state.columnsExpanded ?
+												[
+													i === 0 ? <td className={ styles['collapse-columns'] }
+														rowspan={peers.length}
+														onClick={this.toggleColumns}
+														onMouseEnter={() => this.hoverColumns(true)}
+														onMouseLeave={() => this.hoverColumns(false)}
+														key="toggle"
+													>◀</td> : null,
+													<td className={ styles['responses-column'] } key="1xx">
+														{ tableUtils.responsesTextWithTooltip(peer.responses['1xx'], codes, '1') }
+													</td>,
+													<td className={ styles['responses-column'] } key="2xx">
+														{ tableUtils.responsesTextWithTooltip(peer.responses['2xx'], codes, '2') }
+													</td>,
+													<td className={ styles['responses-column'] } key="3xx">
+														{ tableUtils.responsesTextWithTooltip(peer.responses['3xx'], codes, '3') }
+													</td>,
+												]
+												: i === 0 ? <td className={ styles['collapse-columns'] } rowspan={peers.length} onClick={this.toggleColumns}>▶</td> : null
 										}
-									</td>
-									<td className={ styles['left-align'] }>{ utils.formatUptime(peer.downtime, true) }</td>
-									<td className={ `${ styles['center-align'] } ${ styles.bdr }` }>{ peer.weight }</td>
 
-									<td>
-										<span className={ styles.hinted } {...tooltips.useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
-											{ peer.requests }
-										</span>
-									</td>
+										<td className={`${ styles.flash }${peer['4xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
+											{ tableUtils.responsesTextWithTooltip(peer.responses['4xx'], codes, '4') }
+										</td>
+										<td className={`${ styles.bdr } ${ styles.flash }${peer['5xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
+											{ tableUtils.responsesTextWithTooltip(peer.responses['5xx'], codes, '5') }
+										</td>
 
-									<td className={ styles.bdr }>{ peer.server_req_s }</td>
+										<td className={ styles['center-align'] }>{ peer.active }</td>
+										<td className={ `${ styles['center-align'] } ${ styles.bdr }` }>
+											{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }
+										</td>
 
-									{
-										this.state.columnsExpanded ?
-											[
-												i === 0 ? <td className={ styles['collapse-columns'] }
-													rowspan={peers.length}
-													onClick={this.toggleColumns}
-													onMouseEnter={() => this.hoverColumns(true)}
-													onMouseLeave={() => this.hoverColumns(false)}
-													key="toggle"
-												>◀</td> : null,
-												<td className={ styles['responses-column'] } key="1xx">{ peer.responses['1xx'] }</td>,
-												<td className={ styles['responses-column'] } key="2xx">{ peer.responses['2xx'] }</td>,
-												<td className={ styles['responses-column'] } key="3xx">{ peer.responses['3xx'] }</td>
-											]
-											: i === 0 ? <td className={ styles['collapse-columns'] } rowspan={peers.length} onClick={this.toggleColumns}>▶</td> : null
-									}
+										<td className={ styles.px60 }>{ utils.formatReadableBytes(peer.server_sent_s) }</td>
+										<td className={ styles.px60 }>{ utils.formatReadableBytes(peer.server_rcvd_s) }</td>
+										<td>{ utils.formatReadableBytes(peer.sent) }</td>
+										<td>{ utils.formatReadableBytes(peer.received) }</td>
+										<td>{ peer.fails }</td>
+										<td className={ styles.bdr }>{ peer.unavail }</td>
 
-									<td className={`${ styles.flash }${peer['4xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
-										{ peer.responses['4xx'] }
-									</td>
-									<td className={`${ styles.bdr } ${ styles.flash }${peer['5xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
-										{ peer.responses['5xx'] }
-									</td>
+										<td>{ peer.health_checks.checks }</td>
+										<td>{ peer.health_checks.fails }</td>
+										<td>{ peer.health_checks.unhealthy }</td>
 
-									<td className={ styles['center-align'] }>{ peer.active }</td>
-									<td className={ `${ styles['center-align'] } ${ styles.bdr }` }>
-										{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }
-									</td>
+										<td className={`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }${peer.health_status === false ? (' ' + styles['red-flash']) : ''}`}>
+											{ peer.health_status === null ? '–' : peer.health_status ? 'passed' : 'failed' }
+										</td>
 
-									<td className={ styles.px60 }>{ utils.formatReadableBytes(peer.server_sent_s) }</td>
-									<td className={ styles.px60 }>{ utils.formatReadableBytes(peer.server_rcvd_s) }</td>
-									<td>{ utils.formatReadableBytes(peer.sent) }</td>
-									<td>{ utils.formatReadableBytes(peer.received) }</td>
-									<td>{ peer.fails }</td>
-									<td className={ styles.bdr }>{ peer.unavail }</td>
-
-									<td>{ peer.health_checks.checks }</td>
-									<td>{ peer.health_checks.fails }</td>
-									<td>{ peer.health_checks.unhealthy }</td>
-
-									<td className={`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }${peer.health_status === false ? (' ' + styles['red-flash']) : ''}`}>
-										{ peer.health_status === null ? '–' : peer.health_status ? 'passed' : 'failed' }
-									</td>
-
-									<td>{ utils.formatMs(peer.header_time) }</td>
-									<td>{ utils.formatMs(peer.response_time) }</td>
-								</tr>
-							))
+										<td>{ utils.formatMs(peer.header_time) }</td>
+										<td>{ utils.formatMs(peer.response_time) }</td>
+									</tr>
+								);
+							})
 					}
 				</tbody>
 			</table>

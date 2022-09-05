@@ -1,4 +1,3 @@
-
 /**
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
@@ -7,8 +6,9 @@
  */
 
 import React from 'react';
+
 import styles from './tooltip.css';
-import utils from '../../utils.js';
+import utils from '#/utils.js';
 
 export default function ConnectionsTooltip({ peer }){
 	return (

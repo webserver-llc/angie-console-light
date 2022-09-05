@@ -13,6 +13,7 @@ import tooltips from '../../../../tooltips/index.jsx';
 import utils from '../../../../utils.js';
 import Upstream from '../upstream.jsx';
 import styles from '../../../table/style.css';
+import { tableUtils } from '#/components/table';
 
 describe('<Upstream />', () => {
 	const props = {
@@ -81,7 +82,8 @@ describe('<Upstream />', () => {
 
 		expect(instance.setState.calledOnce, 'this.setState called').to.be.true;
 		expect(instance.setState.args[0][0], 'this.setState args').to.be.deep.equal({
-			columnsExpanded: true
+			columnsExpanded: true,
+			hoveredColumns: false,
 		});
 		expect(appsettings.setSetting.calledOnce, 'appsettings.setSetting called').to.be.true;
 		expect(appsettings.setSetting.args[0][0], 'appsettings.setSetting arg 1').to.be.equal(
@@ -133,7 +135,16 @@ describe('<Upstream />', () => {
 				'2xx': 110,
 				'3xx': 1,
 				'4xx': 10,
-				'5xx': 2
+				'5xx': 2,
+				codes: {
+					200: 100,
+					201: 10,
+					301: 1,
+					400: 2,
+					403: 2,
+					404: 6,
+					500: 2,
+				},
 			},
 			'4xxChanged': true,
 			'5xxChanged': false,
@@ -162,6 +173,11 @@ describe('<Upstream />', () => {
 				'1xx': 1,
 				'2xx': 210,
 				'3xx': 2,
+				codes: {
+					200: 200,
+					201: 10,
+					301: 2,
+				},
 			},
 			'4xxChanged': false,
 			'5xxChanged': true,
@@ -175,6 +191,12 @@ describe('<Upstream />', () => {
 				'1xx': 2,
 				'2xx': 310,
 				'3xx': 3,
+				codes: {
+					200: 200,
+					201: 110,
+					301: 2,
+					302: 1,
+				},
 			},
 			health_checks: {},
 			health_status: true
@@ -204,9 +226,13 @@ describe('<Upstream />', () => {
 		stub(utils, 'formatUptime').callsFake(() => 'time_formatted');
 		stub(utils, 'formatReadableBytes').callsFake(() => 'readable_bytes_formatted');
 		stub(utils, 'formatMs').callsFake(() => 'ms_formatted');
+		stub(tableUtils, 'responsesTextWithTooltip').callsFake((value) => value);
 		stub(instance, 'editSelectedUpstream').callsFake(() => 'edit_selected_upstream_result');
 		stub(instance, 'hoverColumns').callsFake(() => 'hover_columns_result');
 
+		/**
+		 * Empty list
+		 */
 		let table = shallow(
 			instance.renderPeers([])
 		);
@@ -283,6 +309,9 @@ describe('<Upstream />', () => {
 		expect(instance.renderEmptyList.calledOnce, 'this.renderEmptyList called once').to.be.true;
 		expect(instance.getCheckbox.notCalled, 'this.getCheckbox not called').to.be.true;
 
+		/**
+		 * Non empty list
+		 */
 		tooltips.useTooltip.resetHistory();
 		instance.renderEmptyList.resetHistory();
 		table = shallow(
@@ -469,6 +498,80 @@ describe('<Upstream />', () => {
 		).to.be.deep.equal(peers[2]);
 		expect(tooltips.useTooltip.args[9][1], 'useTooltip, call 10, arg 2').to.be.equal('hint');
 
+		expect(tableUtils.responsesTextWithTooltip.callCount, 'responsesTextWithTooltip called 6 times').to.be.equal(6);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[0][0],
+			'[cols collapsed] responsesTextWithTooltip peer 1, 4xx, arg 1'
+		).to.be.equal(peers[0].responses['4xx']);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[0][1],
+			'[cols collapsed] responsesTextWithTooltip peer 1, 4xx, arg 2'
+		).to.be.equal(peers[0].responses.codes);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[0][2],
+			'[cols collapsed] responsesTextWithTooltip peer 1, 4xx, arg 3'
+		).to.be.equal('4');
+		expect(
+			tableUtils.responsesTextWithTooltip.args[1][0],
+			'[cols collapsed] responsesTextWithTooltip peer 1, 5xx, arg 1'
+		).to.be.equal(peers[0].responses['5xx']);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[1][1],
+			'[cols collapsed] responsesTextWithTooltip peer 1, 5xx, arg 2'
+		).to.be.equal(peers[0].responses.codes);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[1][2],
+			'[cols collapsed] responsesTextWithTooltip peer 1, 5xx, arg 3'
+		).to.be.equal('5');
+		expect(
+			tableUtils.responsesTextWithTooltip.args[2][0],
+			'[cols collapsed] responsesTextWithTooltip peer 2, 4xx, arg 1'
+		).to.be.equal(peers[1].responses['4xx']);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[2][1],
+			'[cols collapsed] responsesTextWithTooltip peer 2, 4xx, arg 2'
+		).to.be.equal(peers[1].responses.codes);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[2][2],
+			'[cols collapsed] responsesTextWithTooltip peer 2, 4xx, arg 3'
+		).to.be.equal('4');
+		expect(
+			tableUtils.responsesTextWithTooltip.args[3][0],
+			'[cols collapsed] responsesTextWithTooltip peer 2, 5xx, arg 1'
+		).to.be.equal(peers[1].responses['5xx']);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[3][1],
+			'[cols collapsed] responsesTextWithTooltip peer 2, 5xx, arg 2'
+		).to.be.equal(peers[1].responses.codes);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[3][2],
+			'[cols collapsed] responsesTextWithTooltip peer 2, 5xx, arg 3'
+		).to.be.equal('5');
+		expect(
+			tableUtils.responsesTextWithTooltip.args[4][0],
+			'[cols collapsed] responsesTextWithTooltip peer 3, 4xx, arg 1'
+		).to.be.equal(peers[2].responses['4xx']);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[4][1],
+			'[cols collapsed] responsesTextWithTooltip peer 3, 4xx, arg 2'
+		).to.be.equal(peers[2].responses.codes);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[4][2],
+			'[cols collapsed] responsesTextWithTooltip peer 3, 4xx, arg 3'
+		).to.be.equal('4');
+		expect(
+			tableUtils.responsesTextWithTooltip.args[5][0],
+			'[cols collapsed] responsesTextWithTooltip peer 3, 5xx, arg 1'
+		).to.be.equal(peers[2].responses['5xx']);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[5][1],
+			'[cols collapsed] responsesTextWithTooltip peer 3, 5xx, arg 2'
+		).to.be.equal(peers[2].responses.codes);
+		expect(
+			tableUtils.responsesTextWithTooltip.args[5][2],
+			'[cols collapsed] responsesTextWithTooltip peer 3, 5xx, arg 3'
+		).to.be.equal('5');
+
 		expect(utils.formatUptime.calledThrice, 'formatUptime called thrice').to.be.true;
 		expect(utils.formatUptime.args[0][0], 'formatUptime call 1, arg 1').to.be.equal(1000);
 		expect(utils.formatUptime.args[0][1], 'formatUptime call 1, arg 2').to.be.true;
@@ -501,6 +604,10 @@ describe('<Upstream />', () => {
 
 		expect(table.find(`.${ styles['edit-peer'] }`), '[editMode = false] edit-peer').to.have.lengthOf(0);
 
+		/**
+		 * Non empty list in edit mode + expanded columns
+		 */
+		tableUtils.responsesTextWithTooltip.resetHistory();
 		wrapper.setState({
 			hoveredColumns: true,
 			editMode: true,
@@ -525,6 +632,72 @@ describe('<Upstream />', () => {
 			table.find('thead').childAt(1).children(),
 			'[columnsExpanded = true] head row 2, children length'
 		).to.have.lengthOf(25);
+
+		expect(tableUtils.responsesTextWithTooltip.callCount, 'responsesTextWithTooltip called 15 times').to.be.equal(15);
+		peers.forEach((peer, i) => {
+			const j = i*5;
+
+			expect(
+				tableUtils.responsesTextWithTooltip.args[0+j][0],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 1xx, arg 1`
+			).to.be.equal(peers[i].responses['1xx']);
+			expect(
+				tableUtils.responsesTextWithTooltip.args[0+j][1],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 1xx, arg 2`
+			).to.be.equal(peers[i].responses.codes);
+			expect(
+				tableUtils.responsesTextWithTooltip.args[0+j][2],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 1xx, arg 3`
+			).to.be.equal('1');
+			expect(
+				tableUtils.responsesTextWithTooltip.args[1+j][0],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 2xx, arg 1`
+			).to.be.equal(peers[i].responses['2xx']);
+			expect(
+				tableUtils.responsesTextWithTooltip.args[1+j][1],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 2xx, arg 2`
+			).to.be.equal(peers[i].responses.codes);
+			expect(
+				tableUtils.responsesTextWithTooltip.args[1+j][2],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 2xx, arg 3`
+			).to.be.equal('2');
+			expect(
+				tableUtils.responsesTextWithTooltip.args[2+j][0],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 3xx, arg 1`
+			).to.be.equal(peers[i].responses['3xx']);
+			expect(
+				tableUtils.responsesTextWithTooltip.args[2+j][1],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 3xx, arg 2`
+			).to.be.equal(peers[i].responses.codes);
+			expect(
+				tableUtils.responsesTextWithTooltip.args[2+j][2],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 3xx, arg 3`
+			).to.be.equal('3');
+			expect(
+				tableUtils.responsesTextWithTooltip.args[3+j][0],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 4xx, arg 1`
+			).to.be.equal(peers[i].responses['4xx']);
+			expect(
+				tableUtils.responsesTextWithTooltip.args[3+j][1],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 4xx, arg 2`
+			).to.be.equal(peers[i].responses.codes);
+			expect(
+				tableUtils.responsesTextWithTooltip.args[3+j][2],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 4xx, arg 3`
+			).to.be.equal('4');
+			expect(
+				tableUtils.responsesTextWithTooltip.args[4+j][0],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 5xx, arg 1`
+			).to.be.equal(peers[i].responses['5xx']);
+			expect(
+				tableUtils.responsesTextWithTooltip.args[4+j][1],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 5xx, arg 2`
+			).to.be.equal(peers[i].responses.codes);
+			expect(
+				tableUtils.responsesTextWithTooltip.args[4+j][2],
+				`[cols expanded] responsesTextWithTooltip row ${i}, 5xx, arg 3`
+			).to.be.equal('5');
+		});
 
 		const editPeer = table.find(`.${ styles['edit-peer'] }`);
 
@@ -675,6 +848,7 @@ describe('<Upstream />', () => {
 		utils.formatUptime.restore();
 		utils.formatReadableBytes.restore();
 		utils.formatMs.restore();
+		tableUtils.responsesTextWithTooltip.restore();
 		instance.editSelectedUpstream.restore();
 		instance.hoverColumns.restore();
 	});

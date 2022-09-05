@@ -7,11 +7,15 @@
  */
 
 import React from 'react';
-import utils from '../../../utils';
-import SortableTable from '../../table/sortabletable.jsx';
-import TableSortControl from '../../table/tablesortcontrol.jsx';
-import tooltips from '../../../tooltips/index.jsx';
-import styles from '../../table/style.css';
+
+import utils from '#/utils.js';
+import tooltips from '#/tooltips/index.jsx';
+import {
+	SortableTable,
+	TableSortControl,
+	tableUtils,
+	styles,
+} from '#/components/table';
 
 export default class StreamZones extends SortableTable {
 	get SORTING_SETTINGS_KEY() {
@@ -75,20 +79,35 @@ export default class StreamZones extends SortableTable {
 									status = styles.alert;
 								}
 
+								const { codes } = zone.responses;
+								const codes4xx = utils.getHTTPCodesArray(codes, '4');
+
 								return (<tr>
 									<td className={ status } />
 									<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ name }</td>
 									<td>{ zone.processing }</td>
 									<td>{ zone.requests }</td>
 									<td className={ styles.bdr }>{ zone.zone_req_s }</td>
-									<td>{ zone.responses['1xx'] }</td>
-									<td>{ zone.responses['2xx'] }</td>
-									<td>{ zone.responses['3xx'] }</td>
+									<td>{ tableUtils.responsesTextWithTooltip(zone.responses['1xx'], codes, '1') }</td>
+									<td>{ tableUtils.responsesTextWithTooltip(zone.responses['2xx'], codes, '2') }</td>
+									<td>{ tableUtils.responsesTextWithTooltip(zone.responses['3xx'], codes, '3') }</td>
 									<td className={`${ styles.flash }${zone['4xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
 										<span
 											className={ styles.hinted }
 											{ ...tooltips.useTooltip(
-												<div>4xx: { zone.responses['4xx'] } <br /> 499/444/408: { zone.discarded }</div>,
+												<div>
+													{
+														codes4xx.length > 0
+															? codes4xx.map(({ code, value }) => (
+																<div key={ code }>{ code }: { value }</div>
+															))
+															: (
+																<div>4xx: { zone.responses['4xx'] }</div>
+															)
+													}
+
+													<div key="discarded">499/444/408: { zone.discarded }</div>
+												</div>,
 												'hint'
 											) }
 										>
@@ -96,7 +115,7 @@ export default class StreamZones extends SortableTable {
 										</span>
 									</td>
 									<td className={`${ styles.flash }${zone['5xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
-										{ zone.responses['5xx'] }
+										{ tableUtils.responsesTextWithTooltip(zone.responses['5xx'], codes, '5') }
 									</td>
 									<td className={ styles.bdr }>{ zone.responses.total }</td>
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent_s) }</td>

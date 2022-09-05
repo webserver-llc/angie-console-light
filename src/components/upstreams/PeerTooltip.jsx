@@ -7,8 +7,9 @@
  */
 
 import React from 'react';
+
 import styles from './tooltip.css';
-import utils from '../../utils.js';
+import utils from '#/utils.js';
 
 export default function PeerTooltip({ peer }){
 	let state = null;

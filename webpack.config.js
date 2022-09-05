@@ -150,6 +150,7 @@ const config = {
     resolve: {
         alias: {
             'react': path.resolve(__dirname, 'src/preact-exports.js'),
+            '#': path.resolve(__dirname, 'src'),
         }
     },
     module: {
