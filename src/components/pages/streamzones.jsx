@@ -6,11 +6,12 @@
  */
 
 import React from 'react';
-import api from '../../api';
+
+import api from '#/api';
 import DataBinder from '../databinder/databinder.jsx';
-import calculateStreamLimitConn from '../../calculators/streamlimitconn.js';
+import calculateStreamLimitConn from '#/calculators/streamlimitconn.js';
 import LimitConn from './serverzones/limitconn.jsx';
-import utils from '../../utils';
+import utils from '#/utils.js';
 import styles from '../table/style.css';
 
 export class StreamZones extends React.Component {

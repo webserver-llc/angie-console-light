@@ -9,6 +9,8 @@
 /* eslint-env browser, mocha */
 /* eslint no-underscore-dangle: "off" */
 
+import { spy, stub } from 'sinon';
+
 import datastore from '../../datastore';
 import api, * as Api from '../index.js';
 import ApiProxy from '../ApiProxy.js';
@@ -25,7 +27,6 @@ import calculateSSL from '../../calculators/ssl.js';
 import calculateRequests from '../../calculators/requests.js';
 import calculateZoneSync from '../../calculators/zonesync.js';
 import calculateResolvers from '../../calculators/resolvers.js';
-import { spy, stub } from 'sinon';
 
 describe('Api', () => {
 	it('Returns new instance of ApiProxy', () => {
@@ -69,7 +70,7 @@ describe('Api', () => {
 			Api.checkWritePermissions();
 
 			assert(
-				window.fetch.args[0][0] === '/api/6/http/upstreams/DASHBOARD_INIT/servers/__TEST_FOR_WRITE__/',
+				window.fetch.args[0][0] === `${ API_PATH }/http/upstreams/DASHBOARD_INIT/servers/__TEST_FOR_WRITE__/`,
 				'Unexpected path was passed to "window.fetch"'
 			);
 
@@ -163,7 +164,7 @@ describe('Api', () => {
 
 			Api.checkApiAvailability();
 
-			assert(window.fetch.args[0][0] === '/api/6/nginx/', 'Unexpected path was passed to "window.fetch"');
+			assert(window.fetch.args[0][0] === `${ API_PATH }/nginx/`, 'Unexpected path was passed to "window.fetch"');
 
 			window.fetch = _fetchInner;
 		});

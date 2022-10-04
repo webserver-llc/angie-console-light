@@ -1,6 +1,7 @@
 /**
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
+ * Copyright 2022-present, Igor Meleshchenko
  * All rights reserved.
  *
  */
@@ -63,7 +64,7 @@ export const formatReadableBytes = (
 		measure = 2;
 	} else if (bytes > 1023 && bytes <= 1024000) {
 		measure = 1;
-	} else if (bytes <= 1023) {
+	} else {
 		measure = 0;
 	}
 
@@ -93,9 +94,27 @@ export const formatDate = (timestamp) => {
 	return `${ datetime.toISOString().slice(0, 10) } ${ time[0] } ${ time[1] }`;
 };
 
+export const getHTTPCodesArray = (codes, codeGroup) => {
+	const result = [];
+
+	if (codes && Object.keys(codes).length > 0) {
+		Object.keys(codes).sort().forEach(code => {
+			if (`${code}`.startsWith(codeGroup)) {
+				result.push({
+					code,
+					value: codes[code],
+				});
+			}
+		});
+	}
+
+	return result;
+};
+
 export default {
 	formatUptime,
 	formatReadableBytes,
 	formatMs,
 	formatDate,
+	getHTTPCodesArray,
 };

@@ -6,11 +6,12 @@
  */
 
 import React from 'react';
+
 import IndexBox from '../indexbox/indexbox.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
-import api from '../../../../api';
-import utils from '../../../../utils.js';
-import { zones } from '../../../../calculators/stream.js';
+import api from '#/api';
+import utils from '#/utils.js';
+import { zones } from '#/calculators/stream.js';
 
 export class StreamZones extends React.Component {
 	render() {

@@ -7,13 +7,14 @@
  */
 
 import React from 'react';
+
 import IndexBox from '../indexbox/indexbox.jsx';
 import AlertsCount from '../alertscount/alertscount.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
-import api from '../../../../api';
-import calculateServerZones from '../../../../calculators/serverzones.js';
-import calculateLocationZones from '../../../../calculators/locationzones.js';
-import utils from '../../../../utils.js';
+import api from '#/api';
+import calculateServerZones from '#/calculators/serverzones.js';
+import calculateLocationZones from '#/calculators/locationzones.js';
+import utils from '#/utils.js';
 
 export class ServerZones extends React.Component {
 	render() {

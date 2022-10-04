@@ -6,17 +6,17 @@
  */
 
 import React from 'react';
-import api from '../../../api';
+
+import api from '#/api';
 import DataBinder from '../../databinder/databinder.jsx';
 import ProgressBar from '../../progressbar/progressbar.jsx';
 import GaugeIndicator from '../../gaugeindicator/gaugeindicator.jsx';
 import Icon from '../../icon/icon.jsx';
-import cacheCalculator from '../../../calculators/caches.js';
-import sharedZonesCalculator from '../../../calculators/sharedzones.js';
-import utils from '../../../utils.js';
-import tooltips from '../../../tooltips/index.jsx';
+import cacheCalculator from '#/calculators/caches.js';
+import sharedZonesCalculator from '#/calculators/sharedzones.js';
+import utils from '#/utils.js';
+import tooltips from '#/tooltips/index.jsx';
 import { CacheStateTooltip, SharedZoneTooltip } from '../tooltips.jsx';
-
 import styles from '../../table/style.css';
 import cachesStyles from './style.css';
 

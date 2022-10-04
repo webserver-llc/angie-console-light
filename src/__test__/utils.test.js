@@ -10,7 +10,8 @@ import {
 	formatUptime,
 	formatReadableBytes,
 	formatMs,
-	formatDate
+	formatDate,
+	getHTTPCodesArray,
 } from '../utils.js';
 
 describe('Utils', () => {
@@ -94,5 +95,39 @@ describe('Utils', () => {
 			`${ hours < 10 ? '0' : '' }${ hours }:${ minutes < 10 ? '0' : '' }${ minutes }:${ seconds < 10 ? '0' : '' }${ seconds }`,
 			tz
 		].join(' '));
+	});
+
+	it('getHTTPCodesArray()', () => {
+		[{
+			testCase: "No codes",
+			args: [null, '2'],
+			result: [],
+		}, {
+			testCase: "Empty codes",
+			args: [{}, '2'],
+			result: [],
+		}, {
+			testCase: "Non empty codes",
+			args: [{
+				'200': 1000,
+				'201': 3,
+				'301': 1,
+				'404': 5,
+				'500': 25,
+				'202': 4,
+			}, '2'],
+			result: [{
+				code: '200',
+				value: 1000,
+			}, {
+				code: '201',
+				value: 3,
+			}, {
+				code: '202',
+				value: 4,
+			}],
+		}].forEach(({ testCase, args, result }) => {
+			expect(getHTTPCodesArray(...args), testCase).to.deep.equal(result)
+		});
 	});
 });

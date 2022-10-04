@@ -205,6 +205,10 @@ describe('Datastore', () => {
 		expect(promiseAllCatchSpy.calledOnce, 'Promise.all catch called').to.be.true;
 		expect(promiseAllCatchSpy.args[0][0], 'Promise.all catch call arg').to.be.a('function');
 
+		startObserve();
+
+		expect(live, '[no force, live] live is still true').to.be.true;
+
 		OBSERVED.delete('api_1');
 
 		Promise.all.restore();

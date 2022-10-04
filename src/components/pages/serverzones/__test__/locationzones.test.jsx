@@ -8,11 +8,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { spy, stub } from 'sinon';
+
 import Locations from '../locationzones.jsx';
-import SortableTable from '../../../table/sortabletable.jsx';
-import styles from '../../../table/style.css';
-import utils from '../../../../utils';
-import tooltips from '../../../../tooltips/index.jsx';
+import { SortableTable, tableUtils, styles } from '#/components/table';
+import utils from '#/utils';
+import tooltips from '#/tooltips/index.jsx';
 
 describe('<Locations />', () => {
 	it('extends SortableTable', () => {
@@ -116,68 +116,82 @@ describe('<Locations />', () => {
 			stub(utils, 'formatReadableBytes').callsFake(
 				a => `formatted_${ a }`
 			);
+			spy(utils, 'getHTTPCodesArray');
+			stub(tableUtils, 'responsesTextWithTooltip').callsFake(value => value);
+
+			const items = [
+				['test', {
+					warning: false,
+					'5xxChanged': false,
+					requests: 100,
+					zone_req_s: 10,
+					responses: {
+						'1xx': 0,
+						'2xx': 500,
+						'3xx': 1,
+						'4xx': 5,
+						'5xx': 0,
+						codes: {
+							'404': 1,
+							'403': 2,
+						},
+						total: 506
+					},
+					'4xxChanged': false,
+					discarded: 2,
+					sent_s: 1,
+					rcvd_s: 2,
+					sent: 3,
+					received: 4
+				}], ['test_2', {
+					warning: true,
+					'5xxChanged': false,
+					requests: 1000,
+					zone_req_s: 100,
+					responses: {
+						'1xx': 1,
+						'2xx': 5000,
+						'3xx': 10,
+						'4xx': 50,
+						'5xx': 1,
+						codes: {
+							'100': 1,
+						},
+						total: 5062
+					},
+					'4xxChanged': true,
+					discarded: 3,
+					sent_s: 2,
+					rcvd_s: 3,
+					sent: 4,
+					received: 5
+				}], ['test_3', {
+					warning: false,
+					'5xxChanged': true,
+					requests: 10,
+					zone_req_s: 1,
+					responses: {
+						'1xx': 0,
+						'2xx': 2,
+						'3xx': 0,
+						'4xx': 0,
+						'5xx': 0,
+						codes: {
+							'200': 2,
+						},
+						total: 2
+					},
+					'4xxChanged': false,
+					discarded: 4,
+					sent_s: 3,
+					rcvd_s: 4,
+					sent: 5,
+					received: 6
+				}]
+			];
 
 			const wrapper = shallow(
-				<Locations data={ new Map([
-					['test', {
-						warning: false,
-						'5xxChanged': false,
-						requests: 100,
-						zone_req_s: 10,
-						responses: {
-							'1xx': 0,
-							'2xx': 500,
-							'3xx': 1,
-							'4xx': 5,
-							'5xx': 0,
-							total: 506
-						},
-						'4xxChanged': false,
-						discarded: 2,
-						sent_s: 1,
-						rcvd_s: 2,
-						sent: 3,
-						received: 4
-					}], ['test_2', {
-						warning: true,
-						'5xxChanged': false,
-						requests: 1000,
-						zone_req_s: 100,
-						responses: {
-							'1xx': 1,
-							'2xx': 5000,
-							'3xx': 10,
-							'4xx': 50,
-							'5xx': 1,
-							total: 5062
-						},
-						'4xxChanged': true,
-						discarded: 3,
-						sent_s: 2,
-						rcvd_s: 3,
-						sent: 4,
-						received: 5
-					}], ['test_3', {
-						warning: false,
-						'5xxChanged': true,
-						requests: 10,
-						zone_req_s: 1,
-						responses: {
-							'1xx': 0,
-							'2xx': 2,
-							'3xx': 0,
-							'4xx': 0,
-							'5xx': 0,
-							total: 2
-						},
-						'4xxChanged': false,
-						discarded: 4,
-						sent_s: 3,
-						rcvd_s: 4,
-						sent: 5,
-						received: 6
-					}]
-				]) } />
+				<Locations data={ new Map(items) } />
 			);
 			const rows = wrapper.find('tbody tr');
 			let cells, cell;
@@ -361,58 +375,125 @@ describe('<Locations />', () => {
 			);
 			expect(cell.text(), 'row 3, cell 14, text').to.be.equal('formatted_6');
 
-			expect(tooltips.useTooltip.calledThrice, 'useTooltip called').to.be.true;
+			expect(tableUtils.responsesTextWithTooltip.callCount, 'responsesTextWithTooltip called 12 times').to.be.equal(12);
+			expect(tableUtils.responsesTextWithTooltip.args[0][0], 'responsesTextWithTooltip row 1, arg 1, 1xx').to.be.equal(items[0][1].responses['1xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[0][1], 'responsesTextWithTooltip row 1, arg 2, 1xx').to.be.equal(items[0][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[0][2], 'responsesTextWithTooltip row 1, arg 3, 1xx').to.be.equal('1');
+			expect(tableUtils.responsesTextWithTooltip.args[1][0], 'responsesTextWithTooltip row 1, arg 1, 2xx').to.be.equal(items[0][1].responses['2xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[1][1], 'responsesTextWithTooltip row 1, arg 2, 2xx').to.be.equal(items[0][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[1][2], 'responsesTextWithTooltip row 1, arg 3, 2xx').to.be.equal('2');
+			expect(tableUtils.responsesTextWithTooltip.args[2][0], 'responsesTextWithTooltip row 1, arg 1, 3xx').to.be.equal(items[0][1].responses['3xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[2][1], 'responsesTextWithTooltip row 1, arg 2, 3xx').to.be.equal(items[0][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[2][2], 'responsesTextWithTooltip row 1, arg 3, 3xx').to.be.equal('3');
+			expect(tableUtils.responsesTextWithTooltip.args[3][0], 'responsesTextWithTooltip row 1, arg 1, 5xx').to.be.equal(items[0][1].responses['5xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[3][1], 'responsesTextWithTooltip row 1, arg 2, 5xx').to.be.equal(items[0][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[3][2], 'responsesTextWithTooltip row 1, arg 3, 5xx').to.be.equal('5');
+			expect(tableUtils.responsesTextWithTooltip.args[4][0], 'responsesTextWithTooltip row 2, arg 1, 1xx').to.be.equal(items[1][1].responses['1xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[4][1], 'responsesTextWithTooltip row 2, arg 2, 1xx').to.be.equal(items[1][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[4][2], 'responsesTextWithTooltip row 2, arg 3, 1xx').to.be.equal('1');
+			expect(tableUtils.responsesTextWithTooltip.args[5][0], 'responsesTextWithTooltip row 2, arg 1, 2xx').to.be.equal(items[1][1].responses['2xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[5][1], 'responsesTextWithTooltip row 2, arg 2, 2xx').to.be.equal(items[1][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[5][2], 'responsesTextWithTooltip row 2, arg 3, 2xx').to.be.equal('2');
+			expect(tableUtils.responsesTextWithTooltip.args[6][0], 'responsesTextWithTooltip row 2, arg 1, 3xx').to.be.equal(items[1][1].responses['3xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[6][1], 'responsesTextWithTooltip row 2, arg 2, 3xx').to.be.equal(items[1][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[6][2], 'responsesTextWithTooltip row 2, arg 3, 3xx').to.be.equal('3');
+			expect(tableUtils.responsesTextWithTooltip.args[7][0], 'responsesTextWithTooltip row 2, arg 1, 5xx').to.be.equal(items[1][1].responses['5xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[7][1], 'responsesTextWithTooltip row 2, arg 2, 5xx').to.be.equal(items[1][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[7][2], 'responsesTextWithTooltip row 2, arg 3, 5xx').to.be.equal('5');
+			expect(tableUtils.responsesTextWithTooltip.args[8][0], 'responsesTextWithTooltip row 3, arg 1, 1xx').to.be.equal(items[2][1].responses['1xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[8][1], 'responsesTextWithTooltip row 3, arg 2, 1xx').to.be.equal(items[2][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[8][2], 'responsesTextWithTooltip row 3, arg 3, 1xx').to.be.equal('1');
+			expect(tableUtils.responsesTextWithTooltip.args[9][0], 'responsesTextWithTooltip row 3, arg 1, 2xx').to.be.equal(items[2][1].responses['2xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[9][1], 'responsesTextWithTooltip row 3, arg 2, 2xx').to.be.equal(items[2][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[9][2], 'responsesTextWithTooltip row 3, arg 3, 2xx').to.be.equal('2');
+			expect(tableUtils.responsesTextWithTooltip.args[10][0], 'responsesTextWithTooltip row 3, arg 1, 3xx').to.be.equal(items[2][1].responses['3xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[10][1], 'responsesTextWithTooltip row 3, arg 2, 3xx').to.be.equal(items[2][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[10][2], 'responsesTextWithTooltip row 3, arg 3, 3xx').to.be.equal('3');
+			expect(tableUtils.responsesTextWithTooltip.args[11][0], 'responsesTextWithTooltip row 3, arg 1, 5xx').to.be.equal(items[2][1].responses['5xx']);
+			expect(tableUtils.responsesTextWithTooltip.args[11][1], 'responsesTextWithTooltip row 3, arg 2, 5xx').to.be.equal(items[2][1].responses.codes);
+			expect(tableUtils.responsesTextWithTooltip.args[11][2], 'responsesTextWithTooltip row 3, arg 3, 5xx').to.be.equal('5');
+
+			expect(utils.getHTTPCodesArray.calledThrice, 'getHTTPCodesArray called thrice').to.be.true;
+			expect(utils.getHTTPCodesArray.args[0][0], 'getHTTPCodesArray call 1, arg 1').to.be.equal(items[0][1].responses.codes);
+			expect(utils.getHTTPCodesArray.args[0][1], 'getHTTPCodesArray call 1, arg 2').to.be.equal('4');
+			expect(utils.getHTTPCodesArray.args[1][0], 'getHTTPCodesArray call 2, arg 1').to.be.equal(items[1][1].responses.codes);
+			expect(utils.getHTTPCodesArray.args[1][1], 'getHTTPCodesArray call 2, arg 2').to.be.equal('4');
+			expect(utils.getHTTPCodesArray.args[2][0], 'getHTTPCodesArray call 3, arg 1').to.be.equal(items[2][1].responses.codes);
+			expect(utils.getHTTPCodesArray.args[2][1], 'getHTTPCodesArray call 3, arg 2').to.be.equal('4');
+
+			expect(tooltips.useTooltip.calledThrice, 'useTooltip called thrice').to.be.true;
+			const codeRows = tooltips.useTooltip.args[0][0].props.children[0];
 			expect(
-				tooltips.useTooltip.args[0][0].props.children[0],
-				'useTooltip call 1'
-			).to.contain('4xx:');
+				codeRows,
+				'useTooltip row 1, response code rows length'
+			).to.have.lengthOf(2);
 			expect(
-				tooltips.useTooltip.args[0][0].props.children[1],
-				'useTooltip call 1'
-			).to.be.equal(5);
+				codeRows[0].props.children[0],
+				'useTooltip row 1, response code row 1, key'
+			).to.be.equal('403');
 			expect(
-				tooltips.useTooltip.args[0][0].props.children[4],
-				'useTooltip call 1'
-			).to.contain('499/444/408:');
+				codeRows[0].props.children[2],
+				'useTooltip row 1, response code row 1, value'
+			).to.be.equal(items[0][1].responses.codes['403']);
 			expect(
-				tooltips.useTooltip.args[0][0].props.children[5],
-				'useTooltip call 1'
-			).to.be.equal(2);
-			expect(tooltips.useTooltip.args[0][1], 'useTooltip call 1').to.be.equal('hint');
+				codeRows[1].props.children[0],
+				'useTooltip row 1, response code row 2, key'
+			).to.be.equal('404');
 			expect(
-				tooltips.useTooltip.args[1][0].props.children[0],
-				'useTooltip call 2'
-			).to.contain('4xx:');
+				codeRows[1].props.children[2],
+				'useTooltip row 1, response code row 2, value'
+			).to.be.equal(items[0][1].responses.codes['404']);
 			expect(
-				tooltips.useTooltip.args[1][0].props.children[1],
-				'useTooltip call 2'
-			).to.be.equal(50);
+				tooltips.useTooltip.args[0][0].props.children[1].props.children[0],
+				'useTooltip row 1, 499/444/408 row'
+			).to.contain('499/444/408');
 			expect(
-				tooltips.useTooltip.args[1][0].props.children[4],
-				'useTooltip call 2'
-			).to.contain('499/444/408:');
+				tooltips.useTooltip.args[0][0].props.children[1].props.children[1],
+				'useTooltip row 1, 499/444/408 row'
+			).to.be.equal(items[0][1].discarded);
+			expect(tooltips.useTooltip.args[0][1], 'useTooltip row 1, mode').to.be.equal('hint');
 			expect(
-				tooltips.useTooltip.args[1][0].props.children[5],
-				'useTooltip call 2'
-			).to.be.equal(3);
-			expect(tooltips.useTooltip.args[1][1], 'useTooltip call 2').to.be.equal('hint');
+				tooltips.useTooltip.args[1][0].props.children,
+				'useTooltip row 2, content length'
+			).to.have.lengthOf(2);
 			expect(
-				tooltips.useTooltip.args[2][0].props.children[0],
-				'useTooltip call 3'
-			).to.contain('4xx:');
+				tooltips.useTooltip.args[1][0].props.children[0].props.children[0],
+				'useTooltip row 2, 4xx row'
+			).to.contain('4xx');
 			expect(
-				tooltips.useTooltip.args[2][0].props.children[1],
-				'useTooltip call 3'
-			).to.be.equal(0);
+				tooltips.useTooltip.args[1][0].props.children[0].props.children[1],
+				'useTooltip row 2, 4xx row'
+			).to.be.equal(items[1][1].responses['4xx']);
 			expect(
-				tooltips.useTooltip.args[2][0].props.children[4],
-				'useTooltip call 3'
-			).to.contain('499/444/408:');
+				tooltips.useTooltip.args[1][0].props.children[1].props.children[0],
+				'useTooltip row 2, 499/444/408 row'
+			).to.contain('499/444/408');
 			expect(
-				tooltips.useTooltip.args[2][0].props.children[5],
-				'useTooltip call 3'
-			).to.be.equal(4);
-			expect(tooltips.useTooltip.args[2][1], 'useTooltip call 3').to.be.equal('hint');
+				tooltips.useTooltip.args[1][0].props.children[1].props.children[1],
+				'useTooltip row 2, 499/444/408 row'
+			).to.be.equal(items[1][1].discarded);
+			expect(tooltips.useTooltip.args[1][1], 'useTooltip row 2, mode').to.be.equal('hint');
+			expect(
+				tooltips.useTooltip.args[2][0].props.children,
+				'useTooltip row 3, content length'
+			).to.have.lengthOf(2);
+			expect(
+				tooltips.useTooltip.args[2][0].props.children[0].props.children[0],
+				'useTooltip row 3, 4xx row'
+			).to.contain('4xx');
+			expect(
+				tooltips.useTooltip.args[2][0].props.children[0].props.children[1],
+				'useTooltip row 3, 4xx row'
+			).to.be.equal(items[2][1].responses['4xx']);
+			expect(
+				tooltips.useTooltip.args[2][0].props.children[1].props.children[0],
+				'useTooltip row 3, 499/444/408 row'
+			).to.contain('499/444/408');
+			expect(
+				tooltips.useTooltip.args[2][0].props.children[1].props.children[1],
+				'useTooltip row 3, 499/444/408 row'
+			).to.be.equal(items[2][1].discarded);
+			expect(tooltips.useTooltip.args[2][1], 'useTooltip row 3, mode').to.be.equal('hint');
 
 			expect(utils.formatReadableBytes.callCount, 'useTooltip called').to.be.equal(12);
 			expect(utils.formatReadableBytes.args[0][0], 'useTooltip call 1 arg').to.be.equal(1);
@@ -430,6 +511,8 @@ describe('<Locations />', () => {
 
 			utils.formatReadableBytes.restore();
 			tooltips.useTooltip.restore();
+			utils.getHTTPCodesArray.restore();
+			tableUtils.responsesTextWithTooltip.restore();
 			wrapper.unmount();
 		});
 	});
