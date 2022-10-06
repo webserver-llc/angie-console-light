@@ -50,6 +50,7 @@ export default class StreamZones extends SortableTable {
 							<th colSpan="3">Requests</th>
 							<th colSpan="6">Responses</th>
 							<th colSpan="4">Traffic</th>
+							<th colSpan="3">SSL</th>
 						</tr>
 						<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
 							<th className={ styles.bdr } />
@@ -65,7 +66,10 @@ export default class StreamZones extends SortableTable {
 							<th>Sent/s</th>
 							<th>Rcvd/s</th>
 							<th>Sent</th>
-							<th>Rcvd</th>
+							<th className={ styles.bdr }>Rcvd</th>
+							<th>Handshakes</th>
+							<th>Handshakes<br/>Failed</th>
+							<th>Session<br/>Reuses</th>
 						</tr>
 					</thead>
 					<tbody className={ styles['right-align'] }>
@@ -79,7 +83,10 @@ export default class StreamZones extends SortableTable {
 									status = styles.alert;
 								}
 
-								const { codes } = zone.responses;
+								const {
+									responses: { codes },
+									ssl,
+								} = zone;
 								const codes4xx = utils.getHTTPCodesArray(codes, '4');
 
 								return (<tr>
@@ -121,7 +128,10 @@ export default class StreamZones extends SortableTable {
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent_s) }</td>
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.rcvd_s) }</td>
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent) }</td>
-									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.received) }</td>
+									<td className={ `${ styles.px60 } ${ styles.bdr }` }>{ utils.formatReadableBytes(zone.received) }</td>
+									<td>{ ssl ? ssl.handshakes : '–' }</td>
+									<td>{ ssl ? ssl.handshakes_failed : '–' }</td>
+									<td>{ ssl ? ssl.session_reuses : '–' }</td>
 								</tr>);
 							})
 						}

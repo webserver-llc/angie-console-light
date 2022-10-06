@@ -25,7 +25,8 @@ export const responsesTextWithTooltip = (text, codes, codeGroup) => {
                 <div key={ code }>{ code }: { value }</div>
               ))
             }
-          </div>
+          </div>,
+          'hint'
         ) }
       >{ text }</span>
     )

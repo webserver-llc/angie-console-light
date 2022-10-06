@@ -143,7 +143,12 @@ describe('<ServerZones />', () => {
 					sent_s: 1,
 					rcvd_s: 2,
 					sent: 3,
-					received: 4
+					received: 4,
+					ssl: {
+						handshakes: 135,
+						handshakes_failed: 24,
+						session_reuses: 19,
+					}
 				}], ['test_2', {
 					warning: true,
 					'5xxChanged': false,
@@ -200,8 +205,9 @@ describe('<ServerZones />', () => {
 
 			expect(rows.length, 'rows length').to.be.equal(3);
 
+			// Row 1
 			cells = rows.at(0).find('td');
-			expect(cells.length, 'row 1, cells length').to.be.equal(15);
+			expect(cells.length, 'row 1, cells length').to.be.equal(18);
 			expect(cells.at(0).prop('className'), 'row 1, cell 1, className').to.be.equal(
 				styles['ok']
 			);
@@ -256,12 +262,16 @@ describe('<ServerZones />', () => {
 			expect(cell.text(), 'row 1, cell 14, text').to.be.equal('formatted_3');
 			cell = cells.at(14);
 			expect(cell.prop('className'), 'row 1, cell 15, className').to.be.equal(
-				styles['px60']
+				`${ styles.px60 } ${ styles.bdr }`
 			);
-			expect(cell.text(), 'row 1, cell 14, text').to.be.equal('formatted_4');
+			expect(cell.text(), 'row 1, cell 15, text').to.be.equal('formatted_4');
+			expect(cells.at(15).text(), 'row 1, cell 16, text').to.be.equal('135');
+			expect(cells.at(16).text(), 'row 1, cell 17, text').to.be.equal('24');
+			expect(cells.at(17).text(), 'row 1, cell 18, text').to.be.equal('19');
 
+			// Row 2
 			cells = rows.at(1).find('td');
-			expect(cells.length, 'row 2, cells length').to.be.equal(15);
+			expect(cells.length, 'row 2, cells length').to.be.equal(18);
 			expect(cells.at(0).prop('className'), 'row 2, cell 1, className').to.be.equal(
 				styles['warning']
 			);
@@ -316,12 +326,16 @@ describe('<ServerZones />', () => {
 			expect(cell.text(), 'row 2, cell 14, text').to.be.equal('formatted_4');
 			cell = cells.at(14);
 			expect(cell.prop('className'), 'row 2, cell 15, className').to.be.equal(
-				styles['px60']
+				`${ styles.px60 } ${ styles.bdr }`
 			);
 			expect(cell.text(), 'row 2, cell 15, text').to.be.equal('formatted_5');
+			expect(cells.at(15).text(), 'row 2, cell 16, text').to.be.equal('–');
+			expect(cells.at(16).text(), 'row 2, cell 17, text').to.be.equal('–');
+			expect(cells.at(17).text(), 'row 2, cell 18, text').to.be.equal('–');
 
+			// Row 3
 			cells = rows.at(2).find('td');
-			expect(cells.length, 'row 3, cells length').to.be.equal(15);
+			expect(cells.length, 'row 3, cells length').to.be.equal(18);
 			expect(cells.at(0).prop('className'), 'row 3, cell 1, className').to.be.equal(
 				styles['alert']
 			);
@@ -376,9 +390,12 @@ describe('<ServerZones />', () => {
 			expect(cell.text(), 'row 3, cell 14, text').to.be.equal('formatted_5');
 			cell = cells.at(14);
 			expect(cell.prop('className'), 'row 3, cell 15, className').to.be.equal(
-				styles['px60']
+				`${ styles.px60 } ${ styles.bdr }`
 			);
 			expect(cell.text(), 'row 3, cell 15, text').to.be.equal('formatted_6');
+			expect(cells.at(15).text(), 'row 3, cell 16, text').to.be.equal('–');
+			expect(cells.at(16).text(), 'row 3, cell 17, text').to.be.equal('–');
+			expect(cells.at(17).text(), 'row 3, cell 18, text').to.be.equal('–');
 
 			expect(tableUtils.responsesTextWithTooltip.callCount, 'responsesTextWithTooltip called 12 times').to.be.equal(12);
 			expect(tableUtils.responsesTextWithTooltip.args[0][0], 'responsesTextWithTooltip row 1, arg 1, 1xx').to.be.equal(items[0][1].responses['1xx']);

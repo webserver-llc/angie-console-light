@@ -68,6 +68,11 @@
 	text-align: right;
 	border: none;
 	font-size: 11px;
+	line-height: 14px;
+	height: 30px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	box-sizing: border-box;
 }
 
 .bdr {
