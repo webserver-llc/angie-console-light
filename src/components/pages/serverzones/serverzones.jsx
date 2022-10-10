@@ -87,7 +87,6 @@ export default class StreamZones extends SortableTable {
 									responses: { codes },
 									ssl,
 								} = zone;
-								const codes4xx = utils.getHTTPCodesArray(codes, '4');
 
 								return (<tr>
 									<td className={ status } />
@@ -98,28 +97,19 @@ export default class StreamZones extends SortableTable {
 									<td>{ tableUtils.responsesTextWithTooltip(zone.responses['1xx'], codes, '1') }</td>
 									<td>{ tableUtils.responsesTextWithTooltip(zone.responses['2xx'], codes, '2') }</td>
 									<td>{ tableUtils.responsesTextWithTooltip(zone.responses['3xx'], codes, '3') }</td>
-									<td className={`${ styles.flash }${zone['4xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
-										<span
-											className={ styles.hinted }
-											{ ...tooltips.useTooltip(
-												<div>
-													{
-														codes4xx.length > 0
-															? codes4xx.map(({ code, value }) => (
-																<div key={ code }>{ code }: { value }</div>
-															))
-															: (
-																<div>4xx: { zone.responses['4xx'] }</div>
-															)
-													}
-
-													<div key="discarded">499/444/408: { zone.discarded }</div>
-												</div>,
-												'hint'
-											) }
-										>
-											{ zone.responses['4xx'] + zone.discarded }
-										</span>
+									<td className={ `${ styles.flash }${ zone['4xxChanged'] ? (' ' + styles['red-flash']) : '' }` }>
+										{
+											tableUtils.responsesTextWithTooltip(
+												zone.responses['4xx'] + zone.discarded,
+												{
+													...(codes || {
+														'4xx': zone.responses['4xx']
+													}),
+													'499/444/408': zone.discarded,
+												},
+												'4'
+											)
+										}
 									</td>
 									<td className={`${ styles.flash }${zone['5xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
 										{ tableUtils.responsesTextWithTooltip(zone.responses['5xx'], codes, '5') }
@@ -130,7 +120,17 @@ export default class StreamZones extends SortableTable {
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent) }</td>
 									<td className={ `${ styles.px60 } ${ styles.bdr }` }>{ utils.formatReadableBytes(zone.received) }</td>
 									<td>{ ssl ? ssl.handshakes : '–' }</td>
-									<td>{ ssl ? ssl.handshakes_failed : '–' }</td>
+									<td>
+										{
+											ssl
+												? tableUtils.tooltipRowsContent(
+													ssl.handshakes_failed,
+													utils.getSSLHandhsakesFailures(ssl),
+													'hint'
+												)
+												: '–'
+										}
+									</td>
 									<td>{ ssl ? ssl.session_reuses : '–' }</td>
 								</tr>);
 							})

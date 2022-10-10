@@ -111,10 +111,85 @@ export const getHTTPCodesArray = (codes, codeGroup) => {
 	return result;
 };
 
+export const getSSLHandhsakesFailures = (ssl) => {
+	const result = [];
+
+	if (ssl) {
+		if ('no_common_protocol' in ssl) {
+			result.push({
+				id: 'no_common_protocol',
+				label: 'No common protocol',
+				value: ssl.no_common_protocol,
+			});
+		}
+
+		if ('no_common_cipher' in ssl) {
+			result.push({
+				id: 'no_common_cipher',
+				label: 'No common cipher',
+				value: ssl.no_common_cipher,
+			});
+		}
+
+		if ('handshake_timeout' in ssl) {
+			result.push({
+				id: 'handshake_timeout',
+				label: 'Handshake timeout',
+				value: ssl.handshake_timeout,
+			});
+		}
+
+		if ('peer_rejected_cert' in ssl) {
+			result.push({
+				id: 'peer_rejected_cert',
+				label: 'Rejected cert',
+				value: ssl.peer_rejected_cert,
+			});
+		}
+
+		if (ssl.verify_failures) {
+			if ('expired_cert' in ssl.verify_failures) {
+				result.push({
+					id: 'expired_cert',
+					label: 'Expired cert',
+					value: ssl.verify_failures.expired_cert,
+				});
+			}
+
+			if ('revoked_cert' in ssl.verify_failures) {
+				result.push({
+					id: 'revoked_cert',
+					label: 'Revoked cert',
+					value: ssl.verify_failures.revoked_cert,
+				});
+			}
+
+			if ('hostname_mismatch' in ssl.verify_failures) {
+				result.push({
+					id: 'hostname_mismatch',
+					label: 'Hostname mismatch',
+					value: ssl.verify_failures.hostname_mismatch,
+				});
+			}
+
+			if ('other' in ssl.verify_failures) {
+				result.push({
+					id: 'other',
+					label: 'Other verify failures',
+					value: ssl.verify_failures.other,
+				});
+			}
+		}
+	}
+
+	return result;
+};
+
 export default {
 	formatUptime,
 	formatReadableBytes,
 	formatMs,
 	formatDate,
 	getHTTPCodesArray,
+	getSSLHandhsakesFailures,
 };

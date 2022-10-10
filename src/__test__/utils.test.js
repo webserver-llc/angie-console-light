@@ -12,6 +12,7 @@ import {
 	formatMs,
 	formatDate,
 	getHTTPCodesArray,
+	getSSLHandhsakesFailures,
 } from '../utils.js';
 
 describe('Utils', () => {
@@ -128,6 +129,43 @@ describe('Utils', () => {
 			}],
 		}].forEach(({ testCase, args, result }) => {
 			expect(getHTTPCodesArray(...args), testCase).to.deep.equal(result)
+		});
+	});
+
+	it('getSSLHandhsakesFailures()', () => {
+		expect(getSSLHandhsakesFailures(), 'no arguments').to.be.deep.equal([]);
+		expect(getSSLHandhsakesFailures({}), 'empty object as an argument').to.be.deep.equal([]);
+
+		let ssl = {
+      no_common_protocol: 2,
+      no_common_cipher: 4,
+      handshake_timeout: 79,
+      peer_rejected_cert: 3,
+      verify_failures: {},
+		};
+
+		getSSLHandhsakesFailures(ssl).forEach((item, i) => {
+			expect(item, `[${ i }] ${ item.id }, value prop`).to.have.property('value', ssl[item.id]);
+			expect('id' in item, `[${ i }] ${ item.id }, id exists`).to.be.true;
+			expect('label' in item, `[${ i }] ${ item.id }, label exists`).to.be.true;
+		});
+
+		ssl = {
+      verify_failures: {
+        expired_cert: 90,
+        revoked_cert: 6,
+        hostname_mismatch: 10,
+        other: 3,
+      },
+		};
+
+		getSSLHandhsakesFailures(ssl).forEach((item, i) => {
+			expect(item, `[${ i }] verify_failures.${ item.id }, value prop`).to.have.property(
+				'value',
+				ssl.verify_failures[item.id]
+			);
+			expect('id' in item, `[${ i }] ${ item.id }, id exists`).to.be.true;
+			expect('label' in item, `[${ i }] ${ item.id }, label exists`).to.be.true;
 		});
 	});
 });

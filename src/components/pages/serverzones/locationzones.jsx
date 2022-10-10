@@ -75,7 +75,6 @@ export default class Locations extends SortableTable {
 								}
 
 								const { codes } = location.responses;
-								const codes4xx = utils.getHTTPCodesArray(codes, '4');
 
 								return (<tr>
 									<td className={ status } />
@@ -86,27 +85,18 @@ export default class Locations extends SortableTable {
 									<td>{ tableUtils.responsesTextWithTooltip(location.responses['2xx'], codes, '2') }</td>
 									<td>{ tableUtils.responsesTextWithTooltip(location.responses['3xx'], codes, '3') }</td>
 									<td className={ `${ styles.flash }${ location['4xxChanged'] ? (' ' + styles['red-flash']) : '' }` }>
-										<span
-											className={ styles.hinted }
-											{ ...tooltips.useTooltip(
-												<div>
-													{
-														codes4xx.length > 0
-															? codes4xx.map(({ code, value }) => (
-																<div key={ code }>{ code }: { value }</div>
-															))
-															: (
-																<div>4xx: { location.responses['4xx'] }</div>
-															)
-													}
-
-													<div key="discarded">499/444/408: { location.discarded }</div>
-												</div>,
-												'hint'
-											) }
-										>
-											{ location.responses['4xx'] + location.discarded }
-										</span>
+										{
+											tableUtils.responsesTextWithTooltip(
+												location.responses['4xx'] + location.discarded,
+												{
+													...(codes || {
+														'4xx': location.responses['4xx']
+													}),
+													'499/444/408': location.discarded,
+												},
+												'4'
+											)
+										}
 									</td>
 									<td className={ `${ styles.flash }${ location['5xxChanged'] ? (' ' + styles['red-flash']) : '' }` }>
 										{ tableUtils.responsesTextWithTooltip(location.responses['5xx'], codes, '5') }

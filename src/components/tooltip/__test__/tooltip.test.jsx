@@ -26,7 +26,8 @@ describe('<Tooltip />', () => {
 
 		expect(wrapper.state(), 'this.state').to.be.deep.equal({
 			top: 500,
-			left: 120
+			left: 120,
+			movedToLeft: false,
 		});
 	});
 
@@ -52,10 +53,10 @@ describe('<Tooltip />', () => {
 		);
 		const instance = wrapper.instance();
 		const setStateStub = stub(instance, 'setState').callsFake(() => {});
-
+		let width = 200;
 		stub(instance.ref, 'getBoundingClientRect').callsFake(() => ({
-			width: 200,
-			height: 100
+			width,
+			height: 100,
 		}));
 
 		instance.reposition();
@@ -73,7 +74,8 @@ describe('<Tooltip />', () => {
 			'[no align, no position] this.setState call args'
 		).to.be.deep.equal({
 			top: 500,
-			left: 120
+			left: 120,
+			movedToLeft: false,
 		});
 
 		instance.ref.getBoundingClientRect.resetHistory();
@@ -94,7 +96,8 @@ describe('<Tooltip />', () => {
 			'[align = center, no position] this.setState call args'
 		).to.be.deep.equal({
 			top: 500,
-			left: 30
+			left: 30,
+			movedToLeft: false,
 		});
 
 		instance.ref.getBoundingClientRect.resetHistory();
@@ -115,7 +118,8 @@ describe('<Tooltip />', () => {
 			'[align = center, position = top] this.setState call args'
 		).to.be.deep.equal({
 			top: 360,
-			left: 30
+			left: 30,
+			movedToLeft: false,
 		});
 
 		instance.ref.getBoundingClientRect.resetHistory();
@@ -136,7 +140,8 @@ describe('<Tooltip />', () => {
 			'[align = center, position = right] this.setState call args'
 		).to.be.deep.equal({
 			top: 460,
-			left: 60
+			left: 60,
+			movedToLeft: false,
 		});
 
 		instance.ref.getBoundingClientRect.resetHistory();
@@ -157,7 +162,8 @@ describe('<Tooltip />', () => {
 			'[no align, position = right] this.setState call args'
 		).to.be.deep.equal({
 			top: 460,
-			left: 150
+			left: 150,
+			movedToLeft: false,
 		});
 
 		instance.ref.getBoundingClientRect.resetHistory();
@@ -178,7 +184,31 @@ describe('<Tooltip />', () => {
 			'[no align, position = top] this.setState call args'
 		).to.be.deep.equal({
 			top: 360,
-			left: 120
+			left: 120,
+			movedToLeft: false,
+		});
+
+		instance.ref.getBoundingClientRect.resetHistory();
+		setStateStub.resetHistory();
+		width = 2000;
+		wrapper.setProps({ align: 'center' });
+		instance.reposition();
+
+		expect(
+			instance.ref.getBoundingClientRect.calledOnce,
+			'[movedToLeft = true, align = center, position = top] this.ref.getBoundingClientRect called'
+		).to.be.true;
+		expect(
+			setStateStub.calledOnce,
+			'[movedToLeft = true, align = center, position = top] this.setState called'
+		).to.be.true;
+		expect(
+			setStateStub.args[0][0],
+			'[movedToLeft = true, align = center, position = top] this.setState call args'
+		).to.be.deep.equal({
+			top: 360,
+			left: -1850,
+			movedToLeft: true,
 		});
 
 		instance.ref.getBoundingClientRect.restore();
@@ -218,7 +248,14 @@ describe('<Tooltip />', () => {
 			`${ styles['tooltip'] } ${ styles['top'] } ${ styles['center'] }`
 		);
 
+		wrapper.setState({ movedToLeft: true });
+
+		expect(wrapper.prop('className'), '[position, movedToLeft] wrapper className').to.be.equal(
+			`${ styles['tooltip'] } ${ styles['top'] } ${ styles['start'] }`
+		);
+
 		// Unknown position
+		wrapper.setState({ movedToLeft: false });
 		wrapper.setProps({
 			position: 'there is no such a position',
 		});

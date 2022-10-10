@@ -14,7 +14,8 @@ export default class Tooltip extends React.Component {
 
 		this.state = {
 			top: props.top,
-			left: props.left
+			left: props.left,
+			movedToLeft: false,
 		};
 	}
 
@@ -23,7 +24,10 @@ export default class Tooltip extends React.Component {
 	}
 
 	reposition() {
-		let state = this.state;
+		let state = {
+			...this.state,
+			movedToLeft: false,
+		};
 
 		if (this.ref){
 			const { width, height } = this.ref.getBoundingClientRect();
@@ -32,14 +36,22 @@ export default class Tooltip extends React.Component {
 				state = {
 					...state,
 					top: this.props.top,
-					left: this.props.left - (width - this.props.anchorWidth) / 2
+					left: this.props.left - (width - this.props.anchorWidth) / 2,
 				};
 			}
 
 			if (this.props.position === 'top') {
 				state = {
 					...state,
-					top: state.top - height - 40
+					top: state.top - height - 40,
+					...(
+						this.props.left + width >= window.innerWidth
+							? {
+								left: this.props.left - width + this.props.anchorWidth + 10,
+								movedToLeft: true,
+							}
+							: {}
+					)
 				};
 			} else if (this.props.position === 'right') {
 				state = {
@@ -61,7 +73,9 @@ export default class Tooltip extends React.Component {
 			cn += ` ${ styles[position] }`;
 		}
 
-		if (styles[align]) {
+		if (this.state.movedToLeft) {
+			cn += ` ${ styles.start }`;
+		} else if (styles[align]) {
 			cn += ` ${ styles[align] }`;
 		}
 

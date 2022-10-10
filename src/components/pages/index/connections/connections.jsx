@@ -7,10 +7,12 @@
 
 import React from 'react';
 import IndexBox from '../indexbox/indexbox.jsx';
-import DataBinder from '../../../databinder/databinder.jsx';
-import api from '../../../../api';
-import calculateConnections from '../../../../calculators/connections.js';
-import calculateSSL from '../../../../calculators/ssl.js'
+import DataBinder from '#/components/databinder/databinder.jsx';
+import api from '#/api';
+import calculateConnections from '#/calculators/connections.js';
+import calculateSSL from '#/calculators/ssl.js';
+import utils from '#/utils.js';
+import { tableUtils } from '#/components/table';
 
 import styles from './style.css';
 
@@ -94,7 +96,14 @@ export class Connections extends React.Component {
 						<tr>
 							<td>Total</td>
 							<td>{ ssl.handshakes }</td>
-							<td>{ ssl.handshakes_failed }</td>
+							<td>
+								{
+									tableUtils.tooltipRowsContent(
+										ssl.handshakes_failed,
+										utils.getSSLHandhsakesFailures(ssl)
+									)
+								}
+							</td>
 							<td>{ ssl.session_reuses }</td>
 						</tr>
 						<tr>

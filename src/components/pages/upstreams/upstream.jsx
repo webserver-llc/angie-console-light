@@ -267,7 +267,17 @@ export default class Upstream extends UpstreamsList {
 										<td className={ styles.bdr }>{ utils.formatMs(peer.response_time) }</td>
 
 										<td>{ ssl ? ssl.handshakes : '–' }</td>
-										<td>{ ssl ? ssl.handshakes_failed : '–' }</td>
+										<td>
+											{
+												ssl
+													? tableUtils.tooltipRowsContent(
+														ssl.handshakes_failed,
+														utils.getSSLHandhsakesFailures(ssl),
+														'hint'
+													)
+													: '–'
+											}
+										</td>
 										<td>{ ssl ? ssl.session_reuses : '–' }</td>
 									</tr>
 								);
