@@ -36,6 +36,11 @@
 	margin-left: -6px;
 }
 
+.top.start:before {
+	left: 100%;
+	margin-left: -20px;
+}
+
 .right:before {
 	top: 12px;
 	right: 100%;
@@ -74,6 +79,24 @@
 	margin-top: -6px;
 }
 
+.list-row {
+	display: flex;
+}
+
+.list-label {
+	flex: 0 0 auto;
+}
+
+.list-space {
+	flex: 1 0 auto;
+	min-width: 5px;
+	border-bottom: 1px solid rgba(255,255,255,0.3);
+	margin: 0 3px;
+}
+
+.list-value {
+	flex: 0 0 auto;
+}
 
 .row {
 	margin-bottom: 10px;

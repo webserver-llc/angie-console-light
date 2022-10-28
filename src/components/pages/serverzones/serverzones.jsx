@@ -50,6 +50,7 @@ export default class StreamZones extends SortableTable {
 							<th colSpan="3">Requests</th>
 							<th colSpan="6">Responses</th>
 							<th colSpan="4">Traffic</th>
+							<th colSpan="3">SSL</th>
 						</tr>
 						<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
 							<th className={ styles.bdr } />
@@ -65,7 +66,10 @@ export default class StreamZones extends SortableTable {
 							<th>Sent/s</th>
 							<th>Rcvd/s</th>
 							<th>Sent</th>
-							<th>Rcvd</th>
+							<th className={ styles.bdr }>Rcvd</th>
+							<th>Handshakes</th>
+							<th>Handshakes<br/>Failed</th>
+							<th>Session<br/>Reuses</th>
 						</tr>
 					</thead>
 					<tbody className={ styles['right-align'] }>
@@ -79,8 +83,10 @@ export default class StreamZones extends SortableTable {
 									status = styles.alert;
 								}
 
-								const { codes } = zone.responses;
-								const codes4xx = utils.getHTTPCodesArray(codes, '4');
+								const {
+									responses: { codes },
+									ssl,
+								} = zone;
 
 								return (<tr>
 									<td className={ status } />
@@ -91,28 +97,19 @@ export default class StreamZones extends SortableTable {
 									<td>{ tableUtils.responsesTextWithTooltip(zone.responses['1xx'], codes, '1') }</td>
 									<td>{ tableUtils.responsesTextWithTooltip(zone.responses['2xx'], codes, '2') }</td>
 									<td>{ tableUtils.responsesTextWithTooltip(zone.responses['3xx'], codes, '3') }</td>
-									<td className={`${ styles.flash }${zone['4xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
-										<span
-											className={ styles.hinted }
-											{ ...tooltips.useTooltip(
-												<div>
-													{
-														codes4xx.length > 0
-															? codes4xx.map(({ code, value }) => (
-																<div key={ code }>{ code }: { value }</div>
-															))
-															: (
-																<div>4xx: { zone.responses['4xx'] }</div>
-															)
-													}
-
-													<div key="discarded">499/444/408: { zone.discarded }</div>
-												</div>,
-												'hint'
-											) }
-										>
-											{ zone.responses['4xx'] + zone.discarded }
-										</span>
+									<td className={ `${ styles.flash }${ zone['4xxChanged'] ? (' ' + styles['red-flash']) : '' }` }>
+										{
+											tableUtils.responsesTextWithTooltip(
+												zone.responses['4xx'] + zone.discarded,
+												{
+													...(codes || {
+														'4xx': zone.responses['4xx']
+													}),
+													'499/444/408': zone.discarded,
+												},
+												'4'
+											)
+										}
 									</td>
 									<td className={`${ styles.flash }${zone['5xxChanged'] ? (' ' + styles['red-flash']) : ''}`}>
 										{ tableUtils.responsesTextWithTooltip(zone.responses['5xx'], codes, '5') }
@@ -121,7 +118,20 @@ export default class StreamZones extends SortableTable {
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent_s) }</td>
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.rcvd_s) }</td>
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent) }</td>
-									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.received) }</td>
+									<td className={ `${ styles.px60 } ${ styles.bdr }` }>{ utils.formatReadableBytes(zone.received) }</td>
+									<td>{ ssl ? ssl.handshakes : '–' }</td>
+									<td>
+										{
+											ssl
+												? tableUtils.tooltipRowsContent(
+													ssl.handshakes_failed,
+													utils.getSSLHandhsakesFailures(ssl),
+													'hint'
+												)
+												: '–'
+										}
+									</td>
+									<td>{ ssl ? ssl.session_reuses : '–' }</td>
 								</tr>);
 							})
 						}

@@ -105,6 +105,7 @@ export default class Upstream extends UpstreamsList {
 						<th colSpan="2">Server checks</th>
 						<th colSpan="4">Health monitors</th>
 						<th colSpan="2">Response time</th>
+						<th colSpan="3">SSL</th>
 					</tr>
 					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
 						<th className={ styles['left-align'] }>Name</th>
@@ -148,9 +149,12 @@ export default class Upstream extends UpstreamsList {
 						<th>Checks</th>
 						<th>Fails</th>
 						<th>Unhealthy</th>
-						<th className={ `${ styles.bdr } ${ styles['left-align'] }` }>Last</th>
+						<th className={ styles.bdr }>Last</th>
 						<th>Headers</th>
-						<th>Response</th>
+						<th className={ styles.bdr }>Response</th>
+						<th>Handshakes</th>
+						<th>Handshakes<br/>Failed</th>
+						<th>Session<br/>Reuses</th>
 					</tr>
 				</thead>
 
@@ -160,7 +164,10 @@ export default class Upstream extends UpstreamsList {
 							this.renderEmptyList()
 						:
 							peers.map((peer, i) => {
-								const { codes } = peer.responses;
+								const {
+									responses: { codes },
+									ssl
+								} = peer;
 
 								return (
 									<tr>
@@ -236,12 +243,42 @@ export default class Upstream extends UpstreamsList {
 										<td>{ peer.health_checks.fails }</td>
 										<td>{ peer.health_checks.unhealthy }</td>
 
-										<td className={`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }${peer.health_status === false ? (' ' + styles['red-flash']) : ''}`}>
-											{ peer.health_status === null ? '–' : peer.health_status ? 'passed' : 'failed' }
+										<td className={`${ styles.bdr } ${ styles.flash }${peer.health_status === false ? (' ' + styles['red-flash']) : ''}`}>
+											{
+												peer.health_status === null
+													? '–'
+													: (
+														<span
+															className={ styles.hinted }
+															{...tooltips.useTooltip(
+																<div>
+																	{ peer.health_status ? 'passed' : 'failed' }
+																</div>,
+																'hint'
+															)}
+														>
+															{ peer.health_status ? '✔' : '✘' }
+														</span>
+													)
+											}
 										</td>
 
 										<td>{ utils.formatMs(peer.header_time) }</td>
-										<td>{ utils.formatMs(peer.response_time) }</td>
+										<td className={ styles.bdr }>{ utils.formatMs(peer.response_time) }</td>
+
+										<td>{ ssl ? ssl.handshakes : '–' }</td>
+										<td>
+											{
+												ssl
+													? tableUtils.tooltipRowsContent(
+														ssl.handshakes_failed,
+														utils.getSSLHandhsakesFailures(ssl),
+														'hint'
+													)
+													: '–'
+											}
+										</td>
+										<td>{ ssl ? ssl.session_reuses : '–' }</td>
 									</tr>
 								);
 							})
