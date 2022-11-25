@@ -46,7 +46,7 @@ In the project folder check `coverage` directory – `index.html` includes every
 * [@babel/preset-env](https://www.npmjs.com/package/@babel/preset-env) – 7.18.2
 * [@babel/preset-react](https://www.npmjs.com/package/@babel/preset-react) – 7.17.12
 * [autoprefixer](https://www.npmjs.com/package/autoprefixer) – 10.4.7
-* [babel-loader](https://github.com/babel/babel-loader) – 8.2.5
+* [babel-loader](https://github.com/babel/babel-loader) – 8.3.0
 * [babel-plugin-istanbul](https://github.com/istanbuljs/babel-plugin-istanbul) – 6.1.1
 * [chai](https://www.npmjs.com/package/chai) – 4.3.6
 * [core-js](https://www.npmjs.com/package/core-js) – 3.22.8
