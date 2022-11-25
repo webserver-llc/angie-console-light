@@ -147,6 +147,10 @@ describe('<ServerZones />', () => {
 						handshakes: 135,
 						handshakes_failed: 24,
 						session_reuses: 19,
+						verify_failures: {
+							expired_cert: 90,
+							revoked_cert: 6,
+						}
 					}
 				}], ['test_2', {
 					warning: true,
@@ -203,7 +207,7 @@ describe('<ServerZones />', () => {
 
 			// Row 1
 			cells = rows.at(0).find('td');
-			expect(cells.length, 'row 1, cells length').to.be.equal(18);
+			expect(cells.length, 'row 1, cells length').to.be.equal(19);
 			expect(cells.at(0).prop('className'), 'row 1, cell 1, className').to.be.equal(
 				styles['ok']
 			);
@@ -261,9 +265,11 @@ describe('<ServerZones />', () => {
 			expect(cells.at(16).text(), 'row 1, cell 17, text').to.be.equal('24');
 			expect(cells.at(17).text(), 'row 1, cell 18, text').to.be.equal('19');
 
+			// TODO: Add tests for SSL Verify Failures cell
+
 			// Row 2
 			cells = rows.at(1).find('td');
-			expect(cells.length, 'row 2, cells length').to.be.equal(18);
+			expect(cells.length, 'row 2, cells length').to.be.equal(19);
 			expect(cells.at(0).prop('className'), 'row 2, cell 1, className').to.be.equal(
 				styles['warning']
 			);
@@ -321,9 +327,11 @@ describe('<ServerZones />', () => {
 			expect(cells.at(16).text(), 'row 2, cell 17, text').to.be.equal('–');
 			expect(cells.at(17).text(), 'row 2, cell 18, text').to.be.equal('–');
 
+			// TODO: Add tests for SSL Verify Failures cell
+
 			// Row 3
 			cells = rows.at(2).find('td');
-			expect(cells.length, 'row 3, cells length').to.be.equal(18);
+			expect(cells.length, 'row 3, cells length').to.be.equal(19);
 			expect(cells.at(0).prop('className'), 'row 3, cell 1, className').to.be.equal(
 				styles['alert']
 			);
@@ -381,7 +389,9 @@ describe('<ServerZones />', () => {
 			expect(cells.at(16).text(), 'row 3, cell 17, text').to.be.equal('–');
 			expect(cells.at(17).text(), 'row 3, cell 18, text').to.be.equal('–');
 
-			expect(tableUtils.responsesTextWithTooltip.callCount, 'responsesTextWithTooltip called 12 times').to.be.equal(15);
+			// TODO: Add tests for SSL Verify Failures cell
+
+			expect(tableUtils.responsesTextWithTooltip.callCount, 'responsesTextWithTooltip called 15 times').to.be.equal(15);
 			expect(tableUtils.responsesTextWithTooltip.args[0][0], 'responsesTextWithTooltip row 1, arg 1, 1xx').to.be.equal(items[0][1].responses['1xx']);
 			expect(tableUtils.responsesTextWithTooltip.args[0][1], 'responsesTextWithTooltip row 1, arg 2, 1xx').to.be.equal(items[0][1].responses.codes);
 			expect(tableUtils.responsesTextWithTooltip.args[0][2], 'responsesTextWithTooltip row 1, arg 3, 1xx').to.be.equal('1');

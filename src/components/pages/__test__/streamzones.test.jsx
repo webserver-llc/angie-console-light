@@ -66,7 +66,7 @@ describe('<StreamZones Page />', () => {
 			const rows = wrapper.find('tbody tr');
 			let cells = rows.at(0).find('td');
 
-			expect(cells.length, 'row 1, cells length').to.be.equal(12);
+			expect(cells.length, 'row 1, cells length').to.be.equal(16);
 
 			let cell = cells.at(0);
 
@@ -114,9 +114,11 @@ describe('<StreamZones Page />', () => {
 			expect(cell.text(), 'row 1, cell 11, text').to.be.equal('950');
 			cell = cells.at(11);
 			expect(cell.prop('className'), 'row 1, cell 12, className').to.be.equal(
-				styles['px60']
+				`${ styles['px60'] } ${ styles['bdr'] }`
 			);
 			expect(cell.text(), 'row 1, cell 12, text').to.be.equal('3');
+
+			// TODO: Add tests for SSL stat cells
 
 			cells = rows.at(1).find('td');
 			expect(cells.at(5).prop('className'), 'row 1, cell 6, className').to.be.equal(

@@ -6,13 +6,12 @@
  */
 import React from 'react';
 
-import TableSortControl from '../../table/tablesortcontrol.jsx';
 import UpstreamsList from '../../upstreams/upstreamslist.jsx';
 import utils from '#/utils.js';
 import tooltips from '#/tooltips/index.jsx';
 import PeerTooltip from '../../upstreams/PeerTooltip.jsx';
 import ConnectionsTooltip from '../../upstreams/ConnectionsTooltip.jsx';
-import styles from '../../table/style.css';
+import { TableSortControl, tableUtils, styles } from '#/components/table';
 
 export default class StreamUpstream extends UpstreamsList {
 	get SORTING_SETTINGS_KEY() {
@@ -42,6 +41,7 @@ export default class StreamUpstream extends UpstreamsList {
 						<th colSpan="2">Server checks</th>
 						<th colSpan="4">Health monitors</th>
 						<th colSpan="3">Response time</th>
+						<th colSpan="4">SSL</th>
 					</tr>
 					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
 						<th className={ styles['left-align'] }>Name</th>
@@ -67,7 +67,11 @@ export default class StreamUpstream extends UpstreamsList {
 						<th className={ `${ styles.bdr } ${ styles['left-align'] }` }>Last</th>
 						<th>Connect</th>
 						<th>First byte</th>
-						<th>Response</th>
+						<th className={ styles.bdr }>Response</th>
+						<th>Handshakes</th>
+						<th>Handshakes<br/>Failed</th>
+						<th>Session<br/>Reuses</th>
+						<th>Verify<br/>Failures</th>
 					</tr>
 				</thead>
 
@@ -76,59 +80,87 @@ export default class StreamUpstream extends UpstreamsList {
 						peers.length === 0 ?
 							this.renderEmptyList()
 						:
-							peers.map(peer => (
-								<tr>
-									<td className={ styles[peer.state] } />
+							peers.map(peer => {
+								const { ssl } = peer;
 
-									{ this.getCheckbox(peer) }
+								return (
+									<tr>
+										<td className={ styles[peer.state] } />
 
-									<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.address }` }>
-										<span className={ styles['address-container'] } {...tooltips.useTooltip(<PeerTooltip peer={peer} />)}>
-											{ peer.backup ? <span>b&nbsp;</span> : null }{ peer.server }
-										</span>
+										{ this.getCheckbox(peer) }
 
-										{
-											this.state.editMode ?
-												<span className={ styles['edit-peer'] } onClick={() => this.editSelectedUpstream(peer)} />
-											: null
-										}
-									</td>
+										<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.address }` }>
+											<span className={ styles['address-container'] } {...tooltips.useTooltip(<PeerTooltip peer={peer} />)}>
+												{ peer.backup ? <span>b&nbsp;</span> : null }{ peer.server }
+											</span>
 
-									<td>{ utils.formatUptime(peer.downtime, true) }</td>
-									<td className={ styles.bdr }>{ peer.weight }</td>
-									<td>
-										<span className={ styles.hinted } {...tooltips.useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
-											{ peer.connections }
-										</span>
-									</td>
-									<td>{ peer.server_conn_s }</td>
-									<td>{ peer.active }</td>
-									<td className={ styles.bdr}>
-										{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }
-									</td>
-									<td className={ styles.px60}>
-										{ utils.formatReadableBytes(peer.server_sent_s) }
-									</td>
-									<td className={ styles.px60}>
-										{ utils.formatReadableBytes(peer.server_rcvd_s) }
-									</td>
-									<td>{ utils.formatReadableBytes(peer.sent) }</td>
-									<td className={ styles.bdr}>{ utils.formatReadableBytes(peer.received) }</td>
-									<td>{ peer.fails }</td>
-									<td>{ peer.unavail }</td>
-									<td>{ peer.health_checks.checks }</td>
-									<td>{ peer.health_checks.fails }</td>
-									<td>{ peer.health_checks.unhealthy }</td>
-									<td className={`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }${peer.health_status === false ? (' ' + styles['red-flash']) : ''}`}>
-										{ peer.health_status === null ? '–' :
-											peer.health_status ? 'passed' : 'failed' }
-									</td>
+											{
+												this.state.editMode ?
+													<span className={ styles['edit-peer'] } onClick={() => this.editSelectedUpstream(peer)} />
+												: null
+											}
+										</td>
 
-									<td>{ utils.formatMs(peer.connect_time) }</td>
-									<td>{ utils.formatMs(peer.first_byte_time) }</td>
-									<td>{ utils.formatMs(peer.response_time) }</td>
-								</tr>
-							))
+										<td>{ utils.formatUptime(peer.downtime, true) }</td>
+										<td className={ styles.bdr }>{ peer.weight }</td>
+										<td>
+											<span className={ styles.hinted } {...tooltips.useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
+												{ peer.connections }
+											</span>
+										</td>
+										<td>{ peer.server_conn_s }</td>
+										<td>{ peer.active }</td>
+										<td className={ styles.bdr}>
+											{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }
+										</td>
+										<td className={ styles.px60}>
+											{ utils.formatReadableBytes(peer.server_sent_s) }
+										</td>
+										<td className={ styles.px60}>
+											{ utils.formatReadableBytes(peer.server_rcvd_s) }
+										</td>
+										<td>{ utils.formatReadableBytes(peer.sent) }</td>
+										<td className={ styles.bdr}>{ utils.formatReadableBytes(peer.received) }</td>
+										<td>{ peer.fails }</td>
+										<td>{ peer.unavail }</td>
+										<td>{ peer.health_checks.checks }</td>
+										<td>{ peer.health_checks.fails }</td>
+										<td>{ peer.health_checks.unhealthy }</td>
+										<td className={`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }${peer.health_status === false ? (' ' + styles['red-flash']) : ''}`}>
+											{ peer.health_status === null ? '–' :
+												peer.health_status ? 'passed' : 'failed' }
+										</td>
+
+										<td>{ utils.formatMs(peer.connect_time) }</td>
+										<td>{ utils.formatMs(peer.first_byte_time) }</td>
+										<td className={ styles.bdr}>{ utils.formatMs(peer.response_time) }</td>
+
+										<td>{ ssl ? ssl.handshakes : '–' }</td>
+										<td>
+											{
+												ssl
+													? tableUtils.tooltipRowsContent(
+														ssl.handshakes_failed,
+														utils.getSSLHandhsakesFailures(ssl),
+														'hint'
+													)
+													: '–'
+											}
+										</td>
+										<td>{ ssl ? ssl.session_reuses : '–' }</td>
+										<td>
+											{
+												ssl
+													? tableUtils.tooltipRowsContent(
+														...utils.getSSLVeryfiedFailures(ssl),
+														'hint'
+													)
+													: '–'
+											}
+										</td>
+									</tr>
+								);
+							})
 					}
 				</tbody>
 			</table>

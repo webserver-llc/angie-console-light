@@ -156,7 +156,9 @@ describe('<StreamUpstream />', () => {
 		expect(headRow.childAt(5).prop('colSpan'), 'head row 1, child 6 colspan').to.be.equal('2');
 		expect(headRow.childAt(6).prop('colSpan'), 'head row 1, child 7 colspan').to.be.equal('4');
 		expect(headRow.childAt(7).prop('colSpan'), 'head row 1, child 8 colspan').to.be.equal('3');
-		expect(table.childAt(0).childAt(1).children(), 'head row 2, children length').to.have.lengthOf(20);
+		expect(table.childAt(0).childAt(1).children(), 'head row 2, children length').to.have.lengthOf(24);
+
+		// TODO: Add tests for SSL stat cells
 
 		const headTooltips = table.find(`thead .${ styles['hinted'] }`);
 

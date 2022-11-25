@@ -13,6 +13,7 @@ import {
 	formatDate,
 	getHTTPCodesArray,
 	getSSLHandhsakesFailures,
+	getSSLVeryfiedFailures,
 } from '../utils.js';
 
 describe('Utils', () => {
@@ -136,12 +137,11 @@ describe('Utils', () => {
 		expect(getSSLHandhsakesFailures(), 'no arguments').to.be.deep.equal([]);
 		expect(getSSLHandhsakesFailures({}), 'empty object as an argument').to.be.deep.equal([]);
 
-		let ssl = {
-      no_common_protocol: 2,
-      no_common_cipher: 4,
-      handshake_timeout: 79,
-      peer_rejected_cert: 3,
-      verify_failures: {},
+		const ssl = {
+			no_common_protocol: 2,
+			no_common_cipher: 4,
+			handshake_timeout: 79,
+			peer_rejected_cert: 3,
 		};
 
 		getSSLHandhsakesFailures(ssl).forEach((item, i) => {
@@ -149,21 +149,30 @@ describe('Utils', () => {
 			expect('id' in item, `[${ i }] ${ item.id }, id exists`).to.be.true;
 			expect('label' in item, `[${ i }] ${ item.id }, label exists`).to.be.true;
 		});
+	});
 
-		ssl = {
-      verify_failures: {
-        expired_cert: 90,
-        revoked_cert: 6,
-        hostname_mismatch: 10,
-        other: 3,
-      },
+	it('getSSLVeryfiedFailures()', () => {
+		expect(getSSLVeryfiedFailures(), 'no arguments').to.be.deep.equal([0, []]);
+		expect(getSSLVeryfiedFailures({}), 'empty object as an argument').to.be.deep.equal([0, []]);
+		expect(getSSLVeryfiedFailures({
+			verify_failures: {}
+		}), 'empty "verify_failures"').to.be.deep.equal([0, []]);
+
+		const ssl = {
+			verify_failures: {
+				no_cert: 123,
+				expired_cert: 90,
+				revoked_cert: 6,
+				hostname_mismatch: 10,
+				other: 3,
+			},
 		};
+		const [total, items] = getSSLVeryfiedFailures(ssl);
 
-		getSSLHandhsakesFailures(ssl).forEach((item, i) => {
-			expect(item, `[${ i }] verify_failures.${ item.id }, value prop`).to.have.property(
-				'value',
-				ssl.verify_failures[item.id]
-			);
+		expect(total, 'total value').to.equal(232);
+
+		items.forEach((item, i) => {
+			expect(item, `[${ i }] ${ item.id }, value prop`).to.have.property('value', ssl.verify_failures[item.id]);
 			expect('id' in item, `[${ i }] ${ item.id }, id exists`).to.be.true;
 			expect('label' in item, `[${ i }] ${ item.id }, label exists`).to.be.true;
 		});

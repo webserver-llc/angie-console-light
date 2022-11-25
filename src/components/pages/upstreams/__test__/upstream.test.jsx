@@ -288,7 +288,7 @@ describe('<Upstream />', () => {
 		expect(
 			table.find('thead').childAt(1).children(),
 			'[columnsExpanded = false] head row 2, children length'
-		).to.have.lengthOf(25);
+		).to.have.lengthOf(26);
 
 		const headTooltips = table.find(`thead .${ styles['hinted'] }`);
 
@@ -331,7 +331,7 @@ describe('<Upstream />', () => {
 		expect(tbody.children(), '[with peers] tbody children length').to.have.lengthOf(3);
 
 		// Peer 1
-		expect(tbody.childAt(0).children(), '[peer 1] td count').to.have.lengthOf(27);
+		expect(tbody.childAt(0).children(), '[peer 1] td count').to.have.lengthOf(28);
 		expect(tbody.childAt(0).childAt(0).prop('className'), '[peer 1] peer state').to.be.equal(styles['up']);
 		expect(
 			tbody.childAt(0).childAt(1).prop('id'),
@@ -428,8 +428,10 @@ describe('<Upstream />', () => {
 		expect(tbody.childAt(0).childAt(25).text(), '[peer 1] handshakes_failed').to.be.equal('24');
 		expect(tbody.childAt(0).childAt(26).text(), '[peer 1] session_reuses').to.be.equal('19');
 
+		// TODO: Add tests for SSL Verify Failures cell
+
 		// Peer 2
-		expect(tbody.childAt(1).children(), '[peer 2] td count').to.have.lengthOf(26);
+		expect(tbody.childAt(1).children(), '[peer 2] td count').to.have.lengthOf(27);
 		expect(
 			tbody.childAt(1).childAt(2).childAt(0).text(),
 			'[peer 2] address-container text'
@@ -452,8 +454,10 @@ describe('<Upstream />', () => {
 		expect(tbody.childAt(1).childAt(24).text(), '[peer 2] handshakes_failed').to.be.equal('–');
 		expect(tbody.childAt(1).childAt(25).text(), '[peer 2] session_reuses').to.be.equal('–');
 
+		// TODO: Add tests for SSL Verify Failures cell
+
 		// Peer 3
-		expect(tbody.childAt(2).children(), '[peer 3] td count').to.have.lengthOf(26);
+		expect(tbody.childAt(2).children(), '[peer 3] td count').to.have.lengthOf(27);
 		expect(
 			tbody.childAt(2).childAt(20).prop('className'),
 			'[peer 3] health_status className'
@@ -657,7 +661,7 @@ describe('<Upstream />', () => {
 		expect(
 			table.find('thead').childAt(1).children(),
 			'[columnsExpanded = true] head row 2, children length'
-		).to.have.lengthOf(28);
+		).to.have.lengthOf(29);
 
 		expect(tableUtils.responsesTextWithTooltip.callCount, 'responsesTextWithTooltip called 15 times').to.be.equal(15);
 		peers.forEach((peer, i) => {
@@ -768,7 +772,7 @@ describe('<Upstream />', () => {
 
 		tbody = table.find('tbody');
 
-		expect(tbody.childAt(0).children(), '[columnsExpanded = true, peer 1] td count').to.have.lengthOf(30);
+		expect(tbody.childAt(0).children(), '[columnsExpanded = true, peer 1] td count').to.have.lengthOf(31);
 		expect(
 			tbody.childAt(0).childAt(7).prop('rowspan'),
 			'[columnsExpanded = true, peer 1] collapse-columns rowspan'
@@ -815,7 +819,7 @@ describe('<Upstream />', () => {
 			'[columnsExpanded = true, peer 1] 3xx'
 		).to.be.equal('1');
 
-		expect(tbody.childAt(1).children(), '[columnsExpanded = true, peer 2] td count').to.have.lengthOf(29);
+		expect(tbody.childAt(1).children(), '[columnsExpanded = true, peer 2] td count').to.have.lengthOf(30);
 		expect(
 			tbody.childAt(1).childAt(7).prop('className'),
 			'[columnsExpanded = true, peer 2] 1xx className'
@@ -841,7 +845,7 @@ describe('<Upstream />', () => {
 			'[columnsExpanded = true, peer 2] 3xx'
 		).to.be.equal('2');
 
-		expect(tbody.childAt(2).children(), '[columnsExpanded = true, peer 3] td count').to.have.lengthOf(29);
+		expect(tbody.childAt(2).children(), '[columnsExpanded = true, peer 3] td count').to.have.lengthOf(30);
 		expect(
 			tbody.childAt(2).childAt(7).prop('className'),
 			'[columnsExpanded = true, peer 3] 1xx className'

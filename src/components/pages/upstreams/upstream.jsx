@@ -105,7 +105,7 @@ export default class Upstream extends UpstreamsList {
 						<th colSpan="2">Server checks</th>
 						<th colSpan="4">Health monitors</th>
 						<th colSpan="2">Response time</th>
-						<th colSpan="3">SSL</th>
+						<th colSpan="4">SSL</th>
 					</tr>
 					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
 						<th className={ styles['left-align'] }>Name</th>
@@ -155,6 +155,7 @@ export default class Upstream extends UpstreamsList {
 						<th>Handshakes</th>
 						<th>Handshakes<br/>Failed</th>
 						<th>Session<br/>Reuses</th>
+						<th>Verify<br/>Failures</th>
 					</tr>
 				</thead>
 
@@ -279,6 +280,16 @@ export default class Upstream extends UpstreamsList {
 											}
 										</td>
 										<td>{ ssl ? ssl.session_reuses : '–' }</td>
+										<td>
+											{
+												ssl
+													? tableUtils.tooltipRowsContent(
+														...utils.getSSLVeryfiedFailures(ssl),
+														'hint'
+													)
+													: '–'
+											}
+										</td>
 									</tr>
 								);
 							})

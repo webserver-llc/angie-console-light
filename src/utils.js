@@ -146,43 +146,68 @@ export const getSSLHandhsakesFailures = (ssl) => {
 				value: ssl.peer_rejected_cert,
 			});
 		}
-
-		if (ssl.verify_failures) {
-			if ('expired_cert' in ssl.verify_failures) {
-				result.push({
-					id: 'expired_cert',
-					label: 'Expired cert',
-					value: ssl.verify_failures.expired_cert,
-				});
-			}
-
-			if ('revoked_cert' in ssl.verify_failures) {
-				result.push({
-					id: 'revoked_cert',
-					label: 'Revoked cert',
-					value: ssl.verify_failures.revoked_cert,
-				});
-			}
-
-			if ('hostname_mismatch' in ssl.verify_failures) {
-				result.push({
-					id: 'hostname_mismatch',
-					label: 'Hostname mismatch',
-					value: ssl.verify_failures.hostname_mismatch,
-				});
-			}
-
-			if ('other' in ssl.verify_failures) {
-				result.push({
-					id: 'other',
-					label: 'Other verify failures',
-					value: ssl.verify_failures.other,
-				});
-			}
-		}
 	}
 
 	return result;
+};
+
+export const getSSLVeryfiedFailures = (ssl) => {
+	const result = [];
+	let total = 0;
+
+	if (ssl && ssl.verify_failures) {
+		if ('no_cert' in ssl.verify_failures) {
+			result.push({
+				id: 'no_cert',
+				label: 'No certificate',
+				value: ssl.verify_failures.no_cert,
+			});
+
+			total += ssl.verify_failures.no_cert;
+		}
+
+		if ('expired_cert' in ssl.verify_failures) {
+			result.push({
+				id: 'expired_cert',
+				label: 'Expired cert',
+				value: ssl.verify_failures.expired_cert,
+			});
+
+			total += ssl.verify_failures.expired_cert;
+		}
+
+		if ('revoked_cert' in ssl.verify_failures) {
+			result.push({
+				id: 'revoked_cert',
+				label: 'Revoked cert',
+				value: ssl.verify_failures.revoked_cert,
+			});
+
+			total += ssl.verify_failures.revoked_cert;
+		}
+
+		if ('hostname_mismatch' in ssl.verify_failures) {
+			result.push({
+				id: 'hostname_mismatch',
+				label: 'Hostname mismatch',
+				value: ssl.verify_failures.hostname_mismatch,
+			});
+
+			total += ssl.verify_failures.hostname_mismatch;
+		}
+
+		if ('other' in ssl.verify_failures) {
+			result.push({
+				id: 'other',
+				label: 'Other verify failures',
+				value: ssl.verify_failures.other,
+			});
+
+			total += ssl.verify_failures.other;
+		}
+	}
+
+	return [total, result];
 };
 
 export default {
@@ -192,4 +217,5 @@ export default {
 	formatDate,
 	getHTTPCodesArray,
 	getSSLHandhsakesFailures,
+	getSSLVeryfiedFailures,
 };

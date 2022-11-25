@@ -50,7 +50,7 @@ export default class StreamZones extends SortableTable {
 							<th colSpan="3">Requests</th>
 							<th colSpan="6">Responses</th>
 							<th colSpan="4">Traffic</th>
-							<th colSpan="3">SSL</th>
+							<th colSpan="4">SSL</th>
 						</tr>
 						<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
 							<th className={ styles.bdr } />
@@ -70,6 +70,7 @@ export default class StreamZones extends SortableTable {
 							<th>Handshakes</th>
 							<th>Handshakes<br/>Failed</th>
 							<th>Session<br/>Reuses</th>
+							<th>Verify<br/>Failures</th>
 						</tr>
 					</thead>
 					<tbody className={ styles['right-align'] }>
@@ -132,6 +133,16 @@ export default class StreamZones extends SortableTable {
 										}
 									</td>
 									<td>{ ssl ? ssl.session_reuses : '–' }</td>
+									<td>
+										{
+											ssl
+												? tableUtils.tooltipRowsContent(
+													...utils.getSSLVeryfiedFailures(ssl),
+													'hint'
+												)
+												: '–'
+										}
+									</td>
 								</tr>);
 							})
 						}
