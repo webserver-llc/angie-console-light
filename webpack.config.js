@@ -23,7 +23,7 @@ const PROXY_TARGET = process.env.PROXY_TARGET || 'https://demo.nginx.com';
 
 const plugins = [
     new HtmlWebpackPlugin({
-        title: 'Nginx+ Dashboard',
+        title: 'NGINX Plus Dashboard',
         filename: `${FILE_NAME}.html`,
         template: 'src/index.ejs',
         ...(

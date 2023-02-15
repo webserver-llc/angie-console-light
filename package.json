@@ -1,7 +1,7 @@
 {
   "name": "nginx-plus-dashboard",
   "version": "3.0.3",
-  "description": "Nginx+ dashboard",
+  "description": "NGINX Plus dashboard",
   "main": "index.js",
   "scripts": {
     "clean-dist": "rm -rf ./dist",
