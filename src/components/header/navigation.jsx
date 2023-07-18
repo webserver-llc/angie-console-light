@@ -20,6 +20,7 @@ import calculateCaches from '../../calculators/caches.js';
 import calculateSharedZones from '../../calculators/sharedzones.js';
 import calculateZoneSync from '../../calculators/zonesync.js';
 import calculateResolvers from '../../calculators/resolvers.js';
+import calculateWorkers from '../../calculators/workers.js';
 
 import styles from './style.css';
 
@@ -63,6 +64,11 @@ export const SECTIONS = [
 		title: 'Resolvers',
 		hash: '#resolvers',
 		statusKey: 'resolvers'
+	},
+	{
+		title: 'Workers',
+		hash: '#workers',
+		statusKey: 'workers'
 	}
 ];
 
@@ -105,7 +111,7 @@ export class Navigation extends React.Component {
 						statuses.location_zones.ready
 					);
 				} else {
-					return statuses[statusKey].ready;
+					return statuses[statusKey] && statuses[statusKey].ready;
 				}
 			})
 			.map(section => {
@@ -176,7 +182,8 @@ export default DataBinder(Navigation, [
 	api.http.caches.process(calculateCaches),
 	api.slabs.process(calculateSharedZones),
 	api.stream.zone_sync.process(calculateZoneSync),
-	api.resolvers.process(calculateResolvers)
+	api.resolvers.process(calculateResolvers),
+	api.workers.process(calculateWorkers),
 ], {
 	ignoreEmpty: true
 });

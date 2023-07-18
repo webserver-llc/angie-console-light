@@ -21,6 +21,7 @@ import calculateSSL from '../calculators/ssl.js';
 import calculateRequests from '../calculators/requests.js';
 import calculateZoneSync from '../calculators/zonesync.js';
 import calculateResolvers from '../calculators/resolvers.js';
+import calculateWorkers from '../calculators/workers.js';
 
 const api = new Proxy({}, {
 	get(target, pathStart) {
@@ -91,7 +92,8 @@ export const initialLoad = ({
 		api.http.caches.process(calculateCaches),
 		api.slabs.process(calculateSharedZones),
 		api.stream.zone_sync.process(calculateZoneSync),
-		api.resolvers.process(calculateResolvers)
+		api.resolvers.process(calculateResolvers),
+		api.workers.process(calculateWorkers),
 	];
 
 	return window.fetch(`${API_PATH}/`)

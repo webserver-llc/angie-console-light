@@ -27,6 +27,7 @@ import calculateSSL from '../../calculators/ssl.js';
 import calculateRequests from '../../calculators/requests.js';
 import calculateZoneSync from '../../calculators/zonesync.js';
 import calculateResolvers from '../../calculators/resolvers.js';
+import calculateWorkers from '../../calculators/workers.js';
 
 describe('Api', () => {
 	it('Returns new instance of ApiProxy', () => {
@@ -537,6 +538,9 @@ describe('Api', () => {
 				}, {
 					path: 'resolvers',
 					processor: calculateResolvers
+				}, {
+					path: 'workers',
+					processor: calculateWorkers
 				}
 			];
 

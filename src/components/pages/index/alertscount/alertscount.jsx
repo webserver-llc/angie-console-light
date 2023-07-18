@@ -18,8 +18,23 @@ export default class AlertsCount extends React.Component {
 	}
 
 	render() {
-		const alertsTitle = this.props.alerts > 0 ? 'Alerts' : this.props.warnings > 0 ? 'Warnings' : 'Problems';
-		const alertsStyleName = this.props.alerts > 0 ? styles.alert : this.props.warnings > 0 ? styles.warning : styles.ok;
+		let alertsPart = null;
+		const { total, alerts, warnings } = this.props;
+
+		if (alerts !== undefined || warnings !== undefined) {
+			const alertsTitle = this.props.alerts > 0 ? 'Alerts' : this.props.warnings > 0 ? 'Warnings' : 'Problems';
+			const alertsStyleName = this.props.alerts > 0 ? styles.alert : this.props.warnings > 0 ? styles.warning : styles.ok;
+
+			alertsPart = (
+				<>
+					/
+					<a className={ alertsStyleName } href={ this.props.href }>
+						<span className={ styles.label }>{ alertsTitle }</span>
+						{ this.props.alerts || this.props.warnings || 0 }
+					</a>
+				</>
+			);
+		}
 
 		return (
 			<div className={ styles.alerts }>
@@ -27,11 +42,8 @@ export default class AlertsCount extends React.Component {
 					<span className={ styles.label }>Total</span>
 					{ this.props.total }
 				</span>
-				/
-				<a className={ alertsStyleName } href={ this.props.href }>
-					<span className={ styles.label }>{ alertsTitle }</span>
-					{ this.props.alerts || this.props.warnings || 0 }
-				</a>
+
+				{ alertsPart }
 			</div>
 		);
 	}

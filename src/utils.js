@@ -210,11 +210,14 @@ export const getSSLVeryfiedFailures = (ssl) => {
 	return [total, result];
 };
 
+export const formatNumber = value => typeof value === 'number' ? value : '-';
+
 export default {
 	formatUptime,
 	formatReadableBytes,
 	formatMs,
 	formatDate,
+	formatNumber,
 	getHTTPCodesArray,
 	getSSLHandhsakesFailures,
 	getSSLVeryfiedFailures,

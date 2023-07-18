@@ -79,12 +79,16 @@
 	border-right: 2px solid #fff !important;
 }
 
+.no-bdr {
+	border-right: 0 !important;
+}
+
 .px60 {
 	min-width: 60px;
 }
 
 th.sorter {
-	background-color: #afb1b3;
+	background-color: #eeeeee;
 	cursor: pointer;
 	border-bottom: 1px solid #fff;
 	border-right: 1px solid #fff;
@@ -93,13 +97,23 @@ th.sorter {
 	width: 10px;
 	padding: 0;
 	line-height: 8px;
-	color: #fff;
+	color: #999999;
 	text-align: center;
 	user-select: none;
 }
 
 .sorter:hover {
-	background: #cccccc;
+	background: #aaaaaa;
+	color: #fff;
+}
+
+th.sorterActive {
+	background: #999999;
+	color: #fff;
+}
+
+th.inlinSorter {
+	border-right-width: 2px;
 }
 
 td.status {

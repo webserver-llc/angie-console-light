@@ -17,6 +17,7 @@ import StreamUpstreams from './streamupstreams/streamupstreams.jsx';
 import Caches from './caches/caches.jsx';
 import ZoneSync from './zonesync.jsx';
 import Resolvers from './resolvers.jsx';
+import Workers from './workers.jsx';
 import styles from './style.css';
 
 export default class Index extends React.Component {
@@ -39,6 +40,7 @@ export default class Index extends React.Component {
 					<Caches />
 					<ZoneSync />
 					<Resolvers />
+					<Workers />
 				</div>
 			</div>
 		);

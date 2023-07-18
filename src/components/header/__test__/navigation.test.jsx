@@ -26,7 +26,8 @@ describe('<Navigation />', () => {
 		caches: { ready: false },
 		shared_zones: { ready: false },
 		zone_sync: { ready: false },
-		resolvers: { ready: false }
+		resolvers: { ready: false },
+		workers: { ready: false },
 	});
 	const readyStatuses = () => ({
 		server_zones: { ready: true },
@@ -37,7 +38,8 @@ describe('<Navigation />', () => {
 		caches: { ready: true },
 		shared_zones: { ready: true },
 		zone_sync: { ready: true },
-		resolvers: { ready: true }
+		resolvers: { ready: true },
+		workers: { ready: true },
 	});
 
 	it('constructor()', () => {

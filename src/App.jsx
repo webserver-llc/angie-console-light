@@ -24,6 +24,7 @@ import SharedZones from './components/pages/sharedzones.jsx';
 import UpdatingControl from './components/updating-controll/updating-control.jsx';
 import ZoneSync from './components/pages/zonesync.jsx';
 import Resolvers from './components/pages/resolvers.jsx';
+import Workers from './components/pages/workers.jsx';
 import Disclaimer from './components/demo/disclaimer.jsx';
 import datastore, { STORE, startObserve, play, pause } from './datastore';
 import { apiUtils } from './api';
@@ -39,7 +40,8 @@ export const SECTIONS = {
 	'#caches': Caches,
 	'#shared_zones': SharedZones,
 	'#cluster': ZoneSync,
-	'#resolvers': Resolvers
+	'#resolvers': Resolvers,
+	'#workers': Workers,
 };
 
 export const Errors = {

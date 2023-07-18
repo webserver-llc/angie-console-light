@@ -30,17 +30,30 @@ export default class TableSortControl extends React.Component {
 	render() {
 		const {
 			singleRow,
+			firstSortLabel,
 			secondSortLabel,
-			order
+			order,
+			isActive,
+			isInline,
 		} = this.props;
+
+		let className = styles.sorter;
+
+		if (isActive) {
+			className += ` ${ styles.sorterActive }`;
+		}
+
+		if (isInline) {
+			className += ` ${ styles.inlinSorter }`
+		}
 
 		return (
 			<th
 				rowSpan={ singleRow ? null : '2' }
-				className={ styles.sorter }
+				className={ className }
 				onClick={ this.toggle }
 
-				{ ...tooltips.useTooltip(order === 'asc' ? secondSortLabel : 'Sort by conf order', 'hint-right') }
+				{ ...tooltips.useTooltip(order === 'asc' ? secondSortLabel : firstSortLabel, 'hint-right') }
 			>{
 				order === 'asc' ? '▴' : '▾'
 			}</th>
@@ -49,5 +62,7 @@ export default class TableSortControl extends React.Component {
 }
 
 TableSortControl.defaultProps = {
-	secondSortLabel: 'Sort by status - failed first'
+	firstSortLabel: 'Sort by conf order',
+	secondSortLabel: 'Sort by status - failed first',
+	isActive: true,
 };

@@ -30,5 +30,8 @@ export default {
 	},
 	resolvers: {
 		ready: false
-	}
+	},
+	workers: {
+		ready: false
+	},
 };

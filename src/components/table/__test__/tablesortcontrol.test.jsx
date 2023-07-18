@@ -71,7 +71,7 @@ describe('<TableSortControl />', () => {
 
 		expect(wrapper.type(), 'wrapper html tag').to.be.equal('th');
 		expect(wrapper.prop('rowSpan'), 'wrapper prop rowSpan').to.be.equal('2');
-		expect(wrapper.prop('className'), 'wrapper prop className').to.be.equal(styles['sorter']);
+		expect(wrapper.prop('className'), 'wrapper prop className').to.be.equal(`${styles['sorter']} ${styles['sorterActive']}`);
 		expect(wrapper.prop('onClick'), 'wrapper prop onClick').to.be.a('function');
 		expect(wrapper.prop('onClick').name, 'wrapper prop onClick name').to.be.equal('bound toggle');
 		expect(wrapper.prop('prop_from_useTooltip'), 'wrapper prop from useTooltip').to.be.true;
