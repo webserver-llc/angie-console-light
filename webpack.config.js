@@ -19,11 +19,11 @@ const ENV = process.env.NODE_ENV || 'development';
 const PRODUCTION_BUILD = ENV === 'production';
 const FILE_NAME = process.env.FILE_NAME || 'dashboard_dev';
 const DASHBOARD_TYPE = process.env.DASHBOARD_TYPE || 'dashboard';
-const PROXY_TARGET = process.env.PROXY_TARGET || 'https://demo.nginx.com';
+const PROXY_TARGET = process.env.PROXY_TARGET || 'http://debian11-2023071301-malyakin-1.chi.wbsrv.ru';
 
 const plugins = [
     new HtmlWebpackPlugin({
-        title: 'NGINX Plus Dashboard',
+        title: 'Angie Dashboard',
         filename: `${FILE_NAME}.html`,
         template: 'src/index.ejs',
         ...(
