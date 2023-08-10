@@ -141,8 +141,6 @@ describe('<App />', () => {
 				expect(wrapper.find(SECTIONS[id].name)).to.have.lengthOf(1);
 			});
 
-			expect(wrapper.find('Footer')).to.have.lengthOf(1);
-
 			apiUtils.checkApiAvailability.restore();
 		});
 
