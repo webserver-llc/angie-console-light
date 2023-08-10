@@ -12,7 +12,6 @@ import createHistory from 'history/createBrowserHistory';
 
 import styles from './style.css';
 import Header from './components/header/header.jsx';
-import Footer from './components/footer/footer.jsx';
 import Loader from './components/loader/loader.jsx';
 import Index from './components/pages/index/index.jsx';
 import ServerZones from './components/pages/serverzones/index.jsx';
@@ -133,8 +132,6 @@ export class App extends React.Component {
 
 					{ content }
 				</div>
-
-				<Footer />
 			</div>
 		);
 	}
