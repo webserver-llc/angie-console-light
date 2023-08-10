@@ -12,16 +12,8 @@ import { API_PATH } from '../constants.js';
 
 import calculateServerZones from '../calculators/serverzones.js';
 import calculateLocationZones from '../calculators/locationzones.js';
-import calculateUpstreams from '../calculators/upstreams.js';
-import { zones as calculateStreamZones, upstreams as calculateStreamUpstreams } from '../calculators/stream.js';
-import calculateCaches from '../calculators/caches.js';
-import calculateSharedZones from '../calculators/sharedzones.js';
 import calculateConnections from '../calculators/connections.js';
-import calculateSSL from '../calculators/ssl.js';
-import calculateRequests from '../calculators/requests.js';
-import calculateZoneSync from '../calculators/zonesync.js';
-import calculateResolvers from '../calculators/resolvers.js';
-import calculateWorkers from '../calculators/workers.js';
+import calculateSharedZones from '../calculators/sharedzones.js';
 
 const api = new Proxy({}, {
 	get(target, pathStart) {
@@ -57,9 +49,9 @@ export const checkWritePermissions = (sendCredentials = false) =>
 export const isWritable = () => apiWritePermissions;
 
 export const checkApiAvailability = () => {
-	const nginxApi = api.nginx;
+	const angieApi = api.angie;
 
-	return nginxApi.get().catch((err) => {
+	return angieApi.get().catch((err) => {
 		if (err.status === 401) {
 			throw { type: 'basic_auth' };
 		}
@@ -80,20 +72,11 @@ export const initialLoad = ({
 	availableApiEndpoints
 }) => {
 	const apis = [
-		api.nginx,
-		api.connections.process(calculateConnections),
-		api.ssl.process(calculateSSL),
-		api.http.requests.process(calculateRequests),
+		api.angie,
 		api.http.server_zones.process(calculateServerZones),
 		api.http.location_zones.process(calculateLocationZones),
-		api.http.upstreams.process(calculateUpstreams),
-		api.stream.server_zones.process(calculateStreamZones),
-		api.stream.upstreams.process(calculateStreamUpstreams),
-		api.http.caches.process(calculateCaches),
+		api.connections.process(calculateConnections),
 		api.slabs.process(calculateSharedZones),
-		api.stream.zone_sync.process(calculateZoneSync),
-		api.resolvers.process(calculateResolvers),
-		api.workers.process(calculateWorkers),
 	];
 
 	return window.fetch(`${API_PATH}/`)
@@ -104,8 +87,7 @@ export const initialLoad = ({
 						if (data) {
 							availableApiEndpoints.fillFirstLevel(data);
 						}
-					})
-					.catch(() => {});
+					});
 			}
 		})
 		.then(() =>
@@ -128,25 +110,22 @@ export const initialLoad = ({
 						: Promise.resolve()
 				)
 			)
-				.then(() =>
-					new Promise((resolve) => {
-						let called = false;
+				.then(() => new Promise((resolve) => {
+					let called = false;
+					subscribe(apis, () => {
+						// FIXME: This callback should be called just once for this bulk of apis
 
-						subscribe(apis, () => {
-							// FIXME: This callback should be called just once for this bulk of apis
+						if (called) {
+							return;
+						}
 
-							if (called) {
-								return;
-							}
+						called = true;
+						unsubscribe(apis);
 
-							called = true;
-							unsubscribe(apis);
-
-							resolve();
-						});
-					})
-				)
-		);
+						resolve();
+					});
+				})
+				));
 };
 
 export const apiUtils = {
