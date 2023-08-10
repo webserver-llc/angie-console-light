@@ -1,0 +1,24 @@
+.release {
+	display: inline-block;
+	margin-bottom: 12px;
+	font-weight: bold;
+}
+
+.release,
+.release:visited {
+	color: #2671c6;
+}
+
+.table th,
+.table td {
+	padding: 0 6px 8px 0;
+}
+
+.table td {
+	font-weight: bold;
+}
+
+.uptime {
+	border-bottom: 2px dotted #000;
+	cursor: default;
+}
