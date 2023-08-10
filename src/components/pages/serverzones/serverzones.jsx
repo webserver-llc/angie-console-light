@@ -92,8 +92,8 @@ export default class StreamZones extends SortableTable {
 								return (<tr>
 									<td className={ status } />
 									<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ name }</td>
-									<td>{ zone.processing }</td>
-									<td>{ zone.requests }</td>
+									<td>{ zone.requests.processing }</td>
+									<td>{ zone.requests.total }</td>
 									<td className={ styles.bdr }>{ zone.zone_req_s }</td>
 									<td>{ tableUtils.responsesTextWithTooltip(zone.responses['1xx'], codes, '1') }</td>
 									<td>{ tableUtils.responsesTextWithTooltip(zone.responses['2xx'], codes, '2') }</td>
@@ -101,12 +101,12 @@ export default class StreamZones extends SortableTable {
 									<td className={ `${ styles.flash }${ zone['4xxChanged'] ? (' ' + styles['red-flash']) : '' }` }>
 										{
 											tableUtils.responsesTextWithTooltip(
-												zone.responses['4xx'] + zone.discarded,
+												zone.responses['4xx'] + zone.requests.discarded,
 												{
 													...(codes || {
 														'4xx': zone.responses['4xx']
 													}),
-													'499/444/408': zone.discarded,
+													'499/444/408': zone.requests.discarded,
 												},
 												'4'
 											)
