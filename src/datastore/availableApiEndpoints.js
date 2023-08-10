@@ -32,7 +32,7 @@ export default class AvailableApiEndpoints {
 	}
 
 	fillThirdLevel(secondLevelEndpoint, endpoints) {
-		this.secondLevel[secondLevelEndpoint] = [ ...endpoints ];
+		this.secondLevel[secondLevelEndpoint] = Object.keys(endpoints);
 	}
 
 	secondLevelIncludes(endpoint) {
@@ -47,6 +47,6 @@ export default class AvailableApiEndpoints {
 	}
 
 	fillFirstLevel(endpoints) {
-		this.firstLevel = [ ...endpoints ];
+		this.firstLevel = Object.keys(endpoints);
 	}
 }

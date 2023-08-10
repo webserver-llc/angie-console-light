@@ -64,7 +64,7 @@ describe('Datastore AvailableApiEndpoints', () => {
 	it('fillThirdLevel()', () => {
 		const instance = new AvailableApiEndpoints();
 
-		instance.fillThirdLevel('stream', ['test_1', 'test_2']);
+		instance.fillThirdLevel('stream', { 'test_1': {}, 'test_2': {} });
 
 		expect(instance.secondLevel.stream, 'secondLevel.stream').to.be.deep.equal(
 			['test_1', 'test_2']
@@ -106,7 +106,7 @@ describe('Datastore AvailableApiEndpoints', () => {
 	it('fillFirstLevel', () => {
 		const instance = new AvailableApiEndpoints();
 
-		instance.fillFirstLevel(['http', 'stream']);
+		instance.fillFirstLevel({ 'http': {}, 'stream': {} });
 
 		expect(instance.firstLevel, 'firstLevel').to.be.deep.equal(
 			['http', 'stream']
