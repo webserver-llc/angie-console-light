@@ -14,7 +14,7 @@
 
 .logo {
 	composes: logo from '../../style.css';
-	width: 180px;
+	width: 170px;
 	height: 44px;
 	background-size: contain;
 	padding: 8px;
