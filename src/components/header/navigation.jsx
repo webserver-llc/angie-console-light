@@ -110,9 +110,8 @@ export class Navigation extends React.Component {
 						statuses.server_zones.ready ||
 						statuses.location_zones.ready
 					);
-				} else {
-					return statuses[statusKey] && statuses[statusKey].ready;
 				}
+				return statuses[statusKey] && statuses[statusKey].ready;
 			})
 			.map(section => {
 				let status = '';
@@ -135,7 +134,7 @@ export class Navigation extends React.Component {
 					}
 
 					statusIcon = (
-						<Icon className={ styles.status } type={status} />
+						<Icon className={styles.status} type={status} />
 					);
 				}
 
@@ -147,29 +146,32 @@ export class Navigation extends React.Component {
 					>
 						{ statusIcon }
 
-						<span className={ styles.anchor }>{section.title}</span>
+						<span className={styles.anchor}>{section.title}</span>
 					</a>
 				);
 			});
 
-		return (<div className={`${ styles.nav } ${tabs.length > 6 ? styles['nav-wide'] : styles['nav-small']}`}>
-			<div className={ styles['nav-flex'] }>
-				{ tabs }
+		return (
+			<div className={`${ styles.nav } ${tabs.length > 6 ? styles['nav-wide'] : styles['nav-small']}`}>
+				<div className={styles['nav-flex']}>
+					{ tabs }
+				</div>
+
+				<span className={styles.settings} onClick={this.openSettings}>
+					<Icon type="gear" />
+				</span>
+
+				{
+					this.state.settings ? (
+						<Settings
+							statuses={statuses}
+							close={this.closeSettings}
+						/>
+					)
+						: null
+				}
 			</div>
-
-			<span className={ styles.settings } onClick={this.openSettings}>
-				<Icon type="gear" />
-			</span>
-
-			{
-				this.state.settings ?
-					<Settings
-						statuses={ statuses }
-						close={ this.closeSettings }
-					/>
-				: null
-			}
-		</div>);
+		);
 	}
 }
 
