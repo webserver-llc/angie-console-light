@@ -312,283 +312,258 @@ describe('Api', () => {
 			});
 		});
 
-		// it('Handles errors', done => {
-		// 	let letFetchSuccess = false;
-		// 	const _secondLevelEndpoints = ['http', 'stream'];
-		// 	const responses = [
-		// 		['ssl', ..._secondLevelEndpoints],
-		// 		['server_zones', 'location_zones']
-		// 	];
-		// 	let fetchCall = 0;
-		//
-		// 	window.fetch = spy(path =>
-		// 		Promise.resolve({
-		// 			status: letFetchSuccess ?
-		// 					path === `${ API_PATH }/${ responses[0][2] }/` ?
-		// 						400
-		// 					: 200
-		// 				: 400,
-		// 			json(){
-		// 				return Promise.resolve(responses[fetchCall++]);
-		// 			}
-		// 		})
-		// 	);
-		//
-		// 	spy(datastore.availableApiEndpoints, 'fillFirstLevel');
-		// 	spy(datastore.availableApiEndpoints, 'fillThirdLevel');
-		//
-		// 	const _done = error => {
-		// 		datastore.availableApiEndpoints.fillFirstLevel.restore();
-		// 		datastore.availableApiEndpoints.fillThirdLevel.restore();
-		//
-		// 		window.fetch = _fetchInner;
-		//
-		// 		done(error);
-		// 	};
-		//
-		// 	Api.initialLoad(datastore).then(() => {
-		// 		assert(window.fetch.calledOnce, '"window.fetch" is expected to be called one time');
-		// 		assert(
-		// 			datastore.availableApiEndpoints.getFirstLevel().length === 0,
-		// 			'No available endpoints should be on first level'
-		// 		);
-		// 		assert(
-		// 			datastore.availableApiEndpoints.fillFirstLevel.notCalled,
-		// 			'"fillFirstLevel" should not be called'
-		// 		);
-		// 		assert(
-		// 			datastore.availableApiEndpoints.fillThirdLevel.notCalled,
-		// 			'"fillThirdLevel" should not be called'
-		// 		);
-		// 		assert(
-		// 			datastore.subscribe.calledOnce,
-		// 			'"subscribe" should be called even if error occurs'
-		// 		);
-		//
-		// 		window.fetch.resetHistory();
-		// 		datastore.availableApiEndpoints.fillFirstLevel.resetHistory();
-		// 		datastore.availableApiEndpoints.fillThirdLevel.resetHistory();
-		// 		datastore.subscribe.resetHistory();
-		// 		letFetchSuccess = true;
-		//
-		// 		Api.initialLoad(datastore).then(() => {
-		// 			assert(window.fetch.calledthrice, '"window.fetch" is expected to be called three times');
-		//
-		// 			assert(
-		// 				datastore.availableApiEndpoints.fillFirstLevel.calledOnce,
-		// 				'"fillFirstLevel" should be called once'
-		// 			);
-		// 			assert(
-		// 				datastore.availableApiEndpoints.fillFirstLevel.calledWithExactly(responses[0]),
-		// 				'Wrong arguments of "fillFirstLevel" call'
-		// 			);
-		//
-		// 			assert(
-		// 				window.fetch.secondCall.calledWithExactly(`${ API_PATH }/${ _secondLevelEndpoints[0] }/`),
-		// 				'Unexpected path of "window.fetch" second call'
-		// 			);
-		// 			assert(
-		// 				datastore.availableApiEndpoints.fillThirdLevel.calledOnce,
-		// 				'"fillThirdLevel" should be called one time'
-		// 			);
-		// 			assert(
-		// 				datastore.availableApiEndpoints.fillThirdLevel.calledWithExactly(_secondLevelEndpoints[0], responses[1]),
-		// 				'Wrong arguments of "fillThirdLevel" call'
-		// 			);
-		//
-		// 			assert(
-		// 				window.fetch.thirdCall.calledWithExactly(`${ API_PATH }/${ _secondLevelEndpoints[1] }/`),
-		// 				'Unexpected path of "window.fetch" second call'
-		// 			);
-		//
-		// 			assert(
-		// 				datastore.subscribe.calledOnce,
-		// 				'"subscribe" should be called even if error occurs'
-		// 			);
-		// 		}).then(_done, _done);
-		// 	}).catch(_done);
-		// });
+		it('Handles errors', done => {
+			let letFetchSuccess = false;
+			const _secondLevelEndpoints = { 'http': {}, 'stream': {}};
+			const _secondLevelEndpointsAsKeys = Object.keys(_secondLevelEndpoints);
+			const responses = [
+				{'ssl': {}, ..._secondLevelEndpoints},
+				{'server_zones': {}, 'location_zones': {}}
+			];
+			let fetchCall = 0;
 
-		// it('catches json() errors', done => {
-		// 	window.fetch = path => Promise.resolve({
-		// 		status: 200,
-		// 		json(){
-		// 			return Promise.reject();
-		// 		}
-		// 	});
-		//
-		// 	Api.initialLoad(datastore).then(done);
-		// });
-		//
-		// it('Defines available endpoints', done => {
-		// 	const _secondLevelEndpoints = ['http', 'stream'];
-		// 	const responses = [
-		// 		['ssl', ..._secondLevelEndpoints],
-		// 		['server_zones', 'location_zones'],
-		// 		['upstreams']
-		// 	];
-		// 	let fetchCall = 0;
-		//
-		// 	window.fetch = spy(path =>
-		// 		Promise.resolve({
-		// 			status: 200,
-		// 			json(){
-		// 				return Promise.resolve(responses[fetchCall++]);
-		// 			}
-		// 		})
-		// 	);
-		//
-		// 	const _done = error => {
-		// 		window.fetch = _fetchInner;
-		//
-		// 		done(error);
-		// 	};
-		//
-		// 	Api.initialLoad(datastore).then(() => {
-		// 		const firstLevelEndpoints = datastore.availableApiEndpoints.getFirstLevel();
-		// 		const secondLevelEndpoints = datastore.availableApiEndpoints.getSecondLevel();
-		//
-		// 		assert(
-		// 			window.fetch.callCount === 1 + _secondLevelEndpoints.length,
-		// 			'"window.fetch" should be called 3 times'
-		// 		);
-		//
-		// 		// 1st API call
-		//
-		// 		assert(
-		// 			window.fetch.firstCall.calledWithExactly(`${ API_PATH }/`),
-		// 			`Wrong path was provided to "window.fetch". Expected "${ API_PATH }/"`
-		// 		);
-		// 		assert(
-		// 			firstLevelEndpoints.length === responses[0].length,
-		// 			'First level of available API endpoints has unexpected length'
-		// 		);
-		//
-		// 		firstLevelEndpoints.forEach(ep => {
-		// 			assert(
-		// 				responses[0].includes(ep),
-		// 				`Unexpected "${ ep }" endpoint in first level of available API endpoints`
-		// 			);
-		// 		});
-		//
-		// 		// API calls for 2nd level endpoints
-		//
-		// 		_secondLevelEndpoints.forEach((ep, _i) => {
-		// 			const i = _i + 1;
-		// 			const call = window.fetch.getCall(i);
-		//
-		// 			call.calledWithExactly(
-		// 				`${ API_PATH }/${ ep }/`,
-		// 				`Call #${ i } of "window.fetch" was expected to be for "${ API_PATH }/${ ep }/"`
-		// 			);
-		//
-		// 			const endpoints = datastore.availableApiEndpoints.getThirdLevel(ep);
-		//
-		// 			assert(
-		// 				endpoints.length === responses[i].length,
-		// 				`Third level of available API endpoints for "${ ep }" has unexpected length`
-		// 			);
-		//
-		// 			endpoints.forEach(_ep => {
-		// 				assert(
-		// 					responses[i].includes(_ep),
-		// 					`Unexpected "${ _ep }" endpoint in third level for "${ ep }" endpoint`
-		// 				);
-		// 			});
-		// 		});
-		// 	}).then(_done, _done);
-		// });
-		//
-		// it('subscribe() and it\'s callback', done => {
-		// 	const apisToSubscribe = [{
-		// 			path: 'nginx'
-		// 		}, {
-		// 			path: 'connections',
-		// 			processor: calculateConnections
-		// 		}, {
-		// 			path: 'ssl',
-		// 			processor: calculateSSL
-		// 		}, {
-		// 			path: 'http/requests',
-		// 			processor: calculateRequests
-		// 		}, {
-		// 			path: 'http/server_zones',
-		// 			processor: calculateServerZones
-		// 		}, {
-		// 			path: 'http/location_zones',
-		// 			processor: calculateLocationZones
-		// 		}, {
-		// 			path: 'http/upstreams',
-		// 			processor: calculateUpstreams
-		// 		}, {
-		// 			path: 'stream/server_zones',
-		// 			processor: calculateStreamZones
-		// 		}, {
-		// 			path: 'stream/upstreams',
-		// 			processor: calculateStreamUpstreams
-		// 		}, {
-		// 			path: 'http/caches',
-		// 			processor: calculateCaches
-		// 		}, {
-		// 			path: 'slabs',
-		// 			processor: calculateSharedZones
-		// 		}, {
-		// 			path: 'stream/zone_sync',
-		// 			processor: calculateZoneSync
-		// 		}, {
-		// 			path: 'resolvers',
-		// 			processor: calculateResolvers
-		// 		}, {
-		// 			path: 'workers',
-		// 			processor: calculateWorkers
-		// 		}
-		// 	];
-		//
-		// 	Api.initialLoad(datastore).then(() => {
-		// 		assert(datastore.subscribe.calledOnce, '"subscribe" should be called once');
-		// 		assert(
-		// 			datastore.subscribe.args[0][0].length === apisToSubscribe.length,
-		// 			'Unexpected number of apis to subscribe'
-		// 		);
-		//
-		// 		datastore.subscribe.args[0][0].forEach((proxy, i) => {
-		// 			assert(proxy instanceof ApiProxy, 'All apis to subscribe are expected to be an "ApiProxy" instance');
-		// 			assert(proxy.toString() === apisToSubscribe[i].path, `Unexpected path for api #${ i } to subscribe`);
-		//
-		// 			if (apisToSubscribe[i].processor) {
-		// 				assert(
-		// 					proxy.processors[0] === apisToSubscribe[i].processor,
-		// 					`Unexpected processor for "${ proxy.toString() }" api #${ i } to subscribe`
-		// 				);
-		// 			}
-		// 		});
-		//
-		// 		datastore.subscribe.args[0][1]();
-		//
-		// 		assert(datastore.unsubscribe.calledOnce, '"unsubscribe" should be called once');
-		// 		assert(
-		// 			datastore.unsubscribe.args[0][0].length === apisToSubscribe.length,
-		// 			'Unexpected number of apis to unsubscribe'
-		// 		);
-		//
-		// 		datastore.unsubscribe.args[0][0].forEach((proxy, i) => {
-		// 			assert(
-		// 				proxy instanceof ApiProxy,
-		// 				'All apis to unsubscribe are expected to be an "ApiProxy" instance'
-		// 			);
-		// 			assert(
-		// 				proxy.toString() === apisToSubscribe[i].path,
-		// 				`Unexpected path for api #${ i } to unsubscribe`
-		// 			);
-		//
-		// 			if (apisToSubscribe[i].processor) {
-		// 				assert(
-		// 					proxy.processors[0] === apisToSubscribe[i].processor,
-		// 					`Unexpected processor for "${ proxy.toString() }" api #${ i } to unsubscribe`
-		// 				);
-		// 			}
-		// 		});
-		// 	}).then(done);
-		// });
+			window.fetch = spy(path =>
+				Promise.resolve({
+					status: letFetchSuccess ?
+							path === `${ API_PATH }/${ responses[0][2] }/` ?
+								400
+							: 200
+						: 400,
+					json(){
+						return Promise.resolve(responses[fetchCall++]);
+					}
+				})
+			);
+
+			spy(datastore.availableApiEndpoints, 'fillFirstLevel');
+			spy(datastore.availableApiEndpoints, 'fillThirdLevel');
+
+			const _done = error => {
+				datastore.availableApiEndpoints.fillFirstLevel.restore();
+				datastore.availableApiEndpoints.fillThirdLevel.restore();
+
+				window.fetch = _fetchInner;
+
+				done(error);
+			};
+
+			Api.initialLoad(datastore).then(() => {
+				assert(window.fetch.calledOnce, '"window.fetch" is expected to be called one time');
+				assert(
+					datastore.availableApiEndpoints.getFirstLevel().length === 0,
+					'No available endpoints should be on first level'
+				);
+				assert(
+					datastore.availableApiEndpoints.fillFirstLevel.notCalled,
+					'"fillFirstLevel" should not be called'
+				);
+				assert(
+					datastore.availableApiEndpoints.fillThirdLevel.notCalled,
+					'"fillThirdLevel" should not be called'
+				);
+				assert(
+					datastore.subscribe.calledOnce,
+					'"subscribe" should be called even if error occurs'
+				);
+
+				window.fetch.resetHistory();
+				datastore.availableApiEndpoints.fillFirstLevel.resetHistory();
+				datastore.availableApiEndpoints.fillThirdLevel.resetHistory();
+				datastore.subscribe.resetHistory();
+				letFetchSuccess = true;
+
+				Api.initialLoad(datastore).then(() => {
+					assert(window.fetch.calledThrice, '"window.fetch" is expected to be called three times');
+
+					assert(
+						datastore.availableApiEndpoints.fillFirstLevel.calledOnce,
+						'"fillFirstLevel" should be called once'
+					);
+					assert(
+						datastore.availableApiEndpoints.fillFirstLevel.calledWithExactly(responses[0]),
+						'Wrong arguments of "fillFirstLevel" call'
+					);
+
+					assert(
+						window.fetch.secondCall.calledWithExactly(`${ API_PATH }/${ _secondLevelEndpointsAsKeys[0] }/`),
+						'Unexpected path of "window.fetch" second call'
+					);
+					assert(
+						datastore.availableApiEndpoints.fillThirdLevel.calledOnce,
+						'"fillThirdLevel" should be called one time'
+					);
+					assert(
+						datastore.availableApiEndpoints.fillThirdLevel.calledWithExactly(_secondLevelEndpointsAsKeys[0], responses[1]),
+						'Wrong arguments of "fillThirdLevel" call'
+					);
+
+					assert(
+						window.fetch.thirdCall.calledWithExactly(`${ API_PATH }/${ _secondLevelEndpointsAsKeys[1] }/`),
+						'Unexpected path of "window.fetch" second call'
+					);
+
+					assert(
+						datastore.subscribe.calledOnce,
+						'"subscribe" should be called even if error occurs'
+					);
+				}).then(_done, _done);
+			}).catch(_done);
+		});
+
+		it('catches json() errors', done => {
+			window.fetch = path => Promise.resolve({
+				status: 200,
+				json(){
+					return Promise.reject();
+				}
+			});
+
+			Api.initialLoad(datastore).then(done);
+		});
+
+		it('Defines available endpoints', done => {
+			const _secondLevelEndpoints = { 'http': {}, 'stream': {} };
+			const _secondLevelEndpointsAsKeys = Object.keys(_secondLevelEndpoints);
+			const responses = [
+				{'ssl': {}, ..._secondLevelEndpoints},
+				{'server_zones': {}, 'location_zones': {}},
+				{'upstreams': {}}
+			];
+			let fetchCall = 0;
+
+			window.fetch = spy(path =>
+				Promise.resolve({
+					status: 200,
+					json(){
+						return Promise.resolve(responses[fetchCall++]);
+					}
+				})
+			);
+
+			const _done = error => {
+				window.fetch = _fetchInner;
+
+				done(error);
+			};
+
+			Api.initialLoad(datastore).then(() => {
+				const firstLevelEndpoints = datastore.availableApiEndpoints.getFirstLevel();
+				const secondLevelEndpoints = datastore.availableApiEndpoints.getSecondLevel();
+
+				assert(
+					window.fetch.callCount === 1 + _secondLevelEndpointsAsKeys.length,
+					'"window.fetch" should be called 3 times'
+				);
+
+				// 1st API call
+
+				assert(
+					window.fetch.firstCall.calledWithExactly(`${ API_PATH }/`),
+					`Wrong path was provided to "window.fetch". Expected "${ API_PATH }/"`
+				);
+				assert(
+					firstLevelEndpoints.length === Object.keys(responses[0]).length,
+					'First level of available API endpoints has unexpected length'
+				);
+
+				firstLevelEndpoints.forEach(ep => {
+					assert(
+						Object.keys(responses[0]).includes(ep),
+						`Unexpected "${ ep }" endpoint in first level of available API endpoints`
+					);
+				});
+
+				// API calls for 2nd level endpoints
+
+				_secondLevelEndpointsAsKeys.forEach((ep, _i) => {
+					const i = _i + 1;
+					const call = window.fetch.getCall(i);
+
+					call.calledWithExactly(
+						`${ API_PATH }/${ ep }/`,
+						`Call #${ i } of "window.fetch" was expected to be for "${ API_PATH }/${ ep }/"`
+					);
+
+					const endpoints = datastore.availableApiEndpoints.getThirdLevel(ep);
+
+					assert(
+						endpoints.length === Object.keys(responses[i]).length,
+						`Third level of available API endpoints for "${ ep }" has unexpected length`
+					);
+
+					endpoints.forEach(_ep => {
+						assert(
+							Object.keys(responses[i]).includes(_ep),
+							`Unexpected "${ _ep }" endpoint in third level for "${ ep }" endpoint`
+						);
+					});
+				});
+			}).then(_done, _done);
+		});
+
+		it('subscribe() and it\'s callback', done => {
+			const apisToSubscribe = [{
+					path: 'angie'
+				}, {
+					path: 'connections',
+					processor: calculateConnections
+				}, {
+					path: 'http/server_zones',
+					processor: calculateServerZones
+				}, {
+					path: 'http/location_zones',
+					processor: calculateLocationZones
+				}, {
+					path: 'slabs',
+					processor: calculateSharedZones
+				}
+			];
+
+			Api.initialLoad(datastore).then(() => {
+				assert(datastore.subscribe.calledOnce, '"subscribe" should be called once');
+				assert(
+					datastore.subscribe.args[0][0].length === apisToSubscribe.length,
+					'Unexpected number of apis to subscribe'
+				);
+
+				datastore.subscribe.args[0][0].forEach((proxy, i) => {
+					assert(proxy instanceof ApiProxy, 'All apis to subscribe are expected to be an "ApiProxy" instance');
+					assert(proxy.toString() === apisToSubscribe[i].path, `Unexpected path for api #${ i } to subscribe`);
+
+					if (apisToSubscribe[i].processor) {
+						assert(
+							proxy.processors[0] === apisToSubscribe[i].processor,
+							`Unexpected processor for "${ proxy.toString() }" api #${ i } to subscribe`
+						);
+					}
+				});
+
+				datastore.subscribe.args[0][1]();
+
+				assert(datastore.unsubscribe.calledOnce, '"unsubscribe" should be called once');
+				assert(
+					datastore.unsubscribe.args[0][0].length === apisToSubscribe.length,
+					'Unexpected number of apis to unsubscribe'
+				);
+
+				datastore.unsubscribe.args[0][0].forEach((proxy, i) => {
+					assert(
+						proxy instanceof ApiProxy,
+						'All apis to unsubscribe are expected to be an "ApiProxy" instance'
+					);
+					assert(
+						proxy.toString() === apisToSubscribe[i].path,
+						`Unexpected path for api #${ i } to unsubscribe`
+					);
+
+					if (apisToSubscribe[i].processor) {
+						assert(
+							proxy.processors[0] === apisToSubscribe[i].processor,
+							`Unexpected processor for "${ proxy.toString() }" api #${ i } to unsubscribe`
+						);
+					}
+				});
+			}).then(done);
+		});
 	});
 });

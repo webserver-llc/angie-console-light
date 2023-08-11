@@ -73,9 +73,9 @@ export const initialLoad = ({
 }) => {
 	const apis = [
 		api.angie,
+		api.connections.process(calculateConnections),
 		api.http.server_zones.process(calculateServerZones),
 		api.http.location_zones.process(calculateLocationZones),
-		api.connections.process(calculateConnections),
 		api.slabs.process(calculateSharedZones),
 	];
 
@@ -87,7 +87,8 @@ export const initialLoad = ({
 						if (data) {
 							availableApiEndpoints.fillFirstLevel(data);
 						}
-					});
+					})
+					.catch(() => {});
 			}
 		})
 		.then(() =>
