@@ -34,21 +34,9 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 		);
 		let children = wrapper.children();
 
-		expect(children, 'child length').to.have.lengthOf(2);
+		expect(children, 'child length').to.have.lengthOf(1);
 		expect(children.at(0).prop('className'), 'child 1 className').to.be.equal(tooltipStyles['row']);
-		expect(children.at(0).text(), 'child 1 text').to.be.equal('Last (re)load: test_formatDate_result');
-		expect(utils.formatDate.calledOnce, 'formatDate called once').to.be.true;
-		expect(utils.formatDate.args[0][0], 'formatDate arg').to.be.equal(1599571723125);
-		expect(children.at(1).prop('className'), 'child 2 className').to.be.equal(tooltipStyles['row']);
-		expect(children.at(1).text(), 'child 2 text').to.be.equal('Reloads: 11');
-
-		data.processes = { respawned: 20 };
-		wrapper.setProps({ data });
-		children = wrapper.children();
-
-		expect(children, 'child length').to.have.lengthOf(3);
-		expect(children.at(2).prop('className'), 'child 3 className').to.be.equal(tooltipStyles['row']);
-		expect(children.at(2).text(), 'child 3 text').to.be.equal('Respawned: 20');
+		expect(children.at(0).text(), 'child 1 text').to.be.equal('Reloads: 11');
 
 		utils.formatDate.restore();
 		wrapper.unmount();
@@ -57,6 +45,7 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 
 describe('<AboutAngie IndexPage />', () => {
 	it('render()', () => {
+		stub(Date, 'now').callsFake(() => 1599571723125);
 		stub(Date, 'parse').callsFake(a => a);
 		stub(utils, 'formatUptime').callsFake(() => 'test_formatUptime_result');
 		stub(tooltips, 'useTooltip').callsFake(() => ({
@@ -68,9 +57,7 @@ describe('<AboutAngie IndexPage />', () => {
 				build: 1,
 				version: '0.0.1',
 				address: 'localhost',
-				ppid: 12345,
-				timestamp: 1599571723125,
-				load_timestamp: 1599571720025
+				load_time: 1599571720025
 			}
 		};
 		const wrapper = shallow(
@@ -94,10 +81,9 @@ describe('<AboutAngie IndexPage />', () => {
 
 		expect(table, 'table length').to.have.lengthOf(1);
 		expect(table.prop('className'), 'table className').to.be.equal(styles['table']);
-		expect(table.childAt(0).childAt(1).text(), 'table, row 1, cell 2 (nginx address').to.be.equal('localhost');
-		expect(table.childAt(1).childAt(1).text(), 'table, row 2, cell 2 (nginx ppid').to.be.equal('12345');
+		expect(table.childAt(0).childAt(1).text(), 'table, row 1, cell 2 (angie address').to.be.equal('localhost');
 
-		const tooltip = table.childAt(2).childAt(1).childAt(0);
+		const tooltip = table.childAt(1).childAt(1).childAt(0);
 
 		expect(tooltip.prop('className'), 'tooltip className').to.be.equal(styles['uptime']);
 		expect(tooltip.prop('prop_from_useTooltip'), 'tooltip prop from useTooltip').to.be.true;
@@ -107,12 +93,12 @@ describe('<AboutAngie IndexPage />', () => {
 		expect(tooltips.useTooltip.args[0][0].props.data, 'useTooltip arg prop')
 			.to.be.deep.equal(data);
 		expect(tooltip.text(), 'tooltip text').to.be.equal('test_formatUptime_result');
-		expect(Date.parse.calledTwice, 'formatUptime called twice').to.be.true;
-		expect(Date.parse.args[0][0], 'formatUptime call 1, arg').to.be.equal(1599571723125);
-		expect(Date.parse.args[1][0], 'formatUptime call 2, arg').to.be.equal(1599571720025);
+		expect(Date.parse.calledOnce, 'formatUptime called once').to.be.true;
+		expect(Date.parse.args[0][0], 'formatUptime call 1, arg').to.be.equal(1599571720025);
 		expect(utils.formatUptime.calledOnce, 'formatUptime called once').to.be.true;
 		expect(utils.formatUptime.args[0][0], 'formatUptime arg').to.be.equal(3100);
 
+		Date.now.restore();
 		Date.parse.restore();
 		utils.formatUptime.restore();
 		tooltips.useTooltip.restore();

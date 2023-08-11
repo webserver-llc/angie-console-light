@@ -18,9 +18,7 @@ import tooltipStyles from '../../../tooltip/style.css';
 export const AboutAngieTooltip = ({ data }) => {
 	return (
 		<div>
-			<div className={ tooltipStyles.row }>Last (re)load: {utils.formatDate(data.angie.load_timestamp)}</div>
 			<div className={ tooltipStyles.row }>Reloads: {data.angie.generation}</div>
-			{ data.processes && <div className={ tooltipStyles.row }>Respawned: {data.processes.respawned}</div> }
 		</div>
 	);
 };
@@ -40,14 +38,10 @@ export class AboutAngie extends React.Component {
 					<td>{angie.address}</td>
 				</tr>
 				<tr>
-					<th>PID</th>
-					<td>{angie.ppid}</td>
-				</tr>
-				<tr>
-					<th>Uptime</th>
+					<th>Last reload</th>
 					<td>
 						<span className={ styles.uptime } {...tooltips.useTooltip(<AboutAngieTooltip data={this.props.data} />)}>
-							{ utils.formatUptime(Date.parse(angie.timestamp) - Date.parse(angie.load_timestamp)) }
+							{ utils.formatUptime(Date.now() - Date.parse(angie.load_time)) }
 						</span>
 					</td>
 				</tr>
