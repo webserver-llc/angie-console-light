@@ -16,5 +16,5 @@ export const DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT = 70;
 export const DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT = 3;
 
 export const API_CURRENT_VERSION = 9;
-export const API_PREFIX = '/status';
+export const API_PREFIX = '/api';
 export const API_PATH = `${API_PREFIX}`;
