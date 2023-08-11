@@ -20,26 +20,12 @@ describe('<Navigation />', () => {
 	const defaultStatuses = () => ({
 		server_zones: { ready: false },
 		location_zones: { ready: false },
-		upstreams: { ready: false },
-		tcp_zones: { ready: false },
-		tcp_upstreams: { ready: false },
-		caches: { ready: false },
 		shared_zones: { ready: false },
-		zone_sync: { ready: false },
-		resolvers: { ready: false },
-		workers: { ready: false },
 	});
 	const readyStatuses = () => ({
 		server_zones: { ready: true },
 		location_zones: { ready: true },
-		upstreams: { ready: true },
-		tcp_zones: { ready: true },
-		tcp_upstreams: { ready: true },
-		caches: { ready: true },
 		shared_zones: { ready: true },
-		zone_sync: { ready: true },
-		resolvers: { ready: true },
-		workers: { ready: true },
 	});
 
 	it('constructor()', () => {
@@ -147,11 +133,8 @@ describe('<Navigation />', () => {
 			wrapper.unmount();
 		});
 
-		it('tabs <= 6', () => {
+		it('tabs <= 1', () => {
 			const customStatuses = defaultStatuses();
-
-			customStatuses.zone_sync.ready = true;
-			customStatuses.resolvers.ready = true;
 
 			const wrapper = shallow(
 				<Navigation
@@ -164,22 +147,6 @@ describe('<Navigation />', () => {
 			expect(container.length, 'container length').to.be.equal(1);
 			expect(container.prop('className'), 'container small CN modifier').to.include(styles['nav-small']);
 			expect(container.prop('className'), 'container wide CN modifier').to.not.include(styles['nav-wide']);
-
-			wrapper.unmount();
-		});
-
-		it('tabs > 6', () => {
-			const wrapper = shallow(
-				<Navigation
-					statuses={ readyStatuses() }
-					hash="#"
-				/>
-			);
-			const container = wrapper.find(`.${ styles['nav'] }`);
-
-			expect(container.length, 'container length').to.be.equal(1);
-			expect(container.prop('className'), 'container small CN modifier').to.not.include(styles['nav-small']);
-			expect(container.prop('className'), 'container wide CN modifier').to.include(styles['nav-wide']);
 
 			wrapper.unmount();
 		});
@@ -254,43 +221,44 @@ describe('<Navigation />', () => {
 				wrapper.unmount();
 			});
 
-			it('all statuses', () => {
-				const customStatuses = readyStatuses();
-
-				customStatuses.server_zones.status = 'ok';
-				customStatuses.shared_zones.status = 'warning';
-				customStatuses.zone_sync.status = 'danger';
-				customStatuses.resolvers.status = 'ok';
-
-				const wrapper = shallow(
-					<Navigation
-						statuses={ customStatuses }
-						hash="#"
-					/>
-				);
-				const icons = wrapper.find(`.${ styles['nav-flex'] }`).find('Icon');
-
-				expect(icons.length, 'icons length').to.be.equal(4);
-
-				icons.forEach(icon => {
-					let statusKey = icon.parent().prop('href').substr(1);
-
-					if (statusKey === 'cluster') {
-						statusKey = 'zone_sync';
-					}
-
-					expect(icon.prop('className'), `icon className [${ statusKey }]`).to.be.equal(styles['status']);
-					expect(icon.prop('type'), `icon type [${ statusKey }]`).to.be.equal(
-						statusKey === 'shared_zones' ?
-							'warning'
-						: statusKey === 'zone_sync' ?
-							'danger'
-						: 'ok'
-					);
-				});
-
-				wrapper.unmount();
-			});
+			// TODO: Change after add other widgets
+			// it('all statuses', () => {
+			// 	const customStatuses = readyStatuses();
+			//
+			// 	customStatuses.server_zones.status = 'ok';
+			// 	customStatuses.shared_zones.status = 'warning';
+			// 	customStatuses.zone_sync.status = 'danger';
+			// 	customStatuses.resolvers.status = 'ok';
+			//
+			// 	const wrapper = shallow(
+			// 		<Navigation
+			// 			statuses={ customStatuses }
+			// 			hash="#"
+			// 		/>
+			// 	);
+			// 	const icons = wrapper.find(`.${ styles['nav-flex'] }`).find('Icon');
+			//
+			// 	expect(icons.length, 'icons length').to.be.equal(4);
+			//
+			// 	icons.forEach(icon => {
+			// 		let statusKey = icon.parent().prop('href').substr(1);
+			//
+			// 		if (statusKey === 'cluster') {
+			// 			statusKey = 'zone_sync';
+			// 		}
+			//
+			// 		expect(icon.prop('className'), `icon className [${ statusKey }]`).to.be.equal(styles['status']);
+			// 		expect(icon.prop('type'), `icon type [${ statusKey }]`).to.be.equal(
+			// 			statusKey === 'shared_zones' ?
+			// 				'warning'
+			// 			: statusKey === 'zone_sync' ?
+			// 				'danger'
+			// 			: 'ok'
+			// 		);
+			// 	});
+			//
+			// 	wrapper.unmount();
+			// });
 
 			it('statuses of server and location zones', () => {
 				const customStatuses = readyStatuses();

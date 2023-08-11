@@ -31,45 +31,10 @@ export const SECTIONS = [
 		statusKey: 'server_zones'
 	},
 	{
-		title: 'HTTP Upstreams',
-		hash: '#upstreams',
-		statusKey: 'upstreams'
-	},
-	{
-		title: 'TCP/UDP Zones',
-		hash: '#tcp_zones',
-		statusKey: 'tcp_zones'
-	},
-	{
-		title: 'TCP/UDP Upstreams',
-		hash: '#tcp_upstreams',
-		statusKey: 'tcp_upstreams'
-	},
-	{
-		title: 'Caches',
-		hash: '#caches',
-		statusKey: 'caches'
-	},
-	{
 		title: 'Shared Zones',
 		hash: '#shared_zones',
 		statusKey: 'shared_zones'
 	},
-	{
-		title: 'Cluster',
-		hash: '#cluster',
-		statusKey: 'zone_sync'
-	},
-	{
-		title: 'Resolvers',
-		hash: '#resolvers',
-		statusKey: 'resolvers'
-	},
-	{
-		title: 'Workers',
-		hash: '#workers',
-		statusKey: 'workers'
-	}
 ];
 
 export class Navigation extends React.Component {
@@ -178,14 +143,14 @@ export class Navigation extends React.Component {
 export default DataBinder(Navigation, [
 	api.http.server_zones.process(calculateServerZones),
 	api.http.location_zones.process(calculateLocationZones),
-	api.http.upstreams.process(calculateUpstreams),
-	api.stream.server_zones.process(calculateStreamZones),
-	api.stream.upstreams.process(calculateStreamUpstreams),
-	api.http.caches.process(calculateCaches),
+	// api.http.upstreams.process(calculateUpstreams),
+	// api.stream.server_zones.process(calculateStreamZones),
+	// api.stream.upstreams.process(calculateStreamUpstreams),
+	// api.http.caches.process(calculateCaches),
 	api.slabs.process(calculateSharedZones),
-	api.stream.zone_sync.process(calculateZoneSync),
-	api.resolvers.process(calculateResolvers),
-	api.workers.process(calculateWorkers),
+	// api.stream.zone_sync.process(calculateZoneSync),
+	// api.resolvers.process(calculateResolvers),
+	// api.workers.process(calculateWorkers),
 ], {
 	ignoreEmpty: true
 });
