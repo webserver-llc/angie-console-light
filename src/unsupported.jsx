@@ -21,7 +21,6 @@ export default class Unsupported extends React.Component {
 				<div className={ styles.content }>
 					<div className={ styles['error-block'] }>
 						<p>Unfortunately your browser is not supported, please use modern one.</p>
-						<p>For&nbsp;more information please refer to&nbsp;the&nbsp;following <a href="https://www.nginx.com/resources/admin-guide/monitoring/">documentation.</a></p>
 					</div>
 				</div>
 
