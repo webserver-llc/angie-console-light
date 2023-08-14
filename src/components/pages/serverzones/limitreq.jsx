@@ -12,18 +12,16 @@ import styles from '../../table/style.css';
 
 export const Colors = new Map([
 	['passed', '#4FA932'],
-	['delayed', '#EBC906'],
+	['skipped', '#EBC906'],
 	['rejected', '#FF2323'],
-	['delayed_dry_run', '#861DE3'],
-	['rejected_dry_run', '#000ADD']
+	['exhausted', '#861DE3']
 ]);
 
 export const Labels = new Map([
 	['passed', 'Passed'],
-	['delayed', 'Delayed'],
+	['skipped', 'Skipped'],
 	['rejected', 'Rejected'],
-	['delayed_dry_run', 'Delayed (dry_run)'],
-	['rejected_dry_run', 'Rejected (dry_run)']
+	['exhausted', 'Exhausted']
 ]);
 
 export default class LimitReq extends ChartsTable {
@@ -37,10 +35,9 @@ export default class LimitReq extends ChartsTable {
 				<th/>
 				<th>Zone</th>
 				<th>Passed</th>
-				<th>Delayed</th>
+				<th>Skipped</th>
 				<th>Rejected</th>
-				<th>Delayed (dry_run)</th>
-				<th>Rejected (dry_run)</th>
+				<th>Exhausted</th>
 			</tr>
 		);
 	}
@@ -88,10 +85,9 @@ export default class LimitReq extends ChartsTable {
 						</td>
 						<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ name }</td>
 						<td className={ styles.bdr }>{ zone.passed }</td>
-						<td className={ styles.bdr }>{ zone.delayed }</td>
+						<td className={ styles.bdr }>{ zone.skipped }</td>
 						<td className={ styles.bdr }>{ zone.rejected }</td>
-						<td className={ styles.bdr }>{ zone.delayed_dry_run }</td>
-						<td>{ zone.rejected_dry_run }</td>
+						<td>{ zone.exhausted }</td>
 					</tr>,
 					chart
 				];

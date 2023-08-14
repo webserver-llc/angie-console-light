@@ -33,7 +33,7 @@ describe('<LimitReq />', () => {
 		const headRow = wrapper.instance().getHeadRow();
 
 		expect(headRow.type, 'html tag').to.be.equal('tr');
-		expect(headRow.props.children, 'cells count').to.have.lengthOf(7);
+		expect(headRow.props.children, 'cells count').to.have.lengthOf(6);
 
 		wrapper.unmount();
 	});
@@ -44,19 +44,17 @@ describe('<LimitReq />', () => {
 				['test', {
 					obj: {
 						passed: 78,
-						delayed: 55,
+						skipped: 55,
 						rejected: 9,
-						delayed_dry_run: 11,
-						rejected_dry_run: 13
+						exhausted: 11,
 					},
 					history: 'test__history'
 				}], ['test_1', {
 					obj: {
 						passed: 1,
-						delayed: 5,
+						skipped: 5,
 						rejected: 0,
-						delayed_dry_run: 1,
-						rejected_dry_run: 0
+						exhausted: 1,
 					},
 					history: 'test__history_1'
 				}]
@@ -80,7 +78,7 @@ describe('<LimitReq />', () => {
 		);
 		expect(row.props.title, '[group 1, row 1] attr title').to.be.equal('Click to hide rate graph');
 		expect(row.props.onClick, '[group 1, row 1] attr onClick').to.be.equal('toggleChart_bind_test');
-		expect(row.props.children, '[group 1, row 1] children length').to.have.lengthOf(7);
+		expect(row.props.children, '[group 1, row 1] children length').to.have.lengthOf(6);
 		expect(row.props.children[0].type, '[group 1, row 1] child 1, nodeName').to.be.equal('td');
 		expect(row.props.children[0].props.className, '[group 1, row 1] child 1, className').to.be.equal(
 			`${ styles['center-align'] } ${ styles['bdr'] } ${ styles['chart-icon'] }`
@@ -108,11 +106,7 @@ describe('<LimitReq />', () => {
 			.to.be.equal(styles['bdr']);
 		expect(row.props.children[4].props.children, '[group 1, row 1] child 5, child').to.be.equal(9);
 		expect(row.props.children[5].type, '[group 1, row 1] child 6, nodeName').to.be.equal('td');
-		expect(row.props.children[5].props.className, '[group 1, row 1] child 6, className')
-			.to.be.equal(styles['bdr']);
 		expect(row.props.children[5].props.children, '[group 1, row 1] child 6, child').to.be.equal(11);
-		expect(row.props.children[6].type, '[group 1, row 1] child 7, nodeName').to.be.equal('td');
-		expect(row.props.children[6].props.children, '[group 1, row 1] child 7, child').to.be.equal(13);
 
 		row = body[0][1];
 
@@ -144,7 +138,7 @@ describe('<LimitReq />', () => {
 		expect(row.props.title, '[group 2, row 1] attr title').to.be.equal('Click to view rate graph');
 
 		expect(row.props.onClick, '[group 2, row 1] attr onClick').to.be.equal('toggleChart_bind_test');
-		expect(row.props.children, '[group 2, row 1] children length').to.have.lengthOf(7);
+		expect(row.props.children, '[group 2, row 1] children length').to.have.lengthOf(6);
 		expect(row.props.children[0].type, '[group 2, row 1] child 1, nodeName').to.be.equal('td');
 		expect(row.props.children[0].props.className, '[group 2, row 1] child 1, className').to.be.equal(
 			`${ styles['center-align'] } ${ styles['bdr'] } ${ styles['chart-icon'] }`
@@ -172,11 +166,7 @@ describe('<LimitReq />', () => {
 			.to.be.equal(styles['bdr']);
 		expect(row.props.children[4].props.children, '[group 2, row 1] child 5, child').to.be.equal(0);
 		expect(row.props.children[5].type, '[group 2, row 1] child 6, nodeName').to.be.equal('td');
-		expect(row.props.children[5].props.className, '[group 2, row 1] child 6, className')
-			.to.be.equal(styles['bdr']);
 		expect(row.props.children[5].props.children, '[group 2, row 1] child 6, child').to.be.equal(1);
-		expect(row.props.children[6].type, '[group 2, row 1] child 7, nodeName').to.be.equal('td');
-		expect(row.props.children[6].props.children, '[group 2, row 1] child 7, child').to.be.equal(0);
 
 		expect(body[1][1], '[group 2, row 2] Chart in hidden row').to.be.a('null');
 
