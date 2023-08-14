@@ -224,6 +224,35 @@ describe('ApiProxy', () => {
 				done();
 			});
 		});
+		
+		it('Handles mapper', done => {
+			const response = { a: '123', b: 123 };
+
+			function mapperResponse(res) {
+				const response = { ...res };
+				Object.keys(response).forEach(prop => {
+					if (typeof response[prop] === "number") {
+						response[prop] += 1;
+					}
+				});
+				return response;
+			}
+
+			fetchInner = () =>
+				Promise.resolve({
+					status: 200,
+					json(){
+						return Promise.resolve(response);
+					}
+				});
+
+			api.nginx.test.setMapper(mapperResponse).get().then(data => {
+				assert(Object.keys(response).length === Object.keys(data).length, 'Unexpected number of keys in response data');
+				assert(data.a === response.a, `Prop a has wrong value`);
+				assert(data.b === response.b + 1, `Prop b has wrong value`);
+				done();
+			});
+		});
 	});
 
 	['get', 'del'].forEach(method => {
@@ -297,5 +326,13 @@ describe('ApiProxy', () => {
 
 		assert(api.processors.length === 1, 'One processor expected to be');
 		assert(api.processors[0] === fakeFn, 'Wrong processor were added');
+	});
+	
+	it('setMapper()', () => {
+		const fakeFn = () => {};
+
+		api.setMapper(fakeFn);
+
+		assert(api.mapper === fakeFn, 'Mapper expected to be');
 	});
 });

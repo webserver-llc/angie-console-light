@@ -10,6 +10,7 @@ export default class ApiProxy {
 		this.apiPrefix = apiPrefix;
 		this.path = [pathStart];
 		this.processors = [];
+		this.mapper = null;
 		this.__API_PROXY = true; /* Duck typing for tests */
 
 		this.proxy = new Proxy(this, {
@@ -55,6 +56,10 @@ export default class ApiProxy {
 						throw data;
 					}
 
+					if (this.mapper) {
+						return this.mapper(data);
+					}
+
 					return data;
 				}).catch((data) => {
 					throw ({
@@ -83,6 +88,11 @@ export default class ApiProxy {
 
 	process(fn) {
 		this.processors.push(fn);
+		return this.proxy;
+	}
+
+	setMapper(fn) {
+		this.mapper = fn;
 		return this.proxy;
 	}
 
