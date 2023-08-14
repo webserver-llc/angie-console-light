@@ -14,9 +14,9 @@ export function handleZones(STATS, previousState, zone, zoneName) {
 	if (previousZone) {
 		const period = Date.now() - previousState.lastUpdate;
 
-		zone.sent_s = utils.calculateSpeed(previousZone.sent, zone.sent, period);
-		zone.rcvd_s = utils.calculateSpeed(previousZone.received, zone.received, period);
-		zone.zone_req_s = utils.calculateSpeed(previousZone.requests, zone.requests, period);
+		zone.sent_s = utils.calculateSpeed(previousZone.data.sent, zone.data.sent, period);
+		zone.rcvd_s = utils.calculateSpeed(previousZone.data.received, zone.data.received, period);
+		zone.zone_req_s = utils.calculateSpeed(previousZone.requests.total, zone.requests.total, period);
 
 		utils.calculateTraffic(STATS, zone);
 	}

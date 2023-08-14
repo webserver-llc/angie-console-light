@@ -104,8 +104,8 @@ export default class Locations extends SortableTable {
 									<td className={ styles.bdr }>{ location.responses.total }</td>
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(location.sent_s) }</td>
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(location.rcvd_s) }</td>
-									<td className={ styles.px60 }>{ utils.formatReadableBytes(location.sent) }</td>
-									<td className={ styles.px60 }>{ utils.formatReadableBytes(location.received) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(location.data.sent) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(location.data.received) }</td>
 								</tr>);
 							})
 						}

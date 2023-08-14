@@ -42,21 +42,25 @@ describe('<Locations />', () => {
 					['test', {
 						alert: false,
 						warning: false,
+						data: {},
 						requests: {},
 						responses: {}
 					}], ['test_2', {
 						alert: true,
 						warning: false,
+						data: {},
 						requests: {},
 						responses: {}
 					}], ['test_3', {
 						alert: false,
 						warning: true,
+						data: {},
 						requests: {},
 						responses: {}
 					}], ['test_4', {
 						alert: false,
 						warning: false,
+						data: {},
 						requests: {},
 						responses: {}
 					}]
@@ -146,8 +150,10 @@ describe('<Locations />', () => {
 					'4xxChanged': false,
 					sent_s: 1,
 					rcvd_s: 2,
-					sent: 3,
-					received: 4
+					data: {
+						sent: 3,
+						received: 4
+					}
 				}], ['test_2', {
 					warning: true,
 					'5xxChanged': false,
@@ -167,8 +173,10 @@ describe('<Locations />', () => {
 					'4xxChanged': true,
 					sent_s: 2,
 					rcvd_s: 3,
-					sent: 4,
-					received: 5
+					data: {
+						sent: 4,
+						received: 5
+					}
 				}], ['test_3', {
 					warning: false,
 					'5xxChanged': true,
@@ -191,8 +199,10 @@ describe('<Locations />', () => {
 					'4xxChanged': false,
 					sent_s: 3,
 					rcvd_s: 4,
-					sent: 5,
-					received: 6
+					data: {
+						sent: 5,
+						received: 6
+					}
 				}]
 			];
 

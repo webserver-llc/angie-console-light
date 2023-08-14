@@ -118,8 +118,8 @@ export default class StreamZones extends SortableTable {
 									<td className={ styles.bdr }>{ zone.responses.total }</td>
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent_s) }</td>
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.rcvd_s) }</td>
-									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.sent) }</td>
-									<td className={ `${ styles.px60 } ${ styles.bdr }` }>{ utils.formatReadableBytes(zone.received) }</td>
+									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.data.sent) }</td>
+									<td className={ `${ styles.px60 } ${ styles.bdr }` }>{ utils.formatReadableBytes(zone.data.received) }</td>
 									<td>{ ssl ? ssl.handshakes : '–' }</td>
 									<td>
 										{

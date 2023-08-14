@@ -29,16 +29,24 @@ describe('Calculators – ServerZones', () => {
 				status: 'ok'
 			};
 			server = {
-				sent: 135,
-				received: 132,
-				requests: 24,
+				data: {
+					sent: 135,
+					received: 132,
+				},
+				requests: {
+					total: 24
+				},
 				passedToIs4xx: true
 			};
 			previousState = new Map([
 				[serverName, {
-					sent: 125,
-					received: 122,
-					requests: 14
+					data: {
+						sent: 125,
+						received: 122,
+					},
+					requests: {
+						total: 14
+					}
 				}]
 			]);
 			previousState.lastUpdate = ts - 1000;
@@ -128,18 +136,18 @@ describe('Calculators – ServerZones', () => {
 
 			expect(Date.now.calledOnce, 'Date.now called once').to.be.true;
 			expect(utils.calculateSpeed.callCount, 'calculateSpeed').to.be.equal(3);
-			expect(utils.calculateSpeed.args[0][0], 'calculateSpeed 1st call 1st arg').to.be.equal(previousServer.sent);
-			expect(utils.calculateSpeed.args[0][1], 'calculateSpeed 1st call 2nd arg').to.be.equal(server.sent);
+			expect(utils.calculateSpeed.args[0][0], 'calculateSpeed 1st call 1st arg').to.be.equal(previousServer.data.sent);
+			expect(utils.calculateSpeed.args[0][1], 'calculateSpeed 1st call 2nd arg').to.be.equal(server.data.sent);
 			expect(utils.calculateSpeed.args[0][2], 'calculateSpeed 1st call 3rd arg').to.be.equal(period);
-			expect(result.sent_s, 'server.sent_s').to.be.equal(server.sent);
-			expect(utils.calculateSpeed.args[1][0], 'calculateSpeed 2nd call 1st arg').to.be.equal(previousServer.received);
-			expect(utils.calculateSpeed.args[1][1], 'calculateSpeed 2nd call 2nd arg').to.be.equal(server.received);
+			expect(result.sent_s, 'server.sent_s').to.be.equal(server.data.sent);
+			expect(utils.calculateSpeed.args[1][0], 'calculateSpeed 2nd call 1st arg').to.be.equal(previousServer.data.received);
+			expect(utils.calculateSpeed.args[1][1], 'calculateSpeed 2nd call 2nd arg').to.be.equal(server.data.received);
 			expect(utils.calculateSpeed.args[1][2], 'calculateSpeed 2nd call 3rd arg').to.be.equal(period);
-			expect(result.rcvd_s, 'server.rcvd_s').to.be.equal(server.received);
-			expect(utils.calculateSpeed.args[2][0], 'calculateSpeed 3rd call 1st arg').to.be.equal(previousServer.requests);
-			expect(utils.calculateSpeed.args[2][1], 'calculateSpeed 3rd call 2nd arg').to.be.equal(server.requests);
+			expect(result.rcvd_s, 'server.rcvd_s').to.be.equal(server.data.received);
+			expect(utils.calculateSpeed.args[2][0], 'calculateSpeed 3rd call 1st arg').to.be.equal(previousServer.requests.total);
+			expect(utils.calculateSpeed.args[2][1], 'calculateSpeed 3rd call 2nd arg').to.be.equal(server.requests.total);
 			expect(utils.calculateSpeed.args[2][2], 'calculateSpeed 3rd call 3rd arg').to.be.equal(period);
-			expect(result.zone_req_s, 'server.zone_req_s').to.be.equal(server.requests);
+			expect(result.zone_req_s, 'server.zone_req_s').to.be.equal(server.requests.total);
 			expect(utils.calculateTraffic.calledOnce, 'calculateTraffic called once').to.be.true;
 			expect(utils.calculateTraffic.args[0][0], 'calculateTraffic 1st arg').to.be.deep.equal(STATS);
 			expect(utils.calculateTraffic.args[0][1], 'calculateTraffic 2nd arg').to.be.deep.equal(server);
