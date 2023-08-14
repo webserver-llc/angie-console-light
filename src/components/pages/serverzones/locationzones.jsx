@@ -79,7 +79,7 @@ export default class Locations extends SortableTable {
 								return (<tr>
 									<td className={ status } />
 									<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ name }</td>
-									<td>{ location.requests }</td>
+									<td>{ location.requests.total }</td>
 									<td className={ styles.bdr }>{ location.zone_req_s }</td>
 									<td>{ tableUtils.responsesTextWithTooltip(location.responses['1xx'], codes, '1') }</td>
 									<td>{ tableUtils.responsesTextWithTooltip(location.responses['2xx'], codes, '2') }</td>
@@ -87,12 +87,12 @@ export default class Locations extends SortableTable {
 									<td className={ `${ styles.flash }${ location['4xxChanged'] ? (' ' + styles['red-flash']) : '' }` }>
 										{
 											tableUtils.responsesTextWithTooltip(
-												location.responses['4xx'] + location.discarded,
+												location.responses['4xx'] + location.requests.discarded,
 												{
 													...(codes || {
 														'4xx': location.responses['4xx']
 													}),
-													'499/444/408': location.discarded,
+													'499/444/408': location.requests.discarded,
 												},
 												'4'
 											)

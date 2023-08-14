@@ -8,6 +8,7 @@
 
 import React from 'react';
 
+import mapperHttpResponse from '../../../../api/mappers/httpResponse';
 import IndexBox from '../indexbox/indexbox.jsx';
 import AlertsCount from '../alertscount/alertscount.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
@@ -79,6 +80,6 @@ export class ServerZones extends React.Component {
 }
 
 export default DataBinder(ServerZones, [
-	api.http.server_zones.process(calculateServerZones),
-	api.http.location_zones.process(calculateLocationZones)
+	api.http.server_zones.setMapper(mapperHttpResponse).process(calculateServerZones),
+	api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones)
 ]);

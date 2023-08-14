@@ -12,6 +12,7 @@ import api from '../../api';
 import Settings from '../settings/index.jsx';
 
 import Icon from '../icon/icon.jsx';
+import mapperHttpResponse from '../../api/mappers/httpResponse.js';
 import calculateServerZones from '../../calculators/serverzones.js';
 import calculateLocationZones from '../../calculators/locationzones.js';
 import calculateUpstreams from '../../calculators/upstreams.js';
@@ -141,8 +142,8 @@ export class Navigation extends React.Component {
 }
 
 export default DataBinder(Navigation, [
-	api.http.server_zones.process(calculateServerZones),
-	api.http.location_zones.process(calculateLocationZones),
+	api.http.server_zones.setMapper(mapperHttpResponse).process(calculateServerZones),
+	api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones),
 	// api.http.upstreams.process(calculateUpstreams),
 	// api.stream.server_zones.process(calculateStreamZones),
 	// api.stream.upstreams.process(calculateStreamUpstreams),

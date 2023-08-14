@@ -10,6 +10,8 @@ import ApiProxy from './ApiProxy.js';
 import UpstreamsApi from './UpstreamsApi.js';
 import { API_PATH } from '../constants.js';
 
+import mapperHttpResponse from './mappers/httpResponse.js';
+
 import calculateServerZones from '../calculators/serverzones.js';
 import calculateLocationZones from '../calculators/locationzones.js';
 import calculateConnections from '../calculators/connections.js';
@@ -74,8 +76,8 @@ export const initialLoad = ({
 	const apis = [
 		api.angie,
 		api.connections.process(calculateConnections),
-		api.http.server_zones.process(calculateServerZones),
-		api.http.location_zones.process(calculateLocationZones),
+		api.http.server_zones.setMapper(mapperHttpResponse).process(calculateServerZones),
+		api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones),
 		api.slabs.process(calculateSharedZones),
 	];
 

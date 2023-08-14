@@ -42,18 +42,22 @@ describe('<Locations />', () => {
 					['test', {
 						alert: false,
 						warning: false,
+						requests: {},
 						responses: {}
 					}], ['test_2', {
 						alert: true,
 						warning: false,
+						requests: {},
 						responses: {}
 					}], ['test_3', {
 						alert: false,
 						warning: true,
+						requests: {},
 						responses: {}
 					}], ['test_4', {
 						alert: false,
 						warning: false,
+						requests: {},
 						responses: {}
 					}]
 				]) } />
@@ -122,7 +126,10 @@ describe('<Locations />', () => {
 				['test', {
 					warning: false,
 					'5xxChanged': false,
-					requests: 100,
+					requests: {
+						total: 100,
+						discarded: 2,
+					},
 					zone_req_s: 10,
 					responses: {
 						'1xx': 0,
@@ -137,7 +144,6 @@ describe('<Locations />', () => {
 						total: 506
 					},
 					'4xxChanged': false,
-					discarded: 2,
 					sent_s: 1,
 					rcvd_s: 2,
 					sent: 3,
@@ -145,7 +151,10 @@ describe('<Locations />', () => {
 				}], ['test_2', {
 					warning: true,
 					'5xxChanged': false,
-					requests: 1000,
+					requests: {
+						total: 1000,
+						discarded: 3,
+					},
 					zone_req_s: 100,
 					responses: {
 						'1xx': 1,
@@ -156,7 +165,6 @@ describe('<Locations />', () => {
 						total: 5062
 					},
 					'4xxChanged': true,
-					discarded: 3,
 					sent_s: 2,
 					rcvd_s: 3,
 					sent: 4,
@@ -164,7 +172,10 @@ describe('<Locations />', () => {
 				}], ['test_3', {
 					warning: false,
 					'5xxChanged': true,
-					requests: 10,
+					requests: {
+						total: 10,
+						discarded: 4,
+					},
 					zone_req_s: 1,
 					responses: {
 						'1xx': 0,
@@ -178,7 +189,6 @@ describe('<Locations />', () => {
 						total: 2
 					},
 					'4xxChanged': false,
-					discarded: 4,
 					sent_s: 3,
 					rcvd_s: 4,
 					sent: 5,
@@ -364,11 +374,11 @@ describe('<Locations />', () => {
 			expect(tableUtils.responsesTextWithTooltip.args[2][1], 'responsesTextWithTooltip row 1, arg 2, 3xx').to.be.equal(items[0][1].responses.codes);
 			expect(tableUtils.responsesTextWithTooltip.args[2][2], 'responsesTextWithTooltip row 1, arg 3, 3xx').to.be.equal('3');
 			expect(tableUtils.responsesTextWithTooltip.args[3][0], 'responsesTextWithTooltip row 1, arg 1, 4xx').to.be.equal(
-				items[0][1].responses['4xx'] + items[0][1].discarded
+				items[0][1].responses['4xx'] + items[0][1].requests.discarded
 			);
 			expect(tableUtils.responsesTextWithTooltip.args[3][1], 'responsesTextWithTooltip row 1, arg 2, 4xx').to.be.deep.equal({
 				...items[0][1].responses.codes,
-				'499/444/408': items[0][1].discarded,
+				'499/444/408': items[0][1].requests.discarded,
 			});
 			expect(tableUtils.responsesTextWithTooltip.args[3][2], 'responsesTextWithTooltip row 1, arg 3, 4xx').to.be.equal('4');
 			expect(tableUtils.responsesTextWithTooltip.args[4][0], 'responsesTextWithTooltip row 1, arg 1, 5xx').to.be.equal(items[0][1].responses['5xx']);
@@ -384,11 +394,11 @@ describe('<Locations />', () => {
 			expect(tableUtils.responsesTextWithTooltip.args[7][1], 'responsesTextWithTooltip row 2, arg 2, 3xx').to.be.equal(items[1][1].responses.codes);
 			expect(tableUtils.responsesTextWithTooltip.args[7][2], 'responsesTextWithTooltip row 2, arg 3, 3xx').to.be.equal('3');
 			expect(tableUtils.responsesTextWithTooltip.args[8][0], 'responsesTextWithTooltip row 2, arg 1, 4xx').to.be.equal(
-				items[1][1].responses['4xx'] + items[1][1].discarded
+				items[1][1].responses['4xx'] + items[1][1].requests.discarded
 			);
 			expect(tableUtils.responsesTextWithTooltip.args[8][1], 'responsesTextWithTooltip row 2, arg 2, 4xx').to.be.deep.equal({
 				'4xx': items[1][1].responses['4xx'],
-				'499/444/408': items[1][1].discarded,
+				'499/444/408': items[1][1].requests.discarded,
 			});
 			expect(tableUtils.responsesTextWithTooltip.args[8][2], 'responsesTextWithTooltip row 2, arg 3, 4xx').to.be.equal('4');
 			expect(tableUtils.responsesTextWithTooltip.args[9][0], 'responsesTextWithTooltip row 2, arg 1, 5xx').to.be.equal(items[1][1].responses['5xx']);
@@ -404,11 +414,11 @@ describe('<Locations />', () => {
 			expect(tableUtils.responsesTextWithTooltip.args[12][1], 'responsesTextWithTooltip row 3, arg 2, 3xx').to.be.equal(items[2][1].responses.codes);
 			expect(tableUtils.responsesTextWithTooltip.args[12][2], 'responsesTextWithTooltip row 3, arg 3, 3xx').to.be.equal('3');
 			expect(tableUtils.responsesTextWithTooltip.args[13][0], 'responsesTextWithTooltip row 3, arg 1, 4xx').to.be.equal(
-				items[2][1].responses['4xx'] + items[2][1].discarded
+				items[2][1].responses['4xx'] + items[2][1].requests.discarded
 			);
 			expect(tableUtils.responsesTextWithTooltip.args[13][1], 'responsesTextWithTooltip row 3, arg 2, 4xx').to.be.deep.equal({
 				...items[2][1].responses.codes,
-				'499/444/408': items[2][1].discarded,
+				'499/444/408': items[2][1].requests.discarded,
 			});
 			expect(tableUtils.responsesTextWithTooltip.args[13][2], 'responsesTextWithTooltip row 3, arg 3, 4xx').to.be.equal('4');
 			expect(tableUtils.responsesTextWithTooltip.args[14][0], 'responsesTextWithTooltip row 3, arg 1, 5xx').to.be.equal(items[2][1].responses['5xx']);
