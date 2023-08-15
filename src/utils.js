@@ -231,7 +231,7 @@ export const isEmptyObj = obj => {
 };
 
 export const formatHttpResponse = response => {
-	if (isEmptyObj(response)) return {};
+	if (isEmptyObj(response)) return response;
 
 	const result = {
 		'1xx': 0,
