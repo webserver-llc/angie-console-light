@@ -13,12 +13,14 @@ import styles from '../../table/style.css';
 export const Colors = new Map([
 	['passed', '#4FA932'],
 	['rejected', '#FF2323'],
-	['rejected_dry_run', '#000ADD']
+	['exhausted', '#861DE3'],
+	['skipped', '#000ADD'],
 ]);
 export const Labels = new Map([
 	['passed', 'Passed'],
 	['rejected', 'Rejected'],
-	['rejected_dry_run', 'Rejected (dry_run)']
+	['exhausted', 'Exhausted'],
+	['skipped', 'Skipped'],
 ]);
 
 export default class LimitConn extends ChartsTable {
@@ -33,7 +35,8 @@ export default class LimitConn extends ChartsTable {
 				<th>Zone</th>
 				<th>Passed</th>
 				<th>Rejected</th>
-				<th>Rejected (dry_run)</th>
+				<th>Exhausted</th>
+				<th>Skipped</th>
 			</tr>
 		);
 	}
@@ -82,7 +85,8 @@ export default class LimitConn extends ChartsTable {
 						<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ name }</td>
 						<td className={ styles.bdr }>{ zone.passed }</td>
 						<td className={ styles.bdr }>{ zone.rejected }</td>
-						<td>{ zone.rejected_dry_run }</td>
+						<td className={ styles.bdr }>{ zone.exhausted }</td>
+						<td>{ zone.skipped }</td>
 					</tr>,
 					chart
 				];
