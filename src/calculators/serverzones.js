@@ -16,7 +16,7 @@ export function handleZones(STATS, previousState, zone, zoneName) {
 
 		zone.sent_s = utils.calculateSpeed(previousZone.data.sent, zone.data.sent, period);
 		zone.rcvd_s = utils.calculateSpeed(previousZone.data.received, zone.data.received, period);
-		zone.zone_req_s = utils.calculateSpeed(previousZone.requests.total, zone.requests.total, period);
+		zone.zone_req_s = utils.calculateSpeed(previousZone.requests, zone.requests, period);
 
 		utils.calculateTraffic(STATS, zone);
 	}

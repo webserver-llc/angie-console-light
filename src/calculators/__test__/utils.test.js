@@ -22,17 +22,17 @@ describe('Calculators – utils', () => {
 		stub(appsettings, 'getSetting').callsFake(() => 50);
 
 		expect(
-			is4xxThresholdReached({ responses: { '4xx': 49 }, requests: { total: 100 } })
+			is4xxThresholdReached({ responses: { '4xx': 49 }, requests: 100 })
 		).to.be.false;
 		expect(appsettings.getSetting.calledOnce, 'getSetting called once').to.be.true;
 		expect(appsettings.getSetting.args[0][0], 'getSetting 1st arg').to.be.equal('warnings4xxThresholdPercent');
 		expect(
-			is4xxThresholdReached({ responses: { '4xx': 50 }, requests: { total: 100 } })
+			is4xxThresholdReached({ responses: { '4xx': 50 }, requests: 100 })
 		).to.be.false;
 		expect(appsettings.getSetting.calledTwice, 'getSetting called twice').to.be.true;
 		expect(appsettings.getSetting.args[1][0], 'getSetting 1st arg').to.be.equal('warnings4xxThresholdPercent');
 		expect(
-			is4xxThresholdReached({ responses: { '4xx': 51 }, requests: { total: 100 } })
+			is4xxThresholdReached({ responses: { '4xx': 51 }, requests: 100 })
 		).to.be.true;
 		expect(appsettings.getSetting.calledThrice, 'getSetting called thrice').to.be.true;
 		expect(appsettings.getSetting.args[2][0], 'getSetting 1st arg').to.be.equal('warnings4xxThresholdPercent');

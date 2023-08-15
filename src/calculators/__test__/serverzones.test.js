@@ -33,9 +33,7 @@ describe('Calculators – ServerZones', () => {
 					sent: 135,
 					received: 132,
 				},
-				requests: {
-					total: 24
-				},
+				requests: 24,
 				passedToIs4xx: true
 			};
 			previousState = new Map([
@@ -44,9 +42,7 @@ describe('Calculators – ServerZones', () => {
 						sent: 125,
 						received: 122,
 					},
-					requests: {
-						total: 14
-					}
+					requests: 14
 				}]
 			]);
 			previousState.lastUpdate = ts - 1000;
@@ -144,10 +140,10 @@ describe('Calculators – ServerZones', () => {
 			expect(utils.calculateSpeed.args[1][1], 'calculateSpeed 2nd call 2nd arg').to.be.equal(server.data.received);
 			expect(utils.calculateSpeed.args[1][2], 'calculateSpeed 2nd call 3rd arg').to.be.equal(period);
 			expect(result.rcvd_s, 'server.rcvd_s').to.be.equal(server.data.received);
-			expect(utils.calculateSpeed.args[2][0], 'calculateSpeed 3rd call 1st arg').to.be.equal(previousServer.requests.total);
-			expect(utils.calculateSpeed.args[2][1], 'calculateSpeed 3rd call 2nd arg').to.be.equal(server.requests.total);
+			expect(utils.calculateSpeed.args[2][0], 'calculateSpeed 3rd call 1st arg').to.be.equal(previousServer.requests);
+			expect(utils.calculateSpeed.args[2][1], 'calculateSpeed 3rd call 2nd arg').to.be.equal(server.requests);
 			expect(utils.calculateSpeed.args[2][2], 'calculateSpeed 3rd call 3rd arg').to.be.equal(period);
-			expect(result.zone_req_s, 'server.zone_req_s').to.be.equal(server.requests.total);
+			expect(result.zone_req_s, 'server.zone_req_s').to.be.equal(server.requests);
 			expect(utils.calculateTraffic.calledOnce, 'calculateTraffic called once').to.be.true;
 			expect(utils.calculateTraffic.args[0][0], 'calculateTraffic 1st arg').to.be.deep.equal(STATS);
 			expect(utils.calculateTraffic.args[0][1], 'calculateTraffic 2nd arg').to.be.deep.equal(server);

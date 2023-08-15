@@ -27,9 +27,7 @@ describe('Calculators – LocationZones', () => {
 					sent: 135,
 					received: 132,
 				},
-				requests: {
-					total: 24
-				},
+				requests: 24,
 				passedToIs4xx: true
 			};
 			previousState = new Map([
@@ -38,9 +36,7 @@ describe('Calculators – LocationZones', () => {
 						sent: 125,
 						received: 122,
 					},
-					requests: {
-						total: 14
-					}
+					requests: 14
 				}]
 			]);
 			previousState.lastUpdate = ts - 1000;
@@ -131,10 +127,10 @@ describe('Calculators – LocationZones', () => {
 			expect(utils.calculateSpeed.args[1][1], 'calculateSpeed 2nd call 2nd arg').to.be.equal(location.data.received);
 			expect(utils.calculateSpeed.args[1][2], 'calculateSpeed 2nd call 3rd arg').to.be.equal(period);
 			expect(result.rcvd_s, 'location.rcvd_s').to.be.equal(location.data.received);
-			expect(utils.calculateSpeed.args[2][0], 'calculateSpeed 3rd call 1st arg').to.be.equal(previousLocation.requests.total);
-			expect(utils.calculateSpeed.args[2][1], 'calculateSpeed 3rd call 2nd arg').to.be.equal(location.requests.total);
+			expect(utils.calculateSpeed.args[2][0], 'calculateSpeed 3rd call 1st arg').to.be.equal(previousLocation.requests);
+			expect(utils.calculateSpeed.args[2][1], 'calculateSpeed 3rd call 2nd arg').to.be.equal(location.requests);
 			expect(utils.calculateSpeed.args[2][2], 'calculateSpeed 3rd call 3rd arg').to.be.equal(period);
-			expect(result.zone_req_s, 'location.zone_req_s').to.be.equal(location.requests.total);
+			expect(result.zone_req_s, 'location.zone_req_s').to.be.equal(location.requests);
 			expect(utils.is4xxThresholdReached.calledOnce, 'is4xxThresholdReached called once').to.be.true;
 			expect(utils.is4xxThresholdReached.args[0][0].passedToIs4xx, 'is4xxThresholdReached 1st arg').to.be.true;
 			expect(result.warning, 'location.warning').to.be.an('undefined');

@@ -9,7 +9,7 @@
 import appsettings from '../appsettings';
 
 export const is4xxThresholdReached = obj =>
-	obj.responses['4xx'] / obj.requests.total * 100 > appsettings.getSetting('warnings4xxThresholdPercent');
+	obj.responses['4xx'] / obj.requests * 100 > appsettings.getSetting('warnings4xxThresholdPercent');
 
 export const calculateSpeed = (previous, now, period) => {
 	if (
