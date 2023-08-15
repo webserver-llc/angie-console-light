@@ -22,12 +22,14 @@ describe('<Navigation />', () => {
 		location_zones: { ready: false },
 		shared_zones: { ready: false },
 		caches: { ready: false },
+		upstreams: { ready: false },
 	});
 	const readyStatuses = () => ({
 		server_zones: { ready: true },
 		location_zones: { ready: true },
 		shared_zones: { ready: true },
 		caches: { ready: true },
+		upstreams: { ready: true },
 	});
 
 	it('constructor()', () => {

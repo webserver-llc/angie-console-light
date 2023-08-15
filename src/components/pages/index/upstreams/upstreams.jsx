@@ -10,6 +10,7 @@ import IndexBox from '../indexbox/indexbox.jsx';
 import AlertsCount from '../alertscount/alertscount.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
 import api from '../../../../api';
+import mapperHttpUpstreams from '../../../../api/mappers/httpUpstreams.js';
 import calculateUpstreams from '../../../../calculators/upstreams.js';
 import styles from './style.css';
 
@@ -57,5 +58,5 @@ export class Upstreams extends React.Component {
 }
 
 export default DataBinder(Upstreams, [
-	api.http.upstreams.process(calculateUpstreams)
+	api.http.upstreams.setMapper(mapperHttpUpstreams).process(calculateUpstreams)
 ]);

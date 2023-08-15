@@ -13,6 +13,7 @@ import Settings from '../settings/index.jsx';
 
 import Icon from '../icon/icon.jsx';
 import mapperHttpResponse from '../../api/mappers/httpResponse.js';
+import mapperHttpUpstreams from '../../api/mappers/httpUpstreams.js';
 import calculateServerZones from '../../calculators/serverzones.js';
 import calculateLocationZones from '../../calculators/locationzones.js';
 import calculateUpstreams from '../../calculators/upstreams.js';
@@ -30,6 +31,11 @@ export const SECTIONS = [
 		title: 'HTTP Zones',
 		hash: '#server_zones',
 		statusKey: 'server_zones'
+	},
+	{
+		title: 'HTTP Upstreams',
+		hash: '#upstreams',
+		statusKey: 'upstreams'
 	},
 	{
 		title: 'Caches',
@@ -149,11 +155,11 @@ export class Navigation extends React.Component {
 export default DataBinder(Navigation, [
 	api.http.server_zones.setMapper(mapperHttpResponse).process(calculateServerZones),
 	api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones),
-	// api.http.upstreams.process(calculateUpstreams),
 	// api.stream.server_zones.process(calculateStreamZones),
 	// api.stream.upstreams.process(calculateStreamUpstreams),
 	api.slabs.process(calculateSharedZones),
 	api.http.caches.process(calculateCaches),
+	api.http.upstreams.setMapper(mapperHttpUpstreams).process(calculateUpstreams),
 	// api.stream.zone_sync.process(calculateZoneSync),
 	// api.resolvers.process(calculateResolvers),
 	// api.workers.process(calculateWorkers),

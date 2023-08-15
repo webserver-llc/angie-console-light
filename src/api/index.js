@@ -11,12 +11,14 @@ import UpstreamsApi from './UpstreamsApi.js';
 import { API_PATH } from '../constants.js';
 
 import mapperHttpResponse from './mappers/httpResponse.js';
+import mapperHttpUpstreams from './mappers/httpUpstreams.js';
 
 import calculateServerZones from '../calculators/serverzones.js';
 import calculateLocationZones from '../calculators/locationzones.js';
 import calculateConnections from '../calculators/connections.js';
 import calculateSharedZones from '../calculators/sharedzones.js';
 import calculateCaches from '../calculators/caches.js';
+import calculateUpstreams from '../calculators/upstreams.js';
 
 const api = new Proxy({}, {
 	get(target, pathStart) {
@@ -81,6 +83,7 @@ export const initialLoad = ({
 		api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones),
 		api.slabs.process(calculateSharedZones),
 		api.http.caches.process(calculateCaches),
+		api.http.upstreams.setMapper(mapperHttpUpstreams).process(calculateUpstreams),
 	];
 
 	return window.fetch(`${API_PATH}/`)

@@ -519,6 +519,9 @@ describe('Api', () => {
 				}, {
 					path: 'http/caches',
 					processor: calculateCaches 
+				}, {
+					path: 'http/upstreams',
+					processor: calculateUpstreams
 				}
 			];
 

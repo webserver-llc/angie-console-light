@@ -11,8 +11,9 @@ describe("Mappers - HTTP Upstreams", () => {
             weight: 1,
             state: "up",
             selected: {
-              current: 0,
-              total: 0,
+              current: 1,
+              total: 296,
+              last: "2023-08-15T10:38:41Z",
             },
             responses: {
               200: 198,
@@ -34,6 +35,7 @@ describe("Mappers - HTTP Upstreams", () => {
               fails: 0,
               unavailable: 0,
               downtime: 0,
+              downstart: "2023-08-15T10:38:41Z",
             },
             sid: "8c7de8e7900b468ba646cb8a9e8a588b",
             refs: 0,
@@ -48,15 +50,15 @@ describe("Mappers - HTTP Upstreams", () => {
       "upsteam-red": {
         peers: [
           {
+            id: 0,
             server: "10.11.128.1",
             name: "10.11.128.1:80",
             backup: false,
             weight: 1,
             state: "up",
-            selected: {
-              current: 0,
-              total: 0,
-            },
+            active: 1,
+            requests: 296,
+            selected: "2023-08-15T10:38:41Z",
             responses: {
               "1xx": 0,
               "2xx": 198,
@@ -77,15 +79,13 @@ describe("Mappers - HTTP Upstreams", () => {
               },
               total: 222,
             },
-            data: {
-              sent: 128,
-              received: 256,
-            },
-            health: {
-              fails: 0,
-              unavailable: 0,
-              downtime: 0,
-            },
+            sent: 128,
+            received: 256,
+            unavail: 0,
+            fails: 0,
+            downtime: 0,
+            downstart: "2023-08-15T10:38:41Z",
+            health_checks: {},
             sid: "8c7de8e7900b468ba646cb8a9e8a588b",
             refs: 0,
           },
