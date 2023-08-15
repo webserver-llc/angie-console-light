@@ -36,7 +36,6 @@ export default (response) => {
 		});
 		response[key].peers = result;
 	});
-	console.log(response);
 
 	return response;
 };
