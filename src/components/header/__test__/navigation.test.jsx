@@ -21,11 +21,13 @@ describe('<Navigation />', () => {
 		server_zones: { ready: false },
 		location_zones: { ready: false },
 		shared_zones: { ready: false },
+		caches: { ready: false },
 	});
 	const readyStatuses = () => ({
 		server_zones: { ready: true },
 		location_zones: { ready: true },
 		shared_zones: { ready: true },
+		caches: { ready: true },
 	});
 
 	it('constructor()', () => {

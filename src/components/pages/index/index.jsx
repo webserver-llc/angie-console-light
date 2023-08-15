@@ -10,6 +10,7 @@ import React from 'react';
 import AboutAngie from './aboutangie/aboutangie.jsx';
 import Connections from './connections/connections.jsx';
 import ServerZones from './serverzones/serverzones.jsx';
+import Caches from './caches/caches.jsx';
 import styles from './style.css';
 
 export default class Index extends React.Component {
@@ -25,6 +26,7 @@ export default class Index extends React.Component {
 
 				<div className={ `${ styles.row } ${ styles['row-wrap'] }` }>
 					<ServerZones />
+					<Caches />
 				</div>
 			</div>
 		);

@@ -16,6 +16,7 @@ import calculateServerZones from '../calculators/serverzones.js';
 import calculateLocationZones from '../calculators/locationzones.js';
 import calculateConnections from '../calculators/connections.js';
 import calculateSharedZones from '../calculators/sharedzones.js';
+import calculateCaches from '../calculators/caches.js';
 
 const api = new Proxy({}, {
 	get(target, pathStart) {
@@ -79,6 +80,7 @@ export const initialLoad = ({
 		api.http.server_zones.setMapper(mapperHttpResponse).process(calculateServerZones),
 		api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones),
 		api.slabs.process(calculateSharedZones),
+		api.http.caches.process(calculateCaches),
 	];
 
 	return window.fetch(`${API_PATH}/`)

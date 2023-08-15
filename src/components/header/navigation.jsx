@@ -32,6 +32,11 @@ export const SECTIONS = [
 		statusKey: 'server_zones'
 	},
 	{
+		title: 'Caches',
+		hash: '#caches',
+		statusKey: 'caches'
+	},
+	{
 		title: 'Shared Zones',
 		hash: '#shared_zones',
 		statusKey: 'shared_zones'
@@ -147,8 +152,8 @@ export default DataBinder(Navigation, [
 	// api.http.upstreams.process(calculateUpstreams),
 	// api.stream.server_zones.process(calculateStreamZones),
 	// api.stream.upstreams.process(calculateStreamUpstreams),
-	// api.http.caches.process(calculateCaches),
 	api.slabs.process(calculateSharedZones),
+	api.http.caches.process(calculateCaches),
 	// api.stream.zone_sync.process(calculateZoneSync),
 	// api.resolvers.process(calculateResolvers),
 	// api.workers.process(calculateWorkers),

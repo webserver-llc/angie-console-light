@@ -516,6 +516,9 @@ describe('Api', () => {
 				}, {
 					path: 'slabs',
 					processor: calculateSharedZones
+				}, {
+					path: 'http/caches',
+					processor: calculateCaches 
 				}
 			];
 
