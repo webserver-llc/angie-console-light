@@ -1,6 +1,6 @@
 import mapperHttpResponse from '../httpResponse.js';
 
-describe('Mappers',() => {
+describe('Mappers - HTTP Response',() => {
 	it('mapperHttpResponse()', () => {
 		const angieHttpResponse = {
 		  'russia': {

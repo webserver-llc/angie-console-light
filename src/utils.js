@@ -212,13 +212,81 @@ export const getSSLVeryfiedFailures = (ssl) => {
 
 export const formatNumber = value => typeof value === 'number' ? value : '-';
 
+export const isEmptyObj = obj => {
+	if (obj === undefined) {
+		throw new Error('Argument doesn\'t set or undefined');
+	}
+
+	if (obj === null) {
+		throw new Error('Null is not available argument');
+	}
+
+	// eslint-disable-next-line no-restricted-syntax
+	for (const prop in obj) {
+		// eslint-disable-next-line no-prototype-builtins
+		if (obj.hasOwnProperty(prop)) { return false; }
+	}
+
+	return true;
+};
+
+export const formatHttpResponse = response => {
+	if (isEmptyObj(response)) return {};
+
+	const result = {
+		'1xx': 0,
+		'2xx': 0,
+		'3xx': 0,
+		'4xx': 0,
+		'5xx': 0,
+		codes: {},
+		total: 0,
+	};
+
+	function isStatusCode(statusCode) {
+		return parseInt(statusCode, 10).toString() === statusCode;
+	}
+
+	function mapStatusCodeToResult(statusCode) {
+		const firstChar = statusCode[0];
+		if (firstChar === '1') {
+			result['1xx'] += response[statusCode];
+		}
+		if (firstChar === '2') {
+			result['2xx'] += response[statusCode];
+		}
+		if (firstChar === '3') {
+			result['3xx'] += response[statusCode];
+		}
+		if (firstChar === '4') {
+			result['4xx'] += response[statusCode];
+		}
+		if (firstChar === '5') {
+			result['5xx'] += response[statusCode];
+		}
+		result.total += response[statusCode];
+	}
+
+	Object.keys(response).forEach(prop => {
+		if (isStatusCode(prop)) {
+			mapStatusCodeToResult(prop);
+		}
+	});
+
+	result.codes = response;
+
+	return result;
+};
+
 export default {
 	formatUptime,
 	formatReadableBytes,
 	formatMs,
 	formatDate,
 	formatNumber,
+	formatHttpResponse,
 	getHTTPCodesArray,
 	getSSLHandhsakesFailures,
 	getSSLVeryfiedFailures,
+	isEmptyObj
 };

@@ -14,6 +14,7 @@ import {
 	getHTTPCodesArray,
 	getSSLHandhsakesFailures,
 	getSSLVeryfiedFailures,
+	isEmptyObj,
 } from '../utils.js';
 
 describe('Utils', () => {
@@ -176,5 +177,13 @@ describe('Utils', () => {
 			expect('id' in item, `[${ i }] ${ item.id }, id exists`).to.be.true;
 			expect('label' in item, `[${ i }] ${ item.id }, label exists`).to.be.true;
 		});
+	});
+
+	it('isEmptyObj()', () => {
+		expect(() => isEmptyObj(), 'without argument').to.throw(/set/);	
+		expect(() => isEmptyObj(undefined), 'with undefined argument').to.throw(/set/);	
+		expect(() => isEmptyObj(null), 'with null argument').to.throw('available');	
+		expect(isEmptyObj({}), 'empty object').to.be.true;
+		expect(isEmptyObj({ a: 1 }), 'empty object').to.be.false;
 	});
 });
