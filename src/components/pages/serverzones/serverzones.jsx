@@ -67,10 +67,10 @@ export default class StreamZones extends SortableTable {
 							<th>Rcvd/s</th>
 							<th>Sent</th>
 							<th className={ styles.bdr }>Rcvd</th>
-							<th>Handshakes</th>
-							<th>Handshakes<br/>Failed</th>
-							<th>Session<br/>Reuses</th>
-							<th>Verify<br/>Failures</th>
+							<th>Handshaked</th>
+							<th>Reuses</th>
+							<th>Timedout</th>
+							<th>Failed</th>
 						</tr>
 					</thead>
 					<tbody className={ styles['right-align'] }>
@@ -120,29 +120,10 @@ export default class StreamZones extends SortableTable {
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.rcvd_s) }</td>
 									<td className={ styles.px60 }>{ utils.formatReadableBytes(zone.data.sent) }</td>
 									<td className={ `${ styles.px60 } ${ styles.bdr }` }>{ utils.formatReadableBytes(zone.data.received) }</td>
-									<td>{ ssl ? ssl.handshakes : '–' }</td>
-									<td>
-										{
-											ssl
-												? tableUtils.tooltipRowsContent(
-													ssl.handshakes_failed,
-													utils.getSSLHandhsakesFailures(ssl),
-													'hint'
-												)
-												: '–'
-										}
-									</td>
-									<td>{ ssl ? ssl.session_reuses : '–' }</td>
-									<td>
-										{
-											ssl
-												? tableUtils.tooltipRowsContent(
-													...utils.getSSLVeryfiedFailures(ssl),
-													'hint'
-												)
-												: '–'
-										}
-									</td>
+									<td>{ ssl ? ssl.handshaked : '–' }</td>
+									<td>{ ssl ? ssl.reuses : '–' }</td>
+									<td>{ ssl ? ssl.timedout : '–' }</td>
+									<td>{ ssl ? ssl.failed : '–' }</td>
 								</tr>);
 							})
 						}

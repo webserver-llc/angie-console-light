@@ -156,13 +156,10 @@ describe('<ServerZones />', () => {
 						received: 4,
 					},
 					ssl: {
-						handshakes: 135,
-						handshakes_failed: 24,
-						session_reuses: 19,
-						verify_failures: {
-							expired_cert: 90,
-							revoked_cert: 6,
-						}
+						handshaked: 135,
+						failed: 24,
+						reuses: 19,
+						timedout: 4,
 					}
 				}], ['test_2', {
 					warning: true,
@@ -282,8 +279,9 @@ describe('<ServerZones />', () => {
 			);
 			expect(cell.text(), 'row 1, cell 15, text').to.be.equal('formatted_4');
 			expect(cells.at(15).text(), 'row 1, cell 16, text').to.be.equal('135');
-			expect(cells.at(16).text(), 'row 1, cell 17, text').to.be.equal('24');
-			expect(cells.at(17).text(), 'row 1, cell 18, text').to.be.equal('19');
+			expect(cells.at(16).text(), 'row 1, cell 17, text').to.be.equal('19');
+			expect(cells.at(17).text(), 'row 1, cell 18, text').to.be.equal('4');
+			expect(cells.at(18).text(), 'row 1, cell 18, text').to.be.equal('24');
 
 			// TODO: Add tests for SSL Verify Failures cell
 
