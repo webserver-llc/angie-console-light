@@ -12,6 +12,7 @@ import { API_PATH } from '../constants.js';
 
 import mapperHttpResponse from './mappers/httpResponse.js';
 import mapperHttpUpstreams from './mappers/httpUpstreams.js';
+import mapperStreamServerZones from './mappers/streamServerZones.js';
 
 import calculateServerZones from '../calculators/serverzones.js';
 import calculateLocationZones from '../calculators/locationzones.js';
@@ -20,6 +21,7 @@ import calculateSharedZones from '../calculators/sharedzones.js';
 import calculateCaches from '../calculators/caches.js';
 import calculateUpstreams from '../calculators/upstreams.js';
 import calculateResolvers from '../calculators/resolvers.js';
+import { zones as calculateStreamZones } from '../calculators/stream.js';
 import mapperResolvers from './mappers/resolvers.js';
 
 const api = new Proxy({}, {
@@ -87,6 +89,7 @@ export const initialLoad = ({
 		api.http.caches.process(calculateCaches),
 		api.http.upstreams.setMapper(mapperHttpUpstreams).process(calculateUpstreams),
 		api.resolvers.setMapper(mapperResolvers).process(calculateResolvers),
+		api.stream.server_zones.setMapper(mapperStreamServerZones).process(calculateStreamZones),
 	];
 
 	return window.fetch(`${API_PATH}/`)

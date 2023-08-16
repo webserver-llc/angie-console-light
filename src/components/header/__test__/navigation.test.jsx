@@ -24,6 +24,7 @@ describe('<Navigation />', () => {
 		caches: { ready: false },
 		upstreams: { ready: false },
 		resolvers: { ready: false },
+		tcp_zones: { ready: false }
 	});
 	const readyStatuses = () => ({
 		server_zones: { ready: true },
@@ -32,6 +33,7 @@ describe('<Navigation />', () => {
 		caches: { ready: true },
 		upstreams: { ready: true },
 		resolvers: { ready: true },
+		tcp_zones: { ready: true }
 	});
 
 	it('constructor()', () => {

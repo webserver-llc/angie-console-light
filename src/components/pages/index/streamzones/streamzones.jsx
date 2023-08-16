@@ -10,6 +10,7 @@ import React from 'react';
 import IndexBox from '../indexbox/indexbox.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
 import api from '#/api';
+import mapperStreamServerZones from '../../../../api/mappers/streamServerZones.js';
 import utils from '#/utils.js';
 import { zones } from '#/calculators/stream.js';
 
@@ -37,5 +38,5 @@ export class StreamZones extends React.Component {
 }
 
 export default DataBinder(StreamZones, [
-	api.stream.server_zones.process(zones)
+	api.stream.server_zones.setMapper(mapperStreamServerZones).process(zones)
 ]);

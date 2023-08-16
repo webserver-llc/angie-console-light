@@ -15,6 +15,7 @@ import Icon from '../icon/icon.jsx';
 import mapperHttpResponse from '../../api/mappers/httpResponse.js';
 import mapperHttpUpstreams from '../../api/mappers/httpUpstreams.js';
 import mapperResolvers from '../../api/mappers/resolvers.js';
+import mapperStreamServerZones from '../../api/mappers/streamServerZones.js';
 import calculateServerZones from '../../calculators/serverzones.js';
 import calculateLocationZones from '../../calculators/locationzones.js';
 import calculateUpstreams from '../../calculators/upstreams.js';
@@ -37,6 +38,11 @@ export const SECTIONS = [
 		title: 'HTTP Upstreams',
 		hash: '#upstreams',
 		statusKey: 'upstreams'
+	},
+	{
+		title: 'TCP/UDP Zones',
+		hash: '#tcp_zones',
+		statusKey: 'tcp_zones'
 	},
 	{
 		title: 'Caches',
@@ -161,7 +167,7 @@ export class Navigation extends React.Component {
 export default DataBinder(Navigation, [
 	api.http.server_zones.setMapper(mapperHttpResponse).process(calculateServerZones),
 	api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones),
-	// api.stream.server_zones.process(calculateStreamZones),
+	api.stream.server_zones.setMapper(mapperStreamServerZones).process(calculateStreamZones),
 	// api.stream.upstreams.process(calculateStreamUpstreams),
 	api.slabs.process(calculateSharedZones),
 	api.http.caches.process(calculateCaches),

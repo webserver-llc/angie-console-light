@@ -525,6 +525,9 @@ describe('Api', () => {
 				}, {
 					path: 'resolvers',
 					processor: calculateResolvers
+				}, {
+					path: 'stream/server_zones',
+					processor: calculateStreamZones
 				}
 			];
 

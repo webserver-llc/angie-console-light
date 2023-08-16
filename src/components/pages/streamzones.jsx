@@ -9,6 +9,7 @@ import React from 'react';
 
 import api from '#/api';
 import DataBinder from '../databinder/databinder.jsx';
+import mapperStreamServerZones from '../../api/mappers/streamServerZones.js';
 import calculateStreamLimitConn from '#/calculators/streamlimitconn.js';
 import LimitConn from './serverzones/limitconn.jsx';
 import utils from '#/utils.js';
@@ -117,6 +118,6 @@ export class StreamZones extends React.Component {
 }
 
 export default DataBinder(StreamZones, [
-	api.stream.server_zones,
+	api.stream.server_zones.setMapper(mapperStreamServerZones),
 	api.stream.limit_conns.process(calculateStreamLimitConn),
 ]);
