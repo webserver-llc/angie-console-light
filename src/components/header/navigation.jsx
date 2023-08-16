@@ -19,12 +19,10 @@ import mapperStreamServerZones from '../../api/mappers/streamServerZones.js';
 import calculateServerZones from '../../calculators/serverzones.js';
 import calculateLocationZones from '../../calculators/locationzones.js';
 import calculateUpstreams from '../../calculators/upstreams.js';
-import { zones as calculateStreamZones, upstreams as calculateStreamUpstreams } from '../../calculators/stream.js';
+import { zones as calculateStreamZones } from '../../calculators/stream.js';
 import calculateCaches from '../../calculators/caches.js';
 import calculateSharedZones from '../../calculators/sharedzones.js';
-import calculateZoneSync from '../../calculators/zonesync.js';
 import calculateResolvers from '../../calculators/resolvers.js';
-import calculateWorkers from '../../calculators/workers.js';
 
 import styles from './style.css';
 
@@ -168,13 +166,10 @@ export default DataBinder(Navigation, [
 	api.http.server_zones.setMapper(mapperHttpResponse).process(calculateServerZones),
 	api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones),
 	api.stream.server_zones.setMapper(mapperStreamServerZones).process(calculateStreamZones),
-	// api.stream.upstreams.process(calculateStreamUpstreams),
 	api.slabs.process(calculateSharedZones),
 	api.http.caches.process(calculateCaches),
 	api.http.upstreams.setMapper(mapperHttpUpstreams).process(calculateUpstreams),
-	// api.stream.zone_sync.process(calculateZoneSync),
 	api.resolvers.setMapper(mapperResolvers).process(calculateResolvers),
-	// api.workers.process(calculateWorkers),
 ], {
 	ignoreEmpty: true
 });

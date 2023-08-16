@@ -229,44 +229,43 @@ describe('<Navigation />', () => {
 				wrapper.unmount();
 			});
 
-			// TODO: Change after add other widgets
-			// it('all statuses', () => {
-			// 	const customStatuses = readyStatuses();
-			//
-			// 	customStatuses.server_zones.status = 'ok';
-			// 	customStatuses.shared_zones.status = 'warning';
-			// 	customStatuses.zone_sync.status = 'danger';
-			// 	customStatuses.resolvers.status = 'ok';
-			//
-			// 	const wrapper = shallow(
-			// 		<Navigation
-			// 			statuses={ customStatuses }
-			// 			hash="#"
-			// 		/>
-			// 	);
-			// 	const icons = wrapper.find(`.${ styles['nav-flex'] }`).find('Icon');
-			//
-			// 	expect(icons.length, 'icons length').to.be.equal(4);
-			//
-			// 	icons.forEach(icon => {
-			// 		let statusKey = icon.parent().prop('href').substr(1);
-			//
-			// 		if (statusKey === 'cluster') {
-			// 			statusKey = 'zone_sync';
-			// 		}
-			//
-			// 		expect(icon.prop('className'), `icon className [${ statusKey }]`).to.be.equal(styles['status']);
-			// 		expect(icon.prop('type'), `icon type [${ statusKey }]`).to.be.equal(
-			// 			statusKey === 'shared_zones' ?
-			// 				'warning'
-			// 			: statusKey === 'zone_sync' ?
-			// 				'danger'
-			// 			: 'ok'
-			// 		);
-			// 	});
-			//
-			// 	wrapper.unmount();
-			// });
+			it('all statuses', () => {
+				const customStatuses = readyStatuses();
+
+				customStatuses.server_zones.status = 'ok';
+				customStatuses.shared_zones.status = 'warning';
+				customStatuses.tcp_zones.status = 'danger';
+				customStatuses.resolvers.status = 'ok';
+
+				const wrapper = shallow(
+					<Navigation
+						statuses={ customStatuses }
+						hash="#"
+					/>
+				);
+				const icons = wrapper.find(`.${ styles['nav-flex'] }`).find('Icon');
+
+				expect(icons.length, 'icons length').to.be.equal(4);
+
+				icons.forEach(icon => {
+					let statusKey = icon.parent().prop('href').substr(1);
+
+					if (statusKey === 'cluster') {
+						statusKey = 'tcp_zones';
+					}
+
+					expect(icon.prop('className'), `icon className [${ statusKey }]`).to.be.equal(styles['status']);
+					expect(icon.prop('type'), `icon type [${ statusKey }]`).to.be.equal(
+						statusKey === 'shared_zones' ?
+							'warning'
+						: statusKey === 'tcp_zones' ?
+							'danger'
+						: 'ok'
+					);
+				});
+
+				wrapper.unmount();
+			});
 
 			it('statuses of server and location zones', () => {
 				const customStatuses = readyStatuses();
