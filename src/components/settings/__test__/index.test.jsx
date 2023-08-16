@@ -274,7 +274,7 @@ describe('<Settings />', () => {
 		instance.render();
 
 		expect(wrapper.prop('className'), 'wrapper className').to.be.equal(styles['settings']);
-		expect(wrapper.children(), 'wrapper children size').to.have.lengthOf(9);
+		expect(wrapper.children(), 'wrapper children size').to.have.lengthOf(8);
 		expect(wrapper.childAt(0).type(), 'title').to.be.equal('h2');
 		expect(
 			wrapper.childAt(0).prop('className'),
@@ -422,14 +422,10 @@ describe('<Settings />', () => {
 		).to.be.equal('close_test');
 		expect(
 			wrapper.childAt(7).prop('className'),
-			'help className'
-		).to.be.equal(`${ styles['section'] } ${ styles['help'] }`);
-		expect(
-			wrapper.childAt(8).prop('className'),
 			'version className'
 		).to.be.equal(styles['version']);
 		expect(
-			wrapper.childAt(8).text(),
+			wrapper.childAt(7).text(),
 			'version text'
 		).to.be.equal(`v${ VERSION }`);
 
@@ -468,7 +464,7 @@ describe('<Settings />', () => {
 		expect(
 			wrapper.children(),
 			'[no statuses.zone_sync, no statuses.resolvers] wrapper children size'
-		).to.have.lengthOf(7);
+		).to.have.lengthOf(6);
 		expect(
 			changePercentThresholdBindSpy.callCount,
 			'[no statuses.zone_sync, no statuses.resolvers] this.changePercentThreshold.bind call count'
