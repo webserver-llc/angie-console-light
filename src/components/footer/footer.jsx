@@ -15,6 +15,6 @@ export default class Footer extends React.Component {
 	}
 
 	render() {
-		return <div className={ styles.footer }>© NGINX, Inc. All rights reserved.</div>;
+		return <div className={ styles.footer }>© Angie, Inc. All rights reserved.</div>;
 	}
 };

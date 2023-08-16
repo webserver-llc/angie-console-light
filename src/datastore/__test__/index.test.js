@@ -269,7 +269,7 @@ describe('Datastore', () => {
 
 		let api = {
 			toString(){ return 'api_1' },
-			path: ['nginx', 'version']
+			path: ['angie', 'version']
 		};
 
 		subscribe([ api ]);
@@ -279,7 +279,7 @@ describe('Datastore', () => {
 			'[2] availableApiEndpoints.firstLevelIncludes called'
 		).to.be.true;
 		expect(
-			availableApiEndpoints.firstLevelIncludes.calledWith('nginx'),
+			availableApiEndpoints.firstLevelIncludes.calledWith('angie'),
 			'[2] availableApiEndpoints.firstLevelIncludes call arg'
 		).to.be.true;
 		expect(

@@ -1,6 +1,6 @@
-## NGINX Plus Dashboard
+## Angie Dashboard
 
-Live activity monitoring tool for NGINX Plus.
+Live activity monitoring tool for Angie.
 
 ### Build process:
 
@@ -33,11 +33,6 @@ Running the above command will start karma server and build the coverage report.
 #### Coverage report:
 
 In the project folder check `coverage` directory – `index.html` includes everything you need.
-
-### Useful links:
-* [Quick description](https://www.nginx.com/products/nginx/live-activity-monitoring/)
-* [Guide](https://docs.nginx.com/nginx/admin-guide/monitoring/live-activity-monitoring/#using-the-dashboard)
-* [Live demo](https://demo.nginx.com/)
 
 ### 3rd party modules:
 * [@babel/core](https://www.npmjs.com/package/@babel/core) – 7.18.2

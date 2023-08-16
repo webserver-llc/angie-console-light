@@ -12,8 +12,8 @@ import ApiProxy from '../ApiProxy.js';
 import { spy } from 'sinon';
 
 describe('ApiProxy', () => {
-	const apiPrefix = '/api/1';
-	const path = 'nginx';
+	const apiPrefix = '/api';
+	const path = 'angie';
 	let _fetch, fetchInner, api;
 
 	before(() => {
@@ -55,7 +55,7 @@ describe('ApiProxy', () => {
 		const req = api.http.upstreams['temp-name'].servers['123'];
 
 		assert(
-			req.path.join() === 'nginx,http,upstreams,temp-name,servers,123',
+			req.path.join() === 'angie,http,upstreams,temp-name,servers,123',
 			'Bad value is returned'
 		);
 	});
@@ -64,7 +64,7 @@ describe('ApiProxy', () => {
 		const req = api.http.upstreams['temp-name'].servers['123'];
 
 		assert(
-			req.toString() === 'nginx/http/upstreams/temp-name/servers/123',
+			req.toString() === 'angie/http/upstreams/temp-name/servers/123',
 			'Bad value is returned'
 		);
 	});
@@ -213,7 +213,7 @@ describe('ApiProxy', () => {
 					}
 				});
 
-			api.nginx.test.get().then(data => {
+			api.angie.test.get().then(data => {
 				assert(Object.keys(response).length === Object.keys(data).length, 'Unexpected number of keys in response data');
 
 				Object.keys(response).forEach(key => {
@@ -246,7 +246,7 @@ describe('ApiProxy', () => {
 					}
 				});
 
-			api.nginx.test.setMapper(mapperResponse).get().then(data => {
+			api.angie.test.setMapper(mapperResponse).get().then(data => {
 				assert(Object.keys(response).length === Object.keys(data).length, 'Unexpected number of keys in response data');
 				assert(data.a === response.a, `Prop a has wrong value`);
 				assert(data.b === response.b + 1, `Prop b has wrong value`);

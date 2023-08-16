@@ -21,10 +21,10 @@ describe('Datastore AvailableApiEndpoints', () => {
 	it('getFirstLevel()', () => {
 		const instance = new AvailableApiEndpoints();
 
-		instance.firstLevel = ['nginx', 'http'];
+		instance.firstLevel = ['angie', 'http'];
 
 		expect(instance.getFirstLevel(), 'return').to.be.deep.equal(
-			['nginx', 'http']
+			['angie', 'http']
 		);
 	});
 
@@ -49,7 +49,7 @@ describe('Datastore AvailableApiEndpoints', () => {
 	it('firstLevelIncludes()', () => {
 		const instance = new AvailableApiEndpoints();
 
-		instance.firstLevel = ['nginx', 'upstream'];
+		instance.firstLevel = ['angie', 'upstream'];
 
 		expect(
 			instance.firstLevelIncludes('upstream'),

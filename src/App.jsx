@@ -44,9 +44,9 @@ export const SECTIONS = {
 };
 
 export const Errors = {
-	'basic_auth': 'Access to /api/ location is forbidden. Check NGINX configuration.',
-	'old_status_found': 'No data received from /api/ location, but found deprecated /status/ location. Сheck NGINX configuration.',
-	'api_not_found': 'No data received from /api/ location. Check NGINX configuration.'
+	'basic_auth': 'Access to /api/ location is forbidden. Check Angie configuration.',
+	'old_status_found': 'No data received from /api/ location, but found deprecated /status/ location. Сheck Angie configuration.',
+	'api_not_found': 'No data received from /api/ location. Check Angie configuration.'
 };
 
 export class App extends React.Component {

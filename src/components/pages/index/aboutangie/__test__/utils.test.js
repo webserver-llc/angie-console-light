@@ -1,6 +1,6 @@
 import { getHrefDocs } from "../utils"
 
-describe('AboutNginx Utils', () => {
+describe('AboutAngie Utils', () => {
   it('getHrefDocs()', () => {
     expect(getHrefDocs('PRO'), 'link to angie pro docs').to.be.string('https://wbsrv.ru/angie-pro/docs/')
     expect(getHrefDocs('pro'), 'link to angie pro docs').to.be.string('https://wbsrv.ru/angie-pro/docs/')
