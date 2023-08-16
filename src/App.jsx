@@ -103,7 +103,7 @@ export class App extends React.Component {
 			content = (
 				<div className={ styles['error-block'] }>
 					{ subContent }
-					<p>For&nbsp;more information please refer to&nbsp;the&nbsp;following <a href="https://www.nginx.com/resources/admin-guide/monitoring/">documentation.</a></p>
+					<p>For&nbsp;more information please refer to&nbsp;the&nbsp;following <a href="https://angie.software/en/">documentation.</a></p>
 				</div>
 			);
 		} else {
