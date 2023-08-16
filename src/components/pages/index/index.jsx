@@ -13,6 +13,7 @@ import ServerZones from './serverzones/serverzones.jsx';
 import Caches from './caches/caches.jsx';
 import Upstreams from './upstreams/upstreams.jsx';
 import Resolvers from './resolvers.jsx';
+import StreamZones from './streamzones/streamzones.jsx';
 import styles from './style.css';
 
 export default class Index extends React.Component {
@@ -29,6 +30,7 @@ export default class Index extends React.Component {
 				<div className={ `${ styles.row } ${ styles['row-wrap'] }` }>
 					<ServerZones />
 					<Upstreams />
+					<StreamZones />
 					<Caches />
 					<Resolvers />
 				</div>
