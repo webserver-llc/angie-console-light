@@ -1,7 +1,7 @@
 import mapperHttpUpstreams from "../httpUpstreams";
 
 describe("Mappers - HTTP Upstreams", () => {
-  it("mapperHttpUpstreams", () => {
+  it("mapperHttpUpstreams()", () => {
     const angieHttpUpstreams = {
       "upsteam-red": {
         peers: {

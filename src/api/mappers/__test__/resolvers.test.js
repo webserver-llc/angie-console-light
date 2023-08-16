@@ -1,7 +1,7 @@
 import mapperResolvers from '../resolvers';
 
 describe("Mapper - Resolvers", () => {
-  it("mapperResolvers", () => {
+  it("mapperResolvers()", () => {
     const angieResolvers = {
       "resolver-http": {
         queries: {
