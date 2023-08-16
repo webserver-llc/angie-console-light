@@ -57,10 +57,9 @@ describe('<Disclaimer /> (demo)', () => {
 
 		const links = contentEl.find('a');
 
-		expect(links.length, 'links length').to.be.equal(3);
-		expect(links.get(0).props.href, '1st link href').to.be.equal('https://demo.nginx.com/swagger-ui/');
-		expect(links.get(1).props.href, '2nd link href').to.be.equal('https://www.nginx.com/resources/admin-guide/logging-and-monitoring/');
-		expect(links.get(2).props.href, '3rd link href').to.be.equal('https://www.nginx.com/contact-sales/');
+		expect(links.length, 'links length').to.be.equal(2);
+		expect(links.get(0).props.href, '1nd link href').to.be.equal('https://angie.software/en/api/');
+		expect(links.get(1).props.href, '2rd link href').to.be.equal('https://wbsrv.ru/angie-pro/');
 
 		wrapper.setState({ opened: false });
 
