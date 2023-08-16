@@ -16,6 +16,7 @@ import styles from '../style.css';
 import tooltipStyles from '../../../../tooltip/style.css';
 import utils from '../../../../../utils.js';
 import tooltips from '../../../../../tooltips/index.jsx';
+import { docs } from '../utils.js';
 
 describe('<AboutAngieTooltip IndexPage />', () => {
 	it('returning component', () => {
@@ -54,7 +55,7 @@ describe('<AboutAngie IndexPage />', () => {
 
 		const data = {
 			angie: {
-				build: 1,
+				build: 'PRO',
 				version: '0.0.1',
 				address: 'localhost',
 				load_time: 1599571720025
@@ -73,9 +74,9 @@ describe('<AboutAngie IndexPage />', () => {
 
 		expect(link, 'link length').to.have.lengthOf(1);
 		expect(link.prop('href'), 'link href')
-			.to.be.equal('https://angie.software/#id2');
+			.to.be.equal(docs.pro);
 		expect(link.prop('target'), 'link target').to.be.equal('_blank');
-		expect(link.text(), 'link text').to.be.equal('1 (0.0.1)');
+		expect(link.text(), 'link text').to.be.equal('PRO (0.0.1)');
 
 		const table = wrapper.find('table');
 

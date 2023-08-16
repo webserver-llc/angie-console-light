@@ -14,6 +14,7 @@ import utils from '#/utils.js';
 import tooltips from '#/tooltips/index.jsx';
 import styles from './style.css';
 import tooltipStyles from '../../../tooltip/style.css';
+import { getHrefDocs } from './utils.js';
 
 export const AboutAngieTooltip = ({ data }) => {
 	return (
@@ -26,9 +27,10 @@ export const AboutAngieTooltip = ({ data }) => {
 export class AboutAngie extends React.Component {
 	render() {
 		const { props: { data: { angie } } } = this;
+		const hrefToDocs = getHrefDocs(angie.build);
 
 		return (<IndexBox className={this.props.className}>
-			<a href="https://angie.software/#id2" target="_blank" className={ styles.release }>
+			<a href={hrefToDocs} target="_blank" className={ styles.release }>
 				{angie.build} ({angie.version})
 			</a>
 
