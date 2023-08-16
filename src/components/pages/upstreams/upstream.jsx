@@ -104,8 +104,6 @@ export default class Upstream extends UpstreamsList {
 						<th colSpan="4">Traffic</th>
 						<th colSpan="2">Server checks</th>
 						<th colSpan="4">Health monitors</th>
-						<th colSpan="2">Response time</th>
-						<th colSpan="4">SSL</th>
 					</tr>
 					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
 						<th className={ styles['left-align'] }>Name</th>
@@ -149,13 +147,7 @@ export default class Upstream extends UpstreamsList {
 						<th>Checks</th>
 						<th>Fails</th>
 						<th>Unhealthy</th>
-						<th className={ styles.bdr }>Last</th>
-						<th>Headers</th>
-						<th className={ styles.bdr }>Response</th>
-						<th>Handshakes</th>
-						<th>Handshakes<br/>Failed</th>
-						<th>Session<br/>Reuses</th>
-						<th>Verify<br/>Failures</th>
+						<th>Last</th>
 					</tr>
 				</thead>
 
@@ -261,33 +253,6 @@ export default class Upstream extends UpstreamsList {
 															{ peer.health_status ? '✔' : '✘' }
 														</span>
 													)
-											}
-										</td>
-
-										<td>{ utils.formatMs(peer.header_time) }</td>
-										<td className={ styles.bdr }>{ utils.formatMs(peer.response_time) }</td>
-
-										<td>{ ssl ? ssl.handshakes : '–' }</td>
-										<td>
-											{
-												ssl
-													? tableUtils.tooltipRowsContent(
-														ssl.handshakes_failed,
-														utils.getSSLHandhsakesFailures(ssl),
-														'hint'
-													)
-													: '–'
-											}
-										</td>
-										<td>{ ssl ? ssl.session_reuses : '–' }</td>
-										<td>
-											{
-												ssl
-													? tableUtils.tooltipRowsContent(
-														...utils.getSSLVeryfiedFailures(ssl),
-														'hint'
-													)
-													: '–'
 											}
 										</td>
 									</tr>
