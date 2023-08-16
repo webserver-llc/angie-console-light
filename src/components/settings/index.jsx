@@ -133,17 +133,7 @@ export default class Settings extends React.Component {
 				<button onClick={this.save} className={ styles.save }>Save</button>
 				<button onClick={this.props.close} className={ styles.cancel }>Cancel</button>
 			</div>
-
-			<div className={ `${ styles.section } ${ styles.help }` }>
-				For more information, please check
-				<br />
-				<a
-					target="_blank"
-					href="https://docs.nginx.com/nginx/admin-guide/monitoring/live-activity-monitoring/#dashboard"
-					className={ styles['help-link'] }
-				>NGINX Admin Guide</a>
-			</div>
-
+			
 			<span className={ styles.version }>v{ VERSION }</span>
 		</div>);
 	}
