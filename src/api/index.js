@@ -19,6 +19,8 @@ import calculateConnections from '../calculators/connections.js';
 import calculateSharedZones from '../calculators/sharedzones.js';
 import calculateCaches from '../calculators/caches.js';
 import calculateUpstreams from '../calculators/upstreams.js';
+import calculateResolvers from '../calculators/resolvers.js';
+import mapperResolvers from './mappers/resolvers.js';
 
 const api = new Proxy({}, {
 	get(target, pathStart) {
@@ -84,6 +86,7 @@ export const initialLoad = ({
 		api.slabs.process(calculateSharedZones),
 		api.http.caches.process(calculateCaches),
 		api.http.upstreams.setMapper(mapperHttpUpstreams).process(calculateUpstreams),
+		api.resolvers.setMapper(mapperResolvers).process(calculateResolvers),
 	];
 
 	return window.fetch(`${API_PATH}/`)

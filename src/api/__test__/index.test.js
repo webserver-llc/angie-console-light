@@ -522,6 +522,9 @@ describe('Api', () => {
 				}, {
 					path: 'http/upstreams',
 					processor: calculateUpstreams
+				}, {
+					path: 'resolvers',
+					processor: calculateResolvers
 				}
 			];
 

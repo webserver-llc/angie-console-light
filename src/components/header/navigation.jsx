@@ -14,6 +14,7 @@ import Settings from '../settings/index.jsx';
 import Icon from '../icon/icon.jsx';
 import mapperHttpResponse from '../../api/mappers/httpResponse.js';
 import mapperHttpUpstreams from '../../api/mappers/httpUpstreams.js';
+import mapperResolvers from '../../api/mappers/resolvers.js';
 import calculateServerZones from '../../calculators/serverzones.js';
 import calculateLocationZones from '../../calculators/locationzones.js';
 import calculateUpstreams from '../../calculators/upstreams.js';
@@ -46,6 +47,11 @@ export const SECTIONS = [
 		title: 'Shared Zones',
 		hash: '#shared_zones',
 		statusKey: 'shared_zones'
+	},
+	{
+		title: 'Resolvers',
+		hash: '#resolvers',
+		statusKey: 'resolvers'
 	},
 ];
 
@@ -161,7 +167,7 @@ export default DataBinder(Navigation, [
 	api.http.caches.process(calculateCaches),
 	api.http.upstreams.setMapper(mapperHttpUpstreams).process(calculateUpstreams),
 	// api.stream.zone_sync.process(calculateZoneSync),
-	// api.resolvers.process(calculateResolvers),
+	api.resolvers.setMapper(mapperResolvers).process(calculateResolvers),
 	// api.workers.process(calculateWorkers),
 ], {
 	ignoreEmpty: true

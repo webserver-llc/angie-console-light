@@ -12,6 +12,7 @@ import Connections from './connections/connections.jsx';
 import ServerZones from './serverzones/serverzones.jsx';
 import Caches from './caches/caches.jsx';
 import Upstreams from './upstreams/upstreams.jsx';
+import Resolvers from './resolvers.jsx';
 import styles from './style.css';
 
 export default class Index extends React.Component {
@@ -29,6 +30,7 @@ export default class Index extends React.Component {
 					<ServerZones />
 					<Upstreams />
 					<Caches />
+					<Resolvers />
 				</div>
 			</div>
 		);

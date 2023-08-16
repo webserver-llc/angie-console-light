@@ -11,6 +11,7 @@ import api from '../../api';
 import DataBinder from '../databinder/databinder.jsx';
 import SortableTable from '../table/sortabletable.jsx';
 import TableSortControl from '../table/tablesortcontrol.jsx';
+import mapperResolvers from '../../api/mappers/resolvers.js';
 import calculateResolvers from '../../calculators/resolvers.js';
 import styles from '../table/style.css';
 
@@ -79,5 +80,5 @@ export class Resolvers extends SortableTable {
 }
 
 export default DataBinder(Resolvers, [
-	api.resolvers.process(calculateResolvers)
+	api.resolvers.setMapper(mapperResolvers).process(calculateResolvers)
 ]);

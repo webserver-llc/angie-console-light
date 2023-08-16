@@ -11,6 +11,7 @@ import IndexBox from './indexbox/indexbox.jsx';
 import AlertsCount from './alertscount/alertscount.jsx';
 import DataBinder from '../../databinder/databinder.jsx';
 import api from '../../../api';
+import mapperResolvers from '../../../api/mappers/resolvers.js';
 import calculateResolvers from '../../../calculators/resolvers.js';
 
 export class Resolvers extends React.Component {
@@ -39,5 +40,5 @@ export class Resolvers extends React.Component {
 }
 
 export default DataBinder(Resolvers, [
-	api.resolvers.process(calculateResolvers)
+	api.resolvers.setMapper(mapperResolvers).process(calculateResolvers)
 ]);
