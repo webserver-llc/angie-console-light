@@ -5,14 +5,16 @@
  *
  */
 
-import api from './index.js';
+import api from '../index.js';
+import { getServerName } from './utils.js';
 
 export default class UpstreamsApi {
 	constructor(apiPrefix) {
 		this.apiPrefix = apiPrefix;
 	}
 
-	getPeer(upstreamName, peerId) {
+	getPeer(upstreamName, peer) {
+		const peerId = getServerName(peer);
 		return api[this.apiPrefix].upstreams[upstreamName].servers[peerId].get();
 	}
 
@@ -20,11 +22,13 @@ export default class UpstreamsApi {
 		return api[this.apiPrefix].upstreams[upstreamName].servers.post(peerData);
 	}
 
-	deletePeer(upstreamName, peerId) {
+	deletePeer(upstreamName, peer) {
+		const peerId = getServerName(peer);
 		return api[this.apiPrefix].upstreams[upstreamName].servers[peerId].del();
 	}
 
-	updatePeer(upstreamName, peerId, peerData) {
+	updatePeer(upstreamName, peer, peerData) {
+		const peerId = getServerName(peer);
 		return api[this.apiPrefix].upstreams[upstreamName].servers[peerId].patch(peerData);
 	}
 }

@@ -151,7 +151,10 @@ describe('<UpstreamsEditor />', () => {
 		expect(wrapper.state('data'), '[peers.size = 1] this.state.data').to.be.an('undefined');
 		expect(wrapper.state('initialData'), '[peers.size = 1] this.state.initialData').to.be.an('undefined');
 		expect(getPeerSpy.calledOnce, 'upstreamsApi.getPeer called once').to.be.true;
-		expect(getPeerSpy.calledWith('upstream_test', 4), 'upstreamsApi.getPeer call args').to.be.true;
+		expect(getPeerSpy.calledWith('upstream_test', {
+				id: 4,
+				server: 'test_server_4'
+			}), 'upstreamsApi.getPeer call args').to.be.true;
 		expect(thenSpy.calledOnce, 'upstreamsApi.getPeer().then called once').to.be.true;
 		expect(thenSpy.args[0][0], 'upstreamsApi.getPeer().then call args').to.be.a('function');
 
@@ -285,7 +288,7 @@ describe('<UpstreamsEditor />', () => {
 		const initialData = {
 			server: 'test_server_before'
 		};
-		const updatePeerSpy = spy((_, id) => `updatePeer_result_${ id }`);
+		const updatePeerSpy = spy((_, { server }) => `updatePeer_result_${ server }`);
 		const wrapper = shallow(<UpstreamsEditor
 			{ ...props }
 			upstreamsApi={{
@@ -346,10 +349,13 @@ describe('<UpstreamsEditor />', () => {
 		expect(
 			Promise.all.args[0][0],
 			'this.validate, first "then" cb, Promise.all call args'
-		).to.be.deep.equal([ 'updatePeer_result_test_4' ]);
+		).to.be.deep.equal([ 'updatePeer_result_test_server_4' ]);
 		expect(updatePeerSpy.calledOnce, 'upstreamsApi.updatePeer called once').to.be.true;
 		expect(
-			updatePeerSpy.calledWith('upstream_test', 'test_4', {
+			updatePeerSpy.calledWith('upstream_test', {
+				id: 4,
+				server: 'test_server_4'
+			}, {
 				...data,
 				normalized_by_normalizeOutputData: true
 			}),
@@ -580,7 +586,10 @@ describe('<UpstreamsEditor />', () => {
 		]);
 		expect(deletePeerSpy.calledOnce, 'upstreamsApi.deletePeer called').to.be.true;
 		expect(
-			deletePeerSpy.calledWith('upstream_test', 'test_4'),
+			deletePeerSpy.calledWith('upstream_test', {
+				id: 4,
+				server: 'test_server_4'
+			}),
 			'upstreamsApi.deletePeer call args'
 		).to.be.true;
 		expect(deletePeerThenSpy.calledOnce, 'upstreamsApi.deletePeer "then" called').to.be.true;

@@ -7,7 +7,7 @@
  */
 
 import ApiProxy from './ApiProxy.js';
-import UpstreamsApi from './UpstreamsApi.js';
+import UpstreamsApi from './upstreamsApi';
 import { API_PATH } from '../constants.js';
 
 import mapperHttpResponse from './mappers/httpResponse.js';
@@ -38,7 +38,7 @@ export const streamUpstreamsApi = new UpstreamsApi('stream');
 let apiWritePermissions = null;
 
 export const checkWritePermissions = (sendCredentials = false) =>
-	api.http.upstreams.DASHBOARD_INIT.servers.__TEST_FOR_WRITE__.del({
+	api.config.http.upstreams.DASHBOARD_INIT.servers.__TEST_FOR_WRITE__.del({
 		credentials: sendCredentials ? 'same-origin' : 'omit'
 	}).then(
 		({ error }) => error.status,

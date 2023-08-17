@@ -14,7 +14,7 @@ import { spy, stub } from 'sinon';
 import datastore from '../../datastore';
 import api, * as Api from '../index.js';
 import ApiProxy from '../ApiProxy.js';
-import UpstreamsApi from '../UpstreamsApi.js';
+import UpstreamsApi from '../upstreamsApi';
 import { API_PATH } from '../../constants.js';
 import calculateServerZones from '../../calculators/serverzones.js';
 import calculateLocationZones from '../../calculators/locationzones.js';
@@ -71,7 +71,7 @@ describe('Api', () => {
 			Api.checkWritePermissions();
 
 			assert(
-				window.fetch.args[0][0] === `${ API_PATH }/http/upstreams/DASHBOARD_INIT/servers/__TEST_FOR_WRITE__/`,
+				window.fetch.args[0][0] === `${ API_PATH }/config/http/upstreams/DASHBOARD_INIT/servers/__TEST_FOR_WRITE__/`,
 				'Unexpected path was passed to "window.fetch"'
 			);
 

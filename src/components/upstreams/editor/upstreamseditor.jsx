@@ -75,7 +75,7 @@ export default class UpstreamsEditor extends React.Component {
 		} else if (props.peers && props.peers.size === 1) {
 			this.state.loading = true;
 
-			props.upstreamsApi.getPeer(props.upstream.name, Array.from(props.peers)[0][1].id).then((data) => {
+			props.upstreamsApi.getPeer(props.upstream.name, Array.from(props.peers)[0][1]).then((data) => {
 				const normalizedData = UpstreamsEditor.normalizeInputData(data);
 
 				this.setState({
@@ -156,9 +156,9 @@ export default class UpstreamsEditor extends React.Component {
 			}
 
 			return Promise.all(
-				Array.from(peers).map(([peerId]) => upstreamsApi.updatePeer(
+				Array.from(peers).map(([peerId, peer]) => upstreamsApi.updatePeer(
 					this.props.upstream.name,
-					peerId,
+					peer,
 					UpstreamsEditor.normalizeOutputData(
 						this.state.data,
 						this.state.initialData
@@ -209,7 +209,7 @@ export default class UpstreamsEditor extends React.Component {
 
 		Promise.all(
 			peersArray.map(([peerId, peer]) =>
-				this.props.upstreamsApi.deletePeer(this.props.upstream.name, peerId).then(
+				this.props.upstreamsApi.deletePeer(this.props.upstream.name, peer).then(
 					() => peer.server
 				)
 			)
