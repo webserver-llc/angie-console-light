@@ -159,7 +159,7 @@ describe('<Upstream />', () => {
 			health_checks: {
 				checks: 24,
 				fails: 3,
-				unhealthy: 0
+				last: '2023-08-15T10:38:41Z'
 			},
 			health_status: null,
 			header_time: 999,
@@ -231,6 +231,7 @@ describe('<Upstream />', () => {
 		stub(utils, 'formatUptime').callsFake(() => 'time_formatted');
 		stub(utils, 'formatReadableBytes').callsFake(() => 'readable_bytes_formatted');
 		stub(utils, 'formatMs').callsFake(() => 'ms_formatted');
+		stub(utils, 'formatLastCheckDate').callsFake(() => 'ms_formatted');
 		stub(tableUtils, 'responsesTextWithTooltip').callsFake((value) => value);
 		stub(instance, 'editSelectedUpstream').callsFake(() => 'edit_selected_upstream_result');
 		stub(instance, 'hoverColumns').callsFake(() => 'hover_columns_result');
@@ -249,7 +250,7 @@ describe('<Upstream />', () => {
 		expect(
 			wrapper.find('table col'),
 			'[editMode = false, columnsExpanded = false] table col length'
-		).to.have.lengthOf(23);
+		).to.have.lengthOf(20);
 
 		const tableSortControl = table.find('TableSortControl');
 
@@ -283,12 +284,10 @@ describe('<Upstream />', () => {
 		expect(headRow.childAt(5).prop('colSpan'), 'head row 1, child 6 colspan').to.be.equal('2');
 		expect(headRow.childAt(6).prop('colSpan'), 'head row 1, child 7 colspan').to.be.equal('4');
 		expect(headRow.childAt(7).prop('colSpan'), 'head row 1, child 8 colspan').to.be.equal('2');
-		// expect(headRow.childAt(8).prop('colSpan'), 'head row 1, child 8 colspan').to.be.equal('4');
-		// expect(headRow.childAt(9).prop('colSpan'), 'head row 1, child 8 colspan').to.be.equal('2');
 		expect(
 			table.find('thead').childAt(1).children(),
 			'[columnsExpanded = false] head row 2, children length'
-		).to.have.lengthOf(20);
+		).to.have.lengthOf(19);
 
 		const headTooltips = table.find(`thead .${ styles['hinted'] }`);
 
@@ -331,7 +330,7 @@ describe('<Upstream />', () => {
 		expect(tbody.children(), '[with peers] tbody children length').to.have.lengthOf(3);
 
 		// Peer 1
-		expect(tbody.childAt(0).children(), '[peer 1] td count').to.have.lengthOf(22);
+		expect(tbody.childAt(0).children(), '[peer 1] td count').to.have.lengthOf(21);
 		expect(tbody.childAt(0).childAt(0).prop('className'), '[peer 1] peer state').to.be.equal(styles['up']);
 		expect(
 			tbody.childAt(0).childAt(1).prop('id'),
@@ -416,17 +415,12 @@ describe('<Upstream />', () => {
 		expect(tbody.childAt(0).childAt(17).text(), '[peer 1] unavail').to.be.equal('2');
 		expect(tbody.childAt(0).childAt(18).text(), '[peer 1] health checks').to.be.equal('24');
 		expect(tbody.childAt(0).childAt(19).text(), '[peer 1] health fails').to.be.equal('3');
-		expect(tbody.childAt(0).childAt(20).text(), '[peer 1] health unhealthy').to.be.equal('0');
-		expect(
-			tbody.childAt(0).childAt(21).prop('className'),
-			'[peer 1] health_status className'
-		).to.be.equal(`${ styles['bdr'] } ${ styles['flash'] }`);
-		expect(tbody.childAt(0).childAt(21).text(), '[peer 1] health_status').to.be.equal('–');
+		expect(tbody.childAt(0).childAt(20).text(), '[peer 1] health last').to.be.equal('ms_formatted');
 
 		// TODO: Add tests for SSL Verify Failures cell
 
 		// Peer 2
-		expect(tbody.childAt(1).children(), '[peer 2] td count').to.have.lengthOf(21);
+		expect(tbody.childAt(1).children(), '[peer 2] td count').to.have.lengthOf(20);
 		expect(
 			tbody.childAt(1).childAt(2).childAt(0).text(),
 			'[peer 2] address-container text'
@@ -440,24 +434,14 @@ describe('<Upstream />', () => {
 			'[peer 2] responses 5xx className'
 		).to.be.equal(`${ styles['bdr'] } ${ styles['flash'] } ${ styles['red-flash'] }`);
 		expect(tbody.childAt(1).childAt(10).text(), '[peer 2] max_conns').to.be.equal('123/s');
-		expect(
-			tbody.childAt(1).childAt(20).prop('className'),
-			'[peer 2] health_status className'
-		).to.be.equal(`${ styles['bdr'] } ${ styles['flash'] } ${ styles['red-flash'] }`);
-		expect(tbody.childAt(1).childAt(20).text(), '[peer 2] health_status').to.be.equal('✘');
 
 		// TODO: Add tests for SSL Verify Failures cell
 
 		// Peer 3
-		expect(tbody.childAt(2).children(), '[peer 3] td count').to.have.lengthOf(21);
-		expect(
-			tbody.childAt(2).childAt(20).prop('className'),
-			'[peer 3] health_status className'
-		).to.be.equal(`${ styles['bdr'] } ${ styles['flash'] }`);
-		expect(tbody.childAt(2).childAt(20).text(), '[peer 3] health_status').to.be.equal('✔');
+		expect(tbody.childAt(2).children(), '[peer 3] td count').to.have.lengthOf(20);
 
 		// Tooltips
-		expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(12);
+		expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(10);
 		expect(
 			tooltips.useTooltip.args[4][0].type.name,
 			'useTooltip, peer 1, PeerTooltip'
@@ -493,32 +477,22 @@ describe('<Upstream />', () => {
 		).to.be.deep.equal(peers[1]);
 		expect(tooltips.useTooltip.args[7][1], 'useTooltip, peer 2, ConnectionsTooltip, arg 2').to.be.equal('hint');
 		expect(
-			tooltips.useTooltip.args[8][0].props.children,
-			'useTooltip, peer 2, Health Status'
-		).to.be.equal('failed');
-		expect(tooltips.useTooltip.args[8][1], 'useTooltip, peer 2, Health Status, tooltip type').to.be.equal('hint');
-		expect(
-			tooltips.useTooltip.args[9][0].type.name,
+			tooltips.useTooltip.args[8][0].type.name,
 			'useTooltip, peer 3, PeerTooltip'
 		).to.be.equal('PeerTooltip');
 		expect(
-			tooltips.useTooltip.args[9][0].props.peer,
+			tooltips.useTooltip.args[8][0].props.peer,
 			'useTooltip, peer 3, PeerTooltip, attr peer'
 		).to.be.deep.equal(peers[2]);
 		expect(
-			tooltips.useTooltip.args[10][0].type.name,
+			tooltips.useTooltip.args[9][0].type.name,
 			'useTooltip, peer 3, ConnectionsTooltip'
 		).to.be.equal('ConnectionsTooltip');
 		expect(
-			tooltips.useTooltip.args[10][0].props.peer,
+			tooltips.useTooltip.args[9][0].props.peer,
 			'useTooltip, peer 3, ConnectionsTooltip, attr peer'
 		).to.be.deep.equal(peers[2]);
-		expect(tooltips.useTooltip.args[10][1], 'useTooltip, peer 3, ConnectionsTooltip, arg 2').to.be.equal('hint');
-		expect(
-			tooltips.useTooltip.args[11][0].props.children,
-			'useTooltip, peer 3, Health Status'
-		).to.be.equal('passed');
-		expect(tooltips.useTooltip.args[11][1], 'useTooltip, peer 3, Health Status, tooltip type').to.be.equal('hint');
+		expect(tooltips.useTooltip.args[9][1], 'useTooltip, peer 3, ConnectionsTooltip, arg 2').to.be.equal('hint');
 
 		expect(tableUtils.responsesTextWithTooltip.callCount, 'responsesTextWithTooltip called 6 times').to.be.equal(6);
 		expect(
@@ -637,7 +611,7 @@ describe('<Upstream />', () => {
 		expect(
 			wrapper.find('table col'),
 			'[editMode = true, columnsExpanded = true] table col length'
-		).to.have.lengthOf(27);
+		).to.have.lengthOf(24);
 		expect(
 			table.find('thead').childAt(0).childAt(4).prop('colSpan'),
 			'[columnsExpanded = true] head row 1, child 5 colspan'
@@ -645,7 +619,7 @@ describe('<Upstream />', () => {
 		expect(
 			table.find('thead').childAt(1).children(),
 			'[columnsExpanded = true] head row 2, children length'
-		).to.have.lengthOf(23);
+		).to.have.lengthOf(22);
 
 		expect(tableUtils.responsesTextWithTooltip.callCount, 'responsesTextWithTooltip called 15 times').to.be.equal(15);
 		peers.forEach((peer, i) => {
@@ -756,7 +730,7 @@ describe('<Upstream />', () => {
 
 		tbody = table.find('tbody');
 
-		expect(tbody.childAt(0).children(), '[columnsExpanded = true, peer 1] td count').to.have.lengthOf(25);
+		expect(tbody.childAt(0).children(), '[columnsExpanded = true, peer 1] td count').to.have.lengthOf(24);
 		expect(
 			tbody.childAt(0).childAt(7).prop('rowspan'),
 			'[columnsExpanded = true, peer 1] collapse-columns rowspan'
@@ -803,7 +777,7 @@ describe('<Upstream />', () => {
 			'[columnsExpanded = true, peer 1] 3xx'
 		).to.be.equal('1');
 
-		expect(tbody.childAt(1).children(), '[columnsExpanded = true, peer 2] td count').to.have.lengthOf(24);
+		expect(tbody.childAt(1).children(), '[columnsExpanded = true, peer 2] td count').to.have.lengthOf(23);
 		expect(
 			tbody.childAt(1).childAt(7).prop('className'),
 			'[columnsExpanded = true, peer 2] 1xx className'
@@ -829,7 +803,7 @@ describe('<Upstream />', () => {
 			'[columnsExpanded = true, peer 2] 3xx'
 		).to.be.equal('2');
 
-		expect(tbody.childAt(2).children(), '[columnsExpanded = true, peer 3] td count').to.have.lengthOf(24);
+		expect(tbody.childAt(2).children(), '[columnsExpanded = true, peer 3] td count').to.have.lengthOf(23);
 		expect(
 			tbody.childAt(2).childAt(7).prop('className'),
 			'[columnsExpanded = true, peer 3] 1xx className'
@@ -862,6 +836,7 @@ describe('<Upstream />', () => {
 		utils.formatUptime.restore();
 		utils.formatReadableBytes.restore();
 		utils.formatMs.restore();
+		utils.formatLastCheckDate.restore();
 		tableUtils.responsesTextWithTooltip.restore();
 		instance.editSelectedUpstream.restore();
 		instance.hoverColumns.restore();

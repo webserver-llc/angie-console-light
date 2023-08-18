@@ -9,7 +9,7 @@ describe("Mappers - HTTP Upstreams", () => {
             server: "10.11.128.1",
             backup: false,
             weight: 1,
-            state: "up",
+            state: "unavailable",
             selected: {
               current: 1,
               total: 296,
@@ -55,7 +55,7 @@ describe("Mappers - HTTP Upstreams", () => {
             name: "10.11.128.1:80",
             backup: false,
             weight: 1,
-            state: "up",
+            state: "unavail",
             active: 1,
             requests: 296,
             selected: "2023-08-15T10:38:41Z",

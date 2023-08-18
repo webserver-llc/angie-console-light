@@ -22,7 +22,7 @@ export const FILTER_OPTIONS = {
 	all: 'Show all',
 	up: 'Up',
 	failed: 'Failed',
-	drain: 'Drain',
+	checking: 'Checking',
 	down: 'Down'
 };
 
@@ -145,8 +145,8 @@ export default class UpstreamsList extends SortableTable {
 				case 'unhealthy':
 					needOrder = 'failed';
 					break;
-				case 'draining':
-					needOrder = 'drain';
+				case 'checking':
+					needOrder = 'checking';
 					break;
 				case 'down':
 					needOrder = 'down';

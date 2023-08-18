@@ -33,7 +33,6 @@ describe('<PeerTooltip />', () => {
 			<PeerTooltip
 				peer={{
 					state: 'unavail',
-					health_status: null,
 					name: 'test_1',
 					backup: true,
 					server: 'test_server',
@@ -44,7 +43,7 @@ describe('<PeerTooltip />', () => {
 			/>
 		);
 
-		expect(wrapper.children(), 'content length').to.have.lengthOf(7);
+		expect(wrapper.children(), 'content length').to.have.lengthOf(6);
 		expect(wrapper.childAt(0).prop('className'), 'peer name, className').to.be.equal(styles['row']);
 		expect(wrapper.childAt(0).text(), 'peer name, text').to.be.equal('test_1');
 		expect(wrapper.childAt(1).name(), 'peer server, html tag').to.be.equal('h5');
@@ -82,18 +81,10 @@ describe('<PeerTooltip />', () => {
 		expect(utils.formatUptime.args[0][0], 'formatUptime call arg').to.be.equal('downtime_ts');
 		expect(
 			wrapper.childAt(5).prop('className'),
-			'peer lastcheck, className'
-		).to.be.equal(styles['row']);
-		expect(
-			wrapper.childAt(5).text(),
-			'peer lastcheck, text'
-		).to.be.equal('Last check: unknown');
-		expect(
-			wrapper.childAt(6).prop('className'),
 			'peer downstart, className'
 		).to.be.equal(styles['row']);
 		expect(
-			wrapper.childAt(6).text(),
+			wrapper.childAt(5).text(),
 			'peer downstart, text'
 		).to.be.equal('Down since: formatted_date ');
 		expect(utils.formatDate.calledOnce, 'formatDate called once').to.be.true;
@@ -107,7 +98,6 @@ describe('<PeerTooltip />', () => {
 			<PeerTooltip
 				peer={{
 					state: 'unhealthy',
-					health_status: true,
 					backup: false,
 					server: 'test_server',
 					downtime: 'downtime_ts',
@@ -116,7 +106,7 @@ describe('<PeerTooltip />', () => {
 			/>
 		);
 
-		expect(wrapper.children(), 'content length').to.have.lengthOf(4);
+		expect(wrapper.children(), 'content length').to.have.lengthOf(3);
 		expect(wrapper.childAt(0).name(), 'peer server, html tag').to.be.equal('h5');
 		expect(wrapper.childAt(0).prop('className'), 'peer server, className').to.be.equal(styles['h5']);
 		expect(wrapper.childAt(0).text(), 'peer server, text').to.be.equal('test_server');
@@ -132,14 +122,6 @@ describe('<PeerTooltip />', () => {
 			wrapper.childAt(1).childAt(0).text(),
 			'peer state, text'
 		).to.be.equal('failed (Active health check failed)');
-		expect(
-			wrapper.childAt(3).prop('className'),
-			'peer lastcheck, className'
-		).to.be.equal(styles['row']);
-		expect(
-			wrapper.childAt(3).text(),
-			'peer lastcheck, text'
-		).to.be.equal('Last check: passed');
 		expect(utils.formatDate.notCalled, 'formatDate not called').to.be.true;
 
 		wrapper.unmount();
@@ -150,7 +132,6 @@ describe('<PeerTooltip />', () => {
 			<PeerTooltip
 				peer={{
 					state: 'up',
-					health_status: false,
 					backup: false,
 					server: 'test_server',
 					downtime: 'downtime_ts',
@@ -159,7 +140,7 @@ describe('<PeerTooltip />', () => {
 			/>
 		);
 
-		expect(wrapper.children(), 'content length').to.have.lengthOf(4);
+		expect(wrapper.children(), 'content length').to.have.lengthOf(3);
 		expect(
 			wrapper.childAt(1).prop('className'),
 			'peer state wrap, className'
@@ -169,14 +150,6 @@ describe('<PeerTooltip />', () => {
 			'peer state, className'
 		).to.be.equal(styles['status_up']);
 		expect(wrapper.childAt(1).childAt(0).text(), 'peer state, text').to.be.equal('up');
-		expect(
-			wrapper.childAt(3).prop('className'),
-			'peer lastcheck, className'
-		).to.be.equal(styles['row']);
-		expect(
-			wrapper.childAt(3).text(),
-			'peer lastcheck, text'
-		).to.be.equal('Last check: failed');
 		expect(utils.formatDate.notCalled, 'formatDate not called').to.be.true;
 
 		wrapper.unmount();

@@ -57,35 +57,34 @@ export default class Upstream extends UpstreamsList {
 	renderPeers(peers) {
 		return (
 			<table className={`${ styles.table } ${ styles.wide }${this.state.hoveredColumns ? (' ' + styles['hovered-expander']) : ''}`}>
-				<col width="10px" />
-				{this.state.editMode ? <col width="1%" /> : null}
-				<col width="210px" />
-				<col width="1%" />
+				<colgroup>
+					<col width="10px" />
+					{this.state.editMode ? <col width="1%" /> : null}
+					<col width="210px" />
+					<col width="1%" />
 
-				<col />
-				<col />
-				<col />
+					<col />
+					<col />
+					<col />
 
-				<col width="20px" />
+					<col width="20px" />
 
-				{ this.state.columnsExpanded ? [<col key="0" />, <col key="1" />, <col key="2" />] : null }
+					{ this.state.columnsExpanded ? [<col key="0" />, <col key="1" />, <col key="2" />] : null }
 
-				<col />
-				<col />
-				<col width="1%" />
-				<col width="1%" />
-				<col width="1%" />
-				<col width="1%" />
-				<col />
-				<col />
-				<col />
-				<col />
-				<col />
-				<col />
-				<col />
-				<col />
-				<col />
-				<col />
+					<col />
+					<col />
+					<col width="1%" />
+					<col width="1%" />
+					<col width="1%" />
+					<col width="1%" />
+					<col />
+					<col />
+					<col />
+					<col />
+					<col />
+					<col />
+					<col width="100px" />
+				</colgroup>
 
 				<thead>
 					<tr>
@@ -103,7 +102,7 @@ export default class Upstream extends UpstreamsList {
 						<th colSpan="2">Conns</th>
 						<th colSpan="4">Traffic</th>
 						<th colSpan="2">Server checks</th>
-						<th colSpan="4">Health monitors</th>
+						<th colSpan="3">Health monitors</th>
 					</tr>
 					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
 						<th className={ styles['left-align'] }>Name</th>
@@ -146,7 +145,6 @@ export default class Upstream extends UpstreamsList {
 						<th className={ styles.bdr }>Unavail</th>
 						<th>Checks</th>
 						<th>Fails</th>
-						<th>Unhealthy</th>
 						<th>Last</th>
 					</tr>
 				</thead>
@@ -234,27 +232,7 @@ export default class Upstream extends UpstreamsList {
 
 										<td>{ peer.health_checks.checks }</td>
 										<td>{ peer.health_checks.fails }</td>
-										<td>{ peer.health_checks.unhealthy }</td>
-
-										<td className={`${ styles.bdr } ${ styles.flash }${peer.health_status === false ? (' ' + styles['red-flash']) : ''}`}>
-											{
-												peer.health_status === null
-													? '–'
-													: (
-														<span
-															className={ styles.hinted }
-															{...tooltips.useTooltip(
-																<div>
-																	{ peer.health_status ? 'passed' : 'failed' }
-																</div>,
-																'hint'
-															)}
-														>
-															{ peer.health_status ? '✔' : '✘' }
-														</span>
-													)
-											}
-										</td>
+										<td>{ utils.formatLastCheckDate(peer.health_checks.last) }</td>
 									</tr>
 								);
 							})

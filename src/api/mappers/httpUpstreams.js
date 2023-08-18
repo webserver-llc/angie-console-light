@@ -12,7 +12,7 @@ export default (response) => {
 			const {
 				data: { sent, received },
 				selected: { current, total, last },
-				health: { fails, unavailable, downtime, downstart },
+				health: { fails, unavailable, downtime, downstart, probes },
 			} = peers[key];
 			peers[key].id = index;
 			peers[key].name = key;
@@ -27,11 +27,21 @@ export default (response) => {
 			peers[key].sent = sent;
 			peers[key].received = received;
 
+			if (peers[key].state === 'unavailable') {
+				peers[key].state = 'unavail';
+			}
+
 			delete peers[key].health;
 			delete peers[key].data;
 
-			// TODO: Implements on Angie PRO 1.2.0 version
 			peers[key].health_checks = {};
+			if (probes) {
+				peers[key].health_checks = {
+					checks: probes.count,
+					fails: probes.fails,
+					last: probes.last,
+				};
+			}
 			result.push(peers[key]);
 		});
 		response[key].peers = result;

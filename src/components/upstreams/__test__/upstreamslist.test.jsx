@@ -343,7 +343,7 @@ describe('<UpstreamsList />', () => {
 			{ state: 'up' },
 			{ state: 'unavail' },
 			{ state: 'unhealthy' },
-			{ state: 'draining' },
+			{ state: 'checking' },
 			{ state: 'down' }
 		];
 		const wrapper = shallow(
@@ -365,9 +365,9 @@ describe('<UpstreamsList />', () => {
 			{ state: 'unhealthy' }
 		]);
 		expect(
-			instance.filterPeers(peers, 'drain'),
-			'drain filtering'
-		).to.be.deep.equal([{ state: 'draining' }]);
+			instance.filterPeers(peers, 'checking'),
+			'checking filtering'
+		).to.be.deep.equal([{ state: 'checking' }]);
 		expect(
 			instance.filterPeers(peers, 'down'),
 			'down filtering'
@@ -573,7 +573,7 @@ describe('<UpstreamsList />', () => {
 					{ id: 'test_1', state: 'up' },
 					{ id: 'test_2', state: 'unavail' },
 					{ id: 'test_3', state: 'unhealthy' },
-					{ id: 'test_4', state: 'draining' },
+					{ id: 'test_4', state: 'checking' },
 					{ id: 'test_5', state: 'down' }
 				],
 				zoneSize: null,

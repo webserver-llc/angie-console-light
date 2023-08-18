@@ -22,16 +22,6 @@ export default function PeerTooltip({ peer }){
 		state = <span className={ styles[`status_${peer.state}`] }>{peer.state}</span>;
 	}
 
-	let lastCheck;
-
-	if (peer.health_status === null) {
-		lastCheck = 'unknown';
-	} else if(peer.health_status) {
-		lastCheck = 'passed';
-	} else {
-		lastCheck = 'failed';
-	}
-
 	return (<div>
 		{'name' in peer ? <div className={ styles.row }>{peer.name}</div> : null}
 		<h5 className={ styles.h5 }>{peer.backup ? 'b ' : ''}{peer.server}</h5>
@@ -42,7 +32,6 @@ export default function PeerTooltip({ peer }){
 		}
 
 		<div className={ styles.row }>Total downtime: {utils.formatUptime(peer.downtime)}</div>
-		<div className={ styles.row }>Last check: {lastCheck}</div>
 
 		{
 			peer.isHttp && peer.downstart ? <div className={ styles.row }>Down since: {utils.formatDate(peer.downstart)} </div> : null

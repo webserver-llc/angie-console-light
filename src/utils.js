@@ -94,6 +94,16 @@ export const formatDate = (timestamp) => {
 	return `${ datetime.toISOString().slice(0, 10) } ${ time[0] } ${ time[1] }`;
 };
 
+export const formatLastCheckDate = (timestamp) => {
+	const unixTimestamp = Date.now() - new Date(timestamp).valueOf();
+	if (unixTimestamp < 0) {
+		// eslint-disable-next-line no-console
+		console.warn('Incorrect timestamp or invalid datetime setting on PC. Check your settings', timestamp);
+		return '-';
+	}
+	return formatUptime(unixTimestamp);
+};
+
 export const getHTTPCodesArray = (codes, codeGroup) => {
 	const result = [];
 
@@ -285,6 +295,7 @@ export default {
 	formatDate,
 	formatNumber,
 	formatHttpResponse,
+	formatLastCheckDate,
 	getHTTPCodesArray,
 	getSSLHandhsakesFailures,
 	getSSLVeryfiedFailures,

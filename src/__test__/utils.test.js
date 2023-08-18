@@ -11,6 +11,7 @@ import {
 	formatReadableBytes,
 	formatMs,
 	formatDate,
+	formatLastCheckDate,
 	getHTTPCodesArray,
 	getSSLHandhsakesFailures,
 	getSSLVeryfiedFailures,
@@ -185,5 +186,16 @@ describe('Utils', () => {
 		expect(() => isEmptyObj(null), 'with null argument').to.throw('available');	
 		expect(isEmptyObj({}), 'empty object').to.be.true;
 		expect(isEmptyObj({ a: 1 }), 'empty object').to.be.false;
+	});
+
+	it('formatLastCheckDate()', () => {
+		stub(Date, 'now').callsFake(() => 1692346714363);
+		expect(formatLastCheckDate("2023-08-18T08:18:45Z"), 'invalid timestamp').to.be.equal('-');
+		expect(formatLastCheckDate("2023-08-18T08:18:34Z"), 'ms').to.be.equal('363ms');
+		expect(formatLastCheckDate("2023-08-18T08:18:24Z"), 's').to.be.equal('10.36s');
+		expect(formatLastCheckDate("2023-08-18T08:17:00Z"), 'm').to.be.equal('1m');
+		expect(formatLastCheckDate("2023-08-18T07:17:00Z"), 'h').to.be.equal('1h 1m');
+		expect(formatLastCheckDate("2023-08-16T07:17:00Z"), 'h').to.be.equal('2d 1h 1m');
+		Date.now.restore();
 	});
 });
