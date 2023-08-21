@@ -10,6 +10,10 @@
 	width: 100%;
 }
 
+.half {
+	width: 50%;
+}
+
 .thin {
 	min-width: 500px;
 }
@@ -270,4 +274,28 @@ td.status {
 
 .chart-row td {
 	border-bottom: 2px solid #999;
+}
+
+.table td.inner-table {
+	padding: 0;
+	border-bottom: initial;
+	background-color: transparent;	
+}
+
+.table .expandable-row {
+	user-select: none;
+	cursor: pointer;
+}
+
+.table .without-hover:hover {
+	background-color: transparent;
+}
+
+.table .expanding-item-control {
+	font-size: 14px;
+	line-height: 8px;
+	padding: 0;
+	vertical-align: middle;
+	text-align: center;
+	font-weight: bold;
 }
