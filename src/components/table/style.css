@@ -278,7 +278,7 @@ td.status {
 	background-color: transparent;	
 }
 
-.table .expandable-row {
+[data-expandable="true"] {
 	user-select: none;
 	cursor: pointer;
 }

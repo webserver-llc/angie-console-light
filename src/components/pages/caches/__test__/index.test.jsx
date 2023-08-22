@@ -245,5 +245,142 @@ describe('<Caches Page />', () => {
 			Caches.formatReadableBytes.restore();
 			wrapper.unmount();
 		});
+
+		it('caches rows with shards', () => {
+			stub(tooltips, 'useTooltip').callsFake((prop_1, prop_2) => ({
+				useTooltip_prop_1: prop_1,
+				useTooltip_prop_2: prop_2
+			}));
+			stub(Caches, 'formatReadableBytes').callsFake(a => a);
+			
+			const wrapper = shallow(
+				<Caches data={{ caches: new Map([
+					['test_1', {
+						cold: false,
+						slab: 'test_slab_1',
+						zoneSize: 30,
+						max_size: 500,
+						size: 430,
+						warning: false,
+						danger: false,
+						used: 100,
+						shards: {
+							'/var/cache/angie/proxy_cache/test_slab_1_1': {
+								size: 1064960,
+								max_size: 16777216,
+								cold: false
+							},
+							'/var/cache/angie/proxy_cache/test_slab_1_2': {
+								size: 28672,
+								max_size: 16777216,
+								cold: false
+							}
+						},
+						traffic: {
+							s_served: 3,
+							s_written: 2,
+							s_bypassed: 1
+						},
+						hit_percents_generic: 10
+					}], ['test_2', {
+						cold: true,
+						slab: 'test_slab_2',
+						zoneSize: undefined,
+						max_size: '501',
+						size: 431,
+						warning: true,
+						danger: true,
+						used: 101,
+						shards: {
+							'/var/cache/angie/proxy_cache/test_slab_2_1': {
+								size: 1024960,
+								max_size: 16777216,
+								cold: false
+							},
+							'/var/cache/angie/proxy_cache/test_slab_2_2': {
+								size: 38672,
+								max_size: 16777216,
+								cold: true
+							}
+						},
+						traffic: {
+							s_served: 4,
+							s_written: 3,
+							s_bypassed: 2
+						},
+						hit_percents_generic: 11
+					}]
+				]) }} />
+			);
+			let expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
+			expect(expandableAllControl.prop('className'))
+				.to.be.equal(`${styles.sorter} ${styles.sorterActive} ${styles['hovered-expander']}`);
+			expect(expandableAllControl.text(), 'all expandable control, icon').to.be.equal('▾');
+			expect(expandableAllControl.prop('rowSpan'), 'all expandable control, rowSpan').to.be.equal(2);
+			expect(expandableAllControl.type(), 'all expandable control, type').to.be.equal('th');
+			expect(expandableAllControl.prop('useTooltip_prop_1')).to.be.equal('Show all exsists shards');
+			expect(expandableAllControl.prop('useTooltip_prop_2')).to.be.equal('hint-right');
+			
+			let rows = wrapper.find('[data-expandable="true"]');
+			expect(rows.length, 'count expandable elements').to.be.equal(2);
+			
+			let expandableElement = wrapper.find('[data-expandable-element]');
+			expect(expandableElement.length).to.be.equal(0);
+			expect(rows.at(0).childAt(0).prop('className'), 'row 1, cell 1').to.be.equal(styles['expanding-item-control']);
+			expect(rows.at(0).childAt(0).text(), 'row 1, cell 1').to.be.equal('▾');
+			
+			expect(rows.at(1).childAt(0).prop('className')).to.be.equal(styles['expanding-item-control']);
+			expect(rows.at(1).childAt(0).text()).to.be.equal('▾');
+			
+			expandableAllControl.simulate('click');
+			
+			expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
+			expect(expandableAllControl.text(), 'open all expandable elements').to.be.equal('▴');
+			
+			rows = wrapper.find('[data-expandable="true"]');
+			expect(rows.length, 'count expandable elements').to.be.equal(2);
+			
+			expandableElement = wrapper.find('[data-expandable-element]');
+			expect(expandableElement.length, 'all expandable tables is show').to.be.equal(2);
+			
+			expect(rows.at(0).childAt(0).text(), 'row 1, cell 1').to.be.equal('▴');
+			expect(rows.at(1).childAt(0).text(), 'row 2, cell 1').to.be.equal('▴');
+
+			rows.at(0).simulate('click')	
+			
+			expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
+			expect(expandableAllControl.text(), 'all expandable control is closed').to.be.equal('▾');
+			
+			rows = wrapper.find('[data-expandable="true"]');
+			
+			expect(rows.at(0).childAt(0).text(), 'row 1, cell 1').to.be.equal('▾');
+			expect(rows.at(1).childAt(0).text(), 'row 2, cell 1').to.be.equal('▴');
+			
+			expandableElement = wrapper.find('[data-expandable-element]');
+			expect(expandableElement.length, 'only one expandable element').to.be.equal(1);
+			const expandableElementCells = expandableElement.at(0).find('tbody tr');
+			
+			const row1 = expandableElementCells.at(0).find('td'); 
+			const hintElementRow1 = row1.at(1).childAt(0);
+			expect(row1.at(0).text(), 'row 1, cell 1').to.be.equal('/var/cache/angie/proxy_cache/test_slab_2_1');
+			expect(hintElementRow1.name(), 'row 1, cell 2, Icon').to.be.equal('span');
+			expect(hintElementRow1.prop('useTooltip_prop_1'), 'row 1, cell 2, useTooltip arg 1').to.be.equal('Warm');
+			expect(hintElementRow1.prop('useTooltip_prop_2'), 'row 1, cell 2, useTooltip arg 2').to.be.equal('hint');
+			expect(row1.at(2).text(), 'row 1, cell 3').to.be.equal('16777216');
+			expect(row1.at(3).text(), 'row 1, cell 4').to.be.equal('1024960');
+			
+			const row2 = expandableElementCells.at(1).find('td'); 
+			const hintElementRow2 = row2.at(1).childAt(0);
+			expect(row2.at(0).text(), 'row 2, cell 1').to.be.equal('/var/cache/angie/proxy_cache/test_slab_2_2');
+			expect(hintElementRow2.name(), 'row 2, cell 2, Icon').to.be.equal('span');
+			expect(hintElementRow2.prop('useTooltip_prop_1'), 'row 2, cell 2, useTooltip arg 1').to.be.equal('Cold');
+			expect(hintElementRow2.prop('useTooltip_prop_2'), 'row 2, cell 2, useTooltip arg 2').to.be.equal('hint');
+			expect(row2.at(2).text(), 'row 2, cell 3').to.be.equal('16777216');
+			expect(row2.at(3).text(), 'row 2, cell 4').to.be.equal('38672');
+			
+			tooltips.useTooltip.restore();
+			Caches.formatReadableBytes.restore();
+			wrapper.unmount();
+		})
 	});
 });

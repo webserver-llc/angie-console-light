@@ -122,7 +122,10 @@ export class Caches extends ExpandableTable {
 					<tbody>
 						{Array.from(caches).map(([cacheName, cache]) => {
 							const result = [
-								<tr className={ this.hasExpandable(cacheName) ? styles['expandable-row'] : '' } onClick={() => this.toogleExpandingItemState(cacheName)}>
+								<tr
+									data-expandable={ this.hasExpandable(cacheName) ? 'true' : 'false' }
+									onClick={() => this.toogleExpandingItemState(cacheName)}
+								>
 									{this.renderExpandingItemToogleIcon(cacheName)}
 									<td className={`${styles.bold} ${styles.bdr}`}>
 										{cacheName}
@@ -184,7 +187,7 @@ export class Caches extends ExpandableTable {
 
 							if (this.isExpandingItem(cacheName)) {
 								result.push(
-									<tr className={styles['without-hover']}>
+									<tr data-expandable-element className={styles['without-hover']}>
 										<td colSpan="2" />
 										<td colSpan="10" className={styles['inner-table']}>
 											<table className={`${styles.table} ${styles.wide}`}>
