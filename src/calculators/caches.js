@@ -71,29 +71,49 @@ export function handleCache(STATS, slabs, cache, cacheName) {
 
 	cache.hit_percents_generic = calculateCacheHit(cache);
 
-	if (typeof cache.max_size === 'number') {
-		cache.used = Math.round((cache.size / cache.max_size) * 100);
-	} else {
-		cache.used = (cache.size > 0) ? 1 : 0;
-	}
+	let warning = false;
 
 	utils.pickZoneSize(cache, slabs, cacheName);
-
-	let warning = false;
 
 	if (cache.hit_percents_generic !== null && cache.hit_percents_generic < 30) {
 		STATS.status = 'warning';
 		warning = true;
 	}
 
-	if (cache.used > 105) {
-		STATS.alerts++;
-		cache.danger = true;
-		STATS.status = 'danger';
-	} else if (cache.used > 100 && cache.used <= 105) {
-		STATS.status = 'warning';
-		cache.warning = true;
-		warning = true;
+	if (cache.shards) {
+		Object.values(cache.shards).forEach((shard) => {
+			if (typeof shard.max_size === 'number') {
+				shard.used = Math.round((shard.size / shard.max_size) * 100);
+			} else {
+				shard.used = (shard.size > 0) ? 1 : 0;
+			}
+
+			if (shard.used > 105) {
+				STATS.alerts++;
+				shard.danger = true;
+				STATS.status = 'danger';
+			} else if (shard.used > 100 && shard.used <= 105) {
+				STATS.status = 'warning';
+				shard.warning = true;
+				warning = true;
+			}
+		});
+	} else {
+		if (typeof cache.max_size === 'number') {
+			cache.used = Math.round((cache.size / cache.max_size) * 100);
+		} else {
+			cache.used = (cache.size > 0) ? 1 : 0;
+		}
+
+		if (cache.used > 105) {
+			STATS.alerts++;
+			cache.danger = true;
+			STATS.status = 'danger';
+		} else if (cache.used > 100 && cache.used <= 105) {
+			STATS.status = 'warning';
+			cache.warning = true;
+			warning = true;
+		}
 	}
 
 	if (warning) {

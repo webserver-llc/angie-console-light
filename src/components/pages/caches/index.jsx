@@ -16,10 +16,7 @@ import cacheCalculator from '#/calculators/caches.js';
 import sharedZonesCalculator from '#/calculators/sharedzones.js';
 import utils from '#/utils.js';
 import tooltips from '#/tooltips/index.jsx';
-import {
-	ExpandableTable,
-	styles,
-} from '#/components/table';
+import { ExpandableTable, styles } from '#/components/table';
 import { CacheStateTooltip, SharedZoneTooltip } from '../tooltips.jsx';
 import cachesStyles from './style.css';
 
@@ -65,7 +62,7 @@ export class Caches extends ExpandableTable {
 
 				<table className={styles.table}>
 					<colgroup>
-						{ this.getExpandableItems().length ? <col width="10px" /> : null }
+						{this.getExpandableItems().length ? <col width="10px" /> : null}
 						<col width="170px" />
 					</colgroup>
 
@@ -125,9 +122,23 @@ export class Caches extends ExpandableTable {
 
 					<tbody>
 						{Array.from(caches).map(([cacheName, cache]) => {
+							let comp;
+							
+							if (typeof cache.max_size === 'number') {
+								comp = Caches.formatReadableBytes(cache.max_size, 'GB')
+							} else {
+								if (cache.shards) {
+									comp = <span>-</span>;
+								} else {
+									comp = <span>&infin;</span>;
+								}
+							}
+							
 							const result = [
 								<tr
-									data-expandable={ this.hasExpandable(cacheName) ? 'true' : 'false' }
+									data-expandable={
+										this.hasExpandable(cacheName) ? 'true' : 'false'
+									}
 									onClick={() => this.toogleExpandingItemState(cacheName)}
 								>
 									{this.renderExpandingItemToogleIcon(cacheName)}
@@ -156,23 +167,28 @@ export class Caches extends ExpandableTable {
 										</span>
 									</td>
 									<td className={styles.bdr}>
-										{typeof cache.max_size === 'number' ? (
-											Caches.formatReadableBytes(cache.max_size, 'GB')
+										{comp}
+									</td>
+									<td className={styles.bdr}>
+										{typeof cache.size === 'number' ? (
+											Caches.formatReadableBytes(cache.size, 'GB')
 										) : (
-											<span>&infin;</span>
+											<span>-</span>
 										)}
 									</td>
 									<td className={styles.bdr}>
-										{Caches.formatReadableBytes(cache.size, 'GB')}
-									</td>
-									<td className={styles.bdr}>
-										<ProgressBar
-											warning={cache.warning}
-											danger={cache.danger}
-											percentage={
-												typeof cache.max_size !== 'number' ? -1 : cache.used
-											}
-										/>
+										{typeof cache.max_size === 'number' &&
+                    typeof cache.size === 'number' ? (
+												<ProgressBar
+													warning={cache.warning}
+													danger={cache.danger}
+													percentage={
+														typeof cache.max_size !== 'number' ? -1 : cache.used
+													}
+												/>
+											) : (
+												<span>-</span>
+											)}
 									</td>
 									<td className={styles['right-align']}>
 										{Caches.formatReadableBytes(cache.traffic.s_served)}
@@ -191,7 +207,10 @@ export class Caches extends ExpandableTable {
 
 							if (this.isExpandingItem(cacheName)) {
 								result.push(
-									<tr data-expandable-element className={styles['without-hover']}>
+									<tr
+										data-expandable-element
+										className={styles['without-hover']}
+									>
 										<td colSpan="2" />
 										<td colSpan="10" className={styles['inner-table']}>
 											<table className={`${styles.table} ${styles.wide}`}>
@@ -211,6 +230,17 @@ export class Caches extends ExpandableTable {
 														</th>
 														<th>Max size</th>
 														<th>Used</th>
+														<th>
+															<span
+																className={styles.hinted}
+																{...tooltips.useTooltip(
+																	'Disk usage = Used / Max size',
+																	'hint',
+																)}
+															>
+																Disk usage
+															</span>
+														</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -241,13 +271,31 @@ export class Caches extends ExpandableTable {
 																)}
 															</td>
 															<td className={styles.bdr}>
-																{Caches.formatReadableBytes(
-																	shard.max_size,
-																	'GB',
+																{typeof shard.max_size === 'number' ? (
+																	Caches.formatReadableBytes(
+																		shard.max_size,
+																		'GB',
+																	)
+																) : (
+																	<span>&infin;</span>
 																)}
 															</td>
 															<td className={styles.bdr}>
 																{Caches.formatReadableBytes(shard.size, 'GB')}
+															</td>
+															<td className={styles.bdr}>
+																{typeof shard.max_size === 'number' &&
+                    						typeof shard.size === 'number' ? (
+																		<ProgressBar
+																			warning={shard.warning}
+																			danger={shard.danger}
+																			percentage={
+																				typeof shard.max_size !== 'number' ? -1 : shard.used
+																			}
+																		/>
+																	) : (
+																		<span>-</span>
+																	)}
 															</td>
 														</tr>
 													))}

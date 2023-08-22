@@ -199,10 +199,7 @@ describe('<Caches Page />', () => {
 			expect(cells.at(4).prop('className'), 'row 2, cell 5, className').to.be.equal(styles['bdr']);
 			expect(cells.at(4).text(), 'row 2, cell 5, text').to.be.equal('431');
 			expect(cells.at(5).prop('className'), 'row 2, cell 6, className').to.be.equal(styles['bdr']);
-			expect(cells.at(5).childAt(0).name(), 'row 2, cell 6, ProgressBar').to.be.equal('ProgressBar');
-			expect(cells.at(5).childAt(0).prop('warning'), 'row 2, cell 6, ProgressBar warning').to.be.true;
-			expect(cells.at(5).childAt(0).prop('danger'), 'row 2, cell 6, ProgressBar danger').to.be.true;
-			expect(cells.at(5).childAt(0).prop('percentage'), 'row 2, cell 6, ProgressBar percentage').to.be.equal(-1);
+			expect(cells.at(5).childAt(0).name(), 'row 2, cell 6, span').to.be.equal('span');
 			expect(cells.at(6).prop('className'), 'row 2, cell 7, className').to.be.equal(styles['right-align']);
 			expect(cells.at(6).text(), 'row 2, cell 7, text').to.be.equal('4');
 			expect(cells.at(7).prop('className'), 'row 2, cell 8, className').to.be.equal(styles['right-align']);
@@ -259,20 +256,19 @@ describe('<Caches Page />', () => {
 						cold: false,
 						slab: 'test_slab_1',
 						zoneSize: 30,
-						max_size: 500,
-						size: 430,
-						warning: false,
-						danger: false,
-						used: 100,
 						shards: {
 							'/var/cache/angie/proxy_cache/test_slab_1_1': {
 								size: 1064960,
 								max_size: 16777216,
+								warning: false,
+								danger: false,
 								cold: false
 							},
 							'/var/cache/angie/proxy_cache/test_slab_1_2': {
 								size: 28672,
 								max_size: 16777216,
+								warning: false,
+								danger: false,
 								cold: false
 							}
 						},
@@ -286,20 +282,21 @@ describe('<Caches Page />', () => {
 						cold: true,
 						slab: 'test_slab_2',
 						zoneSize: undefined,
-						max_size: '501',
-						size: 431,
-						warning: true,
-						danger: true,
-						used: 101,
 						shards: {
 							'/var/cache/angie/proxy_cache/test_slab_2_1': {
 								size: 1024960,
 								max_size: 16777216,
+								warning: true,
+								danger: true,
+								used: 100,
 								cold: false
 							},
 							'/var/cache/angie/proxy_cache/test_slab_2_2': {
 								size: 38672,
 								max_size: 16777216,
+								warning: true,
+								danger: true,
+								used: 101,
 								cold: true
 							}
 						},
@@ -366,6 +363,10 @@ describe('<Caches Page />', () => {
 			expect(hintElementRow1.prop('useTooltip_prop_2'), 'row 1, cell 2, useTooltip arg 2').to.be.equal('hint');
 			expect(row1.at(2).text(), 'row 1, cell 3').to.be.equal('16777216');
 			expect(row1.at(3).text(), 'row 1, cell 4').to.be.equal('1024960');
+			expect(row1.at(4).childAt(0).name(), 'row 1, cell 5, ProgressBar').to.be.equal('ProgressBar');
+			expect(row1.at(4).childAt(0).prop('warning'), 'row 1, cell 5, ProgressBar warning').to.be.true;
+			expect(row1.at(4).childAt(0).prop('danger'), 'row 1, cell 5, ProgressBar danger').to.be.true;
+			expect(row1.at(4).childAt(0).prop('percentage'), 'row 1, cell 5, ProgressBar percentage').to.be.equal(100);
 			
 			const row2 = expandableElementCells.at(1).find('td'); 
 			const hintElementRow2 = row2.at(1).childAt(0);
@@ -375,6 +376,10 @@ describe('<Caches Page />', () => {
 			expect(hintElementRow2.prop('useTooltip_prop_2'), 'row 2, cell 2, useTooltip arg 2').to.be.equal('hint');
 			expect(row2.at(2).text(), 'row 2, cell 3').to.be.equal('16777216');
 			expect(row2.at(3).text(), 'row 2, cell 4').to.be.equal('38672');
+			expect(row2.at(4).childAt(0).name(), 'row 2, cell 5, ProgressBar').to.be.equal('ProgressBar');
+			expect(row2.at(4).childAt(0).prop('warning'), 'row 2, cell 5, ProgressBar warning').to.be.true;
+			expect(row2.at(4).childAt(0).prop('danger'), 'row 2, cell 5, ProgressBar danger').to.be.true;
+			expect(row2.at(4).childAt(0).prop('percentage'), 'row 2, cell 5, ProgressBar percentage').to.be.equal(101);
 			
 			expandableAllControl.simulate('click');
 			expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
