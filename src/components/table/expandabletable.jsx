@@ -27,6 +27,7 @@ export default class ExpandableTable extends React.Component {
 	}
 
 	toogleExpandingItemState(item) {
+		if (!this.hasExpandable(item)) return;
 		if (this.isExpandingItem(item)) {
 			this.setState({ expandingItems: this.state.expandingItems.filter(_item => _item !== item) });
 		} else {
@@ -43,11 +44,17 @@ export default class ExpandableTable extends React.Component {
 	}
 
 	renderExpandingItemToogleIcon(item) {
-		if (!this.hasExpandable(item)) return <td />;
+		if (!this.hasExpandable(item)) {
+			if (this.getExpandableItems().length) {
+				return <td/>;
+			}
+			return null;
+		}
 		return <td className={styles['expanding-item-control']}>{this.isExpandingItem(item) ? '▴' : '▾'}</td>;
 	}
 
 	renderExpandingAllControl(props = {}) {
+		if (!this.getExpandableItems().length) return null;
 		return (
 			<th
 				{...props}
@@ -60,8 +67,8 @@ export default class ExpandableTable extends React.Component {
 		);
 	}
 
-	getExpandableItems() {}
-	hasExpandable() {}
+	getExpandableItems() { return []; }
+	hasExpandable() { }
 
 	render() { return <div/>; }
 }

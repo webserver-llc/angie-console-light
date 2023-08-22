@@ -69,9 +69,8 @@ describe('<ExpandableTable>', () => {
   it('renderExpandingItemToogleIcon()', () => {
     let toogleElement;
     
-    toogleElement = shallow(instance.renderExpandingItemToogleIcon('moscow'));
-    expect(toogleElement.type()).to.be.equal('td'); 
-    expect(toogleElement.text()).to.be.equal(''); 
+    toogleElement = shallow(instance.renderExpandingItemToogleIcon(expandableItems[1]));
+    expect(toogleElement.type()).to.be.equal('td');
     toogleElement.unmount();
     
     wrapper.setState({ expandingItems: [expandableItems[1]] });
@@ -83,6 +82,15 @@ describe('<ExpandableTable>', () => {
     toogleElement = shallow(instance.renderExpandingItemToogleIcon(expandableItems[2]));
     expect(toogleElement.children().text()).to.be.equal('▾'); 
     toogleElement.unmount();
+
+    ExpandableTable.prototype.getExpandableItems.restore();
+    ExpandableTable.prototype.hasExpandable.restore();
+    wrapper.unmount();
+    wrapper = shallow(<ExpandableTable />); 
+    instance = wrapper.instance();
+    expect(instance.renderExpandingItemToogleIcon(expandableItems[1])).to.be.null;
+    stub(ExpandableTable.prototype, 'getExpandableItems').callsFake(() => expandableItems);
+    stub(ExpandableTable.prototype, 'hasExpandable').callsFake((name) => expandableItems.indexOf(name) !== -1);
   });
 
   it('renderExpandingAllControl()', () => {
