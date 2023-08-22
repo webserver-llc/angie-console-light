@@ -40,6 +40,10 @@ export class Caches extends ExpandableTable {
 		return !!caches.get(item).shards;
 	}
 
+	componentDidMount() {
+		this.handleClickExpandingAll();
+	}
+
 	static formatReadableBytes(value, measurementUnit) {
 		return utils.formatReadableBytes(value, measurementUnit, {
 			0: 'B',

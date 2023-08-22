@@ -39,7 +39,7 @@ describe('<Caches Page />', () => {
 			);
 			let hintedEl;
 
-			expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(3);
+			expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(6);
 			expect(tooltips.useTooltip.args[0][0].type.displayName, 'useTooltip call 1, arg 1')
 				.to.be.equal('CacheStateTooltip');
 			expect(tooltips.useTooltip.args[0][1], 'useTooltip call 1, arg 2').to.be.equal('hint');
@@ -215,7 +215,7 @@ describe('<Caches Page />', () => {
 			expect(cells.at(9).childAt(0).prop('percentage'), 'row 2, cell 10, GaugeIndicator prop')
 				.to.be.equal(11);
 
-			expect(Caches.formatReadableBytes.callCount, 'row 1, Caches.formatReadableBytes call count').to.be.equal(9);
+			expect(Caches.formatReadableBytes.callCount, 'row 1, Caches.formatReadableBytes call count').to.be.equal(18);
 			expect(Caches.formatReadableBytes.args[0][0], 'row 1, Caches.formatReadableBytes call 1, arg 1')
 				.to.be.equal(500);
 			expect(Caches.formatReadableBytes.args[0][1], 'row 1, Caches.formatReadableBytes call 1, arg 2')
@@ -315,7 +315,7 @@ describe('<Caches Page />', () => {
 			let expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
 			expect(expandableAllControl.prop('className'))
 				.to.be.equal(`${styles.sorter} ${styles.sorterActive} ${styles['hovered-expander']}`);
-			expect(expandableAllControl.text(), 'all expandable control, icon').to.be.equal('▾');
+			expect(expandableAllControl.text(), 'all expandable control, icon').to.be.equal('▴');
 			expect(expandableAllControl.prop('rowSpan'), 'all expandable control, rowSpan').to.be.equal(2);
 			expect(expandableAllControl.type(), 'all expandable control, type').to.be.equal('th');
 			expect(expandableAllControl.prop('useTooltip_prop_1')).to.be.equal('Show all exsists shards');
@@ -325,14 +325,12 @@ describe('<Caches Page />', () => {
 			expect(rows.length, 'count expandable elements').to.be.equal(2);
 			
 			let expandableElement = wrapper.find('[data-expandable-element]');
-			expect(expandableElement.length).to.be.equal(0);
+			expect(expandableElement.length).to.be.equal(2);
 			expect(rows.at(0).childAt(0).prop('className'), 'row 1, cell 1').to.be.equal(styles['expanding-item-control']);
-			expect(rows.at(0).childAt(0).text(), 'row 1, cell 1').to.be.equal('▾');
+			expect(rows.at(0).childAt(0).text(), 'row 1, cell 1').to.be.equal('▴');
 			
 			expect(rows.at(1).childAt(0).prop('className')).to.be.equal(styles['expanding-item-control']);
-			expect(rows.at(1).childAt(0).text()).to.be.equal('▾');
-			
-			expandableAllControl.simulate('click');
+			expect(rows.at(1).childAt(0).text()).to.be.equal('▴');
 			
 			expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
 			expect(expandableAllControl.text(), 'open all expandable elements').to.be.equal('▴');
@@ -377,6 +375,17 @@ describe('<Caches Page />', () => {
 			expect(hintElementRow2.prop('useTooltip_prop_2'), 'row 2, cell 2, useTooltip arg 2').to.be.equal('hint');
 			expect(row2.at(2).text(), 'row 2, cell 3').to.be.equal('16777216');
 			expect(row2.at(3).text(), 'row 2, cell 4').to.be.equal('38672');
+			
+			expandableAllControl.simulate('click');
+			expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
+			expect(expandableAllControl.text(), 'all expandable control, icon').to.be.equal('▾');
+			
+			expandableElement = wrapper.find('[data-expandable-element]');
+			expect(expandableElement.length).to.be.equal(0);
+			
+			rows = wrapper.find('[data-expandable="true"]');
+			expect(rows.at(0).childAt(0).text(), 'row 1, cell 1').to.be.equal('▾');
+			expect(rows.at(1).childAt(0).text(), 'row 2, cell 1').to.be.equal('▾');
 			
 			tooltips.useTooltip.restore();
 			Caches.formatReadableBytes.restore();
