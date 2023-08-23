@@ -3,18 +3,25 @@
 	"env": {
 		"browser": true
 	},
-	"ignorePatterns": ["**/__test__/"],
+	"ignorePatterns": [
+		"**/__test__/"
+	],
 	"rules": {
 		"no-tabs": 0,
 		"comma-dangle": 0,
 		"indent": [
 			"error",
 			"tab",
-			{ "SwitchCase": 1 }
+			{
+				"SwitchCase": 1
+			}
 		],
 		"react/prop-types": 0,
 		"react/no-deprecated": 0,
-		"react/jsx-indent": [2, "tab"],
+		"react/jsx-indent": [
+			2,
+			"tab"
+		],
 		"react/jsx-indent-props": 0,
 		"import/extensions": 0,
 		"import/no-unresolved": 0,
@@ -35,7 +42,10 @@
 		"no-nested-ternary": 0,
 		"no-throw-literal": 0,
 		"no-shadow": 0,
-		"max-len": [1, 120],
+		"max-len": [
+			1,
+			120
+		],
 		"no-constructor-return": 0,
 		"arrow-parens": 0,
 		"consistent-return": 0,
@@ -51,7 +61,12 @@
 		"array-bracket-spacing": 0,
 		"no-extra-boolean-cast": 0,
 		"global-require": 0,
-		"no-empty": ["error", { "allowEmptyCatch": true }]
+		"no-empty": [
+			"error",
+			{
+				"allowEmptyCatch": true
+			}
+		]
 	},
 	"globals": {
 		"assert": true
