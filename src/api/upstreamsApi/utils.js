@@ -4,7 +4,7 @@ export const getServerName = (peer) => {
 	if (
 		!('server' in peer) ||
 		!peer.server ||
-    (typeof peer.server === 'string' && peer.server.length === 0)
+		(typeof peer.server === 'string' && peer.server.length === 0)
 	) {
 		throw new Error('Server is required in peer');
 	}

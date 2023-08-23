@@ -15,20 +15,20 @@ export default class UpstreamsApi {
 
 	getPeer(upstreamName, peer) {
 		const peerId = getServerName(peer);
-		return api[this.apiPrefix].upstreams[upstreamName].servers[peerId].get();
+		return api.config[this.apiPrefix].upstreams[upstreamName].servers[peerId].get();
 	}
 
 	createPeer(upstreamName, peerData) {
-		return api[this.apiPrefix].upstreams[upstreamName].servers.post(peerData);
+		return api.config[this.apiPrefix].upstreams[upstreamName].servers.post(peerData);
 	}
 
 	deletePeer(upstreamName, peer) {
 		const peerId = getServerName(peer);
-		return api[this.apiPrefix].upstreams[upstreamName].servers[peerId].del();
+		return api.config[this.apiPrefix].upstreams[upstreamName].servers[peerId].del();
 	}
 
 	updatePeer(upstreamName, peer, peerData) {
 		const peerId = getServerName(peer);
-		return api[this.apiPrefix].upstreams[upstreamName].servers[peerId].patch(peerData);
+		return api.config[this.apiPrefix].upstreams[upstreamName].servers[peerId].patch(peerData);
 	}
 }
