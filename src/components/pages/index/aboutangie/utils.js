@@ -5,7 +5,8 @@ export const docs = {
 
 export const getHrefDocs = (build) => {
 	if (!build) return docs.default;
-	return docs[build.toLowerCase()] || docs.default;
+	if (build.toLowerCase().indexOf('pro') !== -1) return docs.pro;
+	return docs.default;
 };
 
 export default {
