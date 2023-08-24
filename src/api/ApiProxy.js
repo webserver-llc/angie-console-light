@@ -21,7 +21,7 @@ export default class ApiProxy {
 
 				target.path.push(propKey);
 				return proxy;
-			}
+			},
 		});
 
 		return this.proxy;
@@ -36,22 +36,23 @@ export default class ApiProxy {
 		const params = {
 			method,
 			credentials: 'same-origin',
-			...fetchParams
+			...fetchParams,
 		};
 
 		if (data) {
 			params.body = JSON.stringify(data);
 		}
 
-		return window.fetch(this.getUrl(), params)
-			.then((response) => {
-				let err = false;
+		return window.fetch(this.getUrl(), params).then((response) => {
+			let err = false;
 
-				if (response.status > 299) {
-					err = true;
-				}
+			if (response.status > 299) {
+				err = true;
+			}
 
-				return response.json().then((data) => {
+			return response
+				.json()
+				.then((data) => {
 					if (err) {
 						throw data;
 					}
@@ -61,13 +62,14 @@ export default class ApiProxy {
 					}
 
 					return data;
-				}).catch((data) => {
-					throw ({
+				})
+				.catch((data) => {
+					throw {
 						error: data.error ? `${data.error.code}: ${data.error.text}` : null,
-						status: response.status
-					});
+						status: response.status,
+					};
 				});
-			});
+		});
 	}
 
 	get(fetchParams) {
@@ -76,6 +78,10 @@ export default class ApiProxy {
 
 	post(data, fetchParams) {
 		return this.doRequest('POST', data, fetchParams);
+	}
+
+	put(data, fetchParams) {
+		return this.doRequest('PUT', data, fetchParams);
 	}
 
 	patch(data, fetchParams) {
