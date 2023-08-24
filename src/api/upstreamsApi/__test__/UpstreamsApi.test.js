@@ -21,7 +21,7 @@ describe('UpstreamsApi', () => {
 
 		window.fetch = spy(() => Promise.resolve({
 			status: 200,
-			json(){
+			json() {
 				return Promise.resolve();
 			}
 		}));
@@ -52,7 +52,7 @@ describe('UpstreamsApi', () => {
 		assert(promise instanceof Promise, 'Should return Promise');
 		assert(ApiProxy.prototype.get.calledOnce, 'Should call "get" of ApiProxy');
 		assert(
-			window.fetch.args[0][0] === `${ API_PATH }/${ apiPrefix }/upstreams/${ upstreamName }/servers/${ peer.server }/`,
+			window.fetch.args[0][0] === `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`,
 			'Unexpected path provided to "window.fetch"'
 		);
 
@@ -72,7 +72,7 @@ describe('UpstreamsApi', () => {
 		assert(promise instanceof Promise, 'Should return Promise');
 		assert(ApiProxy.prototype.post.calledOnce, 'Should call "post" of ApiProxy');
 		assert(
-			window.fetch.args[0][0] === `${ API_PATH }/${ apiPrefix }/upstreams/${ upstreamName }/servers/`,
+			window.fetch.args[0][0] === `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/`,
 			'Unexpected path provided to "window.fetch"'
 		);
 		assert('body' in window.fetch.args[0][1], '"body" param was not passed to "window.fetch"');
@@ -80,8 +80,8 @@ describe('UpstreamsApi', () => {
 		const body = JSON.parse(window.fetch.args[0][1].body);
 
 		Object.keys(peerData).forEach(key => {
-			assert(key in body, `Can not find param "${ key }" in body`);
-			assert(body[key] === peerData[key], `Wrong value of "${ key }" param`);
+			assert(key in body, `Can not find param "${key}" in body`);
+			assert(body[key] === peerData[key], `Wrong value of "${key}" param`);
 		});
 
 		ApiProxy.prototype.post.restore();
@@ -100,7 +100,7 @@ describe('UpstreamsApi', () => {
 		assert(promise instanceof Promise, 'Should return Promise');
 		assert(ApiProxy.prototype.del.calledOnce, 'Should call "del" of ApiProxy');
 		assert(
-			window.fetch.args[0][0] === `${ API_PATH }/${ apiPrefix }/upstreams/${ upstreamName }/servers/${ peer.server }/`,
+			window.fetch.args[0][0] === `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`,
 			'Unexpected path provided to "window.fetch"'
 		);
 
@@ -123,7 +123,7 @@ describe('UpstreamsApi', () => {
 		assert(promise instanceof Promise, 'Should return Promise');
 		assert(ApiProxy.prototype.patch.calledOnce, 'Should call "patch" of ApiProxy');
 		assert(
-			window.fetch.args[0][0] === `${ API_PATH }/${ apiPrefix }/upstreams/${ upstreamName }/servers/${ peer.server }/`,
+			window.fetch.args[0][0] === `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`,
 			'Unexpected path provided to "window.fetch"'
 		);
 		assert('body' in window.fetch.args[0][1], '"body" param was not passed to "window.fetch"');
@@ -131,8 +131,8 @@ describe('UpstreamsApi', () => {
 		const body = JSON.parse(window.fetch.args[0][1].body);
 
 		Object.keys(peerData).forEach(key => {
-			assert(key in body, `Can not find param "${ key }" in body`);
-			assert(body[key] === peerData[key], `Wrong value of "${ key }" param`);
+			assert(key in body, `Can not find param "${key}" in body`);
+			assert(body[key] === peerData[key], `Wrong value of "${key}" param`);
 		});
 
 		ApiProxy.prototype.patch.restore();
