@@ -1,19 +1,19 @@
-import mapperHttpUpstreams from "../httpUpstreams";
+import mapperHttpUpstreams from '../httpUpstreams';
 
-describe("Mappers - HTTP Upstreams", () => {
-  it("mapperHttpUpstreams()", () => {
+describe('Mappers - HTTP Upstreams', () => {
+  it('mapperHttpUpstreams()', () => {
     const angieHttpUpstreams = {
-      "upsteam-red": {
+      'upsteam-red': {
         peers: {
-          "10.11.128.1:80": {
-            server: "10.11.128.1",
+          '10.11.128.1:80': {
+            server: '10.11.128.1',
             backup: false,
             weight: 1,
-            state: "unavailable",
+            state: 'unavailable',
             selected: {
               current: 1,
               total: 296,
-              last: "2023-08-15T10:38:41Z",
+              last: '2023-08-15T10:38:41Z',
             },
             responses: {
               200: 198,
@@ -35,36 +35,36 @@ describe("Mappers - HTTP Upstreams", () => {
               fails: 0,
               unavailable: 0,
               downtime: 0,
-              downstart: "2023-08-15T10:38:41Z",
+              downstart: '2023-08-15T10:38:41Z',
             },
-            sid: "8c7de8e7900b468ba646cb8a9e8a588b",
+            sid: '8c7de8e7900b468ba646cb8a9e8a588b',
             refs: 0,
           },
         },
         keepalive: 0,
         zombies: 0,
-        zone: "upstream-red",
+        zone: 'upstream-red',
       },
     };
     const nginxHttpUpsreams = {
-      "upsteam-red": {
+      'upsteam-red': {
         peers: [
           {
-            id: 0,
-            server: "10.11.128.1",
-            name: "10.11.128.1:80",
+            id: '10.11.128.1:80',
+            server: '10.11.128.1',
+            name: '10.11.128.1:80',
             backup: false,
             weight: 1,
-            state: "unavail",
+            state: 'unavail',
             active: 1,
             requests: 296,
-            selected: "2023-08-15T10:38:41Z",
+            selected: '2023-08-15T10:38:41Z',
             responses: {
-              "1xx": 0,
-              "2xx": 198,
-              "3xx": 7,
-              "4xx": 4,
-              "5xx": 13,
+              '1xx': 0,
+              '2xx': 198,
+              '3xx': 7,
+              '4xx': 4,
+              '5xx': 13,
               codes: {
                 200: 198,
                 301: 6,
@@ -84,22 +84,22 @@ describe("Mappers - HTTP Upstreams", () => {
             unavail: 0,
             fails: 0,
             downtime: 0,
-            downstart: "2023-08-15T10:38:41Z",
+            downstart: '2023-08-15T10:38:41Z',
             health_checks: {},
-            sid: "8c7de8e7900b468ba646cb8a9e8a588b",
+            sid: '8c7de8e7900b468ba646cb8a9e8a588b',
             refs: 0,
           },
         ],
         keepalive: 0,
         zombies: 0,
-        zone: "upstream-red",
+        zone: 'upstream-red',
       },
     };
-    expect(mapperHttpUpstreams({}), "should be empty object").to.be.an("object")
+    expect(mapperHttpUpstreams({}), 'should be empty object').to.be.an('object')
       .that.is.empty;
     expect(
       mapperHttpUpstreams(angieHttpUpstreams),
-      "should be correct format",
+      'should be correct format',
     ).to.be.deep.equal(nginxHttpUpsreams);
   });
 });

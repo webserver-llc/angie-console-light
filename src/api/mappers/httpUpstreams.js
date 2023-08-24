@@ -8,13 +8,13 @@ export default (response) => {
 	Object.keys(response).forEach((key) => {
 		const { peers } = response[key];
 		const result = [];
-		Object.keys(peers).forEach((key, index) => {
+		Object.keys(peers).forEach((key) => {
 			const {
 				data: { sent, received },
 				selected: { current, total, last },
 				health: { fails, unavailable, downtime, downstart, probes },
 			} = peers[key];
-			peers[key].id = index;
+			peers[key].id = key;
 			peers[key].name = key;
 			peers[key].responses = formatHttpResponse(peers[key].responses);
 			peers[key].active = current;
