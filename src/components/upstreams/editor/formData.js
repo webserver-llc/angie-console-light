@@ -1,5 +1,5 @@
-function formData() {
-  const data = {};
+function formData(initialData = {}) {
+  const data = initialData;
 
   Object.defineProperty(data, 'toJSON', {
     value() {
