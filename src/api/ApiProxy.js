@@ -71,7 +71,7 @@ export default class ApiProxy {
 				})
 				.catch((data) => {
 					throw {
-						error: data.error ? `${data.error.code}: ${data.error.text}` : null,
+						error: data.error ? `${data.error}: ${data.description}` : null,
 						status: response.status,
 					};
 				});

@@ -217,10 +217,8 @@ describe('ApiProxy', () => {
 		it('Handles fail', (done) => {
 			const status = 400;
 			const response = {
-				error: {
-					code: 'ErrCode',
-					text: 'ErrText',
-				},
+				error: 'ErrCode',
+				description: 'ErrText',
 			};
 			let jsonResult = Promise.resolve(response);
 
@@ -241,7 +239,7 @@ describe('ApiProxy', () => {
 						'"error" property should be in fail response',
 					);
 					assert(
-						data.error === `${response.error.code}: ${response.error.text}`,
+						data.error === `${response.error}: ${response.description}`,
 						'Bad error',
 					);
 
