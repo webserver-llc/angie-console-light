@@ -15,9 +15,13 @@ export default class UpstreamsApi {
 
 	getPeer(upstreamName, peer) {
 		const peerId = getServerName(peer);
-		return api.config[this.apiPrefix].upstreams[upstreamName].servers[
-			peerId
-		].get();
+		return api.config[this.apiPrefix].upstreams[upstreamName].servers[peerId]
+			.get({ searchParams: { defaults: 'on' } })
+			.then((defaultData = {}) =>
+				api.config[this.apiPrefix].upstreams[upstreamName].servers[peerId]
+					.get()
+					.then((data = {}) => ({ ...defaultData, ...data })),
+			);
 	}
 
 	createPeer(upstreamName, peerData) {

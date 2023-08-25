@@ -44,7 +44,7 @@ describe('UpstreamsApi', () => {
 		);
 	});
 
-	it('getPeer()', () => {
+	it('getPeer()', async () => {
 		const upstreamName = 'upstream_1';
 		const peer = {
 			server: 'peer_1',
@@ -52,12 +52,19 @@ describe('UpstreamsApi', () => {
 
 		spy(ApiProxy.prototype, 'get');
 
-		const promise = testUpstreamsApi.getPeer(upstreamName, peer);
+		await testUpstreamsApi.getPeer(upstreamName, peer);
 
-		assert(promise instanceof Promise, 'Should return Promise');
-		assert(ApiProxy.prototype.get.calledOnce, 'Should call "get" of ApiProxy');
+		assert(
+			ApiProxy.prototype.get.calledTwice,
+			'Should call twice "get" of ApiProxy',
+		);
 		assert(
 			window.fetch.args[0][0] ===
+			`${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}?defaults=on`,
+			'Unexpected path provided to "window.fetch"',
+		);
+		assert(
+			window.fetch.args[1][0] ===
 			`${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`,
 			'Unexpected path provided to "window.fetch"',
 		);
