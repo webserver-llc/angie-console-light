@@ -93,7 +93,7 @@ describe('ApiProxy', () => {
 	it('getUrl()', () => {
 		spy(ApiProxy.prototype, 'toString');
 
-		const url = api.getUrl();
+		let url = api.getUrl();
 
 		assert(
 			url.startsWith(`${apiPrefix}/`),
@@ -101,6 +101,9 @@ describe('ApiProxy', () => {
 		);
 		assert(api.toString.calledOnce, '"toString" should be called');
 		assert(url.endsWith('/'), 'Should ends with "/"');
+
+		url = api.getUrl({ foo: 'bar' });
+		assert(url.endsWith('?foo=bar'), 'Should ends with "?foo=bar"');
 
 		ApiProxy.prototype.toString.restore();
 	});
@@ -326,14 +329,23 @@ describe('ApiProxy', () => {
 			const params = {
 				a: '123',
 				b: 123,
+				searchParams: {
+					c: 'foo',
+				},
 			};
 			const httpMethod = method === 'del' ? 'DELETE' : method.toUpperCase();
 
+			spy(ApiProxy.prototype, 'getUrl');
 			spy(ApiProxy.prototype, 'doRequest');
 
 			api.http.upstreams.aaa[method](params);
 
-			assert(api.doRequest.calledOnce, 'Should be called one time');
+			assert(api.getUrl.calledOnce, 'Should be called once');
+			assert(api.doRequest.calledOnce, 'Should be called once');
+
+			expect(api.getUrl.args[0][0], 'Should be called with arg').to.be.equal(
+				params.searchParams,
+			);
 
 			const firstCallArgs = api.doRequest.args[0];
 
@@ -351,6 +363,7 @@ describe('ApiProxy', () => {
 				);
 			});
 
+			ApiProxy.prototype.getUrl.restore();
 			ApiProxy.prototype.doRequest.restore();
 		});
 	});
@@ -365,13 +378,22 @@ describe('ApiProxy', () => {
 			const params = {
 				a: '123',
 				b: 123,
+				searchParams: {
+					c: 'foo',
+				},
 			};
 
+			spy(ApiProxy.prototype, 'getUrl');
 			spy(ApiProxy.prototype, 'doRequest');
 
 			api.http.upstreams.aaa[method](data, params);
 
+			assert(api.getUrl.calledOnce, 'Should be called once');
 			assert(api.doRequest.calledOnce, 'Should be called one time');
+
+			expect(api.getUrl.args[0][0], 'Should be called with arg').to.be.equal(
+				params.searchParams,
+			);
 
 			const firstCallArgs = api.doRequest.args[0];
 
@@ -402,6 +424,7 @@ describe('ApiProxy', () => {
 				);
 			});
 
+			ApiProxy.prototype.getUrl.restore();
 			ApiProxy.prototype.doRequest.restore();
 		});
 	});

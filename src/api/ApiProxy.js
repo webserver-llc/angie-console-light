@@ -27,23 +27,29 @@ export default class ApiProxy {
 		return this.proxy;
 	}
 
-	getUrl() {
+	getUrl(searchParams = {}) {
+		const urlSearchParams = new URLSearchParams(searchParams);
+		if (urlSearchParams.size) {
+			return `${this.apiPrefix}/${this.toString()}?${urlSearchParams}`;
+		}
 		// TODO: use toString() instead
 		return `${this.apiPrefix}/${this.toString()}/`;
 	}
 
 	doRequest(method, data, fetchParams = {}) {
+		const { searchParams, ...otherParams } = fetchParams;
+
 		const params = {
 			method,
 			credentials: 'same-origin',
-			...fetchParams,
+			...otherParams,
 		};
 
 		if (data) {
 			params.body = JSON.stringify(data);
 		}
 
-		return window.fetch(this.getUrl(), params).then((response) => {
+		return window.fetch(this.getUrl(searchParams), params).then((response) => {
 			let err = false;
 
 			if (response.status > 299) {
