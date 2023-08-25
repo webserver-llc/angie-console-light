@@ -13,15 +13,14 @@ import Popup from '../../popup/popup.jsx';
 import Loader from '../../loader/loader.jsx';
 import NumberInput from '../../numberinput/numberinput.jsx';
 import styles from './style.css';
+import formData from './formData.js';
+import { isIP } from '../../../utils.js';
 
-const RGX_IPV4 = /^\s*((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?\s*$/;
-const RGX_IPV6_FULL = /^\s*\[((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\](?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))\s*$/;
-const RGX_IPV6 = /^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/;
 const RGX_SERVICE_SETTING = /^[\w-.]+$/;
-const RGX_SERVER_ADDRESS = /^([\w-]|(\.(?!\.+)))[\w-.]*\:(\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
-const RGX_HTTP_SERVER_ADDRESS = /^([\w-]|(\.(?!\.+)))[\w-.]*(\:(\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
-
-const isIP = (value) => RGX_IPV4.test(value) || RGX_IPV6_FULL.test(value) || RGX_IPV6.test(value);
+const RGX_SERVER_ADDRESS =
+	/^([\w-]|(\.(?!\.+)))[\w-.]*\:(\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
+const RGX_HTTP_SERVER_ADDRESS =
+	/^([\w-]|(\.(?!\.+)))[\w-.]*(\:(\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 
 export default class UpstreamsEditor extends React.Component {
 	static normalizeInputData(data) {
@@ -36,13 +35,7 @@ export default class UpstreamsEditor extends React.Component {
 	}
 
 	static normalizeOutputData(data, initialData) {
-		data = { ...data };
-
-		Object.keys(data).forEach((key) => {
-			if (key === 'fail_timeout' || key === 'slow_start') {
-				data[key] = `${data[key]}s`;
-			}
-		});
+		data = formData({ ...data });
 
 		if (data.server === initialData.server) {
 			delete data.server;
@@ -66,24 +59,29 @@ export default class UpstreamsEditor extends React.Component {
 		this.state = {
 			success: false,
 			loading: false,
-			errorMessages: null
+			shouldClearPeers: false,
+			errorMessages: null,
 		};
 
 		if (!props.peers || props.peers.size > 1) {
-			this.state.data = {};
+			this.state.data = formData();
 			this.state.initialData = {};
 		} else if (props.peers && props.peers.size === 1) {
 			this.state.loading = true;
 
-			props.upstreamsApi.getPeer(props.upstream.name, Array.from(props.peers)[0][1]).then((data) => {
-				const normalizedData = UpstreamsEditor.normalizeInputData(data);
+			props.upstreamsApi
+				.getPeer(props.upstream.name, Array.from(props.peers)[0][1])
+				.then((data) => {
+					const normalizedData = UpstreamsEditor.normalizeInputData(
+						formData(data),
+					);
 
-				this.setState({
-					data: normalizedData,
-					initialData: { ...normalizedData },
-					loading: false
+					this.setState({
+						data: normalizedData,
+						initialData: { ...normalizedData },
+						loading: false,
+					});
 				});
-			});
 		}
 
 		this.validateServerName = this.validateServerName.bind(this);
@@ -113,7 +111,7 @@ export default class UpstreamsEditor extends React.Component {
 		data[target.name] = value;
 
 		this.setState({
-			data
+			data,
 		});
 	}
 
@@ -129,7 +127,7 @@ export default class UpstreamsEditor extends React.Component {
 		}
 
 		this.setState({
-			data
+			data,
 		});
 	}
 
@@ -139,69 +137,73 @@ export default class UpstreamsEditor extends React.Component {
 		this.closeErrors();
 
 		this.setState({
-			loading: true
+			loading: true,
 		});
 
-		this.validate(this.state.data).then(() => {
-			if (isAdd) {
-				return upstreamsApi.createPeer(
-					this.props.upstream.name,
-					this.state.data
+		this.validate(this.state.data)
+			.then(() => {
+				if (isAdd) {
+					return upstreamsApi
+						.createPeer(this.props.upstream.name, this.state.data)
+						.then(() => {
+							this.setState({
+								success: true,
+								successMessage: 'Server added successfully',
+							});
+						});
+				}
+
+				return Promise.all(
+					Array.from(peers).map(([peerId, peer]) =>
+						upstreamsApi.updatePeer(
+							this.props.upstream.name,
+							peer,
+							UpstreamsEditor.normalizeOutputData(
+								this.state.data,
+								this.state.initialData,
+							),
+						),
+					),
 				).then(() => {
 					this.setState({
 						success: true,
-						successMessage: 'Server added successfully'
+						successMessage: 'Changes saved',
 					});
 				});
-			}
-
-			return Promise.all(
-				Array.from(peers).map(([peerId, peer]) => upstreamsApi.updatePeer(
-					this.props.upstream.name,
-					peer,
-					UpstreamsEditor.normalizeOutputData(
-						this.state.data,
-						this.state.initialData
-					)
-				))
-			).then(() => {
+			})
+			.then(() => {
 				this.setState({
-					success: true,
-					successMessage: 'Changes saved'
+					loading: false,
 				});
-			});
-		}).then(() => {
-			this.setState({
-				loading: false
-			});
-		}).catch(data => {
-			let errorMessages;
+			})
+			.catch((data) => {
+				let errorMessages;
 
-			if (data instanceof Array) {
-				errorMessages = data;
-			} else {
-				errorMessages = [data.error];
-			}
+				if (data instanceof Array) {
+					errorMessages = data;
+				} else {
+					errorMessages = [data.error];
+				}
 
-			this.showErrors(errorMessages);
-		});
+				this.showErrors(errorMessages);
+			});
 	}
 
 	closeErrors() {
 		this.setState({
-			errorMessages: null
+			errorMessages: null,
 		});
 	}
 
 	showErrors(errorMessages) {
 		this.setState({
 			errorMessages,
-			loading: false
+			loading: false,
 		});
 	}
 
 	close() {
-		this.props.onClose();
+		this.props.onClose(this.state.shouldClearPeers);
 	}
 
 	remove() {
@@ -209,22 +211,27 @@ export default class UpstreamsEditor extends React.Component {
 
 		Promise.all(
 			peersArray.map(([peerId, peer]) =>
-				this.props.upstreamsApi.deletePeer(this.props.upstream.name, peer).then(
-					() => peer.server
-				)
-			)
-		).then((servers) => {
-			this.setState({
-				success: true,
-				successMessage: `Servers ${servers.join(', ')} successfully removed`
-			});
-		}).catch(({ error }) => this.showErrors([ error ]));
+				this.props.upstreamsApi
+					.deletePeer(this.props.upstream.name, peer)
+					.then(() => peer.server),
+			),
+		)
+			.then((servers) => {
+				this.setState({
+					success: true,
+					shouldClearPeers: true,
+					successMessage: `Servers ${servers.join(', ')} successfully removed`,
+				});
+			})
+			.catch(({ error }) => this.showErrors([error]));
 	}
 
 	validate(data) {
 		let valid = true;
 
-		const addressRegexp = this.props.isStream ? RGX_SERVER_ADDRESS : RGX_HTTP_SERVER_ADDRESS;
+		const addressRegexp = this.props.isStream
+			? RGX_SERVER_ADDRESS
+			: RGX_HTTP_SERVER_ADDRESS;
 		const errorMessages = [];
 
 		const multiplePeers = this.props.peers && this.props.peers.size > 1;
@@ -240,10 +247,9 @@ export default class UpstreamsEditor extends React.Component {
 				valid = false;
 				errorMessages.push('Invalid server address or port');
 			} else if (
-				data.service && (
-					!RGX_SERVICE_SETTING.test(data.service) ||
-					data.server.length + data.service.length > 253
-				)
+				data.service &&
+				(!RGX_SERVICE_SETTING.test(data.service) ||
+					data.server.length + data.service.length > 253)
 			) {
 				valid = false;
 				errorMessages.push('Invalid server address or service setting');
@@ -253,13 +259,17 @@ export default class UpstreamsEditor extends React.Component {
 		if (valid && multiplePeers) {
 			const peersArray = Array.from(this.props.peers);
 
-			return this.props.upstreamsApi.getPeer(this.props.upstream.name, peersArray[0][0]).then(data => {
-				if (data.error) {
-					errorMessages.push('No such server (please, check if it still exists)');
-					valid = false;
-					return Promise.reject(errorMessages);
-				}
-			});
+			return this.props.upstreamsApi
+				.getPeer(this.props.upstream.name, peersArray[0][1])
+				.then((data) => {
+					if (data.error) {
+						errorMessages.push(
+							'No such server (please, check if it still exists)',
+						);
+						valid = false;
+						return Promise.reject(errorMessages);
+					}
+				});
 		}
 
 		if (valid) {
@@ -273,7 +283,7 @@ export default class UpstreamsEditor extends React.Component {
 		const { value } = evt.target;
 
 		this.setState({
-			addAsDomain: !isIP(value)
+			addAsDomain: !isIP(value),
 		});
 	}
 
@@ -281,7 +291,7 @@ export default class UpstreamsEditor extends React.Component {
 		const { upstream, peers, isStream } = this.props;
 
 		let title = '';
-		let isAdd = !peers || peers.size === 0;
+		const isAdd = !peers || peers.size === 0;
 
 		let peersArray;
 
@@ -289,7 +299,8 @@ export default class UpstreamsEditor extends React.Component {
 			title = `Add server to "${upstream.name}"`;
 		} else {
 			peersArray = Array.from(peers);
-			title = `Edit ${peers.size > 1 ? 'servers' : `server ${peersArray[0][1].server}`} "${upstream.name}"`;
+			title = `Edit ${peers.size > 1 ? 'servers' : `server ${peersArray[0][1].server}`
+				} "${upstream.name}"`;
 		}
 
 		let content = null;
@@ -297,230 +308,190 @@ export default class UpstreamsEditor extends React.Component {
 		const { data = {} } = this.state;
 
 		if (this.state.loading) {
-			content = <div className={ styles.content }>
-				<Loader className={ styles.loader } gray />
-			</div>;
+			content = (
+				<div className={styles.content}>
+					<Loader className={styles.loader} gray />
+				</div>
+			);
 		} else if (this.state.success) {
-			content = (<div>
-				<div className={ styles.content }>
-					{ this.state.successMessage }
-				</div>
+			content = (
+				<div>
+					<div className={styles.content}>{this.state.successMessage}</div>
 
-				<div className={ styles.footer }>
-					<div className={ styles.save } onClick={this.close}>Ok</div>
+					<div className={styles.footer}>
+						<div className={styles.save} onClick={this.close}>
+							Ok
+						</div>
+					</div>
 				</div>
-			</div>);
+			);
 		} else {
-			content = (<div>
-				<div className={ styles.content }>
-					{
-						!isAdd && peersArray.length > 1 ?
-							<div className={ styles['form-group'] }>
+			content = (
+				<div>
+					<div className={styles.content}>
+						{!isAdd && peersArray.length > 1 ? (
+							<div className={styles['form-group']}>
 								<label>Selected servers</label>
 
-								<ul className={ styles['servers-list'] }>
-									{ peersArray.map(([peerId, peer]) => <li key={peer.id}>{ peer.server }</li>) }
+								<ul className={styles['servers-list']}>
+									{peersArray.map(([peerId, peer]) => (
+										<li key={peer.id}>{peer.server}</li>
+									))}
 								</ul>
 							</div>
-							:
+						) : (
 							<div>
-								<div className={ styles['form-group'] }>
-									<label htmlFor="server">Server address</label>
-									<input
-										id="server"
-										name="server"
-										type="text"
-										className={ styles.input }
-										value={data.server}
-										defaultValue="{peerToEdit.server}"
-										onKeyUp={this.validateServerName}
-										onInput={this.handleFormChange}
-										disabled={!!data.host}
-									/>
-								</div>
+								{isAdd ? (
+									<div className={styles['form-group']}>
+										<label htmlFor="server">Server address</label>
+										<input
+											id="server"
+											name="server"
+											type="text"
+											className={styles.input}
+											value={data.server}
+											placeholder="127.0.0.1:80"
+											onKeyUp={this.validateServerName}
+											onInput={this.handleFormChange}
+											disabled={!!data.host}
+										/>
+									</div>
+								) : null}
 
-								{
-									data.host ?
-										<div className={ styles['form-group'] }>
-											<strong>Domain name:</strong> {data.host}
-										</div>
-										: null
-								}
+								{data.host ? (
+									<div className={styles['form-group']}>
+										<strong>Domain name:</strong> {data.host}
+									</div>
+								) : null}
 
-								{
-									!isStream ?
-										<div className={ styles['form-group'] }>
-											<label htmlFor="route">Server route</label>
+								{isAdd ? (
+									<div className={styles.checkbox}>
+										<label>
 											<input
-												id="route"
-												name="route"
-												className={ styles.input }
-												type="text"
-												value={data.route}
-												onInput={this.handleFormChange}
-												maxLength={32}
+												name="backup"
+												type="checkbox"
+												checked={data.backup}
+												onChange={this.handleFormChange}
 											/>
-										</div>
-										: null
-								}
-
-								{
-									isAdd ?
-										<div className={ styles.checkbox }>
-											<label>
-												<input
-													name="backup"
-													type="checkbox"
-													checked={data.backup}
-													onChange={this.handleFormChange}
-												/>
-
-												Add as backup server
-											</label>
-										</div>
-										: null
-								}
+											Add as backup server
+										</label>
+									</div>
+								) : null}
 							</div>
-					}
+						)}
 
-					<div className={ styles['forms-mini'] }>
-						<div className={ styles['form-group'] }>
-							<label htmlFor="weight">weight</label>
-							<NumberInput
-								id="weight"
-								name="weight"
-								className={ styles.input }
-								onInput={this.handleFormChange}
-								value={data.weight}
-							/>
-						</div>
-						<div className={ styles['form-group'] }>
-							<label htmlFor="max_conns">max_conns</label>
-							<NumberInput
-								className={ styles.input }
-								id="max_conns"
-								name="max_conns"
-								value={data.max_conns}
-								onInput={this.handleFormChange}
-							/>
-						</div>
-						<div className={ styles['form-group'] }>
-							<label htmlFor="max_fails">max_fails</label>
-							<NumberInput
-								id="max_fails"
-								name="max_fails"
-								className={ styles.input }
-								value={data.max_fails}
-								onInput={this.handleFormChange}
-							/>
-						</div>
-						<div className={ styles['form-group'] }>
-							<label htmlFor="fail_timeout">fail_timeout</label>
-							<NumberInput
-								id="fail_timeout"
-								className={ styles.input }
-								name="fail_timeout"
-								value={data.fail_timeout}
-								onInput={this.handleFormChange}
-							/>
-						</div>
-						<div className={ styles['form-group'] }>
-							<label htmlFor="slow_start">slow_start</label>
-							<NumberInput
-								id="slow_start"
-								name="slow_start"
-								className={ styles.input }
-								value={data.slow_start}
-								onInput={this.handleFormChange}
-							/>
-						</div>
-
-						{
-							isAdd && !this.state.addAsDomain ?
-								<div className={ styles['form-group'] }>
-									<label htmlFor="service">service</label>
-									<input
-										id="service"
-										name="service"
-										className={ styles.input }
-										value={data.service}
-										onInput={this.handleFormChange}
-									/>
-								</div>
-								: null
-						}
-					</div>
-
-					<div className={ styles.radio }>
-						<span className={ styles.title }>Set state</span>
-
-						<label>
-							<input
-								name="state"
-								value="false"
-								type="radio"
-								onChange={this.handleRadioChange}
-								checked={data.down === false}
-							/> Up
-						</label>
-
-						<label>
-							<input
-								name="state"
-								value="true"
-								type="radio"
-								onChange={this.handleRadioChange}
-								checked={data.down === true}
-							/> Down
-						</label>
-
-						{
-							!isStream ?
-								<label>
-									<input
-										name="state"
-										id="drain"
-										value="true"
-										type="radio"
-										onChange={this.handleRadioChange}
-										checked={data.drain === true}
-									/> Drain
-								</label>
-								: null
-						}
-					</div>
-
-					{
-						this.state.errorMessages !== null ?
-							<div className={ styles.error }>
-								<span className={ styles['error-close'] } onClick={this.closeErrors}>×</span>
-								{ this.state.errorMessages.map((msg) => <div>{msg}</div>) }
+						<div className={styles['forms-mini']}>
+							<div className={styles['form-group']}>
+								<label htmlFor="weight">weight</label>
+								<NumberInput
+									id="weight"
+									name="weight"
+									className={styles.input}
+									onInput={this.handleFormChange}
+									value={data.weight}
+								/>
 							</div>
-							: null
-					}
-				</div>
+							<div className={styles['form-group']}>
+								<label htmlFor="max_conns">max_conns</label>
+								<NumberInput
+									className={styles.input}
+									id="max_conns"
+									name="max_conns"
+									value={data.max_conns}
+									onInput={this.handleFormChange}
+								/>
+							</div>
+							<div className={styles['form-group']}>
+								<label htmlFor="max_fails">max_fails</label>
+								<NumberInput
+									id="max_fails"
+									name="max_fails"
+									className={styles.input}
+									value={data.max_fails}
+									onInput={this.handleFormChange}
+								/>
+							</div>
+							<div className={styles['form-group']}>
+								<label htmlFor="fail_timeout">fail_timeout</label>
+								<NumberInput
+									id="fail_timeout"
+									className={styles.input}
+									name="fail_timeout"
+									value={data.fail_timeout}
+									onInput={this.handleFormChange}
+								/>
+							</div>
+						</div>
 
-				<div className={ styles.footer }>
-					{
-						!isAdd ?
-							<div className={ styles.remove } onClick={this.remove}>Remove</div>
-							: null
-					}
+						<div className={styles.radio}>
+							<span className={styles.title}>Set state</span>
 
-					<div className={ styles.save } onClick={this.save}>
-						{ isAdd ? 'Add' : 'Save' }
+							<label>
+								<input
+									name="state"
+									value="false"
+									type="radio"
+									onChange={this.handleRadioChange}
+									checked={data.down === false}
+								/>{' '}
+								Up
+							</label>
+
+							<label>
+								<input
+									name="state"
+									value="true"
+									type="radio"
+									onChange={this.handleRadioChange}
+									checked={data.down === true}
+								/>{' '}
+								Down
+							</label>
+						</div>
+
+						{this.state.errorMessages !== null ? (
+							<div className={styles.error}>
+								<span
+									className={styles['error-close']}
+									onClick={this.closeErrors}
+								>
+									×
+								</span>
+								{this.state.errorMessages.map((msg) => (
+									<div>{msg}</div>
+								))}
+							</div>
+						) : null}
 					</div>
 
-					<div className={ styles.cancel } onClick={this.close}>Cancel</div>
+					<div className={styles.footer}>
+						{!isAdd ? (
+							<div className={styles.remove} onClick={this.remove}>
+								Remove
+							</div>
+						) : null}
+
+						<div className={styles.save} onClick={this.save}>
+							{isAdd ? 'Add' : 'Save'}
+						</div>
+
+						<div className={styles.cancel} onClick={this.close}>
+							Cancel
+						</div>
+					</div>
 				</div>
-			</div>);
+			);
 		}
 
-		return (<Popup className={ styles.editor }>
-			<div className={ styles.header }>{title}</div>
-			<div className={ styles.close } onClick={this.close}>×</div>
+		return (
+			<Popup className={styles.editor}>
+				<div className={styles.header}>{title}</div>
+				<div className={styles.close} onClick={this.close}>
+					×
+				</div>
 
-			{content}
-		</Popup>);
+				{content}
+			</Popup>
+		);
 	}
 }

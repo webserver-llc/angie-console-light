@@ -23,7 +23,7 @@ export const FILTER_OPTIONS = {
 	up: 'Up',
 	failed: 'Failed',
 	checking: 'Checking',
-	down: 'Down'
+	down: 'Down',
 };
 
 export default class UpstreamsList extends SortableTable {
@@ -35,7 +35,7 @@ export default class UpstreamsList extends SortableTable {
 			editMode: false,
 			editor: false,
 			selectedPeers: new Map(),
-			filtering: appsettings.getSetting(this.FILTERING_SETTINGS_KEY, 'all')
+			filtering: appsettings.getSetting(this.FILTERING_SETTINGS_KEY, 'all'),
 		};
 
 		this.toggleEditMode = this.toggleEditMode.bind(this);
@@ -51,7 +51,9 @@ export default class UpstreamsList extends SortableTable {
 
 	toggleEditMode() {
 		if (/[^\x20-\x7F]/.test(this.props.upstream.name)) {
-			alert('Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names');
+			alert(
+				'Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names',
+			);
 			return;
 		}
 
@@ -70,7 +72,7 @@ export default class UpstreamsList extends SortableTable {
 		const editMode = !this.state.editMode;
 
 		const state = {
-			editMode
+			editMode,
 		};
 
 		if (!editMode) {
@@ -83,7 +85,7 @@ export default class UpstreamsList extends SortableTable {
 	editSelectedUpstream(peer) {
 		if (peer) {
 			this.setState({
-				selectedPeers: new Map([[peer.id, peer]])
+				selectedPeers: new Map([[peer.id, peer]]),
 			});
 
 			this.showEditor('edit');
@@ -99,15 +101,19 @@ export default class UpstreamsList extends SortableTable {
 		this.showEditor('add');
 	}
 
-	closeEditor() {
-		this.setState({
-			editor: null
-		});
+	closeEditor(shouldClearPeers = false) {
+		const state = {
+			editor: null,
+		};
+		if (shouldClearPeers) {
+			state.selectedPeers = new Map();
+		}
+		this.setState(state);
 	}
 
 	showEditor(mode) {
 		this.setState({
-			editor: mode
+			editor: mode,
 		});
 	}
 
@@ -115,19 +121,22 @@ export default class UpstreamsList extends SortableTable {
 		appsettings.setSetting(this.FILTERING_SETTINGS_KEY, evt.target.value);
 
 		this.setState({
-			filtering: evt.target.value
+			filtering: evt.target.value,
 		});
 	}
 
 	renderEmptyList() {
-		return (<tr>
-			<td className={ tableStyles['left-align'] } colSpan={30}>
-				No servers with '{this.state.filtering}' state found in this upstream group.
-			</td>
-		</tr>);
+		return (
+			<tr>
+				<td className={tableStyles['left-align']} colSpan={30}>
+					No servers with '{this.state.filtering}' state found in this upstream
+					group.
+				</td>
+			</tr>
+		);
 	}
 
-	renderPeers() {}
+	renderPeers() { }
 
 	filterPeers(data, filtering = this.state.filtering) {
 		return data.filter((item) => {
@@ -159,7 +168,9 @@ export default class UpstreamsList extends SortableTable {
 
 	selectAllPeers(allPeers, state) {
 		this.setState({
-			selectedPeers: new Map(state ? allPeers.map(peer => [peer.id, peer]) : [])
+			selectedPeers: new Map(
+				state ? allPeers.map((peer) => [peer.id, peer]) : [],
+			),
 		});
 	}
 
@@ -173,32 +184,32 @@ export default class UpstreamsList extends SortableTable {
 		}
 
 		this.setState({
-			selectedPeers
+			selectedPeers,
 		});
 	}
 
 	getSelectAllCheckbox(peers) {
-		return this.state.editMode ?
-			<th rowSpan="2" className={ tableStyles.checkbox }>
+		return this.state.editMode ? (
+			<th rowSpan="2" className={tableStyles.checkbox}>
 				<input
 					type="checkbox"
 					onChange={(evt) => this.selectAllPeers(peers, evt.target.checked)}
 					checked={this.state.selectedPeers.size === peers.length}
 				/>
 			</th>
-		: null;
+		) : null;
 	}
 
 	getCheckbox(peer) {
-		return this.state.editMode ?
-			<td className={ tableStyles.checkbox }>
+		return this.state.editMode ? (
+			<td className={tableStyles.checkbox}>
 				<input
 					type="checkbox"
 					onChange={(evt) => this.selectPeer(peer, evt.target.checked)}
 					checked={this.state.selectedPeers.has(peer.id)}
 				/>
 			</td>
-		: null;
+		) : null;
 	}
 
 	render() {
@@ -218,7 +229,11 @@ export default class UpstreamsList extends SortableTable {
 
 		if (this.state.sortOrder === 'desc') {
 			peers = peers.sort((a) => {
-				if (a.state === 'down' || a.state === 'unhealthy' || a.state === 'unavail') {
+				if (
+					a.state === 'down' ||
+					a.state === 'unhealthy' ||
+					a.state === 'unavail'
+				) {
 					return -1;
 				}
 
@@ -226,59 +241,94 @@ export default class UpstreamsList extends SortableTable {
 			});
 		}
 
-		const writePermission = apiUtils.isWritable() === true || apiUtils.isWritable() === null;
+		const writePermission =
+			apiUtils.isWritable() === true || apiUtils.isWritable() === null;
 
-		return (<div className={ styles['upstreams-list'] } id={`upstream-${name}`}>
-			{
-				this.state.editor ?
+		return (
+			<div className={styles['upstreams-list']} id={`upstream-${name}`}>
+				{this.state.editor ? (
 					<UpstreamsEditor
 						upstream={upstream}
-						peers={this.state.editor === 'edit' ? this.state.selectedPeers : null}
+						peers={
+							this.state.editor === 'edit' ? this.state.selectedPeers : null
+						}
 						isStream={this.props.isStream}
 						onClose={this.closeEditor}
 						upstreamsApi={this.props.upstreamsApi}
 					/>
-				: null
-			}
+				) : null}
 
-			<select name="filter" className={ styles.filter } onChange={this.changeFilterRule}>
-				{
-					Object.keys(FILTER_OPTIONS).map(value => (
-						<option value={value} key={value} selected={this.state.filtering === value}>
-							{ FILTER_OPTIONS[value] }
+				<select
+					name="filter"
+					className={styles.filter}
+					onChange={this.changeFilterRule}
+				>
+					{Object.keys(FILTER_OPTIONS).map((value) => (
+						<option
+							value={value}
+							key={value}
+							selected={this.state.filtering === value}
+						>
+							{FILTER_OPTIONS[value]}
 						</option>
-					))
-				}
-			</select>
+					))}
+				</select>
 
-			<div className={ styles.head }>
-				<h2 className={ styles.title } {...tooltips.useTooltip(<UpstreamStatsTooltip upstream={upstream} />)}>{ name }</h2>
+				<div className={styles.head}>
+					<h2
+						className={styles.title}
+						{...tooltips.useTooltip(
+							<UpstreamStatsTooltip upstream={upstream} />,
+						)}
+					>
+						{name}
+					</h2>
 
-				{ writePermission ?
-					<span className={this.state.editMode ? styles['edit-active'] : styles.edit} onClick={this.toggleEditMode} /> : null
-				}
+					{writePermission ? (
+						<span
+							className={
+								this.state.editMode ? styles['edit-active'] : styles.edit
+							}
+							onClick={this.toggleEditMode}
+						/>
+					) : null}
 
-				{
-					writePermission && this.state.editMode ?
-						[
-							<span className={ styles.btn } key="edit" onClick={() => this.editSelectedUpstream()}>Edit selected</span>,
-							<span className={ styles.btn } key="add" onClick={this.addUpstream}>Add server</span>
+					{writePermission && this.state.editMode
+						? [
+							<span
+								className={styles.btn}
+								key="edit"
+								onClick={() => this.editSelectedUpstream()}
+							>
+								Edit selected
+							</span>,
+							<span
+								className={styles.btn}
+								key="add"
+								onClick={this.addUpstream}
+							>
+								Add server
+							</span>,
 						]
-					: null
-				}
+						: null}
 
-				{
-					upstream.zoneSize !== null ?
-						<span className={ styles['zone-capacity'] }>
-								Zone: <span {...tooltips.useTooltip(<SharedZoneTooltip zone={upstream.slab} />, 'hint')}>
-									<ProgressBar percentage={upstream.zoneSize} />
-								</span>
+					{upstream.zoneSize !== null ? (
+						<span className={styles['zone-capacity']}>
+							Zone:{' '}
+							<span
+								{...tooltips.useTooltip(
+									<SharedZoneTooltip zone={upstream.slab} />,
+									'hint',
+								)}
+							>
+								<ProgressBar percentage={upstream.zoneSize} />
+							</span>
 						</span>
-					: null
-				}
-			</div>
+					) : null}
+				</div>
 
-			{ this.renderPeers(peers) }
-		</div>);
+				{this.renderPeers(peers)}
+			</div>
+		);
 	}
 }

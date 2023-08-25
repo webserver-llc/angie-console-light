@@ -1,172 +1,172 @@
 .editor {
-	background: #ffffff;
-	width: 550px;
+  background: #ffffff;
+  width: 600px;
 }
 
 .content {
-	padding: 20px 35px;
-	font-size: 14px
+  padding: 20px 35px;
+  font-size: 14px;
 }
 
 .header {
-	padding: 15px 80px 15px 35px;
-	background-color: #f1f5f7;
-	font-size: 19px;
-	font-weight: 300;
-	line-height: 30px;
-	max-width: 450px;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	white-space: nowrap;
+  padding: 15px 80px 15px 35px;
+  background-color: #f1f5f7;
+  font-size: 19px;
+  font-weight: 300;
+  line-height: 30px;
+  max-width: 500px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .close {
-	width: 60px;
-	height: 60px;
-	font-size: 34px;
-	font-weight: 300;
-	line-height: 60px;
-	position: absolute;
-	right: 0;
-	top: 0;
-	text-align: center;
-	cursor: pointer;
-	opacity: .3;
+  width: 60px;
+  height: 60px;
+  font-size: 34px;
+  font-weight: 300;
+  line-height: 60px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0.3;
 }
 
 .close:hover {
-	background-color: rgba(222, 229, 232, 1);
+  background-color: rgba(222, 229, 232, 1);
 }
 
 .form-group {
-	margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
-	font-weight: bold;
-	margin-bottom: 10px;
-	display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
 }
 
 .input {
-	display: block;
-	color: #595959;
-	border: 1px solid #c2c2c2;
-	outline: 0!important;
-	line-height: 34px;
-	padding: 0 15px;
-	width: 100%;
-	box-sizing: border-box;
-	font-family: "Open Sans", Arial, sans-serif;
-	font-size: 16px;
+  display: block;
+  color: #595959;
+  border: 1px solid #c2c2c2;
+  outline: 0 !important;
+  line-height: 34px;
+  padding: 0 15px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size: 16px;
 }
 
 .footer {
-	padding: 25px 35px;
-	background-color: #f1f5f7;
-	overflow: hidden;
+  padding: 25px 35px;
+  background-color: #f1f5f7;
+  overflow: hidden;
 }
 
 .button {
-	width: 120px;
-	border-width: 1px;
-	border-style: solid;
-	line-height: 34px;
-	text-align: center;
-	cursor: pointer;
-	display: inline-block;
+  width: 120px;
+  border-width: 1px;
+  border-style: solid;
+  line-height: 34px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-block;
 }
 
 .save {
-	composes: button;
-	color: #00972c;
-	border-color: #00972c;
-	margin-right: 20px;
+  composes: button;
+  color: #00972c;
+  border-color: #00972c;
+  margin-right: 20px;
 }
 
 .cancel {
-	composes: button;
-	color: #636363;
-	border-color: #636363;
+  composes: button;
+  color: #636363;
+  border-color: #636363;
 }
 
 .remove {
-	composes: button;
-	float: right;
-	color: #9e0b0f;
-	border-color: #9e0b0f;
+  composes: button;
+  float: right;
+  color: #9e0b0f;
+  border-color: #9e0b0f;
 }
 
 .forms-mini {
-	display: flex;
-	flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .forms-mini .form-group {
-	max-width: 100px;
-	margin-right: 30px;
+  max-width: 100px;
+  margin-right: 30px;
 }
 
 .checkbox {
-	margin: 10px 0 20px;
+  margin: 10px 0 20px;
 }
 
 .checkbox label {
-	cursor: pointer;
-	user-select: none;
+  cursor: pointer;
+  user-select: none;
 }
 
 .checkbox input {
-	margin-right: 4px;
+  margin-right: 4px;
 }
 
 .checkbox .title {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .radio {
-	composes: checkbox
+  composes: checkbox;
 }
 
 .radio label {
-	margin-left: 20px;
+  margin-left: 20px;
 }
 
 .error {
-	margin-bottom: 20px;
-	font-size: 14px;
-	padding: 15px;
-	color: #be0000;
-	background-color: #ffdedd;
+  margin-bottom: 20px;
+  font-size: 14px;
+  padding: 15px;
+  color: #be0000;
+  background-color: #ffdedd;
 }
 
 .error-close {
-	width: 30px;
-	height: 30px;
-	font-size: 18px;
-	font-weight: 300;
-	line-height: 30px;
-	float: right;
-	text-align: center;
-	margin: -5px -15px -9px 0;
-	cursor: pointer;
-	opacity: .6;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 30px;
+  float: right;
+  text-align: center;
+  margin: -5px -15px -9px 0;
+  cursor: pointer;
+  opacity: 0.6;
 }
 
 .loader {
-	margin: 30px auto;
+  margin: 30px auto;
 }
 
 .servers-list {
-	list-style-type: none;
-	padding: 0;
-	margin: 10px 0 30px;
-	overflow: hidden;
-	font-size: 12px;
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0 30px;
+  overflow: hidden;
+  font-size: 12px;
 }
 
 .servers-list li {
-	width: 135px;
-	float: left;
-	margin: 0 20px 10px 0;
+  width: 135px;
+  float: left;
+  margin: 0 20px 10px 0;
 }
