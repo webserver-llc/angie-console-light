@@ -23,15 +23,15 @@ export const formatUptime = (ms, short = false) => {
 	const minutes = Math.floor(((sec % 86400) % 3600) / 60);
 
 	if (days) {
-		result += `${ days }d `;
+		result += `${days}d `;
 	}
 
 	if (days || hours) {
-		result += `${ hours }h `;
+		result += `${hours}h `;
 	}
 
 	if ((days || hours || minutes) && !(short && days > 0)) {
-		result += `${ minutes }m`;
+		result += `${minutes}m`;
 	}
 
 	return result;
@@ -40,7 +40,7 @@ export const formatUptime = (ms, short = false) => {
 export const formatReadableBytes = (
 	bytes,
 	maxMeasurementUnit,
-	units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB' }
+	units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB' },
 ) => {
 	if (isNaN(parseFloat(bytes)) || !isFinite(bytes) || bytes === 0) return '0';
 
@@ -80,10 +80,10 @@ export const formatReadableBytes = (
 		precision = 3 - floor;
 	}
 
-	return `${(bytes / (1024 ** measure)).toFixed(precision)} ${units[measure]}`;
+	return `${(bytes / 1024 ** measure).toFixed(precision)} ${units[measure]}`;
 };
 
-export const formatMs = ms => ms === undefined ? '–' : `${ms}ms`;
+export const formatMs = (ms) => (ms === undefined ? '–' : `${ms}ms`);
 
 export const formatDate = (timestamp) => {
 	if (!timestamp) return '';
@@ -91,14 +91,17 @@ export const formatDate = (timestamp) => {
 	const datetime = new Date(timestamp);
 	const time = datetime.toTimeString().split(' ');
 
-	return `${ datetime.toISOString().slice(0, 10) } ${ time[0] } ${ time[1] }`;
+	return `${datetime.toISOString().slice(0, 10)} ${time[0]} ${time[1]}`;
 };
 
 export const formatLastCheckDate = (timestamp) => {
 	const unixTimestamp = Date.now() - new Date(timestamp).valueOf();
 	if (unixTimestamp < 0) {
 		// eslint-disable-next-line no-console
-		console.warn('Incorrect timestamp or invalid datetime setting on PC. Check your settings', timestamp);
+		console.warn(
+			'Incorrect timestamp or invalid datetime setting on PC. Check your settings',
+			timestamp,
+		);
 		return '-';
 	}
 	return formatUptime(unixTimestamp);
@@ -108,14 +111,16 @@ export const getHTTPCodesArray = (codes, codeGroup) => {
 	const result = [];
 
 	if (codes && Object.keys(codes).length > 0) {
-		Object.keys(codes).sort().forEach(code => {
-			if (`${code}`.startsWith(codeGroup)) {
-				result.push({
-					code,
-					value: codes[code],
-				});
-			}
-		});
+		Object.keys(codes)
+			.sort()
+			.forEach((code) => {
+				if (`${code}`.startsWith(codeGroup)) {
+					result.push({
+						code,
+						value: codes[code],
+					});
+				}
+			});
 	}
 
 	return result;
@@ -220,11 +225,12 @@ export const getSSLVeryfiedFailures = (ssl) => {
 	return [total, result];
 };
 
-export const formatNumber = value => typeof value === 'number' ? value : '-';
+export const formatNumber = (value) =>
+	typeof value === 'number' ? value : '-';
 
-export const isEmptyObj = obj => {
+export const isEmptyObj = (obj) => {
 	if (obj === undefined) {
-		throw new Error('Argument doesn\'t set or undefined');
+		throw new Error("Argument doesn't set or undefined");
 	}
 
 	if (obj === null) {
@@ -234,13 +240,15 @@ export const isEmptyObj = obj => {
 	// eslint-disable-next-line no-restricted-syntax
 	for (const prop in obj) {
 		// eslint-disable-next-line no-prototype-builtins
-		if (obj.hasOwnProperty(prop)) { return false; }
+		if (obj.hasOwnProperty(prop)) {
+			return false;
+		}
 	}
 
 	return true;
 };
 
-export const formatHttpResponse = response => {
+export const formatHttpResponse = (response) => {
 	if (isEmptyObj(response)) return response;
 
 	const result = {
@@ -277,7 +285,7 @@ export const formatHttpResponse = response => {
 		result.total += response[statusCode];
 	}
 
-	Object.keys(response).forEach(prop => {
+	Object.keys(response).forEach((prop) => {
 		if (isStatusCode(prop)) {
 			mapStatusCodeToResult(prop);
 		}
@@ -286,6 +294,20 @@ export const formatHttpResponse = response => {
 	result.codes = response;
 
 	return result;
+};
+
+export const isIP = (value) => {
+	/* eslint-disable max-len, no-useless-escape */
+	const RGX_IPV4 =
+		/^\s*((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?\s*$/;
+	const RGX_IPV6_FULL =
+		/^\s*\[((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\](?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))\s*$/;
+	const RGX_IPV6 =
+		/^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/;
+	/* eslint-enable max-len, no-useless-escape */
+	return (
+		RGX_IPV4.test(value) || RGX_IPV6_FULL.test(value) || RGX_IPV6.test(value)
+	);
 };
 
 export default {
@@ -299,5 +321,6 @@ export default {
 	getHTTPCodesArray,
 	getSSLHandhsakesFailures,
 	getSSLVeryfiedFailures,
-	isEmptyObj
+	isEmptyObj,
+	isIP,
 };
