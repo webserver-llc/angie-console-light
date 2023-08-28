@@ -1,8 +1,5 @@
 {
-	"extends": [
-		"airbnb",
-		"prettier"
-	],
+	"extends": "airbnb",
 	"env": {
 		"browser": true
 	},
@@ -12,6 +9,13 @@
 	"rules": {
 		"no-tabs": 0,
 		"comma-dangle": 0,
+		"indent": [
+			"error",
+			"tab",
+			{
+				"SwitchCase": 1
+			}
+		],
 		"react/prop-types": 0,
 		"react/no-deprecated": 0,
 		"react/jsx-indent": [
@@ -38,6 +42,10 @@
 		"no-nested-ternary": 0,
 		"no-throw-literal": 0,
 		"no-shadow": 0,
+		"max-len": [
+			1,
+			120
+		],
 		"no-constructor-return": 0,
 		"arrow-parens": 0,
 		"consistent-return": 0,
