@@ -18,8 +18,7 @@ export const getServerName = (peer) => {
 	// add default port, if isn't set
 	// should fix next version Angie Pro
 	function getServer(server) {
-		if (isIP(server) && server.indexOf(':') === -1)
-			return `${server}:${defaultPort}`;
+		if (isIP(server) && server.indexOf(':') === -1) return `${server}:${defaultPort}`;
 		return server;
 	}
 
