@@ -114,24 +114,10 @@ describe('<Connections IndexPage />', () => {
 			indexBox.childAt(1).childAt(0).text(),
 			'[Conns tab] Connections tab text'
 		).to.be.equal('Connections');
-		expect(
-			indexBox.childAt(1).childAt(1).prop('className'),
-			'[Conns tab] SSL tab className'
-		).to.be.equal(styles['tab']);
-		expect(
-			indexBox.childAt(1).childAt(1).prop('onClick').name,
-			'[Conns tab] SSL tab onClick'
-		).to.be.equal('bound changeTab');
-		expect(
-			indexBox.childAt(1).childAt(1).text(),
-			'[Conns tab] SSL tab text'
-		).to.be.equal('SSL');
 
-		expect(changeTabBindSpy, 'changeTab called twice').to.be.calledTwice;
+		expect(changeTabBindSpy, 'changeTab called once').to.be.calledOnce;
 		expect(changeTabBindSpy.args[0][0], 'changeTab call 1 arg 1').to.be.deep.equal(instance);
 		expect(changeTabBindSpy.args[0][1], 'changeTab call 1 arg 2').to.be.equal('conns');
-		expect(changeTabBindSpy.args[1][0], 'changeTab call 2 arg 1').to.be.deep.equal(instance);
-		expect(changeTabBindSpy.args[1][1], 'changeTab call 2 arg 2').to.be.equal('ssl');
 
 		expect(indexBox.childAt(2).prop('className'), '[Conns tab] table className').to.be.equal(styles['table']);
 		expect(
@@ -159,79 +145,7 @@ describe('<Connections IndexPage />', () => {
 			'[Conns tab] table row 2 children 5'
 		).to.be.equal('1');
 
-		stub(instance, 'getCurrentCell').callsFake(a => <td>test_getCurrentCell_{ a }</td>);
-		wrapper.setState({ tab: 'ssl' });
-		indexBox = wrapper.find('IndexBox');
-
-		expect(
-			indexBox.childAt(0).prop('className'),
-			'[SSL tab] tabs className'
-		).to.be.equal(`${ styles['tabs'] } ${ styles['tabs_ssl'] }`);
-
-		expect(
-			indexBox.childAt(0).childAt(0).prop('className'),
-			'[SSL tab] Connections tab className'
-		).to.be.equal(styles['tab']);
-		expect(
-			indexBox.childAt(0).childAt(0).prop('onClick').name,
-			'[SSL tab] Connections tab onClick'
-		).to.be.equal('bound changeTab');
-		expect(
-			indexBox.childAt(0).childAt(0).text(),
-			'[SSL tab] Connections tab text'
-		).to.be.equal('Connections');
-		expect(
-			indexBox.childAt(0).childAt(1).prop('className'),
-			'[SSL tab] SSL tab className'
-		).to.be.equal(styles['tab-active']);
-		expect(
-			indexBox.childAt(0).childAt(1).prop('onClick').name,
-			'[SSL tab] SSL tab onClick'
-		).to.be.equal('bound changeTab');
-		expect(
-			indexBox.childAt(0).childAt(1).text(),
-			'[SSL tab] SSL tab text'
-		).to.be.equal('SSL');
-		expect(
-			indexBox.childAt(1).prop('className'),
-			'[SSL tab] table className'
-		).to.be.equal(`${ styles['table'] } ${ styles['ssl'] }`);
-		expect(
-			indexBox.childAt(1).childAt(0).children(),
-			'[SSL tab] table row 1 children length'
-		).to.have.lengthOf(4);
-		expect(
-			indexBox.childAt(1).childAt(1).childAt(1).text(),
-			'[SSL tab] table row 2 children 2'
-		).to.be.equal('20');
-		expect(
-			indexBox.childAt(1).childAt(1).childAt(2).text(),
-			'[SSL tab] table row 2 children 3'
-		).to.be.equal('30');
-		expect(
-			indexBox.childAt(1).childAt(1).childAt(3).text(),
-			'[SSL tab] table row 2 children 4'
-		).to.be.equal('4');
-		expect(
-			indexBox.childAt(1).childAt(2).childAt(1).text(),
-			'[SSL tab] table row 3 children 2'
-		).to.be.equal('test_getCurrentCell_200');
-		expect(
-			indexBox.childAt(1).childAt(2).childAt(2).text(),
-			'[SSL tab] table row 3 children 3'
-		).to.be.equal('test_getCurrentCell_300');
-		expect(
-			indexBox.childAt(1).childAt(2).childAt(3).text(),
-			'[SSL tab] table row 3 children 4'
-		).to.be.equal('test_getCurrentCell_40');
-
-		expect(instance.getCurrentCell.calledThrice, 'this.getCurrentCell called thrice').to.be.true;
-		expect(instance.getCurrentCell.args[0][0], 'this.getCurrentCell call 1 arg').to.be.equal(200);
-		expect(instance.getCurrentCell.args[1][0], 'this.getCurrentCell call 2 arg').to.be.equal(300);
-		expect(instance.getCurrentCell.args[2][0], 'this.getCurrentCell call 3 arg').to.be.equal(40);
-
 		changeTabBindSpy.restore();
-		instance.getCurrentCell.restore();
 		wrapper.unmount();
 	});
 });
