@@ -41,7 +41,6 @@ describe('<App />', () => {
 	describe('componentDidMount()', () => {
 		it('Default flow', async () => {
 			stub(apiUtils, 'checkApiAvailability').callsFake(() => Promise.resolve());
-			stub(apiUtils, 'checkWritePermissions').callsFake(() => {});
 			stub(apiUtils, 'initialLoad').callsFake(() => Promise.resolve());
 			stub(datastore, 'startObserve').callsFake(() => {});
 
@@ -53,7 +52,6 @@ describe('<App />', () => {
 			});
 
 			expect(apiUtils.checkApiAvailability).to.be.calledOnce;
-			expect(apiUtils.checkWritePermissions).to.be.calledOnce;
 			expect(apiUtils.initialLoad).to.be.calledOnce;
 			expect(apiUtils.initialLoad.args[0][0]).to.deep.equal(datastore);
 			expect(instance.setState).to.be.calledOnce;
@@ -61,7 +59,6 @@ describe('<App />', () => {
 			expect(datastore.startObserve).to.be.calledOnce;
 
 			apiUtils.checkApiAvailability.restore();
-			apiUtils.checkWritePermissions.restore();
 			apiUtils.initialLoad.restore();
 			datastore.startObserve.restore();
 		});

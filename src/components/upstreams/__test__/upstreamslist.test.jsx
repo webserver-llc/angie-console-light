@@ -86,7 +86,7 @@ describe('<UpstreamsList />', () => {
 	it('toggleEditMode()', () => {
 		const upstream = {
 			name: '%!£@$',
-			peers: []
+			peers: [{ server: '127.0.0.1'}]
 		};
 		const wrapper = shallow(
 			<UpstreamsList
@@ -119,7 +119,8 @@ describe('<UpstreamsList />', () => {
 
 		expect(apiUtils.isWritable.calledOnce, 'isWritable called').to.be.true;
 		expect(apiUtils.checkWritePermissions.calledOnce, 'checkWritePermissions called').to.be.true;
-		expect(apiUtils.checkWritePermissions.args[0][0], 'checkWritePermissions arg').to.be.true;
+		expect(apiUtils.checkWritePermissions.args[0][0], 'checkWritePermissions arg').to.be.equal(upstream.name);
+		expect(apiUtils.checkWritePermissions.args[0][1], 'checkWritePermissions arg').to.be.equal('127.0.0.1:80');
 		expect(thenSpy.calledOnce, 'checkWritePermissions.then called').to.be.true;
 		expect(thenSpy.args[0][0], 'checkWritePermissions.then callback').to.be.a('function');
 

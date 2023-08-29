@@ -37,21 +37,18 @@ export const streamUpstreamsApi = new UpstreamsApi('stream');
 
 let apiWritePermissions = null;
 
-export const checkWritePermissions = (sendCredentials = false) =>
-	api.config.http.upstreams.DASHBOARD_INIT.servers.__TEST_FOR_WRITE__.del({
+export const checkWritePermissions = (upstream, server, sendCredentials = false) =>
+	api.config.http.upstreams[upstream].servers[server].get({
 		credentials: sendCredentials ? 'same-origin' : 'omit'
-	}).then(
-		({ error }) => error.status,
-		({ status }) => status
-	).then((status) => {
-		if (status === 405 || status === 403) {
+	}).then(() => {
+		apiWritePermissions = true;
+		return apiWritePermissions;
+	}).catch(({ status }) => {
+		if ([403, 404, 405].indexOf(status) !== -1) {
 			apiWritePermissions = false;
-		} else if (status === 401) {
-			apiWritePermissions = null;
 		} else {
-			apiWritePermissions = true;
+			apiWritePermissions = null;
 		}
-
 		return apiWritePermissions;
 	});
 

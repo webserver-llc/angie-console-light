@@ -68,7 +68,7 @@ describe('Api', () => {
 		it('Correct path', () => {
 			window.fetch = spy(_fetchInner);
 
-			Api.checkWritePermissions();
+			Api.checkWritePermissions('DASHBOARD_INIT', '__TEST_FOR_WRITE__');
 
 			assert(
 				window.fetch.args[0][0] === `${ API_PATH }/config/http/upstreams/DASHBOARD_INIT/servers/__TEST_FOR_WRITE__/`,
@@ -79,20 +79,12 @@ describe('Api', () => {
 		});
 
 		it('Correct method', done => {
-			const delSpy = spy(ApiProxy.prototype, 'del');
+			const getSpy = spy(ApiProxy.prototype, 'get');
 
 			Api.checkWritePermissions().then(() => {
-				assert(delSpy.calledOnce, 'del() of ApiProxy is expected to be called once');
-				assert(delSpy.args[0][0].credentials === 'omit', 'Bad fetch params. Expected "credentials:omit" by default');
-
-				Api.checkWritePermissions(true).then(() => {
-					assert(delSpy.calledTwice, 'del() of ApiProxy is expected to be called one more time');
-					assert(delSpy.args[1][0].credentials === 'same-origin', 'Bad fetch params. Expected "credentials:same-origin"');
-
-					ApiProxy.prototype.del.restore();
-
-					done();
-				});
+				assert(getSpy.calledOnce, 'get() of ApiProxy is expected to be called once');
+				ApiProxy.prototype.get.restore();
+				done();
 			});
 		});
 
@@ -100,19 +92,19 @@ describe('Api', () => {
 			status: 405,
 			result: false
 		}, {
+			status: 404,
+			result: false
+		}, {
 			status: 403,
 			result: false
 		}, {
 			status: 401,
 			result: null
-		}, {
-			status: 201,
-			result: true
 		}].map(({ status, result }) => {
 			it(`Handles ${ status } status`, done => {
-				const originDel = ApiProxy.prototype.del;
+				const originGet = ApiProxy.prototype.get;
 
-				ApiProxy.prototype.del = () => Promise.resolve({ error: { status } });
+				ApiProxy.prototype.get = () => Promise.reject({ status });
 
 				Api.checkWritePermissions().then(_result => {
 					assert(_result === result, `Unexpected result of "window.fetch" resolved with ${ status } status`);
@@ -120,23 +112,9 @@ describe('Api', () => {
 						Api.isWritable() === result,
 						`Unexpected return from isWritable() for "window.fetch" resolved with ${ status } status`
 					);
+				}).finally(() => done());
 
-					if (status !== 201) {
-						window.fetch = () => Promise.reject({ status });
-
-						Api.checkWritePermissions().then(_result => {
-							assert(_result === result, `Unexpected result of "window.fetch" rejected with ${ status } status`);
-							assert(
-								Api.isWritable() === result,
-								`Unexpected return from isWritable() for "window.fetch" rejected with ${ status } status`
-							);
-
-							done();
-						});
-					} else done();
-				});
-
-				ApiProxy.prototype.del = originDel;
+				ApiProxy.prototype.get = originGet;
 			});
 		});
 	});

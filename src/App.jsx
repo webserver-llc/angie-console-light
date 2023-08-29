@@ -44,9 +44,9 @@ export const SECTIONS = {
 };
 
 export const Errors = {
-	'basic_auth': 'Access to /api/ location is forbidden. Check Angie configuration.',
-	'old_status_found': 'No data received from /api/ location, but found deprecated /status/ location. Сheck Angie configuration.',
-	'api_not_found': 'No data received from /api/ location. Check Angie configuration.'
+	basic_auth: 'Access to /api/ location is forbidden. Check Angie configuration.',
+	old_status_found: 'No data received from /api/ location, but found deprecated /status/ location. Сheck Angie configuration.',
+	api_not_found: 'No data received from /api/ location. Check Angie configuration.'
 };
 
 export class App extends React.Component {
@@ -67,10 +67,9 @@ export class App extends React.Component {
 			});
 		});
 
-		apiUtils.checkApiAvailability().then(() => {
-			apiUtils.checkWritePermissions();
-			return apiUtils.initialLoad(datastore);
-		}).then(() => {
+		apiUtils.checkApiAvailability().then(() =>
+			apiUtils.initialLoad(datastore)
+		).then(() => {
 			this.setState({ loading: false });
 			datastore.startObserve();
 		}).catch((err) => {
@@ -83,10 +82,10 @@ export class App extends React.Component {
 
 		if (loading) {
 			return (
-				<div className={ styles.splash }>
-					<span className={ styles.logo } />
-					<Loader className={ styles.loader } />
-					<span className={ styles.loading }>Loading...</span>
+				<div className={styles.splash}>
+					<span className={styles.logo} />
+					<Loader className={styles.loader} />
+					<span className={styles.loading}>Loading...</span>
 				</div>
 			);
 		}
@@ -101,9 +100,12 @@ export class App extends React.Component {
 			}
 
 			content = (
-				<div className={ styles['error-block'] }>
+				<div className={styles['error-block']}>
 					{ subContent }
-					<p>For&nbsp;more information please refer to&nbsp;the&nbsp;following <a href="https://angie.software/en/">documentation.</a></p>
+					<p>
+						For&nbsp;more information please refer to&nbsp;the&nbsp;following
+						<a href="https://angie.software/en/">documentation.</a>
+					</p>
 				</div>
 			);
 		} else {
@@ -113,21 +115,21 @@ export class App extends React.Component {
 		}
 
 		return (
-			<div className={ styles.dashboard }>
+			<div className={styles.dashboard}>
 
 				{
 					__ENV__ === 'demo' ?
 						<Disclaimer />
-					: null
+						: null
 				}
 
 				<Header hash={this.state.hash} navigation={!error} statuses={STORE.__STATUSES} />
 
-				<div className={ styles.content }>
+				<div className={styles.content}>
 					{
 						!this.state.error ?
 							<UpdatingControl play={play} pause={pause} update={startObserve} />
-						: null
+							: null
 					}
 
 					{ content }
