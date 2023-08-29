@@ -13,7 +13,7 @@ import Popup from '../../popup/popup.jsx';
 import Loader from '../../loader/loader.jsx';
 import NumberInput from '../../numberinput/numberinput.jsx';
 import styles from './style.css';
-import formData from './formData.js';
+import utils from './formData.js';
 import { isIP } from '../../../utils.js';
 
 const RGX_SERVICE_SETTING = /^[\w-.]+$/;
@@ -35,7 +35,7 @@ export default class UpstreamsEditor extends React.Component {
 	}
 
 	static normalizeOutputData(data, initialData) {
-		data = formData({ ...data });
+		data = utils.formData({ ...data });
 
 		if (data.server === initialData.server) {
 			delete data.server;
@@ -64,7 +64,7 @@ export default class UpstreamsEditor extends React.Component {
 		};
 
 		if (!props.peers || props.peers.size > 1) {
-			this.state.data = formData();
+			this.state.data = utils.formData();
 			this.state.initialData = {};
 		} else if (props.peers && props.peers.size === 1) {
 			this.state.loading = true;
@@ -73,7 +73,7 @@ export default class UpstreamsEditor extends React.Component {
 				.getPeer(props.upstream.name, Array.from(props.peers)[0][1])
 				.then((data) => {
 					const normalizedData = UpstreamsEditor.normalizeInputData(
-						formData(data),
+						utils.formData(data),
 					);
 
 					this.setState({
@@ -300,7 +300,7 @@ export default class UpstreamsEditor extends React.Component {
 		} else {
 			peersArray = Array.from(peers);
 			title = `Edit ${peers.size > 1 ? 'servers' : `server ${peersArray[0][1].server}`
-				} "${upstream.name}"`;
+			} "${upstream.name}"`;
 		}
 
 		let content = null;
@@ -360,7 +360,9 @@ export default class UpstreamsEditor extends React.Component {
 
 								{data.host ? (
 									<div className={styles['form-group']}>
-										<strong>Domain name:</strong> {data.host}
+										<strong>Domain name:</strong>
+										{' '}
+										{data.host}
 									</div>
 								) : null}
 
@@ -433,7 +435,8 @@ export default class UpstreamsEditor extends React.Component {
 									type="radio"
 									onChange={this.handleRadioChange}
 									checked={data.down === false}
-								/>{' '}
+								/>
+								{' '}
 								Up
 							</label>
 
@@ -444,7 +447,8 @@ export default class UpstreamsEditor extends React.Component {
 									type="radio"
 									onChange={this.handleRadioChange}
 									checked={data.down === true}
-								/>{' '}
+								/>
+								{' '}
 								Down
 							</label>
 						</div>

@@ -1,4 +1,4 @@
-import formData from '../formData';
+import { formData } from '../formData';
 
 describe('formData()', () => {
   it('with strings values', () => {

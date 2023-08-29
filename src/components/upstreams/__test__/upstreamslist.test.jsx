@@ -811,16 +811,17 @@ describe('<UpstreamsList />', () => {
 			wrapper.childAt(2).childAt(4).prop('className'),
 			'head, zone capacity className'
 		).to.be.equal(styles['zone-capacity']);
+		window.temp1 = wrapper.childAt(2)
 		expect(
-			wrapper.childAt(2).childAt(4).childAt(1).prop('prop_from_useTooltip'),
+			wrapper.childAt(2).childAt(4).childAt(2).prop('prop_from_useTooltip'),
 			'head, zone capacity, tooltiped el'
 		).to.be.true;
 		expect(
-			wrapper.childAt(2).childAt(4).childAt(1).childAt(0).name(),
+			wrapper.childAt(2).childAt(4).childAt(2).childAt(0).name(),
 			'head, zone capacity, tooltiped el, progress bar'
 		).to.be.equal('ProgressBar');
 		expect(
-			wrapper.childAt(2).childAt(4).childAt(1).childAt(0).prop('percentage'),
+			wrapper.childAt(2).childAt(4).childAt(2).childAt(0).prop('percentage'),
 			'head, zone capacity, tooltiped el, progress bar props'
 		).to.be.equal('zoneSize_test');
 

@@ -129,7 +129,9 @@ export default class UpstreamsList extends SortableTable {
 		return (
 			<tr>
 				<td className={tableStyles['left-align']} colSpan={30}>
-					No servers with '{this.state.filtering}' state found in this upstream
+					No servers with '
+					{this.state.filtering}
+					' state found in this upstream
 					group.
 				</td>
 			</tr>
@@ -314,7 +316,8 @@ export default class UpstreamsList extends SortableTable {
 
 					{upstream.zoneSize !== null ? (
 						<span className={styles['zone-capacity']}>
-							Zone:{' '}
+							Zone:
+							{' '}
 							<span
 								{...tooltips.useTooltip(
 									<SharedZoneTooltip zone={upstream.slab} />,

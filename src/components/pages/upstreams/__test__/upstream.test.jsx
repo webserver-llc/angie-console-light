@@ -368,7 +368,7 @@ describe('<Upstream />', () => {
 			'[peer 1] collapse-columns className'
 		).to.be.equal(styles['collapse-columns']);
 		expect(
-			tbody.childAt(0).childAt(7).prop('rowspan'),
+			tbody.childAt(0).childAt(7).prop('rowSpan'),
 			'[peer 1] collapse-columns rowspan'
 		).to.be.equal(3);
 		expect(
@@ -732,7 +732,7 @@ describe('<Upstream />', () => {
 
 		expect(tbody.childAt(0).children(), '[columnsExpanded = true, peer 1] td count').to.have.lengthOf(24);
 		expect(
-			tbody.childAt(0).childAt(7).prop('rowspan'),
+			tbody.childAt(0).childAt(7).prop('rowSpan'),
 			'[columnsExpanded = true, peer 1] collapse-columns rowspan'
 		).to.be.equal(3);
 		expect(

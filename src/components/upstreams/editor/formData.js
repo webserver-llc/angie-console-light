@@ -1,4 +1,4 @@
-function formData(initialData = {}) {
+export function formData(initialData = {}) {
 	const data = initialData;
 
 	Object.defineProperty(data, 'toJSON', {
@@ -22,4 +22,4 @@ function formData(initialData = {}) {
 	return data;
 }
 
-export default formData;
+export default { formData };

@@ -5,17 +5,17 @@
  * All rights reserved.
  *
  */
-import React from "react";
+import React from 'react';
 
-import appsettings from "#/appsettings";
-import utils from "#/utils.js";
-import { TableSortControl, tableUtils, styles } from "#/components/table";
+import appsettings from '#/appsettings';
+import utils from '#/utils.js';
+import { TableSortControl, tableUtils, styles } from '#/components/table';
 import {
 	UpstreamsList,
 	PeerTooltip,
 	ConnectionsTooltip,
-} from "#/components/upstreams";
-import tooltips from "#/tooltips/index.jsx";
+} from '#/components/upstreams';
+import tooltips from '#/tooltips/index.jsx';
 
 export default class Upstream extends UpstreamsList {
 	constructor(props) {
@@ -67,8 +67,8 @@ export default class Upstream extends UpstreamsList {
 	renderPeers(peers) {
 		return (
 			<table
-				className={`${styles.table} ${styles.wide}${this.state.hoveredColumns ? ` ${styles["hovered-expander"]}` : ""
-					}`}
+				className={`${styles.table} ${styles.wide}${this.state.hoveredColumns ? ` ${styles['hovered-expander']}` : ''
+				}`}
 			>
 				<colgroup>
 					<col width="10px" />
@@ -119,20 +119,20 @@ export default class Upstream extends UpstreamsList {
 						<th colSpan="2">Server checks</th>
 						<th colSpan="3">Health monitors</th>
 					</tr>
-					<tr className={`${styles["right-align"]} ${styles["sub-header"]}`}>
-						<th className={styles["left-align"]}>Name</th>
-						<th className={styles["left-align"]}>
+					<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
+						<th className={styles['left-align']}>Name</th>
+						<th className={styles['left-align']}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip("Total downtime", "hint")}
+								{...tooltips.useTooltip('Total downtime', 'hint')}
 							>
 								DT
 							</span>
 						</th>
-						<th className={`${styles["center-align"]} ${styles.bdr}`}>
+						<th className={`${styles['center-align']} ${styles.bdr}`}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip("Weight", "hint")}
+								{...tooltips.useTooltip('Weight', 'hint')}
 							>
 								W
 							</span>
@@ -143,36 +143,36 @@ export default class Upstream extends UpstreamsList {
 
 						{this.state.columnsExpanded ? (
 							[
-								<th key="empty" className={styles["center-align"]} />,
-								<th key="1xx" className={styles["responses-column"]}>
+								<th key="empty" className={styles['center-align']} />,
+								<th key="1xx" className={styles['responses-column']}>
 									1xx
 								</th>,
-								<th key="2xx" className={styles["responses-column"]}>
+								<th key="2xx" className={styles['responses-column']}>
 									2xx
 								</th>,
-								<th key="3xx" className={styles["responses-column"]}>
+								<th key="3xx" className={styles['responses-column']}>
 									3xx
 								</th>,
 							]
 						) : (
-							<th className={styles["center-align"]}>...</th>
+							<th className={styles['center-align']}>...</th>
 						)}
 
 						<th>4xx</th>
 						<th className={styles.bdr}>5xx</th>
 
-						<th className={styles["center-align"]}>
+						<th className={styles['center-align']}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip("Active", "hint")}
+								{...tooltips.useTooltip('Active', 'hint')}
 							>
 								A
 							</span>
 						</th>
-						<th className={`${styles["center-align"]} ${styles.bdr}`}>
+						<th className={`${styles['center-align']} ${styles.bdr}`}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip("Limit", "hint")}
+								{...tooltips.useTooltip('Limit', 'hint')}
 							>
 								L
 							</span>
@@ -190,7 +190,7 @@ export default class Upstream extends UpstreamsList {
 					</tr>
 				</thead>
 
-				<tbody className={styles["right-align"]}>
+				<tbody className={styles['right-align']}>
 					{peers.length === 0
 						? this.renderEmptyList()
 						: peers.map((peer, i) => {
@@ -206,10 +206,10 @@ export default class Upstream extends UpstreamsList {
 									{this.getCheckbox(peer)}
 
 									<td
-										className={`${styles["left-align"]} ${styles.bold} ${styles.address}`}
+										className={`${styles['left-align']} ${styles.bold} ${styles.address}`}
 									>
 										<div
-											className={styles["address-container"]}
+											className={styles['address-container']}
 											{...tooltips.useTooltip(<PeerTooltip peer={peer} />)}
 										>
 											{peer.backup ? <span>b&nbsp;</span> : null}
@@ -218,15 +218,15 @@ export default class Upstream extends UpstreamsList {
 
 										{this.state.editMode ? (
 											<span
-												className={styles["edit-peer"]}
+												className={styles['edit-peer']}
 												onClick={() => this.editSelectedUpstream(peer)}
 											/>
 										) : null}
 									</td>
-									<td className={styles["left-align"]}>
+									<td className={styles['left-align']}>
 										{utils.formatUptime(peer.downtime, true)}
 									</td>
-									<td className={`${styles["center-align"]} ${styles.bdr}`}>
+									<td className={`${styles['center-align']} ${styles.bdr}`}>
 										{peer.weight}
 									</td>
 
@@ -235,7 +235,7 @@ export default class Upstream extends UpstreamsList {
 											className={styles.hinted}
 											{...tooltips.useTooltip(
 												<ConnectionsTooltip peer={peer} />,
-												"hint",
+												'hint',
 											)}
 										>
 											{peer.requests}
@@ -248,7 +248,7 @@ export default class Upstream extends UpstreamsList {
 										[
 											i === 0 ? (
 												<td
-													className={styles["collapse-columns"]}
+													className={styles['collapse-columns']}
 													rowSpan={peers.length}
 													onClick={this.toggleColumns}
 													onMouseEnter={() => this.hoverColumns(true)}
@@ -258,31 +258,31 @@ export default class Upstream extends UpstreamsList {
 													◀
 												</td>
 											) : null,
-											<td className={styles["responses-column"]} key="1xx">
+											<td className={styles['responses-column']} key="1xx">
 												{tableUtils.responsesTextWithTooltip(
-													peer.responses["1xx"],
+													peer.responses['1xx'],
 													codes,
-													"1",
+													'1',
 												)}
 											</td>,
-											<td className={styles["responses-column"]} key="2xx">
+											<td className={styles['responses-column']} key="2xx">
 												{tableUtils.responsesTextWithTooltip(
-													peer.responses["2xx"],
+													peer.responses['2xx'],
 													codes,
-													"2",
+													'2',
 												)}
 											</td>,
-											<td className={styles["responses-column"]} key="3xx">
+											<td className={styles['responses-column']} key="3xx">
 												{tableUtils.responsesTextWithTooltip(
-													peer.responses["3xx"],
+													peer.responses['3xx'],
 													codes,
-													"3",
+													'3',
 												)}
 											</td>,
 										]
 									) : i === 0 ? (
 										<td
-											className={styles["collapse-columns"]}
+											className={styles['collapse-columns']}
 											rowSpan={peers.length}
 											onClick={this.toggleColumns}
 										>
@@ -291,28 +291,28 @@ export default class Upstream extends UpstreamsList {
 									) : null}
 
 									<td
-										className={`${styles.flash}${peer["4xxChanged"] ? ` ${styles["red-flash"]}` : ""
-											}`}
+										className={`${styles.flash}${peer['4xxChanged'] ? ` ${styles['red-flash']}` : ''
+										}`}
 									>
 										{tableUtils.responsesTextWithTooltip(
-											peer.responses["4xx"],
+											peer.responses['4xx'],
 											codes,
-											"4",
+											'4',
 										)}
 									</td>
 									<td
-										className={`${styles.bdr} ${styles.flash}${peer["5xxChanged"] ? ` ${styles["red-flash"]}` : ""
-											}`}
+										className={`${styles.bdr} ${styles.flash}${peer['5xxChanged'] ? ` ${styles['red-flash']}` : ''
+										}`}
 									>
 										{tableUtils.responsesTextWithTooltip(
-											peer.responses["5xx"],
+											peer.responses['5xx'],
 											codes,
-											"5",
+											'5',
 										)}
 									</td>
 
-									<td className={styles["center-align"]}>{peer.active}</td>
-									<td className={`${styles["center-align"]} ${styles.bdr}`}>
+									<td className={styles['center-align']}>{peer.active}</td>
+									<td className={`${styles['center-align']} ${styles.bdr}`}>
 										{peer.max_conns === Infinity ? (
 											<span>&infin;</span>
 										) : (

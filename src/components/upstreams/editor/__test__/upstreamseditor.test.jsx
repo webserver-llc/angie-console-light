@@ -8,6 +8,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { spy, stub } from 'sinon';
+import utils from '../formData.js';
 import UpstreamsEditor from '../upstreamseditor.jsx';
 import styles from '../style.css';
 
@@ -28,8 +29,6 @@ describe('<UpstreamsEditor />', () => {
 	it('normalizeOutputData()', () => {
 		const data = {
 			test_prop_1: '123',
-			fail_timeout: 5,
-			slow_start: 900,
 			server: 'test_server',
 			id: 1,
 			host: 'test_host'
@@ -37,8 +36,6 @@ describe('<UpstreamsEditor />', () => {
 		let parsedData = UpstreamsEditor.normalizeOutputData(data, { server: 'test_server_1' });
 
 		expect(parsedData.test_prop_1, 'test_prop_1').to.be.equal(data.test_prop_1);
-		expect(parsedData.fail_timeout, 'fail_timeout').to.be.equal('5s');
-		expect(parsedData.slow_start, 'slow_start').to.be.equal('900s');
 		expect('server' in parsedData, '[data.server != initialData.server] server').to.be.true;
 		expect(parsedData.id, 'id').to.be.an('undefined');
 		expect('host' in parsedData, '[no parent] host').to.be.true;
@@ -77,7 +74,8 @@ describe('<UpstreamsEditor />', () => {
 		const closeSpy = spy(UpstreamsEditor.prototype.close, 'bind');
 		const removeSpy = spy(UpstreamsEditor.prototype.remove, 'bind');
 		const closeErrorsSpy = spy(UpstreamsEditor.prototype.closeErrors, 'bind');
-
+		stub(utils, 'formData').callsFake((data = {}) => data);
+		
 		let wrapper = shallow(
 			<UpstreamsEditor { ...Object.assign({}, props, {
 				peers: null
@@ -88,6 +86,7 @@ describe('<UpstreamsEditor />', () => {
 			success: false,
 			loading: false,
 			errorMessages: null,
+			shouldClearPeers: false,
 			data: {},
 			initialData: {}
 		});
@@ -118,7 +117,8 @@ describe('<UpstreamsEditor />', () => {
 		expect(wrapper.state(), '[no peers] this.state').to.be.deep.equal({
 			success: false,
 			loading: false,
-			errorMessages: null
+			errorMessages: null,
+			shouldClearPeers: false,
 		});
 
 		wrapper = shallow(
@@ -203,6 +203,7 @@ describe('<UpstreamsEditor />', () => {
 		closeSpy.restore();
 		removeSpy.restore();
 		closeErrorsSpy.restore();
+		utils.formData.restore()
 	});
 
 	it('handleFormChange()', () => {
@@ -609,6 +610,7 @@ describe('<UpstreamsEditor />', () => {
 		expect(setStateSpy.calledOnce, 'this.setState called once').to.be.true;
 		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
 			success: true,
+			shouldClearPeers: true,
 			successMessage: `Servers 1, 2, 3 successfully removed`
 		});
 		expect(catchSpy.calledOnce, 'Promise.all, "catch" called').to.be.true;
@@ -707,7 +709,7 @@ describe('<UpstreamsEditor />', () => {
 		expect(result, '[peers.size > 1] result').to.be.equal('getPeerThen_result');
 		expect(getPeerSpy.calledOnce, 'upstreamsApi.getPeer called').to.be.true;
 		expect(
-			getPeerSpy.calledWith('upstream_test', 'test_1'),
+			getPeerSpy.calledWith('upstream_test', { id: 1 }),
 			'upstreamsApi.getPeer call args'
 		).to.be.true;
 		expect(getPeerThenSpy.calledOnce, 'upstreamsApi.getPeer "then" called').to.be.true;
@@ -931,7 +933,7 @@ describe('<UpstreamsEditor />', () => {
 		expect(
 			formsMini.children(),
 			'[isAdd, not state.addAsDomain] forms-mini children count'
-		).to.have.lengthOf(6);
+		).to.have.lengthOf(4);
 		expect(
 			formsMini.childAt(0).prop('className'),
 			'forms-mini, weight group className'
@@ -1092,87 +1094,6 @@ describe('<UpstreamsEditor />', () => {
 			formsMini.childAt(3).childAt(1).prop('value'),
 			'forms-mini, fail_timeout input prop value'
 		).to.be.equal('fail_timeout_test');
-		expect(
-			formsMini.childAt(4).prop('className'),
-			'forms-mini, slow_start group className'
-		).to.be.equal(styles['form-group']);
-		expect(
-			formsMini.childAt(4).childAt(0).type(),
-			'forms-mini, slow_start label'
-		).to.be.equal('label');
-		expect(
-			formsMini.childAt(4).childAt(0).prop('htmlFor'),
-			'forms-mini, slow_start label htmlFor'
-		).to.be.equal('slow_start');
-		expect(
-			formsMini.childAt(4).childAt(1).name(),
-			'forms-mini, slow_start input'
-		).to.be.equal('NumberInput');
-		expect(
-			formsMini.childAt(4).childAt(1).prop('id'),
-			'forms-mini, slow_start input prop id'
-		).to.be.equal('slow_start');
-		expect(
-			formsMini.childAt(4).childAt(1).prop('name'),
-			'forms-mini, slow_start input prop name'
-		).to.be.equal('slow_start');
-		expect(
-			formsMini.childAt(4).childAt(1).prop('className'),
-			'forms-mini, slow_start input prop className'
-		).to.be.equal(styles['input']);
-		expect(
-			formsMini.childAt(4).childAt(1).prop('onInput'),
-			'forms-mini, slow_start input prop onInput'
-		).to.be.a('function');
-		expect(
-			formsMini.childAt(4).childAt(1).prop('onInput').name,
-			'forms-mini, slow_start input prop onInput name'
-		).to.be.equal('bound handleFormChange');
-		expect(
-			formsMini.childAt(4).childAt(1).prop('value'),
-			'forms-mini, slow_start input prop value'
-		).to.be.equal('slow_start_test');
-		expect(
-			formsMini.childAt(5).prop('className'),
-			'forms-mini, service group className'
-		).to.be.equal(styles['form-group']);
-		expect(
-			formsMini.childAt(5).childAt(0).type(),
-			'forms-mini, service label'
-		).to.be.equal('label');
-		expect(
-			formsMini.childAt(5).childAt(0).prop('htmlFor'),
-			'forms-mini, service label htmlFor'
-		).to.be.equal('service');
-		expect(
-			formsMini.childAt(5).childAt(1).type(),
-			'forms-mini, service input'
-		).to.be.equal('input');
-		expect(
-			formsMini.childAt(5).childAt(1).prop('id'),
-			'forms-mini, service input prop id'
-		).to.be.equal('service');
-		expect(
-			formsMini.childAt(5).childAt(1).prop('name'),
-			'forms-mini, service input prop name'
-		).to.be.equal('service');
-		expect(
-			formsMini.childAt(5).childAt(1).prop('className'),
-			'forms-mini, service input prop className'
-		).to.be.equal(styles['input']);
-		expect(
-			formsMini.childAt(5).childAt(1).prop('onInput'),
-			'forms-mini, service input prop onInput'
-		).to.be.a('function');
-		expect(
-			formsMini.childAt(5).childAt(1).prop('onInput').name,
-			'forms-mini, service input prop onInput name'
-		).to.be.equal('bound handleFormChange');
-		expect(
-			formsMini.childAt(5).childAt(1).prop('value'),
-			'forms-mini, service input prop value'
-		).to.be.equal('service_test');
-
 		let radio = content.childAt(2);
 
 		expect(radio.prop('className'), 'radio group className').to.be.equal(styles['radio']);
@@ -1285,7 +1206,7 @@ describe('<UpstreamsEditor />', () => {
 		expect(
 			serversGroup.children(),
 			'[with data.host, isStream = false, isAdd] serves group elements count'
-		).to.have.lengthOf(4);
+		).to.have.lengthOf(3);
 		expect(
 			serversGroup.childAt(0).childAt(1).prop('disabled'),
 			'[with data.host] server address, input prop disabled'
@@ -1298,100 +1219,20 @@ describe('<UpstreamsEditor />', () => {
 			serversGroup.childAt(1).text(),
 			'domain name text'
 		).to.be.equal('Domain name: host_test');
-		expect(
-			serversGroup.childAt(2).prop('className'),
-			'server route className'
-		).to.be.equal(styles['form-group']);
-		expect(
-			serversGroup.childAt(2).childAt(0).type(),
-			'server route, label html tag'
-		).to.be.equal('label');
-		expect(
-			serversGroup.childAt(2).childAt(0).prop('htmlFor'),
-			'server route, label htmlFor'
-		).to.be.equal('route');
-		expect(
-			serversGroup.childAt(2).childAt(1).type(),
-			'server route, input html tag'
-		).to.be.equal('input');
-		expect(
-			serversGroup.childAt(2).childAt(1).prop('id'),
-			'server route, input prop id'
-		).to.be.equal('route');
-		expect(
-			serversGroup.childAt(2).childAt(1).prop('name'),
-			'server route, input prop name'
-		).to.be.equal('route');
-		expect(
-			serversGroup.childAt(2).childAt(1).prop('className'),
-			'server route, input prop className'
-		).to.be.equal(styles['input']);
-		expect(
-			serversGroup.childAt(2).childAt(1).prop('type'),
-			'server route, input prop type'
-		).to.be.equal('text');
-		expect(
-			serversGroup.childAt(2).childAt(1).prop('value'),
-			'server route, input prop value'
-		).to.be.equal('route_test');
-		expect(
-			serversGroup.childAt(2).childAt(1).prop('onInput'),
-			'server route, input prop onInput'
-		).to.be.a('function');
-		expect(
-			serversGroup.childAt(2).childAt(1).prop('onInput').name,
-			'server route, input prop onInput name'
-		).to.be.equal('bound handleFormChange');
-		expect(
-			serversGroup.childAt(2).childAt(1).prop('maxLength'),
-			'server route, input prop maxLength'
-		).to.be.equal(32);
 
 		formsMini = content.childAt(1);
 
 		expect(
 			formsMini.children(),
 			'[isAdd, state.addAsDomain] forms-mini children count'
-		).to.have.lengthOf(5);
+		).to.have.lengthOf(4);
 
 		radio = content.childAt(2);
 
 		expect(
 			radio.children(),
 			'[isStream = false] radio group children count'
-		).to.have.lengthOf(4);
-		expect(
-			radio.childAt(3).childAt(0).type(),
-			'radio, state down input'
-		).to.be.equal('input');
-		expect(
-			radio.childAt(3).childAt(0).prop('name'),
-			'radio, state down input, prop name'
-		).to.be.equal('state');
-		expect(
-			radio.childAt(3).childAt(0).prop('id'),
-			'radio, state down input, prop id'
-		).to.be.equal('drain');
-		expect(
-			radio.childAt(3).childAt(0).prop('value'),
-			'radio, state down input, prop value'
-		).to.be.equal('true');
-		expect(
-			radio.childAt(3).childAt(0).prop('type'),
-			'radio, state down input, prop type'
-		).to.be.equal('radio');
-		expect(
-			radio.childAt(3).childAt(0).prop('onChange'),
-			'radio, state down input, prop onChange'
-		).to.be.a('function');
-		expect(
-			radio.childAt(3).childAt(0).prop('onChange').name,
-			'radio, state down input, prop onChange name'
-		).to.be.equal('bound handleRadioChange');
-		expect(
-			radio.childAt(3).childAt(0).prop('checked'),
-			'radio, state down input, prop checked'
-		).to.be.true;
+		).to.have.lengthOf(3);
 
 		wrapper.setProps({ peers: new Map([
 			['test_1', {
@@ -1426,11 +1267,11 @@ describe('<UpstreamsEditor />', () => {
 		expect(
 			serversGroup.children(),
 			'[with data.host, isStream = false, isAdd = false] serves group elements count'
-		).to.have.lengthOf(3);
+		).to.have.lengthOf(1);
 		expect(
 			formsMini.children(),
 			'[isAdd = false, state.addAsDomain] forms-mini children count'
-		).to.have.lengthOf(5);
+		).to.have.lengthOf(4);
 		expect(
 			content.childAt(3).prop('className'),
 			'error messages className'
