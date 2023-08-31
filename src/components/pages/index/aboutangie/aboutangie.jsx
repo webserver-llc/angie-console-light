@@ -16,39 +16,49 @@ import styles from './style.css';
 import tooltipStyles from '../../../tooltip/style.css';
 import { getHrefDocs } from './utils.js';
 
-export const AboutAngieTooltip = ({ data }) => {
+export function AboutAngieTooltip({ data }) {
 	return (
 		<div>
-			<div className={ tooltipStyles.row }>Reloads: {data.angie.generation}</div>
+			<div className={tooltipStyles.row}>
+				Reloads:
+				{' '}
+				{data.angie.generation}
+			</div>
 		</div>
 	);
-};
+}
 
 export class AboutAngie extends React.Component {
 	render() {
 		const { props: { data: { angie } } } = this;
-		const hrefToDocs = getHrefDocs(angie.build);
+		const hrefToDocs = getHrefDocs();
 
-		return (<IndexBox className={this.props.className}>
-			<a href={hrefToDocs} target="_blank" className={ styles.release }>
-				{angie.build} ({angie.version})
-			</a>
+		return (
+			<IndexBox className={this.props.className}>
+				<a href={hrefToDocs} target="_blank" className={styles.release} rel="noreferrer">
+					{angie.build}
+					{' '}
+					(
+					{angie.version}
+					)
+				</a>
 
-			<table className={ styles.table }>
-				<tr>
-					<th>Address</th>
-					<td>{angie.address}</td>
-				</tr>
-				<tr>
-					<th>Last reload</th>
-					<td>
-						<span className={ styles.uptime } {...tooltips.useTooltip(<AboutAngieTooltip data={this.props.data} />)}>
-							{ utils.formatUptime(Date.now() - Date.parse(angie.load_time)) }
-						</span>
-					</td>
-				</tr>
-			</table>
-		</IndexBox>);
+				<table className={styles.table}>
+					<tr>
+						<th>Address</th>
+						<td>{angie.address}</td>
+					</tr>
+					<tr>
+						<th>Last reload</th>
+						<td>
+							<span className={styles.uptime} {...tooltips.useTooltip(<AboutAngieTooltip data={this.props.data} />)}>
+								{ utils.formatUptime(Date.now() - Date.parse(angie.load_time)) }
+							</span>
+						</td>
+					</tr>
+				</table>
+			</IndexBox>
+		);
 	}
 }
 

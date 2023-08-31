@@ -49,6 +49,34 @@ describe('Api', () => {
 		assert(Api.streamUpstreamsApi.apiPrefix === 'stream', 'Unexpected "apiPrefix" value');
 	});
 
+	describe('defineAngieVersion()', () => {
+		it('default value', () => {
+			assert(Api.isAngiePro === false, 'should be false')
+		})
+		
+		it('define pro', () => {
+			Api.defineAngieVersion('PRO');
+			assert(Api.isAngiePro === true, 'should be true')
+			
+			Api.defineAngieVersion('pro');
+			assert(Api.isAngiePro === true, 'should be true')
+			
+			Api.defineAngieVersion('pro p1');
+			assert(Api.isAngiePro === true, 'should be true')
+		})
+		
+		it('define oss', () => {
+			Api.defineAngieVersion();
+			assert(Api.isAngiePro === false, 'should be true')
+			
+			Api.defineAngieVersion('hot');
+			assert(Api.isAngiePro === false, 'should be true')
+			
+			Api.defineAngieVersion('1.2.0');
+			assert(Api.isAngiePro === false, 'should be true')
+		})
+	})
+
 	describe('checkWritePermissions()', () => {
 		const _fetchInner = () => Promise.resolve({
 			error: { status: 405 }
@@ -123,7 +151,13 @@ describe('Api', () => {
 		const _fetchInner = () => Promise.resolve({
 			status: 200,
 			json(){
-				return Promise.resolve();
+				return Promise.resolve({ 
+					version: "1.2.0",
+					build: "PRO p1",
+					address: "192.168.3.2",
+					generation: 1,
+					load_time: "2023-08-29T14:36:13.835Z"
+				});
 			}
 		});
 		let _fetch;
@@ -154,6 +188,7 @@ describe('Api', () => {
 			Api.checkApiAvailability().then(() => {
 				assert(getSpy.calledOnce, 'get() method of ApiProxy is expected to be called once');
 				assert(getSpy.args[0].length === 0, 'No arguments expected');
+				assert(Api.isAngiePro, 'should be true');
 
 				ApiProxy.prototype.get.restore();
 
