@@ -6,6 +6,7 @@
  *
  */
 
+import { isEmptyObj } from '../utils';
 import utils from './utils.js';
 import appsettings from '../appsettings';
 
@@ -35,6 +36,10 @@ export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer) {
 
 	peer.max_conns = peer.max_conns || Infinity;
 	peer.health_status = 'last_passed' in peer.health_checks ? !!peer.health_checks.last_passed : null;
+
+	if (!upstream.configured_health_checks) {
+		upstream.configured_health_checks = !isEmptyObj(peer.health_checks);
+	}
 
 	switch (peer.state) {
 		case 'up':
@@ -83,6 +88,7 @@ export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer) {
 
 export function handleUpstreams(upstreamsKey, STATS, previousState, slabs, upstream, name) {
 	upstream.name = name;
+	upstream.configured_health_checks = false;
 
 	utils.pickZoneSize(upstream, slabs, upstream.zone);
 

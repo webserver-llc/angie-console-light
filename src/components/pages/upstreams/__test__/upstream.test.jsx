@@ -14,7 +14,6 @@ import utils from '../../../../utils.js';
 import Upstream from '../upstream.jsx';
 import styles from '../../../table/style.css';
 import { tableUtils } from '#/components/table';
-import { apiUtils } from '../../../../api';
 
 describe('<Upstream />', () => {
 	const props = {
@@ -121,7 +120,7 @@ describe('<Upstream />', () => {
 		setStateSpy.restore();
 	});
 
-	it('renderPeers() with isAngiePro = false', () => {
+	it('renderPeers()', () => {
 		const peers = [{
 			id: 1,
 			state: 'up',
@@ -211,6 +210,7 @@ describe('<Upstream />', () => {
 			<Upstream
 				name="test"
 				upstream={{
+					configured_health_checks: true,
 					peers: []
 				}}
 			/>
@@ -244,7 +244,6 @@ describe('<Upstream />', () => {
 			instance.renderPeers([])
 		);
 
-		expect(apiUtils.isAngiePro(), 'isAngiePro should return false').to.be.false;
 		expect(table.type(), 'table html tag').to.be.equal('table');
 		expect(table.prop('className'), 'table className').to.be.equal(
 			`${ styles['table'] } ${ styles['wide'] }`
@@ -298,17 +297,15 @@ describe('<Upstream />', () => {
 		expect(headTooltips.at(1).prop('prop_from_useTooltip'), 'thead tooltip 2 props').to.be.true;
 		expect(headTooltips.at(2).prop('prop_from_useTooltip'), 'thead tooltip 3 props').to.be.true;
 		expect(headTooltips.at(3).prop('prop_from_useTooltip'), 'thead tooltip 4 props').to.be.true;
-		expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(5);
-		expect(tooltips.useTooltip.args[0][0], 'useTooltip, call 1, arg 1').to.be.equal('Available in Angie PRO only');
-		expect(tooltips.useTooltip.args[0][1], 'useTooltip, call 1, arg 2').to.be.equal('hint');
-		expect(tooltips.useTooltip.args[1][0], 'useTooltip, call 2, arg 1').to.be.equal('Total downtime');
-		expect(tooltips.useTooltip.args[1][1], 'useTooltip, call 2, arg 2').to.be.equal('hint');
-		expect(tooltips.useTooltip.args[2][0], 'useTooltip, call 3, arg 1').to.be.equal('Weight');
-		expect(tooltips.useTooltip.args[2][1], 'useTooltip, call 3, arg 2').to.be.equal('hint');
-		expect(tooltips.useTooltip.args[3][0], 'useTooltip, call 4, arg 1').to.be.equal('Active');
-		expect(tooltips.useTooltip.args[3][1], 'useTooltip, call 4, arg 2').to.be.equal('hint');
-		expect(tooltips.useTooltip.args[4][0], 'useTooltip, call 5, arg 1').to.be.equal('Limit');
-		expect(tooltips.useTooltip.args[4][1], 'useTooltip, call 5, arg 2').to.be.equal('hint');
+		expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(4);
+		expect(tooltips.useTooltip.args[0][0], 'useTooltip, call 2, arg 1').to.be.equal('Total downtime');
+		expect(tooltips.useTooltip.args[0][1], 'useTooltip, call 2, arg 2').to.be.equal('hint');
+		expect(tooltips.useTooltip.args[1][0], 'useTooltip, call 3, arg 1').to.be.equal('Weight');
+		expect(tooltips.useTooltip.args[1][1], 'useTooltip, call 3, arg 2').to.be.equal('hint');
+		expect(tooltips.useTooltip.args[2][0], 'useTooltip, call 4, arg 1').to.be.equal('Active');
+		expect(tooltips.useTooltip.args[2][1], 'useTooltip, call 4, arg 2').to.be.equal('hint');
+		expect(tooltips.useTooltip.args[3][0], 'useTooltip, call 5, arg 1').to.be.equal('Limit');
+		expect(tooltips.useTooltip.args[3][1], 'useTooltip, call 5, arg 2').to.be.equal('hint');
 
 		let tbody = table.find('tbody');
 
@@ -445,58 +442,58 @@ describe('<Upstream />', () => {
 		expect(tbody.childAt(2).children(), '[peer 3] td count').to.have.lengthOf(20);
 
 		// Tooltips
-		expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(11);
+		expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(10);
 		expect(
-			tooltips.useTooltip.args[5][0].type.name,
+			tooltips.useTooltip.args[4][0].type.name,
 			'useTooltip, peer 1, PeerTooltip'
 		).to.be.equal('PeerTooltip');
 		expect(
-			tooltips.useTooltip.args[5][0].props.peer,
+			tooltips.useTooltip.args[4][0].props.peer,
 			'useTooltip, peer 1, PeerTooltip, attr peer'
 		).to.be.deep.equal(peers[0]);
 		expect(
-			tooltips.useTooltip.args[6][0].type.name,
+			tooltips.useTooltip.args[5][0].type.name,
 			'useTooltip, peer 1, ConnectionsTooltip'
 		).to.be.equal('ConnectionsTooltip');
 		expect(
-			tooltips.useTooltip.args[6][0].props.peer,
+			tooltips.useTooltip.args[5][0].props.peer,
 			'useTooltip, peer 1, ConnectionsTooltip, attr peer'
 		).to.be.deep.equal(peers[0]);
-		expect(tooltips.useTooltip.args[6][1], 'useTooltip, peer 1, ConnectionsTooltip, arg 2').to.be.equal('hint');
+		expect(tooltips.useTooltip.args[5][1], 'useTooltip, peer 1, ConnectionsTooltip, arg 2').to.be.equal('hint');
 		expect(
-			tooltips.useTooltip.args[7][0].type.name,
+			tooltips.useTooltip.args[6][0].type.name,
 			'useTooltip, peer 2, PeerTooltip'
 		).to.be.equal('PeerTooltip');
 		expect(
-			tooltips.useTooltip.args[7][0].props.peer,
+			tooltips.useTooltip.args[6][0].props.peer,
 			'useTooltip, peer 2, PeerTooltip, attr peer'
 		).to.be.deep.equal(peers[1]);
 		expect(
-			tooltips.useTooltip.args[8][0].type.name,
+			tooltips.useTooltip.args[7][0].type.name,
 			'useTooltip, peer 2, ConnectionsTooltip'
 		).to.be.equal('ConnectionsTooltip');
 		expect(
-			tooltips.useTooltip.args[8][0].props.peer,
+			tooltips.useTooltip.args[7][0].props.peer,
 			'useTooltip, peer 2, ConnectionsTooltip, attr peer'
 		).to.be.deep.equal(peers[1]);
-		expect(tooltips.useTooltip.args[8][1], 'useTooltip, peer 2, ConnectionsTooltip, arg 2').to.be.equal('hint');
+		expect(tooltips.useTooltip.args[7][1], 'useTooltip, peer 2, ConnectionsTooltip, arg 2').to.be.equal('hint');
 		expect(
-			tooltips.useTooltip.args[9][0].type.name,
+			tooltips.useTooltip.args[8][0].type.name,
 			'useTooltip, peer 3, PeerTooltip'
 		).to.be.equal('PeerTooltip');
 		expect(
-			tooltips.useTooltip.args[9][0].props.peer,
+			tooltips.useTooltip.args[8][0].props.peer,
 			'useTooltip, peer 3, PeerTooltip, attr peer'
 		).to.be.deep.equal(peers[2]);
 		expect(
-			tooltips.useTooltip.args[10][0].type.name,
+			tooltips.useTooltip.args[9][0].type.name,
 			'useTooltip, peer 3, ConnectionsTooltip'
 		).to.be.equal('ConnectionsTooltip');
 		expect(
-			tooltips.useTooltip.args[10][0].props.peer,
+			tooltips.useTooltip.args[9][0].props.peer,
 			'useTooltip, peer 3, ConnectionsTooltip, attr peer'
 		).to.be.deep.equal(peers[2]);
-		expect(tooltips.useTooltip.args[10][1], 'useTooltip, peer 3, ConnectionsTooltip, arg 2').to.be.equal('hint');
+		expect(tooltips.useTooltip.args[9][1], 'useTooltip, peer 3, ConnectionsTooltip, arg 2').to.be.equal('hint');
 
 		expect(tableUtils.responsesTextWithTooltip.callCount, 'responsesTextWithTooltip called 6 times').to.be.equal(6);
 		expect(
@@ -846,11 +843,57 @@ describe('<Upstream />', () => {
 		instance.hoverColumns.restore();
 	});
 	
-	it('renderPeers() with isAngiePro = true', () => {
+	it('renderPeers() with configured_health_checks = false', () => {
+		const peers = [{
+			id: 1,
+			state: 'up',
+			backup: false,
+			server: 'test_server_1',
+			downtime: 1000,
+			weight: 1,
+			requests: 123,
+			server_req_s: 3,
+			responses: {
+				'1xx': 0,
+				'2xx': 110,
+				'3xx': 1,
+				'4xx': 10,
+				'5xx': 2,
+				codes: {
+					200: 100,
+					201: 10,
+					301: 1,
+					400: 2,
+					403: 2,
+					404: 6,
+					500: 2,
+				},
+			},
+			'4xxChanged': true,
+			'5xxChanged': false,
+			active: 10000,
+			max_conns: Infinity,
+			server_sent_s: 40,
+			server_rcvd_s: 39,
+			sent: 400,
+			received: 399,
+			fails: 1,
+			unavail: 2,
+			health_checks: {},
+			health_status: null,
+			header_time: 999,
+			response_time: 99,
+			ssl: {
+				handshakes: 135,
+				handshakes_failed: 24,
+				session_reuses: 19,
+			},
+		}];
 		const wrapper = shallow(
 			<Upstream
 				name="test"
 				upstream={{
+					configured_health_checks: false,
 					peers: []
 				}}
 			/>
@@ -871,7 +914,6 @@ describe('<Upstream />', () => {
 		);
 		stub(utils, 'formatUptime').callsFake(() => 'time_formatted');
 		stub(utils, 'formatReadableBytes').callsFake(() => 'readable_bytes_formatted');
-		stub(apiUtils, 'isAngiePro').callsFake(() => true);
 		stub(utils, 'formatMs').callsFake(() => 'ms_formatted');
 		stub(utils, 'formatLastCheckDate').callsFake(() => 'ms_formatted');
 		stub(tableUtils, 'responsesTextWithTooltip').callsFake((value) => value);
@@ -882,32 +924,20 @@ describe('<Upstream />', () => {
 		 * Empty list
 		 */
 		let table = shallow(
-			instance.renderPeers([])
+			instance.renderPeers(peers)
 		);
-
-		expect(apiUtils.isAngiePro(), 'isAngiePro should return true').to.be.true;
-		const headTooltips = table.find(`thead .${ styles['hinted'] }`);
-
-		expect(headTooltips, 'thead tooltips length').to.have.lengthOf(4);
-		expect(headTooltips.at(0).prop('prop_from_useTooltip'), 'thead tooltip 1 props').to.be.true;
-		expect(headTooltips.at(1).prop('prop_from_useTooltip'), 'thead tooltip 2 props').to.be.true;
-		expect(headTooltips.at(2).prop('prop_from_useTooltip'), 'thead tooltip 3 props').to.be.true;
-		expect(headTooltips.at(3).prop('prop_from_useTooltip'), 'thead tooltip 4 props').to.be.true;
-		expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(4);
-		expect(tooltips.useTooltip.args[0][0], 'useTooltip, call 2, arg 1').to.be.equal('Total downtime');
-		expect(tooltips.useTooltip.args[0][1], 'useTooltip, call 2, arg 2').to.be.equal('hint');
-		expect(tooltips.useTooltip.args[1][0], 'useTooltip, call 3, arg 1').to.be.equal('Weight');
-		expect(tooltips.useTooltip.args[1][1], 'useTooltip, call 3, arg 2').to.be.equal('hint');
-		expect(tooltips.useTooltip.args[2][0], 'useTooltip, call 4, arg 1').to.be.equal('Active');
-		expect(tooltips.useTooltip.args[2][1], 'useTooltip, call 4, arg 2').to.be.equal('hint');
-		expect(tooltips.useTooltip.args[3][0], 'useTooltip, call 5, arg 1').to.be.equal('Limit');
-		expect(tooltips.useTooltip.args[3][1], 'useTooltip, call 5, arg 2').to.be.equal('hint');
+		
+		const thead = table.find('thead');
+		expect(thead.childAt(0).children(), 'head row 1, children length').to.have.lengthOf(8);
+		expect(thead.childAt(1).children(), 'head row 2, children length').to.have.lengthOf(16);
+		const tbody = table.find('tbody');
+		expect(tbody.children(), '[with peers] tbody children length').to.have.lengthOf(1);
+		expect(tbody.childAt(0).children(), '[peer 1] td count').to.have.lengthOf(18);
 		
 		instance.getSelectAllCheckbox.restore();
 		tooltips.useTooltip.restore();
 		instance.renderEmptyList.restore();
 		instance.getCheckbox.restore();
-		apiUtils.isAngiePro.restore();
 		utils.formatUptime.restore();
 		utils.formatReadableBytes.restore();
 		utils.formatMs.restore();

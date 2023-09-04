@@ -93,6 +93,7 @@ describe('Calculators – factories', () => {
 			};
 			upstream = {
 				name,
+				configured_health_checks: true,
 				stats: {
 					all: 0,
 					up: 0,
@@ -171,6 +172,7 @@ describe('Calculators – factories', () => {
 				});
 				expect(upstream, 'upstream').to.be.deep.equal({
 					name: i === 1 ? 'unknown_upstream' : name,
+					configured_health_checks: true,
 					stats: {
 						all: 1,
 						up: 1,
@@ -223,6 +225,7 @@ describe('Calculators – factories', () => {
 			});
 			expect(upstream, 'upstream').to.be.deep.equal({
 				name,
+				configured_health_checks: true,
 				stats: {
 					all: 1,
 					up: 1,
@@ -272,6 +275,7 @@ describe('Calculators – factories', () => {
 			});
 			expect(upstream, 'upstream').to.be.deep.equal({
 				name,
+				configured_health_checks: true,
 				stats: {
 					all: 1,
 					up: 1,
@@ -318,6 +322,7 @@ describe('Calculators – factories', () => {
 			});
 			expect(upstream, 'upstream').to.be.deep.equal({
 				name,
+				configured_health_checks: true,
 				stats: {
 					all: 1,
 					up: 1,
@@ -381,6 +386,7 @@ describe('Calculators – factories', () => {
 			});
 			expect(upstream, 'upstream').to.be.deep.equal({
 				name,
+				configured_health_checks: true,
 				stats: {
 					all: 1,
 					up: 0,
@@ -412,6 +418,7 @@ describe('Calculators – factories', () => {
 			});
 			expect(upstream, 'upstream').to.be.deep.equal({
 				name,
+				configured_health_checks: true,
 				stats: {
 					all: 1,
 					up: 0,
@@ -444,6 +451,7 @@ describe('Calculators – factories', () => {
 			});
 			expect(upstream, 'upstream').to.be.deep.equal({
 				name,
+				configured_health_checks: true,
 				stats: {
 					all: 1,
 					up: 0,
@@ -476,6 +484,7 @@ describe('Calculators – factories', () => {
 			});
 			expect(upstream, 'upstream').to.be.deep.equal({
 				name,
+				configured_health_checks: true,
 				stats: {
 					all: 1,
 					up: 0,
@@ -507,6 +516,7 @@ describe('Calculators – factories', () => {
 			});
 			expect(upstream, 'upstream').to.be.deep.equal({
 				name,
+				configured_health_checks: true,
 				stats: {
 					all: 1,
 					up: 0,
