@@ -44,19 +44,21 @@ export default class TableSortControl extends React.Component {
 		}
 
 		if (isInline) {
-			className += ` ${ styles.inlinSorter }`
+			className += ` ${ styles.inlinSorter }`;
 		}
 
 		return (
 			<th
-				rowSpan={ singleRow ? null : '2' }
-				className={ className }
-				onClick={ this.toggle }
+				rowSpan={singleRow ? 0 : 2}
+				className={className}
+				onClick={this.toggle}
 
-				{ ...tooltips.useTooltip(order === 'asc' ? secondSortLabel : firstSortLabel, 'hint-right') }
-			>{
-				order === 'asc' ? '▴' : '▾'
-			}</th>
+				{...tooltips.useTooltip(order === 'asc' ? secondSortLabel : firstSortLabel, 'hint-right')}
+			>
+				{
+					order === 'asc' ? '▴' : '▾'
+				}
+			</th>
 		);
 	}
 }

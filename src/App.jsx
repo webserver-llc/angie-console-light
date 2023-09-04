@@ -27,6 +27,7 @@ import Workers from './components/pages/workers.jsx';
 import Disclaimer from './components/demo/disclaimer.jsx';
 import datastore, { STORE, startObserve, play, pause } from './datastore';
 import { apiUtils } from './api';
+import envUtils from './env';
 
 export const history = createHistory();
 
@@ -118,7 +119,7 @@ export class App extends React.Component {
 			<div className={styles.dashboard}>
 
 				{
-					__ENV__ === 'demo' ?
+					envUtils.isDemoEnv() ?
 						<Disclaimer />
 						: null
 				}

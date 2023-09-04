@@ -308,3 +308,19 @@ td.status {
 	opacity: 0.8;
 	left: 0;
 }
+
+.promo-header-cell {
+	position: relative;
+}
+
+.promo-header-cell > span {
+	position: absolute;
+	font-size: 12px;	
+	bottom: -10px;
+	color: red;
+	font-weight: bold;
+}
+
+.promo-header-cell > span > span {
+	color: black;
+}

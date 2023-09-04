@@ -13,6 +13,7 @@ import App, { history, SECTIONS, Errors } from '../App.jsx';
 import datastore, { STORE, startObserve, play, pause } from '../datastore';
 import styles from '../style.css';
 import { apiUtils } from '../api';
+import envUtils from '../env';
 
 describe('<App />', () => {
 	afterEach(() => {
@@ -116,7 +117,7 @@ describe('<App />', () => {
 			wrapper.setState({ loading: false });
 
 			expect(wrapper.prop('className')).to.equal(styles['dashboard']);
-			expect(wrapper.find('Disclaimer')).to.have.lengthOf(__ENV__ === 'demo' ? 1 : 0);
+			expect(wrapper.find('Disclaimer')).to.have.lengthOf(0);
 
 			const header = wrapper.find('Header');
 
@@ -140,6 +141,7 @@ describe('<App />', () => {
 
 			apiUtils.checkApiAvailability.restore();
 		});
+		
 
 		it('Errors', () => {
 			stub(apiUtils, 'checkApiAvailability').callsFake(
@@ -170,5 +172,21 @@ describe('<App />', () => {
 
 			apiUtils.checkApiAvailability.restore();
 		});
+
+		it('Demo env', () => {
+			stub(apiUtils, 'checkApiAvailability').callsFake(
+				() => Promise.reject({ type: '' })
+			);
+			stub(envUtils, 'isDemoEnv').callsFake(
+				() => true
+			);
+			
+			const wrapper = shallow(<App.Component />);
+			wrapper.setState({ loading: false });
+
+			expect(wrapper.find('Disclaimer')).to.have.lengthOf(1);
+			apiUtils.checkApiAvailability.restore();
+			envUtils.isDemoEnv.restore();
+		})
 	});
 });

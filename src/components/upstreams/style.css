@@ -57,6 +57,34 @@
 	background-size: 14px;
 }
 
+.edit-icon {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-image: url('/img/pencil.svg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 14px;
+	vertical-align: top;
+}
+
+.edit-label {
+	display: inline-block;
+	height: 24px;
+	line-height: 24px;
+	font-size: 13px;
+	border: 1px solid red;
+	border-radius: 4px;
+	padding: 0 15px;
+	color: #989a9c;
+	margin: 0 10px;
+	vertical-align: middle;
+}
+
+.edit-label .edit-icon {
+	background-image: url('/img/pencil-red.svg');
+}
+
 .edit-active {
 	composes:edit;
 	background-color: #6e6c6e;
@@ -209,4 +237,13 @@
 	position:absolute;
 	margin-left: -20px;
 	margin-top: 2px;
+}
+
+.promo-text {
+	color: red;
+	font-weight: bold;
+}
+
+.promo-text span {
+	color: black;
 }

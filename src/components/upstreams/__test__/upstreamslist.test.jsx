@@ -12,6 +12,7 @@ import UpstreamsList, { FILTER_OPTIONS } from '../upstreamslist.jsx';
 import SortableTable from '../../table/sortabletable.jsx';
 import appsettings from '../../../appsettings';
 import { apiUtils } from '../../../api';
+import envUtils from '../../../env';
 import tooltips from '../../../tooltips/index.jsx';
 import styles from '../style.css';
 import tableStyles from '../../table/style.css';
@@ -593,6 +594,32 @@ describe('<UpstreamsList />', () => {
 
 		after(() => {
 			wrapper.unmount()
+		});
+		
+		it('isDemoEnv = true', () => {
+			stub(envUtils, 'isDemoEnv').callsFake(() => true);
+			stub(apiUtils, 'isAngiePro').callsFake(() => false);
+			stub(tooltips, 'useTooltip').callsFake(() => ({
+				prop_from_useTooltip: true
+			}));
+			const editButton = shallow(instance.renderEditButton(false));
+			
+			expect(
+				editButton.prop('className'),
+				'has class'
+			).to.be.equal(styles['edit-label']);
+			expect(
+				editButton.childAt(0).prop('className'),
+				'has class'
+			).to.be.equal(styles['edit-icon']);
+			expect(
+				editButton.childAt(1).prop('className'),
+				'has class'
+			).to.be.equal(styles['promo-text']);
+			
+			apiUtils.isAngiePro.restore();
+			envUtils.isDemoEnv.restore();
+			tooltips.useTooltip.restore();
 		});
 		
 		it('isWritable = false, isAngiePro = false', () => {

@@ -9,6 +9,7 @@ import React from 'react';
 
 import appsettings from '#/appsettings';
 import utils from '#/utils.js';
+import envUtils from '#/env.js';
 import { TableSortControl, tableUtils, styles } from '#/components/table';
 import {
 	UpstreamsList,
@@ -103,12 +104,49 @@ export default class Upstream extends UpstreamsList {
 				</colgroup>
 
 				<thead>
+					{
+						envUtils.isDemoEnv() ?
+							(
+								<tr>
+									<TableSortControl
+										secondSortLabel="Sort by status - down first"
+										singleRow
+										order={this.state.sortOrder}
+										onChange={this.changeSorting}
+									/>
+									<th colSpan="3">&nbsp;</th>
+									<th colSpan="2" />
+									<th colSpan={this.state.columnsExpanded ? 6 : 3} />
+									<th colSpan="2" />
+									<th colSpan="4" />
+									<th colSpan="2">&nbsp;</th>
+									{configured_health_checks ? (
+										<th colSpan="3" className={styles['promo-header-cell']}>
+											<span>
+												Available in
+												{' '}
+												<span>Angie PRO</span>
+												{' '}
+												only
+											</span>
+										</th>
+									) : null }
+								</tr>
+							)
+							: null
+					}
 					<tr>
-						<TableSortControl
-							secondSortLabel="Sort by status - down first"
-							order={this.state.sortOrder}
-							onChange={this.changeSorting}
-						/>
+						{
+							!envUtils.isDemoEnv() ?
+								(
+									<TableSortControl
+										secondSortLabel="Sort by status - down first"
+										order={this.state.sortOrder}
+										onChange={this.changeSorting}
+									/>
+								)
+								: null
+						}
 
 						{this.getSelectAllCheckbox(peers)}
 

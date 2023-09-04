@@ -11,6 +11,7 @@ import { stub, spy } from 'sinon';
 import appsettings from '../../../../appsettings';
 import tooltips from '../../../../tooltips/index.jsx';
 import utils from '../../../../utils.js';
+import envUtils from '../../../../env';
 import Upstream from '../upstream.jsx';
 import styles from '../../../table/style.css';
 import { tableUtils } from '#/components/table';
@@ -945,5 +946,57 @@ describe('<Upstream />', () => {
 		tableUtils.responsesTextWithTooltip.restore();
 		instance.editSelectedUpstream.restore();
 		instance.hoverColumns.restore();
+	})
+	
+	describe('renderPeers() with isDemoEnv = true', () => {
+		beforeEach(() => {
+			stub(envUtils, 'isDemoEnv').callsFake(() => true);
+		});
+
+		afterEach(() => {
+			envUtils.isDemoEnv.restore();
+		})
+		
+		it('configured_health_checks = false', () => {
+			const wrapper = shallow(
+				<Upstream
+					name="test"
+					upstream={{
+						configured_health_checks: false,
+						peers: []
+					}}
+				/>
+			);
+			const instance = wrapper.instance();
+			let table = shallow(
+				instance.renderPeers([])
+			);
+			
+			const thead = table.find('thead');
+			expect(thead.childAt(0).children(), 'head row 1, children length').to.have.lengthOf(7);
+			expect(thead.childAt(1).children(), 'head row 2, children length').to.have.lengthOf(6);
+			expect(thead.childAt(2).children(), 'head row 3, children length').to.have.lengthOf(16);
+		});
+		
+		it('configured_health_checks = true', () => {
+			const wrapper = shallow(
+				<Upstream
+					name="test"
+					upstream={{
+						configured_health_checks: true,
+						peers: []
+					}}
+				/>
+			);
+			const instance = wrapper.instance();
+			let table = shallow(
+				instance.renderPeers([])
+			);
+			
+			const thead = table.find('thead');
+			expect(thead.childAt(0).children(), 'head row 1, children length').to.have.lengthOf(8);
+			expect(thead.childAt(1).children(), 'head row 2, children length').to.have.lengthOf(7);
+			expect(thead.childAt(2).children(), 'head row 3, children length').to.have.lengthOf(19);
+		});
 	})
 });

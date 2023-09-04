@@ -70,7 +70,7 @@ describe('<TableSortControl />', () => {
 		const instance = wrapper.instance();
 
 		expect(wrapper.type(), 'wrapper html tag').to.be.equal('th');
-		expect(wrapper.prop('rowSpan'), 'wrapper prop rowSpan').to.be.equal('2');
+		expect(wrapper.prop('rowSpan'), 'wrapper prop rowSpan').to.be.equal(2);
 		expect(wrapper.prop('className'), 'wrapper prop className').to.be.equal(`${styles['sorter']} ${styles['sorterActive']}`);
 		expect(wrapper.prop('onClick'), 'wrapper prop onClick').to.be.a('function');
 		expect(wrapper.prop('onClick').name, 'wrapper prop onClick name').to.be.equal('bound toggle');
@@ -91,7 +91,7 @@ describe('<TableSortControl />', () => {
 		expect(
 			wrapper.prop('rowSpan'),
 			'[prop.singleRow = true] wrapper prop rowSpan'
-		).to.be.an.undefined;
+		).to.be.equal(0);
 		expect(
 			tooltips.useTooltip.calledOnce,
 			'[props.order = desc] useTooltip called'

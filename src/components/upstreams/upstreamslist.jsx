@@ -7,7 +7,8 @@
 
 /* eslint no-alert: 0 */
 import React from 'react';
-import { apiUtils, isAngiePro } from '../../api';
+import { apiUtils } from '../../api';
+import envUtils from '../../env';
 import SortableTable from '../table/sortabletable.jsx';
 import ProgressBar from '../progressbar/progressbar.jsx';
 import appsettings from '../../appsettings';
@@ -51,6 +52,8 @@ export default class UpstreamsList extends SortableTable {
 	}
 
 	toggleEditMode() {
+		if (envUtils.isDemoEnv()) return;
+
 		if (/[^\x20-\x7F]/.test(this.props.upstream.name)) {
 			alert(
 				'Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names',
@@ -218,6 +221,23 @@ export default class UpstreamsList extends SortableTable {
 	}
 
 	renderEditButton(writePermission = false) {
+		if (envUtils.isDemoEnv()) {
+			return (
+				<span
+					className={styles['edit-label']}
+				>
+					<span className={styles['edit-icon']} />
+					<span className={styles['promo-text']}>
+						Available in
+						{' '}
+						<span>Angie PRO</span>
+						{' '}
+						only&nbsp;
+					</span>
+				</span>
+			);
+		}
+
 		if (!apiUtils.isAngiePro()) {
 			return (
 				<span
