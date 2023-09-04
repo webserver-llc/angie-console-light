@@ -7,7 +7,7 @@
 
 /* eslint no-alert: 0 */
 import React from 'react';
-import { apiUtils } from '../../api';
+import { apiUtils, isAngiePro } from '../../api';
 import SortableTable from '../table/sortabletable.jsx';
 import ProgressBar from '../progressbar/progressbar.jsx';
 import appsettings from '../../appsettings';
@@ -217,6 +217,32 @@ export default class UpstreamsList extends SortableTable {
 		) : null;
 	}
 
+	renderEditButton(writePermission = false) {
+		if (!apiUtils.isAngiePro()) {
+			return (
+				<span
+					className={
+						styles['edit-disable']
+					}
+					{...tooltips.useTooltip('Available in Angie PRO only', 'hint-right')}
+				/>
+			);
+		}
+
+		if (writePermission) {
+			return (
+				<span
+					className={
+						this.state.editMode ? styles['edit-active'] : styles.edit
+					}
+					onClick={this.toggleEditMode}
+				/>
+			);
+		}
+
+		return null;
+	}
+
 	render() {
 		const { name, upstream } = this.props;
 
@@ -289,14 +315,7 @@ export default class UpstreamsList extends SortableTable {
 						{name}
 					</h2>
 
-					{writePermission ? (
-						<span
-							className={
-								this.state.editMode ? styles['edit-active'] : styles.edit
-							}
-							onClick={this.toggleEditMode}
-						/>
-					) : null}
+					{this.renderEditButton(writePermission)}
 
 					{writePermission && this.state.editMode
 						? [

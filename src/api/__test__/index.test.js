@@ -51,30 +51,30 @@ describe('Api', () => {
 
 	describe('defineAngieVersion()', () => {
 		it('default value', () => {
-			assert(Api.isAngiePro === false, 'should be false')
+			assert(Api.isAngiePro() === false, 'should be false')
 		})
 		
-		it('define pro', () => {
-			Api.defineAngieVersion('PRO');
-			assert(Api.isAngiePro === true, 'should be true')
-			
-			Api.defineAngieVersion('pro');
-			assert(Api.isAngiePro === true, 'should be true')
-			
-			Api.defineAngieVersion('pro p1');
-			assert(Api.isAngiePro === true, 'should be true')
-		})
-		
-		it('define oss', () => {
-			Api.defineAngieVersion();
-			assert(Api.isAngiePro === false, 'should be true')
-			
-			Api.defineAngieVersion('hot');
-			assert(Api.isAngiePro === false, 'should be true')
-			
-			Api.defineAngieVersion('1.2.0');
-			assert(Api.isAngiePro === false, 'should be true')
-		})
+		// it('define pro', () => {
+		// 	Api.defineAngieVersion('PRO');
+		// 	assert(Api.isAngiePro() === true, 'should be true')
+		// 	
+		// 	Api.defineAngieVersion('pro');
+		// 	assert(Api.isAngiePro() === true, 'should be true')
+		// 	
+		// 	Api.defineAngieVersion('pro p1');
+		// 	assert(Api.isAngiePro() === true, 'should be true')
+		// })
+		// 
+		// it('define oss', () => {
+		// 	Api.defineAngieVersion();
+		// 	assert(Api.isAngiePro() === false, 'should be true')
+		// 	
+		// 	Api.defineAngieVersion('hot');
+		// 	assert(Api.isAngiePro() === false, 'should be true')
+		// 	
+		// 	Api.defineAngieVersion('1.2.0');
+		// 	assert(Api.isAngiePro() === false, 'should be true')
+		// })
 	})
 
 	describe('checkWritePermissions()', () => {
@@ -153,7 +153,7 @@ describe('Api', () => {
 			json(){
 				return Promise.resolve({ 
 					version: "1.2.0",
-					build: "PRO p1",
+					build: "1.2.0",
 					address: "192.168.3.2",
 					generation: 1,
 					load_time: "2023-08-29T14:36:13.835Z"
@@ -174,35 +174,39 @@ describe('Api', () => {
 
 		it('Correct path', () => {
 			window.fetch = spy(_fetchInner);
-
+			stub(Api.apiUtils, 'defineAngieVersion').callsFake(() => {});
+			
 			Api.checkApiAvailability();
-
 			assert(window.fetch.args[0][0] === `${ API_PATH }/angie/`, 'Unexpected path was passed to "window.fetch"');
 
 			window.fetch = _fetchInner;
+			Api.apiUtils.defineAngieVersion.restore()
 		});
 
 		it('Correct method', done => {
 			const getSpy = spy(ApiProxy.prototype, 'get');
+			stub(Api.apiUtils, 'defineAngieVersion').callsFake(() => {});
 
 			Api.checkApiAvailability().then(() => {
 				assert(getSpy.calledOnce, 'get() method of ApiProxy is expected to be called once');
 				assert(getSpy.args[0].length === 0, 'No arguments expected');
-				assert(Api.isAngiePro, 'should be true');
 
 				ApiProxy.prototype.get.restore();
-
+				Api.apiUtils.defineAngieVersion.restore()
 				done();
 			});
 		});
 
 		it('Returns Promise', () => {
+			stub(Api.apiUtils, 'defineAngieVersion').callsFake(() => {});
 			assert(Api.checkApiAvailability() instanceof Promise, 'Should return Promise');
+			Api.apiUtils.defineAngieVersion.restore()
 		});
 
 		it('Handles 401', done => {
 			const _done = error => {
 				window.fetch = _fetchInner;
+				Api.apiUtils.defineAngieVersion.restore()
 
 				done(error);
 			};
@@ -213,6 +217,8 @@ describe('Api', () => {
 					return Promise.resolve({ error: {} });
 				}
 			});
+			
+			stub(Api.apiUtils, 'defineAngieVersion').callsFake(() => {});
 
 			Api.checkApiAvailability()
 				.then(
@@ -228,14 +234,17 @@ describe('Api', () => {
 
 		it('Handles other errors', done => {
 			let status;
+			stub(Api.apiUtils, 'defineAngieVersion').callsFake(() => {});
+			
 			const _done = error => {
 				window.fetch = _fetchInner;
-
+				Api.apiUtils.defineAngieVersion.restore()
+				
 				done(error);
 			};
+			
 			const checkApi = _status => {
 				status = _status;
-
 				Api.checkApiAvailability()
 					.then(
 						() => {

@@ -35,7 +35,7 @@ export default api;
 export const httpUpstreamsApi = new UpstreamsApi('http');
 export const streamUpstreamsApi = new UpstreamsApi('stream');
 
-export let isAngiePro = false;
+export let isAngieProFlag = false;
 let apiWritePermissions = null;
 
 export const checkWritePermissions = (upstream, server, sendCredentials = false) =>
@@ -54,14 +54,15 @@ export const checkWritePermissions = (upstream, server, sendCredentials = false)
 	});
 
 export const isWritable = () => apiWritePermissions;
+export const isAngiePro = () => isAngieProFlag;
 
 export function defineAngieVersion(build) {
 	if (!build) {
-		isAngiePro = false;
+		isAngieProFlag = false;
 	} else if (typeof build === 'string' && build.toLowerCase().indexOf('pro') !== -1) {
-		isAngiePro = true;
+		isAngieProFlag = true;
 	} else {
-		isAngiePro = false;
+		isAngieProFlag = false;
 	}
 }
 
@@ -69,7 +70,8 @@ export const checkApiAvailability = () => {
 	const angieApi = api.angie;
 
 	return angieApi.get().then(response => {
-		defineAngieVersion(response.build);
+		// eslint-disable-next-line no-use-before-define
+		apiUtils.defineAngieVersion(response.build);
 		return response;
 	}).catch((err) => {
 		if (err.status === 401) {
@@ -159,4 +161,5 @@ export const apiUtils = {
 	initialLoad,
 	defineAngieVersion,
 	isWritable,
+	isAngiePro,
 };

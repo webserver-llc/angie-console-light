@@ -111,6 +111,7 @@ describe('<UpstreamsList />', () => {
 		let thenSpy = spy();
 
 		stub(apiUtils, 'isWritable').callsFake(() => isWritableResult);
+		stub(apiUtils, 'isAngiePro').callsFake(() => true);
 		stub(apiUtils, 'checkWritePermissions').callsFake(() => ({
 			then: thenSpy
 		}));
@@ -167,6 +168,7 @@ describe('<UpstreamsList />', () => {
 		stateSpy.restore();
 		window.alert.restore();
 		apiUtils.isWritable.restore();
+		apiUtils.isAngiePro.restore();
 		wrapper.unmount();
 	});
 
@@ -566,6 +568,106 @@ describe('<UpstreamsList />', () => {
 		wrapper.unmount();
 	});
 
+	describe('renderEditButton()', () => {
+		const props = {
+			name: 'test_name',
+			upstream: {
+				peers: [
+					{ id: 'test_1', state: 'up' },
+					{ id: 'test_2', state: 'unavail' },
+					{ id: 'test_3', state: 'unhealthy' },
+					{ id: 'test_4', state: 'checking' },
+					{ id: 'test_5', state: 'down' }
+				],
+				zoneSize: null,
+				slab: 'slab_test'
+			},
+			showOnlyFailed: false,
+			isStream: 'isStream_test',
+			upstreamsApi: 'upstreamsApi_test'
+		};
+		const wrapper = shallow(
+			<UpstreamsList { ...props } />
+		);
+		const instance = wrapper.instance();
+
+		after(() => {
+			wrapper.unmount()
+		});
+		
+		it('isWritable = false, isAngiePro = false', () => {
+			stub(apiUtils, 'isAngiePro').callsFake(() => false);
+			stub(tooltips, 'useTooltip').callsFake(() => ({
+				prop_from_useTooltip: true
+			}));
+			const editButton = shallow(instance.renderEditButton(false));
+			
+			expect(
+				editButton.prop('className'),
+				'has class'
+			).to.be.equal(styles['edit-disable']);
+			expect(tooltips.useTooltip.calledOnce, 'useTooltip called once').to.be.true;
+			expect(
+				tooltips.useTooltip.args[0][0],
+				'useTooltip call arg'
+			).to.be.equal('Available in Angie PRO only');
+			expect(
+				tooltips.useTooltip.args[0][1],
+				'useTooltip call arg'
+			).to.be.equal('hint-right');
+			
+			apiUtils.isAngiePro.restore();
+			tooltips.useTooltip.restore();
+		});
+		
+		it('isWritable = true, isAngiePro = false', () => {
+			stub(apiUtils, 'isAngiePro').callsFake(() => false);
+			stub(tooltips, 'useTooltip').callsFake(() => ({
+				prop_from_useTooltip: true
+			}));
+			const editButton = shallow(instance.renderEditButton(true));
+			
+			expect(
+				editButton.prop('className'),
+				'has class'
+			).to.be.equal(styles['edit-disable']);
+			expect(tooltips.useTooltip.calledOnce, 'useTooltip called once').to.be.true;
+			expect(
+				tooltips.useTooltip.args[0][0],
+				'useTooltip call arg'
+			).to.be.equal('Available in Angie PRO only');
+			expect(
+				tooltips.useTooltip.args[0][1],
+				'useTooltip call arg'
+			).to.be.equal('hint-right');
+			
+			apiUtils.isAngiePro.restore();
+			tooltips.useTooltip.restore();
+		});
+		
+		it('isWritable = false, isAngiePro = true', () => {
+			stub(apiUtils, 'isAngiePro').callsFake(() => true);
+			expect(instance.renderEditButton(false)).to.be.null;
+			apiUtils.isAngiePro.restore();
+		});
+		
+		it('isWritable = true, isAngiePro = true', () => {
+			stub(apiUtils, 'isAngiePro').callsFake(() => true);
+			const editButton = shallow(instance.renderEditButton(true));
+			
+			expect(
+				editButton.prop('className'),
+				'has class'
+			).to.be.equal(styles['edit']);
+			expect(
+				editButton.prop('onClick').name,
+				'has click handler'
+			).to.be.equal('bound toggleEditMode');
+			
+			apiUtils.isAngiePro.restore();
+		});
+	});
+
 	it('render()', () => {
 		const props = {
 			name: 'test_name',
@@ -591,6 +693,7 @@ describe('<UpstreamsList />', () => {
 		let isWritableResult = false;
 
 		stub(apiUtils, 'isWritable').callsFake(() => isWritableResult);
+		stub(apiUtils, 'isAngiePro').callsFake(() => true);
 		stub(instance, 'filterPeers').callsFake(peers => peers);
 		stub(tooltips, 'useTooltip').callsFake(() => ({
 			prop_from_useTooltip: true
@@ -863,6 +966,9 @@ describe('<UpstreamsList />', () => {
 		instance.filterPeers.restore();
 		tooltips.useTooltip.restore();
 		instance.renderPeers.restore();
+		
+		apiUtils.isWritable.restore();
+		apiUtils.isAngiePro.restore();
 		instance.editSelectedUpstream.restore();
 		wrapper.unmount();
 	});

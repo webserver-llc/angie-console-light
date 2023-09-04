@@ -117,7 +117,7 @@ describe('<Tooltip />', () => {
 			setStateStub.args[0][0],
 			'[align = center, position = top] this.setState call args'
 		).to.be.deep.equal({
-			top: 360,
+			top: 340,
 			left: 30,
 			movedToLeft: false,
 		});
@@ -139,7 +139,7 @@ describe('<Tooltip />', () => {
 			setStateStub.args[0][0],
 			'[align = center, position = right] this.setState call args'
 		).to.be.deep.equal({
-			top: 460,
+			top: 440,
 			left: 60,
 			movedToLeft: false,
 		});
@@ -161,7 +161,7 @@ describe('<Tooltip />', () => {
 			setStateStub.args[0][0],
 			'[no align, position = right] this.setState call args'
 		).to.be.deep.equal({
-			top: 460,
+			top: 440,
 			left: 150,
 			movedToLeft: false,
 		});
@@ -183,7 +183,7 @@ describe('<Tooltip />', () => {
 			setStateStub.args[0][0],
 			'[no align, position = top] this.setState call args'
 		).to.be.deep.equal({
-			top: 360,
+			top: 340,
 			left: 120,
 			movedToLeft: false,
 		});
@@ -206,7 +206,7 @@ describe('<Tooltip />', () => {
 			setStateStub.args[0][0],
 			'[movedToLeft = true, align = center, position = top] this.setState call args'
 		).to.be.deep.equal({
-			top: 360,
+			top: 340,
 			left: -1850,
 			movedToLeft: true,
 		});

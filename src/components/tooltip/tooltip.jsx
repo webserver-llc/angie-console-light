@@ -43,7 +43,7 @@ export default class Tooltip extends React.Component {
 			if (this.props.position === 'top') {
 				state = {
 					...state,
-					top: state.top - height - 40,
+					top: state.top - height - this.props.anchorHeight - 20,
 					...(
 						this.props.left + width >= window.innerWidth
 							? {
@@ -56,7 +56,7 @@ export default class Tooltip extends React.Component {
 			} else if (this.props.position === 'right') {
 				state = {
 					...state,
-					top: state.top - this.props.anchorHeight,
+					top: state.top - this.props.anchorHeight - 20,
 					left: state.left + this.props.anchorWidth + 10
 				};
 			}
@@ -81,13 +81,15 @@ export default class Tooltip extends React.Component {
 
 		return (
 			<div
-				className={ cn }
+				className={cn}
 				ref={(ref) => { this.ref = ref; }}
 				style={{
 				     top: `${this.state.top}px`,
 				     left: `${this.state.left}px`
 			     }}
-			>{children}</div>
+			>
+				{children}
+			</div>
 		);
 	}
 }

@@ -16,6 +16,7 @@ import {
 	ConnectionsTooltip,
 } from '#/components/upstreams';
 import tooltips from '#/tooltips/index.jsx';
+import { apiUtils } from '../../../api';
 
 export default class Upstream extends UpstreamsList {
 	constructor(props) {
@@ -117,7 +118,19 @@ export default class Upstream extends UpstreamsList {
 						<th colSpan="2">Conns</th>
 						<th colSpan="4">Traffic</th>
 						<th colSpan="2">Server checks</th>
-						<th colSpan="3">Health monitors</th>
+						<th
+							colSpan="3"
+							className={styles.relative}
+						>
+							{ !apiUtils.isAngiePro() ? (
+								<span
+									className={styles['disable-header-col']}
+									{...tooltips.useTooltip('Available in Angie PRO only', 'hint')}
+								/>
+							)
+								: null}
+							Health monitors
+						</th>
 					</tr>
 					<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
 						<th className={styles['left-align']}>Name</th>

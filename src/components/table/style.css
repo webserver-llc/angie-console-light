@@ -1,3 +1,7 @@
+.relative {
+	position: relative;
+}
+
 .table {
 	font-size: 13px;
 }
@@ -294,4 +298,13 @@ td.status {
 	vertical-align: middle;
 	text-align: center;
 	font-weight: bold;
+}
+
+.disable-header-col {
+	background-color: #ddd;
+	position: absolute;
+	width: 100%;
+	height: 60px;
+	opacity: 0.8;
+	left: 0;
 }
