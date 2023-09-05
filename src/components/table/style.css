@@ -309,6 +309,10 @@ td.status {
 	left: 0;
 }
 
+.table .without-padding {
+	padding: 0;
+}
+
 .promo-header-cell {
 	position: relative;
 }

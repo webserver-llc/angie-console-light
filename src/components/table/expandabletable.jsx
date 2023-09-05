@@ -46,7 +46,7 @@ export default class ExpandableTable extends React.Component {
 	renderExpandingItemToogleIcon(item) {
 		if (!this.hasExpandable(item)) {
 			if (this.getExpandableItems().length) {
-				return <td/>;
+				return <td className={styles['without-padding']} />;
 			}
 			return null;
 		}
@@ -68,7 +68,8 @@ export default class ExpandableTable extends React.Component {
 	}
 
 	getExpandableItems() { return []; }
+
 	hasExpandable() { }
 
-	render() { return <div/>; }
+	render() { return <div />; }
 }
