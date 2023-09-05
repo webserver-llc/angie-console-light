@@ -16,9 +16,80 @@ import styles from '../style.css';
 import tooltipStyles from '../../../../tooltip/style.css';
 import utils from '../../../../../utils.js';
 import tooltips from '../../../../../tooltips/index.jsx';
+import { apiUtils } from '../../../../../api/index.js';
 import { docs } from '../utils.js';
 
 describe('<AboutAngieTooltip IndexPage />', () => {
+	describe('this.renderLinkToDocs()', () => {
+		it('nothing render', () => {
+			const data = {
+				angie: {
+					address: 'localhost',
+					load_time: 1599571720025
+				}
+			};
+			const wrapper = shallow(
+				<AboutAngie
+					data={ data }
+					className="test"
+				/>
+			);
+			let instance = wrapper.instance();
+			expect(instance.renderLinkToDocs()).to.be.null
+			wrapper.unmount();
+		});
+
+		it('only version', () => {
+			const data = {
+				angie: {
+					version: '0.0.1',
+					address: 'localhost',
+					load_time: 1599571720025
+				}
+			};
+			const wrapper = shallow(
+				<AboutAngie
+					data={ data }
+					className="test"
+				/>
+			);
+			let instance = wrapper.instance();
+			const link = shallow(instance.renderLinkToDocs())
+			
+			expect(link.prop('href')).to.be.equal(docs.default);
+			expect(link.text()).to.be.equal(data.angie.version);
+			
+			wrapper.unmount();
+		});
+
+		it('build and version', () => {
+			stub(apiUtils, 'isAngiePro').callsFake(() => true);
+			
+			const data = {
+				angie: {
+					build: 'PRO',
+					version: '0.0.1',
+					address: 'localhost',
+					load_time: 1599571720025
+				}
+			};
+			const wrapper = shallow(
+				<AboutAngie
+					data={ data }
+					className="test"
+				/>
+			);
+			let instance = wrapper.instance();
+			const link = shallow(instance.renderLinkToDocs())
+			
+			expect(link.prop('href')).to.be.equal(docs.pro);
+			expect(link.text()).to.be.equal(`${data.angie.build} (${data.angie.version})`);
+			
+			wrapper.unmount();
+			apiUtils.isAngiePro.restore();
+		});
+	});
+	
 	it('returning component', () => {
 		stub(utils, 'formatDate').callsFake(() => 'test_formatDate_result');
 
@@ -49,6 +120,7 @@ describe('<AboutAngie IndexPage />', () => {
 		stub(Date, 'now').callsFake(() => 1599571723125);
 		stub(Date, 'parse').callsFake(a => a);
 		stub(utils, 'formatUptime').callsFake(() => 'test_formatUptime_result');
+		stub(apiUtils, 'isAngiePro').callsFake(() => true);
 		stub(tooltips, 'useTooltip').callsFake(() => ({
 			prop_from_useTooltip: true
 		}));
@@ -101,6 +173,7 @@ describe('<AboutAngie IndexPage />', () => {
 
 		Date.now.restore();
 		Date.parse.restore();
+		apiUtils.isAngiePro.restore();
 		utils.formatUptime.restore();
 		tooltips.useTooltip.restore();
 		wrapper.unmount();

@@ -29,19 +29,35 @@ export function AboutAngieTooltip({ data }) {
 }
 
 export class AboutAngie extends React.Component {
+	renderLinkToDocs() {
+		const { props: { data: { angie } } } = this;
+
+		if (!angie.build && !angie.version) return null;
+
+		const hrefToDocs = getHrefDocs();
+		let text;
+		if (angie.build) {
+			text = angie.build;
+		}
+		if (text) {
+			text += ` (${angie.version})`;
+		} else {
+			text = angie.version;
+		}
+
+		return (
+			<a href={hrefToDocs} target="_blank" className={styles.release} rel="noreferrer">
+				{text}
+			</a>
+		);
+	}
+
 	render() {
 		const { props: { data: { angie } } } = this;
-		const hrefToDocs = getHrefDocs();
 
 		return (
 			<IndexBox className={this.props.className}>
-				<a href={hrefToDocs} target="_blank" className={styles.release} rel="noreferrer">
-					{angie.build}
-					{' '}
-					(
-					{angie.version}
-					)
-				</a>
+				{this.renderLinkToDocs()}
 
 				<table className={styles.table}>
 					<tr>
