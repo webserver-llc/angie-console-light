@@ -1,11 +1,11 @@
-import { isAngiePro } from '../../../../api';
+import { apiUtils } from '../../../../api';
 
 export const docs = {
 	pro: 'https://wbsrv.ru/angie-pro/docs/',
 	default: 'https://angie.software/en/',
 };
 
-export const getHrefDocs = () => isAngiePro ? docs.pro : docs.default;
+export const getHrefDocs = () => apiUtils.isAngiePro() ? docs.pro : docs.default;
 
 export default {
 	docs,
