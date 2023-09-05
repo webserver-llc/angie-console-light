@@ -14,11 +14,12 @@
 
 .logo {
 	composes: logo from '../../style.css';
-	width: 170px;
+	width: 120px;
 	height: 44px;
 	background-size: contain;
-	padding: 8px;
+	padding: 8px 24px;
 	background-origin: content-box;
+	background-position: center;
 	flex: 0 0 auto;
 }
 
