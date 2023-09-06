@@ -251,27 +251,14 @@ describe('Api', () => {
 							assert.fail('Should throw an exception');
 						},
 						({ type }) => {
-							if (status === 404) {
-								assert(type === 'api_not_found', 'Unexpected error type. "api_not_found" was expected');
-							} else {
-								assert(type === 'old_status_found', 'Unexpected error type. "old_status_found" was expected');
-
-								checkApi(404);
-							}
+							assert(type === 'api_not_found', 'Unexpected error type. "api_not_found" was expected');
+							_done();
 						}
 					)
-					.then(
-						() => {
-							if (_status === 404) {
-								_done();
-							}
-						},
-						_done
-					);
 			};
 
 			window.fetch = (...args) => Promise.resolve({
-				status: args[0] === '/status' ? status : 404,
+				status: 404,
 				json(){
 					return Promise.resolve({ error: {} });
 				}

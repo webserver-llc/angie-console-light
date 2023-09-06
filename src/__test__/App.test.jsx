@@ -79,7 +79,7 @@ describe('<App />', () => {
 			});
 
 			expect(instance.setState).to.be.calledOnce;
-			expect(instance.setState.args[0][0]).to.deep.equal({ error });
+			expect(instance.setState.args[0][0]).to.deep.equal({ loading: false, error });
 
 			apiUtils.checkApiAvailability.restore();
 			apiUtils.checkWritePermissions.restore();
