@@ -114,7 +114,7 @@ describe('<UpstreamsList />', () => {
 		stub(apiUtils, 'isWritable').callsFake(() => isWritableResult);
 		stub(apiUtils, 'isAngiePro').callsFake(() => true);
 		stub(apiUtils, 'checkWritePermissions').callsFake(() => ({
-			then: thenSpy
+			then: () => ({ then: thenSpy })
 		}));
 
 		instance.toggleEditMode();

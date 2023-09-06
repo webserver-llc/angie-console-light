@@ -65,6 +65,11 @@ export default class UpstreamsList extends SortableTable {
 			const { name, peers } = this.props.upstream;
 			const server = getServerName(peers[0]);
 			apiUtils.checkWritePermissions(name, server).then((result) => {
+				if (result === null) {
+					return apiUtils.checkWritePermissions(name, server, true);
+				}
+				return result;
+			}).then((result) => {
 				if (result === true) {
 					this.toggleEditMode();
 				} else if (result === false) {
