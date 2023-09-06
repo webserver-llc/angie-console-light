@@ -74,7 +74,7 @@ export class App extends React.Component {
 			this.setState({ loading: false });
 			datastore.startObserve();
 		}).catch((err) => {
-			this.setState({ error: err.type });
+			this.setState({ loading: false, error: err.type });
 		});
 	}
 

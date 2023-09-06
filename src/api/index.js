@@ -78,13 +78,7 @@ export const checkApiAvailability = () => {
 			throw { type: 'basic_auth' };
 		}
 
-		return window.fetch('/status').then((res) => {
-			if (res.status === 200) {
-				throw { type: 'old_status_found' };
-			}
-
-			throw { type: 'api_not_found' };
-		});
+		throw { type: 'api_not_found' };
 	});
 };
 
