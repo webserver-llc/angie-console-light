@@ -39,22 +39,22 @@ describe('<ServerZones />', () => {
 		it('sort zones', () => {
 			const wrapper = shallow(
 				<ServerZones data={ new Map([
-					['test', {
+					['loca', {
 						alert: false,
 						warning: false,
 						data: {},
 						responses: {}
-					}], ['test_2', {
+					}], ['maka', {
 						alert: true,
 						warning: false,
 						data: {},
 						responses: {}
-					}], ['test_3', {
+					}], ['arak', {
 						alert: false,
 						warning: true,
 						data: {},
 						responses: {}
-					}], ['test_4', {
+					}], ['bora', {
 						alert: false,
 						warning: false,
 						data: {},
@@ -64,28 +64,28 @@ describe('<ServerZones />', () => {
 			);
 			let rows = wrapper.find('tbody tr');
 
-			expect(rows.at(0).find('td').at(1).text(), 'row 1, title').to.be.equal('test');
-			expect(rows.at(1).find('td').at(1).text(), 'row 2, title').to.be.equal('test_2');
-			expect(rows.at(2).find('td').at(1).text(), 'row 3, title').to.be.equal('test_3');
-			expect(rows.at(3).find('td').at(1).text(), 'row 4, title').to.be.equal('test_4');
+			expect(rows.at(0).find('td').at(1).text(), 'row 1, title').to.be.equal('loca');
+			expect(rows.at(1).find('td').at(1).text(), 'row 2, title').to.be.equal('maka');
+			expect(rows.at(2).find('td').at(1).text(), 'row 3, title').to.be.equal('arak');
+			expect(rows.at(3).find('td').at(1).text(), 'row 4, title').to.be.equal('bora');
 
 			wrapper.setState({ sortOrder: 'desc' });
 			rows = wrapper.find('tbody tr');
 
 			assert(
-				['test_2', 'test_3'].includes(rows.at(0).find('td').at(1).text()),
+				rows.at(0).find('td').at(1).text() === 'arak',
 				'row 1, title [desc]'
 			);
 			assert(
-				['test_2', 'test_3'].includes(rows.at(1).find('td').at(1).text()),
+				rows.at(1).find('td').at(1).text() === 'bora',
 				'row 2, title [desc]'
 			);
 			assert(
-				['test', 'test_4'].includes(rows.at(2).find('td').at(1).text()),
+				rows.at(2).find('td').at(1).text() === 'loca',
 				'row 3, title [desc]'
 			);
 			assert(
-				['test', 'test_4'].includes(rows.at(3).find('td').at(1).text()),
+				rows.at(3).find('td').at(1).text() === 'maka',
 				'row 4, title [desc]'
 			);
 
