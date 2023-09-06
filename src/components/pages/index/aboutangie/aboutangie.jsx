@@ -35,14 +35,10 @@ export class AboutAngie extends React.Component {
 		if (!angie.build && !angie.version) return null;
 
 		const hrefToDocs = getHrefDocs();
-		let text;
+		let text = angie.version;
+
 		if (angie.build) {
-			text = angie.build;
-		}
-		if (text) {
-			text += ` (${angie.version})`;
-		} else {
-			text = angie.version;
+			text += ` ${angie.build}`;
 		}
 
 		return (

@@ -83,7 +83,7 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 			const link = shallow(instance.renderLinkToDocs())
 			
 			expect(link.prop('href')).to.be.equal(docs.pro);
-			expect(link.text()).to.be.equal(`${data.angie.build} (${data.angie.version})`);
+			expect(link.text()).to.be.equal(`${data.angie.version} ${data.angie.build}`);
 			
 			wrapper.unmount();
 			apiUtils.isAngiePro.restore();
@@ -148,7 +148,7 @@ describe('<AboutAngie IndexPage />', () => {
 		expect(link.prop('href'), 'link href')
 			.to.be.equal(docs.pro);
 		expect(link.prop('target'), 'link target').to.be.equal('_blank');
-		expect(link.text(), 'link text').to.be.equal('PRO (0.0.1)');
+		expect(link.text(), 'link text').to.be.equal('0.0.1 PRO');
 
 		const table = wrapper.find('table');
 
