@@ -91,7 +91,7 @@ describe('<TableSortControl />', () => {
 		expect(
 			wrapper.prop('rowSpan'),
 			'[prop.singleRow = true] wrapper prop rowSpan'
-		).to.be.equal(0);
+		).to.be.equal(1);
 		expect(
 			tooltips.useTooltip.calledOnce,
 			'[props.order = desc] useTooltip called'

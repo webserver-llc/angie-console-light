@@ -35,6 +35,7 @@ export default class TableSortControl extends React.Component {
 			order,
 			isActive,
 			isInline,
+			rowSpan,
 		} = this.props;
 
 		let className = styles.sorter;
@@ -49,7 +50,7 @@ export default class TableSortControl extends React.Component {
 
 		return (
 			<th
-				rowSpan={singleRow ? 0 : 2}
+				rowSpan={singleRow ? 1 : rowSpan}
 				className={className}
 				onClick={this.toggle}
 
@@ -67,4 +68,5 @@ TableSortControl.defaultProps = {
 	firstSortLabel: 'Sort by conf order',
 	secondSortLabel: 'Sort by status - failed first',
 	isActive: true,
+	rowSpan: 2,
 };

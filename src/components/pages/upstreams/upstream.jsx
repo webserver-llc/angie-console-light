@@ -110,7 +110,7 @@ export default class Upstream extends UpstreamsList {
 								<tr>
 									<TableSortControl
 										secondSortLabel="Sort by status - down first"
-										singleRow
+										rowSpan={3}
 										order={this.state.sortOrder}
 										onChange={this.changeSorting}
 									/>
