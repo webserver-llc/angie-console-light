@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import { spy, stub } from 'sinon';
 
 import utils from '#/utils.js';
 import tooltips from '#/tooltips/index.jsx';
@@ -14,43 +13,43 @@ import tableUtils from '../utils.jsx';
 
 describe('Table utils', () => {
 	it('responsesTextWithTooltip()', () => {
-		spy(utils, 'getHTTPCodesArray');
+		jest.spyOn(utils, 'getHTTPCodesArray').mockClear();
 		const tooltipRowsContentResult = 'tooltipRowsContentResult';
-		stub(tableUtils, 'tooltipRowsContent').callsFake(() => tooltipRowsContentResult);
+		jest.spyOn(tableUtils, 'tooltipRowsContent').mockClear().mockImplementation(() => tooltipRowsContentResult);
 
 		const textResult = 'textResult';
 		const codes = {
-			'101': 10,
-			'200': 320,
-			'303': 0,
-			'404': 1,
-			'500': 103,
+			101: 10,
+			200: 320,
+			303: 0,
+			404: 1,
+			500: 103,
 		};
 		const codeGroup = '1';
 
-		expect(tableUtils.responsesTextWithTooltip(textResult, codes, codeGroup), '').to.be.equal(
-			tooltipRowsContentResult
-		);
-		expect(utils.getHTTPCodesArray.calledOnce, 'getHTTPCodesArray called').to.be.true;
-		expect(utils.getHTTPCodesArray.args[0][0], 'getHTTPCodesArray, arg 1').to.be.deep.equal(
-			codes
-		);
-		expect(utils.getHTTPCodesArray.args[0][1], 'getHTTPCodesArray, arg 2').to.be.equal(
-			codeGroup
-		);
-		expect(tableUtils.tooltipRowsContent.calledOnce, 'tooltipRowsContent called').to.be.true;
-		expect(tableUtils.tooltipRowsContent.args[0][0], 'tooltipRowsContent arg 1').to.be.equal(textResult);
-		expect(tableUtils.tooltipRowsContent.args[0][1], 'tooltipRowsContent arg 2').to.be.deep.equal(
-			[{
-				id: '101',
-				label: '101',
-				value: 10,
-			}]
-		);
-		expect(tableUtils.tooltipRowsContent.args[0][2], 'tooltipRowsContent arg 3').to.be.equal('hint');
+		//
+		expect(tableUtils.responsesTextWithTooltip(textResult, codes, codeGroup)).toBe(tooltipRowsContentResult);
+		// getHTTPCodesArray called
+		expect(utils.getHTTPCodesArray).toHaveBeenCalledTimes(1);
+		// getHTTPCodesArray, arg 1
+		expect(utils.getHTTPCodesArray.mock.calls[0][0]).toEqual(codes);
+		// getHTTPCodesArray, arg 2
+		expect(utils.getHTTPCodesArray.mock.calls[0][1]).toBe(codeGroup);
+		// tooltipRowsContent called
+		expect(tableUtils.tooltipRowsContent).toHaveBeenCalledTimes(1);
+		// tooltipRowsContent arg 1
+		expect(tableUtils.tooltipRowsContent.mock.calls[0][0]).toBe(textResult);
+		// tooltipRowsContent arg 2
+		expect(tableUtils.tooltipRowsContent.mock.calls[0][1]).toEqual([{
+			id: '101',
+			label: '101',
+			value: 10,
+		}]);
+		// tooltipRowsContent arg 3
+		expect(tableUtils.tooltipRowsContent.mock.calls[0][2]).toBe('hint');
 
-		utils.getHTTPCodesArray.restore();
-		tableUtils.tooltipRowsContent.restore();
+		utils.getHTTPCodesArray.mockRestore();
+		tableUtils.tooltipRowsContent.mockRestore();
 	});
 
 	describe('tooltipRowsContent()', () => {
@@ -64,36 +63,43 @@ describe('Table utils', () => {
 		];
 		const useTooltipResult = 'useTooltipResult';
 
-		before(() => {
-			stub(tooltips, 'useTooltip').callsFake(() => ({ useTooltipResult }));
+		beforeAll(() => {
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({ useTooltipResult }));
 		});
 
 		afterEach(() => {
-			tooltips.useTooltip.resetHistory();
+			tooltips.useTooltip.mockClear();
 		});
 
-		after(() => {
-			tooltips.useTooltip.restore();
+		afterAll(() => {
+			tooltips.useTooltip.mockRestore();
 		});
 
 		it('No items', () => {
-			expect(tableUtils.tooltipRowsContent(textResult)).to.be.equal(textResult);
-			expect(tooltips.useTooltip.callCount, 'useTooltip was not called').to.be.equal(0);
+			expect(tableUtils.tooltipRowsContent(textResult)).toBe(textResult);
+			expect(tooltips.useTooltip).toHaveBeenCalledTimes(0);
 		});
 
 		it('With items', () => {
 			const position = 'test position';
 			const result = tableUtils.tooltipRowsContent(textResult, items, position);
 
-			expect(result.props.children, 'result text').to.be.equal(textResult);
-			expect(result.props.useTooltipResult, 'tooltip props were extracted').to.be.equal(useTooltipResult);
+			// result text
+			expect(result.props.children).toBe(textResult);
+			// tooltip props were extracted
+			expect(result.props.useTooltipResult).toBe(useTooltipResult);
 
-			expect(tooltips.useTooltip.calledOnce, 'useTooltip called once').to.be.true;
-			const tooltipContent = tooltips.useTooltip.args[0][0].props.children;
-			expect(tooltipContent[0].key, 'tooltip content, key').to.be.equal(items[0].id);
-			expect(tooltipContent[0].props.children[0].props.children.join(''), 'tooltip content, label').to.be.equal('A:');
-			expect(tooltipContent[0].props.children[2].props.children, 'tooltip content, value').to.be.equal(123);
-			expect(tooltips.useTooltip.args[0][1], 'tooltip position').to.be.equal(position);
+			// useTooltip called once
+			expect(tooltips.useTooltip).toHaveBeenCalledTimes(1);
+			const tooltipContent = tooltips.useTooltip.mock.calls[0][0].props.children;
+			// tooltip content, key
+			expect(tooltipContent[0].key).toBe(items[0].id);
+			// tooltip content, label
+			expect(tooltipContent[0].props.children[0].props.children.join('')).toBe('A:');
+			// tooltip content, value
+			expect(tooltipContent[0].props.children[2].props.children).toBe(123);
+			// tooltip position
+			expect(tooltips.useTooltip.mock.calls[0][1]).toBe(position);
 		});
 	});
 });

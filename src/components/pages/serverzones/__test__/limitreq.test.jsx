@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { stub } from 'sinon';
 import ChartsTable from '../../../charts-table/index.jsx';
 import LimitReq, {
 	Colors,
@@ -17,13 +16,14 @@ import styles from '../../../table/style.css';
 
 describe('<LimitReq />', () => {
 	it('extends ChartsTable', () => {
-		expect(LimitReq.prototype).to.be.an.instanceOf(ChartsTable);
+		expect(LimitReq.prototype).toBeInstanceOf(ChartsTable);
 	});
 
 	it('getTitle()', () => {
 		const wrapper = shallow(<LimitReq />);
 
-		expect(wrapper.instance().getTitle(), 'return value').to.be.equal('Limit Req');
+		// return value
+		expect(wrapper.instance().getTitle()).toBe('Limit Req');
 
 		wrapper.unmount();
 	});
@@ -32,15 +32,17 @@ describe('<LimitReq />', () => {
 		const wrapper = shallow(<LimitReq />);
 		const headRow = wrapper.instance().getHeadRow();
 
-		expect(headRow.type, 'html tag').to.be.equal('tr');
-		expect(headRow.props.children, 'cells count').to.have.lengthOf(7);
+		// html tag
+		expect(headRow.type).toBe('tr');
+		// cells count
+		expect(headRow.props.children).toHaveLength(7);
 
 		wrapper.unmount();
 	});
 
 	it('getBody()', () => {
 		const wrapper = shallow(
-			<LimitReq data={ new Map([
+			<LimitReq data={new Map([
 				['test', {
 					obj: {
 						passed: 78,
@@ -60,136 +62,168 @@ describe('<LimitReq />', () => {
 					},
 					history: 'test__history_1'
 				}]
-			]) }
-		/>);
+			])}
+			/>);
 		const instance = wrapper.instance();
 
 		wrapper.setState({ activeCharts: ['test'] });
-		stub(instance.toggleChart, 'bind').callsFake(() => 'toggleChart_bind_test');
+		jest.spyOn(instance.toggleChart, 'bind').mockClear().mockImplementation(() => 'toggleChart_bind_test');
 
 		const body = wrapper.instance().getBody();
 
-		expect(body, 'rows length').to.have.lengthOf(2);
+		// rows length
+		expect(body).toHaveLength(2);
 
 		let row = body[0][0];
 
-		expect(row.type, '[group 1, row 1] html tag').to.be.equal('tr');
-		expect(row.key, '[group 1, row 1] attr key').to.be.equal('data_test');
-		expect(row.props.className, '[group 1, row 1] attr className').to.be.equal(
-			`${ styles['chart-container'] } ${ styles['chart-container_active'] }`
-		);
-		expect(row.props.title, '[group 1, row 1] attr title').to.be.equal('Click to hide rate graph');
-		expect(row.props.onClick, '[group 1, row 1] attr onClick').to.be.equal('toggleChart_bind_test');
-		expect(row.props.children, '[group 1, row 1] children length').to.have.lengthOf(7);
-		expect(row.props.children[0].type, '[group 1, row 1] child 1, nodeName').to.be.equal('td');
-		expect(row.props.children[0].props.className, '[group 1, row 1] child 1, className').to.be.equal(
-			`${ styles['center-align'] } ${ styles['bdr'] } ${ styles['chart-icon'] }`
-		);
-		expect(row.props.children[0].props.children.type, '[group 1, row 1] child 1, child nodeName').to.be.equal('div');
-		expect(
-			row.props.children[0].props.children.props.className,
-			'[group 1, row 1] child 1, child className'
-		).to.be.equal(styles['chart-icon__icon']);
-		expect(row.props.children[1].type, '[group 1, row 1] child 2, nodeName').to.be.equal('td');
-		expect(row.props.children[1].props.className, '[group 1, row 1] child 2, className').to.be.equal(
-			`${ styles['left-align'] } ${ styles['bold'] } ${ styles['bdr'] }`
-		);
-		expect(row.props.children[1].props.children, '[group 1, row 1] child 2, child').to.be.equal('test');
-		expect(row.props.children[2].type, '[group 1, row 1] child 3, nodeName').to.be.equal('td');
-		expect(row.props.children[2].props.className, '[group 1, row 1] child 3, className')
-			.to.be.equal(styles['bdr']);
-		expect(row.props.children[2].props.children, '[group 1, row 1] child 3, child').to.be.equal(78);
-		expect(row.props.children[3].type, '[group 1, row 1] child 4, nodeName').to.be.equal('td');
-		expect(row.props.children[3].props.className, '[group 1, row 1] child 4, className')
-			.to.be.equal(styles['bdr']);
-		expect(row.props.children[3].props.children, '[group 1, row 1] child 4, child').to.be.equal(55);
-		expect(row.props.children[4].type, '[group 1, row 1] child 5, nodeName').to.be.equal('td');
-		expect(row.props.children[4].props.className, '[group 1, row 1] child 5, className')
-			.to.be.equal(styles['bdr']);
-		expect(row.props.children[4].props.children, '[group 1, row 1] child 5, child').to.be.equal(9);
-		expect(row.props.children[5].type, '[group 1, row 1] child 6, nodeName').to.be.equal('td');
-		expect(row.props.children[5].props.className, '[group 1, row 1] child 6, className')
-			.to.be.equal(styles['bdr']);
-		expect(row.props.children[5].props.children, '[group 1, row 1] child 6, child').to.be.equal(11);
-		expect(row.props.children[6].type, '[group 1, row 1] child 7, nodeName').to.be.equal('td');
-		expect(row.props.children[6].props.children, '[group 1, row 1] child 7, child').to.be.equal(13);
+		// [group 1, row 1] html tag
+		expect(row.type).toBe('tr');
+		// [group 1, row 1] attr key
+		expect(row.key).toBe('data_test');
+		// [group 1, row 1] attr className
+		expect(row.props.className).toBe(`${ styles['chart-container'] } ${ styles['chart-container_active'] }`);
+		// [group 1, row 1] attr title
+		expect(row.props.title).toBe('Click to hide rate graph');
+		// [group 1, row 1] attr onClick
+		expect(row.props.onClick).toBe('toggleChart_bind_test');
+		// [group 1, row 1] children length
+		expect(row.props.children).toHaveLength(7);
+		// [group 1, row 1] child 1, nodeName
+		expect(row.props.children[0].type).toBe('td');
+		// [group 1, row 1] child 1, className
+		expect(row.props.children[0].props.className).toBe(`${ styles['center-align'] } ${ styles.bdr } ${ styles['chart-icon'] }`);
+		// [group 1, row 1] child 1, child nodeName
+		expect(row.props.children[0].props.children.type).toBe('div');
+		// [group 1, row 1] child 1, child className
+		expect(row.props.children[0].props.children.props.className).toBe(styles['chart-icon__icon']);
+		// [group 1, row 1] child 2, nodeName
+		expect(row.props.children[1].type).toBe('td');
+		// [group 1, row 1] child 2, className
+		expect(row.props.children[1].props.className).toBe(`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`);
+		// [group 1, row 1] child 2, child
+		expect(row.props.children[1].props.children).toBe('test');
+		// [group 1, row 1] child 3, nodeName
+		expect(row.props.children[2].type).toBe('td');
+		// [group 1, row 1] child 3, className
+		expect(row.props.children[2].props.className).toBe(styles.bdr);
+		// [group 1, row 1] child 3, child
+		expect(row.props.children[2].props.children).toBe(78);
+		// [group 1, row 1] child 4, nodeName
+		expect(row.props.children[3].type).toBe('td');
+		// [group 1, row 1] child 4, className
+		expect(row.props.children[3].props.className).toBe(styles.bdr);
+		// [group 1, row 1] child 4, child
+		expect(row.props.children[3].props.children).toBe(55);
+		// [group 1, row 1] child 5, nodeName
+		expect(row.props.children[4].type).toBe('td');
+		// [group 1, row 1] child 5, className
+		expect(row.props.children[4].props.className).toBe(styles.bdr);
+		// [group 1, row 1] child 5, child
+		expect(row.props.children[4].props.children).toBe(9);
+		// [group 1, row 1] child 6, nodeName
+		expect(row.props.children[5].type).toBe('td');
+		// [group 1, row 1] child 6, className
+		expect(row.props.children[5].props.className).toBe(styles.bdr);
+		// [group 1, row 1] child 6, child
+		expect(row.props.children[5].props.children).toBe(11);
+		// [group 1, row 1] child 7, nodeName
+		expect(row.props.children[6].type).toBe('td');
+		// [group 1, row 1] child 7, child
+		expect(row.props.children[6].props.children).toBe(13);
 
 		row = body[0][1];
 
-		expect(row.type, '[group 1, row 2] html tag').to.be.equal('tr');
-		expect(row.key, '[group 1, row 2] attr key').to.be.equal('chart_test');
-		expect(row.props.className, '[group 1, row 2] attr className').to.be.equal(
-			styles['chart-row']
-		);
-		expect(row.props.children.type, '[group 1, row 2] child nodeName').to.be.equal('td');
-		expect(row.props.children.props.colspan, '[group 1, row 2] child colspan').to.be.equal('7');
-		expect(
-			row.props.children.props.className,
-			'[group 1, row 2] child className'
-		).to.be.equal(styles['left-align']);
-		expect(row.props.children.props.children.type.name, '[group 1, row 2] Chart in open row').to.be.equal('Chart');
-		expect(row.props.children.props.children.props.data, '[group 1, row 2] Chart attr data')
-			.to.be.equal('test__history');
-		expect(row.props.children.props.children.props.colors, '[group 1, row 2] Chart attr colors')
-			.to.be.deep.equal(Colors);
-		expect(row.props.children.props.children.props.labels, '[group 1, row 2] Chart attr labels')
-			.to.be.deep.equal(Labels);
+		// [group 1, row 2] html tag
+		expect(row.type).toBe('tr');
+		// [group 1, row 2] attr key
+		expect(row.key).toBe('chart_test');
+		// [group 1, row 2] attr className
+		expect(row.props.className).toBe(styles['chart-row']);
+		// [group 1, row 2] child nodeName
+		expect(row.props.children.type).toBe('td');
+		// [group 1, row 2] child colspan
+		expect(row.props.children.props.colspan).toBe('7');
+		// [group 1, row 2] child className
+		expect(row.props.children.props.className).toBe(styles['left-align']);
+		// [group 1, row 2] Chart in open row
+		expect(row.props.children.props.children.type.name).toBe('Chart');
+		// [group 1, row 2] Chart attr data
+		expect(row.props.children.props.children.props.data).toBe('test__history');
+		// [group 1, row 2] Chart attr colors
+		expect(row.props.children.props.children.props.colors).toEqual(Colors);
+		// [group 1, row 2] Chart attr labels
+		expect(row.props.children.props.children.props.labels).toEqual(Labels);
 
 		row = body[1][0];
 
-		expect(row.type, '[group 2, row 1] html tag').to.be.equal('tr');
-		expect(row.key, '[group 2, row 1] attr key').to.be.equal('data_test_1');
-		expect(row.props.className, '[group 2, row 1] attr className')
-			.to.be.equal(styles['chart-container']);
-		expect(row.props.title, '[group 2, row 1] attr title').to.be.equal('Click to view rate graph');
+		// [group 2, row 1] html tag
+		expect(row.type).toBe('tr');
+		// [group 2, row 1] attr key
+		expect(row.key).toBe('data_test_1');
+		// [group 2, row 1] attr className
+		expect(row.props.className).toBe(styles['chart-container']);
+		// [group 2, row 1] attr title
+		expect(row.props.title).toBe('Click to view rate graph');
 
-		expect(row.props.onClick, '[group 2, row 1] attr onClick').to.be.equal('toggleChart_bind_test');
-		expect(row.props.children, '[group 2, row 1] children length').to.have.lengthOf(7);
-		expect(row.props.children[0].type, '[group 2, row 1] child 1, nodeName').to.be.equal('td');
-		expect(row.props.children[0].props.className, '[group 2, row 1] child 1, className').to.be.equal(
-			`${ styles['center-align'] } ${ styles['bdr'] } ${ styles['chart-icon'] }`
-		);
-		expect(row.props.children[0].props.children.type, '[group 2, row 1] child 1, child nodeName').to.be.equal('div');
-		expect(
-			row.props.children[0].props.children.props.className,
-			'[group 2, row 1] child 1, child className'
-		).to.be.equal(styles['chart-icon__icon']);
-		expect(row.props.children[1].type, '[group 2, row 1] child 2, nodeName').to.be.equal('td');
-		expect(row.props.children[1].props.className, '[group 2, row 1] child 2, className').to.be.equal(
-			`${ styles['left-align'] } ${ styles['bold'] } ${ styles['bdr'] }`
-		);
-		expect(row.props.children[1].props.children, '[group 2, row 1] child 2, child').to.be.equal('test_1');
-		expect(row.props.children[2].type, '[group 2, row 1] child 3, nodeName').to.be.equal('td');
-		expect(row.props.children[2].props.className, '[group 2, row 1] child 3, className')
-			.to.be.equal(styles['bdr']);
-		expect(row.props.children[2].props.children, '[group 2, row 1] child 3, child').to.be.equal(1);
-		expect(row.props.children[3].type, '[group 2, row 1] child 4, nodeName').to.be.equal('td');
-		expect(row.props.children[3].props.className, '[group 2, row 1] child 4, className')
-			.to.be.equal(styles['bdr']);
-		expect(row.props.children[3].props.children, '[group 2, row 1] child 4, child').to.be.equal(5);
-		expect(row.props.children[4].type, '[group 2, row 1] child 5, nodeName').to.be.equal('td');
-		expect(row.props.children[4].props.className, '[group 2, row 1] child 5, className')
-			.to.be.equal(styles['bdr']);
-		expect(row.props.children[4].props.children, '[group 2, row 1] child 5, child').to.be.equal(0);
-		expect(row.props.children[5].type, '[group 2, row 1] child 6, nodeName').to.be.equal('td');
-		expect(row.props.children[5].props.className, '[group 2, row 1] child 6, className')
-			.to.be.equal(styles['bdr']);
-		expect(row.props.children[5].props.children, '[group 2, row 1] child 6, child').to.be.equal(1);
-		expect(row.props.children[6].type, '[group 2, row 1] child 7, nodeName').to.be.equal('td');
-		expect(row.props.children[6].props.children, '[group 2, row 1] child 7, child').to.be.equal(0);
+		// [group 2, row 1] attr onClick
+		expect(row.props.onClick).toBe('toggleChart_bind_test');
+		// [group 2, row 1] children length
+		expect(row.props.children).toHaveLength(7);
+		// [group 2, row 1] child 1, nodeName
+		expect(row.props.children[0].type).toBe('td');
+		// [group 2, row 1] child 1, className
+		expect(row.props.children[0].props.className).toBe(`${ styles['center-align'] } ${ styles.bdr } ${ styles['chart-icon'] }`);
+		// [group 2, row 1] child 1, child nodeName
+		expect(row.props.children[0].props.children.type).toBe('div');
+		// [group 2, row 1] child 1, child className
+		expect(row.props.children[0].props.children.props.className).toBe(styles['chart-icon__icon']);
+		// [group 2, row 1] child 2, nodeName
+		expect(row.props.children[1].type).toBe('td');
+		// [group 2, row 1] child 2, className
+		expect(row.props.children[1].props.className).toBe(`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`);
+		// [group 2, row 1] child 2, child
+		expect(row.props.children[1].props.children).toBe('test_1');
+		// [group 2, row 1] child 3, nodeName
+		expect(row.props.children[2].type).toBe('td');
+		// [group 2, row 1] child 3, className
+		expect(row.props.children[2].props.className).toBe(styles.bdr);
+		// [group 2, row 1] child 3, child
+		expect(row.props.children[2].props.children).toBe(1);
+		// [group 2, row 1] child 4, nodeName
+		expect(row.props.children[3].type).toBe('td');
+		// [group 2, row 1] child 4, className
+		expect(row.props.children[3].props.className).toBe(styles.bdr);
+		// [group 2, row 1] child 4, child
+		expect(row.props.children[3].props.children).toBe(5);
+		// [group 2, row 1] child 5, nodeName
+		expect(row.props.children[4].type).toBe('td');
+		// [group 2, row 1] child 5, className
+		expect(row.props.children[4].props.className).toBe(styles.bdr);
+		// [group 2, row 1] child 5, child
+		expect(row.props.children[4].props.children).toBe(0);
+		// [group 2, row 1] child 6, nodeName
+		expect(row.props.children[5].type).toBe('td');
+		// [group 2, row 1] child 6, className
+		expect(row.props.children[5].props.className).toBe(styles.bdr);
+		// [group 2, row 1] child 6, child
+		expect(row.props.children[5].props.children).toBe(1);
+		// [group 2, row 1] child 7, nodeName
+		expect(row.props.children[6].type).toBe('td');
+		// [group 2, row 1] child 7, child
+		expect(row.props.children[6].props.children).toBe(0);
 
-		expect(body[1][1], '[group 2, row 2] Chart in hidden row').to.be.a('null');
+		expect(body[1][1]).toBeNull();
 
-		expect(instance.toggleChart.bind.calledTwice, 'this.toggleChart.bind called')
-			.to.be.true;
-		expect(instance.toggleChart.bind.args[0][0], 'this.toggleChart.bind call 1, arg 1')
-			.to.be.deep.equal(instance);
-		expect(instance.toggleChart.bind.args[0][1], 'this.toggleChart.bind call 1, arg 2')
-			.to.be.equal('test');
-		expect(instance.toggleChart.bind.args[1][0], 'this.toggleChart.bind call 2, arg 1')
-			.to.be.deep.equal(instance);
-		expect(instance.toggleChart.bind.args[1][1], 'this.toggleChart.bind call 2, arg 2')
-			.to.be.equal('test_1');
+		// this.toggleChart.bind called
+		expect(instance.toggleChart.bind).toHaveBeenCalledTimes(2);
+		// this.toggleChart.bind call 1, arg 1
+		expect(instance.toggleChart.bind.mock.calls[0][0]).toEqual(instance);
+		// this.toggleChart.bind call 1, arg 2
+		expect(instance.toggleChart.bind.mock.calls[0][1]).toBe('test');
+		// this.toggleChart.bind call 2, arg 1
+		expect(instance.toggleChart.bind.mock.calls[1][0]).toEqual(instance);
+		// this.toggleChart.bind call 2, arg 2
+		expect(instance.toggleChart.bind.mock.calls[1][1]).toBe('test_1');
 
 		wrapper.unmount();
 	});

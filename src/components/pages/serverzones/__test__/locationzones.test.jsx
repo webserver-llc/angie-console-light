@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy, stub } from 'sinon';
 
 import Locations from '../locationzones.jsx';
 import { SortableTable, tableUtils, styles } from '#/components/table';
@@ -16,13 +15,13 @@ import tooltips from '#/tooltips/index.jsx';
 
 describe('<Locations />', () => {
 	it('extends SortableTable', () => {
-		expect(Locations.prototype instanceof SortableTable).to.be.true;
+		expect(Locations.prototype instanceof SortableTable).toBe(true);
 	});
 
 	it('get SORTING_SETTINGS_KEY', () => {
 		const wrapper = shallow(<Locations />);
 
-		expect(wrapper.instance().SORTING_SETTINGS_KEY).to.be.equal('locationsSortOrder');
+		expect(wrapper.instance().SORTING_SETTINGS_KEY).toBe('locationsSortOrder');
 
 		wrapper.unmount();
 	});
@@ -31,14 +30,15 @@ describe('<Locations />', () => {
 		it('no locations', () => {
 			const wrapper = shallow(<Locations />);
 
-			expect(wrapper, 'return value').to.have.lengthOf(0);
+			// return value
+			expect(wrapper).toHaveLength(0);
 
 			wrapper.unmount();
 		});
 
 		it('sort locations', () => {
 			const wrapper = shallow(
-				<Locations data={ new Map([
+				<Locations data={new Map([
 					['loca', {
 						alert: false,
 						warning: false,
@@ -60,34 +60,27 @@ describe('<Locations />', () => {
 						data: {},
 						responses: {}
 					}]
-				]) } />
+				])}
+				/>
 			);
 			let rows = wrapper.find('tbody tr');
 
-			expect(rows.at(0).find('td').at(1).text(), 'row 1, title').to.be.equal('loca');
-			expect(rows.at(1).find('td').at(1).text(), 'row 2, title').to.be.equal('maka');
-			expect(rows.at(2).find('td').at(1).text(), 'row 3, title').to.be.equal('arak');
-			expect(rows.at(3).find('td').at(1).text(), 'row 4, title').to.be.equal('bora');
+			// row 1, title
+			expect(rows.at(0).find('td').at(1).text()).toBe('loca');
+			// row 2, title
+			expect(rows.at(1).find('td').at(1).text()).toBe('maka');
+			// row 3, title
+			expect(rows.at(2).find('td').at(1).text()).toBe('arak');
+			// row 4, title
+			expect(rows.at(3).find('td').at(1).text()).toBe('bora');
 
 			wrapper.setState({ sortOrder: 'desc' });
 			rows = wrapper.find('tbody tr');
 
-			assert(
-				rows.at(0).find('td').at(1).text() === 'arak',
-				'row 1, title [desc]'
-			);
-			assert(
-				rows.at(1).find('td').at(1).text() === 'bora',
-				'row 2, title [desc]'
-			);
-			assert(
-				rows.at(2).find('td').at(1).text() === 'loca',
-				'row 3, title [desc]'
-			);
-			assert(
-				rows.at(3).find('td').at(1).text() === 'maka',
-				'row 4, title [desc]'
-			);
+			expect(rows.at(0).find('td').at(1).text() === 'arak').toBeTruthy();
+			expect(rows.at(1).find('td').at(1).text() === 'bora').toBeTruthy();
+			expect(rows.at(2).find('td').at(1).text() === 'loca').toBeTruthy();
+			expect(rows.at(3).find('td').at(1).text() === 'maka').toBeTruthy();
 
 			wrapper.unmount();
 		});
@@ -96,31 +89,33 @@ describe('<Locations />', () => {
 			const wrapper = shallow(
 				<Locations data={[]} />
 			);
-			const table = wrapper.find(`.${ styles['table'] }`);
+			const table = wrapper.find(`.${ styles.table }`);
 			const sortControl = table.find('TableSortControl');
 
-			expect(wrapper.getElement().type, 'wrapper html tag').to.be.equal('div');
-			expect(table.length, 'table container').to.be.equal(1);
-			expect(table.hasClass(styles['wide']), 'table has class "wide"').to.be.true;
-			expect(sortControl.length, 'TableSortControl length').to.be.equal(1);
-			expect(sortControl.prop('order'), 'TableSortControl "order" prop').to.be.equal(
-				wrapper.state('sortOrder')
-			);
-			expect(sortControl.prop('onChange').name, 'TableSortControl "onChange" prop').to.be.equal(
-				'bound changeSorting'
-			);
+			// wrapper html tag
+			expect(wrapper.getElement().type).toBe('div');
+			// table container
+			expect(table.length).toBe(1);
+			// table has class "wide"
+			expect(table.hasClass(styles.wide)).toBe(true);
+			// TableSortControl length
+			expect(sortControl.length).toBe(1);
+			// TableSortControl "order" prop
+			expect(sortControl.prop('order')).toBe(wrapper.state('sortOrder'));
+			// TableSortControl "onChange" prop
+			expect(sortControl.prop('onChange').name).toBe('bound changeSorting');
 
 			wrapper.unmount();
 		});
 
 		it('location row', () => {
-			stub(tooltips, 'useTooltip').callsFake(() => ({
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
 				prop_from_useTooltip: true
 			}));
-			stub(utils, 'formatReadableBytes').callsFake(
+			jest.spyOn(utils, 'formatReadableBytes').mockClear().mockImplementation(
 				a => `formatted_${ a }`
 			);
-			stub(tableUtils, 'responsesTextWithTooltip').callsFake(value => value);
+			jest.spyOn(tableUtils, 'responsesTextWithTooltip').mockClear().mockImplementation(value => value);
 
 			const items = [
 				['test', {
@@ -136,8 +131,8 @@ describe('<Locations />', () => {
 						'4xx': 5,
 						'5xx': 0,
 						codes: {
-							'404': 1,
-							'403': 2,
+							404: 1,
+							403: 2,
 						},
 						total: 506
 					},
@@ -182,7 +177,7 @@ describe('<Locations />', () => {
 						'4xx': 0,
 						'5xx': 0,
 						codes: {
-							'200': 2,
+							200: 2,
 						},
 						total: 2
 					},
@@ -197,251 +192,317 @@ describe('<Locations />', () => {
 			];
 
 			const wrapper = shallow(
-				<Locations data={ new Map(items) } />
+				<Locations data={new Map(items)} />
 			);
 			const rows = wrapper.find('tbody tr');
-			let cells, cell;
+			let cells; let
+				cell;
 
-			expect(rows.length, 'rows length').to.be.equal(3);
+			// rows length
+			expect(rows.length).toBe(3);
 
 			cells = rows.at(0).find('td');
-			expect(cells.length, 'row 1, cells length').to.be.equal(14);
-			expect(cells.at(0).prop('className'), 'row 1, cell 1, className').to.be.equal(
-				styles['ok']
-			);
+			// row 1, cells length
+			expect(cells.length).toBe(14);
+			// row 1, cell 1, className
+			expect(cells.at(0).prop('className')).toBe(styles.ok);
 			cell = cells.at(1);
-			expect(cell.prop('className'), 'row 1, cell 2, className').to.be.equal(
-				`${ styles['left-align'] } ${ styles['bold'] } ${ styles['bdr'] }`
-			);
-			expect(cell.text(), 'row 1, cell 2, text').to.be.equal('test');
-			expect(cells.at(2).text(), 'row 1, cell 3, text').to.be.equal('100');
+			// row 1, cell 2, className
+			expect(cell.prop('className')).toBe(`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`);
+			// row 1, cell 2, text
+			expect(cell.text()).toBe('test');
+			// row 1, cell 3, text
+			expect(cells.at(2).text()).toBe('100');
 			cell = cells.at(3);
-			expect(cell.prop('className'), 'row 1, cell 4, className').to.be.equal(
-				styles['bdr']
-			);
-			expect(cell.text(), 'row 1, cell 4, text').to.be.equal('10');
-			expect(cells.at(4).text(), 'row 1, cell 5, text').to.be.equal('0');
-			expect(cells.at(5).text(), 'row 1, cell 6, text').to.be.equal('500');
-			expect(cells.at(6).text(), 'row 1, cell 7, text').to.be.equal('1');
-			expect(cells.at(7).text(), 'row 1, cell 8, text').to.be.equal('7');
+			// row 1, cell 4, className
+			expect(cell.prop('className')).toBe(styles.bdr);
+			// row 1, cell 4, text
+			expect(cell.text()).toBe('10');
+			// row 1, cell 5, text
+			expect(cells.at(4).text()).toBe('0');
+			// row 1, cell 6, text
+			expect(cells.at(5).text()).toBe('500');
+			// row 1, cell 7, text
+			expect(cells.at(6).text()).toBe('1');
+			// row 1, cell 8, text
+			expect(cells.at(7).text()).toBe('7');
 			cell = cells.at(8);
-			expect(cell.prop('className'), 'row 1, cell 9, className').to.be.equal(
-				styles['flash']
-			);
-			expect(cell.text(), 'row 1, cell 9, text').to.be.equal('0');
+			// row 1, cell 9, className
+			expect(cell.prop('className')).toBe(styles.flash);
+			// row 1, cell 9, text
+			expect(cell.text()).toBe('0');
 			cell = cells.at(9);
-			expect(cell.prop('className'), 'row 1, cell 10, className').to.be.equal(
-				styles['bdr']
-			);
-			expect(cell.text(), 'row 1, cell 10, text').to.be.equal('506');
+			// row 1, cell 10, className
+			expect(cell.prop('className')).toBe(styles.bdr);
+			// row 1, cell 10, text
+			expect(cell.text()).toBe('506');
 			cell = cells.at(10);
-			expect(cell.prop('className'), 'row 1, cell 11, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 1, cell 11, text').to.be.equal('formatted_1');
+			// row 1, cell 11, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 1, cell 11, text
+			expect(cell.text()).toBe('formatted_1');
 			cell = cells.at(11);
-			expect(cell.prop('className'), 'row 1, cell 12, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 1, cell 12, text').to.be.equal('formatted_2');
+			// row 1, cell 12, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 1, cell 12, text
+			expect(cell.text()).toBe('formatted_2');
 			cell = cells.at(12);
-			expect(cell.prop('className'), 'row 1, cell 13, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 1, cell 13, text').to.be.equal('formatted_3');
+			// row 1, cell 13, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 1, cell 13, text
+			expect(cell.text()).toBe('formatted_3');
 			cell = cells.at(13);
-			expect(cell.prop('className'), 'row 1, cell 14, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 1, cell 14, text').to.be.equal('formatted_4');
+			// row 1, cell 14, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 1, cell 14, text
+			expect(cell.text()).toBe('formatted_4');
 
 			cells = rows.at(1).find('td');
-			expect(cells.length, 'row 2, cells length').to.be.equal(14);
-			expect(cells.at(0).prop('className'), 'row 2, cell 1, className').to.be.equal(
-				styles['warning']
-			);
+			// row 2, cells length
+			expect(cells.length).toBe(14);
+			// row 2, cell 1, className
+			expect(cells.at(0).prop('className')).toBe(styles.warning);
 			cell = cells.at(1);
-			expect(cell.prop('className'), 'row 2, cell 2, className').to.be.equal(
-				`${ styles['left-align'] } ${ styles['bold'] } ${ styles['bdr'] }`
-			);
-			expect(cell.text(), 'row 2, cell 2, text').to.be.equal('test_2');
-			expect(cells.at(2).text(), 'row 2, cell 3, text').to.be.equal('1000');
+			// row 2, cell 2, className
+			expect(cell.prop('className')).toBe(`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`);
+			// row 2, cell 2, text
+			expect(cell.text()).toBe('test_2');
+			// row 2, cell 3, text
+			expect(cells.at(2).text()).toBe('1000');
 			cell = cells.at(3);
-			expect(cell.prop('className'), 'row 2, cell 4, className').to.be.equal(
-				styles['bdr']
-			);
-			expect(cell.text(), 'row 2, cell 4, text').to.be.equal('100');
-			expect(cells.at(4).text(), 'row 2, cell 5, text').to.be.equal('1');
-			expect(cells.at(5).text(), 'row 2, cell 6, text').to.be.equal('5000');
-			expect(cells.at(6).text(), 'row 2, cell 7, text').to.be.equal('10');
-			expect(cells.at(7).prop('className'), 'row 2, cell 8, className').to.be.equal(
-				`${ styles['flash'] } ${ styles['red-flash'] }`
-			);
-			expect(cells.at(7).text(), 'row 2, cell 8, text').to.be.equal('53');
+			// row 2, cell 4, className
+			expect(cell.prop('className')).toBe(styles.bdr);
+			// row 2, cell 4, text
+			expect(cell.text()).toBe('100');
+			// row 2, cell 5, text
+			expect(cells.at(4).text()).toBe('1');
+			// row 2, cell 6, text
+			expect(cells.at(5).text()).toBe('5000');
+			// row 2, cell 7, text
+			expect(cells.at(6).text()).toBe('10');
+			// row 2, cell 8, className
+			expect(cells.at(7).prop('className')).toBe(`${ styles.flash } ${ styles['red-flash'] }`);
+			// row 2, cell 8, text
+			expect(cells.at(7).text()).toBe('53');
 			cell = cells.at(8);
-			expect(cell.prop('className'), 'row 2, cell 9, className').to.be.equal(
-				styles['flash']
-			);
-			expect(cell.text(), 'row 2, cell 9, text').to.be.equal('1');
+			// row 2, cell 9, className
+			expect(cell.prop('className')).toBe(styles.flash);
+			// row 2, cell 9, text
+			expect(cell.text()).toBe('1');
 			cell = cells.at(9);
-			expect(cell.prop('className'), 'row 2, cell 10, className').to.be.equal(
-				styles['bdr']
-			);
-			expect(cell.text(), 'row 2, cell 10, text').to.be.equal('5062');
+			// row 2, cell 10, className
+			expect(cell.prop('className')).toBe(styles.bdr);
+			// row 2, cell 10, text
+			expect(cell.text()).toBe('5062');
 			cell = cells.at(10);
-			expect(cell.prop('className'), 'row 2, cell 11, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 2, cell 11, text').to.be.equal('formatted_2');
+			// row 2, cell 11, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 2, cell 11, text
+			expect(cell.text()).toBe('formatted_2');
 			cell = cells.at(11);
-			expect(cell.prop('className'), 'row 2, cell 12, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 2, cell 12, text').to.be.equal('formatted_3');
+			// row 2, cell 12, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 2, cell 12, text
+			expect(cell.text()).toBe('formatted_3');
 			cell = cells.at(12);
-			expect(cell.prop('className'), 'row 2, cell 13, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 2, cell 13, text').to.be.equal('formatted_4');
+			// row 2, cell 13, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 2, cell 13, text
+			expect(cell.text()).toBe('formatted_4');
 			cell = cells.at(13);
-			expect(cell.prop('className'), 'row 2, cell 14, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 2, cell 14, text').to.be.equal('formatted_5');
+			// row 2, cell 14, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 2, cell 14, text
+			expect(cell.text()).toBe('formatted_5');
 
 			cells = rows.at(2).find('td');
-			expect(cells.length, 'row 3, cells length').to.be.equal(14);
-			expect(cells.at(0).prop('className'), 'row 3, cell 1, className').to.be.equal(
-				styles['alert']
-			);
+			// row 3, cells length
+			expect(cells.length).toBe(14);
+			// row 3, cell 1, className
+			expect(cells.at(0).prop('className')).toBe(styles.alert);
 			cell = cells.at(1);
-			expect(cell.prop('className'), 'row 3, cell 2, className').to.be.equal(
-				`${ styles['left-align'] } ${ styles['bold'] } ${ styles['bdr'] }`
-			);
-			expect(cell.text(), 'row 3, cell 2, text').to.be.equal('test_3');
-			expect(cells.at(2).text(), 'row 3, cell 3, text').to.be.equal('10');
+			// row 3, cell 2, className
+			expect(cell.prop('className')).toBe(`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`);
+			// row 3, cell 2, text
+			expect(cell.text()).toBe('test_3');
+			// row 3, cell 3, text
+			expect(cells.at(2).text()).toBe('10');
 			cell = cells.at(3);
-			expect(cell.prop('className'), 'row 3, cell 4, className').to.be.equal(
-				styles['bdr']
-			);
-			expect(cell.text(), 'row 3, cell 4, text').to.be.equal('1');
-			expect(cells.at(4).text(), 'row 3, cell 5, text').to.be.equal('0');
-			expect(cells.at(5).text(), 'row 3, cell 6, text').to.be.equal('2');
-			expect(cells.at(6).text(), 'row 3, cell 7, text').to.be.equal('0');
-			expect(cells.at(7).prop('className'), 'row 3, cell 8, className').to.be.equal(
-				styles['flash']
-			);
-			expect(cells.at(7).childAt(0).text(), 'row 3, cell 8, text').to.be.equal('4');
+			// row 3, cell 4, className
+			expect(cell.prop('className')).toBe(styles.bdr);
+			// row 3, cell 4, text
+			expect(cell.text()).toBe('1');
+			// row 3, cell 5, text
+			expect(cells.at(4).text()).toBe('0');
+			// row 3, cell 6, text
+			expect(cells.at(5).text()).toBe('2');
+			// row 3, cell 7, text
+			expect(cells.at(6).text()).toBe('0');
+			// row 3, cell 8, className
+			expect(cells.at(7).prop('className')).toBe(styles.flash);
+			// row 3, cell 8, text
+			expect(cells.at(7).childAt(0).text()).toBe('4');
 			cell = cells.at(8);
-			expect(cell.prop('className'), 'row 3, cell 9, className').to.be.equal(
-				`${ styles['flash'] } ${ styles['red-flash'] }`
-			);
-			expect(cell.text(), 'row 3, cell 9, text').to.be.equal('0');
+			// row 3, cell 9, className
+			expect(cell.prop('className')).toBe(`${ styles.flash } ${ styles['red-flash'] }`);
+			// row 3, cell 9, text
+			expect(cell.text()).toBe('0');
 			cell = cells.at(9);
-			expect(cell.prop('className'), 'row 3, cell 10, className').to.be.equal(
-				styles['bdr']
-			);
-			expect(cell.text(), 'row 3, cell 10, text').to.be.equal('2');
+			// row 3, cell 10, className
+			expect(cell.prop('className')).toBe(styles.bdr);
+			// row 3, cell 10, text
+			expect(cell.text()).toBe('2');
 			cell = cells.at(10);
-			expect(cell.prop('className'), 'row 3, cell 11, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 3, cell 11, text').to.be.equal('formatted_3');
+			// row 3, cell 11, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 3, cell 11, text
+			expect(cell.text()).toBe('formatted_3');
 			cell = cells.at(11);
-			expect(cell.prop('className'), 'row 3, cell 12, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 3, cell 12, text').to.be.equal('formatted_4');
+			// row 3, cell 12, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 3, cell 12, text
+			expect(cell.text()).toBe('formatted_4');
 			cell = cells.at(12);
-			expect(cell.prop('className'), 'row 3, cell 13, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 3, cell 13, text').to.be.equal('formatted_5');
+			// row 3, cell 13, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 3, cell 13, text
+			expect(cell.text()).toBe('formatted_5');
 			cell = cells.at(13);
-			expect(cell.prop('className'), 'row 3, cell 14, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 3, cell 14, text').to.be.equal('formatted_6');
+			// row 3, cell 14, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 3, cell 14, text
+			expect(cell.text()).toBe('formatted_6');
 
-			expect(tableUtils.responsesTextWithTooltip.callCount, 'responsesTextWithTooltip called 12 times').to.be.equal(15);
-			expect(tableUtils.responsesTextWithTooltip.args[0][0], 'responsesTextWithTooltip row 1, arg 1, 1xx').to.be.equal(items[0][1].responses['1xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[0][1], 'responsesTextWithTooltip row 1, arg 2, 1xx').to.be.equal(items[0][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[0][2], 'responsesTextWithTooltip row 1, arg 3, 1xx').to.be.equal('1');
-			expect(tableUtils.responsesTextWithTooltip.args[1][0], 'responsesTextWithTooltip row 1, arg 1, 2xx').to.be.equal(items[0][1].responses['2xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[1][1], 'responsesTextWithTooltip row 1, arg 2, 2xx').to.be.equal(items[0][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[1][2], 'responsesTextWithTooltip row 1, arg 3, 2xx').to.be.equal('2');
-			expect(tableUtils.responsesTextWithTooltip.args[2][0], 'responsesTextWithTooltip row 1, arg 1, 3xx').to.be.equal(items[0][1].responses['3xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[2][1], 'responsesTextWithTooltip row 1, arg 2, 3xx').to.be.equal(items[0][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[2][2], 'responsesTextWithTooltip row 1, arg 3, 3xx').to.be.equal('3');
-			expect(tableUtils.responsesTextWithTooltip.args[3][0], 'responsesTextWithTooltip row 1, arg 1, 4xx').to.be.equal(
-				items[0][1].responses['4xx'] + items[0][1].discarded
-			);
-			expect(tableUtils.responsesTextWithTooltip.args[3][1], 'responsesTextWithTooltip row 1, arg 2, 4xx').to.be.deep.equal({
+			expect(tableUtils.responsesTextWithTooltip).toHaveBeenCalledTimes(15);
+			// responsesTextWithTooltip row 1, arg 1, 1xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[0][0]).toBe(items[0][1].responses['1xx']);
+			// responsesTextWithTooltip row 1, arg 2, 1xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[0][1]).toBe(items[0][1].responses.codes);
+			// responsesTextWithTooltip row 1, arg 3, 1xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[0][2]).toBe('1');
+			// responsesTextWithTooltip row 1, arg 1, 2xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[1][0]).toBe(items[0][1].responses['2xx']);
+			// responsesTextWithTooltip row 1, arg 2, 2xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[1][1]).toBe(items[0][1].responses.codes);
+			// responsesTextWithTooltip row 1, arg 3, 2xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[1][2]).toBe('2');
+			// responsesTextWithTooltip row 1, arg 1, 3xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[2][0]).toBe(items[0][1].responses['3xx']);
+			// responsesTextWithTooltip row 1, arg 2, 3xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[2][1]).toBe(items[0][1].responses.codes);
+			// responsesTextWithTooltip row 1, arg 3, 3xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[2][2]).toBe('3');
+			// responsesTextWithTooltip row 1, arg 1, 4xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[3][0]).toBe(items[0][1].responses['4xx'] + items[0][1].discarded);
+			// responsesTextWithTooltip row 1, arg 2, 4xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[3][1]).toEqual({
 				...items[0][1].responses.codes,
 				'499/444/408': items[0][1].discarded,
 			});
-			expect(tableUtils.responsesTextWithTooltip.args[3][2], 'responsesTextWithTooltip row 1, arg 3, 4xx').to.be.equal('4');
-			expect(tableUtils.responsesTextWithTooltip.args[4][0], 'responsesTextWithTooltip row 1, arg 1, 5xx').to.be.equal(items[0][1].responses['5xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[4][1], 'responsesTextWithTooltip row 1, arg 2, 5xx').to.be.equal(items[0][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[4][2], 'responsesTextWithTooltip row 1, arg 3, 5xx').to.be.equal('5');
-			expect(tableUtils.responsesTextWithTooltip.args[5][0], 'responsesTextWithTooltip row 2, arg 1, 1xx').to.be.equal(items[1][1].responses['1xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[5][1], 'responsesTextWithTooltip row 2, arg 2, 1xx').to.be.equal(items[1][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[5][2], 'responsesTextWithTooltip row 2, arg 3, 1xx').to.be.equal('1');
-			expect(tableUtils.responsesTextWithTooltip.args[6][0], 'responsesTextWithTooltip row 2, arg 1, 2xx').to.be.equal(items[1][1].responses['2xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[6][1], 'responsesTextWithTooltip row 2, arg 2, 2xx').to.be.equal(items[1][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[6][2], 'responsesTextWithTooltip row 2, arg 3, 2xx').to.be.equal('2');
-			expect(tableUtils.responsesTextWithTooltip.args[7][0], 'responsesTextWithTooltip row 2, arg 1, 3xx').to.be.equal(items[1][1].responses['3xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[7][1], 'responsesTextWithTooltip row 2, arg 2, 3xx').to.be.equal(items[1][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[7][2], 'responsesTextWithTooltip row 2, arg 3, 3xx').to.be.equal('3');
-			expect(tableUtils.responsesTextWithTooltip.args[8][0], 'responsesTextWithTooltip row 2, arg 1, 4xx').to.be.equal(
-				items[1][1].responses['4xx'] + items[1][1].discarded
-			);
-			expect(tableUtils.responsesTextWithTooltip.args[8][1], 'responsesTextWithTooltip row 2, arg 2, 4xx').to.be.deep.equal({
+			// responsesTextWithTooltip row 1, arg 3, 4xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[3][2]).toBe('4');
+			// responsesTextWithTooltip row 1, arg 1, 5xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[4][0]).toBe(items[0][1].responses['5xx']);
+			// responsesTextWithTooltip row 1, arg 2, 5xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[4][1]).toBe(items[0][1].responses.codes);
+			// responsesTextWithTooltip row 1, arg 3, 5xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[4][2]).toBe('5');
+			// responsesTextWithTooltip row 2, arg 1, 1xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[5][0]).toBe(items[1][1].responses['1xx']);
+			// responsesTextWithTooltip row 2, arg 2, 1xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[5][1]).toBe(items[1][1].responses.codes);
+			// responsesTextWithTooltip row 2, arg 3, 1xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[5][2]).toBe('1');
+			// responsesTextWithTooltip row 2, arg 1, 2xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[6][0]).toBe(items[1][1].responses['2xx']);
+			// responsesTextWithTooltip row 2, arg 2, 2xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[6][1]).toBe(items[1][1].responses.codes);
+			// responsesTextWithTooltip row 2, arg 3, 2xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[6][2]).toBe('2');
+			// responsesTextWithTooltip row 2, arg 1, 3xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[7][0]).toBe(items[1][1].responses['3xx']);
+			// responsesTextWithTooltip row 2, arg 2, 3xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[7][1]).toBe(items[1][1].responses.codes);
+			// responsesTextWithTooltip row 2, arg 3, 3xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[7][2]).toBe('3');
+			// responsesTextWithTooltip row 2, arg 1, 4xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[8][0]).toBe(items[1][1].responses['4xx'] + items[1][1].discarded);
+			// responsesTextWithTooltip row 2, arg 2, 4xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[8][1]).toEqual({
 				'4xx': items[1][1].responses['4xx'],
 				'499/444/408': items[1][1].discarded,
 			});
-			expect(tableUtils.responsesTextWithTooltip.args[8][2], 'responsesTextWithTooltip row 2, arg 3, 4xx').to.be.equal('4');
-			expect(tableUtils.responsesTextWithTooltip.args[9][0], 'responsesTextWithTooltip row 2, arg 1, 5xx').to.be.equal(items[1][1].responses['5xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[9][1], 'responsesTextWithTooltip row 2, arg 2, 5xx').to.be.equal(items[1][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[9][2], 'responsesTextWithTooltip row 2, arg 3, 5xx').to.be.equal('5');
-			expect(tableUtils.responsesTextWithTooltip.args[10][0], 'responsesTextWithTooltip row 3, arg 1, 1xx').to.be.equal(items[2][1].responses['1xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[10][1], 'responsesTextWithTooltip row 3, arg 2, 1xx').to.be.equal(items[2][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[10][2], 'responsesTextWithTooltip row 3, arg 3, 1xx').to.be.equal('1');
-			expect(tableUtils.responsesTextWithTooltip.args[11][0], 'responsesTextWithTooltip row 3, arg 1, 2xx').to.be.equal(items[2][1].responses['2xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[11][1], 'responsesTextWithTooltip row 3, arg 2, 2xx').to.be.equal(items[2][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[11][2], 'responsesTextWithTooltip row 3, arg 3, 2xx').to.be.equal('2');
-			expect(tableUtils.responsesTextWithTooltip.args[12][0], 'responsesTextWithTooltip row 3, arg 1, 3xx').to.be.equal(items[2][1].responses['3xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[12][1], 'responsesTextWithTooltip row 3, arg 2, 3xx').to.be.equal(items[2][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[12][2], 'responsesTextWithTooltip row 3, arg 3, 3xx').to.be.equal('3');
-			expect(tableUtils.responsesTextWithTooltip.args[13][0], 'responsesTextWithTooltip row 3, arg 1, 4xx').to.be.equal(
-				items[2][1].responses['4xx'] + items[2][1].discarded
-			);
-			expect(tableUtils.responsesTextWithTooltip.args[13][1], 'responsesTextWithTooltip row 3, arg 2, 4xx').to.be.deep.equal({
+			// responsesTextWithTooltip row 2, arg 3, 4xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[8][2]).toBe('4');
+			// responsesTextWithTooltip row 2, arg 1, 5xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[9][0]).toBe(items[1][1].responses['5xx']);
+			// responsesTextWithTooltip row 2, arg 2, 5xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[9][1]).toBe(items[1][1].responses.codes);
+			// responsesTextWithTooltip row 2, arg 3, 5xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[9][2]).toBe('5');
+			// responsesTextWithTooltip row 3, arg 1, 1xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[10][0]).toBe(items[2][1].responses['1xx']);
+			// responsesTextWithTooltip row 3, arg 2, 1xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[10][1]).toBe(items[2][1].responses.codes);
+			// responsesTextWithTooltip row 3, arg 3, 1xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[10][2]).toBe('1');
+			// responsesTextWithTooltip row 3, arg 1, 2xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[11][0]).toBe(items[2][1].responses['2xx']);
+			// responsesTextWithTooltip row 3, arg 2, 2xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[11][1]).toBe(items[2][1].responses.codes);
+			// responsesTextWithTooltip row 3, arg 3, 2xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[11][2]).toBe('2');
+			// responsesTextWithTooltip row 3, arg 1, 3xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[12][0]).toBe(items[2][1].responses['3xx']);
+			// responsesTextWithTooltip row 3, arg 2, 3xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[12][1]).toBe(items[2][1].responses.codes);
+			// responsesTextWithTooltip row 3, arg 3, 3xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[12][2]).toBe('3');
+			// responsesTextWithTooltip row 3, arg 1, 4xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[13][0]).toBe(items[2][1].responses['4xx'] + items[2][1].discarded);
+			// responsesTextWithTooltip row 3, arg 2, 4xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[13][1]).toEqual({
 				...items[2][1].responses.codes,
 				'499/444/408': items[2][1].discarded,
 			});
-			expect(tableUtils.responsesTextWithTooltip.args[13][2], 'responsesTextWithTooltip row 3, arg 3, 4xx').to.be.equal('4');
-			expect(tableUtils.responsesTextWithTooltip.args[14][0], 'responsesTextWithTooltip row 3, arg 1, 5xx').to.be.equal(items[2][1].responses['5xx']);
-			expect(tableUtils.responsesTextWithTooltip.args[14][1], 'responsesTextWithTooltip row 3, arg 2, 5xx').to.be.equal(items[2][1].responses.codes);
-			expect(tableUtils.responsesTextWithTooltip.args[14][2], 'responsesTextWithTooltip row 3, arg 3, 5xx').to.be.equal('5');
+			// responsesTextWithTooltip row 3, arg 3, 4xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[13][2]).toBe('4');
+			// responsesTextWithTooltip row 3, arg 1, 5xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[14][0]).toBe(items[2][1].responses['5xx']);
+			// responsesTextWithTooltip row 3, arg 2, 5xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[14][1]).toBe(items[2][1].responses.codes);
+			// responsesTextWithTooltip row 3, arg 3, 5xx
+			expect(tableUtils.responsesTextWithTooltip.mock.calls[14][2]).toBe('5');
 
-			expect(utils.formatReadableBytes.callCount, 'useTooltip called').to.be.equal(12);
-			expect(utils.formatReadableBytes.args[0][0], 'useTooltip call 1 arg').to.be.equal(1);
-			expect(utils.formatReadableBytes.args[1][0], 'useTooltip call 2 arg').to.be.equal(2);
-			expect(utils.formatReadableBytes.args[2][0], 'useTooltip call 3 arg').to.be.equal(3);
-			expect(utils.formatReadableBytes.args[3][0], 'useTooltip call 4 arg').to.be.equal(4);
-			expect(utils.formatReadableBytes.args[4][0], 'useTooltip call 5 arg').to.be.equal(2);
-			expect(utils.formatReadableBytes.args[5][0], 'useTooltip call 6 arg').to.be.equal(3);
-			expect(utils.formatReadableBytes.args[6][0], 'useTooltip call 7 arg').to.be.equal(4);
-			expect(utils.formatReadableBytes.args[7][0], 'useTooltip call 8 arg').to.be.equal(5);
-			expect(utils.formatReadableBytes.args[8][0], 'useTooltip call 9 arg').to.be.equal(3);
-			expect(utils.formatReadableBytes.args[9][0], 'useTooltip call 10 arg').to.be.equal(4);
-			expect(utils.formatReadableBytes.args[10][0], 'useTooltip call 11 arg').to.be.equal(5);
-			expect(utils.formatReadableBytes.args[11][0], 'useTooltip call 12 arg').to.be.equal(6);
+			expect(utils.formatReadableBytes).toHaveBeenCalledTimes(12);
+			// useTooltip call 1 arg
+			expect(utils.formatReadableBytes.mock.calls[0][0]).toBe(1);
+			// useTooltip call 2 arg
+			expect(utils.formatReadableBytes.mock.calls[1][0]).toBe(2);
+			// useTooltip call 3 arg
+			expect(utils.formatReadableBytes.mock.calls[2][0]).toBe(3);
+			// useTooltip call 4 arg
+			expect(utils.formatReadableBytes.mock.calls[3][0]).toBe(4);
+			// useTooltip call 5 arg
+			expect(utils.formatReadableBytes.mock.calls[4][0]).toBe(2);
+			// useTooltip call 6 arg
+			expect(utils.formatReadableBytes.mock.calls[5][0]).toBe(3);
+			// useTooltip call 7 arg
+			expect(utils.formatReadableBytes.mock.calls[6][0]).toBe(4);
+			// useTooltip call 8 arg
+			expect(utils.formatReadableBytes.mock.calls[7][0]).toBe(5);
+			// useTooltip call 9 arg
+			expect(utils.formatReadableBytes.mock.calls[8][0]).toBe(3);
+			// useTooltip call 10 arg
+			expect(utils.formatReadableBytes.mock.calls[9][0]).toBe(4);
+			// useTooltip call 11 arg
+			expect(utils.formatReadableBytes.mock.calls[10][0]).toBe(5);
+			// useTooltip call 12 arg
+			expect(utils.formatReadableBytes.mock.calls[11][0]).toBe(6);
 
-			utils.formatReadableBytes.restore();
-			tooltips.useTooltip.restore();
-			tableUtils.responsesTextWithTooltip.restore();
+			utils.formatReadableBytes.mockRestore();
+			tooltips.useTooltip.mockRestore();
+			tableUtils.responsesTextWithTooltip.mockRestore();
 			wrapper.unmount();
 		});
 	});

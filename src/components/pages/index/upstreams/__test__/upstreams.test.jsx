@@ -27,29 +27,42 @@ describe('<UpstreamsBox IndexPage />', () => {
 			status: 'ok',
 			href: '#test_block'
 		};
-		const wrapper = shallow(<UpstreamsBox { ...props } />);
+		const wrapper = shallow(<UpstreamsBox {...props} />);
 		let indexBox = wrapper.find('IndexBox');
 
-		expect(indexBox.prop('title'), 'IndexBox title').to.be.equal('test_title');
-		expect(indexBox.prop('status'), 'IndexBox status').to.be.equal('ok');
-		expect(indexBox.prop('href'), 'IndexBox href').to.be.equal('#test_block');
-		expect(indexBox.childAt(0).name(), 'AlertsCount').to.be.equal('AlertsCount');
-		expect(indexBox.childAt(0).prop('total'), 'AlertsCount total').to.be.equal(99);
-		expect(indexBox.childAt(0).prop('warnings'), 'AlertsCount warnings').to.be.equal(0);
-		expect(indexBox.childAt(0).prop('alerts'), 'AlertsCount alerts').to.be.equal(1);
-		expect(indexBox.childAt(0).prop('href'), 'AlertsCount href').to.be.equal('#test_block');
-		expect(indexBox.childAt(2).text(), 'all / up row').to.be.equal('All: 3 / Up: 3');
-		expect(indexBox.childAt(3).prop('className'), 'failed row className').to.be.an('undefined');
-		expect(indexBox.childAt(3).text(), 'failed row').to.be.equal('Failed: 0');
+		// IndexBox title
+		expect(indexBox.prop('title')).toBe('test_title');
+		// IndexBox status
+		expect(indexBox.prop('status')).toBe('ok');
+		// IndexBox href
+		expect(indexBox.prop('href')).toBe('#test_block');
+		// AlertsCount
+		expect(indexBox.childAt(0).name()).toBe('AlertsCount');
+		// AlertsCount total
+		expect(indexBox.childAt(0).prop('total')).toBe(99);
+		// AlertsCount warnings
+		expect(indexBox.childAt(0).prop('warnings')).toBe(0);
+		// AlertsCount alerts
+		expect(indexBox.childAt(0).prop('alerts')).toBe(1);
+		// AlertsCount href
+		expect(indexBox.childAt(0).prop('href')).toBe('#test_block');
+		// all / up row
+		expect(indexBox.childAt(2).text()).toBe('All: 3 / Up: 3');
+		expect(indexBox.childAt(3).prop('className')).toBeUndefined();
+		// failed row
+		expect(indexBox.childAt(3).text()).toBe('Failed: 0');
 
 		props.stats.servers.up = 2;
 		props.stats.servers.failed = 1;
 		wrapper.setProps(props);
 		indexBox = wrapper.find('IndexBox');
 
-		expect(indexBox.childAt(2).text(), 'all / up row').to.be.equal('All: 3 / Up: 2');
-		expect(indexBox.childAt(3).prop('className'), 'failed row className').to.be.equal(styles['red']);
-		expect(indexBox.childAt(3).text(), 'failed row').to.be.equal('Failed: 1');
+		// all / up row
+		expect(indexBox.childAt(2).text()).toBe('All: 3 / Up: 2');
+		// failed row className
+		expect(indexBox.childAt(3).prop('className')).toBe(styles.red);
+		// failed row
+		expect(indexBox.childAt(3).text()).toBe('Failed: 1');
 
 		wrapper.unmount();
 	});
@@ -75,10 +88,14 @@ describe('<Upstreams IndexPage />', () => {
 		);
 		const box = wrapper.find('UpstreamsBox');
 
-		expect(box.prop('title'), 'UpstreamsBox title').to.be.equal('HTTP Upstreams');
-		expect(box.prop('stats'), 'UpstreamsBox stats').to.be.equal('test_stats');
-		expect(box.prop('status'), 'UpstreamsBox status').to.be.equal('ok');
-		expect(box.prop('href'), 'UpstreamsBox href').to.be.equal('#upstreams');
+		// UpstreamsBox title
+		expect(box.prop('title')).toBe('HTTP Upstreams');
+		// UpstreamsBox stats
+		expect(box.prop('stats')).toBe('test_stats');
+		// UpstreamsBox status
+		expect(box.prop('status')).toBe('ok');
+		// UpstreamsBox href
+		expect(box.prop('href')).toBe('#upstreams');
 
 		wrapper.unmount();
 	});

@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy, stub } from 'sinon';
 import DataBinder from '../databinder.jsx';
 import datastore from '../../../datastore';
 import { STORE } from '../../../datastore/store.js';
@@ -17,49 +16,52 @@ describe('DataBinder()', () => {
 		render() {
 			return <div />;
 		}
-	};
+	}
 	const apis = [ 'api_1', 'api_2' ];
 	let dataResult = {
 		api_1: null,
 		api_2: null
 	};
 
-	before(() => {
-		stub(datastore.subscribe, 'apply').callsFake(() => {});
-		stub(datastore, 'unsubscribe').callsFake(() => {});
-		stub(datastore, 'get').callsFake(() => dataResult);
+	beforeAll(() => {
+		jest.spyOn(datastore.subscribe, 'apply').mockClear().mockImplementation(() => {});
+		jest.spyOn(datastore, 'unsubscribe').mockClear().mockImplementation(() => {});
+		jest.spyOn(datastore, 'get').mockClear().mockImplementation(() => dataResult);
 	});
 
 	beforeEach(() => {
-		datastore.subscribe.apply.resetHistory();
-		datastore.unsubscribe.resetHistory();
-		datastore.get.resetHistory();
+		datastore.subscribe.apply.mockClear();
+		datastore.unsubscribe.mockClear();
+		datastore.get.mockClear();
 	});
 
-	after(() => {
-		datastore.subscribe.apply.restore();
-		datastore.unsubscribe.restore();
-		datastore.get.restore();
+	afterAll(() => {
+		datastore.subscribe.apply.mockRestore();
+		datastore.unsubscribe.mockRestore();
+		datastore.get.mockRestore();
 	});
 
 	it('provides class name', () => {
 		const Component = DataBinder(TestComponent);
 
-		expect(Component.name, 'class name').to.be.equal('TestComponent_binded');
+		// class name
+		expect(Component.name).toBe('TestComponent_binded');
 	});
 
 	it('constructor()', () => {
 		const Component = DataBinder(TestComponent);
 		const wrapper = shallow(<Component />);
 
-		const bindSpy = spy(Component.prototype.forceUpdate, 'bind');
+		const bindSpy = jest.spyOn(Component.prototype.forceUpdate, 'bind').mockClear();
 
 		wrapper.instance().constructor();
 
-		expect(bindSpy.calledOnce, 'forceUpdate.bind called once').to.be.true;
-		expect(bindSpy.args[0][0] instanceof Component, 'forceUpdate.bind 1st arg').to.be.true;
+		// forceUpdate.bind called once
+		expect(bindSpy).toHaveBeenCalled();
+		// forceUpdate.bind 1st arg
+		expect(bindSpy.mock.calls[0][0] instanceof Component).toBe(true);
 
-		bindSpy.restore();
+		bindSpy.mockRestore();
 
 		wrapper.unmount();
 	});
@@ -68,12 +70,15 @@ describe('DataBinder()', () => {
 		const Component = DataBinder(TestComponent);
 		const wrapper = shallow(<Component />);
 
-		expect(datastore.subscribe.apply.calledOnce, 'subscribe.apply called once').to.be.true;
-		expect(datastore.subscribe.apply.args[0][0], 'subscribe.apply 1st arg').to.be.a('null');
-		expect(datastore.subscribe.apply.args[0][1], 'subscribe.apply 2nd arg type').to.be.an.instanceof(Array);
-		expect(datastore.subscribe.apply.args[0][1], 'subscribe.apply 2nd arg length').to.have.lengthOf(1);
-		expect(datastore.subscribe.apply.args[0][1][0], 'subscribe.apply 2nd arg name')
-			.to.be.equal(wrapper.instance().forceUpdate);
+		// subscribe.apply called once
+		expect(datastore.subscribe.apply).toHaveBeenCalled();
+		expect(datastore.subscribe.apply.mock.calls[0][0]).toBeNull();
+		// subscribe.apply 2nd arg type
+		expect(datastore.subscribe.apply.mock.calls[0][1]).toBeInstanceOf(Array);
+		// subscribe.apply 2nd arg length
+		expect(datastore.subscribe.apply.mock.calls[0][1]).toHaveLength(1);
+		// subscribe.apply 2nd arg name
+		expect(datastore.subscribe.apply.mock.calls[0][1][0]).toBe(wrapper.instance().forceUpdate);
 
 		wrapper.unmount();
 	});
@@ -82,14 +87,17 @@ describe('DataBinder()', () => {
 		const Component = DataBinder(TestComponent, apis);
 		const wrapper = shallow(<Component />);
 
-		expect(datastore.subscribe.apply.calledOnce, 'subscribe.apply called once').to.be.true;
-		expect(datastore.subscribe.apply.args[0][0], 'subscribe.apply 1st arg').to.be.a('null');
-		expect(datastore.subscribe.apply.args[0][1], 'subscribe.apply 2nd arg type').to.be.an.instanceof(Array);
-		expect(datastore.subscribe.apply.args[0][1], 'subscribe.apply 2nd arg length').to.have.lengthOf(2);
-		expect(datastore.subscribe.apply.args[0][1][0], 'subscribe.apply 1st arg name')
-			.to.be.deep.equal(apis);
-		expect(datastore.subscribe.apply.args[0][1][1], 'subscribe.apply 2nd arg name')
-			.to.be.equal(wrapper.instance().forceUpdate);
+		// subscribe.apply called once
+		expect(datastore.subscribe.apply).toHaveBeenCalled();
+		expect(datastore.subscribe.apply.mock.calls[0][0]).toBeNull();
+		// subscribe.apply 2nd arg type
+		expect(datastore.subscribe.apply.mock.calls[0][1]).toBeInstanceOf(Array);
+		// subscribe.apply 2nd arg length
+		expect(datastore.subscribe.apply.mock.calls[0][1]).toHaveLength(2);
+		// subscribe.apply 1st arg name
+		expect(datastore.subscribe.apply.mock.calls[0][1][0]).toEqual(apis);
+		// subscribe.apply 2nd arg name
+		expect(datastore.subscribe.apply.mock.calls[0][1][1]).toBe(wrapper.instance().forceUpdate);
 
 		wrapper.unmount();
 	});
@@ -100,8 +108,10 @@ describe('DataBinder()', () => {
 
 		wrapper.unmount();
 
-		expect(datastore.unsubscribe.calledOnce, 'datastore.unsubscribe called once').to.be.true;
-		expect(datastore.unsubscribe.args[0][0], 'datastore.unsubscribe 1st arg').to.be.deep.equal(apis);
+		// datastore.unsubscribe called once
+		expect(datastore.unsubscribe).toHaveBeenCalled();
+		// datastore.unsubscribe 1st arg
+		expect(datastore.unsubscribe.mock.calls[0][0]).toEqual(apis);
 	});
 
 	describe('render()', () => {
@@ -122,9 +132,12 @@ describe('DataBinder()', () => {
 				const wrapper = shallow(<Component />);
 				const shallowRender = wrapper.find('TestComponent');
 
-				expect(datastore.get.notCalled, 'get not called').to.be.true;
-				expect(shallowRender.length, 'TestComponent length').to.be.equal(1);
-				expect(shallowRender.props(), 'TestComponent props').to.be.deep.equal({
+				// get not called
+				expect(datastore.get).not.toHaveBeenCalled();
+				// TestComponent length
+				expect(shallowRender.length).toBe(1);
+				// TestComponent props
+				expect(shallowRender.props()).toEqual({
 					children: [],
 					data: null,
 					store: STORE
@@ -139,10 +152,14 @@ describe('DataBinder()', () => {
 			const wrapper = shallow(<Component />);
 			const shallowRender = wrapper.find('TestComponent');
 
-			expect(datastore.get.calledOnce, 'get called once').to.be.true;
-			expect(datastore.get.args[0][0], 'get 1st arg').to.be.deep.equal(apis);
-			expect(wrapper.length, 'Component length').to.be.equal(0);
-			expect(shallowRender.length, 'TestComponent length').to.be.equal(0);
+			// get called once
+			expect(datastore.get).toHaveBeenCalled();
+			// get 1st arg
+			expect(datastore.get.mock.calls[0][0]).toEqual(apis);
+			// Component length
+			expect(wrapper.length).toBe(0);
+			// TestComponent length
+			expect(shallowRender.length).toBe(0);
 
 			wrapper.unmount();
 		});
@@ -162,7 +179,7 @@ describe('DataBinder()', () => {
 			}
 		]).forEach(({ title, _dataResult }) => {
 			it(title, () => {
-				const origDataResult = Object.assign({}, dataResult);
+				const origDataResult = { ...dataResult };
 
 				dataResult = _dataResult;
 
@@ -170,10 +187,14 @@ describe('DataBinder()', () => {
 				const wrapper = shallow(<Component />);
 				const shallowRender = wrapper.find('TestComponent');
 
-				expect(datastore.get.calledOnce, 'get called once').to.be.true;
-				expect(datastore.get.args[0][0], 'get 1st arg').to.be.deep.equal(apis);
-				expect(shallowRender.length, 'TestComponent length').to.be.equal(1);
-				expect(shallowRender.props(), 'TestComponent props').to.be.deep.equal({
+				// get called once
+				expect(datastore.get).toHaveBeenCalled();
+				// get 1st arg
+				expect(datastore.get.mock.calls[0][0]).toEqual(apis);
+				// TestComponent length
+				expect(shallowRender.length).toBe(1);
+				// TestComponent props
+				expect(shallowRender.props()).toEqual({
 					children: [],
 					data: dataResult,
 					store: STORE
@@ -189,15 +210,18 @@ describe('DataBinder()', () => {
 			const Component = DataBinder(TestComponent, []);
 			const wrapper = shallow(
 				<Component
-					test_prop={ true }
-					number_test_prop={ 1234 }
+					test_prop
+					number_test_prop={1234}
 				/>
 			);
 			const shallowRender = wrapper.find('TestComponent');
 
-			expect(datastore.get.notCalled, 'get not called').to.be.true;
-			expect(shallowRender.length, 'TestComponent length').to.be.equal(1);
-			expect(shallowRender.props(), 'TestComponent props').to.be.deep.equal({
+			// get not called
+			expect(datastore.get).not.toHaveBeenCalled();
+			// TestComponent length
+			expect(shallowRender.length).toBe(1);
+			// TestComponent props
+			expect(shallowRender.props()).toEqual({
 				children: [],
 				data: null,
 				store: STORE,

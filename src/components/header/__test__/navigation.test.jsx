@@ -7,13 +7,11 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy, stub } from 'sinon';
 import NavigationBinded, {
 	SECTIONS,
 	Navigation
 } from '../navigation.jsx';
 import Settings from '../../settings/index.jsx';
-import Icon from '../../icon/icon.jsx';
 import styles from '../style.css';
 
 describe('<Navigation />', () => {
@@ -39,23 +37,28 @@ describe('<Navigation />', () => {
 	it('constructor()', () => {
 		const wrapper = shallow(
 			<Navigation
-				statuses={ defaultStatuses() }
+				statuses={defaultStatuses()}
 				hash="#"
 			/>
 		);
-		const openSettingsSpy = spy(Navigation.prototype.openSettings, 'bind');
-		const closeSettingsSpy = spy(Navigation.prototype.closeSettings, 'bind');
+		const openSettingsSpy = jest.spyOn(Navigation.prototype.openSettings, 'bind').mockClear();
+		const closeSettingsSpy = jest.spyOn(Navigation.prototype.closeSettings, 'bind').mockClear();
 
 		wrapper.instance().constructor();
 
-		expect(wrapper.state(), 'state').to.be.deep.equal({ settings: false });
-		expect(openSettingsSpy.calledOnce, 'openSettings.bind called once').to.be.true;
-		expect(openSettingsSpy.args[0][0] instanceof Navigation, 'openSettings.bind 1st arg').to.be.true;
-		expect(closeSettingsSpy.calledOnce, 'closeSettings.bind called once').to.be.true;
-		expect(closeSettingsSpy.args[0][0] instanceof Navigation, 'closeSettings.bind 1st arg').to.be.true;
+		// state
+		expect(wrapper.state()).toEqual({ settings: false });
+		// openSettings.bind called once
+		expect(openSettingsSpy).toHaveBeenCalled();
+		// openSettings.bind 1st arg
+		expect(openSettingsSpy.mock.calls[0][0] instanceof Navigation).toBe(true);
+		// closeSettings.bind called once
+		expect(closeSettingsSpy).toHaveBeenCalled();
+		// closeSettings.bind 1st arg
+		expect(closeSettingsSpy.mock.calls[0][0] instanceof Navigation).toBe(true);
 
-		openSettingsSpy.restore();
-		closeSettingsSpy.restore();
+		openSettingsSpy.mockRestore();
+		closeSettingsSpy.mockRestore();
 
 		wrapper.unmount();
 	});
@@ -63,51 +66,58 @@ describe('<Navigation />', () => {
 	it('openSettings()', () => {
 		const wrapper = shallow(
 			<Navigation
-				statuses={ defaultStatuses() }
+				statuses={defaultStatuses()}
 				hash="#"
 			/>
 		);
 		const instance = wrapper.instance();
-		const stateSpy = spy(instance, 'setState');
-		const closeStub = stub(instance, 'closeSettings').callsFake(() => {});
+		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
+		const closeStub = jest.spyOn(instance, 'closeSettings').mockClear().mockImplementation(() => {});
 
 		instance.openSettings();
 		wrapper.update();
 
-		expect(stateSpy, 'setState called once').to.be.calledOnce;
-		expect(stateSpy.args[0][0], 'setState 1st arg').to.be.deep.equal({
+		// setState called once
+		expect(stateSpy).toHaveBeenCalledTimes(1);
+		// setState 1st arg
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			settings: true
 		});
-		expect(closeStub.notCalled, 'closeSettings not called').to.be.true;
+		// closeSettings not called
+		expect(closeStub).not.toHaveBeenCalled();
 
 		instance.openSettings();
 
-		expect(stateSpy, 'setState called once').to.be.calledOnce;
-		expect(closeStub, 'closeSettings called once').to.be.calledOnce;
+		// setState called once
+		expect(stateSpy).toHaveBeenCalledTimes(1);
+		// closeSettings called once
+		expect(closeStub).toHaveBeenCalledTimes(1);
 
-		stateSpy.restore();
-		closeStub.restore();
+		stateSpy.mockRestore();
+		closeStub.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('closeSettings()', () => {
 		const wrapper = shallow(
 			<Navigation
-				statuses={ defaultStatuses() }
+				statuses={defaultStatuses()}
 				hash="#"
 			/>
 		);
 		const instance = wrapper.instance();
-		const stateSpy = spy(instance, 'setState');
+		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.closeSettings();
 
-		expect(stateSpy.calledOnce, 'setState called once').to.be.true;
-		expect(stateSpy.args[0][0], 'setState 1st arg').to.be.deep.equal({
+		// setState called once
+		expect(stateSpy).toHaveBeenCalled();
+		// setState 1st arg
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			settings: false
 		});
 
-		stateSpy.restore();
+		stateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
@@ -115,28 +125,38 @@ describe('<Navigation />', () => {
 		it('no tabs', () => {
 			const wrapper = shallow(
 				<Navigation
-					statuses={ defaultStatuses() }
+					statuses={defaultStatuses()}
 					hash="#"
 				/>
 			);
-			const container = wrapper.find(`.${ styles['nav'] }`);
+			const container = wrapper.find(`.${ styles.nav }`);
 			const tabs = container.find(`.${ styles['nav-flex'] }`);
-			const settings = container.find(`.${ styles['settings'].split(' ').join('.') }`);
+			const settings = container.find(`.${ styles.settings.split(' ').join('.') }`);
 			const settingsIcon = settings.find('Icon');
 
-			expect(container.length, 'container length').to.be.equal(1);
-			expect(container.prop('className'), 'container small CN modifier').to.include(styles['nav-small']);
-			expect(container.prop('className'), 'container wide CN modifier').to.not.include(styles['nav-wide']);
-			expect(tabs.length, 'tabs container length').to.be.equal(1);
-			expect(tabs.children().length, 'tabs length').to.be.equal(0);
-			expect(settings.length, 'settings length').to.be.equal(1);
-			expect(settings.prop('onClick').name, 'settings onClick handler').to.be.equal('bound openSettings');
-			expect(settingsIcon.length, 'settings icon length').to.be.equal(1);
-			expect(settingsIcon.props(), 'settings icon props').to.be.deep.equal({
+			// container length
+			expect(container.length).toBe(1);
+			// container small CN modifier
+			expect(container.prop('className')).toContain(styles['nav-small']);
+			// container wide CN modifier
+			expect(container.prop('className')).not.toContain(styles['nav-wide']);
+			// tabs container length
+			expect(tabs.length).toBe(1);
+			// tabs length
+			expect(tabs.children().length).toBe(0);
+			// settings length
+			expect(settings.length).toBe(1);
+			// settings onClick handler
+			expect(settings.prop('onClick').name).toBe('bound openSettings');
+			// settings icon length
+			expect(settingsIcon.length).toBe(1);
+			// settings icon props
+			expect(settingsIcon.props()).toEqual({
 				children: [],
 				type: 'gear'
 			});
-			expect(container.find(Settings).length, 'Settings length').to.be.equal(0);
+			// Settings length
+			expect(container.find(Settings).length).toBe(0);
 
 			wrapper.unmount();
 		});
@@ -146,15 +166,18 @@ describe('<Navigation />', () => {
 
 			const wrapper = shallow(
 				<Navigation
-					statuses={ customStatuses }
+					statuses={customStatuses}
 					hash="#"
 				/>
 			);
-			const container = wrapper.find(`.${ styles['nav'] }`);
+			const container = wrapper.find(`.${ styles.nav }`);
 
-			expect(container.length, 'container length').to.be.equal(1);
-			expect(container.prop('className'), 'container small CN modifier').to.include(styles['nav-small']);
-			expect(container.prop('className'), 'container wide CN modifier').to.not.include(styles['nav-wide']);
+			// container length
+			expect(container.length).toBe(1);
+			// container small CN modifier
+			expect(container.prop('className')).toContain(styles['nav-small']);
+			// container wide CN modifier
+			expect(container.prop('className')).not.toContain(styles['nav-wide']);
 
 			wrapper.unmount();
 		});
@@ -167,16 +190,19 @@ describe('<Navigation />', () => {
 
 				const wrapper = shallow(
 					<Navigation
-						statuses={ customStatuses }
+						statuses={customStatuses}
 						hash="#"
 					/>
 				);
 				const section = SECTIONS.find(({ statusKey }) => statusKey === 'server_zones');
-				const link = wrapper.find(`a.${ styles['navlink'] }`);
+				const link = wrapper.find(`a.${ styles.navlink }`);
 
-				expect(link.prop('href'), 'link href').to.be.equal(section.hash);
-				expect(link.prop('title'), 'link title').to.be.equal(section.title);
-				expect(link.find(`span.${ styles['anchor'] }`).text(), 'link anchor').to.be.equal(section.title);
+				// link href
+				expect(link.prop('href')).toBe(section.hash);
+				// link title
+				expect(link.prop('title')).toBe(section.title);
+				// link anchor
+				expect(link.find(`span.${ styles.anchor }`).text()).toBe(section.title);
 
 				wrapper.unmount();
 			});
@@ -189,15 +215,17 @@ describe('<Navigation />', () => {
 
 					const wrapper = shallow(
 						<Navigation
-							statuses={ customStatuses }
+							statuses={customStatuses}
 							hash="#"
 						/>
 					);
-					const link = wrapper.find(`a.${ styles['navlink'] }`);
+					const link = wrapper.find(`a.${ styles.navlink }`);
 					const section = SECTIONS.find(({ statusKey }) => statusKey === 'server_zones');
 
-					expect(link.length, 'link length').to.be.equal(1);
-					expect(link.prop('href'), 'link href').to.be.equal(section.hash);
+					// link length
+					expect(link.length).toBe(1);
+					// link href
+					expect(link.prop('href')).toBe(section.hash);
 
 					wrapper.unmount();
 				});
@@ -206,23 +234,24 @@ describe('<Navigation />', () => {
 			it('all ready (+ checking hash)', () => {
 				const wrapper = shallow(
 					<Navigation
-						statuses={ readyStatuses() }
+						statuses={readyStatuses()}
 						hash="#caches"
 					/>
 				);
-				const link = wrapper.find(`a.${ styles['navlink'] }`);
+				const link = wrapper.find('a');
 
 				SECTIONS.forEach(({ hash, statusKey }) => {
 					const _link = link.filter(`[href="${ hash }"]`);
 
-					expect(_link.length, `link for "${ statusKey }"`).to.be.equal(1);
+					// link for "${ statusKey }"
+					expect(_link.length).toBe(1);
 
 					if (statusKey === 'caches') {
-						expect(_link.prop('className'), 'active link className [caches]')
-							.to.be.equal(styles['navlinkactive']);
+						// active link className [caches]
+						expect(_link.prop('className')).toBe(styles.navlinkactive);
 					} else {
-						expect(_link.prop('className'), `inactive link className [${ statusKey }]`)
-							.to.be.equal(styles['navlink']);
+						// inactive link className [${ statusKey }]
+						expect(_link.prop('className')).toBe(styles.navlink);
 					}
 				});
 
@@ -239,13 +268,14 @@ describe('<Navigation />', () => {
 
 				const wrapper = shallow(
 					<Navigation
-						statuses={ customStatuses }
+						statuses={customStatuses}
 						hash="#"
 					/>
 				);
 				const icons = wrapper.find(`.${ styles['nav-flex'] }`).find('Icon');
 
-				expect(icons.length, 'icons length').to.be.equal(4);
+				// icons length
+				expect(icons.length).toBe(4);
 
 				icons.forEach(icon => {
 					let statusKey = icon.parent().prop('href').substr(1);
@@ -254,14 +284,14 @@ describe('<Navigation />', () => {
 						statusKey = 'tcp_zones';
 					}
 
-					expect(icon.prop('className'), `icon className [${ statusKey }]`).to.be.equal(styles['status']);
-					expect(icon.prop('type'), `icon type [${ statusKey }]`).to.be.equal(
-						statusKey === 'shared_zones' ?
-							'warning'
+					// icon className [${ statusKey }]
+					expect(icon.prop('className')).toBe(styles.status);
+					// icon type [${ statusKey }]
+					expect(icon.prop('type')).toBe(statusKey === 'shared_zones' ?
+						'warning'
 						: statusKey === 'tcp_zones' ?
 							'danger'
-						: 'ok'
-					);
+							: 'ok');
 				});
 
 				wrapper.unmount();
@@ -274,82 +304,82 @@ describe('<Navigation />', () => {
 
 				const wrapper = shallow(
 					<Navigation
-						statuses={ customStatuses }
+						statuses={customStatuses}
 						hash="#"
 					/>
 				);
 
-				expect(wrapper.find(`a[href="#server_zones"] Icon`).length, 'undefined|test_status')
-					.to.be.equal(0);
+				// undefined|test_status
+				expect(wrapper.find('a[href="#server_zones"] Icon').length).toBe(0);
 
 				customStatuses.server_zones.status = 'ok';
 				wrapper.setProps(customStatuses);
 
-				expect(wrapper.find(`a[href="#server_zones"] Icon`).prop('type'), 'ok|test_status')
-					.to.be.equal('ok');
+				// ok|test_status
+				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('ok');
 
 				customStatuses.server_zones.status = 'test_status';
 				customStatuses.location_zones.status = 'ok';
 				wrapper.setProps(customStatuses);
 
-				expect(wrapper.find(`a[href="#server_zones"] Icon`).prop('type'), 'test_status|ok')
-					.to.be.equal('test_status');
+				// test_status|ok
+				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('test_status');
 
 				customStatuses.server_zones.status = 'ok';
 				customStatuses.location_zones.status = 'warning';
 				wrapper.setProps(customStatuses);
 
-				expect(wrapper.find(`a[href="#server_zones"] Icon`).prop('type'), 'ok|warning')
-					.to.be.equal('warning');
+				// ok|warning
+				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('warning');
 
 				customStatuses.server_zones.status = 'warning';
 				customStatuses.location_zones.status = 'ok';
 				wrapper.setProps(customStatuses);
 
-				expect(wrapper.find(`a[href="#server_zones"] Icon`).prop('type'), 'warning|ok')
-					.to.be.equal('warning');
+				// warning|ok
+				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('warning');
 
 				customStatuses.server_zones.status = 'warning';
 				customStatuses.location_zones.status = 'warning';
 				wrapper.setProps(customStatuses);
 
-				expect(wrapper.find(`a[href="#server_zones"] Icon`).prop('type'), 'warning|warning')
-					.to.be.equal('warning');
+				// warning|warning
+				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('warning');
 
 				customStatuses.server_zones.status = 'ok';
 				customStatuses.location_zones.status = 'danger';
 				wrapper.setProps(customStatuses);
 
-				expect(wrapper.find(`a[href="#server_zones"] Icon`).prop('type'), 'ok|danger')
-					.to.be.equal('danger');
+				// ok|danger
+				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('danger');
 
 				customStatuses.server_zones.status = 'danger';
 				customStatuses.location_zones.status = 'ok';
 				wrapper.setProps(customStatuses);
 
-				expect(wrapper.find(`a[href="#server_zones"] Icon`).prop('type'), 'danger|ok')
-					.to.be.equal('danger');
+				// danger|ok
+				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('danger');
 
 				customStatuses.server_zones.status = 'danger';
 				customStatuses.location_zones.status = 'danger';
 				wrapper.setProps(customStatuses);
 
-				expect(wrapper.find(`a[href="#server_zones"] Icon`).prop('type'), 'danger|danger')
-					.to.be.equal('danger');
+				// danger|danger
+				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('danger');
 
 				customStatuses.server_zones.status = 'danger';
 				customStatuses.location_zones.status = 'warning';
 				wrapper.setProps(customStatuses);
 
-				expect(wrapper.find(`a[href="#server_zones"] Icon`).prop('type'), 'danger|warning')
-					.to.be.equal('danger');
+				// danger|warning
+				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('danger');
 
 				customStatuses.server_zones.status = 'warning';
 				customStatuses.location_zones.status = 'danger';
 				wrapper.setProps(customStatuses);
 
-				expect(wrapper.find(`a[href="#server_zones"] Icon`).prop('type'), 'warning|danger')
-					.to.be.equal('danger');
+				// warning|danger
+				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('danger');
 
 				wrapper.unmount();
 			});
@@ -359,7 +389,7 @@ describe('<Navigation />', () => {
 			const statuses = defaultStatuses();
 			const wrapper = shallow(
 				<Navigation
-					statuses={ statuses }
+					statuses={statuses}
 					hash="#"
 				/>
 			);
@@ -368,9 +398,12 @@ describe('<Navigation />', () => {
 
 			const settings = wrapper.find('Settings');
 
-			expect(settings.length, 'Settings length').to.be.equal(1);
-			expect(settings.prop('statuses'), 'Settings statuses prop').to.be.deep.equal(statuses);
-			expect(settings.prop('close').name, 'Settings close prop').to.be.equal('bound closeSettings');
+			// Settings length
+			expect(settings.length).toBe(1);
+			// Settings statuses prop
+			expect(settings.prop('statuses')).toEqual(statuses);
+			// Settings close prop
+			expect(settings.prop('close').name).toBe('bound closeSettings');
 
 			wrapper.unmount();
 		});

@@ -5,12 +5,13 @@
  *
  */
 
-import { stub } from 'sinon';
 import calculate from '../requests.js';
 import utils from '../utils.js';
 
 describe('Calculators – Requests', () => {
 	describe('calculate()', () => {
+		let spyDateNow; let
+			spyUtilsCalculateSpeed;
 		const ts = 1597004040005;
 		const requests = {
 			a: 123,
@@ -23,35 +24,45 @@ describe('Calculators – Requests', () => {
 		};
 		let reqs = 100500;
 
-		before(() => {
-			stub(Date, 'now').callsFake(() => ts);
-			stub(utils, 'calculateSpeed').callsFake(() => ++reqs);
+		beforeAll(() => {
+			spyDateNow = jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
+			spyUtilsCalculateSpeed = jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation(() => ++reqs);
 		});
 
 		beforeEach(() => {
-			utils.calculateSpeed.resetHistory();
-			Date.now.resetHistory();
+			spyUtilsCalculateSpeed.mockClear();
+			spyDateNow.mockClear();
 		});
 
-		after(() => {
-			Date.now.restore();
-			utils.calculateSpeed.restore();
+		afterAll(() => {
+			Date.now.mockRestore();
+			utils.calculateSpeed.mockRestore();
 		});
 
 		it('first call', () => {
-			expect(calculate(requests), 'return').to.be.deep.equal(requests);
-			expect(utils.calculateSpeed.calledOnce, 'calculateSpeed called once').to.be.true;
-			expect(utils.calculateSpeed.args[0][0], 'calculateSpeed 1st arg').to.be.equal(0);
-			expect(utils.calculateSpeed.args[0][1], 'calculateSpeed 2nd arg').to.be.equal(requests.total);
-			expect(utils.calculateSpeed.args[0][2], 'calculateSpeed 3rd arg').to.be.equal(ts);
+			// return
+			expect(calculate(requests)).toEqual(requests);
+			// calculateSpeed called once
+			expect(spyUtilsCalculateSpeed).toHaveBeenCalled();
+			// calculateSpeed 1st arg
+			expect(spyUtilsCalculateSpeed.mock.calls[0][0]).toBe(0);
+			// calculateSpeed 2nd arg
+			expect(spyUtilsCalculateSpeed.mock.calls[0][1]).toBe(requests.total);
+			// calculateSpeed 3rd arg
+			expect(spyUtilsCalculateSpeed.mock.calls[0][2]).toBe(ts);
 		});
 
 		it('with previous', () => {
-			expect(calculate(requests, previous), 'return').to.be.deep.equal(requests);
-			expect(utils.calculateSpeed.calledOnce, 'calculateSpeed called once').to.be.true;
-			expect(utils.calculateSpeed.args[0][0], 'calculateSpeed 1st arg').to.be.equal(previous.total);
-			expect(utils.calculateSpeed.args[0][1], 'calculateSpeed 2nd arg').to.be.equal(requests.total);
-			expect(utils.calculateSpeed.args[0][2], 'calculateSpeed 3rd arg').to.be.equal(ts - previous.lastUpdate);
+			// return
+			expect(calculate(requests, previous)).toEqual(requests);
+			// calculateSpeed called once
+			expect(spyUtilsCalculateSpeed).toHaveBeenCalled();
+			// calculateSpeed 1st arg
+			expect(spyUtilsCalculateSpeed.mock.calls[0][0]).toBe(previous.total);
+			// calculateSpeed 2nd arg
+			expect(spyUtilsCalculateSpeed.mock.calls[0][1]).toBe(requests.total);
+			// calculateSpeed 3rd arg
+			expect(spyUtilsCalculateSpeed.mock.calls[0][2]).toBe(ts - previous.lastUpdate);
 		});
 	});
 });

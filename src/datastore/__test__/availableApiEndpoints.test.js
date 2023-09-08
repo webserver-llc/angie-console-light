@@ -5,14 +5,16 @@
  *
  */
 
- import AvailableApiEndpoints from '../availableApiEndpoints.js';
+import AvailableApiEndpoints from '../availableApiEndpoints.js';
 
 describe('Datastore AvailableApiEndpoints', () => {
 	it('constructor()', () => {
 		const instance = new AvailableApiEndpoints();
 
-		expect(instance.firstLevel, 'this.firstLevel').to.be.deep.equal([]);
-		expect(instance.secondLevel, 'this.secondLevel').to.be.deep.equal({
+		// this.firstLevel
+		expect(instance.firstLevel).toEqual([]);
+		// this.secondLevel
+		expect(instance.secondLevel).toEqual({
 			http: [],
 			stream: []
 		});
@@ -23,17 +25,15 @@ describe('Datastore AvailableApiEndpoints', () => {
 
 		instance.firstLevel = ['angie', 'http'];
 
-		expect(instance.getFirstLevel(), 'return').to.be.deep.equal(
-			['angie', 'http']
-		);
+		// return
+		expect(instance.getFirstLevel()).toEqual(['angie', 'http']);
 	});
 
 	it('getSecondLevel()', () => {
 		const instance = new AvailableApiEndpoints();
 
-		expect(instance.getSecondLevel(), 'return').to.be.deep.equal(
-			['http', 'stream']
-		);
+		// return
+		expect(instance.getSecondLevel()).toEqual(['http', 'stream']);
 	});
 
 	it('getThirdLevel()', () => {
@@ -41,9 +41,8 @@ describe('Datastore AvailableApiEndpoints', () => {
 
 		instance.secondLevel.http = ['test_1', 'test_2'];
 
-		expect(instance.getThirdLevel('http'), 'return').to.be.deep.equal(
-			['test_1', 'test_2']
-		);
+		// return
+		expect(instance.getThirdLevel('http')).toEqual(['test_1', 'test_2']);
 	});
 
 	it('firstLevelIncludes()', () => {
@@ -51,37 +50,28 @@ describe('Datastore AvailableApiEndpoints', () => {
 
 		instance.firstLevel = ['angie', 'upstream'];
 
-		expect(
-			instance.firstLevelIncludes('upstream'),
-			'check existing path'
-		).to.be.true;
-		expect(
-			instance.firstLevelIncludes('test'),
-			'check unavailable path'
-		).to.be.false;
+		// check existing path
+		expect(instance.firstLevelIncludes('upstream')).toBe(true);
+		// check unavailable path
+		expect(instance.firstLevelIncludes('test')).toBe(false);
 	});
 
 	it('fillThirdLevel()', () => {
 		const instance = new AvailableApiEndpoints();
 
-		instance.fillThirdLevel('stream', { 'test_1': {}, 'test_2': {} });
+		instance.fillThirdLevel('stream', { test_1: {}, test_2: {} });
 
-		expect(instance.secondLevel.stream, 'secondLevel.stream').to.be.deep.equal(
-			['test_1', 'test_2']
-		);
+		// secondLevel.stream
+		expect(instance.secondLevel.stream).toEqual(['test_1', 'test_2']);
 	});
 
 	it('secondLevelIncludes()', () => {
 		const instance = new AvailableApiEndpoints();
 
-		expect(
-			instance.secondLevelIncludes('stream'),
-			'check existing path'
-		).to.be.true;
-		expect(
-			instance.secondLevelIncludes('test'),
-			'check unavailable path'
-		).to.be.false;
+		// check existing path
+		expect(instance.secondLevelIncludes('stream')).toBe(true);
+		// check unavailable path
+		expect(instance.secondLevelIncludes('test')).toBe(false);
 	});
 
 	it('thirdLevelIncludes()', () => {
@@ -89,27 +79,20 @@ describe('Datastore AvailableApiEndpoints', () => {
 
 		instance.secondLevel.http = ['test_1', 'test_2'];
 
-		expect(
-			instance.thirdLevelIncludes('test', 'test_1'),
-			'unavailable secondLevel path'
-		).to.be.false;
-		expect(
-			instance.thirdLevelIncludes('http', 'test_3'),
-			'unavailable thirdLevel path'
-		).to.be.false;
-		expect(
-			instance.thirdLevelIncludes('http', 'test_1'),
-			'available 2nd and 3rd paths'
-		).to.be.true;
+		// unavailable secondLevel path
+		expect(instance.thirdLevelIncludes('test', 'test_1')).toBe(false);
+		// unavailable thirdLevel path
+		expect(instance.thirdLevelIncludes('http', 'test_3')).toBe(false);
+		// available 2nd and 3rd paths
+		expect(instance.thirdLevelIncludes('http', 'test_1')).toBe(true);
 	});
 
 	it('fillFirstLevel', () => {
 		const instance = new AvailableApiEndpoints();
 
-		instance.fillFirstLevel({ 'http': {}, 'stream': {} });
+		instance.fillFirstLevel({ http: {}, stream: {} });
 
-		expect(instance.firstLevel, 'firstLevel').to.be.deep.equal(
-			['http', 'stream']
-		);
+		// firstLevel
+		expect(instance.firstLevel).toEqual(['http', 'stream']);
 	});
 });

@@ -5,7 +5,6 @@
  *
  */
 
-import { spy, stub } from 'sinon';
 import {
 	is4xxThresholdReached,
 	calculateSpeed,
@@ -13,49 +12,62 @@ import {
 	createMapFromObject,
 	handleErrors,
 	pickZoneSize,
-	countResolverResponses
+	countResolverResponses,
 } from '../utils.js';
 import appsettings from '../../appsettings';
 
 describe('Calculators – utils', () => {
 	it('is4xxThresholdReached()', () => {
-		stub(appsettings, 'getSetting').callsFake(() => 50);
+		jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(() => 50);
 
 		expect(
 			is4xxThresholdReached({ responses: { '4xx': 49 }, requests: 100 })
-		).to.be.false;
-		expect(appsettings.getSetting.calledOnce, 'getSetting called once').to.be.true;
-		expect(appsettings.getSetting.args[0][0], 'getSetting 1st arg').to.be.equal('warnings4xxThresholdPercent');
+		).toBe(false);
+		// getSetting called once
+		expect(appsettings.getSetting).toHaveBeenCalled();
+		// getSetting 1st arg
+		expect(appsettings.getSetting.mock.calls[0][0]).toBe('warnings4xxThresholdPercent');
 		expect(
 			is4xxThresholdReached({ responses: { '4xx': 50 }, requests: 100 })
-		).to.be.false;
-		expect(appsettings.getSetting.calledTwice, 'getSetting called twice').to.be.true;
-		expect(appsettings.getSetting.args[1][0], 'getSetting 1st arg').to.be.equal('warnings4xxThresholdPercent');
+		).toBe(false);
+		// getSetting called twice
+		expect(appsettings.getSetting).toHaveBeenCalledTimes(2);
+		// getSetting 1st arg
+		expect(appsettings.getSetting.mock.calls[1][0]).toBe('warnings4xxThresholdPercent');
 		expect(
 			is4xxThresholdReached({ responses: { '4xx': 51 }, requests: 100 })
-		).to.be.true;
-		expect(appsettings.getSetting.calledThrice, 'getSetting called thrice').to.be.true;
-		expect(appsettings.getSetting.args[2][0], 'getSetting 1st arg').to.be.equal('warnings4xxThresholdPercent');
-
-		appsettings.getSetting.restore();
+		).toBe(true);
+		// getSetting called thrice
+		expect(appsettings.getSetting).toHaveBeenCalledTimes(3);
+		// getSetting 1st arg
+		expect(appsettings.getSetting.mock.calls[2][0]).toBe('warnings4xxThresholdPercent');
 	});
 
 	it('calculateSpeed()', () => {
-		spy(Math, 'floor');
+		jest.spyOn(Math, 'floor').mockClear();
 
-		expect(calculateSpeed(), 'previous == undefined, now == undefined').to.be.equal('n/a');
-		expect(calculateSpeed(null), 'previous == null, now == undefined').to.be.equal('n/a');
-		expect(calculateSpeed(undefined, null), 'previous == undefined, now == null').to.be.equal('n/a');
-		expect(calculateSpeed(null, null), 'previous == null, now == null').to.be.equal('n/a');
-		expect(calculateSpeed('123', '3'), 'previous and now are Strings').to.be.equal('n/a');
-		expect(calculateSpeed('123', 3), 'previous is a String').to.be.equal('n/a');
-		expect(calculateSpeed(43, '34'), 'now is a String').to.be.equal('n/a');
-		expect(calculateSpeed(32, 1), 'previous > now').to.be.equal(0);
-		expect(calculateSpeed(3, 50, 2000), 'previous < now').to.be.equal(23);
-		expect(Math.floor.calledOnce, 'Math.floor called once').to.be.true;
-		expect(Math.floor.args[0][0], 'Math.floor 1st arg').to.be.equal(23.5);
-
-		Math.floor.restore();
+		// previous == undefined, now == undefined
+		expect(calculateSpeed()).toBe('n/a');
+		// previous == null, now == undefined
+		expect(calculateSpeed(null)).toBe('n/a');
+		// previous == undefined, now == null
+		expect(calculateSpeed(undefined, null)).toBe('n/a');
+		// previous == null, now == null
+		expect(calculateSpeed(null, null)).toBe('n/a');
+		// previous and now are Strings
+		expect(calculateSpeed('123', '3')).toBe('n/a');
+		// previous is a String
+		expect(calculateSpeed('123', 3)).toBe('n/a');
+		// now is a String
+		expect(calculateSpeed(43, '34')).toBe('n/a');
+		// previous > now
+		expect(calculateSpeed(32, 1)).toBe(0);
+		// previous < now
+		expect(calculateSpeed(3, 50, 2000)).toBe(23);
+		// Math.floor called once
+		expect(Math.floor).toHaveBeenCalled();
+		// Math.floor 1st arg
+		expect(Math.floor.mock.calls[0][0]).toBe(23.5);
 	});
 
 	it('calculateTraffic', () => {
@@ -66,33 +78,45 @@ describe('Calculators – utils', () => {
 
 		calculateTraffic(obj, {});
 
-		expect(obj.traffic.in, 'traffic.in [zone = {}]').to.be.equal(0);
-		expect(obj.traffic.out, 'traffic.out [zone = {}]').to.be.equal(0);
+		// traffic.in [zone = {}]
+		expect(obj.traffic.in).toBe(0);
+		// traffic.out [zone = {}]
+		expect(obj.traffic.out).toBe(0);
 
 		calculateTraffic(obj, { rcvd_s: null, sent_s: null });
 
-		expect(obj.traffic.in, 'traffic.in [zone = { rcvd_s: null, sent_s: null }]').to.be.equal(0);
-		expect(obj.traffic.out, 'traffic.out [zone = { rcvd_s: null, sent_s: null }]').to.be.equal(0);
+		// traffic.in [zone = { rcvd_s: null, sent_s: null }]
+		expect(obj.traffic.in).toBe(0);
+		// traffic.out [zone = { rcvd_s: null, sent_s: null }]
+		expect(obj.traffic.out).toBe(0);
 
 		calculateTraffic(obj, { rcvd_s: '123', sent_s: 'null' });
 
-		expect(obj.traffic.in, 'traffic.in [zone = { rcvd_s: "123", sent_s: "null" }]').to.be.equal(0);
-		expect(obj.traffic.out, 'traffic.out [zone = { rcvd_s: "123", sent_s: "null" }]').to.be.equal(0);
+		// traffic.in [zone = { rcvd_s: "123", sent_s: "null" }]
+		expect(obj.traffic.in).toBe(0);
+		// traffic.out [zone = { rcvd_s: "123", sent_s: "null" }]
+		expect(obj.traffic.out).toBe(0);
 
 		calculateTraffic(obj, { rcvd_s: {}, sent_s: () => {} });
 
-		expect(obj.traffic.in, 'traffic.in [zone = { rcvd_s: {}, sent_s: () => {} }]').to.be.equal(0);
-		expect(obj.traffic.out, 'traffic.out [zone = { rcvd_s: {}, sent_s: () => {} }]').to.be.equal(0);
+		// traffic.in [zone = { rcvd_s: {}, sent_s: () => {} }]
+		expect(obj.traffic.in).toBe(0);
+		// traffic.out [zone = { rcvd_s: {}, sent_s: () => {} }]
+		expect(obj.traffic.out).toBe(0);
 
 		calculateTraffic(obj, { rcvd_s: 123, sent_s: 456 });
 
-		expect(obj.traffic.in, 'traffic.in [zone = { rcvd_s: 123, sent_s: 456 }]').to.be.equal(123);
-		expect(obj.traffic.out, 'traffic.out [zone = { rcvd_s: 123, sent_s: 456 }]').to.be.equal(456);
+		// traffic.in [zone = { rcvd_s: 123, sent_s: 456 }]
+		expect(obj.traffic.in).toBe(123);
+		// traffic.out [zone = { rcvd_s: 123, sent_s: 456 }]
+		expect(obj.traffic.out).toBe(456);
 
 		calculateTraffic(obj, { rcvd_s: 7, sent_s: 14 });
 
-		expect(obj.traffic.in, 'traffic.in [zone = { rcvd_s: 7, sent_s: 14 }]').to.be.equal(130);
-		expect(obj.traffic.out, 'traffic.out [zone = { rcvd_s: 7, sent_s: 14 }]').to.be.equal(470);
+		// traffic.in [zone = { rcvd_s: 7, sent_s: 14 }]
+		expect(obj.traffic.in).toBe(130);
+		// traffic.out [zone = { rcvd_s: 7, sent_s: 14 }]
+		expect(obj.traffic.out).toBe(470);
 	});
 
 	describe('createMapFromObject()', () => {
@@ -100,53 +124,77 @@ describe('Calculators – utils', () => {
 			b: { ba: 123, bb: '456' },
 			a: { aa: 789, ab: '012' }
 		};
-		const cb = spy((_, key, i) => `${ key }_${ i }`);
+		const cb = jest.fn((_, key, i) => `${ key }_${ i }`);
 
-		before(() => {
-			spy(Array.prototype, 'sort');
+		beforeAll(() => {
+			jest.spyOn(Array.prototype, 'sort').mockClear();
 		});
 
 		beforeEach(() => {
-			Array.prototype.sort.resetHistory();
-			cb.resetHistory();
+			Array.prototype.sort.mockClear();
+			cb.mockClear();
 		});
 
-		after(() => {
-			Array.prototype.sort.restore();
+		afterAll(() => {
+			Array.prototype.sort.mockRestore();
 		});
 
 		it('with sort', () => {
 			const result = createMapFromObject(obj, cb);
 
-			expect(Array.prototype.sort.calledOnce, 'Array sort called once').to.be.true;
-			expect(cb.calledTwice, 'cb called twice').to.be.true;
-			expect(cb.args[0][0], 'cd 1st call 1st arg').to.be.deep.equal(obj.a);
-			expect(cb.args[0][1], 'cd 1st call 2nd arg').to.be.equal('a');
-			expect(cb.args[0][2], 'cd 1st call 3rd arg').to.be.equal(0);
-			expect(cb.args[1][0], 'cd 2nd call 1st arg').to.be.deep.equal(obj.b);
-			expect(cb.args[1][1], 'cd 2nd call 2nd arg').to.be.equal('b');
-			expect(cb.args[1][2], 'cd 2nd call 3rd arg').to.be.equal(1);
-			expect(result, 'result instanceOf Map').to.be.an.instanceof(Map);
-			expect(result.size, 'result size').to.be.equal(2);
-			expect(result.get('b'), 'prop "b" of result').to.be.equal('b_1');
-			expect(result.get('a'), 'prop "a" of result').to.be.equal('a_0');
+			// Array sort called once
+			expect(Array.prototype.sort).toHaveBeenCalled();
+			// cb called twice
+			expect(cb).toHaveBeenCalledTimes(2);
+			// cd 1st call 1st arg
+			expect(cb.mock.calls[0][0]).toEqual(obj.a);
+			// cd 1st call 2nd arg
+			expect(cb.mock.calls[0][1]).toBe('a');
+			// cd 1st call 3rd arg
+			expect(cb.mock.calls[0][2]).toBe(0);
+			// cd 2nd call 1st arg
+			expect(cb.mock.calls[1][0]).toEqual(obj.b);
+			// cd 2nd call 2nd arg
+			expect(cb.mock.calls[1][1]).toBe('b');
+			// cd 2nd call 3rd arg
+			expect(cb.mock.calls[1][2]).toBe(1);
+			// result instanceOf Map
+			expect(result).toBeInstanceOf(Map);
+			// result size
+			expect(result.size).toBe(2);
+			// prop "b" of result
+			expect(result.get('b')).toBe('b_1');
+			// prop "a" of result
+			expect(result.get('a')).toBe('a_0');
 		});
 
 		it('without sort', () => {
 			const result = createMapFromObject(obj, cb, false);
 
-			expect(Array.prototype.sort.notCalled, 'Array sort not called').to.be.true;
-			expect(cb.calledTwice, 'cb called twice').to.be.true;
-			expect(cb.args[0][0], 'cd 1st call 1st arg').to.be.deep.equal(obj.b);
-			expect(cb.args[0][1], 'cd 1st call 2nd arg').to.be.equal('b');
-			expect(cb.args[0][2], 'cd 1st call 3rd arg').to.be.equal(0);
-			expect(cb.args[1][0], 'cd 2nd call 1st arg').to.be.deep.equal(obj.a);
-			expect(cb.args[1][1], 'cd 2nd call 2nd arg').to.be.equal('a');
-			expect(cb.args[1][2], 'cd 2nd call 3rd arg').to.be.equal(1);
-			expect(result, 'result instanceOf Map').to.be.an.instanceof(Map);
-			expect(result.size, 'result size').to.be.equal(2);
-			expect(result.get('b'), 'prop "b" of result').to.be.equal('b_0');
-			expect(result.get('a'), 'prop "a" of result').to.be.equal('a_1');
+			// Array sort not called
+			expect(Array.prototype.sort).not.toHaveBeenCalled();
+			// cb called twice
+			expect(cb).toHaveBeenCalledTimes(2);
+			// cd 1st call 1st arg
+			expect(cb.mock.calls[0][0]).toEqual(obj.b);
+			// cd 1st call 2nd arg
+			expect(cb.mock.calls[0][1]).toBe('b');
+			// cd 1st call 3rd arg
+			expect(cb.mock.calls[0][2]).toBe(0);
+			// cd 2nd call 1st arg
+			expect(cb.mock.calls[1][0]).toEqual(obj.a);
+			// cd 2nd call 2nd arg
+			expect(cb.mock.calls[1][1]).toBe('a');
+			// cd 2nd call 3rd arg
+			expect(cb.mock.calls[1][2]).toBe(1);
+			// result instanceOf Map
+			expect(result).toBeInstanceOf(Map);
+			// result size
+			expect(result.size).toBe(2);
+			// prop "b" of result
+			expect(result.get('b')).toBe('b_0');
+			// prop "a" of result
+			expect(result.get('a')).toBe('a_1');
 		});
 	});
 
@@ -169,26 +217,26 @@ describe('Calculators – utils', () => {
 		it('no previousData', () => {
 			handleErrors(null, data);
 
-			expect(data[defaultKey]['4xxChanged'], '4xxChanged').to.be.an('undefined');
-			expect(data[defaultKey]['5xxChanged'], '5xxChanged').to.be.an('undefined');
-			expect(data[key]['4xxChanged'], `4xxChanged ["${ key }" key]`).to.be.an('undefined');
-			expect(data[key]['5xxChanged'], `5xxChanged ["${ key }" key]`).to.be.an('undefined');
+			expect(data[defaultKey]['4xxChanged']).toBeUndefined();
+			expect(data[defaultKey]['5xxChanged']).toBeUndefined();
+			expect(data[key]['4xxChanged']).toBeUndefined();
+			expect(data[key]['5xxChanged']).toBeUndefined();
 
 			handleErrors(undefined, data);
 
-			expect(data[defaultKey]['4xxChanged'], '4xxChanged [previousData = undefined]').to.be.an('undefined');
-			expect(data[defaultKey]['5xxChanged'], '5xxChanged [previousData = undefined]').to.be.an('undefined');
-			expect(data[key]['4xxChanged'], `4xxChanged ["${ key }" key]`).to.be.an('undefined');
-			expect(data[key]['5xxChanged'], `5xxChanged ["${ key }" key]`).to.be.an('undefined');
+			expect(data[defaultKey]['4xxChanged']).toBeUndefined();
+			expect(data[defaultKey]['5xxChanged']).toBeUndefined();
+			expect(data[key]['4xxChanged']).toBeUndefined();
+			expect(data[key]['5xxChanged']).toBeUndefined();
 		});
 
 		it('no growth', () => {
 			handleErrors(previousData, data);
 
-			expect(data[defaultKey]['4xxChanged'], '4xxChanged').to.be.an('undefined');
-			expect(data[defaultKey]['5xxChanged'], '5xxChanged').to.be.an('undefined');
-			expect(data[key]['4xxChanged'], `4xxChanged ["${ key }" key]`).to.be.an('undefined');
-			expect(data[key]['5xxChanged'], `5xxChanged ["${ key }" key]`).to.be.an('undefined');
+			expect(data[defaultKey]['4xxChanged']).toBeUndefined();
+			expect(data[defaultKey]['5xxChanged']).toBeUndefined();
+			expect(data[key]['4xxChanged']).toBeUndefined();
+			expect(data[key]['5xxChanged']).toBeUndefined();
 		});
 
 		it('4xx growth', () => {
@@ -196,8 +244,9 @@ describe('Calculators – utils', () => {
 
 			handleErrors(previousData, data);
 
-			expect(data['4xxChanged'], '4xxChanged').to.be.true;
-			expect(data['5xxChanged'], '5xxChanged').to.be.an('undefined');
+			// 4xxChanged
+			expect(data['4xxChanged']).toBe(true);
+			expect(data['5xxChanged']).toBeUndefined();
 		});
 
 		it('5xx growth', () => {
@@ -205,8 +254,9 @@ describe('Calculators – utils', () => {
 
 			handleErrors(previousData, data);
 
-			expect(data['4xxChanged'], '4xxChanged').to.be.an('undefined');
-			expect(data['5xxChanged'], '5xxChanged').to.be.true;
+			expect(data['4xxChanged']).toBeUndefined();
+			// 5xxChanged
+			expect(data['5xxChanged']).toBe(true);
 		});
 
 		it('4xx and 5xx growth', () => {
@@ -215,8 +265,10 @@ describe('Calculators – utils', () => {
 
 			handleErrors(previousData, data);
 
-			expect(data['4xxChanged'], '4xxChanged').to.be.true;
-			expect(data['5xxChanged'], '5xxChanged').to.be.true;
+			// 4xxChanged
+			expect(data['4xxChanged']).toBe(true);
+			// 5xxChanged
+			expect(data['5xxChanged']).toBe(true);
 		});
 
 		it('custom key', () => {
@@ -224,8 +276,9 @@ describe('Calculators – utils', () => {
 
 			handleErrors(previousData, data, key);
 
-			expect(data['4xxChanged'], '4xxChanged').to.be.an('undefined');
-			expect(data['5xxChanged'], '5xxChanged').to.be.true;
+			expect(data['4xxChanged']).toBeUndefined();
+			// 5xxChanged
+			expect(data['5xxChanged']).toBe(true);
 		});
 	});
 
@@ -240,25 +293,27 @@ describe('Calculators – utils', () => {
 			} ]
 		]);
 
-		before(() => {
-			spy(Map.prototype, 'get');
+		beforeAll(() => {
+			jest.spyOn(Map.prototype, 'get').mockClear();
 		});
 
 		beforeEach(() => {
 			obj = {};
 
-			Map.prototype.get.resetHistory();
+			Map.prototype.get.mockClear();
 		});
 
-		after(() => {
-			Map.prototype.get.restore();
+		afterAll(() => {
+			Map.prototype.get.mockRestore();
 		});
 
 		it('no slabs', () => {
 			pickZoneSize(obj);
 
-			expect(Map.prototype.get.notCalled, 'slabs.get not called').to.be.true;
-			expect(obj, 'obj').to.be.deep.equal({
+			// slabs.get not called
+			expect(Map.prototype.get).not.toHaveBeenCalled();
+			// obj
+			expect(obj).toEqual({
 				zoneSize: null
 			});
 		});
@@ -268,9 +323,12 @@ describe('Calculators – utils', () => {
 
 			pickZoneSize(obj, slabs, name);
 
-			expect(Map.prototype.get.calledOnce, 'slabs.get called once').to.be.true;
-			expect(Map.prototype.get.args[0][0], 'slabs.get 1st arg').to.be.equal(name);
-			expect(obj, 'obj').to.be.deep.equal({
+			// slabs.get called once
+			expect(Map.prototype.get).toHaveBeenCalled();
+			// slabs.get 1st arg
+			expect(Map.prototype.get.mock.calls[0][0]).toBe(name);
+			// obj
+			expect(obj).toEqual({
 				zoneSize: null
 			});
 		});
@@ -278,9 +336,12 @@ describe('Calculators – utils', () => {
 		it('slabs and zone provided', () => {
 			pickZoneSize(obj, slabs, zoneName);
 
-			expect(Map.prototype.get.calledOnce, 'slabs.get called once').to.be.true;
-			expect(Map.prototype.get.args[0][0], 'slabs.get 1st arg').to.be.equal(zoneName);
-			expect(obj, 'obj').to.be.deep.equal({
+			// slabs.get called once
+			expect(Map.prototype.get).toHaveBeenCalled();
+			// slabs.get 1st arg
+			expect(Map.prototype.get.mock.calls[0][0]).toBe(zoneName);
+			// obj
+			expect(obj).toEqual({
 				slab: slabs.get(zoneName),
 				zoneSize: 34
 			});
@@ -290,8 +351,10 @@ describe('Calculators – utils', () => {
 	it('countResolverResponses()', () => {
 		let result = countResolverResponses({});
 
-		expect(result.allResponses, 'allResponses [responses = {}]').to.be.equal(0);
-		expect(result.errResponses, 'errResponses [responses = {}]').to.be.equal(0);
+		// allResponses [responses = {}]
+		expect(result.allResponses).toBe(0);
+		// errResponses [responses = {}]
+		expect(result.errResponses).toBe(0);
 
 		result = countResolverResponses({
 			timedout: 4,
@@ -304,7 +367,9 @@ describe('Calculators – utils', () => {
 			response_type_6: 'just a string'
 		});
 
-		expect(result.allResponses, 'allResponses').to.be.equal(382);
-		expect(result.errResponses, 'errResponses').to.be.equal(48);
+		// allResponses
+		expect(result.allResponses).toBe(382);
+		// errResponses
+		expect(result.errResponses).toBe(48);
 	});
 });

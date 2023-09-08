@@ -9,6 +9,7 @@ import calculate from '../upstreams.js';
 
 describe('Calculators – Upstreams', () => {
 	it('calculate()', () => {
-		expect(calculate.name, 'name').to.be.equal('bound upstreamsCalculator');
+		// name
+		expect(calculate.name).toBe('bound upstreamsCalculator');
 	});
 });

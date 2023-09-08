@@ -7,25 +7,24 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { stub } from 'sinon';
 import PeerTooltip from '../PeerTooltip.jsx';
 import utils from '../../../utils.js';
 import styles from '../tooltip.css';
 
 describe('<PeerTooltip />', () => {
-	before(() => {
-		stub(utils, 'formatDate').callsFake(() => 'formatted_date');
-		stub(utils, 'formatUptime').callsFake(() => 'formatted_uptime');
+	beforeAll(() => {
+		jest.spyOn(utils, 'formatDate').mockClear().mockImplementation(() => 'formatted_date');
+		jest.spyOn(utils, 'formatUptime').mockClear().mockImplementation(() => 'formatted_uptime');
 	});
 
 	beforeEach(() => {
-		utils.formatDate.resetHistory();
-		utils.formatUptime.resetHistory();
+		utils.formatDate.mockClear();
+		utils.formatUptime.mockClear();
 	});
 
-	after(() => {
-		utils.formatDate.restore();
-		utils.formatUptime.restore();
+	afterAll(() => {
+		utils.formatDate.mockRestore();
+		utils.formatUptime.mockRestore();
 	});
 
 	it('state = unavail, health_status = null, with name, backup, isHttp and downstart', () => {
@@ -43,52 +42,44 @@ describe('<PeerTooltip />', () => {
 			/>
 		);
 
-		expect(wrapper.children(), 'content length').to.have.lengthOf(6);
-		expect(wrapper.childAt(0).prop('className'), 'peer name, className').to.be.equal(styles['row']);
-		expect(wrapper.childAt(0).text(), 'peer name, text').to.be.equal('test_1');
-		expect(wrapper.childAt(1).name(), 'peer server, html tag').to.be.equal('h5');
-		expect(wrapper.childAt(1).prop('className'), 'peer server, className').to.be.equal(styles['h5']);
-		expect(wrapper.childAt(1).text(), 'peer server, text').to.be.equal('b test_server');
-		expect(
-			wrapper.childAt(2).prop('className'),
-			'peer state wrap, className'
-		).to.be.equal(styles['row']);
-		expect(
-			wrapper.childAt(2).childAt(0).childAt(0).prop('className'),
-			'peer state, className'
-		).to.be.equal(styles['status_unavail']);
-		expect(
-			wrapper.childAt(2).childAt(0).text(),
-			'peer state, text'
-		).to.be.equal('failed (Passive health check failed)');
-		expect(
-			wrapper.childAt(3).prop('className'),
-			'peer type, className'
-		).to.be.equal(styles['row']);
-		expect(
-			wrapper.childAt(3).text(),
-			'peer type, text'
-		).to.be.equal('Type: backup');
-		expect(
-			wrapper.childAt(4).prop('className'),
-			'peer downtime, className'
-		).to.be.equal(styles['row']);
-		expect(
-			wrapper.childAt(4).text(),
-			'peer downtime, text'
-		).to.be.equal('Total downtime: formatted_uptime');
-		expect(utils.formatUptime.calledOnce, 'formatUptime called once').to.be.true;
-		expect(utils.formatUptime.args[0][0], 'formatUptime call arg').to.be.equal('downtime_ts');
-		expect(
-			wrapper.childAt(5).prop('className'),
-			'peer downstart, className'
-		).to.be.equal(styles['row']);
-		expect(
-			wrapper.childAt(5).text(),
-			'peer downstart, text'
-		).to.be.equal('Down since: formatted_date ');
-		expect(utils.formatDate.calledOnce, 'formatDate called once').to.be.true;
-		expect(utils.formatDate.args[0][0], 'formatDate call arg').to.be.equal('downstart_ts');
+		// content length
+		expect(wrapper.children()).toHaveLength(6);
+		// peer name, className
+		expect(wrapper.childAt(0).prop('className')).toBe(styles.row);
+		// peer name, text
+		expect(wrapper.childAt(0).text()).toBe('test_1');
+		// peer server, html tag
+		expect(wrapper.childAt(1).name()).toBe('h5');
+		// peer server, className
+		expect(wrapper.childAt(1).prop('className')).toBe(styles.h5);
+		// peer server, text
+		expect(wrapper.childAt(1).text()).toBe('b test_server');
+		// peer state wrap, className
+		expect(wrapper.childAt(2).prop('className')).toBe(styles.row);
+		// peer state, className
+		expect(wrapper.childAt(2).childAt(0).childAt(0).prop('className')).toBe(styles.status_unavail);
+		// peer state, text
+		expect(wrapper.childAt(2).childAt(0).text()).toBe('failed (Passive health check failed)');
+		// peer type, className
+		expect(wrapper.childAt(3).prop('className')).toBe(styles.row);
+		// peer type, text
+		expect(wrapper.childAt(3).text()).toBe('Type: backup');
+		// peer downtime, className
+		expect(wrapper.childAt(4).prop('className')).toBe(styles.row);
+		// peer downtime, text
+		expect(wrapper.childAt(4).text()).toBe('Total downtime: formatted_uptime');
+		// formatUptime called once
+		expect(utils.formatUptime).toHaveBeenCalled();
+		// formatUptime call arg
+		expect(utils.formatUptime.mock.calls[0][0]).toBe('downtime_ts');
+		// peer downstart, className
+		expect(wrapper.childAt(5).prop('className')).toBe(styles.row);
+		// peer downstart, text
+		expect(wrapper.childAt(5).text()).toBe('Down since: formatted_date ');
+		// formatDate called once
+		expect(utils.formatDate).toHaveBeenCalled();
+		// formatDate call arg
+		expect(utils.formatDate.mock.calls[0][0]).toBe('downstart_ts');
 
 		wrapper.unmount();
 	});
@@ -106,23 +97,22 @@ describe('<PeerTooltip />', () => {
 			/>
 		);
 
-		expect(wrapper.children(), 'content length').to.have.lengthOf(3);
-		expect(wrapper.childAt(0).name(), 'peer server, html tag').to.be.equal('h5');
-		expect(wrapper.childAt(0).prop('className'), 'peer server, className').to.be.equal(styles['h5']);
-		expect(wrapper.childAt(0).text(), 'peer server, text').to.be.equal('test_server');
-		expect(
-			wrapper.childAt(1).prop('className'),
-			'peer state wrap, className'
-		).to.be.equal(styles['row']);
-		expect(
-			wrapper.childAt(1).childAt(0).childAt(0).prop('className'),
-			'peer state, className'
-		).to.be.equal(styles['status_unavail']);
-		expect(
-			wrapper.childAt(1).childAt(0).text(),
-			'peer state, text'
-		).to.be.equal('failed (Active health check failed)');
-		expect(utils.formatDate.notCalled, 'formatDate not called').to.be.true;
+		// content length
+		expect(wrapper.children()).toHaveLength(3);
+		// peer server, html tag
+		expect(wrapper.childAt(0).name()).toBe('h5');
+		// peer server, className
+		expect(wrapper.childAt(0).prop('className')).toBe(styles.h5);
+		// peer server, text
+		expect(wrapper.childAt(0).text()).toBe('test_server');
+		// peer state wrap, className
+		expect(wrapper.childAt(1).prop('className')).toBe(styles.row);
+		// peer state, className
+		expect(wrapper.childAt(1).childAt(0).childAt(0).prop('className')).toBe(styles.status_unavail);
+		// peer state, text
+		expect(wrapper.childAt(1).childAt(0).text()).toBe('failed (Active health check failed)');
+		// formatDate not called
+		expect(utils.formatDate).not.toHaveBeenCalled();
 
 		wrapper.unmount();
 	});
@@ -140,17 +130,16 @@ describe('<PeerTooltip />', () => {
 			/>
 		);
 
-		expect(wrapper.children(), 'content length').to.have.lengthOf(3);
-		expect(
-			wrapper.childAt(1).prop('className'),
-			'peer state wrap, className'
-		).to.be.equal(styles['row']);
-		expect(
-			wrapper.childAt(1).childAt(0).prop('className'),
-			'peer state, className'
-		).to.be.equal(styles['status_up']);
-		expect(wrapper.childAt(1).childAt(0).text(), 'peer state, text').to.be.equal('up');
-		expect(utils.formatDate.notCalled, 'formatDate not called').to.be.true;
+		// content length
+		expect(wrapper.children()).toHaveLength(3);
+		// peer state wrap, className
+		expect(wrapper.childAt(1).prop('className')).toBe(styles.row);
+		// peer state, className
+		expect(wrapper.childAt(1).childAt(0).prop('className')).toBe(styles.status_up);
+		// peer state, text
+		expect(wrapper.childAt(1).childAt(0).text()).toBe('up');
+		// formatDate not called
+		expect(utils.formatDate).not.toHaveBeenCalled();
 
 		wrapper.unmount();
 	});

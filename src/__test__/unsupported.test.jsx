@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import { stub } from 'sinon';
 import { mount } from 'enzyme';
 import Unsupported, { start } from '../unsupported.jsx';
 import Footer from '../components/footer/footer.jsx';
@@ -17,32 +16,33 @@ describe('<Unsupported />', () => {
 	it('render()', () => {
 		const wrapper = mount(<Unsupported />);
 
-		assert(wrapper.find(`.${ styles['console'] }`).length === 1, 'Unexpected root element');
+		expect(wrapper.find(`.${ styles.console }`)).toHaveLength(1);
 
-		const simpleHeader = wrapper.find(`.${ headerStyles['header'] }`);
+		const simpleHeader = wrapper.find(`.${ headerStyles.header }`);
 
-		assert(simpleHeader.length === 1, 'Can not find header');
-		assert(simpleHeader.find(`.${ headerStyles['logo'].replace(' ', '.') }`).length === 1, 'Can not find logo inside the header');
+		expect(simpleHeader.length === 1).toBeTruthy();
+		expect(
+			simpleHeader.find(`.${ headerStyles.logo.replace(' ', '.') }`).length === 1
+		).toBeTruthy();
 
-		assert(wrapper.find(`.${ styles['content'] }`).length === 1, 'Can not find content');
-		assert(wrapper.find(`.${ styles['error-block'] }`).length === 1, 'Can not find error-block inside the content');
+		expect(wrapper.find(`.${ styles.content }`).length === 1).toBeTruthy();
+		expect(wrapper.find(`.${ styles['error-block'] }`).length === 1).toBeTruthy();
 
-		assert(wrapper.find(Footer).length === 1, 'Footer is not found');
+		expect(wrapper.find(Footer).length === 1).toBeTruthy();
 	});
 
 	it('start()', () => {
-		stub(document.body, 'appendChild').callsFake(() => {});
+		jest.spyOn(document.body, 'appendChild').mockClear().mockImplementation(() => {});
 
 		start();
 
-		const Wrapper = document.body.appendChild.args[0][0];
+		const Wrapper = document.body.appendChild.mock.calls[0][0];
 
-		assert(Wrapper.children.length === 1, 'Wrapper children length');
-		assert(
-			Wrapper.textContent.includes('Unfortunately your browser is not supported, please use modern one.'),
-			'Wrapper content'
-		);
+		expect(Wrapper.children.length === 1).toBeTruthy();
+		expect(
+			Wrapper.textContent.includes('Unfortunately your browser is not supported, please use modern one.')
+		).toBeTruthy();
 
-		document.body.appendChild.restore();
+		document.body.appendChild.mockRestore();
 	});
 });

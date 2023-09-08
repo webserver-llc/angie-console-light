@@ -5,14 +5,13 @@
  *
  */
 
-import { spy, stub } from 'sinon';
 import appsettings from '../../appsettings';
 import {
- 	availableApiEndpoints,
- 	OBSERVED,
- 	live,
- 	pause,
- 	play,
+	availableApiEndpoints,
+	OBSERVED,
+	live,
+	pause,
+	play,
 	unsubscribe,
 	startObserve,
 	subscribe,
@@ -24,16 +23,18 @@ describe('Datastore', () => {
 	it('play and pause', () => {
 		pause();
 
-		expect(live, 'pause').to.be.false;
+		// pause
+		expect(live).toBe(false);
 
 		play();
 
-		expect(live, 'play').to.be.true;
+		// play
+		expect(live).toBe(true);
 	});
 
 	it('unsubscribe()', () => {
-		function cb_1(){};
-		function cb_2(){};
+		function cb_1(){}
+		function cb_2(){}
 
 		OBSERVED.set('api_1', {
 			instancesCount: 2,
@@ -45,27 +46,28 @@ describe('Datastore', () => {
 		});
 
 		unsubscribe([
-			{ toString(){ return 'api_1' } },
-			{ toString(){ return 'api_2' } },
-			{ toString(){ return 'api_3' } }
+			{ toString(){ return 'api_1'; } },
+			{ toString(){ return 'api_2'; } },
+			{ toString(){ return 'api_3'; } }
 		], cb_1);
 
-		expect(OBSERVED.get('api_1'), 'api_1').to.be.deep.equal({
+		// api_1
+		expect(OBSERVED.get('api_1')).toEqual({
 			instancesCount: 1,
 			callbacks: [cb_2]
 		});
-		expect(OBSERVED.get('api_2'), 'api_2').to.be.an('undefined');
+		expect(OBSERVED.get('api_2')).toBeUndefined();
 
 		OBSERVED.delete('api_1');
 	});
 
 	it('startObserve()', done => {
-		const apiCallbackSpy = spy();
-		const apiGet2ndThenSpy = spy(() => 'api_get_result');
-		const apiGetThenSpy = spy(() => ({
+		const apiCallbackSpy = jest.fn();
+		const apiGet2ndThenSpy = jest.fn(() => 'api_get_result');
+		const apiGetThenSpy = jest.fn(() => ({
 			then: apiGet2ndThenSpy
 		}));
-		const apiGetSpy = spy(() => ({
+		const apiGetSpy = jest.fn(() => ({
 			then: apiGetThenSpy
 		}));
 		const testApi = {
@@ -78,97 +80,85 @@ describe('Datastore', () => {
 			api: testApi
 		});
 
-		const promiseAllCatchSpy = spy(() => 'promise_all_result');
-		const promiseAllThenSpy = spy(() => ({
+		const promiseAllCatchSpy = jest.fn(() => 'promise_all_result');
+		const promiseAllThenSpy = jest.fn(() => ({
 			catch: promiseAllCatchSpy
 		}));
 
-		stub(Promise, 'all').callsFake(() => ({
+		jest.spyOn(Promise, 'all').mockClear().mockImplementation(() => ({
 			then: promiseAllThenSpy
 		}));
-		stub(appsettings, 'getSetting').callsFake(() => 'getSetting_result');
-		stub(Date, 'now').callsFake(() => 'date_now_result');
-		stub(store, 'handleDataUpdate').callsFake(() => {});
-		stub(window, 'clearTimeout').callsFake(() => {});
-		stub(window, 'setTimeout').callsFake(() => 'setTimeout_result');
+		jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(() => 'getSetting_result');
+		jest.spyOn(Date, 'now').mockClear().mockImplementation(() => 'date_now_result');
+		jest.spyOn(store, 'handleDataUpdate').mockClear().mockImplementation(() => {});
+		jest.spyOn(window, 'clearTimeout').mockClear().mockImplementation(() => {});
+		jest.spyOn(window, 'setTimeout').mockClear().mockImplementation(() => 'setTimeout_result');
 
-		expect(startObserve.name, 'startObserve name').to.be.equal('loop');
+		// startObserve name
+		expect(startObserve.name).toBe('loop');
 
 		pause();
 		startObserve();
 
-		expect(window.clearTimeout.calledOnce, '[1st call] clearTimeout called').to.be.true;
-		expect(
-			Promise.all.notCalled,
-			'[not force, not live] Promise.all not called'
-		).to.be.true;
-		expect(
-			window.setTimeout.calledOnce,
-			'[not force, not live] setTimeout called'
-		).to.be.true;
-		expect(
-			window.setTimeout.calledWith(startObserve, 'getSetting_result'),
-			'[not force, not live] setTimeout call args'
-		).to.be.true;
-		expect(
-			appsettings.getSetting.calledOnce,
-			'[not force, not live] getSetting called'
-		).to.be.true;
-		expect(
-			appsettings.getSetting.calledWith('updatingPeriod'),
-			'[not force, not live] getSetting call args'
-		).to.be.true;
+		// [1st call] clearTimeout called
+		expect(window.clearTimeout).toHaveBeenCalled();
+		// [not force, not live] Promise.all not called
+		expect(Promise.all).not.toHaveBeenCalled();
+		// [not force, not live] setTimeout called
+		expect(window.setTimeout).toHaveBeenCalled();
+		// [not force, not live] setTimeout call args
+		expect(window.setTimeout).toHaveBeenCalledWith(startObserve, 'getSetting_result');
+		// [not force, not live] getSetting called
+		expect(appsettings.getSetting).toHaveBeenCalled();
+		// [not force, not live] getSetting call args
+		expect(appsettings.getSetting).toHaveBeenCalledWith('updatingPeriod');
 
-		window.clearTimeout.resetHistory();
+		window.clearTimeout.mockClear();
 		startObserve(true);
 
-		expect(window.clearTimeout.calledOnce, '[2nd call] clearTimeout called').to.be.true;
-		expect(
-			window.clearTimeout.calledWith('setTimeout_result'),
-			'clearTimeout call args'
-		).to.be.true;
-		expect(Date.now.calledOnce, 'Date.now called').to.be.true;
-		expect(Promise.all.calledOnce, 'Promise.all called').to.be.true;
-		expect(Promise.all.args[0][0], 'Promise.all call args').to.be.deep.equal(
-			['api_get_result']
-		);
-		expect(apiGetSpy.calledOnce, 'api_1 api.get called').to.be.true;
-		expect(apiGetThenSpy.calledOnce, 'api_1 api.get() 1st then called').to.be.true;
-		expect(apiGetThenSpy.args[0][0], 'api_1 api.get() 1st then call arg 1').to.be.a('function');
-		expect(
-			apiGetThenSpy.args[0][0]('test'),
-			'api_1 api.get() 1st then call 1st arg result'
-		).to.be.equal('test');
-		expect(apiGetThenSpy.args[0][1], 'api_1 api.get() 1st then call 2nd arg').to.be.a('function');
-		expect(
-			apiGetThenSpy.args[0][1]('test'),
-			'api_1 api.get() 1st then call 2nd arg result'
-		).to.be.equal('test');
-		expect(apiGet2ndThenSpy.calledOnce, 'api_1 api.get() 2nd then called').to.be.true;
-		expect(apiGet2ndThenSpy.args[0][0], 'api_1 api.get() 2nd then call arg').to.be.a('function');
-		expect(
-			apiGet2ndThenSpy.args[0][0]({ test: true }),
-			'[no data.error] api_1 api.get() 2nd then call arg'
-		).to.be.deep.equal({
+		// [2nd call] clearTimeout called
+		expect(window.clearTimeout).toHaveBeenCalled();
+		// clearTimeout call args
+		expect(window.clearTimeout).toHaveBeenCalledWith('setTimeout_result');
+		// Date.now called
+		expect(Date.now).toHaveBeenCalled();
+		// Promise.all called
+		expect(Promise.all).toHaveBeenCalled();
+		// Promise.all call args
+		expect(Promise.all.mock.calls[0][0]).toEqual(['api_get_result']);
+		// api_1 api.get called
+		expect(apiGetSpy).toHaveBeenCalled();
+		// api_1 api.get() 1st then called
+		expect(apiGetThenSpy).toHaveBeenCalled();
+		expect(apiGetThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
+		// api_1 api.get() 1st then call 1st arg result
+		expect(apiGetThenSpy.mock.calls[0][0]('test')).toBe('test');
+		expect(apiGetThenSpy.mock.calls[0][1]).toBeInstanceOf(Function);
+		// api_1 api.get() 1st then call 2nd arg result
+		expect(apiGetThenSpy.mock.calls[0][1]('test')).toBe('test');
+		// api_1 api.get() 2nd then called
+		expect(apiGet2ndThenSpy).toHaveBeenCalled();
+		expect(apiGet2ndThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
+		// [no data.error] api_1 api.get() 2nd then call arg
+		expect(apiGet2ndThenSpy.mock.calls[0][0]({ test: true })).toEqual({
 			data: { test: true },
 			api: testApi,
 			timeStart: 'date_now_result'
 		});
-		expect(
-			apiGet2ndThenSpy.args[0][0]({ error: true }),
-			'[with data.error] api_1 api.get() 2nd then call arg'
-		).to.be.deep.equal({
+		// [with data.error] api_1 api.get() 2nd then call arg
+		expect(apiGet2ndThenSpy.mock.calls[0][0]({ error: true })).toEqual({
 			data: null,
 			api: testApi,
 			timeStart: 'date_now_result'
 		});
-		expect(promiseAllThenSpy.calledOnce, 'Promise.all 1st then called').to.be.true;
-		expect(promiseAllThenSpy.args[0][0], 'Promise.all 1st then call arg').to.be.a('function');
+		// Promise.all 1st then called
+		expect(promiseAllThenSpy).toHaveBeenCalled();
+		expect(promiseAllThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
-		const api_1 = { toString(){ return 'api_1' } };
-		const api_2 = { toString(){ return 'api_2' } };
+		const api_1 = { toString(){ return 'api_1'; } };
+		const api_2 = { toString(){ return 'api_2'; } };
 
-		promiseAllThenSpy.args[0][0]([
+		promiseAllThenSpy.mock.calls[0][0]([
 			{
 				api: api_1,
 				data: 'data_test_1',
@@ -180,48 +170,45 @@ describe('Datastore', () => {
 			}
 		]);
 
-		expect(store.handleDataUpdate.calledTwice, 'handleDataUpdate called twice').to.be.true;
-		expect(
-			store.handleDataUpdate.args[0][0],
-			'handleDataUpdate call 1 arg 1'
-		).to.be.deep.equal(api_1);
-		expect(store.handleDataUpdate.args[0][1], 'handleDataUpdate call 1 arg 2').to.be.equal(
-			'data_test_1'
-		);
-		expect(store.handleDataUpdate.args[0][2], 'handleDataUpdate call 1 arg 3').to.be.equal(
-			'date_now_result'
-		);
-		expect(
-			store.handleDataUpdate.args[1][0],
-			'handleDataUpdate call 2 arg 1'
-		).to.be.deep.equal(api_2);
-		expect(store.handleDataUpdate.args[1][1], 'handleDataUpdate call 2 arg 2').to.be.equal(
-			'data_test_2'
-		);
-		expect(store.handleDataUpdate.args[1][2], 'handleDataUpdate call 2 arg 3').to.be.equal(
-			'date_now_result'
-		);
-		expect(apiCallbackSpy.calledOnce, 'api_1 callback called').to.be.true;
-		expect(promiseAllCatchSpy.calledOnce, 'Promise.all catch called').to.be.true;
-		expect(promiseAllCatchSpy.args[0][0], 'Promise.all catch call arg').to.be.a('function');
+		// handleDataUpdate called twice
+		expect(store.handleDataUpdate).toHaveBeenCalledTimes(2);
+		// handleDataUpdate call 1 arg 1
+		expect(store.handleDataUpdate.mock.calls[0][0]).toEqual(api_1);
+		// handleDataUpdate call 1 arg 2
+		expect(store.handleDataUpdate.mock.calls[0][1]).toBe('data_test_1');
+		// handleDataUpdate call 1 arg 3
+		expect(store.handleDataUpdate.mock.calls[0][2]).toBe('date_now_result');
+		// handleDataUpdate call 2 arg 1
+		expect(store.handleDataUpdate.mock.calls[1][0]).toEqual(api_2);
+		// handleDataUpdate call 2 arg 2
+		expect(store.handleDataUpdate.mock.calls[1][1]).toBe('data_test_2');
+		// handleDataUpdate call 2 arg 3
+		expect(store.handleDataUpdate.mock.calls[1][2]).toBe('date_now_result');
+		// api_1 callback called
+		expect(apiCallbackSpy).toHaveBeenCalled();
+		// Promise.all catch called
+		expect(promiseAllCatchSpy).toHaveBeenCalled();
+		expect(promiseAllCatchSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
 		startObserve();
 
-		expect(live, '[no force, live] live is still true').to.be.true;
+		// [no force, live] live is still true
+		expect(live).toBe(true);
 
 		OBSERVED.delete('api_1');
 
-		Promise.all.restore();
-		appsettings.getSetting.restore();
-		Date.now.restore();
-		store.handleDataUpdate.restore();
-		window.clearTimeout.restore();
-		window.setTimeout.restore();
+		Promise.all.mockRestore();
+		appsettings.getSetting.mockRestore();
+		Date.now.mockRestore();
+		store.handleDataUpdate.mockRestore();
+		window.clearTimeout.mockRestore();
+		window.setTimeout.mockRestore();
 
 		try {
-			promiseAllCatchSpy.args[0][0]('test_error');
-		} catch(e) {
-			expect(e, 'throw an error').to.be.equal('test_error');
+			promiseAllCatchSpy.mock.calls[0][0]('test_error');
+		} catch (e) {
+			// throw an error
+			expect(e).toBe('test_error');
 
 			done();
 		}
@@ -236,95 +223,74 @@ describe('Datastore', () => {
 			instancesCount: 1
 		});
 
-		stub(availableApiEndpoints, 'firstLevelIncludes').callsFake(
-			path => path === 'stream'|| path === 'http'
+		jest.spyOn(availableApiEndpoints, 'firstLevelIncludes').mockClear().mockImplementation(
+			path => path === 'stream' || path === 'http'
 		);
-		stub(availableApiEndpoints, 'secondLevelIncludes').callsFake(
+		jest.spyOn(availableApiEndpoints, 'secondLevelIncludes').mockClear().mockImplementation(
 			path => path === 'http'
 		);
-		stub(availableApiEndpoints, 'thirdLevelIncludes').callsFake(
+		jest.spyOn(availableApiEndpoints, 'thirdLevelIncludes').mockClear().mockImplementation(
 			(_, path) => path === 'server_test'
 		);
-		stub(window, 'clearImmediate').callsFake(() => {});
-		stub(window, 'setImmediate').callsFake(() => 'setImmediate_result');
+
+		jest.spyOn(window, 'clearImmediate').mockClear().mockImplementation(() => {});
+		jest.spyOn(window, 'setImmediate').mockClear().mockImplementation(() => 'setImmediate_result');
 
 		subscribe([]);
 
-		expect(
-			availableApiEndpoints.firstLevelIncludes.notCalled,
-			'[1] availableApiEndpoints.firstLevelIncludes not called'
-		).to.be.true;
-		expect(window.clearImmediate.calledOnce, '[1st call] window.clearImmediate called').to.be.true;
-		expect(window.setImmediate.calledOnce, '[1st call] window.setImmediate called').to.be.true;
-		expect(
-			window.setImmediate.args[0][0],
-			'[1st call] window.setImmediate call arg'
-		).to.be.a('function');
-		expect(
-			window.setImmediate.args[0][0].name,
-			'[1st call] window.setImmediate call arg name'
-		).to.be.equal('loop');
+		// [1] availableApiEndpoints.firstLevelIncludes not called
+		expect(availableApiEndpoints.firstLevelIncludes).not.toHaveBeenCalled();
+		// [1st call] window.clearImmediate called
+		expect(window.clearImmediate).toHaveBeenCalled();
+		// [1st call] window.setImmediate called
+		expect(window.setImmediate).toHaveBeenCalled();
+		expect(window.setImmediate.mock.calls[0][0]).toBeInstanceOf(Function);
+		// [1st call] window.setImmediate call arg name
+		expect(window.setImmediate.mock.calls[0][0].name).toBe('loop');
 
-		window.clearImmediate.resetHistory();
+		window.clearImmediate.mockClear();
 
 		let api = {
-			toString(){ return 'api_1' },
+			toString(){ return 'api_1'; },
 			path: ['angie', 'version']
 		};
 
 		subscribe([ api ]);
 
-		expect(
-			availableApiEndpoints.firstLevelIncludes.calledOnce,
-			'[2] availableApiEndpoints.firstLevelIncludes called'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.firstLevelIncludes.calledWith('angie'),
-			'[2] availableApiEndpoints.firstLevelIncludes call arg'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.secondLevelIncludes.notCalled,
-			'[2] availableApiEndpoints.secondLevelIncludes not called'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.thirdLevelIncludes.notCalled,
-			'[2] availableApiEndpoints.thirdLevelIncludes not called'
-		).to.be.true;
-		expect(OBSERVED.has('api_1'), 'api_1 removed from OBSERVED').to.be.false;
-		expect(window.clearImmediate.calledOnce, '[2nd call] window.clearImmediate called').to.be.true;
-		expect(
-			window.clearImmediate.calledWith('setImmediate_result'),
-			'[2nd call] window.clearImmediate call arg'
-		).to.be.true;
+		// [2] availableApiEndpoints.firstLevelIncludes called
+		expect(availableApiEndpoints.firstLevelIncludes).toHaveBeenCalled();
+		// [2] availableApiEndpoints.firstLevelIncludes call arg
+		expect(availableApiEndpoints.firstLevelIncludes).toHaveBeenCalledWith('angie');
+		// [2] availableApiEndpoints.secondLevelIncludes not called
+		expect(availableApiEndpoints.secondLevelIncludes).not.toHaveBeenCalled();
+		// [2] availableApiEndpoints.thirdLevelIncludes not called
+		expect(availableApiEndpoints.thirdLevelIncludes).not.toHaveBeenCalled();
+		// api_1 removed from OBSERVED
+		expect(OBSERVED.has('api_1')).toBe(false);
+		// [2nd call] window.clearImmediate called
+		expect(window.clearImmediate).toHaveBeenCalled();
+		// [2nd call] window.clearImmediate call arg
+		expect(window.clearImmediate).toHaveBeenCalledWith('setImmediate_result');
 
-		availableApiEndpoints.firstLevelIncludes.resetHistory();
+		availableApiEndpoints.firstLevelIncludes.mockClear();
 		api = {
-			toString(){ return 'api_2' },
+			toString(){ return 'api_2'; },
 			path: ['stream', 'upstream']
 		};
 		subscribe([ api ], callback_1);
 
-		expect(
-			availableApiEndpoints.firstLevelIncludes.calledOnce,
-			'[3] availableApiEndpoints.firstLevelIncludes called'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.firstLevelIncludes.calledWith('stream'),
-			'[3] availableApiEndpoints.firstLevelIncludes call arg'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.secondLevelIncludes.calledOnce,
-			'[3] availableApiEndpoints.secondLevelIncludes called'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.secondLevelIncludes.calledWith('stream'),
-			'[3] availableApiEndpoints.secondLevelIncludes call arg'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.thirdLevelIncludes.notCalled,
-			'[3] availableApiEndpoints.thirdLevelIncludes not called'
-		).to.be.true;
-		expect(OBSERVED.get('api_2'), '[3] OBSERVED api_2').to.be.deep.equal({
+		// [3] availableApiEndpoints.firstLevelIncludes called
+		expect(availableApiEndpoints.firstLevelIncludes).toHaveBeenCalled();
+		// [3] availableApiEndpoints.firstLevelIncludes call arg
+		expect(availableApiEndpoints.firstLevelIncludes).toHaveBeenCalledWith('stream');
+		// [3] availableApiEndpoints.secondLevelIncludes called
+		expect(availableApiEndpoints.secondLevelIncludes).toHaveBeenCalled();
+		// [3] availableApiEndpoints.secondLevelIncludes call arg
+		expect(availableApiEndpoints.secondLevelIncludes).toHaveBeenCalledWith('stream');
+		// [3] availableApiEndpoints.thirdLevelIncludes not called
+		expect(availableApiEndpoints.thirdLevelIncludes).not.toHaveBeenCalled();
+		// [3] OBSERVED api_2
+		expect(OBSERVED.get('api_2')).toEqual({
 			api,
 			callbacks: [
 				callback_1
@@ -332,90 +298,70 @@ describe('Datastore', () => {
 			instancesCount: 1
 		});
 
-		availableApiEndpoints.firstLevelIncludes.resetHistory();
-		availableApiEndpoints.secondLevelIncludes.resetHistory();
+		availableApiEndpoints.firstLevelIncludes.mockClear();
+		availableApiEndpoints.secondLevelIncludes.mockClear();
 		api = {
-			toString(){ return 'api_3' },
+			toString(){ return 'api_3'; },
 			path: ['http', 'unknown_server']
 		};
 		subscribe([ api ]);
 
+		// [4] availableApiEndpoints.firstLevelIncludes called
+		expect(availableApiEndpoints.firstLevelIncludes).toHaveBeenCalled();
+		// [4] availableApiEndpoints.firstLevelIncludes call arg
+		expect(availableApiEndpoints.firstLevelIncludes).toHaveBeenCalledWith('http');
+		// [4] availableApiEndpoints.secondLevelIncludes called
+		expect(availableApiEndpoints.secondLevelIncludes).toHaveBeenCalled();
+		// [4] availableApiEndpoints.secondLevelIncludes call arg
+		expect(availableApiEndpoints.secondLevelIncludes).toHaveBeenCalledWith('http');
+		// [4] availableApiEndpoints.thirdLevelIncludes called
+		expect(availableApiEndpoints.thirdLevelIncludes).toHaveBeenCalled();
+		// [4] availableApiEndpoints.thirdLevelIncludes call arg
 		expect(
-			availableApiEndpoints.firstLevelIncludes.calledOnce,
-			'[4] availableApiEndpoints.firstLevelIncludes called'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.firstLevelIncludes.calledWith('http'),
-			'[4] availableApiEndpoints.firstLevelIncludes call arg'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.secondLevelIncludes.calledOnce,
-			'[4] availableApiEndpoints.secondLevelIncludes called'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.secondLevelIncludes.calledWith('http'),
-			'[4] availableApiEndpoints.secondLevelIncludes call arg'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.thirdLevelIncludes.calledOnce,
-			'[4] availableApiEndpoints.thirdLevelIncludes called'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.thirdLevelIncludes.calledWith('http', 'unknown_server'),
-			'[4] availableApiEndpoints.thirdLevelIncludes call arg'
-		).to.be.true;
-		expect(OBSERVED.has('api_3'), 'no api_3 in OBSERVED').to.be.false;
+			availableApiEndpoints.thirdLevelIncludes
+		).toHaveBeenCalledWith('http', 'unknown_server');
+		// no api_3 in OBSERVED
+		expect(OBSERVED.has('api_3')).toBe(false);
 
-		availableApiEndpoints.firstLevelIncludes.resetHistory();
-		availableApiEndpoints.secondLevelIncludes.resetHistory();
-		availableApiEndpoints.thirdLevelIncludes.resetHistory();
+		availableApiEndpoints.firstLevelIncludes.mockClear();
+		availableApiEndpoints.secondLevelIncludes.mockClear();
+		availableApiEndpoints.thirdLevelIncludes.mockClear();
 		api = {
-			toString(){ return 'api_4' },
+			toString(){ return 'api_4'; },
 			path: ['http', 'server_test']
 		};
 		subscribe([ api ], callback_2);
 
-		expect(
-			availableApiEndpoints.firstLevelIncludes.calledOnce,
-			'[5] availableApiEndpoints.firstLevelIncludes called'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.firstLevelIncludes.calledWith('http'),
-			'[5] availableApiEndpoints.firstLevelIncludes call arg'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.secondLevelIncludes.calledOnce,
-			'[5] availableApiEndpoints.secondLevelIncludes called'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.secondLevelIncludes.calledWith('http'),
-			'[5] availableApiEndpoints.secondLevelIncludes call arg'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.thirdLevelIncludes.calledOnce,
-			'[5] availableApiEndpoints.thirdLevelIncludes called'
-		).to.be.true;
-		expect(
-			availableApiEndpoints.thirdLevelIncludes.calledWith('http', 'server_test'),
-			'[5] availableApiEndpoints.thirdLevelIncludes call arg'
-		).to.be.true;
-		expect(OBSERVED.get('api_4'), '[5] OBSERVED api_4').to.be.deep.equal({
+		// [5] availableApiEndpoints.firstLevelIncludes called
+		expect(availableApiEndpoints.firstLevelIncludes).toHaveBeenCalled();
+		// [5] availableApiEndpoints.firstLevelIncludes call arg
+		expect(availableApiEndpoints.firstLevelIncludes).toHaveBeenCalledWith('http');
+		// [5] availableApiEndpoints.secondLevelIncludes called
+		expect(availableApiEndpoints.secondLevelIncludes).toHaveBeenCalled();
+		// [5] availableApiEndpoints.secondLevelIncludes call arg
+		expect(availableApiEndpoints.secondLevelIncludes).toHaveBeenCalledWith('http');
+		// [5] availableApiEndpoints.thirdLevelIncludes called
+		expect(availableApiEndpoints.thirdLevelIncludes).toHaveBeenCalled();
+		// [5] availableApiEndpoints.thirdLevelIncludes call arg
+		expect(availableApiEndpoints.thirdLevelIncludes).toHaveBeenCalledWith('http', 'server_test');
+		// [5] OBSERVED api_4
+		expect(OBSERVED.get('api_4')).toEqual({
 			callbacks: [
 				callback_1, callback_2
 			],
 			instancesCount: 2
 		});
 
-		availableApiEndpoints.firstLevelIncludes.restore();
-		availableApiEndpoints.secondLevelIncludes.restore();
-		availableApiEndpoints.thirdLevelIncludes.restore();
-		window.clearImmediate.restore();
-		window.setImmediate.restore();
+		availableApiEndpoints.firstLevelIncludes.mockRestore();
+		availableApiEndpoints.secondLevelIncludes.mockRestore();
+		availableApiEndpoints.thirdLevelIncludes.mockRestore();
+		window.clearImmediate.mockRestore();
+		window.setImmediate.mockRestore();
 
 		OBSERVED.delete('api_2');
 		OBSERVED.delete('api_4');
 
-		function callback_1(){};
-		function callback_2(){};
+		function callback_1(){}
+		function callback_2(){}
 	});
 });

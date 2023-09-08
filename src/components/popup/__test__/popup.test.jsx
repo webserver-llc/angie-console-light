@@ -17,27 +17,21 @@ describe('<Popup />', () => {
 
 		instance.componentDidMount();
 
-		expect(
-			document.documentElement.classList.contains(styles['disable-scroll']),
-			'document.documentElement class'
-		).to.be.true;
+		// document.documentElement class
+		expect(document.documentElement.classList.contains(styles['disable-scroll'])).toBe(true);
 	});
 
 	it('componentWillUnmount()', () => {
 		const wrapper = shallow(<Popup />);
 		const instance = wrapper.instance();
 
-		expect(
-			document.documentElement.classList.contains(styles['disable-scroll']),
-			'document.documentElement class'
-		).to.be.true;
+		// document.documentElement class
+		expect(document.documentElement.classList.contains(styles['disable-scroll'])).toBe(true);
 
 		instance.componentWillUnmount();
 
-		expect(
-			document.documentElement.classList.contains(styles['disable-scroll']),
-			'document.documentElement class'
-		).to.be.false;
+		// document.documentElement class
+		expect(document.documentElement.classList.contains(styles['disable-scroll'])).toBe(false);
 	});
 
 	it('render()', () => {
@@ -50,17 +44,22 @@ describe('<Popup />', () => {
 		const instance = wrapper.instance();
 		const rootElement = instance.rootElementRef;
 
-		expect(wrapper.hasClass('test_class')).to.be.true;
-		expect(rootElement.className, 'fader className').to.be.equal(styles['fader']);
-		expect(rootElement.children[0].className, 'modal className').to.be.equal(styles['modal']);
+		expect(wrapper.hasClass('test_class')).toBe(true);
+		// fader className
+		expect(rootElement.className).toBe(styles.fader);
+		// modal className
+		expect(rootElement.children[0].className).toBe(styles.modal);
 
 		const popup = rootElement.children[0].children[0];
 
-		expect(popup.className, 'popup className')
-			.to.be.equal(`${ styles['popup'] } test_class`);
-		expect(popup.children, 'popup children').to.have.lengthOf(2);
-		expect(popup.children[0].innerHTML, 'popup child 1').to.be.equal('test child 1');
-		expect(popup.children[1].innerHTML, 'popup child 2').to.be.equal('test child 2');
+		// popup className
+		expect(popup.className).toBe(`${ styles.popup } test_class`);
+		// popup children
+		expect(popup.children).toHaveLength(2);
+		// popup child 1
+		expect(popup.children[0].innerHTML).toBe('test child 1');
+		// popup child 2
+		expect(popup.children[1].innerHTML).toBe('test child 2');
 
 		wrapper.unmount();
 	});

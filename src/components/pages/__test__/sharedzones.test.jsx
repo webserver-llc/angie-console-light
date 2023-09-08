@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { stub } from 'sinon';
 import { SharedZones } from '../sharedzones.jsx';
 import SortableTable from '../../table/sortabletable.jsx';
 import styles from '../../table/style.css';
@@ -16,13 +15,13 @@ import tooltips from '../../../tooltips/index.jsx';
 
 describe('<SharedZones Page />', () => {
 	it('extends SortableTable', () => {
-		expect(SharedZones.prototype instanceof SortableTable).to.be.true;
+		expect(SharedZones.prototype instanceof SortableTable).toBe(true);
 	});
 
 	it('get SORTING_SETTINGS_KEY', () => {
 		const wrapper = shallow(<SharedZones data={{ slabs: [] }} />);
 
-		expect(wrapper.instance().SORTING_SETTINGS_KEY).to.be.equal('sharedZonesSortOrder');
+		expect(wrapper.instance().SORTING_SETTINGS_KEY).toBe('sharedZonesSortOrder');
 
 		wrapper.unmount();
 	});
@@ -61,50 +60,62 @@ describe('<SharedZones Page />', () => {
 			);
 			let rows = wrapper.find('tbody tr');
 
-			expect(rows.at(0).find('td').at(1).text(), 'row 1, title').to.be.equal('test');
-			expect(rows.at(1).find('td').at(1).text(), 'row 2, title').to.be.equal('test_2');
-			expect(rows.at(2).find('td').at(1).text(), 'row 3, title').to.be.equal('test_3');
-			expect(rows.at(3).find('td').at(1).text(), 'row 4, title').to.be.equal('test_4');
+			// row 1, title
+			expect(rows.at(0).find('td').at(1).text()).toBe('test');
+			// row 2, title
+			expect(rows.at(1).find('td').at(1).text()).toBe('test_2');
+			// row 3, title
+			expect(rows.at(2).find('td').at(1).text()).toBe('test_3');
+			// row 4, title
+			expect(rows.at(3).find('td').at(1).text()).toBe('test_4');
 
 			wrapper.setState({ sortOrder: 'desc' });
 			rows = wrapper.find('tbody tr');
 
-			expect(rows.at(0).find('td').at(1).text(), 'row 1, title [desc]').to.be.equal('test_4');
-			expect(rows.at(1).find('td').at(1).text(), 'row 2, title [desc]').to.be.equal('test_3');
-			expect(rows.at(2).find('td').at(1).text(), 'row 3, title [desc]').to.be.equal('test');
-			expect(rows.at(3).find('td').at(1).text(), 'row 4, title [desc]').to.be.equal('test_2');
+			// row 1, title [desc]
+			expect(rows.at(0).find('td').at(1).text()).toBe('test_4');
+			// row 2, title [desc]
+			expect(rows.at(1).find('td').at(1).text()).toBe('test_3');
+			// row 3, title [desc]
+			expect(rows.at(2).find('td').at(1).text()).toBe('test');
+			// row 4, title [desc]
+			expect(rows.at(3).find('td').at(1).text()).toBe('test_2');
 
 			wrapper.unmount();
 		});
 
 		it('return value', () => {
-			stub(tooltips, 'useTooltip').callsFake(() => {});
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => {});
 
 			const wrapper = shallow(<SharedZones data={{ slabs: [] }} />);
-			const table = wrapper.find(`.${ styles['table'] }`);
+			const table = wrapper.find(`.${ styles.table }`);
 			const sortControl = table.find('TableSortControl');
 
-			expect(wrapper.getElement().type, 'wrapper html tag').to.be.equal('div');
-			expect(table.length, 'table container').to.be.equal(1);
-			expect(sortControl.length, 'TableSortControl length').to.be.equal(1);
-			expect(sortControl.prop('singleRow'), 'TableSortControl "singleRow" prop').to.be.true;
-			expect(sortControl.prop('secondSortLabel'), 'TableSortControl "secondSortLabel" prop')
-				.to.be.equal('Sort by size - large first');
-			expect(sortControl.prop('order'), 'TableSortControl "order" prop').to.be.equal(
-				wrapper.state('sortOrder')
-			);
-			expect(sortControl.prop('onChange').name, 'TableSortControl "onChange" prop').to.be.equal(
-				'bound changeSorting'
-			);
-			expect(wrapper.find(`.${ styles['hinted'] }`).length, 'hinted element length').to.be.equal(1);
-			expect(tooltips.useTooltip.calledOnce, 'useTooltip called once').to.be.true;
-			expect(tooltips.useTooltip.args[0][0], 'useTooltip 1st arg').to.be.equal(
-				'Memory usage = Used memory pages / Total memory pages'
-			);
-			expect(tooltips.useTooltip.args[0][1], 'useTooltip 2nd arg').to.be.equal('hint');
+			// wrapper html tag
+			expect(wrapper.getElement().type).toBe('div');
+			// table container
+			expect(table.length).toBe(1);
+			// TableSortControl length
+			expect(sortControl.length).toBe(1);
+			// TableSortControl "singleRow" prop
+			expect(sortControl.prop('singleRow')).toBe(true);
+			// TableSortControl "secondSortLabel" prop
+			expect(sortControl.prop('secondSortLabel')).toBe('Sort by size - large first');
+			// TableSortControl "order" prop
+			expect(sortControl.prop('order')).toBe(wrapper.state('sortOrder'));
+			// TableSortControl "onChange" prop
+			expect(sortControl.prop('onChange').name).toBe('bound changeSorting');
+			// hinted element length
+			expect(wrapper.find(`.${ styles.hinted }`).length).toBe(1);
+			// useTooltip called once
+			expect(tooltips.useTooltip).toHaveBeenCalledTimes(1);
+			// useTooltip 1st arg
+			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Memory usage = Used memory pages / Total memory pages');
+			// useTooltip 2nd arg
+			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint');
 
 			wrapper.unmount();
-			tooltips.useTooltip.restore();
+			tooltips.useTooltip.mockRestore();
 		});
 
 		it('zones row', () => {
@@ -122,28 +133,33 @@ describe('<SharedZones Page />', () => {
 			);
 			const rows = wrapper.find('tbody tr');
 
-			expect(rows.length, 'rows length').to.be.equal(1);
+			// rows length
+			expect(rows.length).toBe(1);
 
 			const cells = rows.at(0).find('td');
 
-			expect(cells.length, 'row 1, cells length').to.be.equal(5);
-			expect(cells.at(0).prop('className'), 'row 1, cell 1, className').to.be.equal(
-				styles['status']
-			);
+			// row 1, cells length
+			expect(cells.length).toBe(5);
+			// row 1, cell 1, className
+			expect(cells.at(0).prop('className')).toBe(styles.status);
 
 			const cell = cells.at(1);
 
-			expect(cell.prop('className'), 'row 1, cell 2, className').to.be.equal(
-				styles['bold']
-			);
-			expect(cell.text(), 'row 1, cell 2, text').to.be.equal('test');
-			expect(cells.at(2).text(), 'row 1, cell 3, text').to.be.equal('1000');
-			expect(cells.at(3).text(), 'row 1, cell 4, text').to.be.equal('200');
+			// row 1, cell 2, className
+			expect(cell.prop('className')).toBe(styles.bold);
+			// row 1, cell 2, text
+			expect(cell.text()).toBe('test');
+			// row 1, cell 3, text
+			expect(cells.at(2).text()).toBe('1000');
+			// row 1, cell 4, text
+			expect(cells.at(3).text()).toBe('200');
 
 			const progressBar = cells.at(4).find('ProgressBar');
 
-			expect(progressBar.length, 'ProgressBar length').to.be.equal(1);
-			expect(progressBar.prop('percentage'), 'ProgressBar "percentage" prop').to.be.equal(20);
+			// ProgressBar length
+			expect(progressBar.length).toBe(1);
+			// ProgressBar "percentage" prop
+			expect(progressBar.prop('percentage')).toBe(20);
 
 			wrapper.unmount();
 		});

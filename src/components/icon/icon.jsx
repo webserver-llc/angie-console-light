@@ -10,13 +10,13 @@ import React from 'react';
 import styles from './style.css';
 
 export default function Icon(props){
-    let className = props.className || '';
+	let className = props.className || '';
 
-    if (styles[props.type]) {
-        className += `${ className ? ' ' : '' }${ styles[props.type] }`;
-    }
+	if (styles[props.type]) {
+		className += `${ className ? ' ' : '' }${ styles[props.type] }`;
+	}
 
 	return (
-		<span className={ className } />
+		<span className={className} />
 	);
-};
+}

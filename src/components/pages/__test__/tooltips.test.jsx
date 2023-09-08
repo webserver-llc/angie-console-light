@@ -18,29 +18,36 @@ describe('Tooltips', () => {
 		const wrapper = shallow(
 			<SharedZoneTooltip zone={{
 				pages: { used: 98, total: 100 }
-			}} />
+			}}
+			/>
 		);
 		const text = wrapper.text();
 
-		expect(text, 'display pages.used').to.includes('Used memory pages: 98');
-		expect(text, 'display pages.total').to.includes('Total pages: 100');
+		expect(text).toContain('Used memory pages: 98');
+		expect(text).toContain('Total pages: 100');
 
 		wrapper.unmount();
 	});
 
 	it('<CacheStateTooltip />', () => {
 		const wrapper = shallow(<CacheStateTooltip />);
-		const rows = wrapper.find(`.${ styles['row'] }`);
+		const rows = wrapper.find(`.${ styles.row }`);
 		let icon;
 
-		expect(wrapper.getElement().type, 'wrapper html tag').to.be.equal('div');
-		expect(rows, 'rows length').to.have.lengthOf(2);
+		// wrapper html tag
+		expect(wrapper.getElement().type).toBe('div');
+		// rows length
+		expect(rows).toHaveLength(2);
 		icon = rows.at(0).find('Icon');
-		expect(icon.hasClass(styles['icon']), 'row 1, icon className').to.be.true;
-		expect(icon.prop('type'), 'row 1, icon type').to.be.equal('sun');
+		// row 1, icon className
+		expect(icon.hasClass(styles.icon)).toBe(true);
+		// row 1, icon type
+		expect(icon.prop('type')).toBe('sun');
 		icon = rows.at(1).find('Icon');
-		expect(icon.hasClass(styles['icon']), 'row 2, icon className').to.be.true;
-		expect(icon.prop('type'), 'row 2, icon type').to.be.equal('snowflake');
+		// row 2, icon className
+		expect(icon.hasClass(styles.icon)).toBe(true);
+		// row 2, icon type
+		expect(icon.prop('type')).toBe('snowflake');
 
 		wrapper.unmount();
 	});

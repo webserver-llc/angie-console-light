@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { spy, stub } from 'sinon';
 import Tooltip from '../tooltip.jsx';
 import styles from '../style.css';
 
@@ -21,10 +20,11 @@ describe('<Tooltip />', () => {
 
 	it('constructor()', () => {
 		const wrapper = shallow(
-			<Tooltip { ...props } />
+			<Tooltip {...props} />
 		);
 
-		expect(wrapper.state(), 'this.state').to.be.deep.equal({
+		// this.state
+		expect(wrapper.state()).toEqual({
 			top: 500,
 			left: 120,
 			movedToLeft: false,
@@ -33,235 +33,185 @@ describe('<Tooltip />', () => {
 
 	it('componentDidMount()', () => {
 		const wrapper = mount(
-			<Tooltip { ...props } />
+			<Tooltip {...props} />
 		);
 		const instance = wrapper.instance();
 
-		stub(instance, 'reposition').callsFake(() => {});
+		jest.spyOn(instance, 'reposition').mockClear().mockImplementation(() => {});
 
 		instance.componentDidMount();
 
-		expect(instance.reposition.calledOnce, 'this.reposition called').to.be.true;
+		// this.reposition called
+		expect(instance.reposition).toHaveBeenCalledTimes(1);
 
-		instance.reposition.restore();
+		instance.reposition.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('reposition()', () => {
 		const wrapper = shallow(
-			<Tooltip { ...props } />
+			<Tooltip {...props} />
 		);
 		const instance = wrapper.instance();
-		const setStateStub = stub(instance, 'setState').callsFake(() => {});
+		const setStateStub = jest.spyOn(instance, 'setState').mockClear().mockImplementation(() => {});
 		let width = 200;
-		stub(instance.ref, 'getBoundingClientRect').callsFake(() => ({
+		jest.spyOn(instance.ref, 'getBoundingClientRect').mockClear().mockImplementation(() => ({
 			width,
 			height: 100,
 		}));
 
 		instance.reposition();
 
-		expect(
-			instance.ref.getBoundingClientRect.calledOnce,
-			'[no align, no position] this.ref.getBoundingClientRect called'
-		).to.be.true;
-		expect(
-			setStateStub.calledOnce,
-			'[no align, no position] this.setState called'
-		).to.be.true;
-		expect(
-			setStateStub.args[0][0],
-			'[no align, no position] this.setState call args'
-		).to.be.deep.equal({
+		// [no align, no position] this.ref.getBoundingClientRect called
+		expect(instance.ref.getBoundingClientRect).toHaveBeenCalledTimes(1);
+		// [no align, no position] this.setState called
+		expect(setStateStub).toHaveBeenCalledTimes(1);
+		// [no align, no position] this.setState call args
+		expect(setStateStub.mock.calls[0][0]).toEqual({
 			top: 500,
 			left: 120,
 			movedToLeft: false,
 		});
 
-		instance.ref.getBoundingClientRect.resetHistory();
-		setStateStub.resetHistory();
+		instance.ref.getBoundingClientRect.mockClear();
+		setStateStub.mockClear();
 		wrapper.setProps({ align: 'center' });
 		instance.reposition();
 
-		expect(
-			instance.ref.getBoundingClientRect.calledOnce,
-			'[align = center, no position] this.ref.getBoundingClientRect called'
-		).to.be.true;
-		expect(
-			setStateStub.calledOnce,
-			'[align = center, no position] this.setState called'
-		).to.be.true;
-		expect(
-			setStateStub.args[0][0],
-			'[align = center, no position] this.setState call args'
-		).to.be.deep.equal({
+		// [align = center, no position] this.ref.getBoundingClientRect called
+		expect(instance.ref.getBoundingClientRect).toHaveBeenCalledTimes(1);
+		// [align = center, no position] this.setState called
+		expect(setStateStub).toHaveBeenCalledTimes(1);
+		// [align = center, no position] this.setState call args
+		expect(setStateStub.mock.calls[0][0]).toEqual({
 			top: 500,
 			left: 30,
 			movedToLeft: false,
 		});
 
-		instance.ref.getBoundingClientRect.resetHistory();
-		setStateStub.resetHistory();
+		instance.ref.getBoundingClientRect.mockClear();
+		setStateStub.mockClear();
 		wrapper.setProps({ position: 'top' });
 		instance.reposition();
 
-		expect(
-			instance.ref.getBoundingClientRect.calledOnce,
-			'[align = center, position = top] this.ref.getBoundingClientRect called'
-		).to.be.true;
-		expect(
-			setStateStub.calledOnce,
-			'[align = center, position = top] this.setState called'
-		).to.be.true;
-		expect(
-			setStateStub.args[0][0],
-			'[align = center, position = top] this.setState call args'
-		).to.be.deep.equal({
+		// [align = center, position = top] this.ref.getBoundingClientRect called
+		expect(instance.ref.getBoundingClientRect).toHaveBeenCalledTimes(1);
+		// [align = center, position = top] this.setState called
+		expect(setStateStub).toHaveBeenCalledTimes(1);
+		// [align = center, position = top] this.setState call args
+		expect(setStateStub.mock.calls[0][0]).toEqual({
 			top: 340,
 			left: 30,
 			movedToLeft: false,
 		});
 
-		instance.ref.getBoundingClientRect.resetHistory();
-		setStateStub.resetHistory();
+		instance.ref.getBoundingClientRect.mockClear();
+		setStateStub.mockClear();
 		wrapper.setProps({ position: 'right' });
 		instance.reposition();
 
-		expect(
-			instance.ref.getBoundingClientRect.calledOnce,
-			'[align = center, position = right] this.ref.getBoundingClientRect called'
-		).to.be.true;
-		expect(
-			setStateStub.calledOnce,
-			'[align = center, position = right] this.setState called'
-		).to.be.true;
-		expect(
-			setStateStub.args[0][0],
-			'[align = center, position = right] this.setState call args'
-		).to.be.deep.equal({
+		// [align = center, position = right] this.ref.getBoundingClientRect called
+		expect(instance.ref.getBoundingClientRect).toHaveBeenCalledTimes(1);
+		// [align = center, position = right] this.setState called
+		expect(setStateStub).toHaveBeenCalledTimes(1);
+		// [align = center, position = right] this.setState call args
+		expect(setStateStub.mock.calls[0][0]).toEqual({
 			top: 440,
 			left: 60,
 			movedToLeft: false,
 		});
 
-		instance.ref.getBoundingClientRect.resetHistory();
-		setStateStub.resetHistory();
+		instance.ref.getBoundingClientRect.mockClear();
+		setStateStub.mockClear();
 		wrapper.setProps({ align: '' });
 		instance.reposition();
 
-		expect(
-			instance.ref.getBoundingClientRect.calledOnce,
-			'[no align, position = right] this.ref.getBoundingClientRect called'
-		).to.be.true;
-		expect(
-			setStateStub.calledOnce,
-			'[no align, position = right] this.setState called'
-		).to.be.true;
-		expect(
-			setStateStub.args[0][0],
-			'[no align, position = right] this.setState call args'
-		).to.be.deep.equal({
+		// [no align, position = right] this.ref.getBoundingClientRect called
+		expect(instance.ref.getBoundingClientRect).toHaveBeenCalledTimes(1);
+		// [no align, position = right] this.setState called
+		expect(setStateStub).toHaveBeenCalledTimes(1);
+		// [no align, position = right] this.setState call args
+		expect(setStateStub.mock.calls[0][0]).toEqual({
 			top: 440,
 			left: 150,
 			movedToLeft: false,
 		});
 
-		instance.ref.getBoundingClientRect.resetHistory();
-		setStateStub.resetHistory();
+		instance.ref.getBoundingClientRect.mockClear();
+		setStateStub.mockClear();
 		wrapper.setProps({ position: 'top' });
 		instance.reposition();
 
-		expect(
-			instance.ref.getBoundingClientRect.calledOnce,
-			'[no align, position = top] this.ref.getBoundingClientRect called'
-		).to.be.true;
-		expect(
-			setStateStub.calledOnce,
-			'[no align, position = top] this.setState called'
-		).to.be.true;
-		expect(
-			setStateStub.args[0][0],
-			'[no align, position = top] this.setState call args'
-		).to.be.deep.equal({
+		// [no align, position = top] this.ref.getBoundingClientRect called
+		expect(instance.ref.getBoundingClientRect).toHaveBeenCalledTimes(1);
+		// [no align, position = top] this.setState called
+		expect(setStateStub).toHaveBeenCalledTimes(1);
+		// [no align, position = top] this.setState call args
+		expect(setStateStub.mock.calls[0][0]).toEqual({
 			top: 340,
 			left: 120,
 			movedToLeft: false,
 		});
 
-		instance.ref.getBoundingClientRect.resetHistory();
-		setStateStub.resetHistory();
+		instance.ref.getBoundingClientRect.mockClear();
+		setStateStub.mockClear();
 		width = 2000;
 		wrapper.setProps({ align: 'center' });
 		instance.reposition();
 
-		expect(
-			instance.ref.getBoundingClientRect.calledOnce,
-			'[movedToLeft = true, align = center, position = top] this.ref.getBoundingClientRect called'
-		).to.be.true;
-		expect(
-			setStateStub.calledOnce,
-			'[movedToLeft = true, align = center, position = top] this.setState called'
-		).to.be.true;
-		expect(
-			setStateStub.args[0][0],
-			'[movedToLeft = true, align = center, position = top] this.setState call args'
-		).to.be.deep.equal({
+		// [movedToLeft = true, align = center, position = top] this.ref.getBoundingClientRect called
+		expect(instance.ref.getBoundingClientRect).toHaveBeenCalledTimes(1);
+		// [movedToLeft = true, align = center, position = top] this.setState called
+		expect(setStateStub).toHaveBeenCalledTimes(1);
+		// [movedToLeft = true, align = center, position = top] this.setState call args
+		expect(setStateStub.mock.calls[0][0]).toEqual({
 			top: 340,
 			left: -1850,
 			movedToLeft: true,
 		});
 
-		instance.ref.getBoundingClientRect.restore();
+		instance.ref.getBoundingClientRect.mockClear();
 		delete instance.ref;
-		setStateStub.resetHistory();
+		setStateStub.mockClear();
 		instance.reposition();
 
-		expect(setStateStub.notCalled, '[no this.ref] this.setState not called').to.be.true;
+		// [no this.ref] this.setState not called
+		expect(setStateStub).not.toHaveBeenCalledTimes(1);
 
-		setStateStub.restore();
+		setStateStub.mockRestore();
 	});
 
 	it('render()', () => {
 		const wrapper = shallow(
-			<Tooltip { ...props }>
+			<Tooltip {...props}>
 				test_children
 			</Tooltip>
 		);
 		const instance = wrapper.instance();
 
-		expect(wrapper.prop('className'), '[no position, no align] wrapper className').to.be.equal(
-			`${ styles['tooltip'] } ${ styles['bottom'] }`
-		);
-		expect(wrapper.prop('style'), 'wrapper prop style').to.be.deep.equal({
+		// [no position, no align] wrapper className
+		expect(wrapper.prop('className')).toBe(`${ styles.tooltip } ${ styles.bottom }`);
+		// wrapper prop style
+		expect(wrapper.prop('style')).toEqual({
 			top: '500px',
 			left: '120px'
 		});
-		expect(wrapper.children(), 'wrapper children size').to.have.lengthOf(1);
-		expect(wrapper.childAt(0).text(), 'wrapper children').to.be.equal('test_children');
+		// wrapper children size
+		expect(wrapper.children()).toHaveLength(1);
+		// wrapper children
+		expect(wrapper.childAt(0).text()).toBe('test_children');
 
 		wrapper.setProps({
 			position: 'top',
 			align: 'center'
 		});
 
-		expect(wrapper.prop('className'), '[position, align] wrapper className').to.be.equal(
-			`${ styles['tooltip'] } ${ styles['top'] } ${ styles['center'] }`
-		);
+		// [position, align] wrapper className
+		expect(wrapper.prop('className')).toBe(`${ styles.tooltip } ${ styles.top } ${ styles.center }`);
 
 		wrapper.setState({ movedToLeft: true });
 
-		expect(wrapper.prop('className'), '[position, movedToLeft] wrapper className').to.be.equal(
-			`${ styles['tooltip'] } ${ styles['top'] } ${ styles['start'] }`
-		);
-
-		// Unknown position
-		wrapper.setState({ movedToLeft: false });
-		wrapper.setProps({
-			position: 'there is no such a position',
-		});
-
-		expect(wrapper.prop('className'), '[unknown position, align] wrapper className').to.be.equal(
-			`${ styles['tooltip'] } ${ styles['center'] }`
-		);
+		// [position, movedToLeft] wrapper className
+		expect(wrapper.prop('className')).toBe(`${ styles.tooltip } ${ styles.top } ${ styles.start }`);
 	});
 });

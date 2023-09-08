@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { stub } from 'sinon';
 import StreamUpstream from '../streamupstream.jsx';
 import UpstreamsList from '../../../upstreams/upstreamslist.jsx';
 import tooltips from '../../../../tooltips/index.jsx';
@@ -23,17 +22,17 @@ describe('<StreamUpstream />', () => {
 	};
 
 	it('extends UpstreamsList', () => {
-		expect(StreamUpstream.prototype instanceof UpstreamsList).to.be.true;
+		expect(StreamUpstream.prototype instanceof UpstreamsList).toBe(true);
 	});
 
 	it('get SORTING_SETTINGS_KEY', () => {
 		const wrapper = shallow(
 			<StreamUpstream
-				{ ...props }
+				{...props}
 			/>
 		);
 
-		expect(wrapper.instance().SORTING_SETTINGS_KEY).to.be.equal('sorting-stream-upstreams-test');
+		expect(wrapper.instance().SORTING_SETTINGS_KEY).toBe('sorting-stream-upstreams-test');
 
 		wrapper.unmount();
 	});
@@ -41,11 +40,11 @@ describe('<StreamUpstream />', () => {
 	it('get FILTERING_SETTINGS_KEY', () => {
 		const wrapper = shallow(
 			<StreamUpstream
-				{ ...props }
+				{...props}
 			/>
 		);
 
-		expect(wrapper.instance().FILTERING_SETTINGS_KEY).to.be.equal('filtering-stream-upstreams-test');
+		expect(wrapper.instance().FILTERING_SETTINGS_KEY).toBe('filtering-stream-upstreams-test');
 
 		wrapper.unmount();
 	});
@@ -101,267 +100,265 @@ describe('<StreamUpstream />', () => {
 		);
 		const instance = wrapper.instance();
 
-		stub(instance, 'getSelectAllCheckbox').callsFake(
+		jest.spyOn(instance, 'getSelectAllCheckbox').mockClear().mockImplementation(
 			() => <div id="getSelectAllCheckbox_result" />
 		);
-		stub(tooltips, 'useTooltip').callsFake(() => ({
+		jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
 			prop_from_useTooltip: true
 		}));
-		stub(instance, 'renderEmptyList').callsFake(
+		jest.spyOn(instance, 'renderEmptyList').mockClear().mockImplementation(
 			() => <tr id="renderEmptyList_result" />
 		);
-		stub(instance, 'getCheckbox').callsFake(
-			({ id }) => <td id={ `getCheckbox_result_${ id }` } />
+		jest.spyOn(instance, 'getCheckbox').mockClear().mockImplementation(
+			({ id }) => <td id={`getCheckbox_result_${ id }`} />
 		);
-		stub(utils, 'formatUptime').callsFake(() => 'time_formatted');
-		stub(utils, 'formatReadableBytes').callsFake(() => 'readable_bytes_formatted');
-		stub(utils, 'formatMs').callsFake(() => 'ms_formatted');
-		stub(instance, 'editSelectedUpstream').callsFake(() => 'edit_selected_upstream_result');
+		jest.spyOn(utils, 'formatUptime').mockClear().mockImplementation(() => 'time_formatted');
+		jest.spyOn(utils, 'formatReadableBytes').mockClear().mockImplementation(() => 'readable_bytes_formatted');
+		jest.spyOn(utils, 'formatMs').mockClear().mockImplementation(() => 'ms_formatted');
+		jest.spyOn(instance, 'editSelectedUpstream').mockClear().mockImplementation(() => 'edit_selected_upstream_result');
 
 		let table = shallow(
 			instance.renderPeers([])
 		);
 
-		expect(table.type(), 'table html tag').to.be.equal('table');
-		expect(table.prop('className'), 'table className').to.be.equal(
-			`${ styles['table'] } ${ styles['wide'] }`
-		);
+		// table html tag
+		expect(table.type()).toBe('table');
+		// table className
+		expect(table.prop('className')).toBe(`${ styles.table } ${ styles.wide }`);
 
 		const tableSortControl = table.find('TableSortControl');
 
-		expect(tableSortControl.prop('secondSortLabel'), 'TableSortControl secondSortLabel').to.be.equal(
-			'Sort by status - down first'
-		);
-		expect(tableSortControl.prop('order'), 'TableSortControl order').to.be.equal(
-			wrapper.state('sortOrder')
-		);
-		expect(tableSortControl.prop('onChange').name, 'TableSortControl onChange').to.be.equal(
-			'bound changeSorting'
-		);
-		expect(
-			table.find('#getSelectAllCheckbox_result'),
-			'this.getSelectAllCheckbox result pasted'
-		).to.have.lengthOf(1);
-		expect(instance.getSelectAllCheckbox.calledOnce, 'this.getSelectAllCheckbox called once').to.be.true;
-		expect(
-			instance.getSelectAllCheckbox.args[0][0],
-			'this.getSelectAllCheckbox call arg'
-		).to.be.deep.equal([]);
+		// TableSortControl secondSortLabel
+		expect(tableSortControl.prop('secondSortLabel')).toBe('Sort by status - down first');
+		// TableSortControl order
+		expect(tableSortControl.prop('order')).toBe(wrapper.state('sortOrder'));
+		// TableSortControl onChange
+		expect(tableSortControl.prop('onChange').name).toBe('bound changeSorting');
+		// this.getSelectAllCheckbox result pasted
+		expect(table.find('#getSelectAllCheckbox_result')).toHaveLength(1);
+		// this.getSelectAllCheckbox called once
+		expect(instance.getSelectAllCheckbox).toHaveBeenCalledTimes(1);
+		// this.getSelectAllCheckbox call arg
+		expect(instance.getSelectAllCheckbox.mock.calls[0][0]).toEqual([]);
 
 		const headRow = table.childAt(0).childAt(0);
 
-		expect(headRow.childAt(2).prop('colSpan'), 'head row 1, child 3 colspan').to.be.equal('3');
-		expect(headRow.childAt(3).prop('colSpan'), 'head row 1, child 4 colspan').to.be.equal('4');
-		expect(headRow.childAt(4).prop('colSpan'), 'head row 1, child 5 colspan').to.be.equal('4');
-		expect(headRow.childAt(5).prop('colSpan'), 'head row 1, child 6 colspan').to.be.equal('2');
-		expect(headRow.childAt(6).prop('colSpan'), 'head row 1, child 7 colspan').to.be.equal('4');
-		expect(headRow.childAt(7).prop('colSpan'), 'head row 1, child 8 colspan').to.be.equal('3');
-		expect(table.childAt(0).childAt(1).children(), 'head row 2, children length').to.have.lengthOf(24);
+		// head row 1, child 3 colspan
+		expect(headRow.childAt(2).prop('colSpan')).toBe('3');
+		// head row 1, child 4 colspan
+		expect(headRow.childAt(3).prop('colSpan')).toBe('4');
+		// head row 1, child 5 colspan
+		expect(headRow.childAt(4).prop('colSpan')).toBe('4');
+		// head row 1, child 6 colspan
+		expect(headRow.childAt(5).prop('colSpan')).toBe('2');
+		// head row 1, child 7 colspan
+		expect(headRow.childAt(6).prop('colSpan')).toBe('4');
+		// head row 1, child 8 colspan
+		expect(headRow.childAt(7).prop('colSpan')).toBe('3');
+		// head row 2, children length
+		expect(table.childAt(0).childAt(1).children()).toHaveLength(24);
 
 		// TODO: Add tests for SSL stat cells
 
-		const headTooltips = table.find(`thead .${ styles['hinted'] }`);
+		const headTooltips = table.find(`thead .${ styles.hinted }`);
 
-		expect(headTooltips, 'thead tooltips length').to.have.lengthOf(2);
-		expect(headTooltips.at(0).prop('prop_from_useTooltip'), 'thead tooltip 1 props').to.be.true;
-		expect(headTooltips.at(1).prop('prop_from_useTooltip'), 'thead tooltip 2 props').to.be.true;
-		expect(tooltips.useTooltip.calledTwice, 'useTooltip called twice').to.be.true;
-		expect(tooltips.useTooltip.args[0][0], 'useTooltip, call 1, arg 1').to.be.equal('Total downtime');
-		expect(tooltips.useTooltip.args[0][1], 'useTooltip, call 1, arg 2').to.be.equal('hint');
-		expect(tooltips.useTooltip.args[1][0], 'useTooltip, call 2, arg 1').to.be.equal('Weight');
-		expect(tooltips.useTooltip.args[1][1], 'useTooltip, call 2, arg 2').to.be.equal('hint');
+		// thead tooltips length
+		expect(headTooltips).toHaveLength(2);
+		// thead tooltip 1 props
+		expect(headTooltips.at(0).prop('prop_from_useTooltip')).toBe(true);
+		// thead tooltip 2 props
+		expect(headTooltips.at(1).prop('prop_from_useTooltip')).toBe(true);
+		// useTooltip called twice
+		expect(tooltips.useTooltip).toHaveBeenCalledTimes(2);
+		// useTooltip, call 1, arg 1
+		expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Total downtime');
+		// useTooltip, call 1, arg 2
+		expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint');
+		// useTooltip, call 2, arg 1
+		expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Weight');
+		// useTooltip, call 2, arg 2
+		expect(tooltips.useTooltip.mock.calls[1][1]).toBe('hint');
 
 		let tbody = table.find('tbody');
 
-		expect(tbody.children(), '[no peers] tbody children').to.have.lengthOf(1);
-		expect(tbody.childAt(0).prop('id'), '[no peers] tbody child').to.be.equal('renderEmptyList_result');
-		expect(instance.renderEmptyList.calledOnce, 'this.renderEmptyList called once').to.be.true;
-		expect(instance.getCheckbox.notCalled, 'this.getCheckbox not called').to.be.true;
+		// [no peers] tbody children
+		expect(tbody.children()).toHaveLength(1);
+		// [no peers] tbody child
+		expect(tbody.childAt(0).prop('id')).toBe('renderEmptyList_result');
+		// this.renderEmptyList called once
+		expect(instance.renderEmptyList).toHaveBeenCalledTimes(1);
+		// this.getCheckbox not called
+		expect(instance.getCheckbox).not.toHaveBeenCalled();
 
-		tooltips.useTooltip.resetHistory();
-		instance.renderEmptyList.resetHistory();
+		tooltips.useTooltip.mockClear();
+		instance.renderEmptyList.mockClear();
 		table = shallow(
 			instance.renderPeers(peers)
 		);
 		tbody = table.find('tbody');
 
-		expect(
-			instance.renderEmptyList.notCalled,
-			'[with peers] this.renderEmptyList not called'
-		).to.be.true;
-		expect(tbody.children(), '[with peers] tbody children length').to.have.lengthOf(3);
-		expect(tbody.childAt(0).childAt(0).prop('className'), '[peer 1] peer state').to.be.equal(styles['up']);
-		expect(
-			tbody.childAt(0).childAt(1).prop('id'),
-			'[peer 1] this.getCheckbox rendered'
-		).to.be.equal('getCheckbox_result_1');
-		expect(
-			tbody.childAt(0).childAt(2).childAt(0).prop('className'),
-			'[peer 1] address-container className'
-		).to.be.equal(styles['address-container']);
-		expect(
-			tbody.childAt(0).childAt(2).childAt(0).prop('prop_from_useTooltip'),
-			'[peer 1] address-container, useTooltip applied'
-		).to.be.true;
-		expect(
-			tbody.childAt(0).childAt(2).childAt(0).text(),
-			'[peer 1] address-container text'
-		).to.be.equal('test_server_1');
-		expect(tbody.childAt(0).childAt(3).text(), '[peer 1] peer downtime').to.be.equal('time_formatted');
-		expect(tbody.childAt(0).childAt(4).text(), '[peer 1] peer weight').to.be.equal('1');
-		expect(
-			tbody.childAt(0).childAt(5).childAt(0).prop('className'),
-			'[peer 1] connections className'
-		).to.be.equal(styles['hinted']);
-		expect(
-			tbody.childAt(0).childAt(5).childAt(0).prop('prop_from_useTooltip'),
-			'[peer 1] connections, useTooltip applied'
-		).to.be.true;
-		expect(
-			tbody.childAt(0).childAt(5).childAt(0).text(),
-			'[peer 1] connections text'
-		).to.be.equal('20');
-		expect(tbody.childAt(0).childAt(6).text(), '[peer 1] server_conn_s').to.be.equal('100000');
-		expect(tbody.childAt(0).childAt(7).text(), '[peer 1] active').to.be.equal('10000');
-		expect(
-			tbody.childAt(0).childAt(8).prop('className'),
-			'[peer 1] max_conns className'
-		).to.be.equal(styles['bdr']);
-		expect(tbody.childAt(0).childAt(8).text(), '[peer 1] max_conns').to.be.equal('∞');
-		expect(
-			tbody.childAt(0).childAt(9).prop('className'),
-			'[peer 1] server_sent_s className'
-		).to.be.equal(styles['px60']);
-		expect(tbody.childAt(0).childAt(9).text(), '[peer 1] server_sent_s').to.be.equal('readable_bytes_formatted');
-		expect(
-			tbody.childAt(0).childAt(10).prop('className'),
-			'[peer 1] server_rcvd_s className'
-		).to.be.equal(styles['px60']);
-		expect(tbody.childAt(0).childAt(10).text(), '[peer 1] server_rcvd_s').to.be.equal('readable_bytes_formatted');
-		expect(tbody.childAt(0).childAt(11).text(), '[peer 1] sent').to.be.equal('readable_bytes_formatted');
-		expect(
-			tbody.childAt(0).childAt(12).prop('className'),
-			'[peer 1] received className'
-		).to.be.equal(styles['bdr']);
-		expect(tbody.childAt(0).childAt(12).text(), '[peer 1] received').to.be.equal('readable_bytes_formatted');
-		expect(tbody.childAt(0).childAt(13).text(), '[peer 1] fails').to.be.equal('1');
-		expect(tbody.childAt(0).childAt(14).text(), '[peer 1] unavail').to.be.equal('2');
-		expect(tbody.childAt(0).childAt(15).text(), '[peer 1] health_checks.checks').to.be.equal('24');
-		expect(tbody.childAt(0).childAt(16).text(), '[peer 1] health_checks.fails').to.be.equal('3');
-		expect(tbody.childAt(0).childAt(17).text(), '[peer 1] health_checks.unhealthy').to.be.equal('0');
-		expect(
-			tbody.childAt(0).childAt(18).prop('className'),
-			'[peer 1] health_status className'
-		).to.be.equal(`${ styles['left-align'] } ${ styles['bdr'] } ${ styles['flash'] }`);
-		expect(tbody.childAt(0).childAt(18).text(), '[peer 1] health_status').to.be.equal('–');
-		expect(tbody.childAt(0).childAt(19).text(), '[peer 1] connect_time').to.be.equal('ms_formatted');
-		expect(tbody.childAt(0).childAt(20).text(), '[peer 1] first_byte_time').to.be.equal('ms_formatted');
-		expect(tbody.childAt(0).childAt(21).text(), '[peer 1] response_time').to.be.equal('ms_formatted');
+		// [with peers] this.renderEmptyList not called
+		expect(instance.renderEmptyList).not.toHaveBeenCalled();
+		// [with peers] tbody children length
+		expect(tbody.children()).toHaveLength(3);
+		// [peer 1] peer state
+		expect(tbody.childAt(0).childAt(0).prop('className')).toBe(styles.up);
+		// [peer 1] this.getCheckbox rendered
+		expect(tbody.childAt(0).childAt(1).prop('id')).toBe('getCheckbox_result_1');
+		// [peer 1] address-container className
+		expect(tbody.childAt(0).childAt(2).childAt(0).prop('className')).toBe(styles['address-container']);
+		// [peer 1] address-container, useTooltip applied
+		expect(tbody.childAt(0).childAt(2).childAt(0).prop('prop_from_useTooltip')).toBe(true);
+		// [peer 1] address-container text
+		expect(tbody.childAt(0).childAt(2).childAt(0).text()).toBe('test_server_1');
+		// [peer 1] peer downtime
+		expect(tbody.childAt(0).childAt(3).text()).toBe('time_formatted');
+		// [peer 1] peer weight
+		expect(tbody.childAt(0).childAt(4).text()).toBe('1');
+		// [peer 1] connections className
+		expect(tbody.childAt(0).childAt(5).childAt(0).prop('className')).toBe(styles.hinted);
+		// [peer 1] connections, useTooltip applied
+		expect(tbody.childAt(0).childAt(5).childAt(0).prop('prop_from_useTooltip')).toBe(true);
+		// [peer 1] connections text
+		expect(tbody.childAt(0).childAt(5).childAt(0).text()).toBe('20');
+		// [peer 1] server_conn_s
+		expect(tbody.childAt(0).childAt(6).text()).toBe('100000');
+		// [peer 1] active
+		expect(tbody.childAt(0).childAt(7).text()).toBe('10000');
+		// [peer 1] max_conns className
+		expect(tbody.childAt(0).childAt(8).prop('className')).toBe(styles.bdr);
+		// [peer 1] max_conns
+		expect(tbody.childAt(0).childAt(8).text()).toBe('∞');
+		// [peer 1] server_sent_s className
+		expect(tbody.childAt(0).childAt(9).prop('className')).toBe(styles.px60);
+		// [peer 1] server_sent_s
+		expect(tbody.childAt(0).childAt(9).text()).toBe('readable_bytes_formatted');
+		// [peer 1] server_rcvd_s className
+		expect(tbody.childAt(0).childAt(10).prop('className')).toBe(styles.px60);
+		// [peer 1] server_rcvd_s
+		expect(tbody.childAt(0).childAt(10).text()).toBe('readable_bytes_formatted');
+		// [peer 1] sent
+		expect(tbody.childAt(0).childAt(11).text()).toBe('readable_bytes_formatted');
+		// [peer 1] received className
+		expect(tbody.childAt(0).childAt(12).prop('className')).toBe(styles.bdr);
+		// [peer 1] received
+		expect(tbody.childAt(0).childAt(12).text()).toBe('readable_bytes_formatted');
+		// [peer 1] fails
+		expect(tbody.childAt(0).childAt(13).text()).toBe('1');
+		// [peer 1] unavail
+		expect(tbody.childAt(0).childAt(14).text()).toBe('2');
+		// [peer 1] health_checks.checks
+		expect(tbody.childAt(0).childAt(15).text()).toBe('24');
+		// [peer 1] health_checks.fails
+		expect(tbody.childAt(0).childAt(16).text()).toBe('3');
+		// [peer 1] health_checks.unhealthy
+		expect(tbody.childAt(0).childAt(17).text()).toBe('0');
+		// [peer 1] health_status className
+		expect(tbody.childAt(0).childAt(18).prop('className')).toBe(`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }`);
+		// [peer 1] health_status
+		expect(tbody.childAt(0).childAt(18).text()).toBe('–');
+		// [peer 1] connect_time
+		expect(tbody.childAt(0).childAt(19).text()).toBe('ms_formatted');
+		// [peer 1] first_byte_time
+		expect(tbody.childAt(0).childAt(20).text()).toBe('ms_formatted');
+		// [peer 1] response_time
+		expect(tbody.childAt(0).childAt(21).text()).toBe('ms_formatted');
 
-		expect(
-			tbody.childAt(1).childAt(2).childAt(0).text(),
-			'[peer 2] address-container text'
-		).to.be.equal('b test_server_2');
-		expect(tbody.childAt(1).childAt(8).text(), '[peer 2] max_conns').to.be.equal('123/s');
-		expect(
-			tbody.childAt(1).childAt(18).prop('className'),
-			'[peer 2] health_status className'
-		).to.be.equal(`${ styles['left-align'] } ${ styles['bdr'] } ${ styles['flash'] } ${ styles['red-flash'] }`);
-		expect(tbody.childAt(1).childAt(18).text(), '[peer 2] health_status').to.be.equal('failed');
+		// [peer 2] address-container text
+		expect(tbody.childAt(1).childAt(2).childAt(0).text()).toBe('b test_server_2');
+		// [peer 2] max_conns
+		expect(tbody.childAt(1).childAt(8).text()).toBe('123/s');
+		// [peer 2] health_status className
+		expect(tbody.childAt(1).childAt(18).prop('className')).toBe(
+			`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash } ${ styles['red-flash'] }`
+		);
+		// [peer 2] health_status
+		expect(tbody.childAt(1).childAt(18).text()).toBe('failed');
 
-		expect(
-			tbody.childAt(2).childAt(18).prop('className'),
-			'[peer 3] health_status className'
-		).to.be.equal(`${ styles['left-align'] } ${ styles['bdr'] } ${ styles['flash'] }`);
-		expect(tbody.childAt(2).childAt(18).text(), '[peer 3] health_status').to.be.equal('passed');
+		// [peer 3] health_status className
+		expect(tbody.childAt(2).childAt(18).prop('className')).toBe(`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }`);
+		// [peer 3] health_status
+		expect(tbody.childAt(2).childAt(18).text()).toBe('passed');
 
-		expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(8);
-		expect(
-			tooltips.useTooltip.args[2][0].type.name,
-			'useTooltip, call 3, arg 1'
-		).to.be.equal('PeerTooltip');
-		expect(
-			tooltips.useTooltip.args[2][0].props.peer,
-			'useTooltip, call 3, arg 1, attr peer'
-		).to.be.deep.equal(peers[0]);
-		expect(
-			tooltips.useTooltip.args[3][0].type.name,
-			'useTooltip, call 4, arg 1'
-		).to.be.equal('ConnectionsTooltip');
-		expect(
-			tooltips.useTooltip.args[3][0].props.peer,
-			'useTooltip, call 4, arg 1, attr peer'
-		).to.be.deep.equal(peers[0]);
-		expect(tooltips.useTooltip.args[3][1], 'useTooltip, call 4, arg 2').to.be.equal('hint');
-		expect(
-			tooltips.useTooltip.args[4][0].type.name,
-			'useTooltip, call 5, arg 1'
-		).to.be.equal('PeerTooltip');
-		expect(
-			tooltips.useTooltip.args[4][0].props.peer,
-			'useTooltip, call 5, arg 1, attr peer'
-		).to.be.deep.equal(peers[1]);
-		expect(
-			tooltips.useTooltip.args[5][0].type.name,
-			'useTooltip, call 6, arg 1'
-		).to.be.equal('ConnectionsTooltip');
-		expect(
-			tooltips.useTooltip.args[5][0].props.peer,
-			'useTooltip, call 6, arg 1, attr peer'
-		).to.be.deep.equal(peers[1]);
-		expect(tooltips.useTooltip.args[5][1], 'useTooltip, call 6, arg 2').to.be.equal('hint');
-		expect(
-			tooltips.useTooltip.args[6][0].type.name,
-			'useTooltip, call 7, arg 1'
-		).to.be.equal('PeerTooltip');
-		expect(
-			tooltips.useTooltip.args[6][0].props.peer,
-			'useTooltip, call 7, arg 1, attr peer'
-		).to.be.deep.equal(peers[2]);
-		expect(
-			tooltips.useTooltip.args[7][0].type.name,
-			'useTooltip, call 8, arg 1'
-		).to.be.equal('ConnectionsTooltip');
-		expect(
-			tooltips.useTooltip.args[7][0].props.peer,
-			'useTooltip, call 8, arg 1, attr peer'
-		).to.be.deep.equal(peers[2]);
-		expect(tooltips.useTooltip.args[7][1], 'useTooltip, call 8, arg 2').to.be.equal('hint');
+		expect(tooltips.useTooltip).toHaveBeenCalledTimes(8);
+		// useTooltip, call 3, arg 1
+		expect(tooltips.useTooltip.mock.calls[2][0].type.name).toBe('PeerTooltip');
+		// useTooltip, call 3, arg 1, attr peer
+		expect(tooltips.useTooltip.mock.calls[2][0].props.peer).toEqual(peers[0]);
+		// useTooltip, call 4, arg 1
+		expect(tooltips.useTooltip.mock.calls[3][0].type.name).toBe('ConnectionsTooltip');
+		// useTooltip, call 4, arg 1, attr peer
+		expect(tooltips.useTooltip.mock.calls[3][0].props.peer).toEqual(peers[0]);
+		// useTooltip, call 4, arg 2
+		expect(tooltips.useTooltip.mock.calls[3][1]).toBe('hint');
+		// useTooltip, call 5, arg 1
+		expect(tooltips.useTooltip.mock.calls[4][0].type.name).toBe('PeerTooltip');
+		// useTooltip, call 5, arg 1, attr peer
+		expect(tooltips.useTooltip.mock.calls[4][0].props.peer).toEqual(peers[1]);
+		// useTooltip, call 6, arg 1
+		expect(tooltips.useTooltip.mock.calls[5][0].type.name).toBe('ConnectionsTooltip');
+		// useTooltip, call 6, arg 1, attr peer
+		expect(tooltips.useTooltip.mock.calls[5][0].props.peer).toEqual(peers[1]);
+		// useTooltip, call 6, arg 2
+		expect(tooltips.useTooltip.mock.calls[5][1]).toBe('hint');
+		// useTooltip, call 7, arg 1
+		expect(tooltips.useTooltip.mock.calls[6][0].type.name).toBe('PeerTooltip');
+		// useTooltip, call 7, arg 1, attr peer
+		expect(tooltips.useTooltip.mock.calls[6][0].props.peer).toEqual(peers[2]);
+		// useTooltip, call 8, arg 1
+		expect(tooltips.useTooltip.mock.calls[7][0].type.name).toBe('ConnectionsTooltip');
+		// useTooltip, call 8, arg 1, attr peer
+		expect(tooltips.useTooltip.mock.calls[7][0].props.peer).toEqual(peers[2]);
+		// useTooltip, call 8, arg 2
+		expect(tooltips.useTooltip.mock.calls[7][1]).toBe('hint');
 
-		expect(utils.formatUptime.calledThrice, 'formatUptime called thrice').to.be.true;
-		expect(utils.formatUptime.args[0][0], 'formatUptime call 1, arg 1').to.be.equal(1000);
-		expect(utils.formatUptime.args[0][1], 'formatUptime call 1, arg 2').to.be.true;
-		expect(utils.formatUptime.args[1][0], 'formatUptime call 2, arg 1').to.be.an('undefined');
-		expect(utils.formatUptime.args[1][1], 'formatUptime call 2, arg 2').to.be.true;
-		expect(utils.formatUptime.args[2][0], 'formatUptime call 3, arg 1').to.be.an('undefined');
-		expect(utils.formatUptime.args[2][1], 'formatUptime call 3, arg 2').to.be.true;
+		// formatUptime called thrice
+		expect(utils.formatUptime).toHaveBeenCalledTimes(3);
+		// formatUptime call 1, arg 1
+		expect(utils.formatUptime.mock.calls[0][0]).toBe(1000);
+		// formatUptime call 1, arg 2
+		expect(utils.formatUptime.mock.calls[0][1]).toBe(true);
+		expect(utils.formatUptime.mock.calls[1][0]).toBeUndefined();
+		// formatUptime call 2, arg 2
+		expect(utils.formatUptime.mock.calls[1][1]).toBe(true);
+		expect(utils.formatUptime.mock.calls[2][0]).toBeUndefined();
+		// formatUptime call 3, arg 2
+		expect(utils.formatUptime.mock.calls[2][1]).toBe(true);
 
-		expect(utils.formatReadableBytes.callCount, 'formatReadableBytes call count').to.be.equal(12);
-		expect(utils.formatReadableBytes.args[0][0], 'formatReadableBytes call 1, arg 1').to.be.equal(40);
-		expect(utils.formatReadableBytes.args[1][0], 'formatReadableBytes call 2, arg 1').to.be.equal(39);
-		expect(utils.formatReadableBytes.args[2][0], 'formatReadableBytes call 3, arg 1').to.be.equal(400);
-		expect(utils.formatReadableBytes.args[3][0], 'formatReadableBytes call 4, arg 1').to.be.equal(399);
-		expect(utils.formatReadableBytes.args[4][0], 'formatReadableBytes call 5, arg 1').to.be.an('undefined');
-		expect(utils.formatReadableBytes.args[5][0], 'formatReadableBytes call 6, arg 1').to.be.an('undefined');
-		expect(utils.formatReadableBytes.args[6][0], 'formatReadableBytes call 7, arg 1').to.be.an('undefined');
-		expect(utils.formatReadableBytes.args[7][0], 'formatReadableBytes call 8, arg 1').to.be.an('undefined');
-		expect(utils.formatReadableBytes.args[8][0], 'formatReadableBytes call 9, arg 1').to.be.an('undefined');
-		expect(utils.formatReadableBytes.args[9][0], 'formatReadableBytes call 10, arg 1').to.be.an('undefined');
-		expect(utils.formatReadableBytes.args[10][0], 'formatReadableBytes call 11, arg 1').to.be.an('undefined');
-		expect(utils.formatReadableBytes.args[11][0], 'formatReadableBytes call 12, arg 1').to.be.an('undefined');
+		expect(utils.formatReadableBytes).toHaveBeenCalledTimes(12);
+		// formatReadableBytes call 1, arg 1
+		expect(utils.formatReadableBytes.mock.calls[0][0]).toBe(40);
+		// formatReadableBytes call 2, arg 1
+		expect(utils.formatReadableBytes.mock.calls[1][0]).toBe(39);
+		// formatReadableBytes call 3, arg 1
+		expect(utils.formatReadableBytes.mock.calls[2][0]).toBe(400);
+		// formatReadableBytes call 4, arg 1
+		expect(utils.formatReadableBytes.mock.calls[3][0]).toBe(399);
+		expect(utils.formatReadableBytes.mock.calls[4][0]).toBeUndefined();
+		expect(utils.formatReadableBytes.mock.calls[5][0]).toBeUndefined();
+		expect(utils.formatReadableBytes.mock.calls[6][0]).toBeUndefined();
+		expect(utils.formatReadableBytes.mock.calls[7][0]).toBeUndefined();
+		expect(utils.formatReadableBytes.mock.calls[8][0]).toBeUndefined();
+		expect(utils.formatReadableBytes.mock.calls[9][0]).toBeUndefined();
+		expect(utils.formatReadableBytes.mock.calls[10][0]).toBeUndefined();
+		expect(utils.formatReadableBytes.mock.calls[11][0]).toBeUndefined();
 
-		expect(utils.formatMs.callCount, 'formatMs call count').to.be.equal(9);
-		expect(utils.formatMs.args[0][0], 'formatMs call 1, arg 1').to.be.equal(999);
-		expect(utils.formatMs.args[1][0], 'formatMs call 2, arg 1').to.be.equal(9);
-		expect(utils.formatMs.args[2][0], 'formatMs call 3, arg 1').to.be.equal(11);
-		expect(utils.formatMs.args[3][0], 'formatMs call 4, arg 1').to.be.an('undefined');
-		expect(utils.formatMs.args[4][0], 'formatMs call 5, arg 1').to.be.an('undefined');
-		expect(utils.formatMs.args[5][0], 'formatMs call 6, arg 1').to.be.an('undefined');
-		expect(utils.formatMs.args[6][0], 'formatMs call 7, arg 1').to.be.an('undefined');
-		expect(utils.formatMs.args[7][0], 'formatMs call 8, arg 1').to.be.an('undefined');
-		expect(utils.formatMs.args[8][0], 'formatMs call 9, arg 1').to.be.an('undefined');
+		expect(utils.formatMs).toHaveBeenCalledTimes(9);
+		// formatMs call 1, arg 1
+		expect(utils.formatMs.mock.calls[0][0]).toBe(999);
+		// formatMs call 2, arg 1
+		expect(utils.formatMs.mock.calls[1][0]).toBe(9);
+		// formatMs call 3, arg 1
+		expect(utils.formatMs.mock.calls[2][0]).toBe(11);
+		expect(utils.formatMs.mock.calls[3][0]).toBeUndefined();
+		expect(utils.formatMs.mock.calls[4][0]).toBeUndefined();
+		expect(utils.formatMs.mock.calls[5][0]).toBeUndefined();
+		expect(utils.formatMs.mock.calls[6][0]).toBeUndefined();
+		expect(utils.formatMs.mock.calls[7][0]).toBeUndefined();
+		expect(utils.formatMs.mock.calls[8][0]).toBeUndefined();
 
-		expect(table.find(`.${ styles['edit-peer'] }`), '[editMode = false] edit-peer').to.have.lengthOf(0);
+		// [editMode = false] edit-peer
+		expect(table.find(`.${ styles['edit-peer'] }`)).toHaveLength(0);
 
 		wrapper.setState({ editMode: true });
 		table = shallow(
@@ -370,53 +367,45 @@ describe('<StreamUpstream />', () => {
 
 		const editPeer = table.find(`.${ styles['edit-peer'] }`);
 
-		expect(editPeer, '[editMode = true] edit-peer').to.have.lengthOf(3);
-		expect(editPeer.at(0).prop('onClick'), '[editMode = true] edit-peer onClick').to.be.a('function');
+		// [editMode = true] edit-peer
+		expect(editPeer).toHaveLength(3);
+		expect(editPeer.at(0).prop('onClick')).toBeInstanceOf(Function);
 
 		let clickOnEditPeerResult = editPeer.at(0).prop('onClick')();
 
-		expect(
-			clickOnEditPeerResult,
-			'[peer 1] edit-peer onClick result'
-		).to.be.equal('edit_selected_upstream_result');
-		expect(instance.editSelectedUpstream.calledOnce, 'this.editSelectedUpstream called once').to.be.true;
-		expect(
-			instance.editSelectedUpstream.args[0][0],
-			'this.editSelectedUpstream call 1, arg'
-		).to.be.deep.equal(peers[0]);
+		// [peer 1] edit-peer onClick result
+		expect(clickOnEditPeerResult).toBe('edit_selected_upstream_result');
+		// this.editSelectedUpstream called once
+		expect(instance.editSelectedUpstream).toHaveBeenCalledTimes(1);
+		// this.editSelectedUpstream call 1, arg
+		expect(instance.editSelectedUpstream.mock.calls[0][0]).toEqual(peers[0]);
 
 		clickOnEditPeerResult = editPeer.at(1).prop('onClick')();
 
-		expect(
-			clickOnEditPeerResult,
-			'[peer 2] edit-peer onClick result'
-		).to.be.equal('edit_selected_upstream_result');
-		expect(instance.editSelectedUpstream.calledTwice, 'this.editSelectedUpstream called twice').to.be.true;
-		expect(
-			instance.editSelectedUpstream.args[1][0],
-			'this.editSelectedUpstream call 2, arg'
-		).to.be.deep.equal(peers[1]);
+		// [peer 2] edit-peer onClick result
+		expect(clickOnEditPeerResult).toBe('edit_selected_upstream_result');
+		// this.editSelectedUpstream called twice
+		expect(instance.editSelectedUpstream).toHaveBeenCalledTimes(2);
+		// this.editSelectedUpstream call 2, arg
+		expect(instance.editSelectedUpstream.mock.calls[1][0]).toEqual(peers[1]);
 
 		clickOnEditPeerResult = editPeer.at(2).prop('onClick')();
 
-		expect(
-			clickOnEditPeerResult,
-			'[peer 3] edit-peer onClick result'
-		).to.be.equal('edit_selected_upstream_result');
-		expect(instance.editSelectedUpstream.calledThrice, 'this.editSelectedUpstream called thrice').to.be.true;
-		expect(
-			instance.editSelectedUpstream.args[2][0],
-			'this.editSelectedUpstream call 3, arg'
-		).to.be.deep.equal(peers[2]);
+		// [peer 3] edit-peer onClick result
+		expect(clickOnEditPeerResult).toBe('edit_selected_upstream_result');
+		// this.editSelectedUpstream called thrice
+		expect(instance.editSelectedUpstream).toHaveBeenCalledTimes(3);
+		// this.editSelectedUpstream call 3, arg
+		expect(instance.editSelectedUpstream.mock.calls[2][0]).toEqual(peers[2]);
 
-		instance.getSelectAllCheckbox.restore();
-		tooltips.useTooltip.restore();
-		instance.renderEmptyList.restore();
-		instance.getCheckbox.restore();
-		utils.formatUptime.restore();
-		utils.formatReadableBytes.restore();
-		utils.formatMs.restore();
-		instance.editSelectedUpstream.restore();
+		instance.getSelectAllCheckbox.mockRestore();
+		tooltips.useTooltip.mockRestore();
+		instance.renderEmptyList.mockRestore();
+		instance.getCheckbox.mockRestore();
+		utils.formatUptime.mockRestore();
+		utils.formatReadableBytes.mockRestore();
+		utils.formatMs.mockRestore();
+		instance.editSelectedUpstream.mockRestore();
 		wrapper.unmount();
 	});
 });

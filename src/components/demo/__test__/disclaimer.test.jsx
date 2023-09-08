@@ -7,12 +7,12 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy } from 'sinon';
 import Disclaimer from '../disclaimer.jsx';
 import styles from '../style.css';
 
 describe('<Disclaimer /> (demo)', () => {
-	let wrapper, instance;
+	let wrapper; let
+		instance;
 
 	beforeEach(() => {
 		wrapper = shallow(<Disclaimer />);
@@ -24,45 +24,58 @@ describe('<Disclaimer /> (demo)', () => {
 	});
 
 	it('constructor()', () => {
-		const bindSpy = spy(Disclaimer.prototype.close, 'bind');
+		const bindSpy = jest.spyOn(Disclaimer.prototype.close, 'bind').mockClear();
 
 		instance.constructor();
 
-		expect(wrapper.state(), 'state').to.be.deep.equal({ opened: true });
-		expect(bindSpy.calledOnce, 'close.bind called once').to.be.true;
-		expect(bindSpy.args[0][0] instanceof Disclaimer, 'close.bind 1st arg').to.be.true;
+		// state
+		expect(wrapper.state()).toEqual({ opened: true });
+		// close.bind called once
+		expect(bindSpy).toHaveBeenCalled();
+		// close.bind 1st arg
+		expect(bindSpy.mock.calls[0][0] instanceof Disclaimer).toBe(true);
 
-		bindSpy.restore();
+		bindSpy.mockRestore();
 	});
 
 	it('close()', () => {
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.close();
 
-		expect(setStateSpy.calledOnce, 'setState called once').to.be.true;
-		expect(setStateSpy.args[0][0], 'setState 1st arg').to.be.deep.equal({ opened: false });
+		// setState called once
+		expect(setStateSpy).toHaveBeenCalled();
+		// setState 1st arg
+		expect(setStateSpy.mock.calls[0][0]).toEqual({ opened: false });
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 	});
 
 	it('render()', () => {
 		const closeEl = wrapper.find(`.${ styles['disclaimer-close'] }`);
 		const contentEl = wrapper.find(`.${ styles['disclaimer-content'] }`);
 
-		expect(wrapper.find(`.${ styles['disclaimer'] }`).length, 'root el length').to.be.equal(1);
-		expect(closeEl.length, 'close element length').to.be.equal(1);
-    	expect(closeEl.prop('onClick').name, 'onClick handler').to.be.equal('bound close');
-		expect(contentEl.length, 'content element length').to.be.equal(1);
+		// root el length
+		expect(wrapper.find(`.${ styles.disclaimer }`).length).toBe(1);
+		// close element length
+		expect(closeEl.length).toBe(1);
+    	// onClick handler
+		expect(closeEl.prop('onClick').name).toBe('bound close');
+		// content element length
+		expect(contentEl.length).toBe(1);
 
 		const links = contentEl.find('a');
 
-		expect(links.length, 'links length').to.be.equal(2);
-		expect(links.get(0).props.href, '1nd link href').to.be.equal('https://angie.software/en/api/');
-		expect(links.get(1).props.href, '2rd link href').to.be.equal('https://wbsrv.ru/angie-pro/');
+		// links length
+		expect(links.length).toBe(2);
+		// 1nd link href
+		expect(links.get(0).props.href).toBe('https://angie.software/en/api/');
+		// 2rd link href
+		expect(links.get(1).props.href).toBe('https://wbsrv.ru/angie-pro/');
 
 		wrapper.setState({ opened: false });
 
-		expect(wrapper.length, 'root el when closed').to.be.equal(0);
+		// root el when closed
+		expect(wrapper.length).toBe(0);
 	});
 });

@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy } from 'sinon';
 import NumberControl from '../NumberControl.jsx';
 import styles from '../number-control.css';
 
@@ -17,90 +16,78 @@ describe('<NumberControl />', () => {
 	};
 
 	it('constructor()', () => {
-		const incSpy = spy(NumberControl.prototype.inc, 'bind');
-		const decSpy = spy(NumberControl.prototype.dec, 'bind');
-		const wrapper = shallow(<NumberControl { ...props } />);
+		const incSpy = jest.spyOn(NumberControl.prototype.inc, 'bind').mockClear();
+		const decSpy = jest.spyOn(NumberControl.prototype.dec, 'bind').mockClear();
+		const wrapper = shallow(<NumberControl {...props} />);
 
-		expect(incSpy.calledOnce, 'this.inc.bind called').to.be.true;
-		expect(incSpy.args[0][0] instanceof NumberControl, 'this.inc.bind call arg').to.be.true;
-		expect(decSpy.calledOnce, 'this.dec.bind called').to.be.true;
-		expect(decSpy.args[0][0] instanceof NumberControl, 'this.dec.bind call arg').to.be.true;
+		// this.inc.bind called
+		expect(incSpy).toHaveBeenCalled();
+		// this.inc.bind call arg
+		expect(incSpy.mock.calls[0][0] instanceof NumberControl).toBe(true);
+		// this.dec.bind called
+		expect(decSpy).toHaveBeenCalled();
+		// this.dec.bind call arg
+		expect(decSpy.mock.calls[0][0] instanceof NumberControl).toBe(true);
 
-		decSpy.restore();
-		incSpy.restore();
+		decSpy.mockRestore();
+		incSpy.mockRestore();
 	});
 
 	it('inc()', () => {
-		const onChangeSpy = spy();
+		const onChangeSpy = jest.fn();
 		const wrapper = shallow(
 			<NumberControl
-				{ ...props }
-				onChange={ onChangeSpy }
+				{...props}
+				onChange={onChangeSpy}
 			/>
 		);
 		const instance = wrapper.instance();
 
 		instance.inc();
 
-		expect(onChangeSpy.calledOnce, 'props.onChange called').to.be.true;
-		expect(onChangeSpy.calledWith(21000), 'props.onChange call arg').to.be.true;
+		// props.onChange called
+		expect(onChangeSpy).toHaveReturnedTimes(1);
+		// props.onChange call arg
+		expect(onChangeSpy).toHaveBeenCalledWith(21000);
 	});
 
 	it('dec()', () => {
-		const onChangeSpy = spy();
+		const onChangeSpy = jest.fn();
 		const wrapper = shallow(
 			<NumberControl
-				{ ...props }
-				onChange={ onChangeSpy }
+				{...props}
+				onChange={onChangeSpy}
 			/>
 		);
 		const instance = wrapper.instance();
 
 		instance.dec();
 
-		expect(onChangeSpy.calledOnce, 'props.onChange called').to.be.true;
-		expect(onChangeSpy.calledWith(19000), 'props.onChange call arg').to.be.true;
+		// props.onChange called
+		expect(onChangeSpy).toHaveBeenCalledTimes(1);
+		// props.onChange call arg
+		expect(onChangeSpy).toHaveBeenCalledWith(19000);
 	});
 
 	it('render()', () => {
-		const wrapper = shallow(<NumberControl { ...props } />);
+		const wrapper = shallow(<NumberControl {...props} />);
 		const instance = wrapper.instance();
 
-		expect(
-			wrapper.prop('className'),
-			'wrapper className'
-		).to.be.equal(styles['number-control']);
-		expect(
-			wrapper.childAt(0).prop('className'),
-			'dec control className'
-		).to.be.equal(styles['dec']);
-		expect(
-			wrapper.childAt(0).prop('onClick'),
-			'dec control onClick'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(0).prop('onClick').name,
-			'dec control onClick name'
-		).to.be.equal('bound dec');
-		expect(
-			wrapper.childAt(1).prop('className'),
-			'value className'
-		).to.be.equal(styles['value']);
-		expect(
-			wrapper.childAt(1).text(),
-			'value text'
-		).to.be.equal('20');
-		expect(
-			wrapper.childAt(2).prop('className'),
-			'inc control className'
-		).to.be.equal(styles['inc']);
-		expect(
-			wrapper.childAt(2).prop('onClick'),
-			'inc control onClick'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(2).prop('onClick').name,
-			'inc control onClick name'
-		).to.be.equal('bound inc');
+		// wrapper className
+		expect(wrapper.prop('className')).toBe(styles['number-control']);
+		// dec control className
+		expect(wrapper.childAt(0).prop('className')).toBe(styles.dec);
+		expect(wrapper.childAt(0).prop('onClick')).toBeInstanceOf(Function);
+		// dec control onClick name
+		expect(wrapper.childAt(0).prop('onClick').name).toBe('bound dec');
+		// value className
+		expect(wrapper.childAt(1).prop('className')).toBe(styles.value);
+		// value text
+		expect(wrapper.childAt(1).text()).toBe('20');
+		// inc control className
+		expect(wrapper.childAt(2).prop('className')).toBe(styles.inc);
+		expect(wrapper.childAt(2).prop('onClick')).toBeInstanceOf(Function);
+		// inc control onClick name
+		expect(wrapper.childAt(2).prop('onClick').name).toBe('bound inc');
 	});
 });

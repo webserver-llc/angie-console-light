@@ -14,33 +14,37 @@ describe('<AlertsCount IndexPage />', () => {
 	it('shouldComponentUpdate()', () => {
 		const wrapper = shallow(
 			<AlertsCount
-				total={ 100 }
-				alerts={ 9 }
-				warnings={ 42 }
+				total={100}
+				alerts={9}
+				warnings={42}
 			/>
 		);
 		const instance = wrapper.instance();
 
+		// same props
 		expect(instance.shouldComponentUpdate({
 			total: 100,
 			alerts: 9,
 			warnings: 42
-		}), 'same props').to.be.false;
+		})).toBe(false);
+		// another total
 		expect(instance.shouldComponentUpdate({
 			total: 10,
 			alerts: 9,
 			warnings: 42
-		}), 'another total').to.be.true;
+		})).toBe(true);
+		// another alerts
 		expect(instance.shouldComponentUpdate({
 			total: 100,
 			alerts: 99,
 			warnings: 42
-		}), 'another alerts').to.be.true;
+		})).toBe(true);
+		// another warnings
 		expect(instance.shouldComponentUpdate({
 			total: 100,
 			alerts: 9,
 			warnings: 2
-		}), 'another warnings').to.be.true;
+		})).toBe(true);
 
 		wrapper.unmount();
 	});
@@ -48,26 +52,32 @@ describe('<AlertsCount IndexPage />', () => {
 	it('render()', () => {
 		const wrapper = shallow(
 			<AlertsCount
-				total={ 100 }
-				alerts={ 0 }
-				warnings={ 0 }
+				total={100}
+				alerts={0}
+				warnings={0}
 				href="test_href"
 			/>
 		);
 		const instance = wrapper.instance();
 
-		expect(wrapper.prop('className'), 'root el className').to.be.equal(styles['alerts']);
-		expect(wrapper.childAt(0).prop('className'), '"total" el className').to.be.equal(styles['num']);
-		expect(wrapper.childAt(0).childAt(0).prop('className'), '"total" el, child 1 className')
-			.to.be.equal(styles['label']);
-		expect(wrapper.childAt(0).childAt(1).text(), '"total" el, child 2 text').to.be.equal('100');
-		expect(wrapper.childAt(2).prop('className'), '"alerts/warnings" el className').to.be.equal(styles['ok']);
-		expect(wrapper.childAt(2).prop('href'), '"alerts/warnings" el href').to.be.equal('test_href');
-		expect(wrapper.childAt(2).childAt(0).prop('className'), '"alerts/warnings" el, child 1 className')
-			.to.be.equal(styles['label']);
-		expect(wrapper.childAt(2).childAt(0).text(), '"alerts/warnings" el, child 1 text')
-			.to.be.equal('Problems');
-		expect(wrapper.childAt(2).childAt(1).text(), '"alerts/warnings" el, child 2 text').to.be.equal('0');
+		// root el className
+		expect(wrapper.prop('className')).toBe(styles.alerts);
+		// "total" el className
+		expect(wrapper.childAt(0).prop('className')).toBe(styles.num);
+		// "total" el, child 1 className
+		expect(wrapper.childAt(0).childAt(0).prop('className')).toBe(styles.label);
+		// "total" el, child 2 text
+		expect(wrapper.childAt(0).childAt(1).text()).toBe('100');
+		// "alerts/warnings" el className
+		expect(wrapper.childAt(2).prop('className')).toBe(styles.ok);
+		// "alerts/warnings" el href
+		expect(wrapper.childAt(2).prop('href')).toBe('test_href');
+		// "alerts/warnings" el, child 1 className
+		expect(wrapper.childAt(2).childAt(0).prop('className')).toBe(styles.label);
+		// "alerts/warnings" el, child 1 text
+		expect(wrapper.childAt(2).childAt(0).text()).toBe('Problems');
+		// "alerts/warnings" el, child 2 text
+		expect(wrapper.childAt(2).childAt(1).text()).toBe('0');
 
 		wrapper.setProps({
 			total: 100,
@@ -75,10 +85,12 @@ describe('<AlertsCount IndexPage />', () => {
 			warnings: 11
 		});
 
-		expect(wrapper.childAt(2).prop('className'), '"alerts/warnings" el className').to.be.equal(styles['warning']);
-		expect(wrapper.childAt(2).childAt(0).text(), '"alerts/warnings" el, child 1 text')
-			.to.be.equal('Warnings');
-		expect(wrapper.childAt(2).childAt(1).text(), '"alerts/warnings" el, child 2 text').to.be.equal('11');
+		// "alerts/warnings" el className
+		expect(wrapper.childAt(2).prop('className')).toBe(styles.warning);
+		// "alerts/warnings" el, child 1 text
+		expect(wrapper.childAt(2).childAt(0).text()).toBe('Warnings');
+		// "alerts/warnings" el, child 2 text
+		expect(wrapper.childAt(2).childAt(1).text()).toBe('11');
 
 		wrapper.setProps({
 			total: 100,
@@ -86,10 +98,12 @@ describe('<AlertsCount IndexPage />', () => {
 			warnings: 11
 		});
 
-		expect(wrapper.childAt(2).prop('className'), '"alerts/warnings" el className').to.be.equal(styles['alert']);
-		expect(wrapper.childAt(2).childAt(0).text(), '"alerts/warnings" el, child 1 text')
-			.to.be.equal('Alerts');
-		expect(wrapper.childAt(2).childAt(1).text(), '"alerts/warnings" el, child 2 text').to.be.equal('2');
+		// "alerts/warnings" el className
+		expect(wrapper.childAt(2).prop('className')).toBe(styles.alert);
+		// "alerts/warnings" el, child 1 text
+		expect(wrapper.childAt(2).childAt(0).text()).toBe('Alerts');
+		// "alerts/warnings" el, child 2 text
+		expect(wrapper.childAt(2).childAt(1).text()).toBe('2');
 
 		wrapper.unmount();
 	});

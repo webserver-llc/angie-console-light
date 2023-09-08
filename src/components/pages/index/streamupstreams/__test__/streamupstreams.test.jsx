@@ -29,10 +29,14 @@ describe('<StreamUpstreams IndexPage />', () => {
 		);
 		const box = wrapper.find('UpstreamsBox');
 
-		expect(box.prop('title'), 'UpstreamsBox title').to.be.equal('TCP/UDP Upstreams');
-		expect(box.prop('stats'), 'UpstreamsBox stats').to.be.equal('test_stats');
-		expect(box.prop('status'), 'UpstreamsBox status').to.be.equal('ok');
-		expect(box.prop('href'), 'UpstreamsBox href').to.be.equal('#tcp_upstreams');
+		// UpstreamsBox title
+		expect(box.prop('title')).toBe('TCP/UDP Upstreams');
+		// UpstreamsBox stats
+		expect(box.prop('stats')).toBe('test_stats');
+		// UpstreamsBox status
+		expect(box.prop('status')).toBe('ok');
+		// UpstreamsBox href
+		expect(box.prop('href')).toBe('#tcp_upstreams');
 
 		wrapper.unmount();
 	});

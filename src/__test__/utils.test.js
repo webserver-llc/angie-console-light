@@ -4,8 +4,6 @@
  * All rights reserved.
  *
  */
-
-import { stub } from 'sinon';
 import {
 	formatUptime,
 	formatReadableBytes,
@@ -20,46 +18,46 @@ import {
 
 describe('Utils', () => {
 	it('formatUptime()', () => {
-		expect(formatUptime()).to.be.equal('');
-		expect(formatUptime(999)).to.be.equal('999ms');
-		expect(formatUptime(59999)).to.be.equal('59.99s');
-		expect(formatUptime(68342)).to.be.equal('1m');
-		expect(formatUptime(120 * 1000)).to.be.equal('2m');
-		expect(formatUptime(1.5 * 3600 * 1000)).to.be.equal('1h 30m');
-		expect(formatUptime(1.32 * 24 * 3600 * 1000)).to.be.equal('1d 7h 40m');
-		expect(formatUptime(1.32 * 24 * 3600 * 1000, true)).to.be.equal('1d 7h ');
+		expect(formatUptime()).toBe('');
+		expect(formatUptime(999)).toBe('999ms');
+		expect(formatUptime(59999)).toBe('59.99s');
+		expect(formatUptime(68342)).toBe('1m');
+		expect(formatUptime(120 * 1000)).toBe('2m');
+		expect(formatUptime(1.5 * 3600 * 1000)).toBe('1h 30m');
+		expect(formatUptime(1.32 * 24 * 3600 * 1000)).toBe('1d 7h 40m');
+		expect(formatUptime(1.32 * 24 * 3600 * 1000, true)).toBe('1d 7h ');
 	});
 
 	it('formatReadableBytes()', () => {
-		expect(formatReadableBytes()).to.be.equal('0');
-		expect(formatReadableBytes(null)).to.be.equal('0');
-		expect(formatReadableBytes(NaN)).to.be.equal('0');
-		expect(formatReadableBytes(Infinity)).to.be.equal('0');
-		expect(formatReadableBytes('qwe')).to.be.equal('0');
-		expect(formatReadableBytes(0)).to.be.equal('0');
+		expect(formatReadableBytes()).toBe('0');
+		expect(formatReadableBytes(null)).toBe('0');
+		expect(formatReadableBytes(NaN)).toBe('0');
+		expect(formatReadableBytes(Infinity)).toBe('0');
+		expect(formatReadableBytes('qwe')).toBe('0');
+		expect(formatReadableBytes(0)).toBe('0');
 
-		expect(formatReadableBytes(7)).to.be.equal('7.00 B');
-		expect(formatReadableBytes(16)).to.be.equal('16.0 B');
-		expect(formatReadableBytes(406)).to.be.equal('406 B');
-		expect(formatReadableBytes(1001)).to.be.equal('1001 B');
+		expect(formatReadableBytes(7)).toBe('7.00 B');
+		expect(formatReadableBytes(16)).toBe('16.0 B');
+		expect(formatReadableBytes(406)).toBe('406 B');
+		expect(formatReadableBytes(1001)).toBe('1001 B');
 
-		expect(formatReadableBytes(534591)).to.be.equal('522 KiB');
-		expect(formatReadableBytes(534591, 'B')).to.be.equal('534591 B');
+		expect(formatReadableBytes(534591)).toBe('522 KiB');
+		expect(formatReadableBytes(534591, 'B')).toBe('534591 B');
 
-		expect(formatReadableBytes(9524000)).to.be.equal('9.08 MiB');
-		expect(formatReadableBytes(9524000, 'KiB')).to.be.equal('9301 KiB');
-		expect(formatReadableBytes(9524000, 'B')).to.be.equal('9524000 B');
+		expect(formatReadableBytes(9524000)).toBe('9.08 MiB');
+		expect(formatReadableBytes(9524000, 'KiB')).toBe('9301 KiB');
+		expect(formatReadableBytes(9524000, 'B')).toBe('9524000 B');
 
-		expect(formatReadableBytes(2548575999)).to.be.equal('2.37 GiB');
-		expect(formatReadableBytes(2548575999, 'MiB')).to.be.equal('2431 MiB');
-		expect(formatReadableBytes(2548575999, 'KiB')).to.be.equal('2488844 KiB');
-		expect(formatReadableBytes(2548575999, 'B')).to.be.equal('2548575999 B');
+		expect(formatReadableBytes(2548575999)).toBe('2.37 GiB');
+		expect(formatReadableBytes(2548575999, 'MiB')).toBe('2431 MiB');
+		expect(formatReadableBytes(2548575999, 'KiB')).toBe('2488844 KiB');
+		expect(formatReadableBytes(2548575999, 'B')).toBe('2548575999 B');
 
-		expect(formatReadableBytes(5799511627775)).to.be.equal('5.27 TiB');
-		expect(formatReadableBytes(5799511627775, 'GiB')).to.be.equal('5401 GiB');
-		expect(formatReadableBytes(5799511627775, 'MiB')).to.be.equal('5530845 MiB');
-		expect(formatReadableBytes(5799511627775, 'KiB')).to.be.equal('5663585574 KiB');
-		expect(formatReadableBytes(5799511627775, 'B')).to.be.equal('5799511627775 B');
+		expect(formatReadableBytes(5799511627775)).toBe('5.27 TiB');
+		expect(formatReadableBytes(5799511627775, 'GiB')).toBe('5401 GiB');
+		expect(formatReadableBytes(5799511627775, 'MiB')).toBe('5530845 MiB');
+		expect(formatReadableBytes(5799511627775, 'KiB')).toBe('5663585574 KiB');
+		expect(formatReadableBytes(5799511627775, 'B')).toBe('5799511627775 B');
 
 		const customUnits = {
 			0: 'b',
@@ -69,20 +67,20 @@ describe('Utils', () => {
 			4: 'Tb'
 		};
 
-		expect(formatReadableBytes(5799511627775, null, customUnits)).to.be.equal('5.27 Tb');
-		expect(formatReadableBytes(5799511627775, 'Gb', customUnits)).to.be.equal('5401 Gb');
-		expect(formatReadableBytes(5799511627775, 'Mb', customUnits)).to.be.equal('5530845 Mb');
-		expect(formatReadableBytes(5799511627775, 'Kb', customUnits)).to.be.equal('5663585574 Kb');
-		expect(formatReadableBytes(5799511627775, 'b', customUnits)).to.be.equal('5799511627775 b');
+		expect(formatReadableBytes(5799511627775, null, customUnits)).toBe('5.27 Tb');
+		expect(formatReadableBytes(5799511627775, 'Gb', customUnits)).toBe('5401 Gb');
+		expect(formatReadableBytes(5799511627775, 'Mb', customUnits)).toBe('5530845 Mb');
+		expect(formatReadableBytes(5799511627775, 'Kb', customUnits)).toBe('5663585574 Kb');
+		expect(formatReadableBytes(5799511627775, 'b', customUnits)).toBe('5799511627775 b');
 	});
 
 	it('formatMs()', () => {
-		expect(formatMs()).to.be.equal('–');
-		expect(formatMs(312)).to.be.equal('312ms');
+		expect(formatMs()).toBe('–');
+		expect(formatMs(312)).toBe('312ms');
 	});
 
 	it('formatDate()', () => {
-		expect(formatDate()).to.be.equal('');
+		expect(formatDate()).toBe('');
 
 		const ts = 1596096046972;
 		const date = new Date(ts);
@@ -94,7 +92,7 @@ describe('Utils', () => {
 		const seconds = date.getSeconds();
 		const tz = date.toTimeString().split(' ')[1];
 
-		expect(formatDate(ts)).to.be.equal([
+		expect(formatDate(ts)).toBe([
 			`${ year }-${ month < 10 ? '0' : '' }${ month }-${ day < 10 ? '0' : '' }${ day }`,
 			`${ hours < 10 ? '0' : '' }${ hours }:${ minutes < 10 ? '0' : '' }${ minutes }:${ seconds < 10 ? '0' : '' }${ seconds }`,
 			tz
@@ -103,22 +101,22 @@ describe('Utils', () => {
 
 	it('getHTTPCodesArray()', () => {
 		[{
-			testCase: "No codes",
+			testCase: 'No codes',
 			args: [null, '2'],
 			result: [],
 		}, {
-			testCase: "Empty codes",
+			testCase: 'Empty codes',
 			args: [{}, '2'],
 			result: [],
 		}, {
-			testCase: "Non empty codes",
+			testCase: 'Non empty codes',
 			args: [{
-				'200': 1000,
-				'201': 3,
-				'301': 1,
-				'404': 5,
-				'500': 25,
-				'202': 4,
+				200: 1000,
+				201: 3,
+				301: 1,
+				404: 5,
+				500: 25,
+				202: 4,
 			}, '2'],
 			result: [{
 				code: '200',
@@ -131,13 +129,16 @@ describe('Utils', () => {
 				value: 4,
 			}],
 		}].forEach(({ testCase, args, result }) => {
-			expect(getHTTPCodesArray(...args), testCase).to.deep.equal(result)
+			// testCase
+			expect(getHTTPCodesArray(...args)).toEqual(result);
 		});
 	});
 
 	it('getSSLHandhsakesFailures()', () => {
-		expect(getSSLHandhsakesFailures(), 'no arguments').to.be.deep.equal([]);
-		expect(getSSLHandhsakesFailures({}), 'empty object as an argument').to.be.deep.equal([]);
+		// no arguments
+		expect(getSSLHandhsakesFailures()).toEqual([]);
+		// empty object as an argument
+		expect(getSSLHandhsakesFailures({})).toEqual([]);
 
 		const ssl = {
 			no_common_protocol: 2,
@@ -147,18 +148,24 @@ describe('Utils', () => {
 		};
 
 		getSSLHandhsakesFailures(ssl).forEach((item, i) => {
-			expect(item, `[${ i }] ${ item.id }, value prop`).to.have.property('value', ssl[item.id]);
-			expect('id' in item, `[${ i }] ${ item.id }, id exists`).to.be.true;
-			expect('label' in item, `[${ i }] ${ item.id }, label exists`).to.be.true;
+			// [${ i }] ${ item.id }, value prop
+			expect(item).toHaveProperty('value', ssl[item.id]);
+			// [${ i }] ${ item.id }, id exists
+			expect('id' in item).toBe(true);
+			// [${ i }] ${ item.id }, label exists
+			expect('label' in item).toBe(true);
 		});
 	});
 
 	it('getSSLVeryfiedFailures()', () => {
-		expect(getSSLVeryfiedFailures(), 'no arguments').to.be.deep.equal([0, []]);
-		expect(getSSLVeryfiedFailures({}), 'empty object as an argument').to.be.deep.equal([0, []]);
+		// no arguments
+		expect(getSSLVeryfiedFailures()).toEqual([0, []]);
+		// empty object as an argument
+		expect(getSSLVeryfiedFailures({})).toEqual([0, []]);
+		// empty "verify_failures"
 		expect(getSSLVeryfiedFailures({
 			verify_failures: {}
-		}), 'empty "verify_failures"').to.be.deep.equal([0, []]);
+		})).toEqual([0, []]);
 
 		const ssl = {
 			verify_failures: {
@@ -171,31 +178,47 @@ describe('Utils', () => {
 		};
 		const [total, items] = getSSLVeryfiedFailures(ssl);
 
-		expect(total, 'total value').to.equal(232);
+		// total value
+		expect(total).toBe(232);
 
 		items.forEach((item, i) => {
-			expect(item, `[${ i }] ${ item.id }, value prop`).to.have.property('value', ssl.verify_failures[item.id]);
-			expect('id' in item, `[${ i }] ${ item.id }, id exists`).to.be.true;
-			expect('label' in item, `[${ i }] ${ item.id }, label exists`).to.be.true;
+			// [${ i }] ${ item.id }, value prop
+			expect(item).toHaveProperty('value', ssl.verify_failures[item.id]);
+			// [${ i }] ${ item.id }, id exists
+			expect('id' in item).toBe(true);
+			// [${ i }] ${ item.id }, label exists
+			expect('label' in item).toBe(true);
 		});
 	});
 
 	it('isEmptyObj()', () => {
-		expect(() => isEmptyObj(), 'without argument').to.throw(/set/);	
-		expect(() => isEmptyObj(undefined), 'with undefined argument').to.throw(/set/);	
-		expect(() => isEmptyObj(null), 'with null argument').to.throw('available');	
-		expect(isEmptyObj({}), 'empty object').to.be.true;
-		expect(isEmptyObj({ a: 1 }), 'empty object').to.be.false;
+		// without argument
+		expect(() => isEmptyObj()).toThrow(/set/);
+		// with undefined argument
+		expect(() => isEmptyObj(undefined)).toThrow(/set/);
+		// with null argument
+		expect(() => isEmptyObj(null)).toThrow('available');
+		// empty object
+		expect(isEmptyObj({})).toBe(true);
+		// empty object
+		expect(isEmptyObj({ a: 1 })).toBe(false);
 	});
 
 	it('formatLastCheckDate()', () => {
-		stub(Date, 'now').callsFake(() => 1692346714363);
-		expect(formatLastCheckDate("2023-08-18T08:18:45Z"), 'invalid timestamp').to.be.equal('-');
-		expect(formatLastCheckDate("2023-08-18T08:18:34Z"), 'ms').to.be.equal('363ms');
-		expect(formatLastCheckDate("2023-08-18T08:18:24Z"), 's').to.be.equal('10.36s');
-		expect(formatLastCheckDate("2023-08-18T08:17:00Z"), 'm').to.be.equal('1m');
-		expect(formatLastCheckDate("2023-08-18T07:17:00Z"), 'h').to.be.equal('1h 1m');
-		expect(formatLastCheckDate("2023-08-16T07:17:00Z"), 'h').to.be.equal('2d 1h 1m');
-		Date.now.restore();
+		const consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation();
+		jest.spyOn(Date, 'now').mockClear().mockImplementation(() => 1692346714363);
+		// invalid timestamp
+		expect(formatLastCheckDate('2023-08-18T08:18:45Z')).toBe('-');
+		// ms
+		expect(formatLastCheckDate('2023-08-18T08:18:34Z')).toBe('363ms');
+		// s
+		expect(formatLastCheckDate('2023-08-18T08:18:24Z')).toBe('10.36s');
+		// m
+		expect(formatLastCheckDate('2023-08-18T08:17:00Z')).toBe('1m');
+		// h
+		expect(formatLastCheckDate('2023-08-18T07:17:00Z')).toBe('1h 1m');
+		// h
+		expect(formatLastCheckDate('2023-08-16T07:17:00Z')).toBe('2d 1h 1m');
+		consoleWarnMock.mockRestore();
 	});
 });

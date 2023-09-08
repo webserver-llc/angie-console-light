@@ -14,12 +14,14 @@ describe('<Footer />', () => {
 	it('shouldComponentUpdate()', () => {
 		const wrapper = shallow(<Footer />);
 
-		expect(wrapper.instance().shouldComponentUpdate(), 'return value').to.be.false;
+		// return value
+		expect(wrapper.instance().shouldComponentUpdate()).toBe(false);
 	});
 
 	it('render()', () => {
 		const wrapper = shallow(<Footer />);
 
-		expect(wrapper.find(`div.${ styles['footer'] }`).length, 'div length').to.be.equal(1);
+		// div length
+		expect(wrapper.find(`div.${ styles.footer }`).length).toBe(1);
 	});
 });

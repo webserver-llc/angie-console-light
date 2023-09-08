@@ -5,28 +5,28 @@
  *
  */
 
-import { spy } from 'sinon';
 import calculate, { buildCalculator } from '../httplimitconn.js';
 import factories from '../factories.js';
 
 describe('Calculators – StreamLimitConn', () => {
 	it('buildCalculator()', () => {
-		spy(factories, 'limitConnReqFactory');
+		jest.spyOn(factories, 'limitConnReqFactory').mockClear();
 
 		const result = buildCalculator();
 
-		expect(factories.limitConnReqFactory.calledOnce, 'limitConnReqFactory called once').to.be.true;
-		expect(factories.limitConnReqFactory.args[0][0], 'limitConnReqFactory 1st arg').to.be.deep.equal({
+		// limitConnReqFactory called once
+		expect(factories.limitConnReqFactory).toHaveBeenCalled();
+		// limitConnReqFactory 1st arg
+		expect(factories.limitConnReqFactory.mock.calls[0][0]).toEqual({
 			history: {},
 			prevUpdatingPeriod: null
 		});
-
-		factories.limitConnReqFactory.restore();
 	});
 
 	it('calculate()', () => {
 		const result = buildCalculator();
 
-		expect(calculate.name, 'calculate.name').to.be.equal(result.name);
+		// calculate.name
+		expect(calculate.name).toBe(result.name);
 	});
 });

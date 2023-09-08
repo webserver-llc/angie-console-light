@@ -1,11 +1,9 @@
 {
 	"extends": "airbnb",
 	"env": {
-		"browser": true
+		"browser": true,
+		"jest": true
 	},
-	"ignorePatterns": [
-		"**/__test__/"
-	],
 	"rules": {
 		"no-tabs": 0,
 		"comma-dangle": 0,

@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import { spy, stub } from 'sinon';
 import { shallow } from 'enzyme';
 
 import App, { history, SECTIONS, Errors } from '../App.jsx';
@@ -21,130 +20,129 @@ describe('<App />', () => {
 	});
 
 	it('Listen history', () => {
-		stub(apiUtils, 'checkApiAvailability').callsFake(
+		jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(
 			() => Promise.reject({ type: '' })
 		);
 
 		const newHash = '#new_hash';
 		let wrapper = shallow(<App.Component />);
 
-		expect(wrapper.state('hash')).to.equal(history.location.hash || '#');
+		expect(wrapper.state('hash')).toBe(history.location.hash || '#');
 
 		history.replace({ hash: newHash });
 
 		wrapper = shallow(<App.Component />);
 
-		expect(wrapper.state('hash')).to.equal(newHash);
+		expect(wrapper.state('hash')).toBe(newHash);
 
-		apiUtils.checkApiAvailability.restore();
+		apiUtils.checkApiAvailability.mockRestore();
 	});
 
 	describe('componentDidMount()', () => {
 		it('Default flow', async () => {
-			stub(apiUtils, 'checkApiAvailability').callsFake(() => Promise.resolve());
-			stub(apiUtils, 'initialLoad').callsFake(() => Promise.resolve());
-			stub(datastore, 'startObserve').callsFake(() => {});
+			jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(() => Promise.resolve());
+			jest.spyOn(apiUtils, 'initialLoad').mockClear().mockImplementation(() => Promise.resolve());
+			jest.spyOn(datastore, 'startObserve').mockClear().mockImplementation(() => {});
 
 			const wrapper = shallow(<App.Component />);
 			const instance = wrapper.instance();
 
 			await new Promise(resolve => {
-				stub(instance, 'setState').callsFake(state => resolve(state));
+				jest.spyOn(instance, 'setState').mockClear().mockImplementation(state => resolve(state));
 			});
 
-			expect(apiUtils.checkApiAvailability).to.be.calledOnce;
-			expect(apiUtils.initialLoad).to.be.calledOnce;
-			expect(apiUtils.initialLoad.args[0][0]).to.deep.equal(datastore);
-			expect(instance.setState).to.be.calledOnce;
-			expect(instance.setState.args[0][0]).to.deep.equal({ loading: false });
-			expect(datastore.startObserve).to.be.calledOnce;
+			expect(apiUtils.checkApiAvailability).toHaveBeenCalledTimes(1);
+			expect(apiUtils.initialLoad).toHaveBeenCalledTimes(1);
+			expect(apiUtils.initialLoad.mock.calls[0][0]).toEqual(datastore);
+			expect(instance.setState).toHaveBeenCalledTimes(1);
+			expect(instance.setState.mock.calls[0][0]).toEqual({ loading: false });
+			expect(datastore.startObserve).toHaveBeenCalledTimes(1);
 
-			apiUtils.checkApiAvailability.restore();
-			apiUtils.initialLoad.restore();
-			datastore.startObserve.restore();
+			apiUtils.checkApiAvailability.mockRestore();
+			apiUtils.initialLoad.mockRestore();
+			datastore.startObserve.mockRestore();
 		});
 
 		it('"initialLoad" returns error', async () => {
-			const error = "test_error";
+			const error = 'test_error';
 
-			stub(apiUtils, 'checkApiAvailability').callsFake(() => Promise.reject({ type: error }));
-			stub(apiUtils, 'checkWritePermissions').callsFake(() => {});
-			stub(apiUtils, 'initialLoad').callsFake(() => Promise.resolve());
+			jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(() => Promise.reject({ type: error }));
+			jest.spyOn(apiUtils, 'checkWritePermissions').mockClear().mockImplementation(() => {});
+			jest.spyOn(apiUtils, 'initialLoad').mockClear().mockImplementation(() => Promise.resolve());
 
 			const wrapper = shallow(<App.Component />);
 			const instance = wrapper.instance();
 
 			await new Promise(resolve => {
-				stub(instance, 'setState').callsFake(resolve);
+				jest.spyOn(instance, 'setState').mockClear().mockImplementation(resolve);
 			});
 
-			expect(instance.setState).to.be.calledOnce;
-			expect(instance.setState.args[0][0]).to.deep.equal({ loading: false, error });
+			expect(instance.setState).toHaveBeenCalledTimes(1);
+			expect(instance.setState.mock.calls[0][0]).toEqual({ loading: false, error });
 
-			apiUtils.checkApiAvailability.restore();
-			apiUtils.checkWritePermissions.restore();
-			apiUtils.initialLoad.restore();
+			apiUtils.checkApiAvailability.mockRestore();
+			apiUtils.checkWritePermissions.mockRestore();
+			apiUtils.initialLoad.mockRestore();
 		});
 	});
 
 	describe('render()', () => {
 		it('Loading', async () => {
-			stub(apiUtils, 'checkApiAvailability').callsFake(
+			jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(
 				() => Promise.reject({ type: '' })
 			);
 
 			const wrapper = shallow(<App.Component />);
 			const instance = wrapper.instance();
 
-			expect(wrapper.prop('className')).to.equal(styles['splash']);
-			expect(wrapper.find(`.${ styles['logo'] }`)).to.have.lengthOf(1);
+			expect(wrapper.prop('className')).toBe(styles.splash);
+			expect(wrapper.find(`.${ styles.logo }`)).toHaveLength(1);
 
 			const loader = wrapper.find('Loader');
 
-			expect(loader).to.have.lengthOf(1);
-			expect(loader.hasClass(styles['loader'])).to.be.true;
-			expect(wrapper.find(`.${ styles['loading'] }`)).to.have.lengthOf(1);
+			expect(loader).toHaveLength(1);
+			expect(loader.hasClass(styles.loader)).toBe(true);
+			expect(wrapper.find(`.${ styles.loading }`)).toHaveLength(1);
 
-			apiUtils.checkApiAvailability.restore();
+			apiUtils.checkApiAvailability.mockRestore();
 		});
 
 		it('Loaded', () => {
-			stub(apiUtils, 'checkApiAvailability').callsFake(
+			jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(
 				() => Promise.reject({ type: '' })
 			);
 
 			const wrapper = shallow(<App.Component />);
 			wrapper.setState({ loading: false });
 
-			expect(wrapper.prop('className')).to.equal(styles['console']);
-			expect(wrapper.find('Disclaimer')).to.have.lengthOf(0);
+			expect(wrapper.prop('className')).toBe(styles.console);
+			expect(wrapper.find('Disclaimer')).toHaveLength(0);
 
 			const header = wrapper.find('Header');
 
-			expect(header).to.have.lengthOf(1);
-			expect(header.prop('hash')).to.be.equal(wrapper.state('hash'));
-			expect(header.prop('navigation')).to.be.true;
-			expect(header.prop('statuses')).to.be.equal(STORE.__STATUSES);
+			expect(header).toHaveLength(1);
+			expect(header.prop('hash')).toBe(wrapper.state('hash'));
+			expect(header.prop('navigation')).toBe(true);
+			expect(header.prop('statuses')).toBe(STORE.__STATUSES);
 
 			const updatingControl = wrapper.find('UpdatingControl');
 
-			expect(updatingControl).to.have.lengthOf(1);
-			expect(updatingControl.prop('play')).to.be.equal(play);
-			expect(updatingControl.prop('pause')).to.be.equal(pause);
-			expect(updatingControl.prop('update')).to.be.equal(startObserve);
+			expect(updatingControl).toHaveLength(1);
+			expect(updatingControl.prop('play')).toBe(play);
+			expect(updatingControl.prop('pause')).toBe(pause);
+			expect(updatingControl.prop('update')).toBe(startObserve);
 
 			Object.keys(SECTIONS).forEach(id => {
-				wrapper.setState({ hash: id })
+				wrapper.setState({ hash: id });
 
-				expect(wrapper.find(SECTIONS[id].name)).to.have.lengthOf(1);
+				expect(wrapper.find(SECTIONS[id].name)).toHaveLength(1);
 			});
 
-			apiUtils.checkApiAvailability.restore();
+			apiUtils.checkApiAvailability.mockRestore();
 		});
-		
 
 		it('Errors', () => {
-			stub(apiUtils, 'checkApiAvailability').callsFake(
+			jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(
 				() => Promise.reject({ type: '' })
 			);
 
@@ -152,41 +150,41 @@ describe('<App />', () => {
 			wrapper.setState({ loading: false });
 			const errBlockSelector = `.${ styles['error-block'] }`;
 
-			expect(wrapper.find(errBlockSelector)).to.be.lengthOf(0);
+			expect(wrapper.find(errBlockSelector)).toHaveLength(0);
 
 			wrapper.setState({ error: 'some_unknown_error' });
 
-			expect(wrapper.find(errBlockSelector)).to.be.lengthOf(1);
-			expect(wrapper.find(`${ errBlockSelector } p`)).to.be.lengthOf(1);
-			expect(wrapper.find('Header').prop('navigation')).to.be.false;
-			expect(wrapper.find('UpdatingControl')).to.have.lengthOf(0);
+			expect(wrapper.find(errBlockSelector)).toHaveLength(1);
+			expect(wrapper.find(`${ errBlockSelector } p`)).toHaveLength(1);
+			expect(wrapper.find('Header').prop('navigation')).toBe(false);
+			expect(wrapper.find('UpdatingControl')).toHaveLength(0);
 
 			Object.keys(Errors).forEach(error => {
 				wrapper.setState({ error });
 
 				const p = wrapper.find(`${ errBlockSelector } p`);
 
-				expect(p).to.be.lengthOf(2);
-				expect(p.first().text()).to.be.equal(Errors[error]);
+				expect(p).toHaveLength(2);
+				expect(p.first().text()).toBe(Errors[error]);
 			});
 
-			apiUtils.checkApiAvailability.restore();
+			apiUtils.checkApiAvailability.mockRestore();
 		});
 
 		it('Demo env', () => {
-			stub(apiUtils, 'checkApiAvailability').callsFake(
+			jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(
 				() => Promise.reject({ type: '' })
 			);
-			stub(envUtils, 'isDemoEnv').callsFake(
+			jest.spyOn(envUtils, 'isDemoEnv').mockClear().mockImplementation(
 				() => true
 			);
-			
+
 			const wrapper = shallow(<App.Component />);
 			wrapper.setState({ loading: false });
 
-			expect(wrapper.find('Disclaimer')).to.have.lengthOf(1);
-			apiUtils.checkApiAvailability.restore();
-			envUtils.isDemoEnv.restore();
-		})
+			expect(wrapper.find('Disclaimer')).toHaveLength(1);
+			apiUtils.checkApiAvailability.mockRestore();
+			envUtils.isDemoEnv.mockRestore();
+		});
 	});
 });

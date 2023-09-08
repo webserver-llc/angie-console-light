@@ -29,33 +29,43 @@ describe('<Resolvers IndexPage />', () => {
 		};
 		const wrapper = shallow(
 			<Resolvers
-				data={ data }
-				store={ store }
+				data={data}
+				store={store}
 			/>
 		);
 		const indexBox = wrapper.find('IndexBox');
 
-		expect(indexBox.prop('title'), 'IndexBox title').to.be.equal('Resolvers');
-		expect(indexBox.prop('status'), 'IndexBox status').to.be.equal('ok');
-		expect(indexBox.prop('href'), 'IndexBox href').to.be.equal('#resolvers');
+		// IndexBox title
+		expect(indexBox.prop('title')).toBe('Resolvers');
+		// IndexBox status
+		expect(indexBox.prop('status')).toBe('ok');
+		// IndexBox href
+		expect(indexBox.prop('href')).toBe('#resolvers');
 
 		const alertsCount = indexBox.find('AlertsCount');
 
-		expect(alertsCount.prop('href'), 'AlertsCount href').to.be.equal('#resolvers');
-		expect(alertsCount.prop('total'), 'AlertsCount total').to.be.equal(100);
-		expect(alertsCount.prop('alerts'), 'AlertsCount alerts').to.be.equal(3);
+		// AlertsCount href
+		expect(alertsCount.prop('href')).toBe('#resolvers');
+		// AlertsCount total
+		expect(alertsCount.prop('total')).toBe(100);
+		// AlertsCount alerts
+		expect(alertsCount.prop('alerts')).toBe(3);
 
 		let traffic = indexBox.find('p');
 
-		expect(traffic.at(0).text(), 'Traffic req/s').to.be.equal('Req/s: 0');
-		expect(traffic.at(1).text(), 'Traffic resp/s').to.be.equal('Resp/s: 0');
+		// Traffic req/s
+		expect(traffic.at(0).text()).toBe('Req/s: 0');
+		// Traffic resp/s
+		expect(traffic.at(1).text()).toBe('Resp/s: 0');
 
 		data.resolvers.__STATS.traffic = { in: 20, out: 19 };
 		wrapper.setProps({ data, store });
 		traffic = wrapper.find('IndexBox p');
 
-		expect(traffic.at(0).text(), 'Traffic req/s').to.be.equal('Req/s: 20');
-		expect(traffic.at(1).text(), 'Traffic resp/s').to.be.equal('Resp/s: 19');
+		// Traffic req/s
+		expect(traffic.at(0).text()).toBe('Req/s: 20');
+		// Traffic resp/s
+		expect(traffic.at(1).text()).toBe('Resp/s: 19');
 
 		wrapper.unmount();
 	});

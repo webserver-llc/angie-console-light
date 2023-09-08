@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy, stub } from 'sinon';
 import { Connections } from '../connections.jsx';
 import styles from '../style.css';
 
@@ -18,43 +17,49 @@ describe('<Connections IndexPage />', () => {
 	};
 
 	it('constructor()', () => {
-		const wrapper = shallow(<Connections data={ data } />);
+		const wrapper = shallow(<Connections data={data} />);
 
-		expect(wrapper.state('tab')).to.be.equal('conns');
+		expect(wrapper.state('tab')).toBe('conns');
 
 		wrapper.unmount();
 	});
 
 	it('changeTab()', () => {
-		const wrapper = shallow(<Connections data={ data } />);
+		const wrapper = shallow(<Connections data={data} />);
 		const instance = wrapper.instance();
-		const stateSpy = spy(instance, 'setState');
+		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.changeTab('some_tab');
 
-		expect(stateSpy.calledOnce, 'this.setState called once').to.be.true;
-		expect(stateSpy.args[0][0], 'this.setState arg').to.be.deep.equal({
+		// this.setState called once
+		expect(stateSpy).toHaveBeenCalledTimes(1);
+		// this.setState arg
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			tab: 'some_tab'
 		});
 
-		stateSpy.restore();
+		stateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('getCurrentCell()', () => {
-		const wrapper = shallow(<Connections data={ data } />);
+		const wrapper = shallow(<Connections data={data} />);
 		const instance = wrapper.instance();
 		let cell = instance.getCurrentCell('not_a_number');
 
-		expect(cell.type, '[value is a string] cell nodeName').to.be.equal('td');
-		expect(cell.props.children[0], '[value is a string] cell child 1').to.be.equal('not_a_number');
+		// [value is a string] cell nodeName
+		expect(cell.type).toBe('td');
+		// [value is a string] cell child 1
+		expect(cell.props.children[0]).toBe('not_a_number');
 
 		cell = instance.getCurrentCell(125);
 
-		expect(cell.type, '[value is a number] cell nodeName').to.be.equal('td');
-		expect(cell.props.children[0], '[value is a number] cell child 1').to.be.equal(125);
-		expect(cell.props.children[1].props.className, '[value is a number] cell child 2 className')
-			.to.be.equal(styles['current__sec']);
+		// [value is a number] cell nodeName
+		expect(cell.type).toBe('td');
+		// [value is a number] cell child 1
+		expect(cell.props.children[0]).toBe(125);
+		// [value is a number] cell child 2 className
+		expect(cell.props.children[1].props.className).toBe(styles.current__sec);
 
 		wrapper.unmount();
 	});
@@ -80,72 +85,57 @@ describe('<Connections IndexPage />', () => {
 						session_reuses_s: 40
 					}
 				}}
-				className='test'
+				className="test"
 			/>
 		);
 		const instance = wrapper.instance();
-		const changeTabBindSpy = spy(instance.changeTab, 'bind');
+		const changeTabBindSpy = jest.spyOn(instance.changeTab, 'bind').mockClear();
 
 		instance.forceUpdate();
 
-		let indexBox = wrapper.find('IndexBox');
+		const indexBox = wrapper.find('IndexBox');
 
-		expect(indexBox.prop('className'), 'IndexBox className').to.be.equal('test');
+		// IndexBox className
+		expect(indexBox.prop('className')).toBe('test');
 		// indexBox = indexBox.childAt(0);
-		expect(indexBox.children(), 'IndexBox children length').to.have.lengthOf(3);
-		expect(
-			indexBox.childAt(0).prop('className'),
-			'[Conns tab] accepted block className'
-		).to.be.equal(styles['counter']);
-		expect(indexBox.childAt(0).text(), '[Conns tab] accepted block text').to.be.equal('Accepted:10');
-		expect(
-			indexBox.childAt(1).prop('className'),
-			'[Conns tab] tabs className'
-		).to.be.equal(styles['tabs']);
-		expect(
-			indexBox.childAt(1).childAt(0).prop('className'),
-			'[Conns tab] Connections tab className'
-		).to.be.equal(styles['tab-active']);
-		expect(
-			indexBox.childAt(1).childAt(0).prop('onClick').name,
-			'[Conns tab] Connections tab onClick'
-		).to.be.equal('bound changeTab');
-		expect(
-			indexBox.childAt(1).childAt(0).text(),
-			'[Conns tab] Connections tab text'
-		).to.be.equal('Connections');
+		// IndexBox children length
+		expect(indexBox.children()).toHaveLength(3);
+		// [Conns tab] accepted block className
+		expect(indexBox.childAt(0).prop('className')).toBe(styles.counter);
+		// [Conns tab] accepted block text
+		expect(indexBox.childAt(0).text()).toBe('Accepted:10');
+		// [Conns tab] tabs className
+		expect(indexBox.childAt(1).prop('className')).toBe(styles.tabs);
+		// [Conns tab] Connections tab className
+		expect(indexBox.childAt(1).childAt(0).prop('className')).toBe(styles['tab-active']);
+		// [Conns tab] Connections tab onClick
+		expect(indexBox.childAt(1).childAt(0).prop('onClick').name).toBe('bound changeTab');
+		// [Conns tab] Connections tab text
+		expect(indexBox.childAt(1).childAt(0).text()).toBe('Connections');
 
-		expect(changeTabBindSpy, 'changeTab called once').to.be.calledOnce;
-		expect(changeTabBindSpy.args[0][0], 'changeTab call 1 arg 1').to.be.deep.equal(instance);
-		expect(changeTabBindSpy.args[0][1], 'changeTab call 1 arg 2').to.be.equal('conns');
+		// changeTab called once
+		expect(changeTabBindSpy).toHaveBeenCalledTimes(1);
+		// changeTab call 1 arg 1
+		expect(changeTabBindSpy.mock.calls[0][0]).toEqual(instance);
+		// changeTab call 1 arg 2
+		expect(changeTabBindSpy.mock.calls[0][1]).toBe('conns');
 
-		expect(indexBox.childAt(2).prop('className'), '[Conns tab] table className').to.be.equal(styles['table']);
-		expect(
-			indexBox.childAt(2).childAt(0).children(),
-			'[Conns tab] table row 1 children length'
-		).to.have.lengthOf(5);
-		expect(
-			indexBox.childAt(2).childAt(1).childAt(0).text(),
-			'[Conns tab] table row 2 children 1'
-		).to.be.equal('99');
-		expect(
-			indexBox.childAt(2).childAt(1).childAt(1).text(),
-			'[Conns tab] table row 2 children 2'
-		).to.be.equal('18');
-		expect(
-			indexBox.childAt(2).childAt(1).childAt(2).text(),
-			'[Conns tab] table row 2 children 3'
-		).to.be.equal('72');
-		expect(
-			indexBox.childAt(2).childAt(1).childAt(3).text(),
-			'[Conns tab] table row 2 children 4'
-		).to.be.equal('0');
-		expect(
-			indexBox.childAt(2).childAt(1).childAt(4).text(),
-			'[Conns tab] table row 2 children 5'
-		).to.be.equal('1');
+		// [Conns tab] table className
+		expect(indexBox.childAt(2).prop('className')).toBe(styles.table);
+		// [Conns tab] table row 1 children length
+		expect(indexBox.childAt(2).childAt(0).children()).toHaveLength(5);
+		// [Conns tab] table row 2 children 1
+		expect(indexBox.childAt(2).childAt(1).childAt(0).text()).toBe('99');
+		// [Conns tab] table row 2 children 2
+		expect(indexBox.childAt(2).childAt(1).childAt(1).text()).toBe('18');
+		// [Conns tab] table row 2 children 3
+		expect(indexBox.childAt(2).childAt(1).childAt(2).text()).toBe('72');
+		// [Conns tab] table row 2 children 4
+		expect(indexBox.childAt(2).childAt(1).childAt(3).text()).toBe('0');
+		// [Conns tab] table row 2 children 5
+		expect(indexBox.childAt(2).childAt(1).childAt(4).text()).toBe('1');
 
-		changeTabBindSpy.restore();
+		changeTabBindSpy.mockRestore();
 		wrapper.unmount();
 	});
 });

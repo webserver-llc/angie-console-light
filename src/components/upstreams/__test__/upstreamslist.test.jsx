@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy, stub } from 'sinon';
 import UpstreamsList, { FILTER_OPTIONS } from '../upstreamslist.jsx';
 import SortableTable from '../../table/sortabletable.jsx';
 import appsettings from '../../../appsettings';
@@ -17,6 +16,10 @@ import tooltips from '../../../tooltips/index.jsx';
 import styles from '../style.css';
 import tableStyles from '../../table/style.css';
 
+beforeEach(() => {
+	jest.restoreAllMocks();
+});
+
 describe('<UpstreamsList />', () => {
 	const props = {
 		upstream: {
@@ -25,303 +28,330 @@ describe('<UpstreamsList />', () => {
 	};
 
 	it('extends SortableTable', () => {
-		expect(UpstreamsList.prototype instanceof SortableTable).to.be.true;
+		expect(UpstreamsList.prototype instanceof SortableTable).toBe(true);
 	});
 
 	it('constructor()', () => {
-		stub(appsettings, 'getSetting').callsFake(() => 'get_settings_result');
+		jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(() => 'get_settings_result');
 		UpstreamsList.prototype.FILTERING_SETTINGS_KEY = 'FILTERING_SETTINGS_KEY';
-		const toggleEditModeSpy = spy(UpstreamsList.prototype.toggleEditMode, 'bind');
-		const changeFilterRuleSpy = spy(UpstreamsList.prototype.changeFilterRule, 'bind');
-		const addUpstreamSpy = spy(UpstreamsList.prototype.addUpstream, 'bind');
-		const editSelectedUpstreamSpy = spy(UpstreamsList.prototype.editSelectedUpstream, 'bind');
-		const showEditorSpy = spy(UpstreamsList.prototype.showEditor, 'bind');
-		const closeEditorSpy = spy(UpstreamsList.prototype.closeEditor, 'bind');
-		const selectAllPeersSpy = spy(UpstreamsList.prototype.selectAllPeers, 'bind');
-		const selectPeerSpy = spy(UpstreamsList.prototype.selectPeer, 'bind');
+		const toggleEditModeSpy = jest.spyOn(UpstreamsList.prototype.toggleEditMode, 'bind').mockClear();
+		const changeFilterRuleSpy = jest.spyOn(UpstreamsList.prototype.changeFilterRule, 'bind').mockClear();
+		const addUpstreamSpy = jest.spyOn(UpstreamsList.prototype.addUpstream, 'bind').mockClear();
+		const editSelectedUpstreamSpy = jest.spyOn(UpstreamsList.prototype.editSelectedUpstream, 'bind').mockClear();
+		const showEditorSpy = jest.spyOn(UpstreamsList.prototype.showEditor, 'bind').mockClear();
+		const closeEditorSpy = jest.spyOn(UpstreamsList.prototype.closeEditor, 'bind').mockClear();
+		const selectAllPeersSpy = jest.spyOn(UpstreamsList.prototype.selectAllPeers, 'bind').mockClear();
+		const selectPeerSpy = jest.spyOn(UpstreamsList.prototype.selectPeer, 'bind').mockClear();
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 
-		expect(wrapper.state('editMode'), 'state editMode').to.be.false;
-		expect(wrapper.state('editor'), 'state editor').to.be.false;
-		expect(wrapper.state('selectedPeers'), 'state selectedPeers').to.be.an.instanceof(Map);
-		expect(wrapper.state('selectedPeers'), 'state selectedPeers size').to.have.lengthOf(0);
-		expect(wrapper.state('filtering'), 'state filtering').to.be.equal('get_settings_result');
+		// state editMode
+		expect(wrapper.state('editMode')).toBe(false);
+		// state editor
+		expect(wrapper.state('editor')).toBe(false);
+		// state selectedPeers
+		expect(wrapper.state('selectedPeers')).toBeInstanceOf(Map);
+		// state selectedPeers size
+		expect(wrapper.state('selectedPeers').size).toBe(0);
+		// state filtering
+		expect(wrapper.state('filtering')).toBe('get_settings_result');
 
-		expect(appsettings.getSetting.called, 'getSetting called').to.be.true;
-		expect(
-			appsettings.getSetting.calledWith('FILTERING_SETTINGS_KEY', 'all'),
-			'getSetting call args'
-		).to.be.true;
+		// getSetting called
+		expect(appsettings.getSetting).toHaveBeenCalled();
+		// getSetting call args
+		expect(appsettings.getSetting).toHaveBeenCalledWith('FILTERING_SETTINGS_KEY', 'all');
 
-		expect(toggleEditModeSpy.calledOnce, 'this.toggleEditMode.bind called once').to.be.true;
-		expect(toggleEditModeSpy.args[0][0] instanceof UpstreamsList, 'this.toggleEditMode.bind arg').to.be.true;
-		expect(changeFilterRuleSpy.calledOnce, 'this.changeFilterRule.bind called once').to.be.true;
-		expect(changeFilterRuleSpy.args[0][0] instanceof UpstreamsList, 'this.changeFilterRule.bind arg').to.be.true;
-		expect(addUpstreamSpy.calledOnce, 'this.addUpstream.bind called once').to.be.true;
-		expect(addUpstreamSpy.args[0][0] instanceof UpstreamsList, 'this.addUpstream.bind arg').to.be.true;
-		expect(editSelectedUpstreamSpy.calledOnce, 'this.editSelectedUpstream.bind called once').to.be.true;
-		expect(editSelectedUpstreamSpy.args[0][0] instanceof UpstreamsList, 'this.editSelectedUpstream.bind arg').to.be.true;
-		expect(showEditorSpy.calledOnce, 'this.showEditor.bind called once').to.be.true;
-		expect(showEditorSpy.args[0][0] instanceof UpstreamsList, 'this.showEditor.bind arg').to.be.true;
-		expect(closeEditorSpy.calledOnce, 'this.closeEditor.bind called once').to.be.true;
-		expect(closeEditorSpy.args[0][0] instanceof UpstreamsList, 'this.closeEditor.bind arg').to.be.true;
-		expect(selectAllPeersSpy.calledOnce, 'this.selectAllPeers.bind called once').to.be.true;
-		expect(selectAllPeersSpy.args[0][0] instanceof UpstreamsList, 'this.selectAllPeers.bind arg').to.be.true;
-		expect(selectPeerSpy.calledOnce, 'this.selectPeer.bind called once').to.be.true;
-		expect(selectPeerSpy.args[0][0] instanceof UpstreamsList, 'this.selectPeer.bind arg').to.be.true;
+		// this.toggleEditMode.bind called once
+		expect(toggleEditModeSpy).toHaveBeenCalled();
+		// this.toggleEditMode.bind arg
+		expect(toggleEditModeSpy.mock.calls[0][0] instanceof UpstreamsList).toBe(true);
+		// this.changeFilterRule.bind called once
+		expect(changeFilterRuleSpy).toHaveBeenCalled();
+		// this.changeFilterRule.bind arg
+		expect(changeFilterRuleSpy.mock.calls[0][0] instanceof UpstreamsList).toBe(true);
+		// this.addUpstream.bind called once
+		expect(addUpstreamSpy).toHaveBeenCalled();
+		// this.addUpstream.bind arg
+		expect(addUpstreamSpy.mock.calls[0][0] instanceof UpstreamsList).toBe(true);
+		// this.editSelectedUpstream.bind called once
+		expect(editSelectedUpstreamSpy).toHaveBeenCalled();
+		// this.editSelectedUpstream.bind arg
+		expect(editSelectedUpstreamSpy.mock.calls[0][0] instanceof UpstreamsList).toBe(true);
+		// this.showEditor.bind called once
+		expect(showEditorSpy).toHaveBeenCalled();
+		// this.showEditor.bind arg
+		expect(showEditorSpy.mock.calls[0][0] instanceof UpstreamsList).toBe(true);
+		// this.closeEditor.bind called once
+		expect(closeEditorSpy).toHaveBeenCalled();
+		// this.closeEditor.bind arg
+		expect(closeEditorSpy.mock.calls[0][0] instanceof UpstreamsList).toBe(true);
+		// this.selectAllPeers.bind called once
+		expect(selectAllPeersSpy).toHaveBeenCalled();
+		// this.selectAllPeers.bind arg
+		expect(selectAllPeersSpy.mock.calls[0][0] instanceof UpstreamsList).toBe(true);
+		// this.selectPeer.bind called once
+		expect(selectPeerSpy).toHaveBeenCalled();
+		// this.selectPeer.bind arg
+		expect(selectPeerSpy.mock.calls[0][0] instanceof UpstreamsList).toBe(true);
 
-		toggleEditModeSpy.restore();
-		changeFilterRuleSpy.restore();
-		addUpstreamSpy.restore();
-		editSelectedUpstreamSpy.restore();
-		showEditorSpy.restore();
-		closeEditorSpy.restore();
-		selectAllPeersSpy.restore();
-		selectPeerSpy.restore();
+		toggleEditModeSpy.mockRestore();
+		changeFilterRuleSpy.mockRestore();
+		addUpstreamSpy.mockRestore();
+		editSelectedUpstreamSpy.mockRestore();
+		showEditorSpy.mockRestore();
+		closeEditorSpy.mockRestore();
+		selectAllPeersSpy.mockRestore();
+		selectPeerSpy.mockRestore();
 		UpstreamsList.prototype.FILTERING_SETTINGS_KEY = undefined;
-		appsettings.getSetting.restore();
+		appsettings.getSetting.mockRestore();
 	});
 
 	it('toggleEditMode()', () => {
 		const upstream = {
 			name: '%!£@$',
-			peers: [{ server: '127.0.0.1'}]
+			peers: [{ server: '127.0.0.1' }]
 		};
 		const wrapper = shallow(
 			<UpstreamsList
-				upstream={ upstream }
+				upstream={upstream}
 			/>
 		);
 		const instance = wrapper.instance();
-		const stateSpy = spy(instance, 'setState');
+		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
-		stub(window, 'alert').callsFake(() => {});
+		jest.spyOn(window, 'alert').mockClear().mockImplementation(() => {});
 
 		instance.toggleEditMode();
 
-		expect(window.alert.calledOnce, 'alert called').to.be.true;
-		expect(stateSpy.notCalled, 'this.setState not called').to.be.true;
+		// alert called
+		expect(window.alert).toHaveBeenCalled();
+		// this.setState not called
+		expect(stateSpy).not.toHaveBeenCalled();
 
-		window.alert.resetHistory();
+		window.alert.mockReset();
 		upstream.name = 'test_1';
 		wrapper.setProps({ upstream });
 
 		let isWritableResult = null;
-		let thenSpy = spy();
+		const thenSpy = jest.fn();
 
-		stub(apiUtils, 'isWritable').callsFake(() => isWritableResult);
-		stub(apiUtils, 'isAngiePro').callsFake(() => true);
-		stub(apiUtils, 'checkWritePermissions').callsFake(() => ({
+		jest.spyOn(apiUtils, 'isWritable').mockClear().mockImplementation(() => isWritableResult);
+		jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
+		jest.spyOn(apiUtils, 'checkWritePermissions').mockClear().mockImplementation(() => ({
 			then: () => ({ then: thenSpy })
 		}));
 
 		instance.toggleEditMode();
 
-		expect(apiUtils.isWritable.calledOnce, 'isWritable called').to.be.true;
-		expect(apiUtils.checkWritePermissions.calledOnce, 'checkWritePermissions called').to.be.true;
-		expect(apiUtils.checkWritePermissions.args[0][0], 'checkWritePermissions arg').to.be.equal(upstream.name);
-		expect(apiUtils.checkWritePermissions.args[0][1], 'checkWritePermissions arg').to.be.equal('127.0.0.1:80');
-		expect(thenSpy.calledOnce, 'checkWritePermissions.then called').to.be.true;
-		expect(thenSpy.args[0][0], 'checkWritePermissions.then callback').to.be.a('function');
+		// isWritable called
+		expect(apiUtils.isWritable).toHaveBeenCalled();
+		// checkWritePermissions called
+		expect(apiUtils.checkWritePermissions).toHaveBeenCalled();
+		// checkWritePermissions arg
+		expect(apiUtils.checkWritePermissions.mock.calls[0][0]).toBe(upstream.name);
+		// checkWritePermissions arg
+		expect(apiUtils.checkWritePermissions.mock.calls[0][1]).toBe('127.0.0.1:80');
+		// checkWritePermissions.then called
+		expect(thenSpy).toHaveBeenCalled();
+		expect(thenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
-		stub(instance, 'toggleEditMode').callsFake(() => {});
-		thenSpy.args[0][0](true);
+		jest.spyOn(instance, 'toggleEditMode').mockClear().mockImplementation(() => {});
+		thenSpy.mock.calls[0][0](true);
 
-		expect(instance.toggleEditMode.calledOnce, 'this.toggleEditMode called').to.be.true;
-		expect(window.alert.notCalled, 'alert not called').to.be.true;
+		// this.toggleEditMode called
+		expect(instance.toggleEditMode).toHaveBeenCalled();
+		// alert not called
+		expect(window.alert).not.toHaveBeenCalled();
 
-		instance.toggleEditMode.resetHistory();
-		thenSpy.args[0][0](false);
+		instance.toggleEditMode.mockReset();
+		thenSpy.mock.calls[0][0](false);
 
-		expect(instance.toggleEditMode.notCalled, 'this.toggleEditMode not called').to.be.true;
-		expect(window.alert.calledOnce, 'alert called').to.be.true;
+		// this.toggleEditMode not called
+		expect(instance.toggleEditMode).not.toHaveBeenCalled();
+		// alert called
+		expect(window.alert).toHaveBeenCalled();
 
-		instance.toggleEditMode.resetHistory();
-		window.alert.resetHistory();
-		thenSpy.args[0][0](null);
+		instance.toggleEditMode.mockReset();
+		window.alert.mockReset();
+		thenSpy.mock.calls[0][0](null);
 
-		expect(instance.toggleEditMode.notCalled, 'this.toggleEditMode not called').to.be.true;
-		expect(window.alert.notCalled, 'alert not called').to.be.true;
+		// this.toggleEditMode not called
+		expect(instance.toggleEditMode).not.toHaveBeenCalled();
+		// alert not called
+		expect(window.alert).not.toHaveBeenCalled();
 
-		instance.toggleEditMode.restore();
+		instance.toggleEditMode.mockRestore();
 
-		expect(stateSpy.notCalled, 'this.setState not called').to.be.true;
+		// this.setState not called
+		expect(stateSpy).not.toHaveBeenCalled();
 
 		isWritableResult = true;
 		instance.toggleEditMode();
 		wrapper.update();
 
-		expect(stateSpy.calledOnce, 'this.setState called once').to.be.true;
-		expect(stateSpy.args[0][0], 'this.setState call 1, args').to.be.deep.equal({
+		// this.setState called once
+		expect(stateSpy).toHaveBeenCalled();
+		// this.setState call 1, args
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			editMode: true
 		});
 
 		instance.toggleEditMode();
 
-		expect(stateSpy.calledTwice, 'this.setState called twice').to.be.true;
-		expect(stateSpy.args[1][0], 'this.setState call 2, args').to.be.deep.equal({
+		// this.setState called twice
+		expect(stateSpy).toHaveBeenCalledTimes(2);
+		// this.setState call 2, args
+		expect(stateSpy.mock.calls[1][0]).toEqual({
 			editMode: false,
 			selectedPeers: new Map()
 		});
 
-		stateSpy.restore();
-		window.alert.restore();
-		apiUtils.isWritable.restore();
-		apiUtils.isAngiePro.restore();
+		stateSpy.mockRestore();
+		window.alert.mockRestore();
+		apiUtils.isWritable.mockRestore();
+		apiUtils.isAngiePro.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('editSelectedUpstream()', () => {
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
-		const stateSpy = spy(instance, 'setState');
+		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
-		stub(instance, 'showEditor').callsFake(() => {});
+		jest.spyOn(instance, 'showEditor').mockClear().mockImplementation(() => {});
 
 		instance.editSelectedUpstream();
 
-		expect(
-			stateSpy.notCalled,
-			'[no peer, no selectedPeers] this.setState not called'
-		).to.be.true;
-		expect(
-			instance.showEditor.notCalled,
-			'[no peer, no selectedPeers] this.showEditor not called'
-		).to.be.true;
+		// [no peer, no selectedPeers] this.setState not called
+		expect(stateSpy).not.toHaveBeenCalled();
+		// [no peer, no selectedPeers] this.showEditor not called
+		expect(instance.showEditor).not.toHaveBeenCalled();
 
 		const peer = { id: 'peer_1' };
 
 		instance.editSelectedUpstream(peer);
 		wrapper.update();
 
-		expect(
-			stateSpy.calledOnce,
-			'[with peer, no selectedPeers] this.setState called once'
-		).to.be.true;
-		expect(
-			stateSpy.args[0][0],
-			'[with peer, no selectedPeers] this.setState call args'
-		).to.be.deep.equal({
+		// [with peer, no selectedPeers] this.setState called once
+		expect(stateSpy).toHaveBeenCalled();
+		// [with peer, no selectedPeers] this.setState call args
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			selectedPeers: new Map([[peer.id, peer]])
 		});
-		expect(
-			instance.showEditor.calledOnce,
-			'[with peer, no selectedPeers] this.showEditor called once'
-		).to.be.true;
-		expect(
-			instance.showEditor.args[0][0],
-			'[with peer, no selectedPeers] this.showEditor call args'
-		).to.be.equal('edit');
+		// [with peer, no selectedPeers] this.showEditor called once
+		expect(instance.showEditor).toHaveBeenCalled();
+		// [with peer, no selectedPeers] this.showEditor call args
+		expect(instance.showEditor.mock.calls[0][0]).toBe('edit');
 
-		stateSpy.resetHistory();
-		instance.showEditor.resetHistory();
+		stateSpy.mockReset();
+		instance.showEditor.mockReset();
 		instance.editSelectedUpstream();
 
-		expect(
-			stateSpy.notCalled,
-			'[no peer, with selectedPeers] this.setState not called'
-		).to.be.true;
-		expect(
-			instance.showEditor.calledOnce,
-			'[no peer, with selectedPeers] this.showEditor called once'
-		).to.be.true;
-		expect(
-			instance.showEditor.args[0][0],
-			'[no peer, with selectedPeers] this.showEditor call args'
-		).to.be.equal('edit');
+		// [no peer, with selectedPeers] this.setState not called
+		expect(stateSpy).not.toHaveBeenCalled();
+		// [no peer, with selectedPeers] this.showEditor called once
+		expect(instance.showEditor).toHaveBeenCalled();
+		// [no peer, with selectedPeers] this.showEditor call args
+		expect(instance.showEditor.mock.calls[0][0]).toBe('edit');
 
-		stateSpy.restore();
-		instance.showEditor.restore();
+		stateSpy.mockRestore();
+		instance.showEditor.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('addUpstream()', () => {
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
 
-		stub(instance, 'showEditor').callsFake(() => {});
+		jest.spyOn(instance, 'showEditor').mockClear().mockImplementation(() => {});
 
 		instance.addUpstream();
 
-		expect(instance.showEditor.calledOnce, 'this.showEditor called').to.be.true;
-		expect(instance.showEditor.args[0][0], 'this.showEditor call args').to.be.equal('add');
+		// this.showEditor called
+		expect(instance.showEditor).toHaveBeenCalled();
+		// this.showEditor call args
+		expect(instance.showEditor.mock.calls[0][0]).toBe('add');
 
-		instance.showEditor.restore();
+		instance.showEditor.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('closeEditor()', () => {
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
-		const stateSpy = spy(instance, 'setState');
+		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.closeEditor();
 
-		expect(stateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(stateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// this.setState called
+		expect(stateSpy).toHaveBeenCalled();
+		// this.setState call args
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			editor: null
 		});
 
-		stateSpy.restore();
+		stateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('showEditor()', () => {
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
-		const stateSpy = spy(instance, 'setState');
+		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.showEditor('test_mode');
 
-		expect(stateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(stateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// this.setState called
+		expect(stateSpy).toHaveBeenCalled();
+		// this.setState call args
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			editor: 'test_mode'
 		});
 
-		stateSpy.restore();
+		stateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('changeFilterRule()', () => {
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
-		const stateSpy = spy(instance, 'setState');
+		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
-		stub(appsettings, 'setSetting').callsFake(() => {});
+		jest.spyOn(appsettings, 'setSetting').mockClear().mockImplementation(() => {});
 
 		instance.FILTERING_SETTINGS_KEY = 'FILTERING_SETTINGS_KEY';
 		instance.changeFilterRule({ target: { value: 'test_value' } });
 
-		expect(appsettings.setSetting.calledOnce, 'appsettings.setSetting called once').to.be.true;
-		expect(
-			appsettings.setSetting.calledWith('FILTERING_SETTINGS_KEY', 'test_value'),
-			'appsettings.setSetting call arguments'
-		).to.be.true;
-		expect(stateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(stateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// appsettings.setSetting called once
+		expect(appsettings.setSetting).toHaveBeenCalled();
+		// appsettings.setSetting call arguments
+		expect(appsettings.setSetting).toHaveBeenCalledWith('FILTERING_SETTINGS_KEY', 'test_value');
+		// this.setState called
+		expect(stateSpy).toHaveBeenCalled();
+		// this.setState call args
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			filtering: 'test_value'
 		});
 
-		stateSpy.restore();
-		appsettings.setSetting.restore();
+		stateSpy.mockRestore();
+		appsettings.setSetting.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('renderEmptyList()', () => {
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 
 		wrapper.setState({ filtering: 'filtering_test' });
@@ -330,14 +360,14 @@ describe('<UpstreamsList />', () => {
 			wrapper.instance().renderEmptyList()
 		);
 
-		expect(emptyList.name(), 'empty list html tag').to.be.equal('tr');
-		expect(emptyList.text(), 'empty list text').to.be.equal(
-			"No servers with 'filtering_test' state found in this upstream group."
-		);
-		expect(emptyList.childAt(0).prop('className'), 'empty list, child className').to.be.equal(
-			tableStyles['left-align']
-		);
-		expect(emptyList.childAt(0).prop('colSpan'), 'empty list, child colSpan').to.be.equal(30);
+		// empty list html tag
+		expect(emptyList.name()).toBe('tr');
+		// empty list text
+		expect(emptyList.text()).toBe("No servers with 'filtering_test' state found in this upstream group.");
+		// empty list, child className
+		expect(emptyList.childAt(0).prop('className')).toBe(tableStyles['left-align']);
+		// empty list, child colSpan
+		expect(emptyList.childAt(0).prop('colSpan')).toBe(30);
 
 		wrapper.unmount();
 	});
@@ -351,35 +381,25 @@ describe('<UpstreamsList />', () => {
 			{ state: 'down' }
 		];
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
 
 		wrapper.setState({ filtering: 'up' });
 
-		expect(
-			instance.filterPeers(peers),
-			'[default filtering] up filtering'
-		).to.be.deep.equal([{ state: 'up' }]);
-		expect(
-			instance.filterPeers(peers, 'failed'),
-			'failed filtering'
-		).to.be.deep.equal([
+		// [default filtering] up filtering
+		expect(instance.filterPeers(peers)).toEqual([{ state: 'up' }]);
+		// failed filtering
+		expect(instance.filterPeers(peers, 'failed')).toEqual([
 			{ state: 'unavail' },
 			{ state: 'unhealthy' }
 		]);
-		expect(
-			instance.filterPeers(peers, 'checking'),
-			'checking filtering'
-		).to.be.deep.equal([{ state: 'checking' }]);
-		expect(
-			instance.filterPeers(peers, 'down'),
-			'down filtering'
-		).to.be.deep.equal([{ state: 'down' }]);
-		expect(
-			instance.filterPeers(peers, 'all'),
-			'all filtering'
-		).to.be.deep.equal(peers);
+		// checking filtering
+		expect(instance.filterPeers(peers, 'checking')).toEqual([{ state: 'checking' }]);
+		// down filtering
+		expect(instance.filterPeers(peers, 'down')).toEqual([{ state: 'down' }]);
+		// all filtering
+		expect(instance.filterPeers(peers, 'all')).toEqual(peers);
 
 		wrapper.unmount();
 	});
@@ -389,29 +409,33 @@ describe('<UpstreamsList />', () => {
 			{ id: 'test_1' }
 		];
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
-		const stateSpy = spy(instance, 'setState');
+		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.selectAllPeers(peers);
 
-		expect(stateSpy.calledOnce, '[reset selected] this.setState called').to.be.true;
-		expect(stateSpy.args[0][0], '[reset selected] this.setState call arg').to.be.deep.equal({
+		// [reset selected] this.setState called
+		expect(stateSpy).toHaveBeenCalled();
+		// [reset selected] this.setState call arg
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			selectedPeers: new Map([])
 		});
 
-		stateSpy.resetHistory();
+		stateSpy.mockReset();
 		instance.selectAllPeers(peers, true);
 
-		expect(stateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(stateSpy.args[0][0], 'this.setState call arg').to.be.deep.equal({
+		// this.setState called
+		expect(stateSpy).toHaveBeenCalled();
+		// this.setState call arg
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			selectedPeers: new Map([
 				[peers[0].id, peers[0]]
 			])
 		});
 
-		stateSpy.restore();
+		stateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
@@ -420,138 +444,115 @@ describe('<UpstreamsList />', () => {
 			{ id: 'test_1' }
 		];
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
-		const stateSpy = spy(instance, 'setState');
+		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.selectPeer(peers[0], true);
 
-		expect(stateSpy.calledOnce, '[select peer] this.setState called').to.be.true;
-		expect(stateSpy.args[0][0], '[select peer] this.setState call arg').to.be.deep.equal({
+		// [select peer] this.setState called
+		expect(stateSpy).toHaveBeenCalled();
+		// [select peer] this.setState call arg
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			selectedPeers: new Map([
 				['test_1', peers[0]]
 			])
 		});
 
-		stateSpy.resetHistory();
+		stateSpy.mockReset();
 		instance.selectPeer(peers[0]);
 
-		expect(stateSpy.calledOnce, '[unselect peer] this.setState called').to.be.true;
-		expect(stateSpy.args[0][0], '[unselect peer] this.setState call arg').to.be.deep.equal({
+		// [unselect peer] this.setState called
+		expect(stateSpy).toHaveBeenCalled();
+		// [unselect peer] this.setState call arg
+		expect(stateSpy.mock.calls[0][0]).toEqual({
 			selectedPeers: new Map()
 		});
 
-		stateSpy.restore();
+		stateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('getSelectAllCheckbox()', () => {
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
 
-		stub(instance, 'selectAllPeers').callsFake(() => 'selectAllPeers_result');
+		jest.spyOn(instance, 'selectAllPeers').mockClear().mockImplementation(() => 'selectAllPeers_result');
 
-		expect(instance.getSelectAllCheckbox(), 'editMode = false').to.be.a('null');
+		expect(instance.getSelectAllCheckbox()).toBeNull();
 
 		wrapper.setState({ editMode: true });
 
 		let checkbox = shallow(instance.getSelectAllCheckbox([]));
 
-		expect(checkbox.name(), 'checkbox html tag').to.be.equal('th');
-		expect(checkbox.prop('rowSpan'), 'checkbox rowSpan').to.be.equal('2');
-		expect(
-			checkbox.prop('className'),
-			'checkbox className'
-		).to.be.equal(tableStyles['checkbox']);
-		expect(
-			checkbox.childAt(0).name(),
-			'checkbox, input html tag'
-		).to.be.equal('input');
-		expect(
-			checkbox.childAt(0).prop('type'),
-			'checkbox, input type'
-		).to.be.equal('checkbox');
-		expect(
-			checkbox.childAt(0).prop('checked'),
-			'[peers same as selectedPeers] checkbox, input checked'
-		).to.be.true;
-		expect(
-			checkbox.childAt(0).prop('onChange'),
-			'checkbox, input onChange'
-		).to.be.a('function');
-		expect(
-			checkbox.childAt(0).prop('onChange')({
-				target: { checked: 'target_checked' }
-			}),
-			'checkbox, input onChange return'
-		).to.be.equal('selectAllPeers_result');
-		expect(instance.selectAllPeers.calledOnce, 'this.selectAllPeers called once').to.be.true;
-		expect(
-			instance.selectAllPeers.calledWith([], 'target_checked'),
-			'this.selectAllPeers call arguments'
-		).to.be.true;
+		// checkbox html tag
+		expect(checkbox.name()).toBe('th');
+		// checkbox rowSpan
+		expect(checkbox.prop('rowSpan')).toBe('2');
+		// checkbox className
+		expect(checkbox.prop('className')).toBe(tableStyles.checkbox);
+		// checkbox, input html tag
+		expect(checkbox.childAt(0).name()).toBe('input');
+		// checkbox, input type
+		expect(checkbox.childAt(0).prop('type')).toBe('checkbox');
+		// [peers same as selectedPeers] checkbox, input checked
+		expect(checkbox.childAt(0).prop('checked')).toBe(true);
+		expect(checkbox.childAt(0).prop('onChange')).toBeInstanceOf(Function);
+		// checkbox, input onChange return
+		expect(checkbox.childAt(0).prop('onChange')({
+			target: { checked: 'target_checked' }
+		})).toBe('selectAllPeers_result');
+		// this.selectAllPeers called once
+		expect(instance.selectAllPeers).toHaveBeenCalled();
+		// this.selectAllPeers call arguments
+		expect(instance.selectAllPeers).toHaveBeenCalledWith([], 'target_checked');
 
 		checkbox = shallow(instance.getSelectAllCheckbox([1, 2, 3]));
 
-		expect(
-			checkbox.childAt(0).prop('checked'),
-			'[peers differs from selectedPeers] checkbox, input checked'
-		).to.be.false;
+		// [peers differs from selectedPeers] checkbox, input checked
+		expect(checkbox.childAt(0).prop('checked')).toBe(false);
 
-		instance.selectAllPeers.restore();
+		instance.selectAllPeers.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('getCheckbox()', () => {
 		const peer = { id: 'test_1' };
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
 
-		stub(instance, 'selectPeer').callsFake(() => 'selectPeer_result');
+		jest.spyOn(instance, 'selectPeer').mockClear().mockImplementation(() => 'selectPeer_result');
 
-		expect(instance.getCheckbox(), 'editMode = false').to.be.a('null');
+		expect(instance.getCheckbox()).toBeNull();
 
 		wrapper.setState({ editMode: true });
 
 		let checkbox = shallow(instance.getCheckbox(peer));
 
-		expect(checkbox.name(), 'checkbox html tag').to.be.equal('td');
-		expect(
-			checkbox.prop('className'),
-			'checkbox className'
-		).to.be.equal(tableStyles['checkbox']);
-		expect(
-			checkbox.childAt(0).name(),
-			'checkbox, input html tag'
-		).to.be.equal('input');
-		expect(
-			checkbox.childAt(0).prop('type'),
-			'checkbox, input type'
-		).to.be.equal('checkbox');
-		expect(
-			checkbox.childAt(0).prop('checked'),
-			'[peer IS NOT in selectedPeers] checkbox, input checked'
-		).to.be.false;
-		expect(
-			checkbox.childAt(0).prop('onChange'),
-			'checkbox, input onChange'
-		).to.be.a('function');
-		expect(
-			checkbox.childAt(0).prop('onChange')({
-				target: { checked: 'target_checked' }
-			}),
-			'checkbox, input onChange return'
-		).to.be.equal('selectPeer_result');
-		expect(instance.selectPeer.calledOnce, 'this.selectPeer called once').to.be.true;
-		expect(
-			instance.selectPeer.calledWith(peer, 'target_checked'),
-			'this.selectPeer call arguments'
-		).to.be.true;
+		// checkbox html tag
+		expect(checkbox.name()).toBe('td');
+		// checkbox className
+		expect(checkbox.prop('className')).toBe(tableStyles.checkbox);
+		// checkbox, input html tag
+		expect(checkbox.childAt(0).name()).toBe('input');
+		// checkbox, input type
+		expect(checkbox.childAt(0).prop('type')).toBe('checkbox');
+		// [peer IS NOT in selectedPeers] checkbox, input checked
+		expect(checkbox.childAt(0).prop('checked')).toBe(false);
+		expect(checkbox.childAt(0).prop('onChange')).toBeInstanceOf(Function);
+		// checkbox, input onChange return
+		expect(checkbox.childAt(0).prop('onChange')({
+			target: { checked: 'target_checked' }
+		})).toBe('selectPeer_result');
+		// this.selectPeer called once
+		expect(instance.selectPeer).toHaveBeenCalled();
+		// this.selectPeer call arguments
+		expect(instance.selectPeer).toHaveBeenCalledWith(peer, 'target_checked');
 
 		wrapper.setState({
 			selectedPeers: new Map([
@@ -560,12 +561,10 @@ describe('<UpstreamsList />', () => {
 		});
 		checkbox = shallow(instance.getCheckbox(peer));
 
-		expect(
-			checkbox.childAt(0).prop('checked'),
-			'[peer IS in selectedPeers] checkbox, input checked'
-		).to.be.true;
+		// [peer IS in selectedPeers] checkbox, input checked
+		expect(checkbox.childAt(0).prop('checked')).toBe(true);
 
-		instance.selectPeer.restore();
+		instance.selectPeer.mockRestore();
 		wrapper.unmount();
 	});
 
@@ -588,110 +587,90 @@ describe('<UpstreamsList />', () => {
 			upstreamsApi: 'upstreamsApi_test'
 		};
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
 
-		after(() => {
-			wrapper.unmount()
+		afterAll(() => {
+			wrapper.unmount();
 		});
-		
+
 		it('isDemoEnv = true', () => {
-			stub(envUtils, 'isDemoEnv').callsFake(() => true);
-			stub(apiUtils, 'isAngiePro').callsFake(() => false);
-			stub(tooltips, 'useTooltip').callsFake(() => ({
+			jest.spyOn(envUtils, 'isDemoEnv').mockClear().mockImplementation(() => true);
+			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
 				prop_from_useTooltip: true
 			}));
 			const editButton = shallow(instance.renderEditButton(false));
-			
-			expect(
-				editButton.prop('className'),
-				'has class'
-			).to.be.equal(styles['edit-label']);
-			expect(
-				editButton.childAt(0).prop('className'),
-				'has class'
-			).to.be.equal(styles['edit-icon']);
-			expect(
-				editButton.childAt(1).prop('className'),
-				'has class'
-			).to.be.equal(styles['promo-text']);
-			
-			apiUtils.isAngiePro.restore();
-			envUtils.isDemoEnv.restore();
-			tooltips.useTooltip.restore();
+
+			// has class
+			expect(editButton.prop('className')).toBe(styles['edit-label']);
+			// has class
+			expect(editButton.childAt(0).prop('className')).toBe(styles['edit-icon']);
+			// has class
+			expect(editButton.childAt(1).prop('className')).toBe(styles['promo-text']);
+
+			apiUtils.isAngiePro.mockRestore();
+			envUtils.isDemoEnv.mockRestore();
+			tooltips.useTooltip.mockRestore();
 		});
-		
+
 		it('isWritable = false, isAngiePro = false', () => {
-			stub(apiUtils, 'isAngiePro').callsFake(() => false);
-			stub(tooltips, 'useTooltip').callsFake(() => ({
+			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
 				prop_from_useTooltip: true
 			}));
 			const editButton = shallow(instance.renderEditButton(false));
-			
-			expect(
-				editButton.prop('className'),
-				'has class'
-			).to.be.equal(styles['edit-disable']);
-			expect(tooltips.useTooltip.calledOnce, 'useTooltip called once').to.be.true;
-			expect(
-				tooltips.useTooltip.args[0][0],
-				'useTooltip call arg'
-			).to.be.equal('Available in Angie PRO only');
-			expect(
-				tooltips.useTooltip.args[0][1],
-				'useTooltip call arg'
-			).to.be.equal('hint-right');
-			
-			apiUtils.isAngiePro.restore();
-			tooltips.useTooltip.restore();
+
+			// has class
+			expect(editButton.prop('className')).toBe(styles['edit-disable']);
+			// useTooltip called once
+			expect(tooltips.useTooltip).toHaveBeenCalled();
+			// useTooltip call arg
+			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Available in Angie PRO only');
+			// useTooltip call arg
+			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
+
+			apiUtils.isAngiePro.mockRestore();
+			tooltips.useTooltip.mockRestore();
 		});
-		
+
 		it('isWritable = true, isAngiePro = false', () => {
-			stub(apiUtils, 'isAngiePro').callsFake(() => false);
-			stub(tooltips, 'useTooltip').callsFake(() => ({
+			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
 				prop_from_useTooltip: true
 			}));
 			const editButton = shallow(instance.renderEditButton(true));
-			
-			expect(
-				editButton.prop('className'),
-				'has class'
-			).to.be.equal(styles['edit-disable']);
-			expect(tooltips.useTooltip.calledOnce, 'useTooltip called once').to.be.true;
-			expect(
-				tooltips.useTooltip.args[0][0],
-				'useTooltip call arg'
-			).to.be.equal('Available in Angie PRO only');
-			expect(
-				tooltips.useTooltip.args[0][1],
-				'useTooltip call arg'
-			).to.be.equal('hint-right');
-			
-			apiUtils.isAngiePro.restore();
-			tooltips.useTooltip.restore();
+
+			// has class
+			expect(editButton.prop('className')).toBe(styles['edit-disable']);
+			// useTooltip called once
+			expect(tooltips.useTooltip).toHaveBeenCalled();
+			// useTooltip call arg
+			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Available in Angie PRO only');
+			// useTooltip call arg
+			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
+
+			apiUtils.isAngiePro.mockRestore();
+			tooltips.useTooltip.mockRestore();
 		});
-		
+
 		it('isWritable = false, isAngiePro = true', () => {
-			stub(apiUtils, 'isAngiePro').callsFake(() => true);
-			expect(instance.renderEditButton(false)).to.be.null;
-			apiUtils.isAngiePro.restore();
+			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
+			expect(instance.renderEditButton(false)).toBeNull();
+			apiUtils.isAngiePro.mockRestore();
 		});
-		
+
 		it('isWritable = true, isAngiePro = true', () => {
-			stub(apiUtils, 'isAngiePro').callsFake(() => true);
+			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
 			const editButton = shallow(instance.renderEditButton(true));
-			
-			expect(
-				editButton.prop('className'),
-				'has class'
-			).to.be.equal(styles['edit']);
-			expect(
-				editButton.prop('onClick').name,
-				'has click handler'
-			).to.be.equal('bound toggleEditMode');
-			
-			apiUtils.isAngiePro.restore();
+
+			// has class
+			expect(editButton.prop('className')).toBe(styles.edit);
+			// has click handler
+			expect(editButton.prop('onClick').name).toBe('bound toggleEditMode');
+
+			apiUtils.isAngiePro.mockRestore();
 		});
 	});
 
@@ -714,175 +693,135 @@ describe('<UpstreamsList />', () => {
 			upstreamsApi: 'upstreamsApi_test'
 		};
 		const wrapper = shallow(
-			<UpstreamsList { ...props } />
+			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
 		let isWritableResult = false;
 
-		stub(apiUtils, 'isWritable').callsFake(() => isWritableResult);
-		stub(apiUtils, 'isAngiePro').callsFake(() => true);
-		stub(instance, 'filterPeers').callsFake(peers => peers);
-		stub(tooltips, 'useTooltip').callsFake(() => ({
+		jest.spyOn(apiUtils, 'isWritable').mockClear().mockImplementation(() => isWritableResult);
+		jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
+		jest.spyOn(instance, 'filterPeers').mockClear().mockImplementation(peers => peers);
+		jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
 			prop_from_useTooltip: true
 		}));
-		stub(instance, 'renderPeers').callsFake(() => 'renderPeers_result');
+		jest.spyOn(instance, 'renderPeers').mockClear().mockImplementation(() => 'renderPeers_result');
 
 		wrapper.setState({ filtering: 'up' });
 
-		expect(
-			instance.filterPeers.calledOnce,
-			'[showOnlyFailed = false] this.filterPeers called once'
-		).to.be.true;
-		expect(
-			instance.filterPeers.calledWith(props.upstream.peers),
-			'[showOnlyFailed = false] this.filterPeers call args'
-		).to.be.true;
-		expect(
-			apiUtils.isWritable.calledTwice,
-			'[isWritable returns false] isWritable called twice'
-		).to.be.true;
-		expect(wrapper.prop('className'), 'wrapper className').to.be.equal(styles['upstreams-list']);
-		expect(wrapper.prop('id'), 'wrapper id').to.be.equal('upstream-test_name');
-		expect(wrapper.childAt(0).name(), '[state.editor = false] filter element').to.be.equal('select');
-		expect(
-			wrapper.childAt(0).prop('name'),
-			'[state.editor = false] filter element name'
-		).to.be.equal('filter');
-		expect(
-			wrapper.childAt(0).prop('className'),
-			'filter element className'
-		).to.be.equal(styles['filter']);
-		expect(
-			wrapper.childAt(0).prop('onChange').name,
-			'filter element onChange'
-		).to.be.equal('bound changeFilterRule');
+		// [showOnlyFailed = false] this.filterPeers called once
+		expect(instance.filterPeers).toHaveBeenCalled();
+		// [showOnlyFailed = false] this.filterPeers call args
+		expect(instance.filterPeers).toHaveBeenCalledWith(props.upstream.peers);
+		// [isWritable returns false] isWritable called twice
+		expect(apiUtils.isWritable).toHaveReturnedTimes(2);
+		// wrapper className
+		expect(wrapper.prop('className')).toBe(styles['upstreams-list']);
+		// wrapper id
+		expect(wrapper.prop('id')).toBe('upstream-test_name');
+		// [state.editor = false] filter element
+		expect(wrapper.childAt(0).name()).toBe('select');
+		// [state.editor = false] filter element name
+		expect(wrapper.childAt(0).prop('name')).toBe('filter');
+		// filter element className
+		expect(wrapper.childAt(0).prop('className')).toBe(styles.filter);
+		// filter element onChange
+		expect(wrapper.childAt(0).prop('onChange').name).toBe('bound changeFilterRule');
 
 		const filterKeys = Object.keys(FILTER_OPTIONS);
 
-		expect(
-			wrapper.childAt(0).children(''),
-			'filter element options length'
-		).to.have.lengthOf(filterKeys.length);
+		// filter element options length
+		expect(wrapper.childAt(0).children('')).toHaveLength(filterKeys.length);
 
 		filterKeys.forEach((key, i) => {
-			expect(
-				wrapper.childAt(0).childAt(i).name(),
-				`option ${ i } html tag`
-			).to.be.equal('option');
-			expect(
-				wrapper.childAt(0).childAt(i).prop('value'),
-				`option ${ i } value`
-			).to.be.equal(key);
-			expect(
-				wrapper.childAt(0).childAt(i).prop('selected'),
-				`option ${ i } selected`
-			).to.be.equal(key === 'up');
-			expect(
-				wrapper.childAt(0).childAt(i).text(),
-				`option ${ i } text`
-			).to.be.equal(FILTER_OPTIONS[key]);
+			// option ${ i } html tag
+			expect(wrapper.childAt(0).childAt(i).name()).toBe('option');
+			// option ${ i } value
+			expect(wrapper.childAt(0).childAt(i).prop('value')).toBe(key);
+			// option ${ i } selected
+			expect(wrapper.childAt(0).childAt(i).prop('selected')).toBe(key === 'up');
+			// option ${ i } text
+			expect(wrapper.childAt(0).childAt(i).text()).toBe(FILTER_OPTIONS[key]);
 		});
 
-		expect(
-			wrapper.childAt(1).prop('className'),
-			'head className'
-		).to.be.equal(styles['head']);
-		expect(
-			wrapper.childAt(1).childAt(0).name(),
-			'head title html tag'
-		).to.be.equal('h2');
-		expect(
-			wrapper.childAt(1).childAt(0).prop('className'),
-			'head title className'
-		).to.be.equal(styles['title']);
-		expect(
-			wrapper.childAt(1).childAt(0).prop('prop_from_useTooltip'),
-			'head title tooltip props'
-		).to.be.true;
-		expect(
-			wrapper.childAt(1).childAt(0).text(),
-			'head title text'
-		).to.be.equal('test_name');
-		expect(
-			wrapper.childAt(1).children(),
-			'[writePermission = false, state.editMode = false, upstream.zoneSize = null] head children length'
-		).to.have.lengthOf(1);
-		expect(wrapper.childAt(2).text(), 'this.renderPeers result').to.be.equal('renderPeers_result');
-		expect(instance.renderPeers.calledOnce, 'this.renderPeers called once').to.be.true;
-		expect(instance.renderPeers.args[0][0][0].id, '[1] peers order').to.be.equal('test_1');
-		expect(instance.renderPeers.args[0][0][1].id, '[1] peers order').to.be.equal('test_2');
-		expect(instance.renderPeers.args[0][0][2].id, '[1] peers order').to.be.equal('test_3');
-		expect(instance.renderPeers.args[0][0][3].id, '[1] peers order').to.be.equal('test_4');
-		expect(instance.renderPeers.args[0][0][4].id, '[1] peers order').to.be.equal('test_5');
+		// head className
+		expect(wrapper.childAt(1).prop('className')).toBe(styles.head);
+		// head title html tag
+		expect(wrapper.childAt(1).childAt(0).name()).toBe('h2');
+		// head title className
+		expect(wrapper.childAt(1).childAt(0).prop('className')).toBe(styles.title);
+		// head title tooltip props
+		expect(wrapper.childAt(1).childAt(0).prop('prop_from_useTooltip')).toBe(true);
+		// head title text
+		expect(wrapper.childAt(1).childAt(0).text()).toBe('test_name');
+		// [writePermission = false, state.editMode = false, upstream.zoneSize = null] head children length
+		expect(wrapper.childAt(1).children()).toHaveLength(1);
+		// this.renderPeers result
+		expect(wrapper.childAt(2).text()).toBe('renderPeers_result');
+		// this.renderPeers called once
+		expect(instance.renderPeers).toHaveBeenCalled();
+		// [1] peers order
+		expect(instance.renderPeers.mock.calls[0][0][0].id).toBe('test_1');
+		// [1] peers order
+		expect(instance.renderPeers.mock.calls[0][0][1].id).toBe('test_2');
+		// [1] peers order
+		expect(instance.renderPeers.mock.calls[0][0][2].id).toBe('test_3');
+		// [1] peers order
+		expect(instance.renderPeers.mock.calls[0][0][3].id).toBe('test_4');
+		// [1] peers order
+		expect(instance.renderPeers.mock.calls[0][0][4].id).toBe('test_5');
 
-		expect(tooltips.useTooltip.calledOnce, 'useTooltip called once').to.be.true;
-		expect(
-			tooltips.useTooltip.args[0][0].type.displayName,
-			'useTooltip call arg'
-		).to.be.equal('UpstreamStatsTooltip');
-		expect(
-			tooltips.useTooltip.args[0][0].props.upstream,
-			'useTooltip call arg props'
-		).to.be.deep.equal(props.upstream);
+		// useTooltip called once
+		expect(tooltips.useTooltip).toHaveBeenCalled();
+		// useTooltip call arg
+		expect(tooltips.useTooltip.mock.calls[0][0].type.displayName).toBe('UpstreamStatsTooltip');
+		// useTooltip call arg props
+		expect(tooltips.useTooltip.mock.calls[0][0].props.upstream).toEqual(props.upstream);
 
-		apiUtils.isWritable.resetHistory();
-		instance.renderPeers.resetHistory();
+		apiUtils.isWritable.mockClear();
+		instance.renderPeers.mockClear();
 		isWritableResult = null;
 		wrapper.setState({
 			sortOrder: 'desc',
 			editor: 'test_editor'
 		});
 		wrapper.update();
-		expect(instance.renderPeers).to.be.calledOnce;
-		expect(instance.renderPeers.args[0][0][0].id, '[2] peers order').to.be.equal('test_5');
-		expect(instance.renderPeers.args[0][0][1].id, '[2] peers order').to.be.equal('test_3');
-		expect(instance.renderPeers.args[0][0][2].id, '[2] peers order').to.be.equal('test_2');
-		expect(instance.renderPeers.args[0][0][3].id, '[2] peers order').to.be.equal('test_1');
-		expect(instance.renderPeers.args[0][0][4].id, '[2] peers order').to.be.equal('test_4');
+		expect(instance.renderPeers).toHaveBeenCalledTimes(1);
+		// [2] peers order
+		expect(instance.renderPeers.mock.calls[0][0][0].id).toBe('test_5');
+		// [2] peers order
+		expect(instance.renderPeers.mock.calls[0][0][1].id).toBe('test_3');
+		// [2] peers order
+		expect(instance.renderPeers.mock.calls[0][0][2].id).toBe('test_2');
+		// [2] peers order
+		expect(instance.renderPeers.mock.calls[0][0][3].id).toBe('test_1');
+		// [2] peers order
+		expect(instance.renderPeers.mock.calls[0][0][4].id).toBe('test_4');
 
-		expect(
-			apiUtils.isWritable.calledTwice,
-			'[isWritable returns null] isWritable called twice'
-		).to.be.true;
-		expect(wrapper.childAt(0).name(), 'upstreams editor').to.be.equal('UpstreamsEditor');
-		expect(
-			wrapper.childAt(0).prop('upstream'),
-			'upstreams editor, prop upstream'
-		).to.be.deep.equal(props.upstream);
-		expect(
-			wrapper.childAt(0).prop('peers'),
-			'upstreams editor, prop peers'
-		).to.be.a('null');
-		expect(
-			wrapper.childAt(0).prop('isStream'),
-			'upstreams editor, prop isStream'
-		).to.be.equal('isStream_test');
-		expect(
-			wrapper.childAt(0).prop('onClose').name,
-			'upstreams editor, prop onClose'
-		).to.be.equal('bound closeEditor');
-		expect(
-			wrapper.childAt(0).prop('upstreamsApi'),
-			'upstreams editor, prop upstreamsApi'
-		).to.be.equal('upstreamsApi_test');
-		expect(
-			wrapper.childAt(2).children(),
-			'[writePermission = true, state.editMode = false, upstream.zoneSize = null] head children length'
-		).to.have.lengthOf(2);
-		expect(
-			wrapper.childAt(2).childAt(1).prop('className'),
-			'[state.editMode = false] head, toggle el className'
-		).to.be.equal(styles['edit']);
-		expect(
-			wrapper.childAt(2).childAt(1).prop('onClick').name,
-			'[state.editMode = false] head, toggle el onClick'
-		).to.be.equal('bound toggleEditMode');
+		// [isWritable returns null] isWritable called twice
+		expect(apiUtils.isWritable).toHaveBeenCalledTimes(2);
+		// upstreams editor
+		expect(wrapper.childAt(0).name()).toBe('UpstreamsEditor');
+		// upstreams editor, prop upstream
+		expect(wrapper.childAt(0).prop('upstream')).toEqual(props.upstream);
+		expect(wrapper.childAt(0).prop('peers')).toBeNull();
+		// upstreams editor, prop isStream
+		expect(wrapper.childAt(0).prop('isStream')).toBe('isStream_test');
+		// upstreams editor, prop onClose
+		expect(wrapper.childAt(0).prop('onClose').name).toBe('bound closeEditor');
+		// upstreams editor, prop upstreamsApi
+		expect(wrapper.childAt(0).prop('upstreamsApi')).toBe('upstreamsApi_test');
+		// [writePermission = true, state.editMode = false, upstream.zoneSize = null] head children length
+		expect(wrapper.childAt(2).children()).toHaveLength(2);
+		// [state.editMode = false] head, toggle el className
+		expect(wrapper.childAt(2).childAt(1).prop('className')).toBe(styles.edit);
+		// [state.editMode = false] head, toggle el onClick
+		expect(wrapper.childAt(2).childAt(1).prop('onClick').name).toBe('bound toggleEditMode');
 
 		const selectedPeers = new Map([
 			['test_1', props.upstream.peers[0]]
 		]);
 
-		apiUtils.isWritable.resetHistory();
+		apiUtils.isWritable.mockClear();
 		isWritableResult = true;
 		wrapper.setState({
 			editor: 'edit',
@@ -890,113 +829,75 @@ describe('<UpstreamsList />', () => {
 			selectedPeers
 		});
 
-		expect(
-			apiUtils.isWritable.calledOnce,
-			'[isWritable returns true] isWritable called once'
-		).to.be.true;
-		expect(
-			wrapper.childAt(0).prop('peers'),
-			'[state.editor = edit] upstreams editor, prop peers'
-		).to.be.deep.equal(selectedPeers);
-		expect(
-			wrapper.childAt(2).children(),
-			'[writePermission = true, state.editMode = true, upstream.zoneSize = null] head children length'
-		).to.have.lengthOf(4);
-		expect(
-			wrapper.childAt(2).childAt(1).prop('className'),
-			'[state.editMode = false] head, toggle el className'
-		).to.be.equal(styles['edit-active']);
-		expect(
-			wrapper.childAt(2).childAt(2).prop('className'),
-			'head, edit button className'
-		).to.be.equal(styles['btn']);
+		// [isWritable returns true] isWritable called once
+		expect(apiUtils.isWritable).toHaveBeenCalled();
+		// [state.editor = edit] upstreams editor, prop peers
+		expect(wrapper.childAt(0).prop('peers')).toEqual(selectedPeers);
+		// [writePermission = true, state.editMode = true, upstream.zoneSize = null] head children length
+		expect(wrapper.childAt(2).children()).toHaveLength(4);
+		// [state.editMode = false] head, toggle el className
+		expect(wrapper.childAt(2).childAt(1).prop('className')).toBe(styles['edit-active']);
+		// head, edit button className
+		expect(wrapper.childAt(2).childAt(2).prop('className')).toBe(styles.btn);
 
-		stub(instance, 'editSelectedUpstream').callsFake(() => 'editSelectedUpstream_result');
+		jest.spyOn(instance, 'editSelectedUpstream').mockClear().mockImplementation(() => 'editSelectedUpstream_result');
 
-		expect(
-			wrapper.childAt(2).childAt(2).prop('onClick')(),
-			'head, edit button onClick result'
-		).to.be.equal('editSelectedUpstream_result');
-		expect(
-			instance.editSelectedUpstream.calledOnce,
-			'this.editSelectedUpstream called'
-		).to.be.true;
-		expect(
-			wrapper.childAt(2).childAt(3).prop('className'),
-			'head, add button className'
-		).to.be.equal(styles['btn']);
-		expect(
-			wrapper.childAt(2).childAt(3).prop('onClick').name,
-			'head, add button onClick'
-		).to.be.equal('bound addUpstream');
+		// head, edit button onClick result
+		expect(wrapper.childAt(2).childAt(2).prop('onClick')()).toBe('editSelectedUpstream_result');
+		// this.editSelectedUpstream called
+		expect(instance.editSelectedUpstream).toHaveBeenCalled();
+		// head, add button className
+		expect(wrapper.childAt(2).childAt(3).prop('className')).toBe(styles.btn);
+		// head, add button onClick
+		expect(wrapper.childAt(2).childAt(3).prop('onClick').name).toBe('bound addUpstream');
 
-		tooltips.useTooltip.resetHistory();
+		tooltips.useTooltip.mockClear();
 		props.upstream.zoneSize = 'zoneSize_test';
 		wrapper.setProps(props);
 
-		expect(
-			wrapper.childAt(2).children(),
-			'[writePermission = true, state.editMode = true, valid upstream.zoneSize] head children length'
-		).to.have.lengthOf(5);
-		expect(
-			wrapper.childAt(2).childAt(4).prop('className'),
-			'head, zone capacity className'
-		).to.be.equal(styles['zone-capacity']);
-		window.temp1 = wrapper.childAt(2)
-		expect(
-			wrapper.childAt(2).childAt(4).childAt(2).prop('prop_from_useTooltip'),
-			'head, zone capacity, tooltiped el'
-		).to.be.true;
-		expect(
-			wrapper.childAt(2).childAt(4).childAt(2).childAt(0).name(),
-			'head, zone capacity, tooltiped el, progress bar'
-		).to.be.equal('ProgressBar');
-		expect(
-			wrapper.childAt(2).childAt(4).childAt(2).childAt(0).prop('percentage'),
-			'head, zone capacity, tooltiped el, progress bar props'
-		).to.be.equal('zoneSize_test');
+		// [writePermission = true, state.editMode = true, valid upstream.zoneSize] head children length
+		expect(wrapper.childAt(2).children()).toHaveLength(5);
+		// head, zone capacity className
+		expect(wrapper.childAt(2).childAt(4).prop('className')).toBe(styles['zone-capacity']);
+		window.temp1 = wrapper.childAt(2);
+		// head, zone capacity, tooltiped el
+		expect(wrapper.childAt(2).childAt(4).childAt(2).prop('prop_from_useTooltip')).toBe(true);
+		// head, zone capacity, tooltiped el, progress bar
+		expect(wrapper.childAt(2).childAt(4).childAt(2).childAt(0)
+			.name()).toBe('ProgressBar');
+		// head, zone capacity, tooltiped el, progress bar props
+		expect(wrapper.childAt(2).childAt(4).childAt(2).childAt(0)
+			.prop('percentage')).toBe('zoneSize_test');
 
-		expect(tooltips.useTooltip.calledTwice, 'useTooltip called twice').to.be.true;
-		expect(
-			tooltips.useTooltip.args[1][0].type.displayName,
-			'useTooltip call 2, arg 1'
-		).to.be.equal('SharedZoneTooltip');
-		expect(
-			tooltips.useTooltip.args[1][0].props.zone,
-			'useTooltip call 2, arg 1, props'
-		).to.be.equal('slab_test');
-		expect(
-			tooltips.useTooltip.args[1][1],
-			'useTooltip call 2, arg 2'
-		).to.be.equal('hint');
+		// useTooltip called twice
+		expect(tooltips.useTooltip).toHaveBeenCalledTimes(2);
+		// useTooltip call 2, arg 1
+		expect(tooltips.useTooltip.mock.calls[1][0].type.displayName).toBe('SharedZoneTooltip');
+		// useTooltip call 2, arg 1, props
+		expect(tooltips.useTooltip.mock.calls[1][0].props.zone).toBe('slab_test');
+		// useTooltip call 2, arg 2
+		expect(tooltips.useTooltip.mock.calls[1][1]).toBe('hint');
 
-		instance.filterPeers.resetHistory();
+		instance.filterPeers.mockClear();
 		props.showOnlyFailed = true;
 		wrapper.setProps(props);
 
-		expect(
-			instance.filterPeers.calledOnce,
-			'[showOnlyFailed = true] this.filterPeers called once'
-		).to.be.true;
-		expect(
-			instance.filterPeers.calledWith(props.upstream.peers, 'failed'),
-			'[showOnlyFailed = true] this.filterPeers call args'
-		).to.be.true;
+		// [showOnlyFailed = true] this.filterPeers called once
+		expect(instance.filterPeers).toHaveBeenCalled();
+		// [showOnlyFailed = true] this.filterPeers call args
+		expect(instance.filterPeers).toHaveBeenCalledWith(props.upstream.peers, 'failed');
 
-		instance.filterPeers.callsFake(() => ([]));
+		instance.filterPeers.mockImplementation(() => ([]));
 
-		expect(
-			instance.render(),
-			'[showOnlyFailed = true, this.filterPeers returns empty array] render result'
-		).to.be.a('null');
+		expect(instance.render()).toBeNull();
 
-		instance.filterPeers.restore();
-		tooltips.useTooltip.restore();
-		instance.renderPeers.restore();
-		
-		apiUtils.isWritable.restore();
-		apiUtils.isAngiePro.restore();
-		instance.editSelectedUpstream.restore();
+		instance.filterPeers.mockRestore();
+		tooltips.useTooltip.mockRestore();
+		instance.renderPeers.mockRestore();
+
+		apiUtils.isWritable.mockRestore();
+		apiUtils.isAngiePro.mockRestore();
+		instance.editSelectedUpstream.mockRestore();
 		wrapper.unmount();
 	});
 });

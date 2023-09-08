@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { stub } from 'sinon';
 import { Caches } from '../index.jsx';
 import utils from '../../../../utils.js';
 import tooltips from '../../../../tooltips/index.jsx';
@@ -15,22 +14,25 @@ import styles from '../../../table/style.css';
 
 describe('<Caches Page />', () => {
 	it('formatReadableBytes()', () => {
-		stub(utils, 'formatReadableBytes').callsFake(() => 'test_result');
+		jest.spyOn(utils, 'formatReadableBytes').mockClear().mockImplementation(() => 'test_result');
 
-		expect(Caches.formatReadableBytes(12, 'MB'), 'result').to.be.equal('test_result');
-		expect(utils.formatReadableBytes.calledOnce, 'formatReadableBytes called once').to.be.true;
-		expect(utils.formatReadableBytes.args[0][0], 'formatReadableBytes arg 1').to.be.equal(12);
-		expect(utils.formatReadableBytes.args[0][1], 'formatReadableBytes arg 2').to.be.equal('MB');
-		expect(utils.formatReadableBytes.args[0][2], 'formatReadableBytes arg 3').to.be.deep.equal(
-			{ 0: 'B', 1: 'KB', 2: 'MB', 3: 'GB', 4: 'TB' }
-		);
+		// result
+		expect(Caches.formatReadableBytes(12, 'MB')).toBe('test_result');
+		// formatReadableBytes called once
+		expect(utils.formatReadableBytes).toHaveBeenCalledTimes(1);
+		// formatReadableBytes arg 1
+		expect(utils.formatReadableBytes.mock.calls[0][0]).toBe(12);
+		// formatReadableBytes arg 2
+		expect(utils.formatReadableBytes.mock.calls[0][1]).toBe('MB');
+		// formatReadableBytes arg 3
+		expect(utils.formatReadableBytes.mock.calls[0][2]).toEqual({ 0: 'B', 1: 'KB', 2: 'MB', 3: 'GB', 4: 'TB' });
 
-		utils.formatReadableBytes.restore();
+		utils.formatReadableBytes.mockRestore();
 	});
 
 	describe('render()', () => {
 		it('tooltips', () => {
-			stub(tooltips, 'useTooltip').callsFake(() => ({
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
 				passed_by_useTooltip: true
 			}));
 
@@ -39,48 +41,56 @@ describe('<Caches Page />', () => {
 			);
 			let hintedEl;
 
-			expect(tooltips.useTooltip.callCount, 'useTooltip call count').to.be.equal(6);
-			expect(tooltips.useTooltip.args[0][0].type.displayName, 'useTooltip call 1, arg 1')
-				.to.be.equal('CacheStateTooltip');
-			expect(tooltips.useTooltip.args[0][1], 'useTooltip call 1, arg 2').to.be.equal('hint');
+			expect(tooltips.useTooltip).toHaveBeenCalledTimes(6);
+			// useTooltip call 1, arg 1
+			expect(tooltips.useTooltip.mock.calls[0][0].type.displayName).toBe('CacheStateTooltip');
+			// useTooltip call 1, arg 2
+			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint');
 
-			hintedEl = wrapper.find(`thead span.${ styles['hinted'] }`).at(0);
+			hintedEl = wrapper.find(`thead span.${ styles.hinted }`).at(0);
 
-			expect(hintedEl.text(), 'first hinted el prop').to.be.equal('State');
-			expect(hintedEl.prop('passed_by_useTooltip'), 'first hinted el prop').to.be.true;
+			// first hinted el prop
+			expect(hintedEl.text()).toBe('State');
+			// first hinted el prop
+			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
-			expect(tooltips.useTooltip.args[1][0], 'useTooltip call 2, arg 1').to.be.equal(
-				'Memory usage = Used memory pages / Total memory pages'
-			);
-			expect(tooltips.useTooltip.args[1][1], 'useTooltip call 2, arg 2').to.be.equal('hint');
+			// useTooltip call 2, arg 1
+			expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Memory usage = Used memory pages / Total memory pages');
+			// useTooltip call 2, arg 2
+			expect(tooltips.useTooltip.mock.calls[1][1]).toBe('hint');
 
-			hintedEl = wrapper.find(`thead span.${ styles['hinted'] }`).at(1);
+			hintedEl = wrapper.find(`thead span.${ styles.hinted }`).at(1);
 
-			expect(hintedEl.text(), 'first hinted el prop').to.be.equal('Memory usage');
-			expect(hintedEl.prop('passed_by_useTooltip'), 'first hinted el prop').to.be.true;
+			// first hinted el prop
+			expect(hintedEl.text()).toBe('Memory usage');
+			// first hinted el prop
+			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
-			expect(tooltips.useTooltip.args[2][0], 'useTooltip call 3, arg 1').to.be.equal(
-				'Disk usage = Used / Max size'
-			);
-			expect(tooltips.useTooltip.args[2][1], 'useTooltip call 3, arg 2').to.be.equal('hint');
+			// useTooltip call 3, arg 1
+			expect(tooltips.useTooltip.mock.calls[2][0]).toBe('Disk usage = Used / Max size');
+			// useTooltip call 3, arg 2
+			expect(tooltips.useTooltip.mock.calls[2][1]).toBe('hint');
 
-			hintedEl = wrapper.find(`thead span.${ styles['hinted'] }`).at(2);
+			hintedEl = wrapper.find(`thead span.${ styles.hinted }`).at(2);
 
-			expect(hintedEl.text(), 'first hinted el prop').to.be.equal('Disk usage');
-			expect(hintedEl.prop('passed_by_useTooltip'), 'first hinted el prop').to.be.true;
+			// first hinted el prop
+			expect(hintedEl.text()).toBe('Disk usage');
+			// first hinted el prop
+			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
-			expect(wrapper.find('tbody tr'), 'caches rows').to.have.lengthOf(0);
+			// caches rows
+			expect(wrapper.find('tbody tr')).toHaveLength(0);
 
-			tooltips.useTooltip.restore();
+			tooltips.useTooltip.mockRestore();
 			wrapper.unmount();
 		});
 
 		it('caches rows', () => {
-			stub(tooltips, 'useTooltip').callsFake((prop_1, prop_2) => ({
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation((prop_1, prop_2) => ({
 				useTooltip_prop_1: prop_1,
 				useTooltip_prop_2: prop_2
 			}));
-			stub(Caches, 'formatReadableBytes').callsFake(a => a);
+			jest.spyOn(Caches, 'formatReadableBytes').mockClear().mockImplementation(a => a);
 
 			const wrapper = shallow(
 				<Caches data={{ caches: new Map([
@@ -115,141 +125,173 @@ describe('<Caches Page />', () => {
 						},
 						hit_percents_generic: 11
 					}]
-				]) }} />
+				]) }}
+				/>
 			);
 			const rows = wrapper.find('tbody tr');
 			let cells = rows.at(0).find('td');
 			let hintedEl;
 
-			expect(cells.at(0).prop('className'), 'row 1, cell 1, className').to.be.equal(
-				`${ styles['bold'] } ${ styles['bdr'] }`
-			);
-			expect(cells.at(0).text(), 'row 1, cell 1, text').to.be.equal('test_1');
-			expect(cells.at(1).prop('className'), 'row 1, cell 2, className').to.be.equal(
-				`${ styles['bdr'] } ${ styles['center-align'] }`
-			);
+			// row 1, cell 1, className
+			expect(cells.at(0).prop('className')).toBe(`${ styles.bold } ${ styles.bdr }`);
+			// row 1, cell 1, text
+			expect(cells.at(0).text()).toBe('test_1');
+			// row 1, cell 2, className
+			expect(cells.at(1).prop('className')).toBe(`${ styles.bdr } ${ styles['center-align'] }`);
 			hintedEl = cells.at(1).find('span');
-			expect(hintedEl.prop('useTooltip_prop_1'), 'row 1, cell 2, useTooltip arg 1').to.be.equal('Warm');
-			expect(hintedEl.prop('useTooltip_prop_2'), 'row 1, cell 2, useTooltip arg 2').to.be.equal('hint');
-			expect(hintedEl.childAt(0).name(), 'row 1, cell 2, Icon').to.be.equal('Icon');
-			expect(hintedEl.childAt(0).prop('type'), 'row 1, cell 2, Icon prop').to.be.equal('sun');
-			expect(cells.at(2).prop('className'), 'row 1, cell 3, className').to.be.equal(styles['bdr']);
+			// row 1, cell 2, useTooltip arg 1
+			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Warm');
+			// row 1, cell 2, useTooltip arg 2
+			expect(hintedEl.prop('useTooltip_prop_2')).toBe('hint');
+			// row 1, cell 2, Icon
+			expect(hintedEl.childAt(0).name()).toBe('Icon');
+			// row 1, cell 2, Icon prop
+			expect(hintedEl.childAt(0).prop('type')).toBe('sun');
+			// row 1, cell 3, className
+			expect(cells.at(2).prop('className')).toBe(styles.bdr);
 			hintedEl = cells.at(2).childAt(0);
-			expect(
-				hintedEl.prop('useTooltip_prop_1').type.displayName,
-				'row 1, cell 3, useTooltip arg 1'
-			).to.be.equal('SharedZoneTooltip');
-			expect(
-				hintedEl.prop('useTooltip_prop_1').props.zone,
-				'row 1, cell 3, useTooltip arg 1, attr'
-			).to.be.equal('test_slab_1');
-			expect(hintedEl.prop('useTooltip_prop_2'), 'row 1, cell 3, useTooltip arg 2').to.be.equal('hint');
-			expect(hintedEl.childAt(0).name(), 'row 1, cell 3, ProgressBar').to.be.equal('ProgressBar');
-			expect(hintedEl.childAt(0).prop('percentage'), 'row 1, cell 3, ProgressBar prop').to.be.equal(30);
-			expect(cells.at(3).prop('className'), 'row 1, cell 4, className').to.be.equal(styles['bdr']);
-			expect(cells.at(3).text(), 'row 1, cell 4, text').to.be.equal('500');
-			expect(cells.at(4).prop('className'), 'row 1, cell 5, className').to.be.equal(styles['bdr']);
-			expect(cells.at(4).text(), 'row 1, cell 5, text').to.be.equal('430');
-			expect(cells.at(5).prop('className'), 'row 1, cell 6, className').to.be.equal(styles['bdr']);
-			expect(cells.at(5).childAt(0).name(), 'row 1, cell 6, ProgressBar').to.be.equal('ProgressBar');
-			expect(cells.at(5).childAt(0).prop('warning'), 'row 1, cell 6, ProgressBar warning').to.be.false;
-			expect(cells.at(5).childAt(0).prop('danger'), 'row 1, cell 6, ProgressBar danger').to.be.false;
-			expect(cells.at(5).childAt(0).prop('percentage'), 'row 1, cell 6, ProgressBar percentage').to.be.equal(100);
-			expect(cells.at(6).prop('className'), 'row 1, cell 7, className').to.be.equal(styles['right-align']);
-			expect(cells.at(6).text(), 'row 1, cell 7, text').to.be.equal('3');
-			expect(cells.at(7).prop('className'), 'row 1, cell 8, className').to.be.equal(styles['right-align']);
-			expect(cells.at(7).text(), 'row 1, cell 8, text').to.be.equal('2');
-			expect(cells.at(8).prop('className'), 'row 1, cell 9, className').to.be.equal(
-				`${ styles['bdr'] } ${ styles['right-align'] }`
-			);
-			expect(cells.at(8).text(), 'row 1, cell 9, text').to.be.equal('1');
-			expect(cells.at(9).childAt(0).name(), 'row 1, cell 10, GaugeIndicator').to.be.equal('GaugeIndicator');
-			expect(cells.at(9).childAt(0).prop('percentage'), 'row 1, cell 10, GaugeIndicator prop')
-				.to.be.equal(10);
+			// row 1, cell 3, useTooltip arg 1
+			expect(hintedEl.prop('useTooltip_prop_1').type.displayName).toBe('SharedZoneTooltip');
+			// row 1, cell 3, useTooltip arg 1, attr
+			expect(hintedEl.prop('useTooltip_prop_1').props.zone).toBe('test_slab_1');
+			// row 1, cell 3, useTooltip arg 2
+			expect(hintedEl.prop('useTooltip_prop_2')).toBe('hint');
+			// row 1, cell 3, ProgressBar
+			expect(hintedEl.childAt(0).name()).toBe('ProgressBar');
+			// row 1, cell 3, ProgressBar prop
+			expect(hintedEl.childAt(0).prop('percentage')).toBe(30);
+			// row 1, cell 4, className
+			expect(cells.at(3).prop('className')).toBe(styles.bdr);
+			// row 1, cell 4, text
+			expect(cells.at(3).text()).toBe('500');
+			// row 1, cell 5, className
+			expect(cells.at(4).prop('className')).toBe(styles.bdr);
+			// row 1, cell 5, text
+			expect(cells.at(4).text()).toBe('430');
+			// row 1, cell 6, className
+			expect(cells.at(5).prop('className')).toBe(styles.bdr);
+			// row 1, cell 6, ProgressBar
+			expect(cells.at(5).childAt(0).name()).toBe('ProgressBar');
+			// row 1, cell 6, ProgressBar warning
+			expect(cells.at(5).childAt(0).prop('warning')).toBe(false);
+			// row 1, cell 6, ProgressBar danger
+			expect(cells.at(5).childAt(0).prop('danger')).toBe(false);
+			// row 1, cell 6, ProgressBar percentage
+			expect(cells.at(5).childAt(0).prop('percentage')).toBe(100);
+			// row 1, cell 7, className
+			expect(cells.at(6).prop('className')).toBe(styles['right-align']);
+			// row 1, cell 7, text
+			expect(cells.at(6).text()).toBe('3');
+			// row 1, cell 8, className
+			expect(cells.at(7).prop('className')).toBe(styles['right-align']);
+			// row 1, cell 8, text
+			expect(cells.at(7).text()).toBe('2');
+			// row 1, cell 9, className
+			expect(cells.at(8).prop('className')).toBe(`${ styles.bdr } ${ styles['right-align'] }`);
+			// row 1, cell 9, text
+			expect(cells.at(8).text()).toBe('1');
+			// row 1, cell 10, GaugeIndicator
+			expect(cells.at(9).childAt(0).name()).toBe('GaugeIndicator');
+			// row 1, cell 10, GaugeIndicator prop
+			expect(cells.at(9).childAt(0).prop('percentage')).toBe(10);
 
 			cells = rows.at(1).find('td');
 
-			expect(cells.at(0).prop('className'), 'row 2, cell 1, className').to.be.equal(
-				`${ styles['bold'] } ${ styles['bdr'] }`
-			);
-			expect(cells.at(0).text(), 'row 2, cell 1, text').to.be.equal('test_2');
-			expect(cells.at(1).prop('className'), 'row 2, cell 2, className').to.be.equal(
-				`${ styles['bdr'] } ${ styles['center-align'] }`
-			);
+			// row 2, cell 1, className
+			expect(cells.at(0).prop('className')).toBe(`${ styles.bold } ${ styles.bdr }`);
+			// row 2, cell 1, text
+			expect(cells.at(0).text()).toBe('test_2');
+			// row 2, cell 2, className
+			expect(cells.at(1).prop('className')).toBe(`${ styles.bdr } ${ styles['center-align'] }`);
 			hintedEl = cells.at(1).find('span');
-			expect(hintedEl.prop('useTooltip_prop_1'), 'row 2, cell 2, useTooltip arg 1').to.be.equal('Cold');
-			expect(hintedEl.prop('useTooltip_prop_2'), 'row 2, cell 2, useTooltip arg 2').to.be.equal('hint');
-			expect(hintedEl.childAt(0).name(), 'row 2, cell 2, Icon').to.be.equal('Icon');
-			expect(hintedEl.childAt(0).prop('type'), 'row 2, cell 2, Icon prop').to.be.equal('snowflake');
-			expect(cells.at(2).prop('className'), 'row 2, cell 3, className').to.be.equal(styles['bdr']);
+			// row 2, cell 2, useTooltip arg 1
+			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Cold');
+			// row 2, cell 2, useTooltip arg 2
+			expect(hintedEl.prop('useTooltip_prop_2')).toBe('hint');
+			// row 2, cell 2, Icon
+			expect(hintedEl.childAt(0).name()).toBe('Icon');
+			// row 2, cell 2, Icon prop
+			expect(hintedEl.childAt(0).prop('type')).toBe('snowflake');
+			// row 2, cell 3, className
+			expect(cells.at(2).prop('className')).toBe(styles.bdr);
 			hintedEl = cells.at(2).childAt(0);
-			expect(
-				hintedEl.prop('useTooltip_prop_1').type.displayName,
-				'row 2, cell 3, useTooltip arg 1'
-			).to.be.equal('SharedZoneTooltip');
-			expect(
-				hintedEl.prop('useTooltip_prop_1').props.zone,
-				'row 2, cell 3, useTooltip arg 1, attr'
-			).to.be.equal('test_slab_2');
-			expect(hintedEl.prop('useTooltip_prop_2'), 'row 2, cell 3, useTooltip arg 2').to.be.equal('hint');
-			expect(hintedEl.childAt(0).name(), 'row 2, cell 3, ProgressBar').to.be.equal('ProgressBar');
-			expect(hintedEl.childAt(0).prop('percentage'), 'row 2, cell 3, ProgressBar prop').to.be.equal(0);
-			expect(cells.at(3).prop('className'), 'row 2, cell 4, className').to.be.equal(styles['bdr']);
-			expect(cells.at(3).text(), 'row 2, cell 4, text').to.be.equal('∞');
-			expect(cells.at(4).prop('className'), 'row 2, cell 5, className').to.be.equal(styles['bdr']);
-			expect(cells.at(4).text(), 'row 2, cell 5, text').to.be.equal('431');
-			expect(cells.at(5).prop('className'), 'row 2, cell 6, className').to.be.equal(styles['bdr']);
-			expect(cells.at(5).childAt(0).name(), 'row 2, cell 6, span').to.be.equal('span');
-			expect(cells.at(6).prop('className'), 'row 2, cell 7, className').to.be.equal(styles['right-align']);
-			expect(cells.at(6).text(), 'row 2, cell 7, text').to.be.equal('4');
-			expect(cells.at(7).prop('className'), 'row 2, cell 8, className').to.be.equal(styles['right-align']);
-			expect(cells.at(7).text(), 'row 2, cell 8, text').to.be.equal('3');
-			expect(cells.at(8).prop('className'), 'row 2, cell 9, className').to.be.equal(
-				`${ styles['bdr'] } ${ styles['right-align'] }`
-			);
-			expect(cells.at(8).text(), 'row 2, cell 9, text').to.be.equal('2');
-			expect(cells.at(9).childAt(0).name(), 'row 2, cell 10, GaugeIndicator').to.be.equal('GaugeIndicator');
-			expect(cells.at(9).childAt(0).prop('percentage'), 'row 2, cell 10, GaugeIndicator prop')
-				.to.be.equal(11);
+			// row 2, cell 3, useTooltip arg 1
+			expect(hintedEl.prop('useTooltip_prop_1').type.displayName).toBe('SharedZoneTooltip');
+			// row 2, cell 3, useTooltip arg 1, attr
+			expect(hintedEl.prop('useTooltip_prop_1').props.zone).toBe('test_slab_2');
+			// row 2, cell 3, useTooltip arg 2
+			expect(hintedEl.prop('useTooltip_prop_2')).toBe('hint');
+			// row 2, cell 3, ProgressBar
+			expect(hintedEl.childAt(0).name()).toBe('ProgressBar');
+			// row 2, cell 3, ProgressBar prop
+			expect(hintedEl.childAt(0).prop('percentage')).toBe(0);
+			// row 2, cell 4, className
+			expect(cells.at(3).prop('className')).toBe(styles.bdr);
+			// row 2, cell 4, text
+			expect(cells.at(3).text()).toBe('∞');
+			// row 2, cell 5, className
+			expect(cells.at(4).prop('className')).toBe(styles.bdr);
+			// row 2, cell 5, text
+			expect(cells.at(4).text()).toBe('431');
+			// row 2, cell 6, className
+			expect(cells.at(5).prop('className')).toBe(styles.bdr);
+			// row 2, cell 6, span
+			expect(cells.at(5).childAt(0).name()).toBe('span');
+			// row 2, cell 7, className
+			expect(cells.at(6).prop('className')).toBe(styles['right-align']);
+			// row 2, cell 7, text
+			expect(cells.at(6).text()).toBe('4');
+			// row 2, cell 8, className
+			expect(cells.at(7).prop('className')).toBe(styles['right-align']);
+			// row 2, cell 8, text
+			expect(cells.at(7).text()).toBe('3');
+			// row 2, cell 9, className
+			expect(cells.at(8).prop('className')).toBe(`${ styles.bdr } ${ styles['right-align'] }`);
+			// row 2, cell 9, text
+			expect(cells.at(8).text()).toBe('2');
+			// row 2, cell 10, GaugeIndicator
+			expect(cells.at(9).childAt(0).name()).toBe('GaugeIndicator');
+			// row 2, cell 10, GaugeIndicator prop
+			expect(cells.at(9).childAt(0).prop('percentage')).toBe(11);
 
-			expect(Caches.formatReadableBytes.callCount, 'row 1, Caches.formatReadableBytes call count').to.be.equal(18);
-			expect(Caches.formatReadableBytes.args[0][0], 'row 1, Caches.formatReadableBytes call 1, arg 1')
-				.to.be.equal(500);
-			expect(Caches.formatReadableBytes.args[0][1], 'row 1, Caches.formatReadableBytes call 1, arg 2')
-				.to.be.equal('GB');
-			expect(Caches.formatReadableBytes.args[1][0], 'row 1, Caches.formatReadableBytes call 2, arg 1')
-				.to.be.equal(430);
-			expect(Caches.formatReadableBytes.args[1][1], 'row 1, Caches.formatReadableBytes call 2, arg 2')
-				.to.be.equal('GB');
-			expect(Caches.formatReadableBytes.args[2][0], 'row 1, Caches.formatReadableBytes call 3, arg 1')
-				.to.be.equal(3);
-			expect(Caches.formatReadableBytes.args[3][0], 'row 1, Caches.formatReadableBytes call 4, arg 1')
-				.to.be.equal(2);
-			expect(Caches.formatReadableBytes.args[4][0], 'row 1, Caches.formatReadableBytes call 5, arg 1')
-				.to.be.equal(1);
-			expect(Caches.formatReadableBytes.args[5][0], 'row 2, Caches.formatReadableBytes call 1, arg 1')
-				.to.be.equal(431);
-			expect(Caches.formatReadableBytes.args[5][1], 'row 2, Caches.formatReadableBytes call 1, arg 2')
-				.to.be.equal('GB');
-			expect(Caches.formatReadableBytes.args[6][0], 'row 2, Caches.formatReadableBytes call 2, arg 1')
-				.to.be.equal(4);
-			expect(Caches.formatReadableBytes.args[7][0], 'row 2, Caches.formatReadableBytes call 3, arg 1')
-				.to.be.equal(3);
-			expect(Caches.formatReadableBytes.args[8][0], 'row 2, Caches.formatReadableBytes call 4, arg 1')
-				.to.be.equal(2);
+			expect(Caches.formatReadableBytes).toHaveBeenCalledTimes(18);
+			// row 1, Caches.formatReadableBytes call 1, arg 1
+			expect(Caches.formatReadableBytes.mock.calls[0][0]).toBe(500);
+			// row 1, Caches.formatReadableBytes call 1, arg 2
+			expect(Caches.formatReadableBytes.mock.calls[0][1]).toBe('GB');
+			// row 1, Caches.formatReadableBytes call 2, arg 1
+			expect(Caches.formatReadableBytes.mock.calls[1][0]).toBe(430);
+			// row 1, Caches.formatReadableBytes call 2, arg 2
+			expect(Caches.formatReadableBytes.mock.calls[1][1]).toBe('GB');
+			// row 1, Caches.formatReadableBytes call 3, arg 1
+			expect(Caches.formatReadableBytes.mock.calls[2][0]).toBe(3);
+			// row 1, Caches.formatReadableBytes call 4, arg 1
+			expect(Caches.formatReadableBytes.mock.calls[3][0]).toBe(2);
+			// row 1, Caches.formatReadableBytes call 5, arg 1
+			expect(Caches.formatReadableBytes.mock.calls[4][0]).toBe(1);
+			// row 2, Caches.formatReadableBytes call 1, arg 1
+			expect(Caches.formatReadableBytes.mock.calls[5][0]).toBe(431);
+			// row 2, Caches.formatReadableBytes call 1, arg 2
+			expect(Caches.formatReadableBytes.mock.calls[5][1]).toBe('GB');
+			// row 2, Caches.formatReadableBytes call 2, arg 1
+			expect(Caches.formatReadableBytes.mock.calls[6][0]).toBe(4);
+			// row 2, Caches.formatReadableBytes call 3, arg 1
+			expect(Caches.formatReadableBytes.mock.calls[7][0]).toBe(3);
+			// row 2, Caches.formatReadableBytes call 4, arg 1
+			expect(Caches.formatReadableBytes.mock.calls[8][0]).toBe(2);
 
-			tooltips.useTooltip.restore();
-			Caches.formatReadableBytes.restore();
+			tooltips.useTooltip.mockRestore();
+			Caches.formatReadableBytes.mockRestore();
 			wrapper.unmount();
 		});
 
 		it('caches rows with shards', () => {
-			stub(tooltips, 'useTooltip').callsFake((prop_1, prop_2) => ({
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation((prop_1, prop_2) => ({
 				useTooltip_prop_1: prop_1,
 				useTooltip_prop_2: prop_2
 			}));
-			stub(Caches, 'formatReadableBytes').callsFake(a => a);
-			
+			jest.spyOn(Caches, 'formatReadableBytes').mockClear().mockImplementation(a => a);
+
 			const wrapper = shallow(
 				<Caches data={{ caches: new Map([
 					['test_1', {
@@ -307,94 +349,132 @@ describe('<Caches Page />', () => {
 						},
 						hit_percents_generic: 11
 					}]
-				]) }} />
+				]) }}
+				/>
 			);
 			let expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
-			expect(expandableAllControl.prop('className'))
-				.to.be.equal(`${styles.sorter} ${styles.sorterActive} ${styles['hovered-expander']}`);
-			expect(expandableAllControl.text(), 'all expandable control, icon').to.be.equal('▴');
-			expect(expandableAllControl.prop('rowSpan'), 'all expandable control, rowSpan').to.be.equal(2);
-			expect(expandableAllControl.type(), 'all expandable control, type').to.be.equal('th');
-			expect(expandableAllControl.prop('useTooltip_prop_1')).to.be.equal('Show all exsists shards');
-			expect(expandableAllControl.prop('useTooltip_prop_2')).to.be.equal('hint-right');
-			
-			let rows = wrapper.find('[data-expandable="true"]');
-			expect(rows.length, 'count expandable elements').to.be.equal(2);
-			
-			let expandableElement = wrapper.find('[data-expandable-element]');
-			expect(expandableElement.length).to.be.equal(2);
-			expect(rows.at(0).childAt(0).prop('className'), 'row 1, cell 1').to.be.equal(styles['expanding-item-control']);
-			expect(rows.at(0).childAt(0).text(), 'row 1, cell 1').to.be.equal('▴');
-			
-			expect(rows.at(1).childAt(0).prop('className')).to.be.equal(styles['expanding-item-control']);
-			expect(rows.at(1).childAt(0).text()).to.be.equal('▴');
-			
-			expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
-			expect(expandableAllControl.text(), 'open all expandable elements').to.be.equal('▴');
-			
-			rows = wrapper.find('[data-expandable="true"]');
-			expect(rows.length, 'count expandable elements').to.be.equal(2);
-			
-			expandableElement = wrapper.find('[data-expandable-element]');
-			expect(expandableElement.length, 'all expandable tables is show').to.be.equal(2);
-			
-			expect(rows.at(0).childAt(0).text(), 'row 1, cell 1').to.be.equal('▴');
-			expect(rows.at(1).childAt(0).text(), 'row 2, cell 1').to.be.equal('▴');
+			expect(expandableAllControl.prop('className')).toBe(`${styles.sorter} ${styles.sorterActive} ${styles['hovered-expander']}`);
+			// all expandable control, icon
+			expect(expandableAllControl.text()).toBe('▴');
+			// all expandable control, rowSpan
+			expect(expandableAllControl.prop('rowSpan')).toBe(2);
+			// all expandable control, type
+			expect(expandableAllControl.type()).toBe('th');
+			expect(expandableAllControl.prop('useTooltip_prop_1')).toBe('Show all exsists shards');
+			expect(expandableAllControl.prop('useTooltip_prop_2')).toBe('hint-right');
 
-			rows.at(0).simulate('click')	
-			
+			let rows = wrapper.find('[data-expandable="true"]');
+			// count expandable elements
+			expect(rows.length).toBe(2);
+
+			let expandableElement = wrapper.find('[data-expandable-element]');
+			expect(expandableElement.length).toBe(2);
+			// row 1, cell 1
+			expect(rows.at(0).childAt(0).prop('className')).toBe(styles['expanding-item-control']);
+			// row 1, cell 1
+			expect(rows.at(0).childAt(0).text()).toBe('▴');
+
+			expect(rows.at(1).childAt(0).prop('className')).toBe(styles['expanding-item-control']);
+			expect(rows.at(1).childAt(0).text()).toBe('▴');
+
 			expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
-			expect(expandableAllControl.text(), 'all expandable control is closed').to.be.equal('▾');
-			
+			// open all expandable elements
+			expect(expandableAllControl.text()).toBe('▴');
+
 			rows = wrapper.find('[data-expandable="true"]');
-			
-			expect(rows.at(0).childAt(0).text(), 'row 1, cell 1').to.be.equal('▾');
-			expect(rows.at(1).childAt(0).text(), 'row 2, cell 1').to.be.equal('▴');
-			
+			// count expandable elements
+			expect(rows.length).toBe(2);
+
 			expandableElement = wrapper.find('[data-expandable-element]');
-			expect(expandableElement.length, 'only one expandable element').to.be.equal(1);
+			// all expandable tables is show
+			expect(expandableElement.length).toBe(2);
+
+			// row 1, cell 1
+			expect(rows.at(0).childAt(0).text()).toBe('▴');
+			// row 2, cell 1
+			expect(rows.at(1).childAt(0).text()).toBe('▴');
+
+			rows.at(0).simulate('click');
+
+			expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
+			// all expandable control is closed
+			expect(expandableAllControl.text()).toBe('▾');
+
+			rows = wrapper.find('[data-expandable="true"]');
+
+			// row 1, cell 1
+			expect(rows.at(0).childAt(0).text()).toBe('▾');
+			// row 2, cell 1
+			expect(rows.at(1).childAt(0).text()).toBe('▴');
+
+			expandableElement = wrapper.find('[data-expandable-element]');
+			// only one expandable element
+			expect(expandableElement.length).toBe(1);
 			const expandableElementCells = expandableElement.at(0).find('tbody tr');
-			
-			const row1 = expandableElementCells.at(0).find('td'); 
+
+			const row1 = expandableElementCells.at(0).find('td');
 			const hintElementRow1 = row1.at(1).childAt(0);
-			expect(row1.at(0).text(), 'row 1, cell 1').to.be.equal('/var/cache/angie/proxy_cache/test_slab_2_1');
-			expect(hintElementRow1.name(), 'row 1, cell 2, Icon').to.be.equal('span');
-			expect(hintElementRow1.prop('useTooltip_prop_1'), 'row 1, cell 2, useTooltip arg 1').to.be.equal('Warm');
-			expect(hintElementRow1.prop('useTooltip_prop_2'), 'row 1, cell 2, useTooltip arg 2').to.be.equal('hint');
-			expect(row1.at(2).text(), 'row 1, cell 3').to.be.equal('16777216');
-			expect(row1.at(3).text(), 'row 1, cell 4').to.be.equal('1024960');
-			expect(row1.at(4).childAt(0).name(), 'row 1, cell 5, ProgressBar').to.be.equal('ProgressBar');
-			expect(row1.at(4).childAt(0).prop('warning'), 'row 1, cell 5, ProgressBar warning').to.be.true;
-			expect(row1.at(4).childAt(0).prop('danger'), 'row 1, cell 5, ProgressBar danger').to.be.true;
-			expect(row1.at(4).childAt(0).prop('percentage'), 'row 1, cell 5, ProgressBar percentage').to.be.equal(100);
-			
-			const row2 = expandableElementCells.at(1).find('td'); 
+			// row 1, cell 1
+			expect(row1.at(0).text()).toBe('/var/cache/angie/proxy_cache/test_slab_2_1');
+			// row 1, cell 2, Icon
+			expect(hintElementRow1.name()).toBe('span');
+			// row 1, cell 2, useTooltip arg 1
+			expect(hintElementRow1.prop('useTooltip_prop_1')).toBe('Warm');
+			// row 1, cell 2, useTooltip arg 2
+			expect(hintElementRow1.prop('useTooltip_prop_2')).toBe('hint');
+			// row 1, cell 3
+			expect(row1.at(2).text()).toBe('16777216');
+			// row 1, cell 4
+			expect(row1.at(3).text()).toBe('1024960');
+			// row 1, cell 5, ProgressBar
+			expect(row1.at(4).childAt(0).name()).toBe('ProgressBar');
+			// row 1, cell 5, ProgressBar warning
+			expect(row1.at(4).childAt(0).prop('warning')).toBe(true);
+			// row 1, cell 5, ProgressBar danger
+			expect(row1.at(4).childAt(0).prop('danger')).toBe(true);
+			// row 1, cell 5, ProgressBar percentage
+			expect(row1.at(4).childAt(0).prop('percentage')).toBe(100);
+
+			const row2 = expandableElementCells.at(1).find('td');
 			const hintElementRow2 = row2.at(1).childAt(0);
-			expect(row2.at(0).text(), 'row 2, cell 1').to.be.equal('/var/cache/angie/proxy_cache/test_slab_2_2');
-			expect(hintElementRow2.name(), 'row 2, cell 2, Icon').to.be.equal('span');
-			expect(hintElementRow2.prop('useTooltip_prop_1'), 'row 2, cell 2, useTooltip arg 1').to.be.equal('Cold');
-			expect(hintElementRow2.prop('useTooltip_prop_2'), 'row 2, cell 2, useTooltip arg 2').to.be.equal('hint');
-			expect(row2.at(2).text(), 'row 2, cell 3').to.be.equal('16777216');
-			expect(row2.at(3).text(), 'row 2, cell 4').to.be.equal('38672');
-			expect(row2.at(4).childAt(0).name(), 'row 2, cell 5, ProgressBar').to.be.equal('ProgressBar');
-			expect(row2.at(4).childAt(0).prop('warning'), 'row 2, cell 5, ProgressBar warning').to.be.true;
-			expect(row2.at(4).childAt(0).prop('danger'), 'row 2, cell 5, ProgressBar danger').to.be.true;
-			expect(row2.at(4).childAt(0).prop('percentage'), 'row 2, cell 5, ProgressBar percentage').to.be.equal(101);
-			
+			// row 2, cell 1
+			expect(row2.at(0).text()).toBe('/var/cache/angie/proxy_cache/test_slab_2_2');
+			// row 2, cell 2, Icon
+			expect(hintElementRow2.name()).toBe('span');
+			// row 2, cell 2, useTooltip arg 1
+			expect(hintElementRow2.prop('useTooltip_prop_1')).toBe('Cold');
+			// row 2, cell 2, useTooltip arg 2
+			expect(hintElementRow2.prop('useTooltip_prop_2')).toBe('hint');
+			// row 2, cell 3
+			expect(row2.at(2).text()).toBe('16777216');
+			// row 2, cell 4
+			expect(row2.at(3).text()).toBe('38672');
+			// row 2, cell 5, ProgressBar
+			expect(row2.at(4).childAt(0).name()).toBe('ProgressBar');
+			// row 2, cell 5, ProgressBar warning
+			expect(row2.at(4).childAt(0).prop('warning')).toBe(true);
+			// row 2, cell 5, ProgressBar danger
+			expect(row2.at(4).childAt(0).prop('danger')).toBe(true);
+			// row 2, cell 5, ProgressBar percentage
+			expect(row2.at(4).childAt(0).prop('percentage')).toBe(101);
+
 			expandableAllControl.simulate('click');
 			expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
-			expect(expandableAllControl.text(), 'all expandable control, icon').to.be.equal('▾');
-			
+			// all expandable control, icon
+			expect(expandableAllControl.text()).toBe('▾');
+
 			expandableElement = wrapper.find('[data-expandable-element]');
-			expect(expandableElement.length).to.be.equal(0);
-			
+			expect(expandableElement.length).toBe(0);
+
 			rows = wrapper.find('[data-expandable="true"]');
-			expect(rows.at(0).childAt(0).text(), 'row 1, cell 1').to.be.equal('▾');
-			expect(rows.at(1).childAt(0).text(), 'row 2, cell 1').to.be.equal('▾');
-			
-			tooltips.useTooltip.restore();
-			Caches.formatReadableBytes.restore();
+			// row 1, cell 1
+			expect(rows.at(0).childAt(0).text()).toBe('▾');
+			// row 2, cell 1
+			expect(rows.at(1).childAt(0).text()).toBe('▾');
+
+			tooltips.useTooltip.mockRestore();
+			Caches.formatReadableBytes.mockRestore();
 			wrapper.unmount();
-		})
+		});
 	});
 });

@@ -7,13 +7,12 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { stub } from 'sinon';
 import { StreamZones } from '../streamzones.jsx';
 import utils from '../../../../../utils.js';
 
 describe('<StreamZones IndexPage />', () => {
 	it('render()', () => {
-		stub(utils, 'formatReadableBytes').callsFake(a => a);
+		jest.spyOn(utils, 'formatReadableBytes').mockClear().mockImplementation(a => a);
 
 		const props = {
 			data: {
@@ -34,17 +33,25 @@ describe('<StreamZones IndexPage />', () => {
 				}
 			}
 		};
-		const wrapper = shallow(<StreamZones { ...props } />);
+		const wrapper = shallow(<StreamZones {...props} />);
 		let indexBox = wrapper.find('IndexBox');
 
-		expect(indexBox.prop('title'), 'IndexBox title').to.be.equal('TCP/UDP Zones');
-		expect(indexBox.prop('status'), 'IndexBox status').to.be.equal('danger');
-		expect(indexBox.prop('href'), 'IndexBox href').to.be.equal('#tcp_zones');
-		expect(indexBox.childAt(0).text(), 'total row').to.be.equal('Conn total: 10');
-		expect(indexBox.childAt(1).text(), 'current row').to.be.equal('Conn current: 1');
-		expect(indexBox.childAt(2).text(), 'conn/s row').to.be.equal('Conn/s: 3');
-		expect(indexBox.childAt(4).text(), 'traffic in row').to.be.equal('In: 0');
-		expect(indexBox.childAt(5).text(), 'traffic out row').to.be.equal('Out: 0');
+		// IndexBox title
+		expect(indexBox.prop('title')).toBe('TCP/UDP Zones');
+		// IndexBox status
+		expect(indexBox.prop('status')).toBe('danger');
+		// IndexBox href
+		expect(indexBox.prop('href')).toBe('#tcp_zones');
+		// total row
+		expect(indexBox.childAt(0).text()).toBe('Conn total: 10');
+		// current row
+		expect(indexBox.childAt(1).text()).toBe('Conn current: 1');
+		// conn/s row
+		expect(indexBox.childAt(2).text()).toBe('Conn/s: 3');
+		// traffic in row
+		expect(indexBox.childAt(4).text()).toBe('In: 0');
+		// traffic out row
+		expect(indexBox.childAt(5).text()).toBe('Out: 0');
 
 		props.data.server_zones.__STATS.traffic = {
 			in: 3,
@@ -53,13 +60,18 @@ describe('<StreamZones IndexPage />', () => {
 		wrapper.setProps(props);
 		indexBox = wrapper.find('IndexBox');
 
-		expect(indexBox.childAt(4).text(), 'traffic in row').to.be.equal('In: 3/s');
-		expect(indexBox.childAt(5).text(), 'traffic out row').to.be.equal('Out: 2/s');
-		expect(utils.formatReadableBytes.calledTwice, 'formatReadableBytes called twice').to.be.true;
-		expect(utils.formatReadableBytes.args[0][0], 'formatReadableBytes call 1, arg').to.be.equal(3);
-		expect(utils.formatReadableBytes.args[1][0], 'formatReadableBytes call 2, arg').to.be.equal(2);
+		// traffic in row
+		expect(indexBox.childAt(4).text()).toBe('In: 3/s');
+		// traffic out row
+		expect(indexBox.childAt(5).text()).toBe('Out: 2/s');
+		// formatReadableBytes called twice
+		expect(utils.formatReadableBytes).toHaveBeenCalledTimes(2);
+		// formatReadableBytes call 1, arg
+		expect(utils.formatReadableBytes.mock.calls[0][0]).toBe(3);
+		// formatReadableBytes call 2, arg
+		expect(utils.formatReadableBytes.mock.calls[1][0]).toBe(2);
 
-		utils.formatReadableBytes.restore();
+		utils.formatReadableBytes.mockRestore();
 		wrapper.unmount();
 	});
 });

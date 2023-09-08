@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import { stub } from 'sinon';
 import { start } from '../index.jsx';
 import App from '../App.jsx';
 import appsettings from '../appsettings';
@@ -16,24 +15,24 @@ describe('Index', () => {
 	it('start()', () => {
 		const AppComponentStub = 'App Component';
 
-		stub(appsettings, 'init').callsFake(() => {});
-		stub(tooltips, 'initTooltips').callsFake(() => {});
-		stub(App, 'Component').callsFake(() => <div>{AppComponentStub}</div>);
-		stub(document.body, 'appendChild').callsFake(() => {});
+		const spyAppSettingsInit = jest.spyOn(appsettings, 'init').mockClear().mockImplementation(() => {});
+		const spyInitTooltips = jest.spyOn(tooltips, 'initTooltips').mockClear().mockImplementation(() => {});
+		const spyAppComponent = jest.spyOn(App, 'Component').mockClear().mockImplementation(() => <div>{AppComponentStub}</div>);
+		const spyDomAppendChild = jest.spyOn(document.body, 'appendChild').mockClear().mockImplementation(() => {});
 
 		start();
 
-		assert(appsettings.init.calledOnce, 'appsettings.init() should be called once');
-		assert(tooltips.initTooltips.calledOnce, 'initTooltips() should be called once');
+		expect(spyAppSettingsInit).toHaveBeenCalled();
+		expect(spyInitTooltips).toHaveBeenCalled();
 
-		const AppWrapper = document.body.appendChild.args[0][0];
+		const AppWrapper = document.body.appendChild.mock.calls[0][0];
 
-		assert(AppWrapper.children.length === 1, 'App wrapper children length');
-		assert(AppWrapper.children[0].textContent === AppComponentStub, 'App wrapper content');
+		expect(AppWrapper.children.length === 1).toBeTruthy();
+		expect(AppWrapper.children[0].textContent === AppComponentStub).toBeTruthy();
 
-		appsettings.init.restore();
-		tooltips.initTooltips.restore();
-		App.Component.restore();
-		document.body.appendChild.restore();
+		spyAppSettingsInit.mockRestore();
+		spyInitTooltips.mockRestore();
+		spyAppComponent.mockRestore();
+		spyDomAppendChild.mockRestore();
 	});
 });

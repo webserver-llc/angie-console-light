@@ -5,7 +5,6 @@
  *
  */
 
-import { stub } from 'sinon';
 import calculate from '../ssl.js';
 import utils from '../utils.js';
 
@@ -21,14 +20,14 @@ describe('Calculators – SSL', () => {
 		};
 		let ssl;
 
-		before(() => {
-			stub(Date, 'now').callsFake(() => ts);
-			stub(utils, 'calculateSpeed').callsFake((a, b) => b);
+		beforeAll(() => {
+			jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
+			jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
 		});
 
 		beforeEach(() => {
-			Date.now.resetHistory();
-			utils.calculateSpeed.resetHistory();
+			Date.now.mockClear();
+			utils.calculateSpeed.mockClear();
 
 			ssl = {
 				handshakes: 160,
@@ -37,59 +36,84 @@ describe('Calculators – SSL', () => {
 			};
 		});
 
-		after(() => {
-			Date.now.restore();
-			utils.calculateSpeed.restore();
+		afterAll(() => {
+			Date.now.mockRestore();
+			utils.calculateSpeed.mockRestore();
 		});
 
 		it('no previous', () => {
 			const result = calculate(ssl);
 
-			expect(Date.now.calledOnce, 'Date.now called once').to.be.true;
-			expect(utils.calculateSpeed.calledThrice, 'calculateSpeed called thrice').to.be.true;
+			// Date.now called once
+			expect(Date.now).toHaveBeenCalled();
+			// calculateSpeed called thrice
+			expect(utils.calculateSpeed).toHaveBeenCalledTimes(3);
 
-			expect(utils.calculateSpeed.args[0][0], 'calculateSpeed 1st call 1st arg').to.be.a('null');
-			expect(utils.calculateSpeed.args[0][1], 'calculateSpeed 1st call 2nd arg').to.be.equal(ssl.handshakes);
-			expect(utils.calculateSpeed.args[0][2], 'calculateSpeed 1st call 3rd arg').to.be.equal(ts);
-			expect(result.handshakes_s, 'ssl.handshakes_s').to.be.equal(ssl.handshakes);
+			expect(utils.calculateSpeed.mock.calls[0][0]).toBeNull();
+			// calculateSpeed 1st call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[0][1]).toBe(ssl.handshakes);
+			// calculateSpeed 1st call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[0][2]).toBe(ts);
+			// ssl.handshakes_s
+			expect(result.handshakes_s).toBe(ssl.handshakes);
 
-			expect(utils.calculateSpeed.args[1][0], 'calculateSpeed 2nd call 1st arg').to.be.a('null');
-			expect(utils.calculateSpeed.args[1][1], 'calculateSpeed 2nd call 2nd arg').to.be.equal(ssl.handshakes_failed);
-			expect(utils.calculateSpeed.args[1][2], 'calculateSpeed 2nd call 3rd arg').to.be.equal(ts);
-			expect(result.handshakes_failed_s, 'ssl.handshakes_failed_s').to.be.equal(ssl.handshakes_failed);
+			expect(utils.calculateSpeed.mock.calls[1][0]).toBeNull();
+			// calculateSpeed 2nd call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[1][1]).toBe(ssl.handshakes_failed);
+			// calculateSpeed 2nd call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[1][2]).toBe(ts);
+			// ssl.handshakes_failed_s
+			expect(result.handshakes_failed_s).toBe(ssl.handshakes_failed);
 
-			expect(utils.calculateSpeed.args[2][0], 'calculateSpeed 3rd call 1st arg').to.be.a('null');
-			expect(utils.calculateSpeed.args[2][1], 'calculateSpeed 3rd call 2nd arg').to.be.equal(ssl.session_reuses);
-			expect(utils.calculateSpeed.args[2][2], 'calculateSpeed 3rd call 3rd arg').to.be.equal(ts);
-			expect(result.session_reuses_s, 'ssl.session_reuses_s').to.be.equal(ssl.session_reuses);
+			expect(utils.calculateSpeed.mock.calls[2][0]).toBeNull();
+			// calculateSpeed 3rd call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[2][1]).toBe(ssl.session_reuses);
+			// calculateSpeed 3rd call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[2][2]).toBe(ts);
+			// ssl.session_reuses_s
+			expect(result.session_reuses_s).toBe(ssl.session_reuses);
 
-			expect(result, 'returned ssl').to.be.deep.equal(ssl);
+			// returned ssl
+			expect(result).toEqual(ssl);
 		});
 
 		it('with previous', () => {
 			const result = calculate(ssl, previous);
 
-			expect(Date.now.calledOnce, 'Date.now called once').to.be.true;
-			expect(utils.calculateSpeed.calledThrice, 'calculateSpeed called thrice').to.be.true;
+			// Date.now called once
+			expect(Date.now).toHaveBeenCalled();
+			// calculateSpeed called thrice
+			expect(utils.calculateSpeed).toHaveBeenCalledTimes(3);
 
-			expect(utils.calculateSpeed.args[0][0], 'calculateSpeed 1st call 1st arg').to.be.equal(previous.handshakes);
-			expect(utils.calculateSpeed.args[0][1], 'calculateSpeed 1st call 2nd arg').to.be.equal(ssl.handshakes);
-			expect(utils.calculateSpeed.args[0][2], 'calculateSpeed 1st call 3rd arg').to.be.equal(period);
-			expect(result.handshakes_s, 'ssl.handshakes_s').to.be.equal(ssl.handshakes);
+			// calculateSpeed 1st call 1st arg
+			expect(utils.calculateSpeed.mock.calls[0][0]).toBe(previous.handshakes);
+			// calculateSpeed 1st call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[0][1]).toBe(ssl.handshakes);
+			// calculateSpeed 1st call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[0][2]).toBe(period);
+			// ssl.handshakes_s
+			expect(result.handshakes_s).toBe(ssl.handshakes);
 
-			expect(utils.calculateSpeed.args[1][0], 'calculateSpeed 2nd call 1st arg')
-				.to.be.equal(previous.handshakes_failed);
-			expect(utils.calculateSpeed.args[1][1], 'calculateSpeed 2nd call 2nd arg').to.be.equal(ssl.handshakes_failed);
-			expect(utils.calculateSpeed.args[1][2], 'calculateSpeed 2nd call 3rd arg').to.be.equal(period);
-			expect(result.handshakes_failed_s, 'ssl.handshakes_failed_s').to.be.equal(ssl.handshakes_failed);
+			// calculateSpeed 2nd call 1st arg
+			expect(utils.calculateSpeed.mock.calls[1][0]).toBe(previous.handshakes_failed);
+			// calculateSpeed 2nd call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[1][1]).toBe(ssl.handshakes_failed);
+			// calculateSpeed 2nd call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[1][2]).toBe(period);
+			// ssl.handshakes_failed_s
+			expect(result.handshakes_failed_s).toBe(ssl.handshakes_failed);
 
-			expect(utils.calculateSpeed.args[2][0], 'calculateSpeed 3rd call 1st arg')
-				.to.be.equal(previous.session_reuses);
-			expect(utils.calculateSpeed.args[2][1], 'calculateSpeed 3rd call 2nd arg').to.be.equal(ssl.session_reuses);
-			expect(utils.calculateSpeed.args[2][2], 'calculateSpeed 3rd call 3rd arg').to.be.equal(period);
-			expect(result.session_reuses_s, 'ssl.session_reuses_s').to.be.equal(ssl.session_reuses);
+			// calculateSpeed 3rd call 1st arg
+			expect(utils.calculateSpeed.mock.calls[2][0]).toBe(previous.session_reuses);
+			// calculateSpeed 3rd call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[2][1]).toBe(ssl.session_reuses);
+			// calculateSpeed 3rd call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[2][2]).toBe(period);
+			// ssl.session_reuses_s
+			expect(result.session_reuses_s).toBe(ssl.session_reuses);
 
-			expect(result, 'returned ssl').to.be.deep.equal(ssl);
+			// returned ssl
+			expect(result).toEqual(ssl);
 		});
 	});
 });

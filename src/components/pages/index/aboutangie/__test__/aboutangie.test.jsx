@@ -7,10 +7,9 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { stub } from 'sinon';
 import {
 	AboutAngieTooltip,
-	AboutAngie	
+	AboutAngie
 } from '../aboutangie.jsx';
 import styles from '../style.css';
 import tooltipStyles from '../../../../tooltip/style.css';
@@ -30,12 +29,12 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 			};
 			const wrapper = shallow(
 				<AboutAngie
-					data={ data }
+					data={data}
 					className="test"
 				/>
 			);
-			let instance = wrapper.instance();
-			expect(instance.renderLinkToDocs()).to.be.null
+			const instance = wrapper.instance();
+			expect(instance.renderLinkToDocs()).toBeNull();
 			wrapper.unmount();
 		});
 
@@ -49,22 +48,22 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 			};
 			const wrapper = shallow(
 				<AboutAngie
-					data={ data }
+					data={data}
 					className="test"
 				/>
 			);
-			let instance = wrapper.instance();
-			const link = shallow(instance.renderLinkToDocs())
-			
-			expect(link.prop('href')).to.be.equal(docs.default);
-			expect(link.text()).to.be.equal(data.angie.version);
-			
+			const instance = wrapper.instance();
+			const link = shallow(instance.renderLinkToDocs());
+
+			expect(link.prop('href')).toBe(docs.default);
+			expect(link.text()).toBe(data.angie.version);
+
 			wrapper.unmount();
 		});
 
 		it('build and version', () => {
-			stub(apiUtils, 'isAngiePro').callsFake(() => true);
-			
+			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
+
 			const data = {
 				angie: {
 					build: 'PRO',
@@ -75,23 +74,23 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 			};
 			const wrapper = shallow(
 				<AboutAngie
-					data={ data }
+					data={data}
 					className="test"
 				/>
 			);
-			let instance = wrapper.instance();
-			const link = shallow(instance.renderLinkToDocs())
-			
-			expect(link.prop('href')).to.be.equal(docs.pro);
-			expect(link.text()).to.be.equal(`${data.angie.version} ${data.angie.build}`);
-			
+			const instance = wrapper.instance();
+			const link = shallow(instance.renderLinkToDocs());
+
+			expect(link.prop('href')).toBe(docs.pro);
+			expect(link.text()).toBe(`${data.angie.version} ${data.angie.build}`);
+
 			wrapper.unmount();
-			apiUtils.isAngiePro.restore();
+			apiUtils.isAngiePro.mockRestore();
 		});
 	});
-	
+
 	it('returning component', () => {
-		stub(utils, 'formatDate').callsFake(() => 'test_formatDate_result');
+		jest.spyOn(utils, 'formatDate').mockClear().mockImplementation(() => 'test_formatDate_result');
 
 		const data = {
 			angie: {
@@ -101,27 +100,30 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 		};
 		const wrapper = shallow(
 			<AboutAngieTooltip
-				data={ data }
+				data={data}
 			/>
 		);
-		let children = wrapper.children();
+		const children = wrapper.children();
 
-		expect(children, 'child length').to.have.lengthOf(1);
-		expect(children.at(0).prop('className'), 'child 1 className').to.be.equal(tooltipStyles['row']);
-		expect(children.at(0).text(), 'child 1 text').to.be.equal('Reloads: 11');
+		// child length
+		expect(children).toHaveLength(1);
+		// child 1 className
+		expect(children.at(0).prop('className')).toBe(tooltipStyles.row);
+		// child 1 text
+		expect(children.at(0).text()).toBe('Reloads: 11');
 
-		utils.formatDate.restore();
+		utils.formatDate.mockRestore();
 		wrapper.unmount();
 	});
 });
 
 describe('<AboutAngie IndexPage />', () => {
 	it('render()', () => {
-		stub(Date, 'now').callsFake(() => 1599571723125);
-		stub(Date, 'parse').callsFake(a => a);
-		stub(utils, 'formatUptime').callsFake(() => 'test_formatUptime_result');
-		stub(apiUtils, 'isAngiePro').callsFake(() => true);
-		stub(tooltips, 'useTooltip').callsFake(() => ({
+		jest.spyOn(Date, 'now').mockClear().mockImplementation(() => 1599571723125);
+		jest.spyOn(Date, 'parse').mockClear().mockImplementation(a => a);
+		jest.spyOn(utils, 'formatUptime').mockClear().mockImplementation(() => 'test_formatUptime_result');
+		jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
+		jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
 			prop_from_useTooltip: true
 		}));
 
@@ -135,47 +137,62 @@ describe('<AboutAngie IndexPage />', () => {
 		};
 		const wrapper = shallow(
 			<AboutAngie
-				data={ data }
+				data={data}
 				className="test"
 			/>
 		);
 
-		expect(wrapper.find('IndexBox').prop('className'), 'IndexBox className').to.be.equal('test');
+		// IndexBox className
+		expect(wrapper.find('IndexBox').prop('className')).toBe('test');
 
-		const link = wrapper.find(`a.${ styles['release'] }`);
+		const link = wrapper.find(`a.${ styles.release }`);
 
-		expect(link, 'link length').to.have.lengthOf(1);
-		expect(link.prop('href'), 'link href')
-			.to.be.equal(docs.pro);
-		expect(link.prop('target'), 'link target').to.be.equal('_blank');
-		expect(link.text(), 'link text').to.be.equal('0.0.1 PRO');
+		// link length
+		expect(link).toHaveLength(1);
+		// link href
+		expect(link.prop('href')).toBe(docs.pro);
+		// link target
+		expect(link.prop('target')).toBe('_blank');
+		// link text
+		expect(link.text()).toBe('0.0.1 PRO');
 
 		const table = wrapper.find('table');
 
-		expect(table, 'table length').to.have.lengthOf(1);
-		expect(table.prop('className'), 'table className').to.be.equal(styles['table']);
-		expect(table.childAt(0).childAt(1).text(), 'table, row 1, cell 2 (angie address').to.be.equal('localhost');
+		// table length
+		expect(table).toHaveLength(1);
+		// table className
+		expect(table.prop('className')).toBe(styles.table);
+		// table, row 1, cell 2 (angie address
+		expect(table.childAt(0).childAt(1).text()).toBe('localhost');
 
 		const tooltip = table.childAt(1).childAt(1).childAt(0);
 
-		expect(tooltip.prop('className'), 'tooltip className').to.be.equal(styles['uptime']);
-		expect(tooltip.prop('prop_from_useTooltip'), 'tooltip prop from useTooltip').to.be.true;
-		expect(tooltips.useTooltip.calledOnce, 'useTooltip called once').to.be.true;
-		expect(tooltips.useTooltip.args[0][0].type.displayName, 'useTooltip arg')
-			.to.be.equal('AboutAngieTooltip');
-		expect(tooltips.useTooltip.args[0][0].props.data, 'useTooltip arg prop')
-			.to.be.deep.equal(data);
-		expect(tooltip.text(), 'tooltip text').to.be.equal('test_formatUptime_result');
-		expect(Date.parse.calledOnce, 'formatUptime called once').to.be.true;
-		expect(Date.parse.args[0][0], 'formatUptime call 1, arg').to.be.equal(1599571720025);
-		expect(utils.formatUptime.calledOnce, 'formatUptime called once').to.be.true;
-		expect(utils.formatUptime.args[0][0], 'formatUptime arg').to.be.equal(3100);
+		// tooltip className
+		expect(tooltip.prop('className')).toBe(styles.uptime);
+		// tooltip prop from useTooltip
+		expect(tooltip.prop('prop_from_useTooltip')).toBe(true);
+		// useTooltip called once
+		expect(tooltips.useTooltip).toHaveBeenCalledTimes(1);
+		// useTooltip arg
+		expect(tooltips.useTooltip.mock.calls[0][0].type.displayName).toBe('AboutAngieTooltip');
+		// useTooltip arg prop
+		expect(tooltips.useTooltip.mock.calls[0][0].props.data).toEqual(data);
+		// tooltip text
+		expect(tooltip.text()).toBe('test_formatUptime_result');
+		// formatUptime called once
+		expect(Date.parse).toHaveBeenCalledTimes(1);
+		// formatUptime call 1, arg
+		expect(Date.parse.mock.calls[0][0]).toBe(1599571720025);
+		// formatUptime called once
+		expect(utils.formatUptime).toHaveBeenCalledTimes(1);
+		// formatUptime arg
+		expect(utils.formatUptime.mock.calls[0][0]).toBe(3100);
 
-		Date.now.restore();
-		Date.parse.restore();
-		apiUtils.isAngiePro.restore();
-		utils.formatUptime.restore();
-		tooltips.useTooltip.restore();
+		Date.now.mockRestore();
+		Date.parse.mockRestore();
+		apiUtils.isAngiePro.mockRestore();
+		utils.formatUptime.mockRestore();
+		tooltips.useTooltip.mockRestore();
 		wrapper.unmount();
 	});
 });

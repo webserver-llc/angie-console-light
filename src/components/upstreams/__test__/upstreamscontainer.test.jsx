@@ -7,9 +7,12 @@
 
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { spy, stub } from 'sinon';
 import UpstreamsContainer, { UPSTREAM_GROUP_LENGTH } from '../upstreamscontainer.jsx';
 import styles from '../style.css';
+
+beforeEach(() => {
+	jest.restoreAllMocks();
+});
 
 describe('<UpstreamsContainer />', () => {
 	const props = {
@@ -18,81 +21,91 @@ describe('<UpstreamsContainer />', () => {
 	};
 
 	it('constructor()', () => {
-		const toggleFailedSpy = spy(UpstreamsContainer.prototype.toggleFailed, 'bind');
-		const toggleUpstreamsListSpy = spy(UpstreamsContainer.prototype.toggleUpstreamsList, 'bind');
-		const handleLastItemShowingSpy = spy(UpstreamsContainer.prototype.handleLastItemShowing, 'bind');
+		const toggleFailedSpy = jest.spyOn(UpstreamsContainer.prototype.toggleFailed, 'bind').mockClear();
+		const toggleUpstreamsListSpy = jest.spyOn(UpstreamsContainer.prototype.toggleUpstreamsList, 'bind').mockClear();
+		const handleLastItemShowingSpy = jest.spyOn(UpstreamsContainer.prototype.handleLastItemShowing, 'bind').mockClear();
 		let initIntObsResult = false;
-		const initIntOsververStub = stub(UpstreamsContainer.prototype, 'initIntersectionObserver')
-			.callsFake(() => initIntObsResult);
+		const initIntOsververStub = jest.spyOn(UpstreamsContainer.prototype, 'initIntersectionObserver').mockClear()
+			.mockImplementation(() => initIntObsResult);
 		let wrapper = shallow(
-			<UpstreamsContainer { ...props } />
+			<UpstreamsContainer {...props} />
 		);
 
-		expect(wrapper.state(), 'this.state').to.deep.equal({
+		// this.state
+		expect(wrapper.state()).toEqual({
 			showOnlyFailed: false,
 			showUpstreamsList: false,
 			editor: false,
 			howManyToShow: Infinity
 		});
-		expect(toggleFailedSpy.calledOnce, 'this.toggleFailed.bind called').to.be.true;
-		expect(toggleFailedSpy.args[0][0] instanceof UpstreamsContainer, 'this.toggleFailed.bind arg').to.be.true;
-		expect(toggleUpstreamsListSpy.calledOnce, 'this.toggleUpstreamsList.bind called').to.be.true;
-		expect(toggleUpstreamsListSpy.args[0][0] instanceof UpstreamsContainer, 'this.toggleUpstreamsList.bind arg').to.be.true;
-		expect(handleLastItemShowingSpy.calledOnce, 'this.handleLastItemShowing.bind called').to.be.true;
-		expect(handleLastItemShowingSpy.args[0][0] instanceof UpstreamsContainer, 'this.handleLastItemShowing.bind arg').to.be.true;
-		expect(initIntOsververStub.calledOnce, 'this.initIntersectionObserver called').to.be.true;
+		// this.toggleFailed.bind called
+		expect(toggleFailedSpy).toHaveBeenCalled();
+		// this.toggleFailed.bind arg
+		expect(toggleFailedSpy.mock.calls[0][0] instanceof UpstreamsContainer).toBe(true);
+		// this.toggleUpstreamsList.bind called
+		expect(toggleUpstreamsListSpy).toHaveBeenCalled();
+		// this.toggleUpstreamsList.bind arg
+		expect(toggleUpstreamsListSpy.mock.calls[0][0] instanceof UpstreamsContainer).toBe(true);
+		// this.handleLastItemShowing.bind called
+		expect(handleLastItemShowingSpy).toHaveBeenCalled();
+		// this.handleLastItemShowing.bind arg
+		expect(handleLastItemShowingSpy.mock.calls[0][0] instanceof UpstreamsContainer).toBe(true);
+		// this.initIntersectionObserver called
+		expect(initIntOsververStub).toHaveBeenCalled();
 
 		initIntObsResult = true;
 		wrapper = shallow(
-			<UpstreamsContainer { ...props } />
+			<UpstreamsContainer {...props} />
 		);
 
-		expect(
-			wrapper.state('howManyToShow'),
-			'[this.initIntersectionObserver() = true] this.state.howManyToShow'
-		).to.be.equal(UPSTREAM_GROUP_LENGTH);
+		// [this.initIntersectionObserver() = true] this.state.howManyToShow
+		expect(wrapper.state('howManyToShow')).toBe(UPSTREAM_GROUP_LENGTH);
 
-		initIntOsververStub.restore();
-		handleLastItemShowingSpy.restore();
-		toggleUpstreamsListSpy.restore();
-		toggleFailedSpy.restore();
+		initIntOsververStub.mockRestore();
+		handleLastItemShowingSpy.mockRestore();
+		toggleUpstreamsListSpy.mockRestore();
+		toggleFailedSpy.mockRestore();
 	});
 
 	it('toggleFailed()', () => {
 		const wrapper = shallow(
-			<UpstreamsContainer { ...props } />
+			<UpstreamsContainer {...props} />
 		);
 		const instance = wrapper.instance();
 
-		stub(instance, 'setState').callsFake(() => {});
+		jest.spyOn(instance, 'setState').mockClear().mockImplementation(() => {});
 
 		instance.toggleFailed();
 
-		expect(instance.setState.calledOnce, 'this.setState called').to.be.true;
-		expect(instance.setState.args[0][0], 'this.setState arg').to.be.deep.equal({
+		// this.setState called
+		expect(instance.setState).toHaveBeenCalled();
+		// this.setState arg
+		expect(instance.setState.mock.calls[0][0]).toEqual({
 			showOnlyFailed: true
 		});
 
-		instance.setState.restore();
+		instance.setState.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('toggleUpstreamsList()', () => {
 		const wrapper = shallow(
-			<UpstreamsContainer { ...props } />
+			<UpstreamsContainer {...props} />
 		);
 		const instance = wrapper.instance();
 
-		stub(instance, 'setState').callsFake(() => {});
+		jest.spyOn(instance, 'setState').mockClear().mockImplementation(() => {});
 
 		instance.toggleUpstreamsList();
 
-		expect(instance.setState.calledOnce, 'this.setState called').to.be.true;
-		expect(instance.setState.args[0][0], 'this.setState arg').to.be.deep.equal({
+		// this.setState called
+		expect(instance.setState).toHaveBeenCalled();
+		// this.setState arg
+		expect(instance.setState.mock.calls[0][0]).toEqual({
 			showUpstreamsList: true
 		});
 
-		instance.setState.restore();
+		instance.setState.mockRestore();
 		wrapper.unmount();
 	});
 
@@ -102,178 +115,168 @@ describe('<UpstreamsContainer />', () => {
 		delete window.IntersectionObserver;
 
 		const wrapper = shallow(
-			<UpstreamsContainer { ...props } />
+			<UpstreamsContainer {...props} />
 		);
 		const instance = wrapper.instance();
 
-		expect(instance.initIntersectionObserver(), 'IntersectionObserver not supported').to.be.false;
-		expect(instance.intersectionObserver, 'this.intersectionObserver').to.be.an('undefined');
+		// IntersectionObserver not supported
+		expect(instance.initIntersectionObserver()).toBe(false);
+		expect(instance.intersectionObserver).toBeUndefined();
 
 		window.IntersectionObserver = _IntersectionObserver;
 
-		const intObserverSpy = spy(window, 'IntersectionObserver');
+		const intObserverSpy = jest.spyOn(window, 'IntersectionObserver').mockClear().mockImplementation(() => {});
 
-		expect(instance.initIntersectionObserver(), 'IntersectionObserver supported').to.be.true;
-		expect(instance.intersectionObserver, 'this.intersectionObserver').to.be.an.instanceof(window.IntersectionObserver);
-		expect(intObserverSpy.calledOnce, 'IntersectionObserver created').to.be.true;
-		expect(intObserverSpy.args[0][0].name, 'IntersectionObserver arg 1').to.be.equal('bound handleLastItemShowing');
-		expect(intObserverSpy.args[0][1], 'IntersectionObserver arg 2').to.be.deep.equal({
+		// IntersectionObserver supported
+		expect(instance.initIntersectionObserver()).toBe(true);
+		// this.intersectionObserver
+		// IntersectionObserver created
+		expect(intObserverSpy).toHaveBeenCalled();
+		// IntersectionObserver arg 1
+		expect(intObserverSpy.mock.calls[0][0].name).toBe('bound handleLastItemShowing');
+		// IntersectionObserver arg 2
+		expect(intObserverSpy.mock.calls[0][1]).toEqual({
 			root: null,
 			threshold: 0.3
 		});
 
-		intObserverSpy.restore();
+		intObserverSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('handleLastItemShowing()', () => {
-		const Component = () => {
+		function Component() {
 			return (
 				<div>Test</div>
 			);
-		};
+		}
 		const wrapper = mount(
 			<UpstreamsContainer
-				{ ...props }
-				component={ Component }
-				upstreams={ new Map([
+				{...props}
+				component={Component}
+				upstreams={new Map([
 					['test_1', {}],
 					['test_2', {}]
-				]) }
+				])}
 			/>
 		);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
-		stub(instance.intersectionObserver, 'unobserve').callsFake(() => {});
+		jest.spyOn(instance.intersectionObserver, 'unobserve').mockClear().mockImplementation(() => {});
 
 		instance.handleLastItemShowing([{}]);
 
-		expect(
-			instance.intersectionObserver.unobserve.notCalled,
-			'[no isIntersecting] this.intersectionObserver.unobserve not called'
-		).to.be.true;
-		expect(
-			setStateSpy.notCalled,
-			'[no isIntersecting] this.setState not called'
-		).to.be.true;
+		// [no isIntersecting] this.intersectionObserver.unobserve not called
+		expect(instance.intersectionObserver.unobserve).not.toHaveBeenCalled();
+		// [no isIntersecting] this.setState not called
+		expect(setStateSpy).not.toHaveBeenCalled();
 
 		wrapper.setState({ howManyToShow: Infinity });
 		wrapper.update();
-		setStateSpy.resetHistory();
+		setStateSpy.mockClear();
 		instance.handleLastItemShowing([{ isIntersecting: true }]);
 
-		expect(
-			instance.intersectionObserver.unobserve.notCalled,
-			'[state.howManyToShow = Infinity] this.intersectionObserver.unobserve not called'
-		).to.be.true;
-		expect(
-			setStateSpy.notCalled,
-			'[state.howManyToShow = Infinity] this.setState not called'
-		).to.be.true;
+		// [state.howManyToShow = Infinity] this.intersectionObserver.unobserve not called
+		expect(instance.intersectionObserver.unobserve).not.toHaveBeenCalled();
+		// [state.howManyToShow = Infinity] this.setState not called
+		expect(setStateSpy).not.toHaveBeenCalled();
 
 		wrapper.setState({ howManyToShow: 70 });
 		wrapper.update();
-		setStateSpy.resetHistory();
+		setStateSpy.mockClear();
 		instance.handleLastItemShowing([{ isIntersecting: true }]);
 
-		expect(
-			instance.intersectionObserver.unobserve.notCalled,
-			'[upstreams.size < state.howManyToShow] this.intersectionObserver.unobserve not called'
-		).to.be.true;
-		expect(
-			setStateSpy.notCalled,
-			'[upstreams.size < state.howManyToShow] this.setState not called'
-		).to.be.true;
+		// [upstreams.size < state.howManyToShow] this.intersectionObserver.unobserve not called
+		expect(instance.intersectionObserver.unobserve).not.toHaveBeenCalled();
+		// [upstreams.size < state.howManyToShow] this.setState not called
+		expect(setStateSpy).not.toHaveBeenCalled();
 
 		wrapper.setState({ howManyToShow: 1 });
 		wrapper.update();
-		setStateSpy.resetHistory();
+		setStateSpy.mockClear();
 		instance.handleLastItemShowing([{
 			isIntersecting: true,
 			target: 'test_target'
 		}]);
 
-		expect(instance.intersectionObserver.unobserve).to.be.calledOnce;
-		expect(
-			instance.intersectionObserver.unobserve.args[0][0],
-			'this.intersectionObserver.unobserve call arg'
-		).to.be.equal('test_target');
-		expect(
-			setStateSpy.calledOnce,
-			'this.setState called once'
-		).to.be.true;
-		expect(
-			setStateSpy.args[0][0],
-			'this.setState call arg'
-		).to.be.deep.equal({
+		expect(instance.intersectionObserver.unobserve).toHaveBeenCalled();
+		// this.intersectionObserver.unobserve call arg
+		expect(instance.intersectionObserver.unobserve.mock.calls[0][0]).toBe('test_target');
+		// this.setState called once
+		expect(setStateSpy).toHaveBeenCalled();
+		// this.setState call arg
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			howManyToShow: 71
 		});
 
-		setStateSpy.restore();
-		instance.intersectionObserver.unobserve.restore();
+		setStateSpy.mockRestore();
+		instance.intersectionObserver.unobserve.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('scrollTo()', () => {
 		const wrapper = shallow(
-			<UpstreamsContainer { ...props } />
+			<UpstreamsContainer {...props} />
 		);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
-		const scrollIntoViewSpy = spy();
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
+		const scrollIntoViewSpy = jest.fn();
 
-		stub(document, 'getElementById').callsFake(() => ({
+		jest.spyOn(document, 'getElementById').mockClear().mockImplementation(() => ({
 			scrollIntoView: scrollIntoViewSpy
-		}))
+		}));
 
 		instance.scrollTo('test_upstream', 3);
 
-		expect(setStateSpy.calledOnce, 'this.setState called once').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call arg 1').to.be.deep.equal({
+		// this.setState called once
+		expect(setStateSpy).toHaveBeenCalled();
+		// this.setState call arg 1
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			howManyToShow: 73
 		});
-		expect(setStateSpy.args[0][1], 'this.setState call arg 2').to.be.a('function');
+		expect(setStateSpy.mock.calls[0][1]).toBeInstanceOf(Function);
 
-		setStateSpy.args[0][1]();
+		setStateSpy.mock.calls[0][1]();
 
-		expect(document.getElementById.calledOnce, 'document.getElementById called').to.be.true;
-		expect(document.getElementById.args[0][0], 'document.getElementById call arg').to.be.equal('upstream-test_upstream');
-		expect(scrollIntoViewSpy.calledOnce, 'scrollIntoView called').to.be.true;
+		// document.getElementById called
+		expect(document.getElementById).toHaveBeenCalled();
+		// document.getElementById call arg
+		expect(document.getElementById.mock.calls[0][0]).toBe('upstream-test_upstream');
+		// scrollIntoView called
+		expect(scrollIntoViewSpy).toHaveBeenCalled();
 
-		setStateSpy.restore();
-		document.getElementById.restore();
+		setStateSpy.mockRestore();
+		document.getElementById.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('upstreamRef()', () => {
 		const wrapper = shallow(
-			<UpstreamsContainer { ...props } />
+			<UpstreamsContainer {...props} />
 		);
 		const instance = wrapper.instance();
 
-		stub(instance.intersectionObserver, 'observe').callsFake(() => {});
+		jest.spyOn(instance.intersectionObserver, 'observe').mockClear().mockImplementation(() => {});
 
 		instance.upstreamRef(false);
 
-		expect(instance.intersectionObserver.observe.notCalled, 'not last').to.be.true;
+		// not last
+		expect(instance.intersectionObserver.observe).not.toHaveBeenCalled();
 
 		instance.upstreamRef(true);
 
-		expect(instance.intersectionObserver.observe.notCalled, 'no ref provided').to.be.true;
+		// no ref provided
+		expect(instance.intersectionObserver.observe).not.toHaveBeenCalled();
 
 		instance.upstreamRef(true, { base: 'base_test' });
 
-		expect(
-			instance.intersectionObserver.observe.calledOnce,
-			'called'
-		).to.be.true;
-		expect(
-			instance.intersectionObserver.observe.args[0][0],
-			'argument'
-		).to.be.equal('base_test');
+		// called
+		expect(instance.intersectionObserver.observe).toHaveBeenCalled();
+		// argument
+		expect(instance.intersectionObserver.observe.mock.calls[0][0]).toBe('base_test');
 
-		instance.intersectionObserver.observe.restore();
+		instance.intersectionObserver.observe.mockRestore();
 		wrapper.unmount();
 	});
 
@@ -297,115 +300,101 @@ describe('<UpstreamsContainer />', () => {
 
 		function TestComponent(){
 			return <div />;
-		};
+		}
 		const wrapper = mount(
 			<UpstreamsContainer
 				title="test_title"
-				upstreams={ upstreams }
-				component={ TestComponent }
+				upstreams={upstreams}
+				component={TestComponent}
 				writePermission="writePermission_test"
 				upstreamsApi="upstreamsApi_test"
-				isStream={ true }
+				isStream
 			/>
 		);
 		const instance = wrapper.instance();
 
-		stub(instance.upstreamRef, 'bind').callsFake(() => {});
-		stub(instance, 'scrollTo').callsFake(() => 'scrollTo_result');
+		jest.spyOn(instance.upstreamRef, 'bind').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'scrollTo').mockClear().mockImplementation(() => 'scrollTo_result');
 
-		const arraySliceSpy = spy(Array.prototype, 'slice');
+		const arraySliceSpy = jest.spyOn(Array.prototype, 'slice').mockClear();
 
 		instance.render();
 
 		let root = wrapper.childAt(0);
 
-		expect(root.hasClass(styles['upstreams-container']), 'wrapper className').to.be.true;
-		expect(root.children(), 'wrapper children length').to.have.lengthOf(5);
-		expect(root.childAt(0).prop('className'), 'toggle-failed, className').to.be.equal(styles['toggle-failed']);
-		expect(
-			root.childAt(0).childAt(1).prop('className'),
-			'[showOnlyFailed = false] toggle-failed child 1, className'
-		).to.be.equal(styles['toggler']);
-		expect(
-			root.childAt(0).childAt(1).prop('onClick').name,
-			'toggle-failed child 1, onClick'
-		).to.be.equal('bound toggleFailed');
-		expect(
-			root.childAt(0).childAt(1).childAt(0).prop('className'),
-			'toggle-failed child 2, className'
-		).to.be.equal(styles['toggler-point']);
-		expect(root.childAt(1).name(), 'title, html tag').to.be.equal('h1');
-		expect(root.childAt(1).text(), 'title, text').to.be.equal('test_title');
-		expect(
-			root.childAt(2).prop('className'),
-			'[showUpstreamsList = false] toggle upstreams list, className'
-		).to.be.equal(styles['list-toggler']);
-		expect(
-			root.childAt(2).prop('onClick').name,
-			'toggle upstreams list, onClick'
-		).to.be.equal('bound toggleUpstreamsList');
-		expect(
-			root.childAt(2).text(),
-			'toggle upstreams list, text'
-		).to.be.equal('Show upstreams list');
-		expect(root.childAt(3).name(), 'upstream 1, component').to.be.equal('TestComponent');
-		expect(
-			root.childAt(3).prop('upstream'),
-			'upstream 1, upstream'
-		).to.be.deep.equal(upstreams.get('test_1'));
-		expect(root.childAt(3).prop('name'), 'upstream 1, name').to.be.equal('test_1');
-		expect(root.childAt(3).prop('showOnlyFailed'), 'upstream 1, showOnlyFailed').to.be.false;
-		expect(
-			root.childAt(3).prop('writePermission'),
-			'upstream 1, writePermission'
-		).to.be.equal('writePermission_test');
-		expect(
-			root.childAt(3).prop('upstreamsApi'),
-			'upstream 1, upstreamsApi'
-		).to.be.equal('upstreamsApi_test');
-		expect(root.childAt(3).prop('isStream'), 'upstream 1, isStream').to.be.true;
+		// wrapper className
+		expect(root.hasClass(styles['upstreams-container'])).toBe(true);
+		// wrapper children length
+		expect(root.children()).toHaveLength(5);
+		// toggle-failed, className
+		expect(root.childAt(0).prop('className')).toBe(styles['toggle-failed']);
+		// [showOnlyFailed = false] toggle-failed child 1, className
+		expect(root.childAt(0).childAt(1).prop('className')).toBe(styles.toggler);
+		// toggle-failed child 1, onClick
+		expect(root.childAt(0).childAt(1).prop('onClick').name).toBe('bound toggleFailed');
+		// toggle-failed child 2, className
+		expect(root.childAt(0).childAt(1).childAt(0).prop('className')).toBe(styles['toggler-point']);
+		// title, html tag
+		expect(root.childAt(1).name()).toBe('h1');
+		// title, text
+		expect(root.childAt(1).text()).toBe('test_title');
+		// [showUpstreamsList = false] toggle upstreams list, className
+		expect(root.childAt(2).prop('className')).toBe(styles['list-toggler']);
+		// toggle upstreams list, onClick
+		expect(root.childAt(2).prop('onClick').name).toBe('bound toggleUpstreamsList');
+		// toggle upstreams list, text
+		expect(root.childAt(2).text()).toBe('Show upstreams list');
+		// upstream 1, component
+		expect(root.childAt(3).name()).toBe('TestComponent');
+		// upstream 1, upstream
+		expect(root.childAt(3).prop('upstream')).toEqual(upstreams.get('test_1'));
+		// upstream 1, name
+		expect(root.childAt(3).prop('name')).toBe('test_1');
+		// upstream 1, showOnlyFailed
+		expect(root.childAt(3).prop('showOnlyFailed')).toBe(false);
+		// upstream 1, writePermission
+		expect(root.childAt(3).prop('writePermission')).toBe('writePermission_test');
+		// upstream 1, upstreamsApi
+		expect(root.childAt(3).prop('upstreamsApi')).toBe('upstreamsApi_test');
+		// upstream 1, isStream
+		expect(root.childAt(3).prop('isStream')).toBe(true);
 
-		expect(root.childAt(4).name(), 'upstream 2, component').to.be.equal('TestComponent');
-		expect(
-			root.childAt(4).prop('upstream'),
-			'upstream 2, upstream'
-		).to.be.deep.equal(upstreams.get('test_2'));
-		expect(root.childAt(4).prop('name'), 'upstream 2, name').to.be.equal('test_2');
-		expect(root.childAt(4).prop('showOnlyFailed'), 'upstream 2, showOnlyFailed').to.be.false;
-		expect(
-			root.childAt(4).prop('writePermission'),
-			'upstream 2, writePermission'
-		).to.be.equal('writePermission_test');
-		expect(
-			root.childAt(4).prop('upstreamsApi'),
-			'upstream 2, upstreamsApi'
-		).to.be.equal('upstreamsApi_test');
-		expect(root.childAt(4).prop('isStream'), 'upstream 2, isStream').to.be.true;
+		// upstream 2, component
+		expect(root.childAt(4).name()).toBe('TestComponent');
+		// upstream 2, upstream
+		expect(root.childAt(4).prop('upstream')).toEqual(upstreams.get('test_2'));
+		// upstream 2, name
+		expect(root.childAt(4).prop('name')).toBe('test_2');
+		// upstream 2, showOnlyFailed
+		expect(root.childAt(4).prop('showOnlyFailed')).toBe(false);
+		// upstream 2, writePermission
+		expect(root.childAt(4).prop('writePermission')).toBe('writePermission_test');
+		// upstream 2, upstreamsApi
+		expect(root.childAt(4).prop('upstreamsApi')).toBe('upstreamsApi_test');
+		// upstream 2, isStream
+		expect(root.childAt(4).prop('isStream')).toBe(true);
 
-		expect(instance.upstreamRef.bind.calledTwice, 'this,upstreamRef.bind called twice').to.be.true;
-		expect(
-			instance.upstreamRef.bind.args[0][0],
-			'this,upstreamRef.bind call 1, arg 1'
-		).to.be.deep.equal(instance);
-		expect(instance.upstreamRef.bind.args[0][1], 'this,upstreamRef.bind call 1, arg 2').to.be.false;
-		expect(
-			instance.upstreamRef.bind.args[1][0],
-			'this,upstreamRef.bind call 2, arg 1'
-		).to.be.deep.equal(instance);
-		expect(instance.upstreamRef.bind.args[1][1], 'this,upstreamRef.bind call 2, arg 2').to.be.true;
+		// this,upstreamRef.bind called twice
+		expect(instance.upstreamRef.bind).toHaveBeenCalled();
+		// this,upstreamRef.bind call 1, arg 1
+		expect(instance.upstreamRef.bind.mock.calls[0][0]).toEqual(instance);
+		// this,upstreamRef.bind call 1, arg 2
+		expect(instance.upstreamRef.bind.mock.calls[0][1]).toBe(false);
+		// this,upstreamRef.bind call 2, arg 1
+		expect(instance.upstreamRef.bind.mock.calls[1][0]).toEqual(instance);
+		// this,upstreamRef.bind call 2, arg 2
+		expect(instance.upstreamRef.bind.mock.calls[1][1]).toBe(true);
 
-		expect(arraySliceSpy.calledOnce, '[howManyToShow is finite] Array slice called once').to.be.true;
-		expect(
-			arraySliceSpy.getCall(0).thisValue,
-			'Array slice called on upstreams'
-		).to.be.deep.equal(Array.from(upstreams));
-		expect(arraySliceSpy.calledWith(0, 70), 'Array slice call arguments').to.be.true;
+		// [howManyToShow is finite] Array slice called once
+		expect(arraySliceSpy).toHaveBeenCalled();
+		// Array slice call arguments
+		expect(arraySliceSpy).toHaveBeenCalledWith(0, 70);
 
 		upstreams.set('test_2', {
 			hasFailedPeer: false
 		});
 		wrapper.setProps({ upstreams });
-		arraySliceSpy.resetHistory();
+		arraySliceSpy.mockReset();
 		wrapper.setState({
 			showOnlyFailed: true,
 			showUpstreamsList: true,
@@ -414,49 +403,33 @@ describe('<UpstreamsContainer />', () => {
 		wrapper.update();
 		root = wrapper.childAt(0);
 
-		expect(root.children(), 'wrapper children length').to.have.lengthOf(5);
-		expect(
-			root.childAt(0).childAt(1).prop('className'),
-			'[showOnlyFailed = true] toggle-failed child 1, className'
-		).to.be.equal(styles['toggler-active']);
-		expect(
-			root.childAt(2).prop('className'),
-			'[showUpstreamsList = true] toggle upstreams list, className'
-		).to.be.equal(styles['list-toggler-opened']);
-		expect(
-			root.childAt(2).text(),
-			'toggle upstreams list, text'
-		).to.be.equal('Hide upstreams list');
-		expect(
-			root.childAt(3).prop('className'),
-			'upstreams catalog, className'
-		).to.be.equal(styles['upstreams-catalog']);
-		expect(
-			root.childAt(3).childAt(0).prop('className'),
-			'upstreams catalog, summary, className'
-		).to.be.equal(styles['upstreams-summary']);
-		expect(
-			root.childAt(3).childAt(0).find(`.${styles['red-text']}`),
-			'upstreams catalog, summary, with problems, className'
-		).to.have.lengthOf(1);
-		expect(
-			root.childAt(3).childAt(0).text(),
-			'upstreams catalog, summary text'
-		).to.be.equal('Total: total_num upstreams (all_num servers)With problems: failures_num upstreams (failed_num servers)');
-		expect(
-			root.childAt(3).childAt(1).prop('className'),
-			'upstreams catalog, navlinks, className'
-		).to.be.equal(styles['upstreams-navlinks']);
-		expect(
-			root.childAt(3).childAt(1).children(),
-			'[no failed upstreams] upstreams catalog, navlinks, children length'
-		).to.have.lengthOf(0);
-		expect(
-			root.childAt(4).prop('className'),
-			'[no upstreams to display] upstreams, className'
-		).to.be.equal(styles['msg']);
+		// wrapper children length
+		expect(root.children()).toHaveLength(5);
+		// [showOnlyFailed = true] toggle-failed child 1, className
+		expect(root.childAt(0).childAt(1).prop('className')).toBe(styles['toggler-active']);
+		// [showUpstreamsList = true] toggle upstreams list, className
+		expect(root.childAt(2).prop('className')).toBe(styles['list-toggler-opened']);
+		// toggle upstreams list, text
+		expect(root.childAt(2).text()).toBe('Hide upstreams list');
+		// upstreams catalog, className
+		expect(root.childAt(3).prop('className')).toBe(styles['upstreams-catalog']);
+		// upstreams catalog, summary, className
+		expect(root.childAt(3).childAt(0).prop('className')).toBe(styles['upstreams-summary']);
+		// upstreams catalog, summary, with problems, className
+		expect(root.childAt(3).childAt(0).find(`.${styles['red-text']}`)).toHaveLength(1);
+		// upstreams catalog, summary text
+		expect(root.childAt(3).childAt(0).text()).toBe(
+			'Total: total_num upstreams (all_num servers)With problems: failures_num upstreams (failed_num servers)'
+		);
+		// upstreams catalog, navlinks, className
+		expect(root.childAt(3).childAt(1).prop('className')).toBe(styles['upstreams-navlinks']);
+		// [no failed upstreams] upstreams catalog, navlinks, children length
+		expect(root.childAt(3).childAt(1).children()).toHaveLength(0);
+		// [no upstreams to display] upstreams, className
+		expect(root.childAt(4).prop('className')).toBe(styles.msg);
 
-		expect(arraySliceSpy.notCalled, '[howManyToShow = Infinity] Array slice not called').to.be.true;
+		// [howManyToShow = Infinity] Array slice not called
+		expect(arraySliceSpy).not.toHaveBeenCalled();
 
 		upstreams.set('test_2', {
 			hasFailedPeer: true
@@ -464,38 +437,22 @@ describe('<UpstreamsContainer />', () => {
 		wrapper.setProps({ upstreams });
 		root = wrapper.childAt(0);
 
-		expect(
-			root.childAt(3).childAt(1).children(),
-			'[with failed upstreams] upstreams catalog, navlinks, children length'
-		).to.have.lengthOf(1);
-		expect(
-			root.childAt(3).childAt(1).childAt(0).prop('className'),
-			'upstreams catalog, navlink, className'
-		).to.be.equal(styles['upstream-link-failed']);
-		expect(
-			root.childAt(3).childAt(1).childAt(0).prop('onClick'),
-			'upstreams catalog, navlink, onClick'
-		).to.be.a('function');
-		expect(
-			root.childAt(3).childAt(1).childAt(0).prop('onClick')(),
-			'upstreams catalog, navlink, onClick returns'
-		).to.be.equal('scrollTo_result');
-		expect(
-			instance.scrollTo.calledOnce,
-			'this.scrollTo called once from navlink onClick prop'
-		).to.be.true;
-		expect(
-			instance.scrollTo.calledWith('test_2', 1),
-			'this.scrollTo call from navlink onClick prop, arguments'
-		).to.be.true;
-		expect(
-			root.childAt(3).childAt(1).childAt(0).childAt(0).prop('className'),
-			'upstreams catalog, navlink, name className'
-		).to.be.equal(styles['dashed']);
-		expect(
-			root.childAt(3).childAt(1).childAt(0).text(),
-			'upstreams catalog, navlink, text'
-		).to.be.equal('test_2');
+		// [with failed upstreams] upstreams catalog, navlinks, children length
+		expect(root.childAt(3).childAt(1).children()).toHaveLength(1);
+		// upstreams catalog, navlink, className
+		expect(root.childAt(3).childAt(1).childAt(0).prop('className')).toBe(styles['upstream-link-failed']);
+		expect(root.childAt(3).childAt(1).childAt(0).prop('onClick')).toBeInstanceOf(Function);
+		// upstreams catalog, navlink, onClick returns
+		expect(root.childAt(3).childAt(1).childAt(0).prop('onClick')()).toBe('scrollTo_result');
+		// this.scrollTo called once from navlink onClick prop
+		expect(instance.scrollTo).toHaveBeenCalled();
+		// this.scrollTo call from navlink onClick prop, arguments
+		expect(instance.scrollTo).toHaveBeenCalledWith('test_2', 1);
+		// upstreams catalog, navlink, name className
+		expect(root.childAt(3).childAt(1).childAt(0).childAt(0)
+			.prop('className')).toBe(styles.dashed);
+		// upstreams catalog, navlink, text
+		expect(root.childAt(3).childAt(1).childAt(0).text()).toBe('test_2');
 
 		wrapper.setState({
 			showOnlyFailed: false
@@ -503,22 +460,16 @@ describe('<UpstreamsContainer />', () => {
 		wrapper.update();
 		root = wrapper.childAt(0);
 
-		expect(
-			root.childAt(3).childAt(1).children(),
-			'[showOnlyFailed = false] upstreams catalog, navlinks, children length'
-		).to.have.lengthOf(2);
-		expect(
-			root.childAt(3).childAt(1).childAt(0).prop('className'),
-			'[showOnlyFailed = false] upstreams catalog, navlink 1, className'
-		).to.be.equal(styles['upstream-link']);
-		expect(
-			root.childAt(3).childAt(1).childAt(0).text(),
-			'upstreams catalog, navlink, text'
-		).to.be.equal('test_1');
+		// [showOnlyFailed = false] upstreams catalog, navlinks, children length
+		expect(root.childAt(3).childAt(1).children()).toHaveLength(2);
+		// [showOnlyFailed = false] upstreams catalog, navlink 1, className
+		expect(root.childAt(3).childAt(1).childAt(0).prop('className')).toBe(styles['upstream-link']);
+		// upstreams catalog, navlink, text
+		expect(root.childAt(3).childAt(1).childAt(0).text()).toBe('test_1');
 
-		instance.upstreamRef.bind.restore();
-		instance.scrollTo.restore();
-		arraySliceSpy.restore();
+		instance.upstreamRef.bind.mockRestore();
+		instance.scrollTo.mockRestore();
+		arraySliceSpy.mockRestore();
 		wrapper.unmount();
 	});
 });

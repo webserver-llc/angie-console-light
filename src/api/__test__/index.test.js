@@ -9,8 +9,6 @@
 /* eslint-env browser, mocha */
 /* eslint no-underscore-dangle: "off" */
 
-import { spy, stub } from 'sinon';
-
 import datastore from '../../datastore';
 import api, * as Api from '../index.js';
 import ApiProxy from '../ApiProxy.js';
@@ -31,51 +29,51 @@ import calculateWorkers from '../../calculators/workers.js';
 
 describe('Api', () => {
 	it('Returns new instance of ApiProxy', () => {
-		assert(api.a !== api.a, 'Should always return new ApiProxy instance');
-		assert(api.a.__API_PROXY, 'Should have appropriate "__API_PROXY" sign');
+		expect(api.a !== api.a).toBeTruthy();
+		expect(api.a.__API_PROXY).toBeTruthy();
 	});
 
 	it('Passes API_PATH to ApiProxy', () => {
-		assert(api.a.apiPrefix === API_PATH, 'Wrong "apiPrefix" of ApiProxy');
+		expect(api.a.apiPrefix === API_PATH).toBeTruthy();
 	});
 
 	it('httpUpstreamsApi', () => {
-		assert(Api.httpUpstreamsApi instanceof UpstreamsApi, 'Should be the instance of UpstreamsApi');
-		assert(Api.httpUpstreamsApi.apiPrefix === 'http', 'Unexpected "apiPrefix" value');
+		expect(Api.httpUpstreamsApi instanceof UpstreamsApi).toBeTruthy();
+		expect(Api.httpUpstreamsApi.apiPrefix === 'http').toBeTruthy();
 	});
 
 	it('streamUpstreamsApi', () => {
-		assert(Api.streamUpstreamsApi instanceof UpstreamsApi, 'Should be the instance of UpstreamsApi');
-		assert(Api.streamUpstreamsApi.apiPrefix === 'stream', 'Unexpected "apiPrefix" value');
+		expect(Api.streamUpstreamsApi instanceof UpstreamsApi).toBeTruthy();
+		expect(Api.streamUpstreamsApi.apiPrefix === 'stream').toBeTruthy();
 	});
 
 	describe('defineAngieVersion()', () => {
 		it('default value', () => {
-			assert(Api.isAngiePro() === false, 'should be false')
-		})
-		
+			expect(Api.isAngiePro() === false).toBeTruthy();
+		});
+
 		// it('define pro', () => {
 		// 	Api.defineAngieVersion('PRO');
 		// 	assert(Api.isAngiePro() === true, 'should be true')
-		// 	
+		//
 		// 	Api.defineAngieVersion('pro');
 		// 	assert(Api.isAngiePro() === true, 'should be true')
-		// 	
+		//
 		// 	Api.defineAngieVersion('pro p1');
 		// 	assert(Api.isAngiePro() === true, 'should be true')
 		// })
-		// 
+		//
 		// it('define oss', () => {
 		// 	Api.defineAngieVersion();
 		// 	assert(Api.isAngiePro() === false, 'should be true')
-		// 	
+		//
 		// 	Api.defineAngieVersion('hot');
 		// 	assert(Api.isAngiePro() === false, 'should be true')
-		// 	
+		//
 		// 	Api.defineAngieVersion('1.2.0');
 		// 	assert(Api.isAngiePro() === false, 'should be true')
 		// })
-	})
+	});
 
 	describe('checkWritePermissions()', () => {
 		const _fetchInner = () => Promise.resolve({
@@ -83,35 +81,35 @@ describe('Api', () => {
 		});
 		let _fetch;
 
-		before(() => {
+		afterEach(() => {
+			jest.restoreAllMocks();
+		});
+
+		beforeAll(() => {
 			_fetch = window.fetch;
 
 			window.fetch = _fetchInner;
 		});
 
-		after(() => {
+		afterAll(() => {
 			window.fetch = _fetch;
 		});
 
 		it('Correct path', () => {
-			window.fetch = spy(_fetchInner);
+			window.fetch = jest.fn(_fetchInner);
 
 			Api.checkWritePermissions('CONSOLE_INIT', '__TEST_FOR_WRITE__');
 
-			assert(
-				window.fetch.args[0][0] === `${ API_PATH }/config/http/upstreams/CONSOLE_INIT/servers/__TEST_FOR_WRITE__/`,
-				'Unexpected path was passed to "window.fetch"'
-			);
+			expect(window.fetch.mock.calls[0][0]).toBe(`${ API_PATH }/config/http/upstreams/CONSOLE_INIT/servers/__TEST_FOR_WRITE__/`);
 
 			window.fetch = _fetchInner;
 		});
 
 		it('Correct method', done => {
-			const getSpy = spy(ApiProxy.prototype, 'get');
+			const spyApiGet = jest.spyOn(ApiProxy.prototype, 'get').mockClear();
 
 			Api.checkWritePermissions().then(() => {
-				assert(getSpy.calledOnce, 'get() of ApiProxy is expected to be called once');
-				ApiProxy.prototype.get.restore();
+				expect(spyApiGet).toHaveBeenCalled();
 				done();
 			});
 		});
@@ -135,11 +133,8 @@ describe('Api', () => {
 				ApiProxy.prototype.get = () => Promise.reject({ status });
 
 				Api.checkWritePermissions().then(_result => {
-					assert(_result === result, `Unexpected result of "window.fetch" resolved with ${ status } status`);
-					assert(
-						Api.isWritable() === result,
-						`Unexpected return from isWritable() for "window.fetch" resolved with ${ status } status`
-					);
+					expect(_result === result).toBeTruthy();
+					expect(Api.isWritable() === result).toBeTruthy();
 				}).finally(() => done());
 
 				ApiProxy.prototype.get = originGet;
@@ -151,62 +146,62 @@ describe('Api', () => {
 		const _fetchInner = () => Promise.resolve({
 			status: 200,
 			json(){
-				return Promise.resolve({ 
-					version: "1.2.0",
-					build: "1.2.0",
-					address: "192.168.3.2",
+				return Promise.resolve({
+					version: '1.2.0',
+					build: '1.2.0',
+					address: '192.168.3.2',
 					generation: 1,
-					load_time: "2023-08-29T14:36:13.835Z"
+					load_time: '2023-08-29T14:36:13.835Z'
 				});
 			}
 		});
 		let _fetch;
 
-		before(() => {
+		beforeAll(() => {
 			_fetch = window.fetch;
 
 			window.fetch = _fetchInner;
 		});
 
-		after(() => {
+		afterAll(() => {
 			window.fetch = _fetch;
 		});
 
 		it('Correct path', () => {
-			window.fetch = spy(_fetchInner);
-			stub(Api.apiUtils, 'defineAngieVersion').callsFake(() => {});
-			
+			window.fetch = jest.fn(_fetchInner);
+			const spyDefineAngieVersion = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => {});
+
 			Api.checkApiAvailability();
-			assert(window.fetch.args[0][0] === `${ API_PATH }/angie/`, 'Unexpected path was passed to "window.fetch"');
+			expect(window.fetch.mock.calls[0][0] === `${ API_PATH }/angie/`).toBeTruthy();
 
 			window.fetch = _fetchInner;
-			Api.apiUtils.defineAngieVersion.restore()
+			spyDefineAngieVersion.mockRestore();
 		});
 
 		it('Correct method', done => {
-			const getSpy = spy(ApiProxy.prototype, 'get');
-			stub(Api.apiUtils, 'defineAngieVersion').callsFake(() => {});
+			const spyApiGet = jest.spyOn(ApiProxy.prototype, 'get').mockClear();
+			const spyDefineAngieVersion = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => {});
 
 			Api.checkApiAvailability().then(() => {
-				assert(getSpy.calledOnce, 'get() method of ApiProxy is expected to be called once');
-				assert(getSpy.args[0].length === 0, 'No arguments expected');
+				expect(spyApiGet).toHaveBeenCalled();
+				expect(spyApiGet.mock.calls[0].length === 0).toBeTruthy();
 
-				ApiProxy.prototype.get.restore();
-				Api.apiUtils.defineAngieVersion.restore()
+				spyApiGet.mockRestore();
+				spyDefineAngieVersion.mockRestore();
 				done();
 			});
 		});
 
 		it('Returns Promise', () => {
-			stub(Api.apiUtils, 'defineAngieVersion').callsFake(() => {});
-			assert(Api.checkApiAvailability() instanceof Promise, 'Should return Promise');
-			Api.apiUtils.defineAngieVersion.restore()
+			const spyApiGet = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => {});
+			expect(Api.checkApiAvailability() instanceof Promise).toBeTruthy();
+			spyApiGet.mockRestore();
 		});
 
 		it('Handles 401', done => {
 			const _done = error => {
 				window.fetch = _fetchInner;
-				Api.apiUtils.defineAngieVersion.restore()
+				spyDefineAngieVersion.mockRestore();
 
 				done(error);
 			};
@@ -217,16 +212,16 @@ describe('Api', () => {
 					return Promise.resolve({ error: {} });
 				}
 			});
-			
-			stub(Api.apiUtils, 'defineAngieVersion').callsFake(() => {});
+
+			const spyDefineAngieVersion = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => {});
 
 			Api.checkApiAvailability()
 				.then(
 					() => {
-						assert.fail('Should throw an exception');
+						expect(false).toBe(true);
 					},
 					({ type }) => {
-						assert(type === 'basic_auth', 'Unexpected error type');
+						expect(type === 'basic_auth').toBeTruthy();
 					}
 				)
 				.then(_done, _done);
@@ -234,27 +229,27 @@ describe('Api', () => {
 
 		it('Handles other errors', done => {
 			let status;
-			stub(Api.apiUtils, 'defineAngieVersion').callsFake(() => {});
-			
+			const spyDefineAngieVersion = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => {});
+
 			const _done = error => {
 				window.fetch = _fetchInner;
-				Api.apiUtils.defineAngieVersion.restore()
-				
+				spyDefineAngieVersion.mockRestore();
+
 				done(error);
 			};
-			
+
 			const checkApi = _status => {
 				status = _status;
 				Api.checkApiAvailability()
 					.then(
 						() => {
-							assert.fail('Should throw an exception');
+							expect(false).toBe(true);
 						},
 						({ type }) => {
-							assert(type === 'api_not_found', 'Unexpected error type. "api_not_found" was expected');
+							expect(type === 'api_not_found').toBeTruthy();
 							_done();
 						}
-					)
+					);
 			};
 
 			window.fetch = (...args) => Promise.resolve({
@@ -269,6 +264,9 @@ describe('Api', () => {
 	});
 
 	describe('initialLoad()', () => {
+		let spySubscribe; let
+			spyUnsubscribe;
+
 		const _fetchInner = () => Promise.resolve({
 			status: 200,
 			json(){
@@ -277,22 +275,22 @@ describe('Api', () => {
 		});
 		let _fetch;
 
-		before(() => {
+		beforeAll(() => {
 			_fetch = window.fetch;
 			window.fetch = _fetchInner;
 		});
 
 		beforeEach(() => {
-			stub(datastore, 'subscribe').callsFake((apis, callback) => { callback(); });
-			stub(datastore, 'unsubscribe').callsFake(() => {});
+			spySubscribe = jest.spyOn(datastore, 'subscribe').mockClear().mockImplementation((apis, callback) => { callback(); });
+			spyUnsubscribe = jest.spyOn(datastore, 'unsubscribe').mockClear().mockImplementation(() => {});
 		});
 
 		afterEach(() => {
-			datastore.subscribe.restore();
-			datastore.unsubscribe.restore();
+			spySubscribe.mockRestore();
+			spyUnsubscribe.mockRestore();
 		});
 
-		after(() => {
+		afterAll(() => {
 			window.fetch = _fetch;
 		});
 
@@ -300,20 +298,17 @@ describe('Api', () => {
 			const promise = Api.initialLoad(datastore);
 
 			promise.then(() => {
-				assert(promise instanceof Promise, 'Should return a promise');
+				expect(promise instanceof Promise).toBeTruthy();
 
 				done();
 			});
 		});
 
 		it('Calls right path', done => {
-			window.fetch = spy(_fetchInner);
+			window.fetch = jest.fn(_fetchInner);
 
 			Api.initialLoad(datastore).then(() => {
-				assert(
-					window.fetch.firstCall.calledWithExactly(`${ API_PATH }/`),
-					'Wrong path was provided to "window.fetch"'
-				);
+				expect(window.fetch).toHaveBeenCalledWith(`${ API_PATH }/`);
 
 				window.fetch = _fetch;
 
@@ -323,33 +318,32 @@ describe('Api', () => {
 
 		it('Handles errors', done => {
 			let letFetchSuccess = false;
-			const _secondLevelEndpoints = { 'http': {}, 'stream': {}};
+			const _secondLevelEndpoints = { http: {}, stream: {} };
 			const _secondLevelEndpointsAsKeys = Object.keys(_secondLevelEndpoints);
 			const responses = [
-				{'ssl': {}, ..._secondLevelEndpoints},
-				{'server_zones': {}, 'location_zones': {}}
+				{ ssl: {}, ..._secondLevelEndpoints },
+				{ server_zones: {}, location_zones: {} }
 			];
 			let fetchCall = 0;
 
-			window.fetch = spy(path =>
+			window.fetch = jest.fn(path =>
 				Promise.resolve({
 					status: letFetchSuccess ?
-							path === `${ API_PATH }/${ responses[0][2] }/` ?
-								400
+						path === `${ API_PATH }/${ responses[0][2] }/` ?
+							400
 							: 200
 						: 400,
 					json(){
 						return Promise.resolve(responses[fetchCall++]);
 					}
-				})
-			);
+				}));
 
-			spy(datastore.availableApiEndpoints, 'fillFirstLevel');
-			spy(datastore.availableApiEndpoints, 'fillThirdLevel');
+			const spyFillFirstLevel = jest.spyOn(datastore.availableApiEndpoints, 'fillFirstLevel').mockClear();
+			const spyFillThirdLevel = jest.spyOn(datastore.availableApiEndpoints, 'fillThirdLevel').mockClear();
 
 			const _done = error => {
-				datastore.availableApiEndpoints.fillFirstLevel.restore();
-				datastore.availableApiEndpoints.fillThirdLevel.restore();
+				spyFillFirstLevel.mockRestore();
+				spyFillThirdLevel.mockRestore();
 
 				window.fetch = _fetchInner;
 
@@ -357,64 +351,30 @@ describe('Api', () => {
 			};
 
 			Api.initialLoad(datastore).then(() => {
-				assert(window.fetch.calledOnce, '"window.fetch" is expected to be called one time');
-				assert(
-					datastore.availableApiEndpoints.getFirstLevel().length === 0,
-					'No available endpoints should be on first level'
-				);
-				assert(
-					datastore.availableApiEndpoints.fillFirstLevel.notCalled,
-					'"fillFirstLevel" should not be called'
-				);
-				assert(
-					datastore.availableApiEndpoints.fillThirdLevel.notCalled,
-					'"fillThirdLevel" should not be called'
-				);
-				assert(
-					datastore.subscribe.calledOnce,
-					'"subscribe" should be called even if error occurs'
-				);
+				expect(window.fetch).toHaveBeenCalled();
+				expect(datastore.availableApiEndpoints.getFirstLevel().length === 0).toBeTruthy();
+				expect(spyFillFirstLevel).not.toHaveBeenCalled();
+				expect(spyFillThirdLevel).not.toHaveBeenCalled();
+				expect(spySubscribe).toHaveBeenCalled();
 
-				window.fetch.resetHistory();
-				datastore.availableApiEndpoints.fillFirstLevel.resetHistory();
-				datastore.availableApiEndpoints.fillThirdLevel.resetHistory();
-				datastore.subscribe.resetHistory();
+				window.fetch.mockClear();
+				spyFillFirstLevel.mockClear();
+				spyFillThirdLevel.mockClear();
+				spySubscribe.mockClear();
 				letFetchSuccess = true;
 
 				Api.initialLoad(datastore).then(() => {
-					assert(window.fetch.calledThrice, '"window.fetch" is expected to be called three times');
+					expect(window.fetch).toHaveBeenCalledTimes(3);
 
-					assert(
-						datastore.availableApiEndpoints.fillFirstLevel.calledOnce,
-						'"fillFirstLevel" should be called once'
-					);
-					assert(
-						datastore.availableApiEndpoints.fillFirstLevel.calledWithExactly(responses[0]),
-						'Wrong arguments of "fillFirstLevel" call'
-					);
+					expect(spyFillFirstLevel).toHaveBeenCalled();
+					expect(spyFillFirstLevel).toHaveBeenCalledWith(responses[0]);
+					expect(window.fetch).toHaveBeenCalledWith(`${ API_PATH }/${ _secondLevelEndpointsAsKeys[0] }/`);
+					expect(spyFillThirdLevel).toHaveBeenCalled();
+					expect(spyFillThirdLevel).toHaveBeenCalledWith(_secondLevelEndpointsAsKeys[0], responses[1]);
 
-					assert(
-						window.fetch.secondCall.calledWithExactly(`${ API_PATH }/${ _secondLevelEndpointsAsKeys[0] }/`),
-						'Unexpected path of "window.fetch" second call'
-					);
-					assert(
-						datastore.availableApiEndpoints.fillThirdLevel.calledOnce,
-						'"fillThirdLevel" should be called one time'
-					);
-					assert(
-						datastore.availableApiEndpoints.fillThirdLevel.calledWithExactly(_secondLevelEndpointsAsKeys[0], responses[1]),
-						'Wrong arguments of "fillThirdLevel" call'
-					);
+					expect(window.fetch).toHaveBeenCalledWith(`${ API_PATH }/${ _secondLevelEndpointsAsKeys[1] }/`);
 
-					assert(
-						window.fetch.thirdCall.calledWithExactly(`${ API_PATH }/${ _secondLevelEndpointsAsKeys[1] }/`),
-						'Unexpected path of "window.fetch" second call'
-					);
-
-					assert(
-						datastore.subscribe.calledOnce,
-						'"subscribe" should be called even if error occurs'
-					);
+					expect(spySubscribe).toHaveBeenCalled();
 				}).then(_done, _done);
 			}).catch(_done);
 		});
@@ -431,23 +391,22 @@ describe('Api', () => {
 		});
 
 		it('Defines available endpoints', done => {
-			const _secondLevelEndpoints = { 'http': {}, 'stream': {} };
+			const _secondLevelEndpoints = { http: {}, stream: {} };
 			const _secondLevelEndpointsAsKeys = Object.keys(_secondLevelEndpoints);
 			const responses = [
-				{'ssl': {}, ..._secondLevelEndpoints},
-				{'server_zones': {}, 'location_zones': {}},
-				{'upstreams': {}}
+				{ ssl: {}, ..._secondLevelEndpoints },
+				{ server_zones: {}, location_zones: {} },
+				{ upstreams: {} }
 			];
 			let fetchCall = 0;
 
-			window.fetch = spy(path =>
+			window.fetch = jest.fn(path =>
 				Promise.resolve({
 					status: 200,
 					json(){
 						return Promise.resolve(responses[fetchCall++]);
 					}
-				})
-			);
+				}));
 
 			const _done = error => {
 				window.fetch = _fetchInner;
@@ -459,52 +418,31 @@ describe('Api', () => {
 				const firstLevelEndpoints = datastore.availableApiEndpoints.getFirstLevel();
 				const secondLevelEndpoints = datastore.availableApiEndpoints.getSecondLevel();
 
-				assert(
-					window.fetch.callCount === 1 + _secondLevelEndpointsAsKeys.length,
-					'"window.fetch" should be called 3 times'
-				);
+				expect(window.fetch.mock.calls.length === 1 + _secondLevelEndpointsAsKeys.length).toBeTruthy();
 
 				// 1st API call
 
-				assert(
-					window.fetch.firstCall.calledWithExactly(`${ API_PATH }/`),
-					`Wrong path was provided to "window.fetch". Expected "${ API_PATH }/"`
-				);
-				assert(
-					firstLevelEndpoints.length === Object.keys(responses[0]).length,
-					'First level of available API endpoints has unexpected length'
-				);
+				expect(window.fetch).toHaveBeenCalledWith(`${ API_PATH }/`);
+				expect(firstLevelEndpoints.length === Object.keys(responses[0]).length).toBeTruthy();
 
 				firstLevelEndpoints.forEach(ep => {
-					assert(
-						Object.keys(responses[0]).includes(ep),
-						`Unexpected "${ ep }" endpoint in first level of available API endpoints`
-					);
+					expect(Object.keys(responses[0]).includes(ep)).toBeTruthy();
 				});
 
 				// API calls for 2nd level endpoints
 
 				_secondLevelEndpointsAsKeys.forEach((ep, _i) => {
 					const i = _i + 1;
-					const call = window.fetch.getCall(i);
-
-					call.calledWithExactly(
-						`${ API_PATH }/${ ep }/`,
-						`Call #${ i } of "window.fetch" was expected to be for "${ API_PATH }/${ ep }/"`
+					expect(window.fetch).toHaveBeenNthCalledWith(i + 1,
+						`${ API_PATH }/${ ep }/`
 					);
 
 					const endpoints = datastore.availableApiEndpoints.getThirdLevel(ep);
 
-					assert(
-						endpoints.length === Object.keys(responses[i]).length,
-						`Third level of available API endpoints for "${ ep }" has unexpected length`
-					);
+					expect(endpoints.length === Object.keys(responses[i]).length).toBeTruthy();
 
 					endpoints.forEach(_ep => {
-						assert(
-							Object.keys(responses[i]).includes(_ep),
-							`Unexpected "${ _ep }" endpoint in third level for "${ ep }" endpoint`
-						);
+						expect(Object.keys(responses[i]).includes(_ep)).toBeTruthy();
 					});
 				});
 			}).then(_done, _done);
@@ -512,76 +450,58 @@ describe('Api', () => {
 
 		it('subscribe() and it\'s callback', done => {
 			const apisToSubscribe = [{
-					path: 'angie'
-				}, {
-					path: 'connections',
-					processor: calculateConnections
-				}, {
-					path: 'http/server_zones',
-					processor: calculateServerZones
-				}, {
-					path: 'http/location_zones',
-					processor: calculateLocationZones
-				}, {
-					path: 'slabs',
-					processor: calculateSharedZones
-				}, {
-					path: 'http/caches',
-					processor: calculateCaches 
-				}, {
-					path: 'http/upstreams',
-					processor: calculateUpstreams
-				}, {
-					path: 'resolvers',
-					processor: calculateResolvers
-				}, {
-					path: 'stream/server_zones',
-					processor: calculateStreamZones
-				}
+				path: 'angie'
+			}, {
+				path: 'connections',
+				processor: calculateConnections
+			}, {
+				path: 'http/server_zones',
+				processor: calculateServerZones
+			}, {
+				path: 'http/location_zones',
+				processor: calculateLocationZones
+			}, {
+				path: 'slabs',
+				processor: calculateSharedZones
+			}, {
+				path: 'http/caches',
+				processor: calculateCaches
+			}, {
+				path: 'http/upstreams',
+				processor: calculateUpstreams
+			}, {
+				path: 'resolvers',
+				processor: calculateResolvers
+			}, {
+				path: 'stream/server_zones',
+				processor: calculateStreamZones
+			}
 			];
 
 			Api.initialLoad(datastore).then(() => {
-				assert(datastore.subscribe.calledOnce, '"subscribe" should be called once');
-				assert(
-					datastore.subscribe.args[0][0].length === apisToSubscribe.length,
-					'Unexpected number of apis to subscribe'
-				);
+				expect(spySubscribe).toHaveBeenCalled();
+				expect(spySubscribe.mock.calls[0][0].length === apisToSubscribe.length).toBeTruthy();
 
-				datastore.subscribe.args[0][0].forEach((proxy, i) => {
-					assert(proxy instanceof ApiProxy, 'All apis to subscribe are expected to be an "ApiProxy" instance');
-					assert(proxy.toString() === apisToSubscribe[i].path, `Unexpected path for api #${ i } to subscribe`);
+				spySubscribe.mock.calls[0][0].forEach((proxy, i) => {
+					expect(proxy instanceof ApiProxy).toBeTruthy();
+					expect(proxy.toString() === apisToSubscribe[i].path).toBeTruthy();
 
 					if (apisToSubscribe[i].processor) {
-						assert(
-							proxy.processors[0] === apisToSubscribe[i].processor,
-							`Unexpected processor for "${ proxy.toString() }" api #${ i } to subscribe`
-						);
+						expect(proxy.processors[0] === apisToSubscribe[i].processor).toBeTruthy();
 					}
 				});
 
-				datastore.subscribe.args[0][1]();
+				spySubscribe.mock.calls[0][1]();
 
-				assert(datastore.unsubscribe.calledOnce, '"unsubscribe" should be called once');
-				assert(
-					datastore.unsubscribe.args[0][0].length === apisToSubscribe.length,
-					'Unexpected number of apis to unsubscribe'
-				);
+				expect(spyUnsubscribe).toHaveBeenCalled();
+				expect(spyUnsubscribe.mock.calls[0][0].length === apisToSubscribe.length).toBeTruthy();
 
-				datastore.unsubscribe.args[0][0].forEach((proxy, i) => {
-					assert(
-						proxy instanceof ApiProxy,
-						'All apis to unsubscribe are expected to be an "ApiProxy" instance'
-					);
-					assert(
-						proxy.toString() === apisToSubscribe[i].path,
-						`Unexpected path for api #${ i } to unsubscribe`
-					);
+				spyUnsubscribe.mock.calls[0][0].forEach((proxy, i) => {
+					expect(proxy instanceof ApiProxy).toBeTruthy();
+					expect(proxy.toString() === apisToSubscribe[i].path).toBeTruthy();
 
 					if (apisToSubscribe[i].processor) {
-						assert(
-							proxy.processors[0] === apisToSubscribe[i].processor,
-							`Unexpected processor for "${ proxy.toString() }" api #${ i } to unsubscribe`
-						);
+						expect(proxy.processors[0] === apisToSubscribe[i].processor).toBeTruthy();
 					}
 				});
 			}).then(done);

@@ -5,24 +5,23 @@
  *
  */
 
-import { spy, stub } from 'sinon';
 import calculate, { handleZones } from '../zonesync.js';
 import { DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT } from '../../constants.js';
 import utils from '../utils.js';
 import appsettings from '../../appsettings';
 
-
 describe('Calculators – ZoneSync', () => {
 	describe('handleZones()', () => {
 		let alertThreshold = 100;
-		let STATS, zone;
+		let STATS; let
+			zone;
 
-		before(() => {
-			stub(appsettings, 'getSetting').callsFake(() => alertThreshold);
+		beforeAll(() => {
+			jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(() => alertThreshold);
 		});
 
 		beforeEach(() => {
-			appsettings.getSetting.resetHistory();
+			appsettings.getSetting.mockClear();
 
 			STATS = {
 				total: 0,
@@ -40,24 +39,29 @@ describe('Calculators – ZoneSync', () => {
 			};
 		});
 
-		after(() => {
-			appsettings.getSetting.restore();
+		afterAll(() => {
+			appsettings.getSetting.mockRestore();
 		});
 
 		it('total records > 0', () => {
 			const result = handleZones(STATS, zone);
 
-			expect(appsettings.getSetting.calledOnce, 'getSetting called once').to.be.true;
-			expect(appsettings.getSetting.args[0][0], 'getSetting 1st arg').to.be.equal('zonesyncPendingThreshold');
-			expect(appsettings.getSetting.args[0][1], 'getSetting 2nd arg').to.be.equal(
-				DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT
-			);
-			expect(result.alert, 'zone.alert').to.be.an('undefined');
-			expect(result.warning, 'zone.warning').to.be.an('undefined');
-			expect(STATS.status, 'STATS.status').to.be.equal('ok');
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(0);
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(0);
-			expect(result, 'returned zone').to.be.deep.equal(zone);
+			// getSetting called once
+			expect(appsettings.getSetting).toHaveBeenCalled();
+			// getSetting 1st arg
+			expect(appsettings.getSetting.mock.calls[0][0]).toBe('zonesyncPendingThreshold');
+			// getSetting 2nd arg
+			expect(appsettings.getSetting.mock.calls[0][1]).toBe(DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT);
+			expect(result.alert).toBeUndefined();
+			expect(result.warning).toBeUndefined();
+			// STATS.status
+			expect(STATS.status).toBe('ok');
+			// STATS.alerts
+			expect(STATS.alerts).toBe(0);
+			// STATS.warnings
+			expect(STATS.warnings).toBe(0);
+			// returned zone
+			expect(result).toEqual(zone);
 		});
 
 		it('total records > 0 && alert threshold reached', () => {
@@ -65,17 +69,23 @@ describe('Calculators – ZoneSync', () => {
 
 			const result = handleZones(STATS, zone);
 
-			expect(appsettings.getSetting.calledOnce, 'getSetting called once').to.be.true;
-			expect(appsettings.getSetting.args[0][0], 'getSetting 1st arg').to.be.equal('zonesyncPendingThreshold');
-			expect(appsettings.getSetting.args[0][1], 'getSetting 2nd arg').to.be.equal(
-				DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT
-			);
-			expect(result.alert, 'zone.alert').to.be.true;
-			expect(STATS.status, 'STATS.status').to.be.equal('danger');
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(1);
-			expect(result.warning, 'zone.warning').to.be.an('undefined');
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(0);
-			expect(result, 'returned zone').to.be.deep.equal(zone);
+			// getSetting called once
+			expect(appsettings.getSetting).toHaveBeenCalled();
+			// getSetting 1st arg
+			expect(appsettings.getSetting.mock.calls[0][0]).toBe('zonesyncPendingThreshold');
+			// getSetting 2nd arg
+			expect(appsettings.getSetting.mock.calls[0][1]).toBe(DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT);
+			// zone.alert
+			expect(result.alert).toBe(true);
+			// STATS.status
+			expect(STATS.status).toBe('danger');
+			// STATS.alerts
+			expect(STATS.alerts).toBe(1);
+			expect(result.warning).toBeUndefined();
+			// STATS.warnings
+			expect(STATS.warnings).toBe(0);
+			// returned zone
+			expect(result).toEqual(zone);
 		});
 
 		it('total records > 0 && warning threshold reached', () => {
@@ -83,17 +93,23 @@ describe('Calculators – ZoneSync', () => {
 
 			const result = handleZones(STATS, zone);
 
-			expect(appsettings.getSetting.calledOnce, 'getSetting called once').to.be.true;
-			expect(appsettings.getSetting.args[0][0], 'getSetting 1st arg').to.be.equal('zonesyncPendingThreshold');
-			expect(appsettings.getSetting.args[0][1], 'getSetting 2nd arg').to.be.equal(
-				DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT
-			);
-			expect(result.alert, 'zone.alert').to.be.an('undefined');
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(0);
-			expect(result.warning, 'zone.warning').to.be.true;
-			expect(STATS.status, 'STATS.status').to.be.equal('warning');
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(1);
-			expect(result, 'returned zone').to.be.deep.equal(zone);
+			// getSetting called once
+			expect(appsettings.getSetting).toHaveBeenCalled();
+			// getSetting 1st arg
+			expect(appsettings.getSetting.mock.calls[0][0]).toBe('zonesyncPendingThreshold');
+			// getSetting 2nd arg
+			expect(appsettings.getSetting.mock.calls[0][1]).toBe(DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT);
+			expect(result.alert).toBeUndefined();
+			// STATS.alerts
+			expect(STATS.alerts).toBe(0);
+			// zone.warning
+			expect(result.warning).toBe(true);
+			// STATS.status
+			expect(STATS.status).toBe('warning');
+			// STATS.warnings
+			expect(STATS.warnings).toBe(1);
+			// returned zone
+			expect(result).toEqual(zone);
 		});
 
 		it('total records == 0 && pending > 0', () => {
@@ -101,13 +117,19 @@ describe('Calculators – ZoneSync', () => {
 
 			const result = handleZones(STATS, zone);
 
-			expect(appsettings.getSetting.notCalled, 'getSetting not called').to.be.true;
-			expect(result.alert, 'zone.alert').to.be.true;
-			expect(STATS.status, 'STATS.status').to.be.equal('danger');
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(1);
-			expect(result.warning, 'zone.warning').to.be.an('undefined');
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(0);
-			expect(result, 'returned zone').to.be.deep.equal(zone);
+			// getSetting not called
+			expect(appsettings.getSetting).not.toHaveBeenCalled();
+			// zone.alert
+			expect(result.alert).toBe(true);
+			// STATS.status
+			expect(STATS.status).toBe('danger');
+			// STATS.alerts
+			expect(STATS.alerts).toBe(1);
+			expect(result.warning).toBeUndefined();
+			// STATS.warnings
+			expect(STATS.warnings).toBe(0);
+			// returned zone
+			expect(result).toEqual(zone);
 		});
 
 		it('total records = 0 && pending == 0', () => {
@@ -116,13 +138,18 @@ describe('Calculators – ZoneSync', () => {
 
 			const result = handleZones(STATS, zone);
 
-			expect(appsettings.getSetting.notCalled, 'getSetting not called').to.be.true;
-			expect(result.alert, 'zone.alert').to.be.an('undefined');
-			expect(result.warning, 'zone.warning').to.be.an('undefined');
-			expect(STATS.status, 'STATS.status').to.be.equal('ok');
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(0);
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(0);
-			expect(result, 'returned zone').to.be.deep.equal(zone);
+			// getSetting not called
+			expect(appsettings.getSetting).not.toHaveBeenCalled();
+			expect(result.alert).toBeUndefined();
+			expect(result.warning).toBeUndefined();
+			// STATS.status
+			expect(STATS.status).toBe('ok');
+			// STATS.alerts
+			expect(STATS.alerts).toBe(0);
+			// STATS.warnings
+			expect(STATS.warnings).toBe(0);
+			// returned zone
+			expect(result).toEqual(zone);
 		});
 
 		it('STATS collecting', () => {
@@ -156,8 +183,10 @@ describe('Calculators – ZoneSync', () => {
 				records_pending: 450
 			});
 
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(2);
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(3);
+			// STATS.alerts
+			expect(STATS.alerts).toBe(2);
+			// STATS.warnings
+			expect(STATS.warnings).toBe(3);
 		});
 	});
 
@@ -175,20 +204,21 @@ describe('Calculators – ZoneSync', () => {
 			},
 			lastUpdate: ts - period
 		};
-		let STATS, zone_sync, STORE;
+		let STATS; let zone_sync; let
+			STORE;
 
-		before(() => {
-			stub(Date, 'now').callsFake(() => ts);
-			stub(utils, 'calculateSpeed').callsFake((a, b) => b);
-			stub(utils, 'createMapFromObject').callsFake(() => zonesMap);
-			spy(handleZones, 'bind');
+		beforeAll(() => {
+			jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
+			jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
+			jest.spyOn(utils, 'createMapFromObject').mockClear().mockImplementation(() => zonesMap);
+			jest.spyOn(handleZones, 'bind').mockClear();
 		});
 
 		beforeEach(() => {
-			Date.now.resetHistory();
-			utils.calculateSpeed.resetHistory();
-			utils.createMapFromObject.resetHistory();
-			handleZones.bind.resetHistory();
+			Date.now.mockClear();
+			utils.calculateSpeed.mockClear();
+			utils.createMapFromObject.mockClear();
+			handleZones.bind.mockClear();
 
 			STATS = {
 				total: 0,
@@ -215,77 +245,108 @@ describe('Calculators – ZoneSync', () => {
 			} };
 		});
 
-		after(() => {
-			Date.now.restore();
-			utils.calculateSpeed.restore();
-			utils.createMapFromObject.restore();
-			handleZones.bind.restore();
+		afterAll(() => {
+			Date.now.mockRestore();
+			utils.calculateSpeed.mockRestore();
+			utils.createMapFromObject.mockRestore();
+			handleZones.bind.mockRestore();
 		});
 
 		it('zone_sync is null', () => {
 			const result = calculate(null, null, STORE);
 
-			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
-			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(utils.createMapFromObject.notCalled, 'createMapFromObject not called').to.be.true;
-			expect(handleZones.bind.notCalled, 'handleZones.bind not called').to.be.true;
-			expect(STORE.__STATUSES.zone_sync.ready, '__STATUSES.zone_sync.ready').to.be.false;
-			expect(STORE.__STATUSES.zone_sync.status, '__STATUSES.zone_sync.status').to.be.an('undefined');
-			expect(result, 'returned zone_sync').to.be.a('null');
+			// Date.now not called
+			expect(Date.now).not.toHaveBeenCalled();
+			// calculateSpeed not called
+			expect(utils.calculateSpeed).not.toHaveBeenCalled();
+			// createMapFromObject not called
+			expect(utils.createMapFromObject).not.toHaveBeenCalled();
+			// handleZones.bind not called
+			expect(handleZones.bind).not.toHaveBeenCalled();
+			// __STATUSES.zone_sync.ready
+			expect(STORE.__STATUSES.zone_sync.ready).toBe(false);
+			expect(STORE.__STATUSES.zone_sync.status).toBeUndefined();
+			expect(result).toBeNull();
 		});
 
 		it('zone_sync is empty', () => {
 			const result = calculate({}, null, STORE);
 
-			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
-			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(utils.createMapFromObject.notCalled, 'createMapFromObject not called').to.be.true;
-			expect(handleZones.bind.notCalled, 'handleZones.bind not called').to.be.true;
-			expect(STORE.__STATUSES.zone_sync.ready, '__STATUSES.zone_sync.ready').to.be.false;
-			expect(STORE.__STATUSES.zone_sync.status, '__STATUSES.zone_sync.status').to.be.an('undefined');
-			expect(result, 'returned zone_sync').to.be.a('null');
+			// Date.now not called
+			expect(Date.now).not.toHaveBeenCalled();
+			// calculateSpeed not called
+			expect(utils.calculateSpeed).not.toHaveBeenCalled();
+			// createMapFromObject not called
+			expect(utils.createMapFromObject).not.toHaveBeenCalled();
+			// handleZones.bind not called
+			expect(handleZones.bind).not.toHaveBeenCalled();
+			// __STATUSES.zone_sync.ready
+			expect(STORE.__STATUSES.zone_sync.ready).toBe(false);
+			expect(STORE.__STATUSES.zone_sync.status).toBeUndefined();
+			expect(result).toBeNull();
 		});
 
 		it('no previous state', () => {
 			const result = calculate(zone_sync, null, STORE);
 
-			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
-			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(utils.createMapFromObject.calledOnce, 'createMapFromObject called once').to.be.true;
-			expect(utils.createMapFromObject.args[0][0], 'createMapFromObject 1st arg').to.be.deep.equal({
+			// Date.now not called
+			expect(Date.now).not.toHaveBeenCalled();
+			// calculateSpeed not called
+			expect(utils.calculateSpeed).not.toHaveBeenCalled();
+			// createMapFromObject called once
+			expect(utils.createMapFromObject).toHaveBeenCalled();
+			// createMapFromObject 1st arg
+			expect(utils.createMapFromObject.mock.calls[0][0]).toEqual({
 				test: { a: 123 },
 				test_1: { a: 321 }
 			});
-			expect(handleZones.bind.calledOnce, 'handleZones.bind called once').to.be.true;
-			expect(handleZones.bind.args[0][0], 'handleZones.bind 1st arg').to.be.a('null');
+			// handleZones.bind called once
+			expect(handleZones.bind).toHaveBeenCalled();
+			expect(handleZones.bind.mock.calls[0][0]).toBeNull();
 
 			STATS.total = zonesMap.size;
 
-			expect(handleZones.bind.args[0][1], 'handleZones.bind 2nd arg').to.be.deep.equal(STATS);
-			expect(utils.createMapFromObject.args[0][1].name, 'createMapFromObject 2nd arg').to.be.equal(
-				'bound handleZones'
-			);
-			expect(utils.createMapFromObject.args[0][2], 'createMapFromObject 3rd arg').to.be.false;
-			expect(result.zones, 'zone_sync.zones').to.be.deep.equal(zonesMap);
-			expect(STATS.total, 'STATS.total').to.be.equal(result.zones.size);
-			expect(zone_sync.__STATS, 'zone_sync.__STATS').to.be.deep.equal(STATS);
-			expect(STORE.__STATUSES.zone_sync.ready, '__STATUSES.zone_sync.ready').to.be.true;
-			expect(STORE.__STATUSES.zone_sync.status, '__STATUSES.zone_sync.status').to.be.equal('ok');
-			expect(result, 'returned zone_sync').to.be.deep.equal(zone_sync);
+			// handleZones.bind 2nd arg
+			expect(handleZones.bind.mock.calls[0][1]).toEqual(STATS);
+			// createMapFromObject 2nd arg
+			expect(utils.createMapFromObject.mock.calls[0][1].name).toBe('bound handleZones');
+			// createMapFromObject 3rd arg
+			expect(utils.createMapFromObject.mock.calls[0][2]).toBe(false);
+			// zone_sync.zones
+			expect(result.zones).toEqual(zonesMap);
+			// STATS.total
+			expect(STATS.total).toBe(result.zones.size);
+			// zone_sync.__STATS
+			expect(zone_sync.__STATS).toEqual(STATS);
+			// __STATUSES.zone_sync.ready
+			expect(STORE.__STATUSES.zone_sync.ready).toBe(true);
+			// __STATUSES.zone_sync.status
+			expect(STORE.__STATUSES.zone_sync.status).toBe('ok');
+			// returned zone_sync
+			expect(result).toEqual(zone_sync);
 		});
 
 		it('with previous state', () => {
 			const result = calculate(zone_sync, previous, STORE);
 
-			expect(utils.calculateSpeed.calledTwice, 'calculateSpeed called twice').to.be.true;
-			expect(utils.calculateSpeed.args[0][0], 'calculateSpeed call 1, arg 1').to.be.equal(5);
-			expect(utils.calculateSpeed.args[0][1], 'calculateSpeed call 1, arg 2').to.be.equal(10);
-			expect(utils.calculateSpeed.args[0][2], 'calculateSpeed call 1, arg 3').to.be.equal(period);
-			expect(result.__STATS.traffic.in, 'STATS.traffic.in').to.be.equal(10);
-			expect(utils.calculateSpeed.args[1][0], 'calculateSpeed call 2, arg 1').to.be.equal(4);
-			expect(utils.calculateSpeed.args[1][1], 'calculateSpeed call 2, arg 2').to.be.equal(9);
-			expect(utils.calculateSpeed.args[1][2], 'calculateSpeed call 2, arg 3').to.be.equal(period);
-			expect(result.__STATS.traffic.out, 'STATS.traffic.out').to.be.equal(9);
+			// calculateSpeed called twice
+			expect(utils.calculateSpeed).toHaveBeenCalledTimes(2);
+			// calculateSpeed call 1, arg 1
+			expect(utils.calculateSpeed.mock.calls[0][0]).toBe(5);
+			// calculateSpeed call 1, arg 2
+			expect(utils.calculateSpeed.mock.calls[0][1]).toBe(10);
+			// calculateSpeed call 1, arg 3
+			expect(utils.calculateSpeed.mock.calls[0][2]).toBe(period);
+			// STATS.traffic.in
+			expect(result.__STATS.traffic.in).toBe(10);
+			// calculateSpeed call 2, arg 1
+			expect(utils.calculateSpeed.mock.calls[1][0]).toBe(4);
+			// calculateSpeed call 2, arg 2
+			expect(utils.calculateSpeed.mock.calls[1][1]).toBe(9);
+			// calculateSpeed call 2, arg 3
+			expect(utils.calculateSpeed.mock.calls[1][2]).toBe(period);
+			// STATS.traffic.out
+			expect(result.__STATS.traffic.out).toBe(9);
 		});
 	});
 });

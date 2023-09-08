@@ -12,81 +12,57 @@ import styles from '../style.css';
 
 describe('<ProgressBar />', () => {
 	it('shouldComponentUpdate()', () => {
-		const wrapper = shallow(<ProgressBar percentage={ 10 } />);
+		const wrapper = shallow(<ProgressBar percentage={10} />);
 		const instance = wrapper.instance();
 
-		expect(
-			instance.shouldComponentUpdate({ percentage: 10 }),
-			'percentage prop not changed'
-		).to.be.false;
-		expect(
-			instance.shouldComponentUpdate({ percentage: 53 }),
-			'percentage prop changed'
-		).to.be.true;
+		// percentage prop not changed
+		expect(instance.shouldComponentUpdate({ percentage: 10 })).toBe(false);
+		// percentage prop changed
+		expect(instance.shouldComponentUpdate({ percentage: 53 })).toBe(true);
 
 		wrapper.unmount();
 	});
 
 	it('render()', () => {
-		const wrapper = shallow(<ProgressBar percentage={ -1 } />);
+		const wrapper = shallow(<ProgressBar percentage={-1} />);
 		const instance = wrapper.instance();
 
-		expect(
-			wrapper.prop('className'),
-			'[no danger, no warning] wrapper className'
-		).to.be.equal(styles['progress-bar']);
-		expect(
-			wrapper.childAt(0).text(),
-			'percentage text'
-		).to.be.equal('<1 %');
-		expect(
-			wrapper.childAt(1).prop('className'),
-			'fulfillment className'
-		).to.be.equal(styles['fulfillment']);
-		expect(
-			wrapper.childAt(1).prop('style'),
-			'fulfillment style'
-		).to.be.deep.equal({
+		// [no danger, no warning] wrapper className
+		expect(wrapper.prop('className')).toBe(styles['progress-bar']);
+		// percentage text
+		expect(wrapper.childAt(0).text()).toBe('<1 %');
+		// fulfillment className
+		expect(wrapper.childAt(1).prop('className')).toBe(styles.fulfillment);
+		// fulfillment style
+		expect(wrapper.childAt(1).prop('style')).toEqual({
 			width: '1%'
 		});
-		expect(
-			wrapper.childAt(1).text(),
-			'fulfillment text'
-		).to.be.equal('<1 %');
+		// fulfillment text
+		expect(wrapper.childAt(1).text()).toBe('<1 %');
 
 		wrapper.setProps({
 			percentage: 50,
 			warning: true
 		});
 
-		expect(
-			wrapper.prop('className'),
-			'[warning] wrapper className'
-		).to.be.equal(`${ styles['progress-bar'] } ${ styles['warning'] }`);
-		expect(
-			wrapper.childAt(0).text(),
-			'percentage text'
-		).to.be.equal('50 %');
-		expect(
-			wrapper.childAt(1).prop('style'),
-			'fulfillment style'
-		).to.be.deep.equal({
+		// [warning] wrapper className
+		expect(wrapper.prop('className')).toBe(`${ styles['progress-bar'] } ${ styles.warning }`);
+		// percentage text
+		expect(wrapper.childAt(0).text()).toBe('50 %');
+		// fulfillment style
+		expect(wrapper.childAt(1).prop('style')).toEqual({
 			width: '50%'
 		});
-		expect(
-			wrapper.childAt(1).text(),
-			'fulfillment text'
-		).to.be.equal('50 %');
+		// fulfillment text
+		expect(wrapper.childAt(1).text()).toBe('50 %');
 
 		wrapper.setProps({
 			percentage: 99,
 			danger: true
 		});
 
-		expect(
-			wrapper.prop('className'),
-			'[danger] wrapper className'
-		).to.be.equal(`${ styles['progress-bar'] } ${ styles['danger'] }`);
+		// [danger] wrapper className
+		expect(wrapper.prop('className')).toBe(`${ styles['progress-bar'] } ${ styles.danger }`);
 
 		wrapper.unmount();
 	});

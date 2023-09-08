@@ -34,33 +34,48 @@ describe('<Caches IndexPage />', () => {
 		};
 		const wrapper = shallow(
 			<Caches
-				data={ data }
-				store={ store }
+				data={data}
+				store={store}
 			/>
 		);
 		const indexBox = wrapper.find('IndexBox');
 
-		expect(indexBox.prop('title'), 'IndexBox title').to.be.equal('Caches');
-		expect(indexBox.prop('status'), 'IndexBox status').to.be.equal('ok');
-		expect(indexBox.prop('href'), 'IndexBox href').to.be.equal('#caches');
+		// IndexBox title
+		expect(indexBox.prop('title')).toBe('Caches');
+		// IndexBox status
+		expect(indexBox.prop('status')).toBe('ok');
+		// IndexBox href
+		expect(indexBox.prop('href')).toBe('#caches');
 
 		const alertsCount = indexBox.find('AlertsCount');
 
-		expect(alertsCount.prop('href'), 'AlertsCount href').to.be.equal('#caches');
-		expect(alertsCount.prop('total'), 'AlertsCount total').to.be.equal(100);
-		expect(alertsCount.prop('alerts'), 'AlertsCount alerts').to.be.equal(3);
-		expect(alertsCount.prop('warnings'), 'AlertsCount warnings').to.be.equal(5);
+		// AlertsCount href
+		expect(alertsCount.prop('href')).toBe('#caches');
+		// AlertsCount total
+		expect(alertsCount.prop('total')).toBe(100);
+		// AlertsCount alerts
+		expect(alertsCount.prop('alerts')).toBe(3);
+		// AlertsCount warnings
+		expect(alertsCount.prop('warnings')).toBe(5);
 
 		const states = wrapper.find('p');
 
-		expect(states.at(0).childAt(0).name(), 'Icon 1').to.be.equal('Icon');
-		expect(states.at(0).childAt(0).prop('type'), 'Icon 1, type').to.be.equal('sun');
-		expect(states.at(0).childAt(0).prop('className'), 'Icon 1, className').to.be.equal(styles['icon']);
-		expect(states.at(0).text(), 'state label 1').to.contain('Warm: 10');
-		expect(states.at(1).childAt(0).name(), 'Icon 2').to.be.equal('Icon');
-		expect(states.at(1).childAt(0).prop('type'), 'Icon 2, type').to.be.equal('snowflake');
-		expect(states.at(1).childAt(0).prop('className'), 'Icon 2, className').to.be.equal(`${ styles['icon'] } ${ styles['snowflakeIcon'] }`);
-		expect(states.at(1).text(), 'state label 2').to.contain('Cold: 30');
+		// Icon 1
+		expect(states.at(0).childAt(0).name()).toBe('Icon');
+		// Icon 1, type
+		expect(states.at(0).childAt(0).prop('type')).toBe('sun');
+		// Icon 1, className
+		expect(states.at(0).childAt(0).prop('className')).toBe(styles.icon);
+		// state label 1
+		expect(states.at(0).text()).toContain('Warm: 10');
+		// Icon 2
+		expect(states.at(1).childAt(0).name()).toBe('Icon');
+		// Icon 2, type
+		expect(states.at(1).childAt(0).prop('type')).toBe('snowflake');
+		// Icon 2, className
+		expect(states.at(1).childAt(0).prop('className')).toBe(`${ styles.icon } ${ styles.snowflakeIcon }`);
+		// state label 2
+		expect(states.at(1).text()).toContain('Cold: 30');
 
 		wrapper.unmount();
 	});

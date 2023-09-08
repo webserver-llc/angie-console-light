@@ -7,10 +7,13 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy, stub } from 'sinon';
 import utils from '../formData.js';
 import UpstreamsEditor from '../upstreamseditor.jsx';
 import styles from '../style.css';
+
+beforeEach(() => {
+	jest.restoreAllMocks();
+});
 
 describe('<UpstreamsEditor />', () => {
 	it('normalizeInputData()', () => {
@@ -21,9 +24,12 @@ describe('<UpstreamsEditor />', () => {
 		};
 		const parsedData = UpstreamsEditor.normalizeInputData(data);
 
-		expect(parsedData.test_prop_1, 'test_prop_1').to.be.equal(data.test_prop_1);
-		expect(parsedData.fail_timeout, 'fail_timeout').to.be.equal(5);
-		expect(parsedData.slow_start, 'slow_start').to.be.equal(900);
+		// test_prop_1
+		expect(parsedData.test_prop_1).toBe(data.test_prop_1);
+		// fail_timeout
+		expect(parsedData.fail_timeout).toBe(5);
+		// slow_start
+		expect(parsedData.slow_start).toBe(900);
 	});
 
 	it('normalizeOutputData()', () => {
@@ -35,21 +41,24 @@ describe('<UpstreamsEditor />', () => {
 		};
 		let parsedData = UpstreamsEditor.normalizeOutputData(data, { server: 'test_server_1' });
 
-		expect(parsedData.test_prop_1, 'test_prop_1').to.be.equal(data.test_prop_1);
-		expect('server' in parsedData, '[data.server != initialData.server] server').to.be.true;
-		expect(parsedData.id, 'id').to.be.an('undefined');
-		expect('host' in parsedData, '[no parent] host').to.be.true;
+		// test_prop_1
+		expect(parsedData.test_prop_1).toBe(data.test_prop_1);
+		// [data.server != initialData.server] server
+		expect('server' in parsedData).toBe(true);
+		expect(parsedData.id).toBeUndefined();
+		// [no parent] host
+		expect('host' in parsedData).toBe(true);
 
 		parsedData = UpstreamsEditor.normalizeOutputData(data, { server: 'test_server' });
 
-		expect(parsedData.server, '[data.server = initialData.server] server').to.be.an('undefined');
+		expect(parsedData.server).toBeUndefined();
 
 		data.parent = 'parent_test';
 		parsedData = UpstreamsEditor.normalizeOutputData(data, { server: 'test_server_1' });
 
-		expect(parsedData.parent, '[with parent] parent').to.be.an('undefined');
-		expect(parsedData.host, '[with parent] host').to.be.an('undefined');
-		expect(parsedData.server, '[with parent] server').to.be.an('undefined');
+		expect(parsedData.parent).toBeUndefined();
+		expect(parsedData.host).toBeUndefined();
+		expect(parsedData.server).toBeUndefined();
 	});
 
 	const props = {
@@ -66,23 +75,22 @@ describe('<UpstreamsEditor />', () => {
 	};
 
 	it('constructor()', () => {
-		const validateServerNameSpy = spy(UpstreamsEditor.prototype.validateServerName, 'bind');
-		const handleFormChangeSpy = spy(UpstreamsEditor.prototype.handleFormChange, 'bind');
-		const handleRadioChangeSpy = spy(UpstreamsEditor.prototype.handleRadioChange, 'bind');
-		const validateSpy = spy(UpstreamsEditor.prototype.validate, 'bind');
-		const saveSpy = spy(UpstreamsEditor.prototype.save, 'bind');
-		const closeSpy = spy(UpstreamsEditor.prototype.close, 'bind');
-		const removeSpy = spy(UpstreamsEditor.prototype.remove, 'bind');
-		const closeErrorsSpy = spy(UpstreamsEditor.prototype.closeErrors, 'bind');
-		stub(utils, 'formData').callsFake((data = {}) => data);
-		
+		const validateServerNameSpy = jest.spyOn(UpstreamsEditor.prototype.validateServerName, 'bind').mockClear();
+		const handleFormChangeSpy = jest.spyOn(UpstreamsEditor.prototype.handleFormChange, 'bind').mockClear();
+		const handleRadioChangeSpy = jest.spyOn(UpstreamsEditor.prototype.handleRadioChange, 'bind').mockClear();
+		const validateSpy = jest.spyOn(UpstreamsEditor.prototype.validate, 'bind').mockClear();
+		const saveSpy = jest.spyOn(UpstreamsEditor.prototype.save, 'bind').mockClear();
+		const closeSpy = jest.spyOn(UpstreamsEditor.prototype.close, 'bind').mockClear();
+		const removeSpy = jest.spyOn(UpstreamsEditor.prototype.remove, 'bind').mockClear();
+		const closeErrorsSpy = jest.spyOn(UpstreamsEditor.prototype.closeErrors, 'bind').mockClear();
+		jest.spyOn(utils, 'formData').mockClear().mockImplementation((data = {}) => data);
+
 		let wrapper = shallow(
-			<UpstreamsEditor { ...Object.assign({}, props, {
-				peers: null
-			}) } />
+			<UpstreamsEditor {...({ ...props, peers: null })} />
 		);
 
-		expect(wrapper.state(), '[no peers] this.state').to.be.deep.equal({
+		// [no peers] this.state
+		expect(wrapper.state()).toEqual({
 			success: false,
 			loading: false,
 			errorMessages: null,
@@ -91,30 +99,45 @@ describe('<UpstreamsEditor />', () => {
 			initialData: {}
 		});
 
-		expect(validateServerNameSpy.calledOnce, 'this.validateServerName.bind called once').to.be.true;
-		expect(validateServerNameSpy.args[0][0] instanceof UpstreamsEditor, 'this.validateServerName.bind arg').to.be.true;
-		expect(handleFormChangeSpy.calledOnce, 'this.handleFormChange.bind called once').to.be.true;
-		expect(handleFormChangeSpy.args[0][0] instanceof UpstreamsEditor, 'this.handleFormChange.bind arg').to.be.true;
-		expect(handleRadioChangeSpy.calledOnce, 'this.handleRadioChange.bind called once').to.be.true;
-		expect(handleRadioChangeSpy.args[0][0] instanceof UpstreamsEditor, 'this.handleRadioChange.bind arg').to.be.true;
-		expect(validateSpy.calledOnce, 'this.validate.bind called once').to.be.true;
-		expect(validateSpy.args[0][0] instanceof UpstreamsEditor, 'this.validate.bind arg').to.be.true;
-		expect(saveSpy.calledOnce, 'this.save.bind called once').to.be.true;
-		expect(saveSpy.args[0][0] instanceof UpstreamsEditor, 'this.save.bind arg').to.be.true;
-		expect(closeSpy.calledOnce, 'this.close.bind called once').to.be.true;
-		expect(closeSpy.args[0][0] instanceof UpstreamsEditor, 'this.close.bind arg').to.be.true;
-		expect(removeSpy.calledOnce, 'this.remove.bind called once').to.be.true;
-		expect(removeSpy.args[0][0] instanceof UpstreamsEditor, 'this.remove.bind arg').to.be.true;
-		expect(closeErrorsSpy.calledOnce, 'this.closeErrors.bind called once').to.be.true;
-		expect(closeErrorsSpy.args[0][0] instanceof UpstreamsEditor, 'this.closeErrors.bind arg').to.be.true;
+		// this.validateServerName.bind called once
+		expect(validateServerNameSpy).toHaveBeenCalled();
+		// this.validateServerName.bind arg
+		expect(validateServerNameSpy.mock.calls[0][0] instanceof UpstreamsEditor).toBe(true);
+		// this.handleFormChange.bind called once
+		expect(handleFormChangeSpy).toHaveBeenCalled();
+		// this.handleFormChange.bind arg
+		expect(handleFormChangeSpy.mock.calls[0][0] instanceof UpstreamsEditor).toBe(true);
+		// this.handleRadioChange.bind called once
+		expect(handleRadioChangeSpy).toHaveBeenCalled();
+		// this.handleRadioChange.bind arg
+		expect(handleRadioChangeSpy.mock.calls[0][0] instanceof UpstreamsEditor).toBe(true);
+		// this.validate.bind called once
+		expect(validateSpy).toHaveBeenCalled();
+		// this.validate.bind arg
+		expect(validateSpy.mock.calls[0][0] instanceof UpstreamsEditor).toBe(true);
+		// this.save.bind called once
+		expect(saveSpy).toHaveBeenCalled();
+		// this.save.bind arg
+		expect(saveSpy.mock.calls[0][0] instanceof UpstreamsEditor).toBe(true);
+		// this.close.bind called once
+		expect(closeSpy).toHaveBeenCalled();
+		// this.close.bind arg
+		expect(closeSpy.mock.calls[0][0] instanceof UpstreamsEditor).toBe(true);
+		// this.remove.bind called once
+		expect(removeSpy).toHaveBeenCalled();
+		// this.remove.bind arg
+		expect(removeSpy.mock.calls[0][0] instanceof UpstreamsEditor).toBe(true);
+		// this.closeErrors.bind called once
+		expect(closeErrorsSpy).toHaveBeenCalled();
+		// this.closeErrors.bind arg
+		expect(closeErrorsSpy.mock.calls[0][0] instanceof UpstreamsEditor).toBe(true);
 
 		wrapper = shallow(
-			<UpstreamsEditor { ...Object.assign({}, props, {
-				peers: new Map()
-			}) } />,
+			<UpstreamsEditor {...({ ...props, peers: new Map() })} />,
 		);
 
-		expect(wrapper.state(), '[no peers] this.state').to.be.deep.equal({
+		// [no peers] this.state
+		expect(wrapper.state()).toEqual({
 			success: false,
 			loading: false,
 			errorMessages: null,
@@ -122,64 +145,68 @@ describe('<UpstreamsEditor />', () => {
 		});
 
 		wrapper = shallow(
-			<UpstreamsEditor { ...Object.assign({}, props, {
+			<UpstreamsEditor {...({ ...props,
 				peers: new Map([
 					['test_1', {}],
 					['test_2', {}],
 					['test_3', {}]
-				])
-			}) } />
+				]) })}
+			/>
 		);
 
-		expect(wrapper.state('data'), '[peers.size > 1] this.state.data').to.be.deep.equal({});
-		expect(wrapper.state('initialData'), '[peers.size > 1] this.state.initialData').to.be.deep.equal({});
+		// [peers.size > 1] this.state.data
+		expect(wrapper.state('data')).toEqual({});
+		// [peers.size > 1] this.state.initialData
+		expect(wrapper.state('initialData')).toEqual({});
 
-		const thenSpy = spy();
-		const getPeerSpy = spy(() => ({
+		const thenSpy = jest.fn();
+		const getPeerSpy = jest.fn(() => ({
 			then: thenSpy
 		}));
 
 		wrapper = shallow(
-			<UpstreamsEditor { ...Object.assign({}, props, {
+			<UpstreamsEditor {...({ ...props,
 				upstreamsApi: {
 					getPeer: getPeerSpy
-				}
-			}) } />
+				} })}
+			/>
 		);
 
-		expect(wrapper.state('loading'), '[peers.size = 1] this.state.loading').to.be.true;
-		expect(wrapper.state('data'), '[peers.size = 1] this.state.data').to.be.an('undefined');
-		expect(wrapper.state('initialData'), '[peers.size = 1] this.state.initialData').to.be.an('undefined');
-		expect(getPeerSpy.calledOnce, 'upstreamsApi.getPeer called once').to.be.true;
-		expect(getPeerSpy.calledWith('upstream_test', {
-				id: 4,
-				server: 'test_server_4'
-			}), 'upstreamsApi.getPeer call args').to.be.true;
-		expect(thenSpy.calledOnce, 'upstreamsApi.getPeer().then called once').to.be.true;
-		expect(thenSpy.args[0][0], 'upstreamsApi.getPeer().then call args').to.be.a('function');
+		// [peers.size = 1] this.state.loading
+		expect(wrapper.state('loading')).toBe(true);
+		expect(wrapper.state('data')).toBeUndefined();
+		expect(wrapper.state('initialData')).toBeUndefined();
+		// upstreamsApi.getPeer called once
+		expect(getPeerSpy).toHaveBeenCalled();
+		// upstreamsApi.getPeer call args
+		expect(getPeerSpy).toHaveBeenLastCalledWith('upstream_test', {
+			id: 4,
+			server: 'test_server_4'
+		});
+		// upstreamsApi.getPeer().then called once
+		expect(thenSpy).toHaveBeenCalled();
+		expect(thenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
-		const setStateSpy = spy(wrapper.instance(), 'setState');
+		const setStateSpy = jest.spyOn(wrapper.instance(), 'setState').mockClear();
 		const peerData = {
 			should_be_normilized: true,
 			and_passed_to: 'state'
 		};
 
-		stub(UpstreamsEditor, 'normalizeInputData').callsFake(data => ({
+		jest.spyOn(UpstreamsEditor, 'normalizeInputData').mockClear().mockImplementation(data => ({
 			...data,
 			normalized_by_normalizeInputData: true
 		}));
-		thenSpy.args[0][0](peerData);
+		thenSpy.mock.calls[0][0](peerData);
 
-		expect(
-			UpstreamsEditor.normalizeInputData.calledOnce,
-			'UpstreamsEditor.normalizeInputData called once'
-		).to.be.true;
-		expect(
-			UpstreamsEditor.normalizeInputData.args[0][0],
-			'UpstreamsEditor.normalizeInputData call args'
-		).to.be.deep.equal(peerData);
-		expect(setStateSpy.calledOnce, 'this.setState called once').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// UpstreamsEditor.normalizeInputData called once
+		expect(UpstreamsEditor.normalizeInputData).toHaveBeenCalled();
+		// UpstreamsEditor.normalizeInputData call args
+		expect(UpstreamsEditor.normalizeInputData.mock.calls[0][0]).toEqual(peerData);
+		// this.setState called once
+		expect(setStateSpy).toHaveBeenCalled();
+		// this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			data: {
 				should_be_normilized: true,
 				and_passed_to: 'state',
@@ -193,26 +220,26 @@ describe('<UpstreamsEditor />', () => {
 			loading: false
 		});
 
-		UpstreamsEditor.normalizeInputData.restore();
+		UpstreamsEditor.normalizeInputData.mockRestore();
 
-		validateServerNameSpy.restore();
-		handleFormChangeSpy.restore();
-		handleRadioChangeSpy.restore();
-		validateSpy.restore();
-		saveSpy.restore();
-		closeSpy.restore();
-		removeSpy.restore();
-		closeErrorsSpy.restore();
-		utils.formData.restore()
+		validateServerNameSpy.mockRestore();
+		handleFormChangeSpy.mockRestore();
+		handleRadioChangeSpy.mockRestore();
+		validateSpy.mockRestore();
+		saveSpy.mockRestore();
+		closeSpy.mockRestore();
+		removeSpy.mockRestore();
+		closeErrorsSpy.mockRestore();
+		utils.formData.mockRestore();
 	});
 
 	it('handleFormChange()', () => {
-		const wrapper = shallow(<UpstreamsEditor { ...props } />);
+		const wrapper = shallow(<UpstreamsEditor {...props} />);
 		const instance = wrapper.instance();
 
 		wrapper.setState({ data: {} });
 
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.handleFormChange({ target: {
 			name: 'form_field_1',
@@ -220,63 +247,71 @@ describe('<UpstreamsEditor />', () => {
 			checked: false
 		} });
 
-		expect(setStateSpy.calledOnce, '[checkbox changed] this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], '[checkbox changed] this.setState call args').to.be.deep.equal({
+		// [checkbox changed] this.setState called
+		expect(setStateSpy).toHaveBeenCalled();
+		// [checkbox changed] this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			data: {
 				form_field_1: false
 			}
 		});
 
-		setStateSpy.resetHistory();
+		setStateSpy.mockReset();
 		instance.handleFormChange({ target: {
 			name: 'form_field_2',
 			type: 'text',
 			value: 'test value 2'
 		} });
 
-		expect(setStateSpy.calledOnce, '[text input changed] this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], '[text input changed] this.setState call args').to.be.deep.equal({
+		// [text input changed] this.setState called
+		expect(setStateSpy).toHaveBeenCalled();
+		// [text input changed] this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			data: {
 				form_field_1: false,
 				form_field_2: 'test value 2'
 			}
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('handleRadioChange()', () => {
-		const wrapper = shallow(<UpstreamsEditor { ...props } />);
+		const wrapper = shallow(<UpstreamsEditor {...props} />);
 		const instance = wrapper.instance();
 
 		wrapper.setState({ data: {
 			down: true
 		} });
 
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.handleRadioChange({ target: {
 			id: 'drain'
 		} });
 
-		expect(setStateSpy.calledOnce, '[drain change] this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], '[drain change] this.setState call args').to.be.deep.equal({
+		// [drain change] this.setState called
+		expect(setStateSpy).toHaveBeenCalled();
+		// [drain change] this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			data: { drain: true }
 		});
 
-		setStateSpy.resetHistory();
+		setStateSpy.mockReset();
 		instance.handleRadioChange({ target: {
 			id: 'test_id',
 			value: 'true'
 		} });
 
-		expect(setStateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// this.setState called
+		expect(setStateSpy).toHaveBeenCalled();
+		// this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			data: { down: true }
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
@@ -289,9 +324,9 @@ describe('<UpstreamsEditor />', () => {
 		const initialData = {
 			server: 'test_server_before'
 		};
-		const updatePeerSpy = spy((_, { server }) => `updatePeer_result_${ server }`);
+		const updatePeerSpy = jest.fn((_, { server }) => `updatePeer_result_${ server }`);
 		const wrapper = shallow(<UpstreamsEditor
-			{ ...props }
+			{...props}
 			upstreamsApi={{
 				getPeer(){
 					return Promise.resolve({});
@@ -299,146 +334,128 @@ describe('<UpstreamsEditor />', () => {
 				updatePeer: updatePeerSpy
 			}}
 		/>);
-		let instance = wrapper.instance();
+		const instance = wrapper.instance();
 
 		wrapper.setState({ data, initialData });
 
-		const setStateSpy = spy(instance, 'setState');
-		const catchSpy = spy();
-		const nextThenSpy = spy(() => ({
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
+		const catchSpy = jest.fn();
+		const nextThenSpy = jest.fn(() => ({
 			catch: catchSpy
 		}));
-		const thenSpy = spy(() => ({
+		const thenSpy = jest.fn(() => ({
 			then: nextThenSpy
 		}));
 
-		stub(instance, 'closeErrors').callsFake(() => {});
-		stub(instance, 'validate').callsFake(() => ({
+		jest.spyOn(instance, 'closeErrors').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'validate').mockClear().mockImplementation(() => ({
 			then: thenSpy
 		}));
-		stub(UpstreamsEditor, 'normalizeOutputData').callsFake(data => ({
+		jest.spyOn(UpstreamsEditor, 'normalizeOutputData').mockClear().mockImplementation(data => ({
 			...data,
 			normalized_by_normalizeOutputData: true
 		}));
 
 		instance.save();
 
-		expect(instance.closeErrors.calledOnce, 'this.closeErrors called once').to.be.true;
-		expect(setStateSpy.calledOnce, 'this.setState called once').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// this.closeErrors called once
+		expect(instance.closeErrors).toHaveBeenCalled();
+		// this.setState called once
+		expect(setStateSpy).toHaveBeenCalled();
+		// this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			loading: true
 		});
-		expect(instance.validate.calledOnce, 'this.validate called once').to.be.true;
-		expect(instance.validate.args[0][0], 'this.validate call args').to.be.deep.equal(data);
-		expect(thenSpy.calledOnce, 'this.validate, first "then" called').to.be.true;
-		expect(thenSpy.args[0][0], 'this.validate, first "then" call arg').to.be.a('function');
+		// this.validate called once
+		expect(instance.validate).toHaveBeenCalled();
+		// this.validate call args
+		expect(instance.validate.mock.calls[0][0]).toEqual(data);
+		// this.validate, first "then" called
+		expect(thenSpy).toHaveBeenCalled();
+		expect(thenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
-		const promiseAllThenSpy = spy(() => 'promise_all_result');
+		const promiseAllThenSpy = jest.fn(() => 'promise_all_result');
 
-		stub(Promise, 'all').callsFake(() => ({
+		jest.spyOn(Promise, 'all').mockClear().mockImplementation(() => ({
 			then: promiseAllThenSpy
 		}));
 
-		expect(
-			thenSpy.args[0][0](),
-			'this.validate, first "then" callback result'
-		).to.be.equal('promise_all_result');
-		expect(
-			Promise.all.calledOnce,
-			'this.validate, first "then" cb, Promise.all called'
-		).to.be.true;
-		expect(
-			Promise.all.args[0][0],
-			'this.validate, first "then" cb, Promise.all call args'
-		).to.be.deep.equal([ 'updatePeer_result_test_server_4' ]);
-		expect(updatePeerSpy.calledOnce, 'upstreamsApi.updatePeer called once').to.be.true;
-		expect(
-			updatePeerSpy.calledWith('upstream_test', {
-				id: 4,
-				server: 'test_server_4'
-			}, {
-				...data,
-				normalized_by_normalizeOutputData: true
-			}),
-			'upstreamsApi.updatePeer call args'
-		).to.be.true;
-		expect(
-			UpstreamsEditor.normalizeOutputData.calledOnce,
-			'UpstreamsEditor.normalizeOutputData called once'
-		).to.be.true;
-		expect(
-			UpstreamsEditor.normalizeOutputData.calledWith(
-				data, initialData
-			),
-			'UpstreamsEditor.normalizeOutputData call args'
-		).to.be.true;
-		expect(promiseAllThenSpy.calledOnce, 'Promise.all, first "then" called').to.be.true;
-		expect(promiseAllThenSpy.args[0][0], 'Promise.all, first "then" call arg').to.be.a('function');
+		// this.validate, first "then" callback result
+		expect(thenSpy.mock.calls[0][0]()).toBe('promise_all_result');
+		// this.validate, first "then" cb, Promise.all called
+		expect(Promise.all).toHaveBeenCalled();
+		// this.validate, first "then" cb, Promise.all call args
+		expect(Promise.all.mock.calls[0][0]).toEqual([ 'updatePeer_result_test_server_4' ]);
+		// upstreamsApi.updatePeer called once
+		expect(updatePeerSpy).toHaveBeenCalled();
+		// upstreamsApi.updatePeer call args
+		expect(updatePeerSpy).toHaveBeenLastCalledWith('upstream_test', {
+			id: 4,
+			server: 'test_server_4'
+		}, {
+			...data,
+			normalized_by_normalizeOutputData: true
+		});
+		// UpstreamsEditor.normalizeOutputData called once
+		expect(UpstreamsEditor.normalizeOutputData).toHaveBeenCalled();
+		// UpstreamsEditor.normalizeOutputData call args
+		expect(UpstreamsEditor.normalizeOutputData).toHaveBeenLastCalledWith(
+			data, initialData
+		);
+		// Promise.all, first "then" called
+		expect(promiseAllThenSpy).toHaveBeenCalled();
+		expect(promiseAllThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
-		setStateSpy.resetHistory();
-		promiseAllThenSpy.args[0][0]();
+		setStateSpy.mockReset();
+		promiseAllThenSpy.mock.calls[0][0]();
 
-		expect(
-			setStateSpy.calledOnce,
-			'Promise.all, first "then", this.setState called once'
-		).to.be.true;
-		expect(
-			setStateSpy.args[0][0],
-			'Promise.all, first "then", this.setState call args'
-		).to.be.deep.equal({
+		// Promise.all, first "then", this.setState called once
+		expect(setStateSpy).toHaveBeenCalled();
+		// Promise.all, first "then", this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			success: true,
 			successMessage: 'Changes saved'
 		});
-		expect(nextThenSpy.calledOnce, 'this.validate, second "then" called').to.be.true;
-		expect(nextThenSpy.args[0][0], 'this.validate, second "then" call arg').to.be.a('function');
+		// this.validate, second "then" called
+		expect(nextThenSpy).toHaveBeenCalled();
+		expect(nextThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
-		setStateSpy.resetHistory();
-		nextThenSpy.args[0][0]();
+		setStateSpy.mockClear();
+		nextThenSpy.mock.calls[0][0]();
 
-		expect(
-			setStateSpy.calledOnce,
-			'this.validate, second "then", this.setState called once'
-		).to.be.true;
-		expect(
-			setStateSpy.args[0][0],
-			'this.validate, second "then", this.setState call args'
-		).to.be.deep.equal({
+		// this.validate, second "then", this.setState called once
+		expect(setStateSpy).toHaveBeenCalled();
+		// this.validate, second "then", this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			loading: false
 		});
-		expect(catchSpy.calledOnce, 'this.validate, catch called').to.be.true;
-		expect(catchSpy.args[0][0], 'this.validate, catch call arg').to.be.a('function');
+		// this.validate, catch called
+		expect(catchSpy).toHaveBeenCalled();
+		expect(catchSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
-		stub(instance, 'showErrors').callsFake(() => {});
-		catchSpy.args[0][0]({ error: 'test error' });
+		jest.spyOn(instance, 'showErrors').mockClear().mockImplementation(() => {});
+		catchSpy.mock.calls[0][0]({ error: 'test error' });
 
-		expect(
-			instance.showErrors.calledOnce,
-			'this.validate, catch call, this.showErrors called'
-		).to.be.true;
-		expect(
-			instance.showErrors.args[0][0],
-			'this.validate, catch call, this.showErrors call args'
-		).to.be.deep.equal([ 'test error' ]);
+		// this.validate, catch call, this.showErrors called
+		expect(instance.showErrors).toHaveBeenCalled();
+		// this.validate, catch call, this.showErrors call args
+		expect(instance.showErrors.mock.calls[0][0]).toEqual([ 'test error' ]);
 
-		instance.showErrors.resetHistory();
-		catchSpy.args[0][0](['test error', 'another test error']);
+		instance.showErrors.mockClear();
+		catchSpy.mock.calls[0][0](['test error', 'another test error']);
 
-		expect(
-			instance.showErrors.calledOnce,
-			'this.validate, catch call, this.showErrors called'
-		).to.be.true;
-		expect(
-			instance.showErrors.args[0][0],
-			'this.validate, catch call, this.showErrors call args'
-		).to.be.deep.equal(['test error', 'another test error']);
+		// this.validate, catch call, this.showErrors called
+		expect(instance.showErrors).toHaveBeenCalled();
+		// this.validate, catch call, this.showErrors call args
+		expect(instance.showErrors.mock.calls[0][0]).toEqual(['test error', 'another test error']);
 
-		const createPeerThenSpy = spy(() => 'create_peer_result');
-		const createPeerSpy = spy(() => ({
+		const createPeerThenSpy = jest.fn(() => 'create_peer_result');
+		const createPeerSpy = jest.fn(() => ({
 			then: createPeerThenSpy
 		}));
 
-		thenSpy.resetHistory();
-		Promise.all.resetHistory();
+		thenSpy.mockClear();
+		Promise.all.mockClear();
 		wrapper.setProps({
 			...props,
 			peers: null,
@@ -452,113 +469,106 @@ describe('<UpstreamsEditor />', () => {
 
 		instance.save();
 
-		expect(thenSpy.calledOnce, '[isAdd = true] this.validate, first "then" called').to.be.true;
-		expect(
-			thenSpy.args[0][0],
-			'[isAdd = true] this.validate, first "then" call arg'
-		).to.be.a('function');
-		expect(
-			thenSpy.args[0][0](),
-			'[isAdd = true] this.validate, first "then" callback result'
-		).to.be.equal('create_peer_result');
-		expect(createPeerSpy.calledOnce, 'upstreamsApi.createPeer called').to.be.true;
-		expect(
-			createPeerSpy.args[0][0],
-			'upstreamsApi.createPeer call 1st arg'
-		).to.be.equal('upstream_test');
-		expect(
-			createPeerSpy.args[0][1],
-			'upstreamsApi.createPeer call 2nd arg'
-		).to.be.deep.equal(wrapper.state('data'));
-		expect(createPeerThenSpy.calledOnce, 'createPeer, 1st "then" cb called').to.be.true;
-		expect(createPeerThenSpy.args[0][0], 'createPeer, 1st "then" cb call arg').to.be.a('function');
+		// [isAdd = true] this.validate, first "then" called
+		expect(thenSpy).toHaveBeenCalled();
+		expect(thenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
+		// [isAdd = true] this.validate, first "then" callback result
+		expect(thenSpy.mock.calls[0][0]()).toBe('create_peer_result');
+		// upstreamsApi.createPeer called
+		expect(createPeerSpy).toHaveBeenCalled();
+		// upstreamsApi.createPeer call 1st arg
+		expect(createPeerSpy.mock.calls[0][0]).toBe('upstream_test');
+		// upstreamsApi.createPeer call 2nd arg
+		expect(createPeerSpy.mock.calls[0][1]).toEqual(wrapper.state('data'));
+		// createPeer, 1st "then" cb called
+		expect(createPeerThenSpy).toHaveBeenCalled();
+		expect(createPeerThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
-		setStateSpy.resetHistory();
-		createPeerThenSpy.args[0][0]();
+		setStateSpy.mockReset();
+		createPeerThenSpy.mock.calls[0][0]();
 
-		expect(
-			setStateSpy.calledOnce,
-			'createPeer, 1st "then" cb, this.setState called'
-		).to.be.true;
-		expect(
-			setStateSpy.args[0][0],
-			'createPeer, 1st "then" cb, this.setState call args'
-		).to.be.deep.equal({
+		// createPeer, 1st "then" cb, this.setState called
+		expect(setStateSpy).toHaveBeenCalled();
+		// createPeer, 1st "then" cb, this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			success: true,
 			successMessage: 'Server added successfully'
 		});
-		expect(
-			Promise.all.notCalled,
-			'this.validate, first "then" cb, Promise.all not called'
-		).to.be.true;
+		// this.validate, first "then" cb, Promise.all not called
+		expect(Promise.all).not.toHaveBeenCalled();
 
-		Promise.all.restore();
-		instance.showErrors.restore();
-		setStateSpy.restore();
-		instance.closeErrors.restore();
-		instance.validate.restore();
-		UpstreamsEditor.normalizeOutputData.restore();
+		Promise.all.mockRestore();
+		instance.showErrors.mockRestore();
+		setStateSpy.mockRestore();
+		instance.closeErrors.mockRestore();
+		instance.validate.mockRestore();
+		UpstreamsEditor.normalizeOutputData.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('closeErrors()', () => {
-		const wrapper = shallow(<UpstreamsEditor { ...props } />);
+		const wrapper = shallow(<UpstreamsEditor {...props} />);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.closeErrors();
 
-		expect(setStateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// this.setState called
+		expect(setStateSpy).toHaveBeenCalled();
+		// this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			errorMessages: null
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('showErrors()', () => {
-		const wrapper = shallow(<UpstreamsEditor { ...props } />);
+		const wrapper = shallow(<UpstreamsEditor {...props} />);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 		const errorMessages = ['error_1', 'error_2'];
 
 		instance.showErrors(errorMessages);
 
-		expect(setStateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// this.setState called
+		expect(setStateSpy).toHaveBeenCalled();
+		// this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			errorMessages,
 			loading: false
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('close()', () => {
-		const onCloseSpy = spy();
+		const onCloseSpy = jest.fn();
 		const wrapper = shallow(
 			<UpstreamsEditor
-				{ ...props }
-				onClose={ onCloseSpy }
+				{...props}
+				onClose={onCloseSpy}
 			/>);
 		const instance = wrapper.instance();
 
 		instance.close();
 
-		expect(onCloseSpy.calledOnce, 'this.props.onClose called').to.be.true;
+		// this.props.onClose called
+		expect(onCloseSpy).toHaveBeenCalled();
 
 		wrapper.unmount();
 	});
 
 	it('remove()', () => {
-		const deletePeerThenSpy = spy(() => 'deletePeer_result');
-		const deletePeerSpy = spy((_, id) => ({
+		const deletePeerThenSpy = jest.fn(() => 'deletePeer_result');
+		const deletePeerSpy = jest.fn((_, id) => ({
 			then: deletePeerThenSpy
 		}));
 		const wrapper = shallow(
 			<UpstreamsEditor
-				{ ...props }
+				{...props}
 				upstreamsApi={{
 					getPeer(){
 						return Promise.resolve({});
@@ -568,130 +578,131 @@ describe('<UpstreamsEditor />', () => {
 			/>
 		);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
-		const catchSpy = spy();
-		const thenSpy = spy(() => ({
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
+		const catchSpy = jest.fn();
+		const thenSpy = jest.fn(() => ({
 			catch: catchSpy
-		}))
+		}));
 
-		stub(Promise, 'all').callsFake(() => ({
+		jest.spyOn(Promise, 'all').mockClear().mockImplementation(() => ({
 			then: thenSpy
 		}));
-		stub(instance, 'showErrors').callsFake(() => 'showErrors_result');
+		jest.spyOn(instance, 'showErrors').mockClear().mockImplementation(() => 'showErrors_result');
 
 		instance.remove();
 
-		expect(Promise.all.calledOnce, 'Promise.all called').to.be.true;
-		expect(Promise.all.args[0][0], 'Promise.all call args').to.be.deep.equal([
+		// Promise.all called
+		expect(Promise.all).toHaveBeenCalled();
+		// Promise.all call args
+		expect(Promise.all.mock.calls[0][0]).toEqual([
 			'deletePeer_result'
 		]);
-		expect(deletePeerSpy.calledOnce, 'upstreamsApi.deletePeer called').to.be.true;
-		expect(
-			deletePeerSpy.calledWith('upstream_test', {
-				id: 4,
-				server: 'test_server_4'
-			}),
-			'upstreamsApi.deletePeer call args'
-		).to.be.true;
-		expect(deletePeerThenSpy.calledOnce, 'upstreamsApi.deletePeer "then" called').to.be.true;
-		expect(
-			deletePeerThenSpy.args[0][0],
-			'upstreamsApi.deletePeer "then" call arg'
-		).to.be.a('function');
-		expect(
-			deletePeerThenSpy.args[0][0](),
-			'upstreamsApi.deletePeer "then" call arg result'
-		).to.be.equal('test_server_4');
-		expect(thenSpy.calledOnce, 'Promise.all, "then" called').to.be.true;
-		expect(thenSpy.args[0][0], 'Promise.all, "then" call arg').to.be.a('function');
+		// upstreamsApi.deletePeer called
+		expect(deletePeerSpy).toHaveBeenCalled();
+		// upstreamsApi.deletePeer call args
+		expect(deletePeerSpy).toHaveBeenLastCalledWith('upstream_test', {
+			id: 4,
+			server: 'test_server_4'
+		});
+		// upstreamsApi.deletePeer "then" called
+		expect(deletePeerThenSpy).toHaveBeenCalled();
+		expect(deletePeerThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
+		// upstreamsApi.deletePeer "then" call arg result
+		expect(deletePeerThenSpy.mock.calls[0][0]()).toBe('test_server_4');
+		// Promise.all, "then" called
+		expect(thenSpy).toHaveBeenCalled();
+		expect(thenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
-		thenSpy.args[0][0](['1', '2', '3']);
+		thenSpy.mock.calls[0][0](['1', '2', '3']);
 
-		expect(setStateSpy.calledOnce, 'this.setState called once').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// this.setState called once
+		expect(setStateSpy).toHaveBeenCalled();
+		// this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			success: true,
 			shouldClearPeers: true,
-			successMessage: `Servers 1, 2, 3 successfully removed`
+			successMessage: 'Servers 1, 2, 3 successfully removed'
 		});
-		expect(catchSpy.calledOnce, 'Promise.all, "catch" called').to.be.true;
-		expect(catchSpy.args[0][0], 'Promise.all, "catch" call arg').to.be.a('function');
+		// Promise.all, "catch" called
+		expect(catchSpy).toHaveBeenCalled();
+		expect(catchSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
-		setStateSpy.resetHistory();
-		expect(
-			catchSpy.args[0][0]({ error: 'test_error' }),
-			'Promise.all, "catch" callback result'
-		).to.be.equal('showErrors_result');
-		expect(instance.showErrors.calledOnce, 'this.showErrors called once').to.be.true;
-		expect(instance.showErrors.args[0][0], 'this.showErrors call args').to.be.deep.equal([
+		setStateSpy.mockReset();
+		// Promise.all, "catch" callback result
+		expect(catchSpy.mock.calls[0][0]({ error: 'test_error' })).toBe('showErrors_result');
+		// this.showErrors called once
+		expect(instance.showErrors).toHaveBeenCalled();
+		// this.showErrors call args
+		expect(instance.showErrors.mock.calls[0][0]).toEqual([
 			'test_error'
 		]);
 
-		Promise.all.restore();
-		instance.showErrors.restore();
-		setStateSpy.restore();
+		Promise.all.mockRestore();
+		instance.showErrors.mockRestore();
+		setStateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('validate()', () => {
-		const wrapper = shallow(<UpstreamsEditor { ...props } />);
+		const wrapper = shallow(<UpstreamsEditor {...props} />);
 		const instance = wrapper.instance();
 
-		stub(Promise, 'resolve').callsFake(() => true);
-		stub(Promise, 'reject').callsFake(errors => errors);
+		jest.spyOn(Promise, 'resolve').mockClear().mockImplementation(() => true);
+		jest.spyOn(Promise, 'reject').mockClear().mockImplementation(errors => errors);
 
 		let result = instance.validate({});
 
-		expect(result, '[empty data] result').to.be.true;
+		// [empty data] result
+		expect(result).toBe(true);
 
 		result = instance.validate({ server: '127.0.0.1' });
 
-		expect(result, '[server is IP] result').to.be.true;
+		// [server is IP] result
+		expect(result).toBe(true);
 
 		result = instance.validate({ server: 'localhost' });
 
-		expect(result, '[valid non-IP server, no service] result').to.be.true;
+		// [valid non-IP server, no service] result
+		expect(result).toBe(true);
 
 		result = instance.validate({ server: '' });
 
-		expect(result, '[invalid non-IP server] result').to.be.deep.equal(
-			['Invalid server address or port']
-		);
+		// [invalid non-IP server] result
+		expect(result).toEqual(['Invalid server address or port']);
 
 		result = instance.validate({
 			server: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'
 		});
 
-		expect(result, '[too long non-IP server] result').to.be.deep.equal(
-			['Invalid server address or port']
-		);
+		// [too long non-IP server] result
+		expect(result).toEqual(['Invalid server address or port']);
 
 		result = instance.validate({
 			server: 'localhost',
 			service: 'test_service'
 		});
 
-		expect(result, '[valid non-IP server, valid service] result').to.be.true;
+		// [valid non-IP server, valid service] result
+		expect(result).toBe(true);
 
 		result = instance.validate({
 			server: 'localhost',
 			service: 'test service'
 		});
 
-		expect(result, '[valid non-IP server, invalid service] result').to.be.deep.equal(
-			['Invalid server address or service setting']
-		);
+		// [valid non-IP server, invalid service] result
+		expect(result).toEqual(['Invalid server address or service setting']);
 
 		result = instance.validate({
 			server: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
 			service: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'
 		});
 
-		expect(result, '[valid non-IP server and service, but sum of both length is too long] result').to.be.deep.equal(
-			['Invalid server address or service setting']
-		);
+		// [valid non-IP server and service, but sum of both length is too long] result
+		expect(result).toEqual(['Invalid server address or service setting']);
 
-		const getPeerThenSpy = spy(() => 'getPeerThen_result');
-		const getPeerSpy = spy(() => ({
+		const getPeerThenSpy = jest.fn(() => 'getPeerThen_result');
+		const getPeerSpy = jest.fn(() => ({
 			then: getPeerThenSpy
 		}));
 
@@ -706,82 +717,80 @@ describe('<UpstreamsEditor />', () => {
 		});
 		result = instance.validate({});
 
-		expect(result, '[peers.size > 1] result').to.be.equal('getPeerThen_result');
-		expect(getPeerSpy.calledOnce, 'upstreamsApi.getPeer called').to.be.true;
-		expect(
-			getPeerSpy.calledWith('upstream_test', { id: 1 }),
-			'upstreamsApi.getPeer call args'
-		).to.be.true;
-		expect(getPeerThenSpy.calledOnce, 'upstreamsApi.getPeer "then" called').to.be.true;
-		expect(getPeerThenSpy.args[0][0], 'upstreamsApi.getPeer "then" call arg').to.be.a('function');
-		expect(
-			getPeerThenSpy.args[0][0]({}),
-			'upstreamsApi.getPeer "then" callback, without errors'
-		).to.be.an('undefined');
-		expect(
-			getPeerThenSpy.args[0][0]({ error: true }),
-			'upstreamsApi.getPeer "then" callback, with error'
-		).to.be.deep.equal(
-			['No such server (please, check if it still exists)']
-		);
+		// [peers.size > 1] result
+		expect(result).toBe('getPeerThen_result');
+		// upstreamsApi.getPeer called
+		expect(getPeerSpy).toHaveBeenCalled();
+		// upstreamsApi.getPeer call args
+		expect(getPeerSpy).toHaveBeenLastCalledWith('upstream_test', { id: 1 });
+		// upstreamsApi.getPeer "then" called
+		expect(getPeerThenSpy).toHaveBeenCalled();
+		expect(getPeerThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
+		expect(getPeerThenSpy.mock.calls[0][0]({})).toBeUndefined();
+		// upstreamsApi.getPeer "then" callback, with error
+		expect(getPeerThenSpy.mock.calls[0][0]({ error: true })).toEqual(['No such server (please, check if it still exists)']);
 
 		wrapper.setProps({ peers: null });
 		result = instance.validate({ server: '127.0.0.1' });
 
-		expect(result, '[no peers] result').to.be.true;
+		// [no peers] result
+		expect(result).toBe(true);
 
 		result = instance.validate({});
 
-		expect(result, '[props.isStream = true, invalid non-IP server] result').to.be.deep.equal(
-			['Invalid server address or port']
-		);
+		// [props.isStream = true, invalid non-IP server] result
+		expect(result).toEqual(['Invalid server address or port']);
 
 		wrapper.setProps({ isStream: true });
 		result = instance.validate({ server: 'localhost' });
 
-		expect(result, '[props.isStream = true, invalid non-IP server] result').to.be.deep.equal(
-			['Invalid server address or port']
-		);
+		// [props.isStream = true, invalid non-IP server] result
+		expect(result).toEqual(['Invalid server address or port']);
 
 		result = instance.validate({ server: 'localhost:1234' });
 
-		expect(result, '[props.isStream = true, invalid non-IP server] result').to.be.true;
+		// [props.isStream = true, invalid non-IP server] result
+		expect(result).toBe(true);
 
-		Promise.resolve.restore();
-		Promise.reject.restore();
+		Promise.resolve.mockRestore();
+		Promise.reject.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('validateServerName()', () => {
-		const wrapper = shallow(<UpstreamsEditor { ...props } />);
+		const wrapper = shallow(<UpstreamsEditor {...props} />);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.validateServerName({ target: { value: '127.0.0.1' } });
 
-		expect(setStateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// this.setState called
+		expect(setStateSpy).toHaveBeenCalled();
+		// this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			addAsDomain: false
 		});
 
-		setStateSpy.resetHistory();
+		setStateSpy.mockReset();
 		instance.validateServerName({ target: { value: 'example.com' } });
 
-		expect(setStateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// this.setState called
+		expect(setStateSpy).toHaveBeenCalled();
+		// this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			addAsDomain: true
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('render()', () => {
 		const wrapper = shallow(
 			<UpstreamsEditor
-				{ ...props }
-				peers={ null }
-				isStream={ true }
+				{...props}
+				peers={null}
+				isStream
 			/>
 		);
 		const data = {
@@ -802,396 +811,214 @@ describe('<UpstreamsEditor />', () => {
 
 		const instance = wrapper.instance();
 
-		expect(wrapper.name(), 'wrapper name').to.be.equal('Popup');
-		expect(wrapper.prop('className'), 'wrapper className').to.be.equal(styles['editor']);
+		// wrapper name
+		expect(wrapper.name()).toBe('Popup');
+		// wrapper className
+		expect(wrapper.prop('className')).toBe(styles.editor);
 
-		let popup = wrapper.childAt(0);
+		const popup = wrapper.childAt(0);
 
-		expect(wrapper.childAt(0).prop('className'), 'title className').to.be.equal(
-			styles['header']
-		);
-		expect(wrapper.childAt(0).text(), 'title text').to.be.equal('Add server to "upstream_test"');
-		expect(wrapper.childAt(1).prop('className'), 'close el className').to.be.equal(
-			styles['close']
-		);
-		expect(wrapper.childAt(1).prop('onClick'), 'close el onClick').to.be.a('function');
-		expect(
-			wrapper.childAt(1).prop('onClick').name,
-			'close el onClick name'
-		).to.be.equal('bound close');
+		// title className
+		expect(wrapper.childAt(0).prop('className')).toBe(styles.header);
+		// title text
+		expect(wrapper.childAt(0).text()).toBe('Add server to "upstream_test"');
+		// close el className
+		expect(wrapper.childAt(1).prop('className')).toBe(styles.close);
+		expect(wrapper.childAt(1).prop('onClick')).toBeInstanceOf(Function);
+		// close el onClick name
+		expect(wrapper.childAt(1).prop('onClick').name).toBe('bound close');
 
 		let content = wrapper.childAt(2).childAt(0);
 
-		expect(content.prop('className'), 'content className').to.be.equal(styles['content']);
-		expect(
-			content.children(),
-			'[errorMessages = null] content children count'
-		).to.have.lengthOf(3);
+		// content className
+		expect(content.prop('className')).toBe(styles.content);
+		// [errorMessages = null] content children count
+		expect(content.children()).toHaveLength(3);
 
 		let serversGroup = content.childAt(0);
 
-		expect(
-			serversGroup.prop('className'),
-			'[isAdd, no peers] server groups className'
-		).to.be.an('undefined');
-		expect(
-			serversGroup.children(),
-			'[no data.host, isStream, isAdd] serves group elements count'
-		).to.have.lengthOf(2);
-		expect(
-			serversGroup.childAt(0).prop('className'),
-			'server address className'
-		).to.be.equal(styles['form-group']);
-		expect(
-			serversGroup.childAt(0).childAt(0).type(),
-			'server address, label html tag'
-		).to.be.equal('label');
-		expect(
-			serversGroup.childAt(0).childAt(0).prop('htmlFor'),
-			'server address, label htmlFor'
-		).to.be.equal('server');
-		expect(
-			serversGroup.childAt(0).childAt(1).type(),
-			'server address, input html tag'
-		).to.be.equal('input');
-		expect(
-			serversGroup.childAt(0).childAt(1).prop('id'),
-			'server address, input prop id'
-		).to.be.equal('server');
-		expect(
-			serversGroup.childAt(0).childAt(1).prop('name'),
-			'server address, input prop name'
-		).to.be.equal('server');
-		expect(
-			serversGroup.childAt(0).childAt(1).prop('type'),
-			'server address, input prop type'
-		).to.be.equal('text');
-		expect(
-			serversGroup.childAt(0).childAt(1).prop('className'),
-			'server address, input prop className'
-		).to.be.equal(styles['input']);
-		expect(
-			serversGroup.childAt(0).childAt(1).prop('value'),
-			'server address, input prop value'
-		).to.be.equal('localhost');
-		expect(
-			serversGroup.childAt(0).childAt(1).prop('onKeyUp'),
-			'server address, input prop onKeyUp'
-		).to.be.a('function');
-		expect(
-			serversGroup.childAt(0).childAt(1).prop('onKeyUp').name,
-			'server address, input prop onKeyUp name'
-		).to.be.equal('bound validateServerName');
-		expect(
-			serversGroup.childAt(0).childAt(1).prop('onInput'),
-			'server address, input prop onInput'
-		).to.be.a('function');
-		expect(
-			serversGroup.childAt(0).childAt(1).prop('onInput').name,
-			'server address, input prop onInput name'
-		).to.be.equal('bound handleFormChange');
-		expect(
-			serversGroup.childAt(0).childAt(1).prop('disabled'),
-			'server address, input prop disabled'
-		).to.be.false;
-		expect(
-			serversGroup.childAt(1).prop('className'),
-			'backup server className'
-		).to.be.equal(styles['checkbox']);
-		expect(
-			serversGroup.childAt(1).childAt(0).type(),
-			'backup server, label'
-		).to.be.equal('label');
-		expect(
-			serversGroup.childAt(1).childAt(0).childAt(0).type(),
-			'backup server, input'
-		).to.be.equal('input');
-		expect(
-			serversGroup.childAt(1).childAt(0).childAt(0).prop('name'),
-			'backup server, input prop name'
-		).to.be.equal('backup');
-		expect(
-			serversGroup.childAt(1).childAt(0).childAt(0).prop('type'),
-			'backup server, input prop type'
-		).to.be.equal('checkbox');
-		expect(
-			serversGroup.childAt(1).childAt(0).childAt(0).prop('checked'),
-			'backup server, input prop checked'
-		).to.be.equal('backup_test');
-		expect(
-			serversGroup.childAt(1).childAt(0).childAt(0).prop('onChange'),
-			'server address, input prop onChange'
-		).to.be.a('function');
-		expect(
-			serversGroup.childAt(1).childAt(0).childAt(0).prop('onChange').name,
-			'server address, input prop onChange name'
-		).to.be.equal('bound handleFormChange');
+		expect(serversGroup.prop('className')).toBeUndefined();
+		// [no data.host, isStream, isAdd] serves group elements count
+		expect(serversGroup.children()).toHaveLength(2);
+		// server address className
+		expect(serversGroup.childAt(0).prop('className')).toBe(styles['form-group']);
+		// server address, label html tag
+		expect(serversGroup.childAt(0).childAt(0).type()).toBe('label');
+		// server address, label htmlFor
+		expect(serversGroup.childAt(0).childAt(0).prop('htmlFor')).toBe('server');
+		// server address, input html tag
+		expect(serversGroup.childAt(0).childAt(1).type()).toBe('input');
+		// server address, input prop id
+		expect(serversGroup.childAt(0).childAt(1).prop('id')).toBe('server');
+		// server address, input prop name
+		expect(serversGroup.childAt(0).childAt(1).prop('name')).toBe('server');
+		// server address, input prop type
+		expect(serversGroup.childAt(0).childAt(1).prop('type')).toBe('text');
+		// server address, input prop className
+		expect(serversGroup.childAt(0).childAt(1).prop('className')).toBe(styles.input);
+		// server address, input prop value
+		expect(serversGroup.childAt(0).childAt(1).prop('value')).toBe('localhost');
+		expect(serversGroup.childAt(0).childAt(1).prop('onKeyUp')).toBeInstanceOf(Function);
+		// server address, input prop onKeyUp name
+		expect(serversGroup.childAt(0).childAt(1).prop('onKeyUp').name).toBe('bound validateServerName');
+		expect(serversGroup.childAt(0).childAt(1).prop('onInput')).toBeInstanceOf(Function);
+		// server address, input prop onInput name
+		expect(serversGroup.childAt(0).childAt(1).prop('onInput').name).toBe('bound handleFormChange');
+		// server address, input prop disabled
+		expect(serversGroup.childAt(0).childAt(1).prop('disabled')).toBe(false);
+		// backup server className
+		expect(serversGroup.childAt(1).prop('className')).toBe(styles.checkbox);
+		// backup server, label
+		expect(serversGroup.childAt(1).childAt(0).type()).toBe('label');
+		// backup server, input
+		expect(serversGroup.childAt(1).childAt(0).childAt(0).type()).toBe('input');
+		// backup server, input prop name
+		expect(serversGroup.childAt(1).childAt(0).childAt(0).prop('name')).toBe('backup');
+		// backup server, input prop type
+		expect(serversGroup.childAt(1).childAt(0).childAt(0).prop('type')).toBe('checkbox');
+		// backup server, input prop checked
+		expect(serversGroup.childAt(1).childAt(0).childAt(0).prop('checked')).toBe('backup_test');
+		expect(serversGroup.childAt(1).childAt(0).childAt(0).prop('onChange')).toBeInstanceOf(Function);
+		// server address, input prop onChange name
+		expect(serversGroup.childAt(1).childAt(0).childAt(0).prop('onChange').name).toBe('bound handleFormChange');
 
 		let formsMini = content.childAt(1);
 
-		expect(formsMini.prop('className'), 'forms-mini className').to.be.equal(styles['forms-mini']);
-		expect(
-			formsMini.children(),
-			'[isAdd, not state.addAsDomain] forms-mini children count'
-		).to.have.lengthOf(4);
-		expect(
-			formsMini.childAt(0).prop('className'),
-			'forms-mini, weight group className'
-		).to.be.equal(styles['form-group']);
-		expect(
-			formsMini.childAt(0).childAt(0).type(),
-			'forms-mini, weight label'
-		).to.be.equal('label');
-		expect(
-			formsMini.childAt(0).childAt(0).prop('htmlFor'),
-			'forms-mini, weight label htmlFor'
-		).to.be.equal('weight');
-		expect(
-			formsMini.childAt(0).childAt(1).name(),
-			'forms-mini, weight input'
-		).to.be.equal('NumberInput');
-		expect(
-			formsMini.childAt(0).childAt(1).prop('id'),
-			'forms-mini, weight input prop id'
-		).to.be.equal('weight');
-		expect(
-			formsMini.childAt(0).childAt(1).prop('name'),
-			'forms-mini, weight input prop name'
-		).to.be.equal('weight');
-		expect(
-			formsMini.childAt(0).childAt(1).prop('className'),
-			'forms-mini, weight input prop className'
-		).to.be.equal(styles['input']);
-		expect(
-			formsMini.childAt(0).childAt(1).prop('onInput'),
-			'forms-mini, weight input prop onInput'
-		).to.be.a('function');
-		expect(
-			formsMini.childAt(0).childAt(1).prop('onInput').name,
-			'forms-mini, weight input prop onInput name'
-		).to.be.equal('bound handleFormChange');
-		expect(
-			formsMini.childAt(0).childAt(1).prop('value'),
-			'forms-mini, weight input prop value'
-		).to.be.equal('weight_test');
-		expect(
-			formsMini.childAt(1).prop('className'),
-			'forms-mini, max_conns group className'
-		).to.be.equal(styles['form-group']);
-		expect(
-			formsMini.childAt(1).childAt(0).type(),
-			'forms-mini, max_conns label'
-		).to.be.equal('label');
-		expect(
-			formsMini.childAt(1).childAt(0).prop('htmlFor'),
-			'forms-mini, max_conns label htmlFor'
-		).to.be.equal('max_conns');
-		expect(
-			formsMini.childAt(1).childAt(1).name(),
-			'forms-mini, max_conns input'
-		).to.be.equal('NumberInput');
-		expect(
-			formsMini.childAt(1).childAt(1).prop('id'),
-			'forms-mini, max_conns input prop id'
-		).to.be.equal('max_conns');
-		expect(
-			formsMini.childAt(1).childAt(1).prop('name'),
-			'forms-mini, max_conns input prop name'
-		).to.be.equal('max_conns');
-		expect(
-			formsMini.childAt(1).childAt(1).prop('className'),
-			'forms-mini, max_conns input prop className'
-		).to.be.equal(styles['input']);
-		expect(
-			formsMini.childAt(1).childAt(1).prop('onInput'),
-			'forms-mini, max_conns input prop onInput'
-		).to.be.a('function');
-		expect(
-			formsMini.childAt(1).childAt(1).prop('onInput').name,
-			'forms-mini, max_conns input prop onInput name'
-		).to.be.equal('bound handleFormChange');
-		expect(
-			formsMini.childAt(1).childAt(1).prop('value'),
-			'forms-mini, max_conns input prop value'
-		).to.be.equal('max_conns_test');
-		expect(
-			formsMini.childAt(2).prop('className'),
-			'forms-mini, max_fails group className'
-		).to.be.equal(styles['form-group']);
-		expect(
-			formsMini.childAt(2).childAt(0).type(),
-			'forms-mini, max_fails label'
-		).to.be.equal('label');
-		expect(
-			formsMini.childAt(2).childAt(0).prop('htmlFor'),
-			'forms-mini, max_fails label htmlFor'
-		).to.be.equal('max_fails');
-		expect(
-			formsMini.childAt(2).childAt(1).name(),
-			'forms-mini, max_fails input'
-		).to.be.equal('NumberInput');
-		expect(
-			formsMini.childAt(2).childAt(1).prop('id'),
-			'forms-mini, max_fails input prop id'
-		).to.be.equal('max_fails');
-		expect(
-			formsMini.childAt(2).childAt(1).prop('name'),
-			'forms-mini, max_fails input prop name'
-		).to.be.equal('max_fails');
-		expect(
-			formsMini.childAt(2).childAt(1).prop('className'),
-			'forms-mini, max_fails input prop className'
-		).to.be.equal(styles['input']);
-		expect(
-			formsMini.childAt(2).childAt(1).prop('onInput'),
-			'forms-mini, max_fails input prop onInput'
-		).to.be.a('function');
-		expect(
-			formsMini.childAt(2).childAt(1).prop('onInput').name,
-			'forms-mini, max_fails input prop onInput name'
-		).to.be.equal('bound handleFormChange');
-		expect(
-			formsMini.childAt(2).childAt(1).prop('value'),
-			'forms-mini, max_fails input prop value'
-		).to.be.equal('max_fails_test');
-		expect(
-			formsMini.childAt(3).prop('className'),
-			'forms-mini, fail_timeout group className'
-		).to.be.equal(styles['form-group']);
-		expect(
-			formsMini.childAt(3).childAt(0).type(),
-			'forms-mini, fail_timeout label'
-		).to.be.equal('label');
-		expect(
-			formsMini.childAt(3).childAt(0).prop('htmlFor'),
-			'forms-mini, fail_timeout label htmlFor'
-		).to.be.equal('fail_timeout');
-		expect(
-			formsMini.childAt(3).childAt(1).name(),
-			'forms-mini, fail_timeout input'
-		).to.be.equal('NumberInput');
-		expect(
-			formsMini.childAt(3).childAt(1).prop('id'),
-			'forms-mini, fail_timeout input prop id'
-		).to.be.equal('fail_timeout');
-		expect(
-			formsMini.childAt(3).childAt(1).prop('name'),
-			'forms-mini, fail_timeout input prop name'
-		).to.be.equal('fail_timeout');
-		expect(
-			formsMini.childAt(3).childAt(1).prop('className'),
-			'forms-mini, fail_timeout input prop className'
-		).to.be.equal(styles['input']);
-		expect(
-			formsMini.childAt(3).childAt(1).prop('onInput'),
-			'forms-mini, fail_timeout input prop onInput'
-		).to.be.a('function');
-		expect(
-			formsMini.childAt(3).childAt(1).prop('onInput').name,
-			'forms-mini, fail_timeout input prop onInput name'
-		).to.be.equal('bound handleFormChange');
-		expect(
-			formsMini.childAt(3).childAt(1).prop('value'),
-			'forms-mini, fail_timeout input prop value'
-		).to.be.equal('fail_timeout_test');
+		// forms-mini className
+		expect(formsMini.prop('className')).toBe(styles['forms-mini']);
+		// [isAdd, not state.addAsDomain] forms-mini children count
+		expect(formsMini.children()).toHaveLength(4);
+		// forms-mini, weight group className
+		expect(formsMini.childAt(0).prop('className')).toBe(styles['form-group']);
+		// forms-mini, weight label
+		expect(formsMini.childAt(0).childAt(0).type()).toBe('label');
+		// forms-mini, weight label htmlFor
+		expect(formsMini.childAt(0).childAt(0).prop('htmlFor')).toBe('weight');
+		// forms-mini, weight input
+		expect(formsMini.childAt(0).childAt(1).name()).toBe('NumberInput');
+		// forms-mini, weight input prop id
+		expect(formsMini.childAt(0).childAt(1).prop('id')).toBe('weight');
+		// forms-mini, weight input prop name
+		expect(formsMini.childAt(0).childAt(1).prop('name')).toBe('weight');
+		// forms-mini, weight input prop className
+		expect(formsMini.childAt(0).childAt(1).prop('className')).toBe(styles.input);
+		expect(formsMini.childAt(0).childAt(1).prop('onInput')).toBeInstanceOf(Function);
+		// forms-mini, weight input prop onInput name
+		expect(formsMini.childAt(0).childAt(1).prop('onInput').name).toBe('bound handleFormChange');
+		// forms-mini, weight input prop value
+		expect(formsMini.childAt(0).childAt(1).prop('value')).toBe('weight_test');
+		// forms-mini, max_conns group className
+		expect(formsMini.childAt(1).prop('className')).toBe(styles['form-group']);
+		// forms-mini, max_conns label
+		expect(formsMini.childAt(1).childAt(0).type()).toBe('label');
+		// forms-mini, max_conns label htmlFor
+		expect(formsMini.childAt(1).childAt(0).prop('htmlFor')).toBe('max_conns');
+		// forms-mini, max_conns input
+		expect(formsMini.childAt(1).childAt(1).name()).toBe('NumberInput');
+		// forms-mini, max_conns input prop id
+		expect(formsMini.childAt(1).childAt(1).prop('id')).toBe('max_conns');
+		// forms-mini, max_conns input prop name
+		expect(formsMini.childAt(1).childAt(1).prop('name')).toBe('max_conns');
+		// forms-mini, max_conns input prop className
+		expect(formsMini.childAt(1).childAt(1).prop('className')).toBe(styles.input);
+		expect(formsMini.childAt(1).childAt(1).prop('onInput')).toBeInstanceOf(Function);
+		// forms-mini, max_conns input prop onInput name
+		expect(formsMini.childAt(1).childAt(1).prop('onInput').name).toBe('bound handleFormChange');
+		// forms-mini, max_conns input prop value
+		expect(formsMini.childAt(1).childAt(1).prop('value')).toBe('max_conns_test');
+		// forms-mini, max_fails group className
+		expect(formsMini.childAt(2).prop('className')).toBe(styles['form-group']);
+		// forms-mini, max_fails label
+		expect(formsMini.childAt(2).childAt(0).type()).toBe('label');
+		// forms-mini, max_fails label htmlFor
+		expect(formsMini.childAt(2).childAt(0).prop('htmlFor')).toBe('max_fails');
+		// forms-mini, max_fails input
+		expect(formsMini.childAt(2).childAt(1).name()).toBe('NumberInput');
+		// forms-mini, max_fails input prop id
+		expect(formsMini.childAt(2).childAt(1).prop('id')).toBe('max_fails');
+		// forms-mini, max_fails input prop name
+		expect(formsMini.childAt(2).childAt(1).prop('name')).toBe('max_fails');
+		// forms-mini, max_fails input prop className
+		expect(formsMini.childAt(2).childAt(1).prop('className')).toBe(styles.input);
+		expect(formsMini.childAt(2).childAt(1).prop('onInput')).toBeInstanceOf(Function);
+		// forms-mini, max_fails input prop onInput name
+		expect(formsMini.childAt(2).childAt(1).prop('onInput').name).toBe('bound handleFormChange');
+		// forms-mini, max_fails input prop value
+		expect(formsMini.childAt(2).childAt(1).prop('value')).toBe('max_fails_test');
+		// forms-mini, fail_timeout group className
+		expect(formsMini.childAt(3).prop('className')).toBe(styles['form-group']);
+		// forms-mini, fail_timeout label
+		expect(formsMini.childAt(3).childAt(0).type()).toBe('label');
+		// forms-mini, fail_timeout label htmlFor
+		expect(formsMini.childAt(3).childAt(0).prop('htmlFor')).toBe('fail_timeout');
+		// forms-mini, fail_timeout input
+		expect(formsMini.childAt(3).childAt(1).name()).toBe('NumberInput');
+		// forms-mini, fail_timeout input prop id
+		expect(formsMini.childAt(3).childAt(1).prop('id')).toBe('fail_timeout');
+		// forms-mini, fail_timeout input prop name
+		expect(formsMini.childAt(3).childAt(1).prop('name')).toBe('fail_timeout');
+		// forms-mini, fail_timeout input prop className
+		expect(formsMini.childAt(3).childAt(1).prop('className')).toBe(styles.input);
+		expect(formsMini.childAt(3).childAt(1).prop('onInput')).toBeInstanceOf(Function);
+		// forms-mini, fail_timeout input prop onInput name
+		expect(formsMini.childAt(3).childAt(1).prop('onInput').name).toBe('bound handleFormChange');
+		// forms-mini, fail_timeout input prop value
+		expect(formsMini.childAt(3).childAt(1).prop('value')).toBe('fail_timeout_test');
 		let radio = content.childAt(2);
 
-		expect(radio.prop('className'), 'radio group className').to.be.equal(styles['radio']);
-		expect(radio.children(), '[isStream] radio group children count').to.have.lengthOf(3);
-		expect(
-			radio.childAt(0).prop('className'),
-			'radio, title className'
-		).to.be.equal(styles['title']);
-		expect(radio.childAt(1).type(), 'radio, state up label').to.be.equal('label');
-		expect(
-			radio.childAt(1).childAt(0).type(),
-			'radio, state up input'
-		).to.be.equal('input');
-		expect(
-			radio.childAt(1).childAt(0).prop('name'),
-			'radio, state up input, prop name'
-		).to.be.equal('state');
-		expect(
-			radio.childAt(1).childAt(0).prop('value'),
-			'radio, state up input, prop value'
-		).to.be.equal('false');
-		expect(
-			radio.childAt(1).childAt(0).prop('type'),
-			'radio, state up input, prop type'
-		).to.be.equal('radio');
-		expect(
-			radio.childAt(1).childAt(0).prop('onChange'),
-			'radio, state up input, prop onChange'
-		).to.be.a('function');
-		expect(
-			radio.childAt(1).childAt(0).prop('onChange').name,
-			'radio, state up input, prop onChange name'
-		).to.be.equal('bound handleRadioChange');
-		expect(
-			radio.childAt(1).childAt(0).prop('checked'),
-			'radio, state up input, prop checked'
-		).to.be.false;
-		expect(
-			radio.childAt(2).childAt(0).type(),
-			'radio, state down input'
-		).to.be.equal('input');
-		expect(
-			radio.childAt(2).childAt(0).prop('name'),
-			'radio, state down input, prop name'
-		).to.be.equal('state');
-		expect(
-			radio.childAt(2).childAt(0).prop('value'),
-			'radio, state down input, prop value'
-		).to.be.equal('true');
-		expect(
-			radio.childAt(2).childAt(0).prop('type'),
-			'radio, state down input, prop type'
-		).to.be.equal('radio');
-		expect(
-			radio.childAt(2).childAt(0).prop('onChange'),
-			'radio, state down input, prop onChange'
-		).to.be.a('function');
-		expect(
-			radio.childAt(2).childAt(0).prop('onChange').name,
-			'radio, state down input, prop onChange name'
-		).to.be.equal('bound handleRadioChange');
-		expect(
-			radio.childAt(2).childAt(0).prop('checked'),
-			'radio, state down input, prop checked'
-		).to.be.true;
+		// radio group className
+		expect(radio.prop('className')).toBe(styles.radio);
+		// [isStream] radio group children count
+		expect(radio.children()).toHaveLength(3);
+		// radio, title className
+		expect(radio.childAt(0).prop('className')).toBe(styles.title);
+		// radio, state up label
+		expect(radio.childAt(1).type()).toBe('label');
+		// radio, state up input
+		expect(radio.childAt(1).childAt(0).type()).toBe('input');
+		// radio, state up input, prop name
+		expect(radio.childAt(1).childAt(0).prop('name')).toBe('state');
+		// radio, state up input, prop value
+		expect(radio.childAt(1).childAt(0).prop('value')).toBe('false');
+		// radio, state up input, prop type
+		expect(radio.childAt(1).childAt(0).prop('type')).toBe('radio');
+		expect(radio.childAt(1).childAt(0).prop('onChange')).toBeInstanceOf(Function);
+		// radio, state up input, prop onChange name
+		expect(radio.childAt(1).childAt(0).prop('onChange').name).toBe('bound handleRadioChange');
+		// radio, state up input, prop checked
+		expect(radio.childAt(1).childAt(0).prop('checked')).toBe(false);
+		// radio, state down input
+		expect(radio.childAt(2).childAt(0).type()).toBe('input');
+		// radio, state down input, prop name
+		expect(radio.childAt(2).childAt(0).prop('name')).toBe('state');
+		// radio, state down input, prop value
+		expect(radio.childAt(2).childAt(0).prop('value')).toBe('true');
+		// radio, state down input, prop type
+		expect(radio.childAt(2).childAt(0).prop('type')).toBe('radio');
+		expect(radio.childAt(2).childAt(0).prop('onChange')).toBeInstanceOf(Function);
+		// radio, state down input, prop onChange name
+		expect(radio.childAt(2).childAt(0).prop('onChange').name).toBe('bound handleRadioChange');
+		// radio, state down input, prop checked
+		expect(radio.childAt(2).childAt(0).prop('checked')).toBe(true);
 
 		let footer = wrapper.childAt(2).childAt(1);
 
-		expect(footer.prop('className'), 'footer className').to.be.equal(styles['footer']);
-		expect(footer.children(), '[isAdd = true] footer childs count').to.have.lengthOf(2);
-		expect(
-			footer.childAt(0).prop('className'),
-			'footer, save className'
-		).to.be.equal(styles['save']);
-		expect(
-			footer.childAt(0).prop('onClick'),
-			'footer, save onClick'
-		).to.be.a('function');
-		expect(
-			footer.childAt(0).prop('onClick').name,
-			'footer, save onClick name'
-		).to.be.equal('bound save');
-		expect(
-			footer.childAt(0).text(),
-			'footer, save text'
-		).to.be.equal('Add');
-		expect(
-			footer.childAt(1).prop('className'),
-			'footer, cancel className'
-		).to.be.equal(styles['cancel']);
-		expect(
-			footer.childAt(1).prop('onClick'),
-			'footer, cancel onClick'
-		).to.be.a('function');
-		expect(
-			footer.childAt(1).prop('onClick').name,
-			'footer, cancel onClick name'
-		).to.be.equal('bound close');
+		// footer className
+		expect(footer.prop('className')).toBe(styles.footer);
+		// [isAdd = true] footer childs count
+		expect(footer.children()).toHaveLength(2);
+		// footer, save className
+		expect(footer.childAt(0).prop('className')).toBe(styles.save);
+		expect(footer.childAt(0).prop('onClick')).toBeInstanceOf(Function);
+		// footer, save onClick name
+		expect(footer.childAt(0).prop('onClick').name).toBe('bound save');
+		// footer, save text
+		expect(footer.childAt(0).text()).toBe('Add');
+		// footer, cancel className
+		expect(footer.childAt(1).prop('className')).toBe(styles.cancel);
+		expect(footer.childAt(1).prop('onClick')).toBeInstanceOf(Function);
+		// footer, cancel onClick name
+		expect(footer.childAt(1).prop('onClick').name).toBe('bound close');
 
 		wrapper.setProps({ isStream: false });
 		data.host = 'host_test';
@@ -1203,36 +1030,24 @@ describe('<UpstreamsEditor />', () => {
 		content = wrapper.childAt(2).childAt(0);
 		serversGroup = content.childAt(0);
 
-		expect(
-			serversGroup.children(),
-			'[with data.host, isStream = false, isAdd] serves group elements count'
-		).to.have.lengthOf(3);
-		expect(
-			serversGroup.childAt(0).childAt(1).prop('disabled'),
-			'[with data.host] server address, input prop disabled'
-		).to.be.true;
-		expect(
-			serversGroup.childAt(1).prop('className'),
-			'domain name className'
-		).to.be.equal(styles['form-group']);
-		expect(
-			serversGroup.childAt(1).text(),
-			'domain name text'
-		).to.be.equal('Domain name: host_test');
+		// [with data.host, isStream = false, isAdd] serves group elements count
+		expect(serversGroup.children()).toHaveLength(3);
+		// [with data.host] server address, input prop disabled
+		expect(serversGroup.childAt(0).childAt(1).prop('disabled')).toBe(true);
+		// domain name className
+		expect(serversGroup.childAt(1).prop('className')).toBe(styles['form-group']);
+		// domain name text
+		expect(serversGroup.childAt(1).text()).toBe('Domain name: host_test');
 
 		formsMini = content.childAt(1);
 
-		expect(
-			formsMini.children(),
-			'[isAdd, state.addAsDomain] forms-mini children count'
-		).to.have.lengthOf(4);
+		// [isAdd, state.addAsDomain] forms-mini children count
+		expect(formsMini.children()).toHaveLength(4);
 
 		radio = content.childAt(2);
 
-		expect(
-			radio.children(),
-			'[isStream = false] radio group children count'
-		).to.have.lengthOf(3);
+		// [isStream = false] radio group children count
+		expect(radio.children()).toHaveLength(3);
 
 		wrapper.setProps({ peers: new Map([
 			['test_1', {
@@ -1246,76 +1061,44 @@ describe('<UpstreamsEditor />', () => {
 			errorMessages: ['error_1', 'error_2']
 		});
 
-		expect(
-			wrapper.childAt(0).childAt(0).text(),
-			'[peers.length = 1] title text'
-		).to.be.equal('Edit server test_server_1 "upstream_test"');
+		// [peers.length = 1] title text
+		expect(wrapper.childAt(0).childAt(0).text()).toBe('Edit server test_server_1 "upstream_test"');
 
 		content = wrapper.childAt(2).childAt(0);
 
-		expect(
-			content.children(),
-			'[with errorMessages] content children count'
-		).to.have.lengthOf(4);
+		// [with errorMessages] content children count
+		expect(content.children()).toHaveLength(4);
 
 		serversGroup = content.childAt(0);
 
-		expect(
-			serversGroup.prop('className'),
-			'[isAdd = false, peers.size = 1] server groups className'
-		).to.be.an('undefined');
-		expect(
-			serversGroup.children(),
-			'[with data.host, isStream = false, isAdd = false] serves group elements count'
-		).to.have.lengthOf(1);
-		expect(
-			formsMini.children(),
-			'[isAdd = false, state.addAsDomain] forms-mini children count'
-		).to.have.lengthOf(4);
-		expect(
-			content.childAt(3).prop('className'),
-			'error messages className'
-		).to.be.equal(styles['error']);
-		expect(
-			content.childAt(3).childAt(0).prop('className'),
-			'error messages, close className'
-		).to.be.equal(styles['error-close']);
-		expect(
-			content.childAt(3).childAt(0).prop('onClick'),
-			'error messages, close onClick'
-		).to.be.a('function');
-		expect(
-			content.childAt(3).childAt(0).prop('onClick').name,
-			'error messages, close onClick name'
-		).to.be.equal('bound closeErrors');
-		expect(
-			content.childAt(3).childAt(1).text(),
-			'error messages, error 1'
-		).to.be.equal('error_1');
-		expect(
-			content.childAt(3).childAt(2).text(),
-			'error messages, error 2'
-		).to.be.equal('error_2');
+		expect(serversGroup.prop('className')).toBeUndefined();
+		// [with data.host, isStream = false, isAdd = false] serves group elements count
+		expect(serversGroup.children()).toHaveLength(1);
+		// [isAdd = false, state.addAsDomain] forms-mini children count
+		expect(formsMini.children()).toHaveLength(4);
+		// error messages className
+		expect(content.childAt(3).prop('className')).toBe(styles.error);
+		// error messages, close className
+		expect(content.childAt(3).childAt(0).prop('className')).toBe(styles['error-close']);
+		expect(content.childAt(3).childAt(0).prop('onClick')).toBeInstanceOf(Function);
+		// error messages, close onClick name
+		expect(content.childAt(3).childAt(0).prop('onClick').name).toBe('bound closeErrors');
+		// error messages, error 1
+		expect(content.childAt(3).childAt(1).text()).toBe('error_1');
+		// error messages, error 2
+		expect(content.childAt(3).childAt(2).text()).toBe('error_2');
 
 		footer = wrapper.childAt(2).childAt(1);
 
-		expect(footer.children(), '[isAdd = false] footer childs count').to.have.lengthOf(3);
-		expect(
-			footer.childAt(0).prop('className'),
-			'footer, remove className'
-		).to.be.equal(styles['remove']);
-		expect(
-			footer.childAt(0).prop('onClick'),
-			'footer, remove onClick'
-		).to.be.a('function');
-		expect(
-			footer.childAt(0).prop('onClick').name,
-			'footer, remove onClick name'
-		).to.be.equal('bound remove');
-		expect(
-			footer.childAt(1).text(),
-			'footer, save text'
-		).to.be.equal('Save');
+		// [isAdd = false] footer childs count
+		expect(footer.children()).toHaveLength(3);
+		// footer, remove className
+		expect(footer.childAt(0).prop('className')).toBe(styles.remove);
+		expect(footer.childAt(0).prop('onClick')).toBeInstanceOf(Function);
+		// footer, remove onClick name
+		expect(footer.childAt(0).prop('onClick').name).toBe('bound remove');
+		// footer, save text
+		expect(footer.childAt(1).text()).toBe('Save');
 
 		wrapper.setProps({ peers: new Map([
 			['test_1', {
@@ -1327,68 +1110,43 @@ describe('<UpstreamsEditor />', () => {
 			}]
 		]) });
 
-		expect(
-			wrapper.childAt(0).childAt(0).text(),
-			'[peers.length = 1] title text'
-		).to.be.equal('Edit servers "upstream_test"');
+		// [peers.length = 1] title text
+		expect(wrapper.childAt(0).childAt(0).text()).toBe('Edit servers "upstream_test"');
 
 		content = wrapper.childAt(2).childAt(0);
 		serversGroup = content.childAt(0);
 
-		expect(
-			serversGroup.prop('className'),
-			'[isAdd = false, peers.size = 2] server groups className'
-		).to.be.equal(styles['form-group']);
-		expect(
-			serversGroup.childAt(0).type(),
-			'servers list, child 1'
-		).to.be.equal('label');
-		expect(
-			serversGroup.childAt(1).type(),
-			'servers list, child 2'
-		).to.be.equal('ul');
-		expect(
-			serversGroup.childAt(1).prop('className'),
-			'servers list, child 2 className'
-		).to.be.equal(styles['servers-list']);
-		expect(
-			serversGroup.childAt(1).children(),
-			'servers list, child 2, childs size'
-		).to.have.lengthOf(2);
-		expect(
-			serversGroup.childAt(1).childAt(0).type(),
-			'servers list, child 2, child 1'
-		).to.be.equal('li');
-		expect(
-			serversGroup.childAt(1).childAt(0).text(),
-			'servers list, child 2, child 1 text'
-		).to.be.equal('test_server_1');
-		expect(
-			serversGroup.childAt(1).childAt(1).type(),
-			'servers list, child 2, child 2'
-		).to.be.equal('li');
-		expect(
-			serversGroup.childAt(1).childAt(1).text(),
-			'servers list, child 2, child 2 text'
-		).to.be.equal('test_server_2');
+		// [isAdd = false, peers.size = 2] server groups className
+		expect(serversGroup.prop('className')).toBe(styles['form-group']);
+		// servers list, child 1
+		expect(serversGroup.childAt(0).type()).toBe('label');
+		// servers list, child 2
+		expect(serversGroup.childAt(1).type()).toBe('ul');
+		// servers list, child 2 className
+		expect(serversGroup.childAt(1).prop('className')).toBe(styles['servers-list']);
+		// servers list, child 2, childs size
+		expect(serversGroup.childAt(1).children()).toHaveLength(2);
+		// servers list, child 2, child 1
+		expect(serversGroup.childAt(1).childAt(0).type()).toBe('li');
+		// servers list, child 2, child 1 text
+		expect(serversGroup.childAt(1).childAt(0).text()).toBe('test_server_1');
+		// servers list, child 2, child 2
+		expect(serversGroup.childAt(1).childAt(1).type()).toBe('li');
+		// servers list, child 2, child 2 text
+		expect(serversGroup.childAt(1).childAt(1).text()).toBe('test_server_2');
 
 		wrapper.setState({ loading: true });
 
 		content = wrapper.childAt(2);
 
-		expect(
-			content.prop('className'),
-			'[state.loading = true] content className'
-		).to.be.equal(styles['content']);
-		expect(content.childAt(0).name(), 'Loader').to.be.equal('Loader');
-		expect(
-			content.childAt(0).prop('className'),
-			'Loader className'
-		).to.be.equal(styles['loader']);
-		expect(
-			content.childAt(0).prop('gray'),
-			'Loader prop gray'
-		).to.be.true;
+		// [state.loading = true] content className
+		expect(content.prop('className')).toBe(styles.content);
+		// Loader
+		expect(content.childAt(0).name()).toBe('Loader');
+		// Loader className
+		expect(content.childAt(0).prop('className')).toBe(styles.loader);
+		// Loader prop gray
+		expect(content.childAt(0).prop('gray')).toBe(true);
 
 		wrapper.setState({
 			loading: false,
@@ -1398,33 +1156,20 @@ describe('<UpstreamsEditor />', () => {
 
 		content = wrapper.childAt(2).childAt(0);
 
-		expect(
-			content.prop('className'),
-			'[state.success = true] content className'
-		).to.be.equal(styles['content']);
-		expect(
-			content.text(),
-			'[state.success = true] content text'
-		).to.be.equal('success message test');
+		// [state.success = true] content className
+		expect(content.prop('className')).toBe(styles.content);
+		// [state.success = true] content text
+		expect(content.text()).toBe('success message test');
 
 		footer = wrapper.childAt(2).childAt(1);
 
-		expect(
-			footer.prop('className'),
-			'[state.success = true] footer'
-		).to.be.equal(styles['footer']);
-		expect(
-			footer.childAt(0).prop('className'),
-			'[state.success = true] footer, save className'
-		).to.be.equal(styles['save']);
-		expect(
-			footer.childAt(0).prop('onClick'),
-			'[state.success = true] footer, save onClick'
-		).to.be.a('function');
-		expect(
-			footer.childAt(0).prop('onClick').name,
-			'[state.success = true] footer, save onClick'
-		).to.be.equal('bound close');
+		// [state.success = true] footer
+		expect(footer.prop('className')).toBe(styles.footer);
+		// [state.success = true] footer, save className
+		expect(footer.childAt(0).prop('className')).toBe(styles.save);
+		expect(footer.childAt(0).prop('onClick')).toBeInstanceOf(Function);
+		// [state.success = true] footer, save onClick
+		expect(footer.childAt(0).prop('onClick').name).toBe('bound close');
 
 		wrapper.unmount();
 	});

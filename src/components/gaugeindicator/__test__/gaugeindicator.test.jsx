@@ -11,7 +11,6 @@
 /* eslint no-param-reassign: "off" */
 
 import React from 'react';
-import { spy } from 'sinon';
 import { mount } from 'enzyme';
 import GaugeIndicator, { WIDTH, HEIGHT, LINE_WIDTH, BG_COLOR, YELLOW_COLOR, GREEN_COLOR } from '../gaugeindicator.jsx';
 import styles from '../style.css';
@@ -19,63 +18,57 @@ import styles from '../style.css';
 describe('<GaugeIndicator />', () => {
 	const percentage = '50';
 	const percentageNew = '60';
-	let wrapper, instance;
+	let wrapper; let
+		instance;
 
 	beforeEach(() => {
 		wrapper = mount(
-			<GaugeIndicator percentage={ percentage } />
+			<GaugeIndicator percentage={percentage} />
 		);
 		instance = wrapper.instance();
 	});
 
 	it('componentDidMount()', () => {
-		const initCanvasSpy = spy(instance, 'initCanvas');
-		const updateCanvasSpy = spy(instance, 'updateCanvas');
+		const initCanvasSpy = jest.spyOn(instance, 'initCanvas').mockClear();
+		const updateCanvasSpy = jest.spyOn(instance, 'updateCanvas').mockClear();
 
 		instance.componentDidMount();
 
-		assert(initCanvasSpy.calledOnce, '"initCanvas" should be called');
-		assert(updateCanvasSpy.calledOnce, '"updateCanvas" should be called');
-		assert(updateCanvasSpy.calledWith(percentage), '"updateCanvas" was called with wrong arguments');
+		expect(initCanvasSpy).toHaveBeenCalled();
+		expect(updateCanvasSpy).toHaveBeenCalled();
+		expect(updateCanvasSpy).toHaveBeenCalledWith(percentage);
 	});
 
 	it('shouldComponentUpdate()', () => {
-		assert.isFalse(
-			instance.shouldComponentUpdate({ percentage: percentage }),
-			'Shouldn\'t be updated with same percentage value'
-		);
-		assert(
-			instance.shouldComponentUpdate({ percentage: percentageNew }),
-			'Should be updated with new percentage'
-		);
+		expect(instance.shouldComponentUpdate({ percentage })).toBe(false);
+		expect(instance.shouldComponentUpdate({ percentage: percentageNew })).toBeTruthy();
 	});
 
 	it('componentWillUpdate()', () => {
-		const updateCanvasSpy = spy(instance, 'updateCanvas');
+		const updateCanvasSpy = jest.spyOn(instance, 'updateCanvas').mockClear();
 
-		instance.componentWillUpdate({ percentage: percentage });
+		instance.componentWillUpdate({ percentage });
 
-		assert(updateCanvasSpy.calledOnce, '"updateCanvas" should be called');
-		assert(updateCanvasSpy.calledWith(percentage), '"updateCanvas" was called with wrong arguments');
+		expect(updateCanvasSpy).toHaveBeenCalled();
+		expect(updateCanvasSpy).toHaveBeenCalledWith(percentage);
 	});
 
 	it('initCanvas()', () => {
 		const { canvas } = instance;
 
-		spy(CanvasRenderingContext2D.prototype, 'scale');
+		jest.spyOn(CanvasRenderingContext2D.prototype, 'scale').mockClear();
 
 		instance.initCanvas();
 
-		assert(canvas.width === WIDTH * window.devicePixelRatio, 'Bad canvas width');
-		assert(canvas.height === HEIGHT * window.devicePixelRatio, 'Bad canvas height');
-		assert(canvas.style.width === `${ WIDTH }px`, 'Bad canvas style width');
-		assert(canvas.style.height === `${ HEIGHT }px`, 'Bad canvas style height');
-		assert(
-			canvas.getContext('2d').scale.calledWith(window.devicePixelRatio, window.devicePixelRatio),
-			'Bad canvas scale'
-		);
+		expect(canvas.width === WIDTH * window.devicePixelRatio).toBeTruthy();
+		expect(canvas.height === HEIGHT * window.devicePixelRatio).toBeTruthy();
+		expect(canvas.style.width === `${ WIDTH }px`).toBeTruthy();
+		expect(canvas.style.height === `${ HEIGHT }px`).toBeTruthy();
+		expect(
+			canvas.getContext('2d').scale
+		).toHaveBeenCalledWith(window.devicePixelRatio, window.devicePixelRatio);
 
-		canvas.getContext('2d').scale.restore();
+		canvas.getContext('2d').scale.mockRestore();
 	});
 
 	describe('updateCanvas()', () => {
@@ -98,7 +91,7 @@ describe('<GaugeIndicator />', () => {
 
 					get: (target, name) => {
 						if (!target[name]) {
-							target[name] = spy();
+							target[name] = jest.fn();
 						}
 
 						return target[name];
@@ -109,63 +102,63 @@ describe('<GaugeIndicator />', () => {
 		it('Draws', () => {
 			instance.updateCanvas(percentage);
 
-			assert(spyContext.clearRect.calledWith(0, 0, WIDTH, HEIGHT), 'Cleared bad square');
-			assert(spyContext.lineWidth[0] === LINE_WIDTH, 'Bad line width setted');
+			expect(spyContext.clearRect).toHaveBeenCalledWith(0, 0, WIDTH, HEIGHT);
+			expect(spyContext.lineWidth[0] === LINE_WIDTH).toBeTruthy();
 
-			assert(spyContext.beginPath.calledTwice, 'Two draw cycles should be done');
+			expect(spyContext.beginPath).toHaveBeenCalledTimes(2);
 
-			assert(spyContext.arc.getCall(0).calledWith(
+			expect(spyContext.arc).toHaveBeenCalledWith(
 				WIDTH / 2,
 				HEIGHT,
 				WIDTH / 2 - LINE_WIDTH / 2,
 				Math.PI,
 				2 * Math.PI,
 				false
-			), 'Bad first draw operation');
+			);
 
-			assert(spyContext.arc.getCall(1).calledWith(
+			expect(spyContext.arc).toHaveBeenLastCalledWith(
 				WIDTH / 2,
 				HEIGHT,
 				WIDTH / 2 - LINE_WIDTH / 2,
 				Math.PI,
 				Math.PI * (1 + percentage / 100),
 				false
-			), 'Bad second draw operation');
+			);
 		});
 
 		it('Uses proper colors', () => {
 			instance.updateCanvas('39');
 
-			assert(spyContext.strokeStyle[0] === BG_COLOR);
-			assert(spyContext.strokeStyle[1] === YELLOW_COLOR);
+			expect(spyContext.strokeStyle[0] === BG_COLOR).toBeTruthy();
+			expect(spyContext.strokeStyle[1] === YELLOW_COLOR).toBeTruthy();
 
 			spyContext.strokeStyle = [];
 
 			instance.updateCanvas('40');
 
-			assert(spyContext.strokeStyle[1] === GREEN_COLOR);
+			expect(spyContext.strokeStyle[1] === GREEN_COLOR).toBeTruthy();
 		});
 	});
 
 	describe('render()', () => {
 		it('Has expected structure', () => {
-			assert(wrapper.getDOMNode().className === styles['gaugeindicator'], 'Wrapper has unexpected className');
+			expect(wrapper.getDOMNode().className === styles.gaugeindicator).toBeTruthy();
 
-			assert(instance.canvas instanceof HTMLCanvasElement, 'Bad canvas instance');
-			assert(instance.canvas.className === styles['canvas'], 'Canvas has unexpected className');
+			expect(instance.canvas instanceof HTMLCanvasElement).toBeTruthy();
+			expect(instance.canvas.className === styles.canvas).toBeTruthy();
 
-			const value = wrapper.find(`.${ styles['value'] }`);
+			const value = wrapper.find(`.${ styles.value }`);
 
-			assert(value.length === 1, 'Can\'t find percentage value element');
-			assert(value.text() === `${ percentage }%`, 'Percentage value rendered badly');
+			expect(value.length === 1).toBeTruthy();
+			expect(value.text() === `${ percentage }%`).toBeTruthy();
 		});
 
 		it('Updates properly', () => {
 			wrapper.setProps({ percentage: percentageNew });
-			assert(wrapper.find(`.${ styles['value'] }`).text() === `${ percentageNew }%`, 'Percentage value should be updated');
+			expect(wrapper.find(`.${ styles.value }`).text() === `${ percentageNew }%`).toBeTruthy();
 
 			wrapper.setProps({ percentage: null });
-			assert(wrapper.find(`.${ styles['value'] }`).length === 0, 'Percentage element should not be presented when value is "null"');
+			expect(wrapper.find(`.${ styles.value }`).length === 0).toBeTruthy();
 		});
 	});
 });

@@ -7,37 +7,45 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy, stub } from 'sinon';
 import UpdatingControl from '../updating-control.jsx';
 import styles from '../style.css';
 
 describe('<UpdatingControl />', () => {
 	it('constructor()', () => {
-		const toggleBindSpy = spy(UpdatingControl.prototype.toggle, 'bind');
-		const playBindSpy = spy(UpdatingControl.prototype.play, 'bind');
-		const pauseBindSpy = spy(UpdatingControl.prototype.pause, 'bind');
-		const updateBindSpy = spy(UpdatingControl.prototype.update, 'bind');
+		const toggleBindSpy = jest.spyOn(UpdatingControl.prototype.toggle, 'bind').mockClear();
+		const playBindSpy = jest.spyOn(UpdatingControl.prototype.play, 'bind').mockClear();
+		const pauseBindSpy = jest.spyOn(UpdatingControl.prototype.pause, 'bind').mockClear();
+		const updateBindSpy = jest.spyOn(UpdatingControl.prototype.update, 'bind').mockClear();
 		const wrapper = shallow(
 			<UpdatingControl />
 		);
 
-		expect(wrapper.state(), 'this.state').to.be.deep.equal({
+		// this.state
+		expect(wrapper.state()).toEqual({
 			expanded: false,
 			state: true
 		});
-		expect(toggleBindSpy.calledOnce, 'this.toggle.bind called').to.be.true;
-		expect(toggleBindSpy.args[0][0] instanceof UpdatingControl, 'this.toggle.bind call arg').to.be.true;
-		expect(playBindSpy.calledOnce, 'this.play.bind called').to.be.true;
-		expect(playBindSpy.args[0][0] instanceof UpdatingControl, 'this.play.bind call arg').to.be.true;
-		expect(pauseBindSpy.calledOnce, 'this.pause.bind called').to.be.true;
-		expect(pauseBindSpy.args[0][0] instanceof UpdatingControl, 'this.pause.bind call arg').to.be.true;
-		expect(updateBindSpy.calledOnce, 'this.update.bind called').to.be.true;
-		expect(updateBindSpy.args[0][0] instanceof UpdatingControl, 'this.update.bind call arg').to.be.true;
+		// this.toggle.bind called
+		expect(toggleBindSpy).toHaveBeenCalledTimes(1);
+		// this.toggle.bind call arg
+		expect(toggleBindSpy.mock.calls[0][0] instanceof UpdatingControl).toBe(true);
+		// this.play.bind called
+		expect(playBindSpy).toHaveBeenCalledTimes(1);
+		// this.play.bind call arg
+		expect(playBindSpy.mock.calls[0][0] instanceof UpdatingControl).toBe(true);
+		// this.pause.bind called
+		expect(pauseBindSpy).toHaveBeenCalledTimes(1);
+		// this.pause.bind call arg
+		expect(pauseBindSpy.mock.calls[0][0] instanceof UpdatingControl).toBe(true);
+		// this.update.bind called
+		expect(updateBindSpy).toHaveBeenCalledTimes(1);
+		// this.update.bind call arg
+		expect(updateBindSpy.mock.calls[0][0] instanceof UpdatingControl).toBe(true);
 
-		updateBindSpy.restore();
-		pauseBindSpy.restore();
-		playBindSpy.restore();
-		toggleBindSpy.restore();
+		updateBindSpy.mockRestore();
+		pauseBindSpy.mockRestore();
+		playBindSpy.mockRestore();
+		toggleBindSpy.mockRestore();
 	});
 
 	it('toggle()', () => {
@@ -45,89 +53,103 @@ describe('<UpdatingControl />', () => {
 			<UpdatingControl />
 		);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.toggle();
 
-		expect(setStateSpy.calledOnce, '[from false] this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], '[from false] this.setState call args').to.be.deep.equal({
+		// [from false] this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// [from false] this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			expanded: true
 		});
 
 		wrapper.update();
-		setStateSpy.resetHistory();
+		setStateSpy.mockClear();
 		instance.toggle();
 
-		expect(setStateSpy.calledOnce, '[from true] this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], '[from true] this.setState call args').to.be.deep.equal({
+		// [from true] this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// [from true] this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			expanded: false
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 	});
 
 	it('play()', () => {
-		const playSpy = spy();
+		const playSpy = jest.fn();
 		const wrapper = shallow(
 			<UpdatingControl
-				play={ playSpy }
+				play={playSpy}
 			/>
 		);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.play();
 
-		expect(playSpy.calledOnce, 'props.play called').to.be.true;
-		expect(setStateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// props.play called
+		expect(playSpy).toHaveBeenCalledTimes(1);
+		// this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			state: true
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 	});
 
 	it('pause()', () => {
-		const pauseSpy = spy();
+		const pauseSpy = jest.fn();
 		const wrapper = shallow(
 			<UpdatingControl
-				pause={ pauseSpy }
+				pause={pauseSpy}
 			/>
 		);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.pause();
 
-		expect(pauseSpy.calledOnce, 'props.pause called').to.be.true;
-		expect(setStateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// props.pause called
+		expect(pauseSpy).toHaveBeenCalledTimes(1);
+		// this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			state: false
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 	});
 
 	it('update()', () => {
-		const updateSpy = spy();
+		const updateSpy = jest.fn();
 		const wrapper = shallow(
 			<UpdatingControl
-				update={ updateSpy }
+				update={updateSpy}
 			/>
 		);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.update();
 
-		expect(updateSpy.calledOnce, 'props.update called').to.be.true;
-		expect(updateSpy.args[0][0], 'props.update call arg').to.be.true;
-		expect(setStateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call args').to.be.deep.equal({
+		// props.update called
+		expect(updateSpy).toHaveBeenCalledTimes(1);
+		// props.update call arg
+		expect(updateSpy.mock.calls[0][0]).toBe(true);
+		// this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// this.setState call args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			state: true
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 	});
 
 	it('render()', () => {
@@ -135,67 +157,35 @@ describe('<UpdatingControl />', () => {
 			<UpdatingControl />
 		);
 
-		expect(
-			wrapper.prop('className'),
-			'[expanded = false] wrapper className'
-		).to.be.equal(styles['updating-control']);
-		expect(
-			wrapper.childAt(0).prop('className'),
-			'toggle className'
-		).to.be.equal(styles['toggle']);
-		expect(
-			wrapper.childAt(0).prop('onClick'),
-			'toggle onClick'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(0).prop('onClick').name,
-			'toggle onClick name'
-		).to.be.equal('bound toggle');
-		expect(
-			wrapper.childAt(1).prop('className'),
-			'pause className'
-		).to.be.equal(styles['pause']);
-		expect(
-			wrapper.childAt(1).prop('onClick'),
-			'pause onClick'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(1).prop('onClick').name,
-			'pause onClick name'
-		).to.be.equal('bound pause');
-		expect(
-			wrapper.childAt(2).prop('className'),
-			'update className'
-		).to.be.equal(styles['update']);
-		expect(
-			wrapper.childAt(2).prop('onClick'),
-			'update onClick'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(2).prop('onClick').name,
-			'update onClick name'
-		).to.be.equal('bound update');
+		// [expanded = false] wrapper className
+		expect(wrapper.prop('className')).toBe(styles['updating-control']);
+		// toggle className
+		expect(wrapper.childAt(0).prop('className')).toBe(styles.toggle);
+		expect(wrapper.childAt(0).prop('onClick')).toBeInstanceOf(Function);
+		// toggle onClick name
+		expect(wrapper.childAt(0).prop('onClick').name).toBe('bound toggle');
+		// pause className
+		expect(wrapper.childAt(1).prop('className')).toBe(styles.pause);
+		expect(wrapper.childAt(1).prop('onClick')).toBeInstanceOf(Function);
+		// pause onClick name
+		expect(wrapper.childAt(1).prop('onClick').name).toBe('bound pause');
+		// update className
+		expect(wrapper.childAt(2).prop('className')).toBe(styles.update);
+		expect(wrapper.childAt(2).prop('onClick')).toBeInstanceOf(Function);
+		// update onClick name
+		expect(wrapper.childAt(2).prop('onClick').name).toBe('bound update');
 
 		wrapper.setState({
 			expanded: true,
 			state: false
 		});
 
-		expect(
-			wrapper.prop('className'),
-			'[expanded = true] wrapper className'
-		).to.be.equal(styles['expanded-control']);
-		expect(
-			wrapper.childAt(1).prop('className'),
-			'play className'
-		).to.be.equal(styles['play']);
-		expect(
-			wrapper.childAt(1).prop('onClick'),
-			'play onClick'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(1).prop('onClick').name,
-			'play onClick name'
-		).to.be.equal('bound play');
+		// [expanded = true] wrapper className
+		expect(wrapper.prop('className')).toBe(styles['expanded-control']);
+		// play className
+		expect(wrapper.childAt(1).prop('className')).toBe(styles.play);
+		expect(wrapper.childAt(1).prop('onClick')).toBeInstanceOf(Function);
+		// play onClick name
+		expect(wrapper.childAt(1).prop('onClick').name).toBe('bound play');
 	});
 });

@@ -32,7 +32,11 @@ const api = new Proxy({}, {
 
 export default api;
 
+/* TODO Circular dependency! Move UpstreamsApi to other module, bacause UpstreamsApi use default api from this module.
+ * Jest doesnt work if module has circular dependencies */
 export const httpUpstreamsApi = new UpstreamsApi('http');
+/* TODO Circular dependency! Move UpstreamsApi to other module, bacause UpstreamsApi use default api from this module.
+ * Jest doesnt work if module has circular dependencies */
 export const streamUpstreamsApi = new UpstreamsApi('stream');
 
 export let isAngieProFlag = false;

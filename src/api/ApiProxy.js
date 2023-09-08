@@ -29,7 +29,8 @@ export default class ApiProxy {
 
 	getUrl(searchParams = {}) {
 		const urlSearchParams = new URLSearchParams(searchParams);
-		if (urlSearchParams.size) {
+		const size = Array.from(urlSearchParams).length;
+		if (size) {
 			return `${this.apiPrefix}/${this.toString()}?${urlSearchParams}`;
 		}
 		// TODO: use toString() instead

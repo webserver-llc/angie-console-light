@@ -7,26 +7,28 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy } from 'sinon';
 import NumberInput from '../numberinput.jsx';
 
 describe('<NumberInput />', () => {
 	it('onKeyPress()', () => {
 		const evt = {
 			charCode: 0,
-			preventDefault: spy()
+			preventDefault: jest.fn()
 		};
 
 		NumberInput.onKeyPress(evt);
-		expect(evt.preventDefault.notCalled, 'evt.preventDefault not called [charCode = 0]').to.be.true;
+		// evt.preventDefault not called [charCode = 0]
+		expect(evt.preventDefault).not.toHaveBeenCalled();
 
 		evt.charCode = 53;
 		NumberInput.onKeyPress(evt);
-		expect(evt.preventDefault.notCalled, 'evt.preventDefault not called ["5" char]').to.be.true;
+		// evt.preventDefault not called ["5" char]
+		expect(evt.preventDefault).not.toHaveBeenCalled();
 
 		evt.charCode = 100;
 		NumberInput.onKeyPress(evt);
-		expect(evt.preventDefault.calledOnce, 'evt.preventDefault called once ["d" char]').to.be.true;
+		// evt.preventDefault called once ["d" char]
+		expect(evt.preventDefault).toHaveReturnedTimes(1);
 	});
 
 	it('render()', () => {
@@ -34,17 +36,21 @@ describe('<NumberInput />', () => {
 		const prop_2 = '123qwe';
 		const wrapper = shallow(
 			<NumberInput
-				prop_1={ prop_1 }
-				prop_2={ prop_2 }
+				prop_1={prop_1}
+				prop_2={prop_2}
 			/>
 		);
 		const rootEl = wrapper.getElement();
 
-		expect(rootEl.type, 'check html tag').to.be.equal('input');
-		expect(rootEl.props.children, 'check children').to.be.an('undefined');
-		expect(rootEl.props.onKeyPress.name, '"onKeyPress" prop').to.be.equal('onKeyPress');
-		expect(rootEl.props.prop_1, '"prop_1" prop').to.be.equal(prop_1);
-		expect(rootEl.props.prop_2, '"prop_2" prop').to.be.equal(prop_2);
+		// check html tag
+		expect(rootEl.type).toBe('input');
+		expect(rootEl.props.children).toBeUndefined();
+		// "onKeyPress" prop
+		expect(rootEl.props.onKeyPress.name).toBe('onKeyPress');
+		// "prop_1" prop
+		expect(rootEl.props.prop_1).toBe(prop_1);
+		// "prop_2" prop
+		expect(rootEl.props.prop_2).toBe(prop_2);
 
 		wrapper.unmount();
 	});

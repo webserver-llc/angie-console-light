@@ -5,18 +5,13 @@
  *
  */
 
-import { spy, stub } from 'sinon';
-import {
-	STORE,
-	handleDataUpdate,
-	get
-} from '../store.js';
+import { STORE, handleDataUpdate, get } from '../store.js';
 
 describe('Datastore Store', () => {
 	it('handleDataUpdate()', () => {
-		stub(Date, 'now').callsFake(() => 'date_now_test');
+		jest.spyOn(Date, 'now').mockClear().mockImplementation(() => 'date_now_test');
 
-		const processorSpy = spy(() => ({
+		const processorSpy = jest.fn(() => ({
 			handledByProcessor: true
 		}));
 
@@ -29,18 +24,24 @@ describe('Datastore Store', () => {
 			'timeStart_test'
 		);
 
-		expect(processorSpy.calledOnce, 'processor fn called').to.be.true;
-		expect(processorSpy.args[0][0], 'processor fn call arg 1').to.be.equal('data_test');
-		expect(processorSpy.args[0][1], 'processor fn call arg 2').to.be.a('null');
-		expect(processorSpy.args[0][2], 'processor fn call arg 3').to.be.deep.equal(STORE);
-		expect(processorSpy.args[0][3], 'processor fn call arg 4').to.be.equal('timeStart_test');
-		expect(STORE.test_1, 'STORE.test_1').to.be.deep.equal({
+		// processor fn called
+		expect(processorSpy).toHaveBeenCalled();
+		// processor fn call arg 1
+		expect(processorSpy.mock.calls[0][0]).toBe('data_test');
+		expect(processorSpy.mock.calls[0][1]).toBeNull();
+		// processor fn call arg 3
+		expect(processorSpy.mock.calls[0][2]).toEqual(STORE);
+		// processor fn call arg 4
+		expect(processorSpy.mock.calls[0][3]).toBe('timeStart_test');
+		// STORE.test_1
+		expect(STORE.test_1).toEqual({
 			test_2: {
 				handledByProcessor: true,
 				lastUpdate: 'date_now_test'
 			}
 		});
-		expect(Date.now.calledOnce, 'Date.now called').to.be.true;
+		// Date.now called
+		expect(Date.now).toHaveBeenCalled();
 
 		handleDataUpdate(
 			{
@@ -51,13 +52,14 @@ describe('Datastore Store', () => {
 			'timeStart_test'
 		);
 
-		expect(STORE.test_1, 'STORE.test_1').to.be.deep.equal({
+		// STORE.test_1
+		expect(STORE.test_1).toEqual({
 			test_2: null
 		});
 
 		delete STORE.test_1;
 
-		Date.now.restore();
+		Date.now.mockRestore();
 	});
 
 	it('get()', () => {
@@ -67,12 +69,13 @@ describe('Datastore Store', () => {
 			}
 		};
 
-		let result = get([
+		const result = get([
 			{ path: ['test_1', 'test_2', 'test_3'] },
 			{ path: ['another_test_1', 'another_test_2'] }
 		]);
 
-		expect(result, 'return value').to.be.deep.equal({
+		// return value
+		expect(result).toEqual({
 			test_3: 'test_3_value',
 			another_test_2: null
 		});

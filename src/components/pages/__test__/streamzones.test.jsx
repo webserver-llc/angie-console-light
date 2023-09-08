@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { stub } from 'sinon';
 import { StreamZones } from '../streamzones.jsx';
 import styles from '../../table/style.css';
 import utils from '../../../utils';
@@ -18,22 +17,26 @@ describe('<StreamZones Page />', () => {
 			const limit_conns = 'test_data_for_limit_conns';
 			const wrapper = shallow(<StreamZones data={{ server_zones: [] }} />);
 
-			expect(wrapper.find(`.${ styles['table'] }`).length, 'table container').to.be.equal(1);
-			expect(wrapper.find('LimitConn').length, 'LimitConn length').to.be.equal(0);
+			// table container
+			expect(wrapper.find(`.${ styles.table }`).length).toBe(1);
+			// LimitConn length
+			expect(wrapper.find('LimitConn').length).toBe(0);
 
 			wrapper.setProps({ data: {
 				server_zones: [],
 				limit_conns
 			} });
 
-			expect(wrapper.find('LimitConn').length, 'LimitConn length').to.be.equal(1);
-			expect(wrapper.find('LimitConn').prop('data'), 'LimitConn "data" prop').to.be.equal(limit_conns);
+			// LimitConn length
+			expect(wrapper.find('LimitConn').length).toBe(1);
+			// LimitConn "data" prop
+			expect(wrapper.find('LimitConn').prop('data')).toBe(limit_conns);
 
 			wrapper.unmount();
 		});
 
 		it('zones row', () => {
-			stub(utils, 'formatReadableBytes').callsFake(a => a);
+			jest.spyOn(utils, 'formatReadableBytes').mockClear().mockImplementation(a => a);
 
 			const server_zones = new Map([
 				['test', {
@@ -66,72 +69,74 @@ describe('<StreamZones Page />', () => {
 			const rows = wrapper.find('tbody tr');
 			let cells = rows.at(0).find('td');
 
-			expect(cells.length, 'row 1, cells length').to.be.equal(16);
+			// row 1, cells length
+			expect(cells.length).toBe(16);
 
 			let cell = cells.at(0);
 
-			expect(cell.prop('className'), 'row 1, cell 1, className').to.be.equal(
-				`${ styles['left-align'] } ${ styles['bold'] } ${ styles['bdr'] }`
-			);
-			expect(cell.text(), 'row 1, cell 1, text').to.be.equal('test');
-			expect(cells.at(1).text(), 'row 1, cell 2, text').to.be.equal('100');
-			expect(cells.at(2).text(), 'row 1, cell 3, text').to.be.equal('23');
+			// row 1, cell 1, className
+			expect(cell.prop('className')).toBe(`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`);
+			// row 1, cell 1, text
+			expect(cell.text()).toBe('test');
+			// row 1, cell 2, text
+			expect(cells.at(1).text()).toBe('100');
+			// row 1, cell 3, text
+			expect(cells.at(2).text()).toBe('23');
 			cell = cells.at(3);
-			expect(cell.prop('className'), 'row 1, cell 4, className').to.be.equal(
-				styles['bdr']
-			);
-			expect(cell.text(), 'row 1, cell 4, text').to.be.equal('34');
-			expect(cells.at(4).text(), 'row 1, cell 5, text').to.be.equal('83');
+			// row 1, cell 4, className
+			expect(cell.prop('className')).toBe(styles.bdr);
+			// row 1, cell 4, text
+			expect(cell.text()).toBe('34');
+			// row 1, cell 5, text
+			expect(cells.at(4).text()).toBe('83');
 			cell = cells.at(5);
-			expect(cell.prop('className'), 'row 1, cell 6, className').to.be.equal(
-				styles['flash']
-			);
-			expect(cell.text(), 'row 1, cell 6, text').to.be.equal('2');
+			// row 1, cell 6, className
+			expect(cell.prop('className')).toBe(styles.flash);
+			// row 1, cell 6, text
+			expect(cell.text()).toBe('2');
 			cell = cells.at(6);
-			expect(cell.prop('className'), 'row 1, cell 7, className').to.be.equal(
-				styles['flash']
-			);
-			expect(cell.text(), 'row 1, cell 7, text').to.be.equal('1');
+			// row 1, cell 7, className
+			expect(cell.prop('className')).toBe(styles.flash);
+			// row 1, cell 7, text
+			expect(cell.text()).toBe('1');
 			cell = cells.at(7);
-			expect(cell.prop('className'), 'row 1, cell 8, className').to.be.equal(
-				styles['bdr']
-			);
-			expect(cell.text(), 'row 1, cell 8, text').to.be.equal('86');
+			// row 1, cell 8, className
+			expect(cell.prop('className')).toBe(styles.bdr);
+			// row 1, cell 8, text
+			expect(cell.text()).toBe('86');
 			cell = cells.at(8);
-			expect(cell.prop('className'), 'row 1, cell 9, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 1, cell 9, text').to.be.equal('333');
+			// row 1, cell 9, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 1, cell 9, text
+			expect(cell.text()).toBe('333');
 			cell = cells.at(9);
-			expect(cell.prop('className'), 'row 1, cell 10, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 1, cell 10, text').to.be.equal('0');
+			// row 1, cell 10, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 1, cell 10, text
+			expect(cell.text()).toBe('0');
 			cell = cells.at(10);
-			expect(cell.prop('className'), 'row 1, cell 11, className').to.be.equal(
-				styles['px60']
-			);
-			expect(cell.text(), 'row 1, cell 11, text').to.be.equal('950');
+			// row 1, cell 11, className
+			expect(cell.prop('className')).toBe(styles.px60);
+			// row 1, cell 11, text
+			expect(cell.text()).toBe('950');
 			cell = cells.at(11);
-			expect(cell.prop('className'), 'row 1, cell 12, className').to.be.equal(
-				`${ styles['px60'] } ${ styles['bdr'] }`
-			);
-			expect(cell.text(), 'row 1, cell 12, text').to.be.equal('3');
+			// row 1, cell 12, className
+			expect(cell.prop('className')).toBe(`${ styles.px60 } ${ styles.bdr }`);
+			// row 1, cell 12, text
+			expect(cell.text()).toBe('3');
 
 			// TODO: Add tests for SSL stat cells
 
 			cells = rows.at(1).find('td');
-			expect(cells.at(5).prop('className'), 'row 1, cell 6, className').to.be.equal(
-				`${ styles['flash'] } ${ styles['red-flash'] }`
-			);
+			// row 1, cell 6, className
+			expect(cells.at(5).prop('className')).toBe(`${ styles.flash } ${ styles['red-flash'] }`);
 
 			cells = rows.at(2).find('td');
-			expect(cells.at(6).prop('className'), 'row 1, cell 7, className').to.be.equal(
-				`${ styles['flash'] } ${ styles['red-flash'] }`
-			);
+			// row 1, cell 7, className
+			expect(cells.at(6).prop('className')).toBe(`${ styles.flash } ${ styles['red-flash'] }`);
 
 			wrapper.unmount();
-			utils.formatReadableBytes.restore();
+			utils.formatReadableBytes.mockRestore();
 		});
 	});
 });

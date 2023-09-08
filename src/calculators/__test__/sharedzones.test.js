@@ -5,7 +5,6 @@
  *
  */
 
-import { stub } from 'sinon';
 import calculate, { handleZones } from '../sharedzones.js';
 import utils from '../utils.js';
 
@@ -19,17 +18,20 @@ describe('Calculators – SharedZones', () => {
 		};
 		const result = handleZones(zone);
 
-		expect(result.pages.total, 'zone.pages.total').to.be.equal(1000);
-		expect(result.percentSize, 'zone.percentSize').to.be.equal(23);
-		expect(result, 'returned zone').to.be.deep.equal(zone);
+		// zone.pages.total
+		expect(result.pages.total).toBe(1000);
+		// zone.percentSize
+		expect(result.percentSize).toBe(23);
+		// returned zone
+		expect(result).toEqual(zone);
 	});
 
 	describe('calculate', () => {
 		const expectedResult = 'Result of createMapFromObject';
 		let STORE;
 
-		before(() => {
-			stub(utils, 'createMapFromObject').callsFake(() => expectedResult);
+		beforeAll(() => {
+			jest.spyOn(utils, 'createMapFromObject').mockClear().mockImplementation(() => expectedResult);
 		});
 
 		beforeEach(() => {
@@ -41,27 +43,31 @@ describe('Calculators – SharedZones', () => {
 		});
 
 		afterEach(() => {
-			utils.createMapFromObject.resetHistory();
+			utils.createMapFromObject.mockClear();
 		});
 
-		after(() => {
-			utils.createMapFromObject.restore();
+		afterAll(() => {
+			utils.createMapFromObject.mockRestore();
 		});
 
 		it('zones wasn\'t provided', () => {
 			const result = calculate(null, null, STORE);
 
-			expect(STORE.__STATUSES.shared_zones.ready, '__STATUSES.shared_zones.ready').to.be.false;
-			expect(result, 'return').to.be.a('null');
-			expect(utils.createMapFromObject.notCalled, 'createMapFromObject not called').to.be.true;
+			// __STATUSES.shared_zones.ready
+			expect(STORE.__STATUSES.shared_zones.ready).toBe(false);
+			expect(result).toBeNull();
+			// createMapFromObject not called
+			expect(utils.createMapFromObject).not.toHaveBeenCalled();
 		});
 
 		it('empty zones', () => {
 			const result = calculate({}, null, STORE);
 
-			expect(STORE.__STATUSES.shared_zones.ready, '__STATUSES.shared_zones.ready').to.be.false;
-			expect(result, 'return').to.be.a('null');
-			expect(utils.createMapFromObject.notCalled, 'createMapFromObject not called').to.be.true;
+			// __STATUSES.shared_zones.ready
+			expect(STORE.__STATUSES.shared_zones.ready).toBe(false);
+			expect(result).toBeNull();
+			// createMapFromObject not called
+			expect(utils.createMapFromObject).not.toHaveBeenCalled();
 		});
 
 		it('filled zones', () => {
@@ -75,11 +81,16 @@ describe('Calculators – SharedZones', () => {
 			};
 			const result = calculate(zones, null, STORE);
 
-			expect(STORE.__STATUSES.shared_zones.ready, '__STATUSES.shared_zones.ready').to.be.true;
-			expect(utils.createMapFromObject.calledOnce, 'createMapFromObject called once').to.be.true;
-			expect(utils.createMapFromObject.args[0][0], 'createMapFromObject 1st arg').to.be.deep.equal(zones);
-			expect(utils.createMapFromObject.args[0][1].name, 'createMapFromObject 2nd arg').to.be.equal('handleZones');
-			expect(result, 'return').to.be.equal(expectedResult);
+			// __STATUSES.shared_zones.ready
+			expect(STORE.__STATUSES.shared_zones.ready).toBe(true);
+			// createMapFromObject called once
+			expect(utils.createMapFromObject).toHaveBeenCalled();
+			// createMapFromObject 1st arg
+			expect(utils.createMapFromObject.mock.calls[0][0]).toEqual(zones);
+			// createMapFromObject 2nd arg
+			expect(utils.createMapFromObject.mock.calls[0][1].name).toBe('handleZones');
+			// return
+			expect(result).toBe(expectedResult);
 		});
 	});
 });

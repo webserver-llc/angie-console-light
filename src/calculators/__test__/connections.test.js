@@ -5,7 +5,6 @@
  *
  */
 
-import { stub } from 'sinon';
 import calculate from '../connections.js';
 import utils from '../utils.js';
 
@@ -24,30 +23,40 @@ describe('Calculators – Connections', () => {
 		};
 		const expectedSpeed = 'test_speed';
 
-		stub(utils, 'calculateSpeed').callsFake(() => expectedSpeed);
-		stub(Date, 'now').callsFake(() => ts);
+		const spyUtilsCalculateSpeed = jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation(() => expectedSpeed);
+		const spyDateNow = jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
 
 		let result = calculate(connections);
 
-		expect(result.current, 'connections.current').to.be.equal(connections.active + connections.idle);
-		expect(result.accepted_s, 'connections.accepted_s').to.be.equal(expectedSpeed);
-		expect(utils.calculateSpeed.calledOnce, 'calculateSpeed called once').to.be.true;
-		expect(utils.calculateSpeed.args[0][0], 'calculateSpeed 1st arg').to.be.a('null');
-		expect(utils.calculateSpeed.args[0][1], 'calculateSpeed 2nd arg').to.be.equal(connections.accepted);
-		expect(utils.calculateSpeed.args[0][2], 'calculateSpeed 3rd arg').to.be.equal(ts);
-		expect(Date.now.calledOnce, 'Date.now called once').to.be.true;
-		expect(result, 'result').to.be.deep.equal(connections);
+		// connections.current
+		expect(result.current).toBe(connections.active + connections.idle);
+		// connections.accepted_s
+		expect(result.accepted_s).toBe(expectedSpeed);
+		// calculateSpeed called once
+    		expect(spyUtilsCalculateSpeed).toHaveBeenCalled();
+		expect(spyUtilsCalculateSpeed.mock.calls[0][0]).toBeNull();
+		// calculateSpeed 2nd arg
+		expect(spyUtilsCalculateSpeed.mock.calls[0][1]).toBe(connections.accepted);
+		// calculateSpeed 3rd arg
+		expect(spyUtilsCalculateSpeed.mock.calls[0][2]).toBe(ts);
+		// Date.now called once
+		expect(spyDateNow).toHaveBeenCalled();
+		// result
+		expect(result).toEqual(connections);
 
 		result = calculate(connections, previous);
 
-		expect(utils.calculateSpeed.calledTwice, 'calculateSpeed called twice').to.be.true;
-		expect(utils.calculateSpeed.args[1][0], 'calculateSpeed 1st arg').to.be.equal(previous.accepted);
-		expect(utils.calculateSpeed.args[1][1], 'calculateSpeed 2nd arg').to.be.equal(connections.accepted);
-		expect(utils.calculateSpeed.args[1][2], 'calculateSpeed 3rd arg').to.be.equal(ts - previous.lastUpdate);
-		expect(Date.now.calledTwice, 'Date.now called twice').to.be.true;
-		expect(result, 'result').to.be.deep.equal(connections);
-
-		utils.calculateSpeed.restore();
-		Date.now.restore();
+		// calculateSpeed called twice
+		expect(spyUtilsCalculateSpeed).toHaveBeenCalledTimes(2);
+		// calculateSpeed 1st arg
+		expect(spyUtilsCalculateSpeed.mock.calls[1][0]).toBe(previous.accepted);
+		// calculateSpeed 2nd arg
+		expect(spyUtilsCalculateSpeed.mock.calls[1][1]).toBe(connections.accepted);
+		// calculateSpeed 3rd arg
+		expect(spyUtilsCalculateSpeed.mock.calls[1][2]).toBe(ts - previous.lastUpdate);
+		// Date.now called twice
+		expect(spyDateNow).toHaveBeenCalled();
+		// result
+		expect(result).toEqual(connections);
 	});
 });

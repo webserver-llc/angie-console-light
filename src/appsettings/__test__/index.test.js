@@ -5,7 +5,6 @@
  *
  */
 
-import { spy, stub } from 'sinon';
 import appsettings, { AppSettings } from '../index.js';
 import {
 	DEFAULT_UPDATING_PERIOD,
@@ -17,93 +16,75 @@ import {
 
 describe('AppSettings', () => {
 	it('constructor()', () => {
-		assert(appsettings instanceof AppSettings, 'appsettings should export AppSettings instance by default');
+		expect(appsettings instanceof AppSettings).toBeTruthy();
 
 		const appset = new AppSettings();
 
-		assert(appset.SETTINGS_KEY_NAME === '__ANGIE_CONSOLE', 'Unexpected "SETTINGS_KEY_NAME" value');
-		assert(
-			appset.defaults.updatingPeriod === DEFAULT_UPDATING_PERIOD,
-			'Unexpected "defaults.updatingPeriod" value'
-		);
-		assert(
-			appset.defaults.warnings4xxThresholdPercent === DEFAULT_4XX_THRESHOLD_PERCENT,
-			'Unexpected "defaults.warnings4xxThresholdPercent" value'
-		);
-		assert(
-			appset.defaults.cacheDataInterval === DEFAULT_CACHE_DATA_INTERVAL,
-			'Unexpected "defaults.cacheDataInterval" value'
-		);
-		assert(
-			appset.defaults.zonesyncPendingThreshold === DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT,
-			'Unexpected "defaults.zonesyncPendingThreshold" value'
-		);
-		assert(
-			appset.defaults.resolverErrorsThreshold === DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT,
-			'Unexpected "defaults.resolverErrorsThreshold" value'
-		);
-		assert(
-			appset.settingChangeCallbacks instanceof Map,
-			'"settingChangeCallbacks" is expected to be an instance of Map'
-		);
-		assert(
-			appset.settingChangeCallbacks.size === 0,
-			'"settingChangeCallbacks" should be empty'
-		);
-		assert(appset.currentSettings === null, '"currentSettings" should be null');
-		assert(appset.subscribeCounter === 0, 'Unexpected value of "subscribeCounter"');
+		expect(appset.SETTINGS_KEY_NAME).toBe('__ANGIE_CONSOLE');
+		expect(appset.defaults.updatingPeriod === DEFAULT_UPDATING_PERIOD).toBeTruthy();
+		expect(
+			appset.defaults.warnings4xxThresholdPercent === DEFAULT_4XX_THRESHOLD_PERCENT
+		).toBeTruthy();
+		expect(appset.defaults.cacheDataInterval === DEFAULT_CACHE_DATA_INTERVAL).toBeTruthy();
+		expect(
+			appset.defaults.zonesyncPendingThreshold === DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT
+		).toBeTruthy();
+		expect(
+			appset.defaults.resolverErrorsThreshold === DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT
+		).toBeTruthy();
+		expect(appset.settingChangeCallbacks instanceof Map).toBeTruthy();
+		expect(appset.settingChangeCallbacks.size === 0).toBeTruthy();
+		expect(appset.currentSettings === null).toBeTruthy();
+		expect(appset.subscribeCounter === 0).toBeTruthy();
 	});
 
 	it('saveSettings()', () => {
 		const originSettings = appsettings.currentSettings;
 		const customSettings = {
-			'saveSettings_test': true,
-			'should_be_written': 'to localStorage'
+			saveSettings_test: true,
+			should_be_written: 'to localStorage'
 		};
 
 		appsettings.currentSettings = customSettings;
 		appsettings.saveSettings();
 
-		expect(localStorage.getItem(appsettings.SETTINGS_KEY_NAME), 'write test value')
-			.to.be.equal(JSON.stringify(customSettings));
+		// write test value
+		expect(localStorage.getItem(appsettings.SETTINGS_KEY_NAME)).toBe(JSON.stringify(customSettings));
 
 		appsettings.currentSettings = originSettings;
 		appsettings.saveSettings();
 
-		expect(localStorage.getItem(appsettings.SETTINGS_KEY_NAME), 'write test value')
-			.to.be.equal(JSON.stringify(originSettings));
+		// write test value
+		expect(localStorage.getItem(appsettings.SETTINGS_KEY_NAME)).toBe(JSON.stringify(originSettings));
 	});
 
 	it('setSetting()', () => {
 		const key = 'test_setting';
 		let value = 1;
 		const callbackID = 1234;
-		const callback = spy();
+		const callback = jest.fn();
 
-		appsettings.settingChangeCallbacks.set(callbackID, callback);
-		stub(appsettings, 'saveSettings').callsFake(() => {});
+		const appset = new AppSettings();
+		appset.init();
 
-		appsettings.setSetting(key, value, true);
+		appset.settingChangeCallbacks.set(callbackID, callback);
+		const spyAppSettingsSaveSettings = jest.spyOn(appset, 'saveSettings').mockClear().mockImplementation(() => {});
 
-		assert(
-			appsettings.currentSettings[key] === value,
-			`Unexpected value was added to currentSettings. Should be ${ value }`
-		);
-		assert(appsettings.saveSettings.calledOnce, 'saveSettings should be called once');
-		assert(callback.callCount === 0, 'Callbacks should NOT be called in "silent" mode');
+		appset.setSetting(key, value, true);
 
-		appsettings.setSetting(key, ++value);
+		expect(appset.currentSettings[key] === value).toBeTruthy();
+		expect(spyAppSettingsSaveSettings).toHaveBeenCalled();
+		expect(callback).not.toHaveBeenCalled();
 
-		assert(
-			appsettings.currentSettings[key] === value,
-			`Unexpected value was added to currentSettings. Should be ${ value }`
-		);
-		assert(appsettings.saveSettings.calledTwice, 'saveSettings should be called twice');
-		assert(callback.calledOnce, 'Callback is expected to be called');
+		appset.setSetting(key, ++value);
 
-		delete appsettings.currentSettings[key];
-		appsettings.settingChangeCallbacks.delete(callbackID);
-		appsettings.saveSettings.restore();
+		expect(appset.currentSettings[key] === value).toBeTruthy();
+		expect(spyAppSettingsSaveSettings).toHaveBeenCalledTimes(2);
+		expect(callback).toHaveBeenCalled();
+
+		delete appset.currentSettings[key];
+		appset.settingChangeCallbacks.delete(callbackID);
+		appset.saveSettings.mockRestore();
 	});
 
 	it('getSetting()', () => {
@@ -113,91 +94,75 @@ describe('AppSettings', () => {
 		const newValue = 'new';
 		let value;
 
-		spy(appsettings, 'setSetting');
-		stub(appsettings, 'saveSettings').callsFake(() => {});
+		const appset = new AppSettings();
+		appset.init();
 
-		value = appsettings.getSetting(existingKey);
+		const spyAppSettingsSet = jest.spyOn(appset, 'setSetting').mockClear();
+		jest.spyOn(appset, 'saveSettings').mockClear().mockImplementation(() => {});
 
-		assert(value === DEFAULT_UPDATING_PERIOD, `Unexpected value of "${ existingKey }"`);
-		assert(
-			appsettings.setSetting.callCount === 0,
-			'setSetting should NOT be called when asking for existing property'
-		);
-		assert(
-			missedKey in appsettings.currentSettings === false,
-			`Found unexpected property "${ missedKey }" in currentSettings`
-		);
+		value = appset.getSetting(existingKey);
 
-		value = appsettings.getSetting(missedKey, defaultValue);
+		expect(value === DEFAULT_UPDATING_PERIOD).toBeTruthy();
+		expect(spyAppSettingsSet).not.toHaveBeenCalled();
+		expect(missedKey in appset.currentSettings === false).toBeTruthy();
 
-		assert(appsettings.setSetting.calledOnce, 'setSetting should be called once');
-		assert(appsettings.setSetting.args[0][0] === missedKey, 'Unexpected key argument was provided to setSetting');
-		assert(appsettings.setSetting.args[0][1] === defaultValue, 'Unexpected value argument was provided to setSetting');
-		assert(appsettings.setSetting.args[0][2] === true, 'Unexpected "silent" argument was provided to setSetting');
-		assert(
-			value === defaultValue,
-			`Unexpected value of new property (added within "getSetting"): ${ value }. Expected: ${ defaultValue }`
-		);
+		value = appset.getSetting(missedKey, defaultValue);
 
-		appsettings.setSetting(missedKey, newValue);
-		value = appsettings.getSetting(missedKey, defaultValue);
+		expect(spyAppSettingsSet).toHaveBeenCalled();
+		expect(appset.setSetting.mock.calls[0][0] === missedKey).toBeTruthy();
+		expect(appset.setSetting.mock.calls[0][1] === defaultValue).toBeTruthy();
+		expect(appset.setSetting.mock.calls[0][2] === true).toBeTruthy();
+		expect(value === defaultValue).toBeTruthy();
 
-		assert(appsettings.setSetting.calledTwice, 'setSetting should be called twice');
-		assert(
-			value === newValue,
-			`Unexpected value of existing property: ${ value }. Expected: ${ newValue }`
-		);
+		appset.setSetting(missedKey, newValue);
+		value = appset.getSetting(missedKey, defaultValue);
 
-		delete appsettings.currentSettings[missedKey];
-		appsettings.setSetting.restore();
-		appsettings.saveSettings.restore();
+		expect(spyAppSettingsSet).toHaveBeenCalledTimes(2);
+		expect(value === newValue).toBeTruthy();
+
+		delete appset.currentSettings[missedKey];
+		appset.setSetting.mockRestore();
+		appset.saveSettings.mockRestore();
 	});
 
 	it('subscribe()', () => {
-		const cb = spy();
+		const cb = jest.fn();
 		const key = 'updatingPeriod';
 		const expectedId = '0';
 		const value = 312;
 
-		spy(appsettings.settingChangeCallbacks, 'set');
+		const spyAppSettingsSet = jest.spyOn(appsettings.settingChangeCallbacks, 'set').mockClear();
 
-		assert(
-			appsettings.subscribe() === undefined,
-			'Wrong return value when no callback and no property name were provided'
-		);
-		assert(appsettings.subscribe(null) === undefined, 'Wrong return value when callback is not a function');
-		assert(appsettings.subscribe(cb) === undefined, 'Wrong return value when no property name was provided');
-		assert(appsettings.subscribe(cb, 123) === undefined, 'Wrong return value when property name is not a string');
-		assert(
-			appsettings.settingChangeCallbacks.set.notCalled,
-			'Map.set should not be called when no callback and no property name were provided'
-		);
+		expect(appsettings.subscribe() === undefined).toBeTruthy();
+		expect(appsettings.subscribe(null) === undefined).toBeTruthy();
+		expect(appsettings.subscribe(cb) === undefined).toBeTruthy();
+		expect(appsettings.subscribe(cb, 123) === undefined).toBeTruthy();
+		expect(spyAppSettingsSet).not.toHaveBeenCalled();
 
-		assert(appsettings.subscribe(cb, key) === expectedId, 'Wrong return value');
-		assert(appsettings.subscribeCounter === 1, '"subscribeCounter" should be increased');
-		assert(appsettings.settingChangeCallbacks.set.calledOnce, 'Callback is expected to be added');
-		assert(appsettings.settingChangeCallbacks.set.args[0][0] === expectedId, 'Unexpected first argument of Map.set');
-		assert(
-			typeof appsettings.settingChangeCallbacks.set.args[0][1] === 'function',
-			'Unexpected second argument of Map.set'
-		);
+		expect(appsettings.subscribe(cb, key) === expectedId).toBeTruthy();
+		expect(appsettings.subscribeCounter === 1).toBeTruthy();
+		expect(spyAppSettingsSet).toHaveBeenCalled();
+		expect(spyAppSettingsSet.mock.calls[0][0] === expectedId).toBeTruthy();
+		expect(
+			typeof spyAppSettingsSet.mock.calls[0][1] === 'function'
+		).toBeTruthy();
 
 		const changesCb = appsettings.settingChangeCallbacks.get(expectedId);
 
 		changesCb('any_other_prop', value);
 
-		assert(cb.notCalled, 'Callback should not be called');
+		expect(cb).not.toHaveBeenCalled();
 
 		changesCb(key, value);
 
-		assert(cb.calledOnce, 'Callback is expected to be called once');
-		assert(cb.args[0][0] === value, 'Unexpected argument was provided to callback');
+		expect(cb).toHaveBeenCalled();
+		expect(cb.mock.calls[0][0] === value).toBeTruthy();
 
-		appsettings.settingChangeCallbacks.set.restore();
+		appsettings.settingChangeCallbacks.set.mockRestore();
 	});
 
 	it('unsubscribe()', () => {
-		spy(appsettings.settingChangeCallbacks, 'delete');
+		const spyAppSettingsDel = jest.spyOn(appsettings.settingChangeCallbacks, 'delete').mockClear();
 
 		const key = 'updatingPeriod';
 		const wrongId = '100500';
@@ -205,48 +170,44 @@ describe('AppSettings', () => {
 
 		appsettings.unsubscribe(wrongId);
 
-		assert(appsettings.settingChangeCallbacks.delete.notCalled, 'Map.delete should not be called');
+		expect(spyAppSettingsDel).not.toHaveBeenCalled();
 
 		appsettings.unsubscribe(id);
 
-		assert(appsettings.settingChangeCallbacks.delete.calledOnce, 'Map.delete should be called once');
-		assert(appsettings.settingChangeCallbacks.delete.args[0][0] === id, 'Unexpected argument for Map.delete');
-		assert(appsettings.settingChangeCallbacks.has(id) === false, 'Callback is expected to be removed');
+		expect(spyAppSettingsDel).toHaveBeenCalled();
+		expect(spyAppSettingsDel.mock.calls[0][0] === id).toBeTruthy();
+		expect(appsettings.settingChangeCallbacks.has(id) === false).toBeTruthy();
 
-		appsettings.settingChangeCallbacks.delete.restore();
+		appsettings.settingChangeCallbacks.delete.mockRestore();
 	});
 
 	it('init()', () => {
 		const originSettings = appsettings.currentSettings;
 		const settings = { abc: 123, asd: '321' };
 
-		stub(appsettings, 'saveSettings').callsFake(() => {});
+		const spyAppSettingsSaveSettings = jest.spyOn(appsettings, 'saveSettings').mockClear().mockImplementation(() => {});
 
 		localStorage.removeItem(appsettings.SETTINGS_KEY_NAME);
 		appsettings.init();
 
-		assert(
-			Object.keys(appsettings.defaults).length === Object.keys(appsettings.currentSettings).length,
-			'"currentSettings" should have same keys length as "defaults"'
-		);
+		expect(
+			Object.keys(appsettings.defaults).length === Object.keys(appsettings.currentSettings).length
+		).toBeTruthy();
 		Object.keys(appsettings.defaults).forEach(key => {
-			assert(key in appsettings.currentSettings, `"${ key }" prop should be in "currentSettings"`);
-			assert(
-				appsettings.currentSettings[key] === appsettings.defaults[key],
-				`Unexpected "${ key }" prop value in "currentSettings"`
-			);
+			expect(key in appsettings.currentSettings).toBeTruthy();
+			expect(appsettings.currentSettings[key] === appsettings.defaults[key]).toBeTruthy();
 		});
-		assert(appsettings.saveSettings.calledOnce, '"saveSettings" is expected to be called');
+		expect(spyAppSettingsSaveSettings).toHaveBeenCalled();
 
 		localStorage.setItem(appsettings.SETTINGS_KEY_NAME, JSON.stringify(settings));
 		appsettings.init();
 
-		expect(appsettings.currentSettings).to.be.deep.equal(settings);
-		assert(appsettings.saveSettings.calledOnce, '"saveSettings" should not called');
+		expect(appsettings.currentSettings).toEqual(settings);
+		expect(spyAppSettingsSaveSettings).toHaveBeenCalled();
 
 		appsettings.currentSettings = originSettings;
 		localStorage.setItem(appsettings.SETTINGS_KEY_NAME, JSON.stringify(originSettings));
 
-		appsettings.saveSettings.restore();
+		appsettings.saveSettings.mockRestore();
 	});
 });

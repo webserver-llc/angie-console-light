@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy, stub } from 'sinon';
 import Settings from '../index.jsx';
 import appsettings from '../../../appsettings';
 import {
@@ -25,13 +24,14 @@ describe('<Settings />', () => {
 	};
 
 	it('constructor()', () => {
-		const getSettingStub = stub(appsettings, 'getSetting').callsFake(a => `${ a }_test`);
-		const changeUpdatePeriodSpy = spy(Settings.prototype.changeUpdatePeriod, 'bind');
-		const changeCacheHitRatioIntevalSpy = spy(Settings.prototype.changeCacheHitRatioInteval, 'bind');
-		const saveSpy = spy(Settings.prototype.save, 'bind');
-		const wrapper = shallow(<Settings { ...props } />);
+		const getSettingStub = jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(a => `${ a }_test`);
+		const changeUpdatePeriodSpy = jest.spyOn(Settings.prototype.changeUpdatePeriod, 'bind').mockClear();
+		const changeCacheHitRatioIntevalSpy = jest.spyOn(Settings.prototype.changeCacheHitRatioInteval, 'bind').mockClear();
+		const saveSpy = jest.spyOn(Settings.prototype.save, 'bind').mockClear();
+		const wrapper = shallow(<Settings {...props} />);
 
-		expect(wrapper.state(), 'this.state').to.be.deep.equal({
+		// this.state
+		expect(wrapper.state()).toEqual({
 			updatingPeriod: 'updatingPeriod_test',
 			warnings4xxThresholdPercent: 'warnings4xxThresholdPercent_test',
 			cacheDataInterval: 'cacheDataInterval_test',
@@ -39,77 +39,51 @@ describe('<Settings />', () => {
 			resolverErrorsThreshold: 'resolverErrorsThreshold_test'
 		});
 
-		expect(getSettingStub.callCount, 'getSetting call count').to.be.equal(5);
-		expect(
-			getSettingStub.args[0][0],
-			'getSetting call 1 arg 1'
-		).to.be.equal('updatingPeriod');
-		expect(
-			getSettingStub.args[1][0],
-			'getSetting call 2 arg 1'
-		).to.be.equal('warnings4xxThresholdPercent');
-		expect(
-			getSettingStub.args[2][0],
-			'getSetting call 3 arg 1'
-		).to.be.equal('cacheDataInterval');
-		expect(
-			getSettingStub.args[3][0],
-			'getSetting call 4 arg 1'
-		).to.be.equal('zonesyncPendingThreshold');
-		expect(
-			getSettingStub.args[3][1],
-			'getSetting call 4 arg 2'
-		).to.be.equal(DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT);
-		expect(
-			getSettingStub.args[4][0],
-			'getSetting call 5 arg 1'
-		).to.be.equal('resolverErrorsThreshold');
-		expect(
-			getSettingStub.args[4][1],
-			'getSetting call 5 arg 2'
-		).to.be.equal(DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT);
+		expect(getSettingStub).toHaveBeenCalledTimes(5);
+		// getSetting call 1 arg 1
+		expect(getSettingStub.mock.calls[0][0]).toBe('updatingPeriod');
+		// getSetting call 2 arg 1
+		expect(getSettingStub.mock.calls[1][0]).toBe('warnings4xxThresholdPercent');
+		// getSetting call 3 arg 1
+		expect(getSettingStub.mock.calls[2][0]).toBe('cacheDataInterval');
+		// getSetting call 4 arg 1
+		expect(getSettingStub.mock.calls[3][0]).toBe('zonesyncPendingThreshold');
+		// getSetting call 4 arg 2
+		expect(getSettingStub.mock.calls[3][1]).toBe(DEFAULT_ZONESYNC_PENDING_THRESHOLD_PERCENT);
+		// getSetting call 5 arg 1
+		expect(getSettingStub.mock.calls[4][0]).toBe('resolverErrorsThreshold');
+		// getSetting call 5 arg 2
+		expect(getSettingStub.mock.calls[4][1]).toBe(DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT);
 
-		expect(
-			changeUpdatePeriodSpy.calledOnce,
-			'this.changeUpdatePeriod.bind called'
-		).to.be.true;
-		expect(
-			changeUpdatePeriodSpy.args[0][0] instanceof Settings,
-			'this.changeUpdatePeriod.bind call arg'
-		).to.be.true;
-		expect(
-			changeCacheHitRatioIntevalSpy.calledOnce,
-			'this.changeCacheHitRatioInteval.bind called'
-		).to.be.true;
-		expect(
-			changeCacheHitRatioIntevalSpy.args[0][0] instanceof Settings,
-			'this.changeCacheHitRatioInteval.bind call arg'
-		).to.be.true;
-		expect(
-			saveSpy.calledOnce,
-			'this.save.bind called'
-		).to.be.true;
-		expect(
-			saveSpy.args[0][0] instanceof Settings,
-			'this.save.bind call arg'
-		).to.be.true;
+		// this.changeUpdatePeriod.bind called
+		expect(changeUpdatePeriodSpy).toHaveBeenCalledTimes(1);
+		// this.changeUpdatePeriod.bind call arg
+		expect(changeUpdatePeriodSpy.mock.calls[0][0] instanceof Settings).toBe(true);
+		// this.changeCacheHitRatioInteval.bind called
+		expect(changeCacheHitRatioIntevalSpy).toHaveBeenCalledTimes(1);
+		// this.changeCacheHitRatioInteval.bind call arg
+		expect(changeCacheHitRatioIntevalSpy.mock.calls[0][0] instanceof Settings).toBe(true);
+		// this.save.bind called
+		expect(saveSpy).toHaveBeenCalledTimes(1);
+		// this.save.bind call arg
+		expect(saveSpy.mock.calls[0][0] instanceof Settings).toBe(true);
 
-		saveSpy.restore();
-		changeCacheHitRatioIntevalSpy.restore();
-		changeUpdatePeriodSpy.restore();
-		getSettingStub.restore();
+		saveSpy.mockRestore();
+		changeCacheHitRatioIntevalSpy.mockRestore();
+		changeUpdatePeriodSpy.mockRestore();
+		getSettingStub.mockRestore();
 	});
 
 	it('save()', () => {
-		const closeSpy = spy();
+		const closeSpy = jest.fn();
 		const wrapper = shallow(
 			<Settings
-				{ ...props }
-				close={ closeSpy }
+				{...props}
+				close={closeSpy}
 			/>
 		);
 		const instance = wrapper.instance();
-		const setSettingStub = stub(appsettings, 'setSetting').callsFake(() => {});
+		const setSettingStub = jest.spyOn(appsettings, 'setSetting').mockClear().mockImplementation(() => {});
 
 		wrapper.setState({
 			updatingPeriod: 'updatingPeriod_test',
@@ -121,137 +95,132 @@ describe('<Settings />', () => {
 
 		instance.save();
 
-		expect(setSettingStub.callCount, 'setSetting call count').to.be.equal(5);
-		expect(
-			setSettingStub.calledWith('updatingPeriod', 'updatingPeriod_test'),
-			'setSetting called for "updatingPeriod"'
-		).to.be.true;
-		expect(
-			setSettingStub.calledWith('warnings4xxThresholdPercent', 'warnings4xxThresholdPercent_test'),
-			'setSetting called for "warnings4xxThresholdPercent"'
-		).to.be.true;
-		expect(
-			setSettingStub.calledWith('cacheDataInterval', 'cacheDataInterval_test'),
-			'setSetting called for "cacheDataInterval"'
-		).to.be.true;
-		expect(
-			setSettingStub.calledWith('zonesyncPendingThreshold', 'zonesyncPendingThreshold_test'),
-			'setSetting called for "zonesyncPendingThreshold"'
-		).to.be.true;
-		expect(
-			setSettingStub.calledWith('resolverErrorsThreshold', 'resolverErrorsThreshold_test'),
-			'setSetting called for "resolverErrorsThreshold"'
-		).to.be.true;
-		expect(closeSpy.calledOnce, 'props.close called').to.be.true;
+		expect(setSettingStub).toHaveBeenCalledTimes(5);
+		// setSetting called for "updatingPeriod"
+		expect(setSettingStub).toHaveBeenCalledWith('updatingPeriod', 'updatingPeriod_test');
+		// setSetting called for "warnings4xxThresholdPercent"
+		expect(setSettingStub).toHaveBeenCalledWith('warnings4xxThresholdPercent', 'warnings4xxThresholdPercent_test');
+		// setSetting called for "cacheDataInterval"
+		expect(setSettingStub).toHaveBeenCalledWith('cacheDataInterval', 'cacheDataInterval_test');
+		// setSetting called for "zonesyncPendingThreshold"
+		expect(setSettingStub).toHaveBeenCalledWith('zonesyncPendingThreshold', 'zonesyncPendingThreshold_test');
+		// setSetting called for "resolverErrorsThreshold"
+		expect(setSettingStub).toHaveBeenCalledWith('resolverErrorsThreshold', 'resolverErrorsThreshold_test');
+		// props.close called
+		expect(closeSpy).toHaveBeenCalledTimes(1);
 
-		setSettingStub.restore();
+		setSettingStub.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('changeUpdatePeriod()', () => {
-		const wrapper = shallow(<Settings { ...props } />);
+		const wrapper = shallow(<Settings {...props} />);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.changeUpdatePeriod();
 
-		expect(
-			setStateSpy.calledOnce,
-			'[no period] this.setState called'
-		).to.be.true;
-		expect(
-			setStateSpy.args[0][0],
-			'[no period] this.setState args'
-		).to.be.deep.equal({
+		// [no period] this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// [no period] this.setState args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			updatingPeriod: 1000
 		});
 
-		setStateSpy.resetHistory();
+		setStateSpy.mockReset();
 		instance.changeUpdatePeriod(2000);
 
-		expect(
-			setStateSpy.calledOnce,
-			'[with period] this.setState called'
-		).to.be.true;
-		expect(
-			setStateSpy.args[0][0],
-			'[with period] this.setState args'
-		).to.be.deep.equal({
+		// [with period] this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// [with period] this.setState args
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			updatingPeriod: 2000
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('changePercentThreshold()', () => {
-		const wrapper = shallow(<Settings { ...props } />);
+		const wrapper = shallow(<Settings {...props} />);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.changePercentThreshold('test_prop', { target: { value: 34 } });
 
-		expect(setStateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call arg').to.be.deep.equal({
+		// this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// this.setState call arg
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			test_prop: 34
 		});
 
-		setStateSpy.resetHistory();
+		setStateSpy.mockReset();
 		instance.changePercentThreshold('test_prop', { target: { value: 101 } });
 
-		expect(setStateSpy.calledOnce, '[MAX reached] this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], '[MAX reached] this.setState call arg').to.be.deep.equal({
+		// [MAX reached] this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// [MAX reached] this.setState call arg
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			test_prop: 100
 		});
 
-		setStateSpy.resetHistory();
+		setStateSpy.mockReset();
 		instance.changePercentThreshold('test_prop', { target: { value: -1 } });
 
-		expect(setStateSpy.calledOnce, '[MIN reached] this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], '[MIN reached] this.setState call arg').to.be.deep.equal({
+		// [MIN reached] this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// [MIN reached] this.setState call arg
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			test_prop: 0
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('changeCacheHitRatioInteval()', () => {
-		const wrapper = shallow(<Settings { ...props } />);
+		const wrapper = shallow(<Settings {...props} />);
 		const instance = wrapper.instance();
-		const setStateSpy = spy(instance, 'setState');
+		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.changeCacheHitRatioInteval({ target: { value: 45 } });
 
-		expect(setStateSpy.calledOnce, 'this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], 'this.setState call arg').to.be.deep.equal({
+		// this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// this.setState call arg
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			cacheDataInterval: 45000
 		});
 
-		setStateSpy.resetHistory();
+		setStateSpy.mockReset();
 		instance.changeCacheHitRatioInteval({ target: { value: 4000 } });
 
-		expect(setStateSpy.calledOnce, '[MAX reached] this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], '[MAX reached] this.setState call arg').to.be.deep.equal({
+		// [MAX reached] this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// [MAX reached] this.setState call arg
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			cacheDataInterval: 3600000
 		});
 
-		setStateSpy.resetHistory();
+		setStateSpy.mockReset();
 		instance.changeCacheHitRatioInteval({ target: { value: 25 } });
 
-		expect(setStateSpy.calledOnce, '[MIN reached] this.setState called').to.be.true;
-		expect(setStateSpy.args[0][0], '[MIN reached] this.setState call arg').to.be.deep.equal({
+		// [MIN reached] this.setState called
+		expect(setStateSpy).toHaveBeenCalledTimes(1);
+		// [MIN reached] this.setState call arg
+		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			cacheDataInterval: 30000
 		});
 
-		setStateSpy.restore();
+		setStateSpy.mockRestore();
 		wrapper.unmount();
 	});
 
 	it('render()', () => {
 		const wrapper = shallow(
 			<Settings
-				{ ...props }
+				{...props}
 				statuses={{
 					zone_sync: { ready: true },
 					resolvers: { ready: true }
@@ -269,212 +238,111 @@ describe('<Settings />', () => {
 			resolverErrorsThreshold: 'resolverErrorsThreshold_test'
 		});
 
-		const changePercentThresholdBindSpy = spy(instance.changePercentThreshold, 'bind');
+		const changePercentThresholdBindSpy = jest.spyOn(instance.changePercentThreshold, 'bind').mockClear();
 
 		instance.render();
 
-		expect(wrapper.prop('className'), 'wrapper className').to.be.equal(styles['settings']);
-		expect(wrapper.children(), 'wrapper children size').to.have.lengthOf(8);
-		expect(wrapper.childAt(0).type(), 'title').to.be.equal('h2');
-		expect(
-			wrapper.childAt(0).prop('className'),
-			'title className'
-		).to.be.equal(styles['title']);
-		expect(
-			wrapper.childAt(1).prop('className'),
-			'updatingPeriod className'
-		).to.be.equal(styles['section']);
-		expect(
-			wrapper.childAt(1).childAt(1).name(),
-			'updatingPeriod, NumberControl'
-		).to.be.equal('NumberControl');
-		expect(
-			wrapper.childAt(1).childAt(1).prop('value'),
-			'updatingPeriod, NumberControl prop value'
-		).to.be.equal('updatingPeriod_test');
-		expect(
-			wrapper.childAt(1).childAt(1).prop('onChange'),
-			'updatingPeriod, NumberControl prop onChange'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(1).childAt(1).prop('onChange').name,
-			'updatingPeriod, NumberControl prop onChange'
-		).to.be.equal('bound changeUpdatePeriod');
-		expect(
-			wrapper.childAt(2).prop('className'),
-			'4xxThreshold className'
-		).to.be.equal(styles['section']);
-		expect(
-			wrapper.childAt(2).childAt(1).name(),
-			'4xxThreshold, NumberInput'
-		).to.be.equal('NumberInput');
-		expect(
-			wrapper.childAt(2).childAt(1).prop('defaultValue'),
-			'4xxThreshold, NumberInput prop defaultValue'
-		).to.be.equal('warnings4xxThresholdPercent_test');
-		expect(
-			wrapper.childAt(2).childAt(1).prop('onChange'),
-			'4xxThreshold, NumberInput prop onChange'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(2).childAt(1).prop('onChange').name,
-			'4xxThreshold, NumberInput prop onChange'
-		).to.be.equal('bound changePercentThreshold');
-		expect(
-			wrapper.childAt(2).childAt(1).prop('className'),
-			'4xxThreshold, NumberInput className'
-		).to.be.equal(styles['input']);
-		expect(
-			wrapper.childAt(3).prop('className'),
-			'hit ratio className'
-		).to.be.equal(styles['section']);
-		expect(
-			wrapper.childAt(3).childAt(1).name(),
-			'hit ratio, NumberInput'
-		).to.be.equal('NumberInput');
-		expect(
-			wrapper.childAt(3).childAt(1).prop('defaultValue'),
-			'hit ratio, NumberInput prop defaultValue'
-		).to.be.equal(15);
-		expect(
-			wrapper.childAt(3).childAt(1).prop('onChange'),
-			'hit ratio, NumberInput prop onChange'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(3).childAt(1).prop('onChange').name,
-			'hit ratio, NumberInput prop onChange'
-		).to.be.equal('bound changeCacheHitRatioInteval');
-		expect(
-			wrapper.childAt(3).childAt(1).prop('className'),
-			'hit ratio, NumberInput className'
-		).to.be.equal(styles['wide-input']);
-		expect(
-			wrapper.childAt(4).prop('className'),
-			'zoneSync threshold className'
-		).to.be.equal(styles['section']);
-		expect(
-			wrapper.childAt(4).childAt(1).name(),
-			'zoneSync threshold, NumberInput'
-		).to.be.equal('NumberInput');
-		expect(
-			wrapper.childAt(4).childAt(1).prop('defaultValue'),
-			'zoneSync threshold, NumberInput prop defaultValue'
-		).to.be.equal('zonesyncPendingThreshold_test');
-		expect(
-			wrapper.childAt(4).childAt(1).prop('onChange'),
-			'zoneSync threshold, NumberInput prop onChange'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(4).childAt(1).prop('onChange').name,
-			'zoneSync threshold, NumberInput prop onChange'
-		).to.be.equal('bound changePercentThreshold');
-		expect(
-			wrapper.childAt(4).childAt(1).prop('className'),
-			'zoneSync threshold, NumberInput className'
-		).to.be.equal(styles['input']);
-		expect(
-			wrapper.childAt(5).prop('className'),
-			'resolver errors threshold className'
-		).to.be.equal(styles['section']);
-		expect(
-			wrapper.childAt(5).childAt(1).name(),
-			'resolver errors threshold, NumberInput'
-		).to.be.equal('NumberInput');
-		expect(
-			wrapper.childAt(5).childAt(1).prop('defaultValue'),
-			'resolver errors threshold, NumberInput prop defaultValue'
-		).to.be.equal('resolverErrorsThreshold_test');
-		expect(
-			wrapper.childAt(5).childAt(1).prop('onChange'),
-			'resolver errors threshold, NumberInput prop onChange'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(5).childAt(1).prop('onChange').name,
-			'resolver errors threshold, NumberInput prop onChange'
-		).to.be.equal('bound changePercentThreshold');
-		expect(
-			wrapper.childAt(5).childAt(1).prop('className'),
-			'resolver errors threshold, NumberInput className'
-		).to.be.equal(styles['input']);
-		expect(
-			wrapper.childAt(6).prop('className'),
-			'controls className'
-		).to.be.equal(styles['section']);
-		expect(
-			wrapper.childAt(6).childAt(0).prop('className'),
-			'save className'
-		).to.be.equal(styles['save']);
-		expect(
-			wrapper.childAt(6).childAt(0).prop('onClick'),
-			'save onClick'
-		).to.be.a('function');
-		expect(
-			wrapper.childAt(6).childAt(0).prop('onClick').name,
-			'save onClick name'
-		).to.be.equal('bound save');
-		expect(
-			wrapper.childAt(6).childAt(1).prop('className'),
-			'cancel className'
-		).to.be.equal(styles['cancel']);
-		expect(
-			wrapper.childAt(6).childAt(1).prop('onClick'),
-			'cancel onClick'
-		).to.be.equal('close_test');
-		expect(
-			wrapper.childAt(7).prop('className'),
-			'version className'
-		).to.be.equal(styles['version']);
-		expect(
-			wrapper.childAt(7).text(),
-			'version text'
-		).to.be.equal(`v${ VERSION }`);
+		// wrapper className
+		expect(wrapper.prop('className')).toBe(styles.settings);
+		// wrapper children size
+		expect(wrapper.children()).toHaveLength(8);
+		// title
+		expect(wrapper.childAt(0).type()).toBe('h2');
+		// title className
+		expect(wrapper.childAt(0).prop('className')).toBe(styles.title);
+		// updatingPeriod className
+		expect(wrapper.childAt(1).prop('className')).toBe(styles.section);
+		// updatingPeriod, NumberControl
+		expect(wrapper.childAt(1).childAt(1).name()).toBe('NumberControl');
+		// updatingPeriod, NumberControl prop value
+		expect(wrapper.childAt(1).childAt(1).prop('value')).toBe('updatingPeriod_test');
+		expect(wrapper.childAt(1).childAt(1).prop('onChange')).toBeInstanceOf(Function);
+		// updatingPeriod, NumberControl prop onChange
+		expect(wrapper.childAt(1).childAt(1).prop('onChange').name).toBe('bound changeUpdatePeriod');
+		// 4xxThreshold className
+		expect(wrapper.childAt(2).prop('className')).toBe(styles.section);
+		// 4xxThreshold, NumberInput
+		expect(wrapper.childAt(2).childAt(1).name()).toBe('NumberInput');
+		// 4xxThreshold, NumberInput prop defaultValue
+		expect(wrapper.childAt(2).childAt(1).prop('defaultValue')).toBe('warnings4xxThresholdPercent_test');
+		expect(wrapper.childAt(2).childAt(1).prop('onChange')).toBeInstanceOf(Function);
+		// 4xxThreshold, NumberInput prop onChange
+		expect(wrapper.childAt(2).childAt(1).prop('onChange').name).toBe('bound changePercentThreshold');
+		// 4xxThreshold, NumberInput className
+		expect(wrapper.childAt(2).childAt(1).prop('className')).toBe(styles.input);
+		// hit ratio className
+		expect(wrapper.childAt(3).prop('className')).toBe(styles.section);
+		// hit ratio, NumberInput
+		expect(wrapper.childAt(3).childAt(1).name()).toBe('NumberInput');
+		// hit ratio, NumberInput prop defaultValue
+		expect(wrapper.childAt(3).childAt(1).prop('defaultValue')).toBe(15);
+		expect(wrapper.childAt(3).childAt(1).prop('onChange')).toBeInstanceOf(Function);
+		// hit ratio, NumberInput prop onChange
+		expect(wrapper.childAt(3).childAt(1).prop('onChange').name).toBe('bound changeCacheHitRatioInteval');
+		// hit ratio, NumberInput className
+		expect(wrapper.childAt(3).childAt(1).prop('className')).toBe(styles['wide-input']);
+		// zoneSync threshold className
+		expect(wrapper.childAt(4).prop('className')).toBe(styles.section);
+		// zoneSync threshold, NumberInput
+		expect(wrapper.childAt(4).childAt(1).name()).toBe('NumberInput');
+		// zoneSync threshold, NumberInput prop defaultValue
+		expect(wrapper.childAt(4).childAt(1).prop('defaultValue')).toBe('zonesyncPendingThreshold_test');
+		expect(wrapper.childAt(4).childAt(1).prop('onChange')).toBeInstanceOf(Function);
+		// zoneSync threshold, NumberInput prop onChange
+		expect(wrapper.childAt(4).childAt(1).prop('onChange').name).toBe('bound changePercentThreshold');
+		// zoneSync threshold, NumberInput className
+		expect(wrapper.childAt(4).childAt(1).prop('className')).toBe(styles.input);
+		// resolver errors threshold className
+		expect(wrapper.childAt(5).prop('className')).toBe(styles.section);
+		// resolver errors threshold, NumberInput
+		expect(wrapper.childAt(5).childAt(1).name()).toBe('NumberInput');
+		// resolver errors threshold, NumberInput prop defaultValue
+		expect(wrapper.childAt(5).childAt(1).prop('defaultValue')).toBe('resolverErrorsThreshold_test');
+		expect(wrapper.childAt(5).childAt(1).prop('onChange')).toBeInstanceOf(Function);
+		// resolver errors threshold, NumberInput prop onChange
+		expect(wrapper.childAt(5).childAt(1).prop('onChange').name).toBe('bound changePercentThreshold');
+		// resolver errors threshold, NumberInput className
+		expect(wrapper.childAt(5).childAt(1).prop('className')).toBe(styles.input);
+		// controls className
+		expect(wrapper.childAt(6).prop('className')).toBe(styles.section);
+		// save className
+		expect(wrapper.childAt(6).childAt(0).prop('className')).toBe(styles.save);
+		expect(wrapper.childAt(6).childAt(0).prop('onClick')).toBeInstanceOf(Function);
+		// save onClick name
+		expect(wrapper.childAt(6).childAt(0).prop('onClick').name).toBe('bound save');
+		// cancel className
+		expect(wrapper.childAt(6).childAt(1).prop('className')).toBe(styles.cancel);
+		// cancel onClick
+		expect(wrapper.childAt(6).childAt(1).prop('onClick')).toBe('close_test');
+		// version className
+		expect(wrapper.childAt(7).prop('className')).toBe(styles.version);
+		// version text
+		expect(wrapper.childAt(7).text()).toBe(`v${ VERSION }`);
 
-		expect(
-			changePercentThresholdBindSpy.callCount,
-			'this.changePercentThreshold.bind call count'
-		).to.be.equal(3);
-		expect(
-			changePercentThresholdBindSpy.args[0][0],
-			'this.changePercentThreshold.bind call 1, arg 1'
-		).to.be.deep.equal(instance);
-		expect(
-			changePercentThresholdBindSpy.args[0][1],
-			'this.changePercentThreshold.bind call 1, arg 2'
-		).to.be.equal('warnings4xxThresholdPercent');
-		expect(
-			changePercentThresholdBindSpy.args[1][0],
-			'this.changePercentThreshold.bind call 2, arg 1'
-		).to.be.deep.equal(instance);
-		expect(
-			changePercentThresholdBindSpy.args[1][1],
-			'this.changePercentThreshold.bind call 2, arg 2'
-		).to.be.equal('zonesyncPendingThreshold');
-		expect(
-			changePercentThresholdBindSpy.args[2][0],
-			'this.changePercentThreshold.bind call 3, arg 1'
-		).to.be.deep.equal(instance);
-		expect(
-			changePercentThresholdBindSpy.args[2][1],
-			'this.changePercentThreshold.bind call 3, arg 2'
-		).to.be.equal('resolverErrorsThreshold');
+		expect(changePercentThresholdBindSpy).toHaveBeenCalledTimes(3);
+		// this.changePercentThreshold.bind call 1, arg 1
+		expect(changePercentThresholdBindSpy.mock.calls[0][0]).toEqual(instance);
+		// this.changePercentThreshold.bind call 1, arg 2
+		expect(changePercentThresholdBindSpy.mock.calls[0][1]).toBe('warnings4xxThresholdPercent');
+		// this.changePercentThreshold.bind call 2, arg 1
+		expect(changePercentThresholdBindSpy.mock.calls[1][0]).toEqual(instance);
+		// this.changePercentThreshold.bind call 2, arg 2
+		expect(changePercentThresholdBindSpy.mock.calls[1][1]).toBe('zonesyncPendingThreshold');
+		// this.changePercentThreshold.bind call 3, arg 1
+		expect(changePercentThresholdBindSpy.mock.calls[2][0]).toEqual(instance);
+		// this.changePercentThreshold.bind call 3, arg 2
+		expect(changePercentThresholdBindSpy.mock.calls[2][1]).toBe('resolverErrorsThreshold');
 
-		changePercentThresholdBindSpy.resetHistory();
+		changePercentThresholdBindSpy.mockReset();
 		wrapper.setProps({ statuses: {} });
 
-		expect(
-			wrapper.children(),
-			'[no statuses.zone_sync, no statuses.resolvers] wrapper children size'
-		).to.have.lengthOf(6);
-		expect(
-			changePercentThresholdBindSpy.callCount,
-			'[no statuses.zone_sync, no statuses.resolvers] this.changePercentThreshold.bind call count'
-		).to.be.equal(1);
-		expect(
-			changePercentThresholdBindSpy.args[0][1],
-			'this.changePercentThreshold.bind call 1, arg 2'
-		).to.be.equal('warnings4xxThresholdPercent');
+		// [no statuses.zone_sync, no statuses.resolvers] wrapper children size
+		expect(wrapper.children()).toHaveLength(6);
+		expect(changePercentThresholdBindSpy).toHaveBeenCalledTimes(1);
+		// this.changePercentThreshold.bind call 1, arg 2
+		expect(changePercentThresholdBindSpy.mock.calls[0][1]).toBe('warnings4xxThresholdPercent');
 
-		changePercentThresholdBindSpy.restore();
+		changePercentThresholdBindSpy.mockRestore();
 		wrapper.unmount();
 	});
 });

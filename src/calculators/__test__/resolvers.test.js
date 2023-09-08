@@ -5,7 +5,6 @@
  *
  */
 
-import { spy, stub } from 'sinon';
 import calculate, { handleResolver } from '../resolvers.js';
 import { DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT } from '../../constants.js';
 import utils from '../utils.js';
@@ -24,7 +23,8 @@ describe('Calculators – Resolvers', () => {
 			allResponses: 53,
 			errResponses: 0
 		};
-		let STATS, resolver, previousState;
+		let STATS; let resolver; let
+			previousState;
 
 		beforeEach(() => {
 			STATS = {
@@ -76,63 +76,72 @@ describe('Calculators – Resolvers', () => {
 		});
 
 		it('no previous state', () => {
-			stub(Date, 'now').callsFake(() => ts);
-			stub(utils, 'calculateSpeed').callsFake(() => {});
-			stub(utils, 'countResolverResponses').callsFake(() => {});
-			stub(appsettings, 'getSetting').callsFake(() => {});
+			const spyDateNow = jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
+			const spyUtilsCalculateSpeed = jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation(() => {});
+			const spyUtilsCountResolverResponse = jest.spyOn(utils, 'countResolverResponses').mockClear().mockImplementation(() => {});
+			const spyAppSettingsGetSetting = jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(() => {});
 
 			const result = handleResolver(STATS, null, resolver);
 
-			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
-			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(utils.countResolverResponses.notCalled, 'countResolverResponses not called').to.be.true;
-			expect(appsettings.getSetting.notCalled, 'getSetting not called').to.be.true;
-			expect(STATS, 'STATS').to.be.deep.equal(STATS);
-			expect(STATS.traffic.in, 'STATS.traffic.in').to.be.equal(0);
-			expect(STATS.traffic.out, 'STATS.traffic.out').to.be.equal(0);
-			expect(STATS.status, 'STATS.status').to.be.equal('ok');
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(0);
-			expect(result.alert, 'resolver.alert').to.be.an('undefined');
-			expect(result, 'returned resolver').to.be.deep.equal(resolver);
-
-			Date.now.restore();
-			utils.calculateSpeed.restore();
-			utils.countResolverResponses.restore();
-			appsettings.getSetting.restore();
+			// Date.now not called
+			expect(spyDateNow).not.toHaveBeenCalled();
+			// calculateSpeed not called
+			expect(spyUtilsCalculateSpeed).not.toHaveBeenCalled();
+			// countResolverResponses not called
+			expect(spyUtilsCountResolverResponse).not.toHaveBeenCalled();
+			// getSetting not called
+			expect(spyAppSettingsGetSetting).not.toHaveBeenCalled();
+			// STATS
+			expect(STATS).toEqual(STATS);
+			// STATS.traffic.in
+			expect(STATS.traffic.in).toBe(0);
+			// STATS.traffic.out
+			expect(STATS.traffic.out).toBe(0);
+			// STATS.status
+			expect(STATS.status).toBe('ok');
+			// STATS.alerts
+			expect(STATS.alerts).toBe(0);
+			expect(result.alert).toBeUndefined();
+			// returned resolver
+			expect(result).toEqual(resolver);
 		});
 
 		it('no resolver in previous state', () => {
-			stub(Date, 'now').callsFake(() => ts);
-			stub(utils, 'calculateSpeed').callsFake(() => {});
-			stub(utils, 'countResolverResponses').callsFake(() => {});
-			stub(appsettings, 'getSetting').callsFake(() => {});
+			const spyDateNow = jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
+			const spyUtilsCalculateSpeed = jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation(() => {});
+			const spyUtilsCountResolverResponse = jest.spyOn(utils, 'countResolverResponses').mockClear().mockImplementation(() => {});
+			const spyAppSettingsGetSetting = jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(() => {});
 
 			const result = handleResolver(STATS, previousState, resolver, 'unknown_resolver');
 
-			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
-			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(utils.countResolverResponses.notCalled, 'countResolverResponses not called').to.be.true;
-			expect(appsettings.getSetting.notCalled, 'getSetting not called').to.be.true;
-			expect(STATS.traffic.in, 'STATS.traffic.in').to.be.equal(0);
-			expect(STATS.traffic.out, 'STATS.traffic.out').to.be.equal(0);
-			expect(STATS.status, 'STATS.status').to.be.equal('ok');
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(0);
-			expect(result.alert, 'resolver.alert').to.be.an('undefined');
-			expect(result, 'returned resolver').to.be.deep.equal(resolver);
-
-			Date.now.restore();
-			utils.calculateSpeed.restore();
-			utils.countResolverResponses.restore();
-			appsettings.getSetting.restore();
+			// Date.now not called
+			expect(spyDateNow).not.toHaveBeenCalled();
+			// calculateSpeed not called
+			expect(spyUtilsCalculateSpeed).not.toHaveBeenCalled();
+			// countResolverResponses not called
+			expect(spyUtilsCountResolverResponse).not.toHaveBeenCalled();
+			// getSetting not called
+			expect(spyAppSettingsGetSetting).not.toHaveBeenCalled();
+			// STATS.traffic.in
+			expect(STATS.traffic.in).toBe(0);
+			// STATS.traffic.out
+			expect(STATS.traffic.out).toBe(0);
+			// STATS.status
+			expect(STATS.status).toBe('ok');
+			// STATS.alerts
+			expect(STATS.alerts).toBe(0);
+			expect(result.alert).toBeUndefined();
+			// returned resolver
+			expect(result).toEqual(resolver);
 		});
 
 		it('with previous state', () => {
-			stub(Date, 'now').callsFake(() => ts);
-			stub(utils, 'calculateSpeed').callsFake((a, b) => b);
-			stub(utils, 'countResolverResponses').callsFake(
+			const spyDateNow = jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
+			const spyUtilsCalculateSpeed = jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
+			const spyUtilsCountResolverResponse = jest.spyOn(utils, 'countResolverResponses').mockClear().mockImplementation(
 				_responses => _responses.noerror === resolver.responses.noerror ? responses : prevResponses
 			);
-			stub(appsettings, 'getSetting').callsFake(() => 50);
+			const spyAppSettingsGetSetting = jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(() => 50);
 
 			previousState.set(resolverName, {
 				requests: {
@@ -156,74 +165,97 @@ describe('Calculators – Resolvers', () => {
 
 			const result = handleResolver(STATS, previousState, resolver, resolverName);
 
-			expect(Date.now.calledOnce, 'Date.now called once').to.be.true;
-			expect(utils.calculateSpeed.calledTwice, 'calculateSpeed called twice').to.be.true;
-			expect(utils.calculateSpeed.args[0][0], 'calculateSpeed 1st call 1st arg').to.be.equal(53);
-			expect(utils.calculateSpeed.args[0][1], 'calculateSpeed 1st call 2nd arg').to.be.equal(76);
-			expect(utils.calculateSpeed.args[0][2], 'calculateSpeed 1st call 3rd arg').to.be.equal(period);
-			expect(utils.calculateSpeed.args[1][0], 'calculateSpeed 2nd call 1st arg').to.be.equal(53);
-			expect(utils.calculateSpeed.args[1][1], 'calculateSpeed 2nd call 2nd arg').to.be.equal(71);
-			expect(utils.calculateSpeed.args[1][2], 'calculateSpeed 2nd call 3rd arg').to.be.equal(period);
-			expect(utils.countResolverResponses.calledTwice, 'countResolverResponses called twice').to.be.true;
-			expect(utils.countResolverResponses.args[0][0], 'countResolverResponses 1st call 1st arg')
-				.to.be.deep.equal(resolver.responses);
-			expect(utils.countResolverResponses.args[1][0], 'countResolverResponses 2nd call 1st arg')
-				.to.be.deep.equal(previousState.get(resolverName).responses);
-			expect(appsettings.getSetting.calledOnce, 'getSettings called once').to.be.true;
-			expect(appsettings.getSetting.args[0][0], 'getSettings 1st arg').to.be.equal('resolverErrorsThreshold');
-			expect(appsettings.getSetting.args[0][1], 'getSettings 2nd arg')
-				.to.be.equal(DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT);
-			expect(STATS.traffic.in, 'STATS.traffic.in').to.be.equal(76);
-			expect(STATS.traffic.out, 'STATS.traffic.out').to.be.equal(71);
-			expect(STATS.status, 'STATS.status').to.be.equal('ok');
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(0);
-			expect(result.alert, 'resolver.alert').to.be.an('undefined');
-			expect(result, 'returned resolver').to.be.deep.equal(resolver);
-
-			Date.now.restore();
-			utils.calculateSpeed.restore();
-			utils.countResolverResponses.restore();
-			appsettings.getSetting.restore();
+			// Date.now called once
+			expect(spyDateNow).toHaveBeenCalled();
+			// calculateSpeed called twice
+			expect(spyUtilsCalculateSpeed).toHaveBeenCalledTimes(2);
+			// calculateSpeed 1st call 1st arg
+			expect(utils.calculateSpeed.mock.calls[0][0]).toBe(53);
+			// calculateSpeed 1st call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[0][1]).toBe(76);
+			// calculateSpeed 1st call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[0][2]).toBe(period);
+			// calculateSpeed 2nd call 1st arg
+			expect(utils.calculateSpeed.mock.calls[1][0]).toBe(53);
+			// calculateSpeed 2nd call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[1][1]).toBe(71);
+			// calculateSpeed 2nd call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[1][2]).toBe(period);
+			// countResolverResponses called twice
+			expect(utils.countResolverResponses).toHaveBeenCalledTimes(2);
+			// countResolverResponses 1st call 1st arg
+			expect(utils.countResolverResponses.mock.calls[0][0]).toEqual(resolver.responses);
+			// countResolverResponses 2nd call 1st arg
+			expect(utils.countResolverResponses.mock.calls[1][0]).toEqual(previousState.get(resolverName).responses);
+			// getSettings called once
+			expect(appsettings.getSetting).toHaveBeenCalled();
+			// getSettings 1st arg
+			expect(appsettings.getSetting.mock.calls[0][0]).toBe('resolverErrorsThreshold');
+			// getSettings 2nd arg
+			expect(appsettings.getSetting.mock.calls[0][1]).toBe(DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT);
+			// STATS.traffic.in
+			expect(STATS.traffic.in).toBe(76);
+			// STATS.traffic.out
+			expect(STATS.traffic.out).toBe(71);
+			// STATS.status
+			expect(STATS.status).toBe('ok');
+			// STATS.alerts
+			expect(STATS.alerts).toBe(0);
+			expect(result.alert).toBeUndefined();
+			// returned resolver
+			expect(result).toEqual(resolver);
 		});
 
 		it('errors threshold reached', () => {
-			stub(Date, 'now').callsFake(() => ts);
-			stub(utils, 'calculateSpeed').callsFake((a, b) => b);
-			stub(utils, 'countResolverResponses').callsFake(
+			jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
+			jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
+			jest.spyOn(utils, 'countResolverResponses').mockClear().mockImplementation(
 				_responses => _responses.noerror === resolver.responses.noerror ? responses : prevResponses
 			);
-			stub(appsettings, 'getSetting').callsFake(() => 0);
+			jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(() => 0);
 
 			const result = handleResolver(STATS, previousState, resolver, resolverName);
 
-			expect(Date.now.calledOnce, 'Date.now called once').to.be.true;
-			expect(utils.calculateSpeed.calledTwice, 'calculateSpeed called twice').to.be.true;
-			expect(utils.calculateSpeed.args[0][0], 'calculateSpeed 1st call 1st arg').to.be.equal(53);
-			expect(utils.calculateSpeed.args[0][1], 'calculateSpeed 1st call 2nd arg').to.be.equal(76);
-			expect(utils.calculateSpeed.args[0][2], 'calculateSpeed 1st call 3rd arg').to.be.equal(period);
-			expect(utils.calculateSpeed.args[1][0], 'calculateSpeed 2nd call 1st arg').to.be.equal(53);
-			expect(utils.calculateSpeed.args[1][1], 'calculateSpeed 2nd call 2nd arg').to.be.equal(71);
-			expect(utils.calculateSpeed.args[1][2], 'calculateSpeed 2nd call 3rd arg').to.be.equal(period);
-			expect(utils.countResolverResponses.calledTwice, 'countResolverResponses called twice').to.be.true;
-			expect(utils.countResolverResponses.args[0][0], 'countResolverResponses 1st call 1st arg')
-				.to.be.deep.equal(resolver.responses);
-			expect(utils.countResolverResponses.args[1][0], 'countResolverResponses 2nd call 1st arg')
-				.to.be.deep.equal(previousState.get(resolverName).responses);
-			expect(appsettings.getSetting.calledOnce, 'getSettings called once').to.be.true;
-			expect(appsettings.getSetting.args[0][0], 'getSettings 1st arg').to.be.equal('resolverErrorsThreshold');
-			expect(appsettings.getSetting.args[0][1], 'getSettings 2nd arg')
-				.to.be.equal(DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT);
-			expect(STATS.traffic.in, 'STATS.traffic.in').to.be.equal(76);
-			expect(STATS.traffic.out, 'STATS.traffic.out').to.be.equal(71);
-			expect(STATS.status, 'STATS.status').to.be.equal('danger');
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(1);
-			expect(result.alert, 'resolver.alert').to.be.true;
-			expect(result, 'returned resolver').to.be.deep.equal(resolver);
-
-			Date.now.restore();
-			utils.calculateSpeed.restore();
-			utils.countResolverResponses.restore();
-			appsettings.getSetting.restore();
+			// Date.now called once
+			expect(Date.now).toHaveBeenCalled();
+			// calculateSpeed called twice
+			expect(utils.calculateSpeed).toHaveBeenCalledTimes(2);
+			// calculateSpeed 1st call 1st arg
+			expect(utils.calculateSpeed.mock.calls[0][0]).toBe(53);
+			// calculateSpeed 1st call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[0][1]).toBe(76);
+			// calculateSpeed 1st call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[0][2]).toBe(period);
+			// calculateSpeed 2nd call 1st arg
+			expect(utils.calculateSpeed.mock.calls[1][0]).toBe(53);
+			// calculateSpeed 2nd call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[1][1]).toBe(71);
+			// calculateSpeed 2nd call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[1][2]).toBe(period);
+			// countResolverResponses called twice
+			expect(utils.countResolverResponses).toHaveBeenCalledTimes(2);
+			// countResolverResponses 1st call 1st arg
+			expect(utils.countResolverResponses.mock.calls[0][0]).toEqual(resolver.responses);
+			// countResolverResponses 2nd call 1st arg
+			expect(utils.countResolverResponses.mock.calls[1][0]).toEqual(previousState.get(resolverName).responses);
+			// getSettings called once
+			expect(appsettings.getSetting).toHaveBeenCalled();
+			// getSettings 1st arg
+			expect(appsettings.getSetting.mock.calls[0][0]).toBe('resolverErrorsThreshold');
+			// getSettings 2nd arg
+			expect(appsettings.getSetting.mock.calls[0][1]).toBe(DEFAULT_RESOLVER_ERRORS_THRESHOLD_PERCENT);
+			// STATS.traffic.in
+			expect(STATS.traffic.in).toBe(76);
+			// STATS.traffic.out
+			expect(STATS.traffic.out).toBe(71);
+			// STATS.status
+			expect(STATS.status).toBe('danger');
+			// STATS.alerts
+			expect(STATS.alerts).toBe(1);
+			// resolver.alert
+			expect(result.alert).toBe(true);
+			// returned resolver
+			expect(result).toEqual(resolver);
 		});
 	});
 
@@ -248,39 +280,49 @@ describe('Calculators – Resolvers', () => {
 			}
 		};
 
-		spy(handleResolver, 'bind');
-		stub(utils, 'createMapFromObject').callsFake(() => resolversMap);
+		jest.spyOn(handleResolver, 'bind').mockClear();
+		jest.spyOn(utils, 'createMapFromObject').mockClear().mockImplementation(() => resolversMap);
 
-		expect(calculate(null, null, STORE), 'result [resolvers = null]').to.be.a('null');
-		expect(STORE.__STATUSES.resolvers.ready, '__STATUSES.resolvers.ready [resolvers = {}]').to.be.false;
-		expect(utils.createMapFromObject.notCalled, 'createMapFromObject not called').to.be.true;
+		expect(calculate(null, null, STORE)).toBeNull();
+		// __STATUSES.resolvers.ready [resolvers = {}]
+		expect(STORE.__STATUSES.resolvers.ready).toBe(false);
+		// createMapFromObject not called
+		expect(utils.createMapFromObject).not.toHaveBeenCalled();
 
 		delete STORE.__STATUSES.resolvers.ready;
 
-		expect(calculate({}, null, STORE), 'result [resolvers = {}]').to.be.a('null');
-		expect(STORE.__STATUSES.resolvers.ready, '__STATUSES.resolvers.ready [resolvers = {}]').to.be.false;
-		expect(utils.createMapFromObject.notCalled, 'createMapFromObject not called').to.be.true;
+		expect(calculate({}, null, STORE)).toBeNull();
+		// __STATUSES.resolvers.ready [resolvers = {}]
+		expect(STORE.__STATUSES.resolvers.ready).toBe(false);
+		// createMapFromObject not called
+		expect(utils.createMapFromObject).not.toHaveBeenCalled();
 
 		const result = calculate(resolvers, previousState, STORE);
 
-		expect(utils.createMapFromObject.calledOnce, 'createMapFromObject called once').to.be.true;
-		expect(utils.createMapFromObject.args[0][0], 'createMapFromObject 1st arg').to.be.deep.equal(resolvers);
-		expect(utils.createMapFromObject.args[0][1].name, 'createMapFromObject 2nd arg').to.be.equal('bound handleResolver');
-		expect(handleResolver.bind.calledOnce, 'handleResolver.bind called once').to.be.true;
-		expect(handleResolver.bind.args[0][0], 'handleResolver.bind 1st arg').to.be.a('null');
+		// createMapFromObject called once
+		expect(utils.createMapFromObject).toHaveBeenCalled();
+		// createMapFromObject 1st arg
+		expect(utils.createMapFromObject.mock.calls[0][0]).toEqual(resolvers);
+		// createMapFromObject 2nd arg
+		expect(utils.createMapFromObject.mock.calls[0][1].name).toBe('bound handleResolver');
+		// handleResolver.bind called once
+		expect(handleResolver.bind).toHaveBeenCalled();
+		expect(handleResolver.bind.mock.calls[0][0]).toBeNull();
 
 		STATS.total = resolversMap.size;
 
-		expect(handleResolver.bind.args[0][1], 'handleResolver.bind 2nd arg').to.be.deep.equal(STATS);
-		expect(handleResolver.bind.args[0][2], 'handleResolver.bind 3rd arg').to.be.equal(previousState);
-		expect(utils.createMapFromObject.args[0][2], 'createMapFromObject 3rd arg').to.be.false;
-		expect(result.__STATS, 'resolvers.__STATS').to.be.deep.equal(STATS);
-		expect(STORE.__STATUSES.resolvers, 'STORE.__STATUSES.resolvers').to.be.deep.equal({
+		// handleResolver.bind 2nd arg
+		expect(handleResolver.bind.mock.calls[0][1]).toEqual(STATS);
+		// handleResolver.bind 3rd arg
+		expect(handleResolver.bind.mock.calls[0][2]).toBe(previousState);
+		// createMapFromObject 3rd arg
+		expect(utils.createMapFromObject.mock.calls[0][2]).toBe(false);
+		// resolvers.__STATS
+		expect(result.__STATS).toEqual(STATS);
+		// STORE.__STATUSES.resolvers
+		expect(STORE.__STATUSES.resolvers).toEqual({
 			ready: true,
 			status: STATS.status
 		});
-
-		handleResolver.bind.restore();
-		utils.createMapFromObject.restore();
 	});
 });

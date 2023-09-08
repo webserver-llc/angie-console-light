@@ -32,7 +32,9 @@ describe('Chart utils', () => {
 	const metrics = ['a', 'b', 'c', 'd'];
 
 	it('getYMax()', () => {
-		expect(getYMax(data, metrics, []), 'no disabled').to.be.equal(35);
-		expect(getYMax(data, metrics, ['b']), '"b" disabled').to.be.equal(12);
+		// no disabled
+		expect(getYMax(data, metrics, [])).toBe(35);
+		// "b" disabled
+		expect(getYMax(data, metrics, ['b'])).toBe(12);
 	});
 });

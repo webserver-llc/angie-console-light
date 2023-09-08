@@ -17,34 +17,34 @@ describe('<Loader />', () => {
 	it('return', () => {
 		const className = 'test';
 		const wrapper = shallow(
-			<Loader className={ className } />
+			<Loader className={className} />
 		);
 		const rootEl = wrapper.getElement();
 
-		assert(rootEl.type === 'div', 'Should be a "div" html tag');
-		assert(rootEl.props.children === undefined, 'Should not have any children');
+		expect(rootEl.type === 'div').toBeTruthy();
+		expect(rootEl.props.children === undefined).toBeTruthy();
 
-		assert(wrapper.hasClass(className), 'Should have a class from "className" property');
+		expect(wrapper.hasClass(className)).toBeTruthy();
 
 		wrapper.unmount();
 	});
 
 	it('gray = false', () => {
 		const wrapper = shallow(
-			<Loader gray={ false } />
+			<Loader gray={false} />
 		);
 
-		expect(wrapper.hasClass(defaultSN)).to.be.true;
+		expect(wrapper.hasClass(defaultSN)).toBe(true);
 
 		wrapper.unmount();
 	});
 
 	it('gray = true', () => {
 		const wrapper = shallow(
-			<Loader gray={ true } />
+			<Loader gray />
 		);
 
-		expect(wrapper.hasClass(graySN)).to.be.true;
+		expect(wrapper.hasClass(graySN)).toBe(true);
 
 		wrapper.unmount();
 	});

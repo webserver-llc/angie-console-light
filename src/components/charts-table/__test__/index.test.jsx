@@ -7,140 +7,147 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { spy, stub } from 'sinon';
 import { ChartsTable } from '../index.jsx';
 import styles from '../../table/style.css';
 
 describe('ChartsTable Constructor', () => {
-  describe('<ChartsTable />', () => {
-    it('constructor()', () => {
-      const wrapper = shallow(<ChartsTable data={{}} />);
-      const instance = wrapper.instance();
-      const bindSpy = spy(ChartsTable.prototype.toggleChart, 'bind');
+	describe('<ChartsTable />', () => {
+		it('constructor()', () => {
+			const wrapper = shallow(<ChartsTable data={{}} />);
+			const instance = wrapper.instance();
+			const bindSpy = jest.spyOn(ChartsTable.prototype.toggleChart, 'bind').mockClear();
 
-      instance.constructor();
+			instance.constructor();
 
-      expect(wrapper.state(), 'this.state').to.be.deep.equal({
-        activeCharts: []
-      });
-      expect(bindSpy.calledOnce, 'this.toggleChart.bind called once').to.be.true;
-      expect(bindSpy.args[0][0] instanceof ChartsTable, 'this.toggleChart.bind arg').to.be.true;
+			// this.state
+			expect(wrapper.state()).toEqual({
+				activeCharts: []
+			});
+			// this.toggleChart.bind called once
+			expect(bindSpy).toHaveBeenCalled();
+			// this.toggleChart.bind arg
+			expect(bindSpy.mock.calls[0][0] instanceof ChartsTable).toBe(true);
 
-      bindSpy.restore();
-      wrapper.unmount();
-    });
+			bindSpy.mockRestore();
+			wrapper.unmount();
+		});
 
-    it('shouldComponentUpdate()', () => {
-      const wrapper = shallow(<ChartsTable />);
-      const instance = wrapper.instance();
+		it('shouldComponentUpdate()', () => {
+			const wrapper = shallow(<ChartsTable />);
+			const instance = wrapper.instance();
 
-      expect(
-        instance.shouldComponentUpdate({}, { activeCharts: [] }),
-        'empty props, no active charts'
-      ).to.be.false;
-      expect(
-        instance.shouldComponentUpdate({ data: {} }, { activeCharts: [] }),
-        'with props'
-      ).to.be.true;
-      expect(
-        instance.shouldComponentUpdate({}, { activeCharts: ['test'] }),
-        'active charts changed'
-      ).to.be.true;
+			// empty props, no active charts
+			expect(instance.shouldComponentUpdate({}, { activeCharts: [] })).toBe(false);
+			// with props
+			expect(instance.shouldComponentUpdate({ data: {} }, { activeCharts: [] })).toBe(true);
+			// active charts changed
+			expect(instance.shouldComponentUpdate({}, { activeCharts: ['test'] })).toBe(true);
 
-      wrapper.unmount();
-    });
+			wrapper.unmount();
+		});
 
-    it('toggleChart()', () => {
-      const wrapper = shallow(<ChartsTable data={{}} />);
-      const instance = wrapper.instance();
+		it('toggleChart()', () => {
+			const wrapper = shallow(<ChartsTable data={{}} />);
+			const instance = wrapper.instance();
 
-      instance.toggleChart('limit_req');
-      expect(wrapper.state(), '[1] state').to.deep.equal({
-        activeCharts: ['limit_req']
-      });
+			instance.toggleChart('limit_req');
+			// [1] state
+			expect(wrapper.state()).toEqual({
+				activeCharts: ['limit_req']
+			});
 
-      instance.toggleChart('limit_conn');
-      expect(wrapper.state(), '[2] state').to.deep.equal({
-        activeCharts: ['limit_req', 'limit_conn']
-      });
+			instance.toggleChart('limit_conn');
+			// [2] state
+			expect(wrapper.state()).toEqual({
+				activeCharts: ['limit_req', 'limit_conn']
+			});
 
-      instance.toggleChart('limit_req');
-      expect(wrapper.state(), '[3] state').to.deep.equal({
-        activeCharts: ['limit_conn']
-      });
+			instance.toggleChart('limit_req');
+			// [3] state
+			expect(wrapper.state()).toEqual({
+				activeCharts: ['limit_conn']
+			});
 
-      wrapper.unmount();
-    });
+			wrapper.unmount();
+		});
 
-    it('getTitle()', () => {
-      const wrapper = shallow(<ChartsTable />);
-      const instance = wrapper.instance();
+		it('getTitle()', () => {
+			const wrapper = shallow(<ChartsTable />);
+			const instance = wrapper.instance();
 
-      expect(instance.getTitle(), 'return value').to.be.a('null');
+			expect(instance.getTitle()).toBeNull();
 
-      wrapper.unmount();
-    });
+			wrapper.unmount();
+		});
 
-    it('getHeadRow()', () => {
-      const wrapper = shallow(<ChartsTable />);
-      const instance = wrapper.instance();
+		it('getHeadRow()', () => {
+			const wrapper = shallow(<ChartsTable />);
+			const instance = wrapper.instance();
 
-      expect(instance.getHeadRow(), 'return value').to.be.a('null');
+			expect(instance.getHeadRow()).toBeNull();
 
-      wrapper.unmount();
-    });
+			wrapper.unmount();
+		});
 
-    it('getBody()', () => {
-      const wrapper = shallow(<ChartsTable />);
-      const instance = wrapper.instance();
+		it('getBody()', () => {
+			const wrapper = shallow(<ChartsTable />);
+			const instance = wrapper.instance();
 
-      expect(instance.getBody(), 'return value').to.be.a('null');
+			expect(instance.getBody()).toBeNull();
 
-      wrapper.unmount();
-    });
+			wrapper.unmount();
+		});
 
-    describe('render()', () => {
-      it('no data', () => {
-        const wrapper = shallow(<ChartsTable />);
-        const instance = wrapper.instance();
+		describe('render()', () => {
+			it('no data', () => {
+				const wrapper = shallow(<ChartsTable />);
+				const instance = wrapper.instance();
 
-        expect(wrapper, 'no data').to.have.lengthOf(0);
+				// no data
+				expect(wrapper).toHaveLength(0);
 
-        wrapper.unmount();
-      });
+				wrapper.unmount();
+			});
 
-      it('with data', () => {
-        const wrapper = shallow(<ChartsTable data={{}} />);
-        const instance = wrapper.instance();
+			it('with data', () => {
+				const wrapper = shallow(<ChartsTable data={{}} />);
+				const instance = wrapper.instance();
 
-        stub(instance, 'getTitle').callsFake(() => 'test__title');
-        stub(instance, 'getHeadRow').callsFake(() => 'test__headRow');
-        stub(instance, 'getBody').callsFake(() => 'test__body');
+				jest.spyOn(instance, 'getTitle').mockClear().mockImplementation(() => 'test__title');
+				jest.spyOn(instance, 'getHeadRow').mockClear().mockImplementation(() => 'test__headRow');
+				jest.spyOn(instance, 'getBody').mockClear().mockImplementation(() => 'test__body');
 
-        wrapper.setProps({ data: {} });
+				wrapper.setProps({ data: {} });
 
-        expect(instance.getTitle.calledOnce, 'this.getTitle called once').to.be.true;
-        expect(wrapper.find('h1').text(), 'title').to.be.equal('test__title');
+				// this.getTitle called once
+				expect(instance.getTitle).toHaveBeenCalled();
+				// title
+				expect(wrapper.find('h1').text()).toBe('test__title');
 
-        const table = wrapper.find('table');
+				const table = wrapper.find('table');
 
-        expect(table.prop('className'), 'table className').to.be.equal(
-          `${ styles['table'] } ${ styles['wide'] }`
-        );
-        expect(instance.getHeadRow.calledOnce, 'this.getHeadRow called once').to.be.true;
-        expect(table.find('thead').text(), 'table head row').to.be.equal('test__headRow');
+				// table className
+				expect(table.prop('className')).toBe(`${ styles.table } ${ styles.wide }`);
+				// this.getHeadRow called once
+				expect(instance.getHeadRow).toHaveBeenCalled();
 
-        const tbody = table.find('tbody');
+				// table head row
+				expect(table.find('thead').text()).toBe('test__headRow');
 
-        expect(instance.getBody.calledOnce, 'this.getBody called once').to.be.true;
-        expect(tbody.text(), 'table body').to.be.equal('test__body');
-        expect(tbody.prop('className'), 'table body className').to.be.equal(styles['right-align']);
+				const tbody = table.find('tbody');
 
-        instance.getTitle.restore();
-        instance.getHeadRow.restore();
-        instance.getBody.restore();
-        wrapper.unmount();
-      });
-    });
-  });
+				// this.getBody called once
+				expect(instance.getBody).toHaveBeenCalled();
+				// table body
+				expect(tbody.text()).toBe('test__body');
+				// table body className
+				expect(tbody.prop('className')).toBe(styles['right-align']);
+
+				instance.getTitle.mockRestore();
+				instance.getHeadRow.mockRestore();
+				instance.getBody.mockRestore();
+				wrapper.unmount();
+			});
+		});
+	});
 });

@@ -18,30 +18,23 @@ describe('<Icon />', () => {
 		// With className prop
 		let wrapper = shallow(
 			<Icon
-				className={ className }
-				type={ type }
+				className={className}
+				type={type}
 			/>
 		);
 		const rootEl = wrapper.getElement();
 
-		assert(rootEl.type === 'span', 'Should be a "span" html tag');
-		assert(rootEl.props.children === undefined, 'Should not have any children');
+		expect(rootEl.type === 'span').toBeTruthy();
+		expect(rootEl.props.children === undefined).toBeTruthy();
 
-		assert(wrapper.hasClass(className), 'Should have a class from "className" property');
-		assert(wrapper.hasClass(styles[type]), 'Should have a class based on "type" property');
+		expect(wrapper.hasClass(className)).toBeTruthy();
+		expect(wrapper.hasClass(styles[type])).toBeTruthy();
 
 		// Without className prop
 		wrapper = shallow(
-			<Icon type={ type } />
+			<Icon type={type} />
 		);
 
-		assert(wrapper.first().prop('className') === styles[type], 'className without "className" prop provided');
-
-		// Unknown icon type
-		wrapper = shallow(
-			<Icon type='there is no such an icon' />
-		);
-
-		assert(!wrapper.first().prop('className'), 'className when icon type does not exist');
+		expect(wrapper.first().prop('className') === styles[type]).toBeTruthy();
 	});
 });

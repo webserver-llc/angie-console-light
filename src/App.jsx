@@ -8,7 +8,7 @@
 /* global __ENV__ */
 
 import React from 'react';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory as createHistory } from 'history';
 
 import styles from './style.css';
 import Header from './components/header/header.jsx';

@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import { spy } from 'sinon';
 import { shallow } from 'enzyme';
 import { ZoneSync } from '../zonesync.jsx';
 import SortableTable from '../../table/sortabletable.jsx';
@@ -15,7 +14,7 @@ import styles from '../../table/style.css';
 
 describe('<ZoneSync Page />', () => {
 	it('extends SortableTable', () => {
-		expect(ZoneSync.prototype instanceof SortableTable).to.be.true;
+		expect(ZoneSync.prototype instanceof SortableTable).toBe(true);
 	});
 
 	it('get SORTING_SETTINGS_KEY', () => {
@@ -23,10 +22,11 @@ describe('<ZoneSync Page />', () => {
 			<ZoneSync data={{ zone_sync: {
 				status: {},
 				zones: []
-			} }} />
+			} }}
+			/>
 		);
 
-		expect(wrapper.instance().SORTING_SETTINGS_KEY).to.be.equal('zoneSyncSortOrder');
+		expect(wrapper.instance().SORTING_SETTINGS_KEY).toBe('zoneSyncSortOrder');
 
 		wrapper.unmount();
 	});
@@ -56,30 +56,22 @@ describe('<ZoneSync Page />', () => {
 			);
 			let rows = wrapper.find('table').at(1).find('tbody tr');
 
-			expect(rows.at(0).find('td').at(1).text(), 'row 1, title').to.be.equal('test');
-			expect(rows.at(1).find('td').at(1).text(), 'row 2, title').to.be.equal('test_2');
-			expect(rows.at(2).find('td').at(1).text(), 'row 3, title').to.be.equal('test_3');
-			expect(rows.at(3).find('td').at(1).text(), 'row 4, title').to.be.equal('test_4');
+			// row 1, title
+			expect(rows.at(0).find('td').at(1).text()).toBe('test');
+			// row 2, title
+			expect(rows.at(1).find('td').at(1).text()).toBe('test_2');
+			// row 3, title
+			expect(rows.at(2).find('td').at(1).text()).toBe('test_3');
+			// row 4, title
+			expect(rows.at(3).find('td').at(1).text()).toBe('test_4');
 
 			wrapper.setState({ sortOrder: 'desc' });
 			rows = wrapper.find('table').at(1).find('tbody tr');
 
-			assert(
-				['test_2', 'test_3'].includes(rows.at(0).find('td').at(1).text()),
-				'row 1, title [desc]'
-			);
-			assert(
-				['test_2', 'test_3'].includes(rows.at(1).find('td').at(1).text()),
-				'row 2, title [desc]'
-			);
-			assert(
-				['test', 'test_4'].includes(rows.at(2).find('td').at(1).text()),
-				'row 3, title [desc]'
-			);
-			assert(
-				['test', 'test_4'].includes(rows.at(3).find('td').at(1).text()),
-				'row 4, title [desc]'
-			);
+			expect(['test_2', 'test_3'].includes(rows.at(0).find('td').at(1).text())).toBeTruthy();
+			expect(['test_2', 'test_3'].includes(rows.at(1).find('td').at(1).text())).toBeTruthy();
+			expect(['test', 'test_4'].includes(rows.at(2).find('td').at(1).text())).toBeTruthy();
+			expect(['test', 'test_4'].includes(rows.at(3).find('td').at(1).text())).toBeTruthy();
 
 			wrapper.unmount();
 		});
@@ -95,42 +87,49 @@ describe('<ZoneSync Page />', () => {
 						nodes_online: 10
 					},
 					zones: []
-				} }} />
+				} }}
+				/>
 			);
 
-			expect(wrapper.getElement().type, 'wrapper html tag').to.be.equal('div');
+			// wrapper html tag
+			expect(wrapper.getElement().type).toBe('div');
 
-			const tables = wrapper.find(`.${ styles['table'] }`);
+			const tables = wrapper.find(`.${ styles.table }`);
 
-			expect(tables, 'tables length').to.have.lengthOf(2);
+			// tables length
+			expect(tables).toHaveLength(2);
 			tables.forEach((table, i) => {
-				expect(table.hasClass(styles['thin']), `table ${ i } has class "thin"`).to.be.true;
+				// table ${ i } has class "thin"
+				expect(table.hasClass(styles.thin)).toBe(true);
 			});
 
 			const statusCells = tables.at(0).find('tbody td');
 
-			expect(statusCells, 'status cells').to.have.lengthOf(5);
-			expect(statusCells.at(0).text(), 'status cell 1, text').to.be.equal('100');
-			expect(statusCells.at(1).text(), 'status cell 2, text').to.be.equal('100000');
-			expect(statusCells.at(1).prop('className'), 'status cell 2, className').to.be.equal(
-				styles['bdr']
-			)
-			;expect(statusCells.at(2).text(), 'status cell 3, text').to.be.equal('99');
-			expect(statusCells.at(3).text(), 'status cell 4, text').to.be.equal('99000');
-			expect(statusCells.at(3).prop('className'), 'status cell 4, className').to.be.equal(
-				styles['bdr']
-			);
-			expect(statusCells.at(4).text(), 'status cell 5, text').to.be.equal('10');
+			// status cells
+			expect(statusCells).toHaveLength(5);
+			// status cell 1, text
+			expect(statusCells.at(0).text()).toBe('100');
+			// status cell 2, text
+			expect(statusCells.at(1).text()).toBe('100000');
+			// status cell 2, className
+			expect(statusCells.at(1).prop('className')).toBe(styles.bdr)
+			;// status cell 3, text
+			expect(statusCells.at(2).text()).toBe('99');
+			// status cell 4, text
+			expect(statusCells.at(3).text()).toBe('99000');
+			// status cell 4, className
+			expect(statusCells.at(3).prop('className')).toBe(styles.bdr);
+			// status cell 5, text
+			expect(statusCells.at(4).text()).toBe('10');
 
 			const sortControl = tables.at(1).find('TableSortControl');
 
-			expect(sortControl.length, 'TableSortControl length').to.be.equal(1);
-			expect(sortControl.prop('order'), 'TableSortControl "order" prop').to.be.equal(
-				wrapper.state('sortOrder')
-			);
-			expect(sortControl.prop('onChange').name, 'TableSortControl "onChange" prop').to.be.equal(
-				'bound changeSorting'
-			);
+			// TableSortControl length
+			expect(sortControl.length).toBe(1);
+			// TableSortControl "order" prop
+			expect(sortControl.prop('order')).toBe(wrapper.state('sortOrder'));
+			// TableSortControl "onChange" prop
+			expect(sortControl.prop('onChange').name).toBe('bound changeSorting');
 
 			wrapper.unmount();
 		});
@@ -163,37 +162,50 @@ describe('<ZoneSync Page />', () => {
 			const rows = wrapper.find('table').at(1).find('tbody tr');
 			let cells;
 
-			expect(rows, 'rows length').to.have.lengthOf(3);
+			// rows length
+			expect(rows).toHaveLength(3);
 
 			cells = rows.at(0).find('td');
-			expect(cells, 'cells length').to.have.lengthOf(4);
-			expect(cells.at(0).prop('className'), 'row 1, status cell className').to.be.equal(styles['ok']);
-			expect(cells.at(1).prop('className'), 'row 1, name cell, className').to.be.equal(
-				`${ styles['left-align'] } ${ styles['bold'] } ${ styles['bdr'] }`
-			);
-			expect(cells.at(1).text(), 'row 1, name cell, text').to.be.equal('test');
-			expect(cells.at(2).text(), 'row 1, total cell, text').to.be.equal('1000000');
-			expect(cells.at(3).text(), 'row 1, pending cell, text').to.be.equal('2');
+			// cells length
+			expect(cells).toHaveLength(4);
+			// row 1, status cell className
+			expect(cells.at(0).prop('className')).toBe(styles.ok);
+			// row 1, name cell, className
+			expect(cells.at(1).prop('className')).toBe(`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`);
+			// row 1, name cell, text
+			expect(cells.at(1).text()).toBe('test');
+			// row 1, total cell, text
+			expect(cells.at(2).text()).toBe('1000000');
+			// row 1, pending cell, text
+			expect(cells.at(3).text()).toBe('2');
 
 			cells = rows.at(1).find('td');
-			expect(cells, 'cells length').to.have.lengthOf(4);
-			expect(cells.at(0).prop('className'), 'row 2, status cell className').to.be.equal(styles['warning']);
-			expect(cells.at(1).prop('className'), 'row 2, name cell, className').to.be.equal(
-				`${ styles['left-align'] } ${ styles['bold'] } ${ styles['bdr'] }`
-			);
-			expect(cells.at(1).text(), 'row 2, name cell, text').to.be.equal('test_2');
-			expect(cells.at(2).text(), 'row 2, total cell, text').to.be.equal('5000');
-			expect(cells.at(3).text(), 'row 2, pending cell, text').to.be.equal('100');
+			// cells length
+			expect(cells).toHaveLength(4);
+			// row 2, status cell className
+			expect(cells.at(0).prop('className')).toBe(styles.warning);
+			// row 2, name cell, className
+			expect(cells.at(1).prop('className')).toBe(`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`);
+			// row 2, name cell, text
+			expect(cells.at(1).text()).toBe('test_2');
+			// row 2, total cell, text
+			expect(cells.at(2).text()).toBe('5000');
+			// row 2, pending cell, text
+			expect(cells.at(3).text()).toBe('100');
 
 			cells = rows.at(2).find('td');
-			expect(cells, 'cells length').to.have.lengthOf(4);
-			expect(cells.at(0).prop('className'), 'row 3, status cell className').to.be.equal(styles['alert']);
-			expect(cells.at(1).prop('className'), 'row 3, name cell, className').to.be.equal(
-				`${ styles['left-align'] } ${ styles['bold'] } ${ styles['bdr'] }`
-			);
-			expect(cells.at(1).text(), 'row 3, name cell, text').to.be.equal('test_3');
-			expect(cells.at(2).text(), 'row 3, total cell, text').to.be.equal('100');
-			expect(cells.at(3).text(), 'row 3, pending cell, text').to.be.equal('80');
+			// cells length
+			expect(cells).toHaveLength(4);
+			// row 3, status cell className
+			expect(cells.at(0).prop('className')).toBe(styles.alert);
+			// row 3, name cell, className
+			expect(cells.at(1).prop('className')).toBe(`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`);
+			// row 3, name cell, text
+			expect(cells.at(1).text()).toBe('test_3');
+			// row 3, total cell, text
+			expect(cells.at(2).text()).toBe('100');
+			// row 3, pending cell, text
+			expect(cells.at(3).text()).toBe('80');
 
 			wrapper.unmount();
 		});

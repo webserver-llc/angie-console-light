@@ -26,26 +26,25 @@ describe('<Requests IndexPage />', () => {
 		);
 		let indexBox = wrapper.find('IndexBox');
 
-		expect(indexBox.prop('className'), 'IndexBox className from props').to.be.equal('test_class');
+		// IndexBox className from props
+		expect(indexBox.prop('className')).toBe('test_class');
 
 		indexBox = indexBox;
 
-		expect(indexBox.childAt(0).prop('className'), 'total row, className').to.be.equal(styles['counter']);
-		expect(indexBox.childAt(0).text(), 'total row, text').to.be.equal('Total:1000');
-		expect(indexBox.childAt(2).type(), 'table').to.be.equal('table');
-		expect(indexBox.childAt(2).prop('className'), 'table className').to.be.equal(styles['table']);
-		expect(
-			indexBox.childAt(2).childAt(0).children(),
-			'table, row 1 children length'
-		).to.have.lengthOf(2);
-		expect(
-			indexBox.childAt(2).childAt(1).childAt(0).text(),
-			'table, row 2, cell 1 text'
-		).to.be.equal('999');
-		expect(
-			indexBox.childAt(2).childAt(1).childAt(1).text(),
-			'table, row 2, cell 2 text'
-		).to.be.equal('103');
+		// total row, className
+		expect(indexBox.childAt(0).prop('className')).toBe(styles.counter);
+		// total row, text
+		expect(indexBox.childAt(0).text()).toBe('Total:1000');
+		// table
+		expect(indexBox.childAt(2).type()).toBe('table');
+		// table className
+		expect(indexBox.childAt(2).prop('className')).toBe(styles.table);
+		// table, row 1 children length
+		expect(indexBox.childAt(2).childAt(0).children()).toHaveLength(2);
+		// table, row 2, cell 1 text
+		expect(indexBox.childAt(2).childAt(1).childAt(0).text()).toBe('999');
+		// table, row 2, cell 2 text
+		expect(indexBox.childAt(2).childAt(1).childAt(1).text()).toBe('103');
 
 		wrapper.unmount();
 	});

@@ -5,17 +5,16 @@
  *
  */
 
-import { spy, stub } from 'sinon';
 import calculate, { handleZones } from '../serverzones.js';
 import utils from '../utils.js';
 import appsettings from '../../appsettings';
-
 
 describe('Calculators – ServerZones', () => {
 	describe('handleZones()', () => {
 		const ts = 1596792686803;
 		const serverName = 'test_server';
-		let STATS, server, previousState, STORE;
+		let STATS; let server; let previousState; let
+			STORE;
 
 		beforeEach(() => {
 			STATS = {
@@ -54,216 +53,260 @@ describe('Calculators – ServerZones', () => {
 		});
 
 		it('no previous state', () => {
-			stub(Date, 'now').callsFake(() => {});
-			stub(utils, 'calculateSpeed').callsFake((a, b) => b);
-			stub(utils, 'calculateTraffic').callsFake(() => {});
-			stub(utils, 'is4xxThresholdReached').callsFake(() => false);
-			stub(utils, 'handleErrors').callsFake(() => {});
+			jest.spyOn(Date, 'now').mockClear().mockImplementation(() => {});
+			jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
+			jest.spyOn(utils, 'calculateTraffic').mockClear().mockImplementation(() => {});
+			jest.spyOn(utils, 'is4xxThresholdReached').mockClear().mockImplementation(() => false);
+			jest.spyOn(utils, 'handleErrors').mockClear().mockImplementation(() => {});
 
 			const result = handleZones(STATS, null, server);
 
-			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
-			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(result.sent_s, 'server.sent_s').to.be.an('undefined');
-			expect(result.rcvd_s, 'server.rcvd_s').to.be.an('undefined');
-			expect(result.zone_req_s, 'server.zone_req_s').to.be.an('undefined');
-			expect(utils.calculateTraffic.notCalled, 'calculateTraffic not called').to.be.true;
-			expect(utils.is4xxThresholdReached.calledOnce, 'is4xxThresholdReached called once').to.be.true;
-			expect(utils.is4xxThresholdReached.args[0][0].passedToIs4xx, 'is4xxThresholdReached 1st arg').to.be.true;
-			expect(result.warning, 'server.warning').to.be.an('undefined');
-			expect(STATS.status, 'STATS.status').to.be.equal('ok');
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(0);
-			expect(utils.handleErrors.calledOnce, 'handleErrors called once').to.be.true;
-			expect(utils.handleErrors.args[0][0], 'handleErrors 1st arg').to.be.a('null');
-			expect(utils.handleErrors.args[0][1], 'handleErrors 2nd arg').to.be.deep.equal(server);
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(0);
-			expect(result, 'returned server').to.be.deep.equal(server);
-
-			Date.now.restore();
-			utils.calculateSpeed.restore();
-			utils.calculateTraffic.restore();
-			utils.is4xxThresholdReached.restore();
-			utils.handleErrors.restore();
+			// Date.now not called
+			expect(Date.now).not.toHaveBeenCalled();
+			// calculateSpeed not called
+			expect(utils.calculateSpeed).not.toHaveBeenCalled();
+			expect(result.sent_s).toBeUndefined();
+			expect(result.rcvd_s).toBeUndefined();
+			expect(result.zone_req_s).toBeUndefined();
+			// calculateTraffic not called
+			expect(utils.calculateTraffic).not.toHaveBeenCalled();
+			// is4xxThresholdReached called once
+			expect(utils.is4xxThresholdReached).toHaveBeenCalled();
+			// is4xxThresholdReached 1st arg
+			expect(utils.is4xxThresholdReached.mock.calls[0][0].passedToIs4xx).toBe(true);
+			expect(result.warning).toBeUndefined();
+			// STATS.status
+			expect(STATS.status).toBe('ok');
+			// STATS.warnings
+			expect(STATS.warnings).toBe(0);
+			// handleErrors called once
+			expect(utils.handleErrors).toHaveBeenCalled();
+			expect(utils.handleErrors.mock.calls[0][0]).toBeNull();
+			// handleErrors 2nd arg
+			expect(utils.handleErrors.mock.calls[0][1]).toEqual(server);
+			// STATS.alerts
+			expect(STATS.alerts).toBe(0);
+			// returned server
+			expect(result).toEqual(server);
 		});
 
 		it('no location in previous state', () => {
-			stub(Date, 'now').callsFake(() => ts);
-			stub(utils, 'calculateSpeed').callsFake((a, b) => b);
-			stub(utils, 'calculateTraffic').callsFake(() => {});
-			stub(utils, 'is4xxThresholdReached').callsFake(() => false);
-			stub(utils, 'handleErrors').callsFake(() => {});
+			jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
+			jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
+			jest.spyOn(utils, 'calculateTraffic').mockClear().mockImplementation(() => {});
+			jest.spyOn(utils, 'is4xxThresholdReached').mockClear().mockImplementation(() => false);
+			jest.spyOn(utils, 'handleErrors').mockClear().mockImplementation(() => {});
 
 			const result = handleZones(STATS, previousState, server, 'unknown_server');
 
-			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
-			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(result.sent_s, 'server.sent_s').to.be.an('undefined');
-			expect(result.rcvd_s, 'server.rcvd_s').to.be.an('undefined');
-			expect(result.zone_req_s, 'server.zone_req_s').to.be.an('undefined');
-			expect(utils.calculateTraffic.notCalled, 'calculateTraffic not called').to.be.true;
-			expect(utils.is4xxThresholdReached.calledOnce, 'is4xxThresholdReached called once').to.be.true;
-			expect(utils.is4xxThresholdReached.args[0][0].passedToIs4xx, 'is4xxThresholdReached 1st arg').to.be.true;
-			expect(result.warning, 'server.warning').to.be.an('undefined');
-			expect(STATS.status, 'STATS.status').to.be.equal('ok');
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(0);
-			expect(utils.handleErrors.calledOnce, 'handleErrors called once').to.be.true;
-			expect(utils.handleErrors.args[0][0], 'handleErrors 1st arg').to.be.an('undefined');
-			expect(utils.handleErrors.args[0][1], 'handleErrors 2nd arg').to.be.deep.equal(server);
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(0);
-			expect(result, 'returned server').to.be.deep.equal(server);
-
-			Date.now.restore();
-			utils.calculateSpeed.restore();
-			utils.calculateTraffic.restore();
-			utils.is4xxThresholdReached.restore();
-			utils.handleErrors.restore();
+			// Date.now not called
+			expect(Date.now).not.toHaveBeenCalled();
+			// calculateSpeed not called
+			expect(utils.calculateSpeed).not.toHaveBeenCalled();
+			expect(result.sent_s).toBeUndefined();
+			expect(result.rcvd_s).toBeUndefined();
+			expect(result.zone_req_s).toBeUndefined();
+			// calculateTraffic not called
+			expect(utils.calculateTraffic).not.toHaveBeenCalled();
+			// is4xxThresholdReached called once
+			expect(utils.is4xxThresholdReached).toHaveBeenCalled();
+			// is4xxThresholdReached 1st arg
+			expect(utils.is4xxThresholdReached.mock.calls[0][0].passedToIs4xx).toBe(true);
+			expect(result.warning).toBeUndefined();
+			// STATS.status
+			expect(STATS.status).toBe('ok');
+			// STATS.warnings
+			expect(STATS.warnings).toBe(0);
+			// handleErrors called once
+			expect(utils.handleErrors).toHaveBeenCalled();
+			expect(utils.handleErrors.mock.calls[0][0]).toBeUndefined();
+			// handleErrors 2nd arg
+			expect(utils.handleErrors.mock.calls[0][1]).toEqual(server);
+			// STATS.alerts
+			expect(STATS.alerts).toBe(0);
+			// returned server
+			expect(result).toEqual(server);
 		});
 
 		it('with previous state', () => {
-			stub(Date, 'now').callsFake(() => ts);
-			stub(utils, 'calculateSpeed').callsFake((a, b) => b);
-			stub(utils, 'calculateTraffic').callsFake(() => {});
-			stub(utils, 'is4xxThresholdReached').callsFake(() => false);
-			stub(utils, 'handleErrors').callsFake(() => {});
+			jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
+			jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
+			jest.spyOn(utils, 'calculateTraffic').mockClear().mockImplementation(() => {});
+			jest.spyOn(utils, 'is4xxThresholdReached').mockClear().mockImplementation(() => false);
+			jest.spyOn(utils, 'handleErrors').mockClear().mockImplementation(() => {});
 
 			const previousServer = previousState.get(serverName);
 			const period = ts - previousState.lastUpdate;
 			const result = handleZones(STATS, previousState, server, serverName);
 
-			expect(Date.now.calledOnce, 'Date.now called once').to.be.true;
-			expect(utils.calculateSpeed.callCount, 'calculateSpeed').to.be.equal(3);
-			expect(utils.calculateSpeed.args[0][0], 'calculateSpeed 1st call 1st arg').to.be.equal(previousServer.data.sent);
-			expect(utils.calculateSpeed.args[0][1], 'calculateSpeed 1st call 2nd arg').to.be.equal(server.data.sent);
-			expect(utils.calculateSpeed.args[0][2], 'calculateSpeed 1st call 3rd arg').to.be.equal(period);
-			expect(result.sent_s, 'server.sent_s').to.be.equal(server.data.sent);
-			expect(utils.calculateSpeed.args[1][0], 'calculateSpeed 2nd call 1st arg').to.be.equal(previousServer.data.received);
-			expect(utils.calculateSpeed.args[1][1], 'calculateSpeed 2nd call 2nd arg').to.be.equal(server.data.received);
-			expect(utils.calculateSpeed.args[1][2], 'calculateSpeed 2nd call 3rd arg').to.be.equal(period);
-			expect(result.rcvd_s, 'server.rcvd_s').to.be.equal(server.data.received);
-			expect(utils.calculateSpeed.args[2][0], 'calculateSpeed 3rd call 1st arg').to.be.equal(previousServer.requests);
-			expect(utils.calculateSpeed.args[2][1], 'calculateSpeed 3rd call 2nd arg').to.be.equal(server.requests);
-			expect(utils.calculateSpeed.args[2][2], 'calculateSpeed 3rd call 3rd arg').to.be.equal(period);
-			expect(result.zone_req_s, 'server.zone_req_s').to.be.equal(server.requests);
-			expect(utils.calculateTraffic.calledOnce, 'calculateTraffic called once').to.be.true;
-			expect(utils.calculateTraffic.args[0][0], 'calculateTraffic 1st arg').to.be.deep.equal(STATS);
-			expect(utils.calculateTraffic.args[0][1], 'calculateTraffic 2nd arg').to.be.deep.equal(server);
-			expect(utils.is4xxThresholdReached.calledOnce, 'is4xxThresholdReached called once').to.be.true;
-			expect(utils.is4xxThresholdReached.args[0][0].passedToIs4xx, 'is4xxThresholdReached 1st arg').to.be.true;
-			expect(result.warning, 'server.warning').to.be.an('undefined');
-			expect(STATS.status, 'STATS.status').to.be.equal('ok');
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(0);
-			expect(utils.handleErrors.calledOnce, 'handleErrors called once').to.be.true;
-			expect(utils.handleErrors.args[0][0], 'handleErrors 1st arg').to.be.deep.equal(previousServer);
-			expect(utils.handleErrors.args[0][1], 'handleErrors 2nd arg').to.be.deep.equal(server);
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(0);
-			expect(result, 'returned server').to.be.deep.equal(server);
-
-			Date.now.restore();
-			utils.calculateSpeed.restore();
-			utils.calculateTraffic.restore();
-			utils.is4xxThresholdReached.restore();
-			utils.handleErrors.restore();
+			// Date.now called once
+			expect(Date.now).toHaveBeenCalled();
+			expect(utils.calculateSpeed).toHaveBeenCalledTimes(3);
+			// calculateSpeed 1st call 1st arg
+			expect(utils.calculateSpeed.mock.calls[0][0]).toBe(previousServer.data.sent);
+			// calculateSpeed 1st call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[0][1]).toBe(server.data.sent);
+			// calculateSpeed 1st call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[0][2]).toBe(period);
+			// server.sent_s
+			expect(result.sent_s).toBe(server.data.sent);
+			// calculateSpeed 2nd call 1st arg
+			expect(utils.calculateSpeed.mock.calls[1][0]).toBe(previousServer.data.received);
+			// calculateSpeed 2nd call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[1][1]).toBe(server.data.received);
+			// calculateSpeed 2nd call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[1][2]).toBe(period);
+			// server.rcvd_s
+			expect(result.rcvd_s).toBe(server.data.received);
+			// calculateSpeed 3rd call 1st arg
+			expect(utils.calculateSpeed.mock.calls[2][0]).toBe(previousServer.requests);
+			// calculateSpeed 3rd call 2nd arg
+			expect(utils.calculateSpeed.mock.calls[2][1]).toBe(server.requests);
+			// calculateSpeed 3rd call 3rd arg
+			expect(utils.calculateSpeed.mock.calls[2][2]).toBe(period);
+			// server.zone_req_s
+			expect(result.zone_req_s).toBe(server.requests);
+			// calculateTraffic called once
+			expect(utils.calculateTraffic).toHaveBeenCalled();
+			// calculateTraffic 1st arg
+			expect(utils.calculateTraffic.mock.calls[0][0]).toEqual(STATS);
+			// calculateTraffic 2nd arg
+			expect(utils.calculateTraffic.mock.calls[0][1]).toEqual(server);
+			// is4xxThresholdReached called once
+			expect(utils.is4xxThresholdReached).toHaveBeenCalled();
+			// is4xxThresholdReached 1st arg
+			expect(utils.is4xxThresholdReached.mock.calls[0][0].passedToIs4xx).toBe(true);
+			expect(result.warning).toBeUndefined();
+			// STATS.status
+			expect(STATS.status).toBe('ok');
+			// STATS.warnings
+			expect(STATS.warnings).toBe(0);
+			// handleErrors called once
+			expect(utils.handleErrors).toHaveBeenCalled();
+			// handleErrors 1st arg
+			expect(utils.handleErrors.mock.calls[0][0]).toEqual(previousServer);
+			// handleErrors 2nd arg
+			expect(utils.handleErrors.mock.calls[0][1]).toEqual(server);
+			// STATS.alerts
+			expect(STATS.alerts).toBe(0);
+			// returned server
+			expect(result).toEqual(server);
 		});
 
 		it('4xx threshold reached', () => {
-			stub(Date, 'now').callsFake(() => {});
-			stub(utils, 'calculateSpeed').callsFake((a, b) => b);
-			stub(utils, 'calculateTraffic').callsFake(() => {});
-			stub(utils, 'is4xxThresholdReached').callsFake(() => true);
-			stub(utils, 'handleErrors').callsFake(() => {});
+			jest.spyOn(Date, 'now').mockClear().mockImplementation(() => {});
+			jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
+			jest.spyOn(utils, 'calculateTraffic').mockClear().mockImplementation(() => {});
+			jest.spyOn(utils, 'is4xxThresholdReached').mockClear().mockImplementation(() => true);
+			jest.spyOn(utils, 'handleErrors').mockClear().mockImplementation(() => {});
 
 			const result = handleZones(STATS, null, server);
 
-			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
-			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(result.sent_s, 'server.sent_s').to.be.an('undefined');
-			expect(result.rcvd_s, 'server.rcvd_s').to.be.an('undefined');
-			expect(result.zone_req_s, 'server.zone_req_s').to.be.an('undefined');
-			expect(utils.calculateTraffic.notCalled, 'calculateTraffic not called').to.be.true;
-			expect(utils.is4xxThresholdReached.calledOnce, 'is4xxThresholdReached called once').to.be.true;
-			expect(utils.is4xxThresholdReached.args[0][0].passedToIs4xx, 'is4xxThresholdReached 1st arg').to.be.true;
-			expect(result.warning, 'server.warning').to.be.true;
-			expect(STATS.status, 'STATS.status').to.be.equal('warning');
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(1);
-			expect(utils.handleErrors.calledOnce, 'handleErrors called once').to.be.true;
-			expect(utils.handleErrors.args[0][0], 'handleErrors 1st arg').to.be.a('null');
-			expect(utils.handleErrors.args[0][1], 'handleErrors 2nd arg').to.be.deep.equal(server);
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(0);
-			expect(result, 'returned server').to.be.deep.equal(server);
-
-			Date.now.restore();
-			utils.calculateSpeed.restore();
-			utils.calculateTraffic.restore();
-			utils.is4xxThresholdReached.restore();
-			utils.handleErrors.restore();
+			// Date.now not called
+			expect(Date.now).not.toHaveBeenCalled();
+			// calculateSpeed not called
+			expect(utils.calculateSpeed).not.toHaveBeenCalled();
+			expect(result.sent_s).toBeUndefined();
+			expect(result.rcvd_s).toBeUndefined();
+			expect(result.zone_req_s).toBeUndefined();
+			// calculateTraffic not called
+			expect(utils.calculateTraffic).not.toHaveBeenCalled();
+			// is4xxThresholdReached called once
+			expect(utils.is4xxThresholdReached).toHaveBeenCalled();
+			// is4xxThresholdReached 1st arg
+			expect(utils.is4xxThresholdReached.mock.calls[0][0].passedToIs4xx).toBe(true);
+			// server.warning
+			expect(result.warning).toBe(true);
+			// STATS.status
+			expect(STATS.status).toBe('warning');
+			// STATS.warnings
+			expect(STATS.warnings).toBe(1);
+			// handleErrors called once
+			expect(utils.handleErrors).toHaveBeenCalled();
+			expect(utils.handleErrors.mock.calls[0][0]).toBeNull();
+			// handleErrors 2nd arg
+			expect(utils.handleErrors.mock.calls[0][1]).toEqual(server);
+			// STATS.alerts
+			expect(STATS.alerts).toBe(0);
+			// returned server
+			expect(result).toEqual(server);
 		});
 
 		it('handles 5xx changing', () => {
-			stub(Date, 'now').callsFake(() => {});
-			stub(utils, 'calculateSpeed').callsFake((a, b) => b);
-			stub(utils, 'calculateTraffic').callsFake(() => {});
-			stub(utils, 'is4xxThresholdReached').callsFake(() => false);
-			stub(utils, 'handleErrors').callsFake((_, server) => {
+			jest.spyOn(Date, 'now').mockClear().mockImplementation(() => {});
+			jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
+			jest.spyOn(utils, 'calculateTraffic').mockClear().mockImplementation(() => {});
+			jest.spyOn(utils, 'is4xxThresholdReached').mockClear().mockImplementation(() => false);
+			jest.spyOn(utils, 'handleErrors').mockClear().mockImplementation((_, server) => {
 				server['5xxChanged'] = true;
 			});
 
 			const result = handleZones(STATS, null, server);
 
-			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
-			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(result.sent_s, 'server.sent_s').to.be.an('undefined');
-			expect(result.rcvd_s, 'server.rcvd_s').to.be.an('undefined');
-			expect(result.zone_req_s, 'server.zone_req_s').to.be.an('undefined');
-			expect(utils.is4xxThresholdReached.calledOnce, 'is4xxThresholdReached called once').to.be.true;
-			expect(utils.is4xxThresholdReached.args[0][0].passedToIs4xx, 'is4xxThresholdReached 1st arg').to.be.true;
-			expect(result.warning, 'server.warning').to.be.an('undefined');
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(0);
-			expect(utils.handleErrors.calledOnce, 'handleErrors called once').to.be.true;
-			expect(utils.handleErrors.args[0][0], 'handleErrors 1st arg').to.be.a('null');
-			expect(utils.handleErrors.args[0][1], 'handleErrors 2nd arg').to.be.deep.equal(server);
-			expect(STATS.status, 'STATS.status').to.be.equal('danger');
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(1);
-			expect(result, 'returned server').to.be.deep.equal(server);
-
-			Date.now.restore();
-			utils.calculateSpeed.restore();
-			utils.calculateTraffic.restore();
-			utils.is4xxThresholdReached.restore();
-			utils.handleErrors.restore();
+			// Date.now not called
+			expect(Date.now).not.toHaveBeenCalled();
+			// calculateSpeed not called
+			expect(utils.calculateSpeed).not.toHaveBeenCalled();
+			expect(result.sent_s).toBeUndefined();
+			expect(result.rcvd_s).toBeUndefined();
+			expect(result.zone_req_s).toBeUndefined();
+			// is4xxThresholdReached called once
+			expect(utils.is4xxThresholdReached).toHaveBeenCalled();
+			// is4xxThresholdReached 1st arg
+			expect(utils.is4xxThresholdReached.mock.calls[0][0].passedToIs4xx).toBe(true);
+			expect(result.warning).toBeUndefined();
+			// STATS.warnings
+			expect(STATS.warnings).toBe(0);
+			// handleErrors called once
+			expect(utils.handleErrors).toHaveBeenCalled();
+			expect(utils.handleErrors.mock.calls[0][0]).toBeNull();
+			// handleErrors 2nd arg
+			expect(utils.handleErrors.mock.calls[0][1]).toEqual(server);
+			// STATS.status
+			expect(STATS.status).toBe('danger');
+			// STATS.alerts
+			expect(STATS.alerts).toBe(1);
+			// returned server
+			expect(result).toEqual(server);
 		});
 
 		it('handles 5xx changing (with 4xx threshold reached)', () => {
-			stub(Date, 'now').callsFake(() => {});
-			stub(utils, 'calculateSpeed').callsFake((a, b) => b);
-			stub(utils, 'calculateTraffic').callsFake(() => {});
-			stub(utils, 'is4xxThresholdReached').callsFake(() => true);
-			stub(utils, 'handleErrors').callsFake((_, server) => {
+			jest.spyOn(Date, 'now').mockClear().mockImplementation(() => {});
+			jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
+			jest.spyOn(utils, 'calculateTraffic').mockClear().mockImplementation(() => {});
+			jest.spyOn(utils, 'is4xxThresholdReached').mockClear().mockImplementation(() => true);
+			jest.spyOn(utils, 'handleErrors').mockClear().mockImplementation((_, server) => {
 				server['5xxChanged'] = true;
 			});
 
 			const result = handleZones(STATS, null, server);
 
-			expect(Date.now.notCalled, 'Date.now not called').to.be.true;
-			expect(utils.calculateSpeed.notCalled, 'calculateSpeed not called').to.be.true;
-			expect(result.sent_s, 'server.sent_s').to.be.an('undefined');
-			expect(result.rcvd_s, 'server.rcvd_s').to.be.an('undefined');
-			expect(result.zone_req_s, 'server.zone_req_s').to.be.an('undefined');
-			expect(utils.is4xxThresholdReached.calledOnce, 'is4xxThresholdReached called once').to.be.true;
-			expect(utils.is4xxThresholdReached.args[0][0].passedToIs4xx, 'is4xxThresholdReached 1st arg').to.be.true;
-			expect(result.warning, 'server.warning').to.be.true;
-			expect(STATS.warnings, 'STATS.warnings').to.be.equal(1);
-			expect(utils.handleErrors.calledOnce, 'handleErrors called once').to.be.true;
-			expect(utils.handleErrors.args[0][0], 'handleErrors 1st arg').to.be.a('null');
-			expect(utils.handleErrors.args[0][1], 'handleErrors 2nd arg').to.be.deep.equal(server);
-			expect(STATS.status, 'STATS.status').to.be.equal('danger');
-			expect(STATS.alerts, 'STATS.alerts').to.be.equal(1);
-			expect(result, 'returned server').to.be.deep.equal(server);
-
-			Date.now.restore();
-			utils.calculateSpeed.restore();
-			utils.calculateTraffic.restore();
-			utils.is4xxThresholdReached.restore();
-			utils.handleErrors.restore();
+			// Date.now not called
+			expect(Date.now).not.toHaveBeenCalled();
+			// calculateSpeed not called
+			expect(utils.calculateSpeed).not.toHaveBeenCalled();
+			expect(result.sent_s).toBeUndefined();
+			expect(result.rcvd_s).toBeUndefined();
+			expect(result.zone_req_s).toBeUndefined();
+			// is4xxThresholdReached called once
+			expect(utils.is4xxThresholdReached).toHaveBeenCalled();
+			// is4xxThresholdReached 1st arg
+			expect(utils.is4xxThresholdReached.mock.calls[0][0].passedToIs4xx).toBe(true);
+			// server.warning
+			expect(result.warning).toBe(true);
+			// STATS.warnings
+			expect(STATS.warnings).toBe(1);
+			// handleErrors called once
+			expect(utils.handleErrors).toHaveBeenCalled();
+			expect(utils.handleErrors.mock.calls[0][0]).toBeNull();
+			// handleErrors 2nd arg
+			expect(utils.handleErrors.mock.calls[0][1]).toEqual(server);
+			// STATS.status
+			expect(STATS.status).toBe('danger');
+			// STATS.alerts
+			expect(STATS.alerts).toBe(1);
+			// returned server
+			expect(result).toEqual(server);
 		});
 	});
 
@@ -289,37 +332,45 @@ describe('Calculators – ServerZones', () => {
 			}
 		};
 
-		spy(handleZones, 'bind');
-		stub(utils, 'createMapFromObject').callsFake(() => zonesMap);
+		jest.spyOn(handleZones, 'bind').mockClear();
+		jest.spyOn(utils, 'createMapFromObject').mockClear().mockImplementation(() => zonesMap);
 
-		expect(calculate(null, null, STORE), 'result [zones = null]').to.be.a('null');
-		expect(STORE.__STATUSES.server_zones.ready, '__STATUSES.server_zones.ready [zones = {}]').to.be.false;
+		expect(calculate(null, null, STORE)).toBeNull();
+		// __STATUSES.server_zones.ready [zones = {}]
+		expect(STORE.__STATUSES.server_zones.ready).toBe(false);
 
 		delete STORE.__STATUSES.server_zones.ready;
 
-		expect(calculate({}, null, STORE), 'result [zones = {}]').to.be.a('null');
-		expect(STORE.__STATUSES.server_zones.ready, '__STATUSES.server_zones.ready [zones = {}]').to.be.false;
+		expect(calculate({}, null, STORE)).toBeNull();
+		// __STATUSES.server_zones.ready [zones = {}]
+		expect(STORE.__STATUSES.server_zones.ready).toBe(false);
 
 		const result = calculate(zones, previousState, STORE);
 
-		expect(utils.createMapFromObject.calledOnce, 'createMapFromObject called once').to.be.true;
-		expect(utils.createMapFromObject.args[0][0], 'createMapFromObject 1st arg').to.be.deep.equal(zones);
-		expect(utils.createMapFromObject.args[0][1].name, 'createMapFromObject 2nd arg').to.be.equal('bound handleZones');
-		expect(handleZones.bind.calledOnce, 'handleZones.bind called once').to.be.true;
-		expect(handleZones.bind.args[0][0], 'handleZones.bind 1st arg').to.be.a('null');
+		// createMapFromObject called once
+		expect(utils.createMapFromObject).toHaveBeenCalled();
+		// createMapFromObject 1st arg
+		expect(utils.createMapFromObject.mock.calls[0][0]).toEqual(zones);
+		// createMapFromObject 2nd arg
+		expect(utils.createMapFromObject.mock.calls[0][1].name).toBe('bound handleZones');
+		// handleZones.bind called once
+		expect(handleZones.bind).toHaveBeenCalled();
+		expect(handleZones.bind.mock.calls[0][0]).toBeNull();
 
 		STATS.total = zonesMap.size;
 
-		expect(handleZones.bind.args[0][1], 'handleZones.bind 2nd arg').to.be.deep.equal(STATS);
-		expect(handleZones.bind.args[0][2], 'handleZones.bind 3rd arg').to.be.equal(previousState);
-		expect(utils.createMapFromObject.args[0][2], 'createMapFromObject 3rd arg').to.be.false;
-		expect(result.__STATS, 'zones.__STATS').to.be.deep.equal(STATS);
-		expect(STORE.__STATUSES.server_zones, 'STORE.__STATUSES.server_zones').to.be.deep.equal({
+		// handleZones.bind 2nd arg
+		expect(handleZones.bind.mock.calls[0][1]).toEqual(STATS);
+		// handleZones.bind 3rd arg
+		expect(handleZones.bind.mock.calls[0][2]).toBe(previousState);
+		// createMapFromObject 3rd arg
+		expect(utils.createMapFromObject.mock.calls[0][2]).toBe(false);
+		// zones.__STATS
+		expect(result.__STATS).toEqual(STATS);
+		// STORE.__STATUSES.server_zones
+		expect(STORE.__STATUSES.server_zones).toEqual({
 			ready: true,
 			status: STATS.status
 		});
-
-		handleZones.bind.restore();
-		utils.createMapFromObject.restore();
 	});
 });

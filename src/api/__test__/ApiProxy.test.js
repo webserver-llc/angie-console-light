@@ -9,14 +9,14 @@
 /* eslint-env browser, mocha */
 
 import ApiProxy from '../ApiProxy.js';
-import { spy } from 'sinon';
 
 describe('ApiProxy', () => {
 	const apiPrefix = '/api';
 	const path = 'angie';
-	let _fetch, fetchInner, api;
+	let _fetch; let fetchInner; let
+		api;
 
-	before(() => {
+	beforeAll(() => {
 		_fetch = window.fetch;
 
 		window.fetch = (...args) => fetchInner(...args);
@@ -33,79 +33,49 @@ describe('ApiProxy', () => {
 			});
 	});
 
-	after(() => {
+	afterAll(() => {
 		window.fetch = _fetch;
 	});
 
 	it('constructor()', () => {
-		assert(
-			api.apiPrefix === apiPrefix,
-			'Supplied "apiPrefix" was not handled correctly',
-		);
+		expect(api.apiPrefix === apiPrefix).toBeTruthy();
 
-		assert(
-			api.path instanceof Array,
-			'"path" field is expected to be an Array',
-		);
-		assert(
-			api.path.length === 1,
-			'"path" field is expected to have only one element when ApiProxy was just created',
-		);
-		assert(api.path[0] === path, 'Supplied "path" was not handled correctly');
+		expect(api.path instanceof Array).toBeTruthy();
+		expect(api.path.length === 1).toBeTruthy();
+		expect(api.path[0] === path).toBeTruthy();
 
-		assert(
-			api.processors instanceof Array,
-			'"processors" field is expected to be an Array',
-		);
-		assert(
-			api.processors.length === 0,
-			'"processors" field is expected to be empty when ApiProxy was just created',
-		);
+		expect(api.processors instanceof Array).toBeTruthy();
+		expect(api.processors.length === 0).toBeTruthy();
 
-		assert(
-			typeof api.proxy === 'object',
-			'"proxy" field is expected be a Proxy instance',
-		);
-		assert(
-			api === api.proxy,
-			'"proxy" should be returned as a result of ApiProxy creation',
-		);
+		expect(typeof api.proxy === 'object').toBeTruthy();
+		expect(api === api.proxy).toBeTruthy();
 	});
 
 	it('Builds path', () => {
 		const req = api.http.upstreams['temp-name'].servers['123'];
 
-		assert(
-			req.path.join() === 'angie,http,upstreams,temp-name,servers,123',
-			'Bad value is returned',
-		);
+		expect(req.path.join() === 'angie,http,upstreams,temp-name,servers,123').toBeTruthy();
 	});
 
 	it('toString()', () => {
 		const req = api.http.upstreams['temp-name'].servers['123'];
 
-		assert(
-			req.toString() === 'angie/http/upstreams/temp-name/servers/123',
-			'Bad value is returned',
-		);
+		expect(req.toString() === 'angie/http/upstreams/temp-name/servers/123').toBeTruthy();
 	});
 
 	it('getUrl()', () => {
-		spy(ApiProxy.prototype, 'toString');
+		const spy = jest.spyOn(ApiProxy.prototype, 'toString').mockClear();
 
 		let url = api.getUrl();
 
-		assert(
-			url.startsWith(`${apiPrefix}/`),
-			'Should starts with "apiPrefix" value',
-		);
-		assert(api.toString.calledOnce, '"toString" should be called');
-		assert(url.endsWith('/'), 'Should ends with "/"');
+		expect(url.startsWith(`${apiPrefix}/`)).toBeTruthy();
+		expect(spy).toHaveBeenCalled();
+		expect(url.endsWith('/')).toBeTruthy();
 
 		url = api.getUrl({ foo: 'bar' });
-		assert(url.endsWith('?foo=bar'), 'Should ends with "?foo=bar"');
+		expect(url.endsWith('?foo=bar')).toBeTruthy();
 
-		ApiProxy.prototype.toString.restore();
+		spy.mockRestore();
 	});
 
 	describe('doRequest()', () => {
@@ -124,91 +94,61 @@ describe('ApiProxy', () => {
 		});
 
 		it('Calls "window.fetch" properly', () => {
-			fetchInner = spy(() =>
+			fetchInner = jest.fn(() =>
 				Promise.resolve({
 					status: 200,
 					json() {
 						return Promise.resolve(response);
 					},
-				}),
-			);
+				}));
 
-			spy(ApiProxy.prototype, 'getUrl');
+			const spyGetUrl = jest.spyOn(ApiProxy.prototype, 'getUrl').mockClear();
 
 			const req = api.http.upstreams['temp-name'].servers['123'];
 			let reqPromise = req.doRequest(method, params, fetchParams);
 
-			assert(api.getUrl.calledOnce, '"getUrl" should be called');
+			expect(spyGetUrl).toHaveBeenCalled();
 
-			const spyArgs = fetchInner.args[0];
+			const spyArgs = fetchInner.mock.calls[0];
 
-			assert(fetchInner.calledOnce, '"window.fetch" should be called once');
+			expect(fetchInner).toHaveBeenCalled();
 
-			assert(
-				spyArgs[0] === api.getUrl(),
-				'First argument for "window.fetch" is expected to be a result of "getUrl" method',
-			);
-			assert(
-				spyArgs[1].method === method,
-				'Wrong method was provided to "window.fetch"',
-			);
-			assert(
-				spyArgs[1].credentials === 'same-origin',
-				'"credentials:same-origin" should be provided to "window.fetch"',
-			);
+			expect(spyArgs[0] === api.getUrl()).toBeTruthy();
+			expect(spyArgs[1].method === method).toBeTruthy();
+			expect(spyArgs[1].credentials === 'same-origin').toBeTruthy();
 
 			Object.keys(fetchParams).forEach((key) => {
-				assert(
-					key in spyArgs[1],
-					`"${key}" should be passed to "window.fetch"`,
-				);
-				assert(
-					spyArgs[1][key] === fetchParams[key],
-					`Wrong "${key}" value is passed to "window.fetch"`,
-				);
+				expect(key in spyArgs[1]).toBeTruthy();
+				expect(spyArgs[1][key] === fetchParams[key]).toBeTruthy();
 			});
 
-			assert(
-				spyArgs[1].body === JSON.stringify(params),
-				'Request params are missed in "window.fetch"',
-			);
+			expect(spyArgs[1].body === JSON.stringify(params)).toBeTruthy();
 
-			assert(reqPromise instanceof Promise, 'Should return Promise');
+			expect(reqPromise instanceof Promise).toBeTruthy();
 
 			reqPromise = req.doRequest(method, null, fetchParams);
 
-			assert.isFalse(
-				'body' in fetchInner.args[1][1],
-				'Unexpected "body" found',
-			);
+			expect('body' in fetchInner.mock.calls[1][1]).toBe(false);
 
-			ApiProxy.prototype.getUrl.restore();
+			spyGetUrl.mockRestore();
 		});
 
 		it('Handles success', (done) => {
-			fetchInner = () => {
-				return Promise.resolve({
-					status: 200,
-					json() {
-						return Promise.resolve(response);
-					},
-				});
-			};
+			fetchInner = () => Promise.resolve({
+				status: 200,
+				json() {
+					return Promise.resolve(response);
+				},
+			});
 
 			api.http.upstreams['temp-name'].servers['123']
 				.doRequest(method, params, fetchParams)
 				.then((data) => {
-					assert(
-						Object.keys(response).length === Object.keys(data).length,
-						'Wrong response data',
-					);
+					expect(Object.keys(response).length === Object.keys(data).length).toBeTruthy();
 
 					Object.keys(response).forEach((key) => {
-						assert(key in data, `Missed "${key}" param in response`);
-						assert(
-							response[key] === data[key],
-							`Wrong "${key}" value in response`,
-						);
+						expect(key in data).toBeTruthy();
+						expect(response[key] === data[key]).toBeTruthy();
 					});
 				})
 				.then(done, done);
@@ -233,27 +173,18 @@ describe('ApiProxy', () => {
 			api.http.upstreams['temp-name'].servers['123']
 				.doRequest(method, params, fetchParams)
 				.catch((data) => {
-					assert(data.status === status, 'Bad status');
-					assert(
-						'error' in data,
-						'"error" property should be in fail response',
-					);
-					assert(
-						data.error === `${response.error}: ${response.description}`,
-						'Bad error',
-					);
+					expect(data.status === status).toBeTruthy();
+					expect('error' in data).toBeTruthy();
+					expect(data.error === `${response.error}: ${response.description}`).toBeTruthy();
 
 					jsonResult = Promise.resolve({});
 
 					api.http.upstreams['temp-name'].servers['123']
 						.doRequest(method, params, fetchParams)
 						.catch((data) => {
-							assert(data.status === status, 'Bad status');
-							assert(
-								'error' in data,
-								'"error" property should be in fail response',
-							);
-							assert(data.error === null, 'Bad error');
+							expect(data.status === status).toBeTruthy();
+							expect('error' in data).toBeTruthy();
+							expect(data.error === null).toBeTruthy();
 
 							done();
 						});
@@ -272,14 +203,11 @@ describe('ApiProxy', () => {
 				});
 
 			api.angie.test.get().then((data) => {
-				assert(
-					Object.keys(response).length === Object.keys(data).length,
-					'Unexpected number of keys in response data',
-				);
+				expect(Object.keys(response).length === Object.keys(data).length).toBeTruthy();
 
 				Object.keys(response).forEach((key) => {
-					assert(key in data, `Prop "${key}" is missed`);
-					assert(response[key] === data[key], `Prop "${key}" has wrong value`);
+					expect(key in data).toBeTruthy();
+					expect(response[key] === data[key]).toBeTruthy();
 				});
 
 				done();
@@ -311,12 +239,9 @@ describe('ApiProxy', () => {
 				.setMapper(mapperResponse)
 				.get()
 				.then((data) => {
-					assert(
-						Object.keys(response).length === Object.keys(data).length,
-						'Unexpected number of keys in response data',
-					);
-					assert(data.a === response.a, `Prop a has wrong value`);
-					assert(data.b === response.b + 1, `Prop b has wrong value`);
+					expect(Object.keys(response).length === Object.keys(data).length).toBeTruthy();
+					expect(data.a === response.a).toBeTruthy();
+					expect(data.b === response.b + 1).toBeTruthy();
 					done();
 				});
 		});
@@ -333,36 +258,29 @@ describe('ApiProxy', () => {
 			};
 			const httpMethod = method === 'del' ? 'DELETE' : method.toUpperCase();
 
-			spy(ApiProxy.prototype, 'getUrl');
-			spy(ApiProxy.prototype, 'doRequest');
+			const spyGetUrl = jest.spyOn(ApiProxy.prototype, 'getUrl').mockClear();
+			const spyDoRequest = jest.spyOn(ApiProxy.prototype, 'doRequest').mockClear();
 
 			api.http.upstreams.aaa[method](params);
 
-			assert(api.getUrl.calledOnce, 'Should be called once');
-			assert(api.doRequest.calledOnce, 'Should be called once');
+			expect(spyGetUrl).toHaveBeenCalled();
+			expect(spyDoRequest).toHaveBeenCalled();
 
-			expect(api.getUrl.args[0][0], 'Should be called with arg').to.be.equal(
-				params.searchParams,
-			);
+			// Should be called with arg
+			expect(spyGetUrl.mock.calls[0][0]).toBe(params.searchParams);
 
-			const firstCallArgs = api.doRequest.args[0];
+			const firstCallArgs = spyDoRequest.mock.calls[0];
 
-			assert(firstCallArgs[0] === httpMethod, 'Wrong method provided');
-			assert(firstCallArgs[1] === null, 'Wrong data provided');
+			expect(firstCallArgs[0] === httpMethod).toBeTruthy();
+			expect(firstCallArgs[1] === null).toBeTruthy();
 
 			Object.keys(params).forEach((key) => {
-				assert(
-					key in firstCallArgs[2],
-					`Prop "${key}" is missed in passed params`,
-				);
-				assert(
-					params[key] === firstCallArgs[2][key],
-					`Passed params has wrong "${key}" value`,
-				);
+				expect(key in firstCallArgs[2]).toBeTruthy();
+				expect(params[key] === firstCallArgs[2][key]).toBeTruthy();
 			});
 
-			ApiProxy.prototype.getUrl.restore();
-			ApiProxy.prototype.doRequest.restore();
+			spyGetUrl.mockRestore();
+			spyDoRequest.mockRestore();
 		});
 	});
 
@@ -381,49 +299,33 @@ describe('ApiProxy', () => {
 				},
 			};
 
-			spy(ApiProxy.prototype, 'getUrl');
-			spy(ApiProxy.prototype, 'doRequest');
+			const spyGetUrl = jest.spyOn(ApiProxy.prototype, 'getUrl').mockClear();
+			const spyDoRequest = jest.spyOn(ApiProxy.prototype, 'doRequest').mockClear();
 
 			api.http.upstreams.aaa[method](data, params);
 
-			assert(api.getUrl.calledOnce, 'Should be called once');
-			assert(api.doRequest.calledOnce, 'Should be called one time');
+			expect(spyGetUrl).toHaveBeenCalled();
+			expect(spyDoRequest).toHaveBeenCalled();
 
-			expect(api.getUrl.args[0][0], 'Should be called with arg').to.be.equal(
-				params.searchParams,
-			);
+			// Should be called with arg
+			expect(spyGetUrl.mock.calls[0][0]).toBe(params.searchParams);
 
-			const firstCallArgs = api.doRequest.args[0];
+			const firstCallArgs = spyDoRequest.mock.calls[0];
 
-			assert(
-				firstCallArgs[0] === method.toUpperCase(),
-				'Wrong method provided',
-			);
+			expect(firstCallArgs[0] === method.toUpperCase()).toBeTruthy();
 
 			Object.keys(data).forEach((key) => {
-				assert(
-					key in firstCallArgs[1],
-					`Prop "${key}" is missed in passed data`,
-				);
-				assert(
-					data[key] === firstCallArgs[1][key],
-					`Passed data has wrong "${key}" value`,
-				);
+				expect(key in firstCallArgs[1]).toBeTruthy();
+				expect(data[key] === firstCallArgs[1][key]).toBeTruthy();
 			});
 
 			Object.keys(params).forEach((key) => {
-				assert(
-					key in firstCallArgs[2],
-					`Prop "${key}" is missed in passed params`,
-				);
-				assert(
-					params[key] === firstCallArgs[2][key],
-					`Passed params has wrong "${key}" value`,
-				);
+				expect(key in firstCallArgs[2]).toBeTruthy();
+				expect(params[key] === firstCallArgs[2][key]).toBeTruthy();
 			});
 
-			ApiProxy.prototype.getUrl.restore();
-			ApiProxy.prototype.doRequest.restore();
+			spyGetUrl.mockRestore();
+			spyDoRequest.mockRestore();
 		});
 	});
 
@@ -432,8 +334,8 @@ describe('ApiProxy', () => {
 
 		api.process(fakeFn);
 
-		assert(api.processors.length === 1, 'One processor expected to be');
-		assert(api.processors[0] === fakeFn, 'Wrong processor were added');
+		expect(api.processors.length === 1).toBeTruthy();
+		expect(api.processors[0] === fakeFn).toBeTruthy();
 	});
 
 	it('setMapper()', () => {
@@ -441,6 +343,6 @@ describe('ApiProxy', () => {
 
 		api.setMapper(fakeFn);
 
-		assert(api.mapper === fakeFn, 'Mapper expected to be');
+		expect(api.mapper === fakeFn).toBeTruthy();
 	});
 });

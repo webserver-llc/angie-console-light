@@ -12,18 +12,23 @@ import { HTTPZones } from '../index.jsx';
 describe('<HTTPZones Page />', () => {
 	it('render()', () => {
 		const wrapper = shallow(
-			<HTTPZones data={ {
+			<HTTPZones data={{
 				server_zones: 'test__server_zones',
 				location_zones: 'test__location_zones',
 				limit_conns: 'test__limit_conns',
 				limit_reqs: 'test__limit_reqs'
-			} } />
+			}}
+			/>
 		);
 
-		expect(wrapper.find('StreamZones').prop('data'), 'StreamZones props').to.be.equal('test__server_zones');
-		expect(wrapper.find('Locations').prop('data'), 'Locations props').to.be.equal('test__location_zones');
-		expect(wrapper.find('LimitConn').prop('data'), 'LimitConn props').to.be.equal('test__limit_conns');
-		expect(wrapper.find('LimitReq').prop('data'), 'LimitReq props').to.be.equal('test__limit_reqs');
+		// StreamZones props
+		expect(wrapper.find('StreamZones').prop('data')).toBe('test__server_zones');
+		// Locations props
+		expect(wrapper.find('Locations').prop('data')).toBe('test__location_zones');
+		// LimitConn props
+		expect(wrapper.find('LimitConn').prop('data')).toBe('test__limit_conns');
+		// LimitReq props
+		expect(wrapper.find('LimitReq').prop('data')).toBe('test__limit_reqs');
 
 		wrapper.unmount();
 	});

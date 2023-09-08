@@ -21,17 +21,16 @@ describe('<Upstreams Page />', () => {
 		);
 		const upstreamsContainer = wrapper.find('UpstreamsContainer');
 
-		expect(upstreamsContainer.prop('title'), 'UpstreamsContainer title').to.be.equal('HTTP Upstreams');
-		expect(
-			upstreamsContainer.prop('component').name,
-			'UpstreamsContainer component'
-		).to.be.equal('Upstream');
-		expect(upstreamsContainer.prop('upstreams'), 'UpstreamsContainer upstreams').to.be.equal('test_upstreams');
-		expect(
-			upstreamsContainer.prop('upstreamsApi'),
-			'UpstreamsContainer upstreamsApi'
-		).to.be.deep.equal(httpUpstreamsApi);
-		expect(upstreamsContainer.prop('isStream'), 'UpstreamsContainer isStream').to.be.false;
+		// UpstreamsContainer title
+		expect(upstreamsContainer.prop('title')).toBe('HTTP Upstreams');
+		// UpstreamsContainer component
+		expect(upstreamsContainer.prop('component').name).toBe('Upstream');
+		// UpstreamsContainer upstreams
+		expect(upstreamsContainer.prop('upstreams')).toBe('test_upstreams');
+		// UpstreamsContainer upstreamsApi
+		expect(upstreamsContainer.prop('upstreamsApi')).toEqual(httpUpstreamsApi);
+		// UpstreamsContainer isStream
+		expect(upstreamsContainer.prop('isStream')).toBe(false);
 
 		wrapper.unmount();
 	});

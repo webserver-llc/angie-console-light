@@ -17,44 +17,54 @@ describe('<Header />', () => {
 		it('root element', () => {
 			const wrapper = shallow(<Header />);
 
-			expect(wrapper.find(`.${ styles['header'] }`).length, 'element length').to.be.equal(1);
+			// element length
+			expect(wrapper.find(`.${ styles.header }`).length).toBe(1);
 		});
 
 		it('props.hash = "#"', () => {
 			const wrapper = shallow(<Header hash="#" />);
 			const link = wrapper.find('a');
 
-			expect(link.length, 'link length').to.be.equal(1);
-			expect(link.prop('className'), 'link className').to.be.equal(styles['logoactive']);
-			expect(link.prop('href'), 'link href').to.be.equal('#');
+			// link length
+			expect(link.length).toBe(1);
+			// link className
+			expect(link.prop('className')).toBe(styles.logoactive);
+			// link href
+			expect(link.prop('href')).toBe('#');
 		});
 
 		it('other props.hash', () => {
 			const wrapper = shallow(<Header />);
 			const link = wrapper.find('a');
 
-			expect(link.length, 'link length').to.be.equal(1);
-			expect(link.prop('className'), 'link className').to.be.equal(styles['logo']);
-			expect(link.prop('href'), 'link href').to.be.equal('#');
+			// link length
+			expect(link.length).toBe(1);
+			// link className
+			expect(link.prop('className')).toBe(styles.logo);
+			// link href
+			expect(link.prop('href')).toBe('#');
 		});
 
 		it('no props.navigation', () => {
 			const wrapper = shallow(<Header />);
 
-			expect(wrapper.find(Navigation).length, 'Navigation length').to.be.equal(0);
+			// Navigation length
+			expect(wrapper.find(Navigation).length).toBe(0);
 		});
 
 		it('with props.navigation', () => {
 			const wrapper = shallow(
 				<Header
-					navigation={ true }
+					navigation
 					test_property="test"
 				/>
 			);
 			const navigation = wrapper.find('Navigation_binded');
 
-			expect(navigation.length, 'Navigation length').to.be.equal(1);
-			expect(navigation.props(), 'Navigation props').to.be.deep.equal({
+			// Navigation length
+			expect(navigation.length).toBe(1);
+			// Navigation props
+			expect(navigation.props()).toEqual({
 				children: [],
 				navigation: true,
 				test_property: 'test'

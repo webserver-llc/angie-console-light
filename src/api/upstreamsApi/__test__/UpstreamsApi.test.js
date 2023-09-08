@@ -5,8 +5,7 @@
  * All rights reserved.
  *
  */
-
-import { spy } from 'sinon';
+import api from '../../index.js';
 import UpstreamsApi from '../UpstreamsApi.js';
 import ApiProxy from '../../ApiProxy.js';
 import { API_PATH } from '../../../constants.js';
@@ -16,32 +15,28 @@ describe('UpstreamsApi', () => {
 	const testUpstreamsApi = new UpstreamsApi(apiPrefix);
 	let _fetch;
 
-	before(() => {
+	beforeAll(() => {
 		_fetch = window.fetch;
 
-		window.fetch = spy(() =>
+		window.fetch = jest.fn(() =>
 			Promise.resolve({
 				status: 200,
 				json() {
 					return Promise.resolve();
 				},
-			}),
-		);
+			}));
 	});
 
 	afterEach(() => {
-		window.fetch.resetHistory();
+		window.fetch.mockClear();
 	});
 
-	after(() => {
+	afterAll(() => {
 		window.fetch = _fetch;
 	});
 
 	it('constructor()', () => {
-		assert(
-			testUpstreamsApi.apiPrefix === apiPrefix,
-			'Unexpected "apiPrefix" value',
-		);
+		expect(testUpstreamsApi.apiPrefix === apiPrefix).toBeTruthy();
 	});
 
 	it('getPeer()', async () => {
@@ -50,26 +45,17 @@ describe('UpstreamsApi', () => {
 			server: 'peer_1',
 		};
 
-		spy(ApiProxy.prototype, 'get');
+		const spyApiProxyGet = jest.spyOn(ApiProxy.prototype, 'get').mockClear();
 
 		await testUpstreamsApi.getPeer(upstreamName, peer);
 
-		assert(
-			ApiProxy.prototype.get.calledTwice,
-			'Should call twice "get" of ApiProxy',
-		);
-		assert(
-			window.fetch.args[0][0] ===
-			`${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}?defaults=on`,
-			'Unexpected path provided to "window.fetch"',
-		);
-		assert(
-			window.fetch.args[1][0] ===
-			`${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`,
-			'Unexpected path provided to "window.fetch"',
-		);
+		expect(spyApiProxyGet).toHaveBeenCalledTimes(2);
+		expect(window.fetch.mock.calls[0][0] ===
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}?defaults=on`).toBeTruthy();
+		expect(window.fetch.mock.calls[1][0] ===
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`).toBeTruthy();
 
-		ApiProxy.prototype.get.restore();
+		spyApiProxyGet.mockRestore();
 	});
 
 	it('createPeer()', () => {
@@ -79,30 +65,24 @@ describe('UpstreamsApi', () => {
 			server: 'name',
 		};
 
-		spy(ApiProxy.prototype, 'put');
+		const spyApiProxyPut = jest.spyOn(ApiProxy.prototype, 'put').mockClear();
 
 		const promise = testUpstreamsApi.createPeer(upstreamName, peerData);
 
-		assert(promise instanceof Promise, 'Should return Promise');
-		assert(ApiProxy.prototype.put.calledOnce, 'Should call "put" of ApiProxy');
-		assert(
-			window.fetch.args[0][0] ===
-			`${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peerData.server}/`,
-			'Unexpected path provided to "window.fetch"',
-		);
-		assert(
-			'body' in window.fetch.args[0][1],
-			'"body" param was not passed to "window.fetch"',
-		);
+		expect(promise instanceof Promise).toBeTruthy();
+		expect(spyApiProxyPut).toHaveBeenCalled();
+		expect(window.fetch.mock.calls[0][0] ===
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peerData.server}/`).toBeTruthy();
+		expect('body' in window.fetch.mock.calls[0][1]).toBeTruthy();
 
-		const body = JSON.parse(window.fetch.args[0][1].body);
+		const body = JSON.parse(window.fetch.mock.calls[0][1].body);
 
 		Object.keys(peerData).forEach((key) => {
-			assert(key in body, `Can not find param "${key}" in body`);
-			assert(body[key] === peerData[key], `Wrong value of "${key}" param`);
+			expect(key in body).toBeTruthy();
+			expect(body[key] === peerData[key]).toBeTruthy();
 		});
 
-		ApiProxy.prototype.put.restore();
+		spyApiProxyPut.mockRestore();
 	});
 
 	it('deletePeer()', () => {
@@ -111,19 +91,16 @@ describe('UpstreamsApi', () => {
 			server: 'peer_1',
 		};
 
-		spy(ApiProxy.prototype, 'del');
+		const spyApiProxyDel = jest.spyOn(ApiProxy.prototype, 'del').mockClear();
 
 		const promise = testUpstreamsApi.deletePeer(upstreamName, peer);
 
-		assert(promise instanceof Promise, 'Should return Promise');
-		assert(ApiProxy.prototype.del.calledOnce, 'Should call "del" of ApiProxy');
-		assert(
-			window.fetch.args[0][0] ===
-			`${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`,
-			'Unexpected path provided to "window.fetch"',
-		);
+		expect(promise instanceof Promise).toBeTruthy();
+		expect(spyApiProxyDel).toHaveBeenCalled();
+		expect(window.fetch.mock.calls[0][0] ===
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`).toBeTruthy();
 
-		ApiProxy.prototype.del.restore();
+		spyApiProxyDel.mockRestore();
 	});
 
 	it('updatePeer()', () => {
@@ -135,32 +112,23 @@ describe('UpstreamsApi', () => {
 			name: 'test_peer_new',
 		};
 
-		spy(ApiProxy.prototype, 'patch');
+		const spyApiProxyPatch = jest.spyOn(ApiProxy.prototype, 'patch').mockClear();
 
 		const promise = testUpstreamsApi.updatePeer(upstreamName, peer, peerData);
 
-		assert(promise instanceof Promise, 'Should return Promise');
-		assert(
-			ApiProxy.prototype.patch.calledOnce,
-			'Should call "patch" of ApiProxy',
-		);
-		assert(
-			window.fetch.args[0][0] ===
-			`${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`,
-			'Unexpected path provided to "window.fetch"',
-		);
-		assert(
-			'body' in window.fetch.args[0][1],
-			'"body" param was not passed to "window.fetch"',
-		);
+		expect(promise instanceof Promise).toBeTruthy();
+		expect(spyApiProxyPatch).toHaveBeenCalled();
+		expect(window.fetch.mock.calls[0][0] ===
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`).toBeTruthy();
+		expect('body' in window.fetch.mock.calls[0][1]).toBeTruthy();
 
-		const body = JSON.parse(window.fetch.args[0][1].body);
+		const body = JSON.parse(window.fetch.mock.calls[0][1].body);
 
 		Object.keys(peerData).forEach((key) => {
-			assert(key in body, `Can not find param "${key}" in body`);
-			assert(body[key] === peerData[key], `Wrong value of "${key}" param`);
+			expect(key in body).toBeTruthy();
+			expect(body[key] === peerData[key]).toBeTruthy();
 		});
 
-		ApiProxy.prototype.patch.restore();
+		spyApiProxyPatch.mockRestore();
 	});
 });
