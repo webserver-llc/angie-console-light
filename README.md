@@ -1,4 +1,4 @@
-## Angie Dashboard
+## Angie Console Light 
 
 Live activity monitoring tool for Angie.
 
@@ -9,11 +9,11 @@ Ensure you have all dependencies installed:
 yarn install
 ```
 
-To build the dashboard run:
+To build the project run:
 ```
 yarn build
 ```
-The result will be placed in `dist/dashboard.html`.
+The result will be placed in `dist/console.html`.
 
 ### Testing:
 

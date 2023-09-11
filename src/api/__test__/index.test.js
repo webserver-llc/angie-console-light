@@ -96,10 +96,10 @@ describe('Api', () => {
 		it('Correct path', () => {
 			window.fetch = spy(_fetchInner);
 
-			Api.checkWritePermissions('DASHBOARD_INIT', '__TEST_FOR_WRITE__');
+			Api.checkWritePermissions('CONSOLE_INIT', '__TEST_FOR_WRITE__');
 
 			assert(
-				window.fetch.args[0][0] === `${ API_PATH }/config/http/upstreams/DASHBOARD_INIT/servers/__TEST_FOR_WRITE__/`,
+				window.fetch.args[0][0] === `${ API_PATH }/config/http/upstreams/CONSOLE_INIT/servers/__TEST_FOR_WRITE__/`,
 				'Unexpected path was passed to "window.fetch"'
 			);
 

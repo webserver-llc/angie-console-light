@@ -116,7 +116,7 @@ export class App extends React.Component {
 		}
 
 		return (
-			<div className={styles.dashboard}>
+			<div className={styles.console}>
 
 				{
 					envUtils.isDemoEnv() ?

@@ -29,13 +29,21 @@ export default class Disclaimer extends React.Component {
 			return null;
 		}
 
-		return (<div className={ styles.disclaimer }>
-			<div className={ styles['disclaimer-close'] } onClick={this.close}>x</div>
-			<div className={ styles['disclaimer-content'] }>
-				Below is the example of the Angie live activity monitoring. This page collects real time data from a demo instance of Angie.<br />
-				For more information on configuration please visit <a href="https://angie.software/en/api/">https://angie.software/en/api/</a><br />
-				For purchasing Angie Pro please contact the sales team: <a href="https://wbsrv.ru/angie-pro/">https://wbsrv.ru/angie-pro/</a>
+		return (
+			<div className={styles.disclaimer}>
+				<div className={styles['disclaimer-close']} onClick={this.close}>x</div>
+				<div className={styles['disclaimer-content']}>
+					Below is the example of the Angie Console Light. This page collects real time data from a demo instance of Angie.
+					<br />
+					For more information on configuration please visit
+					{' '}
+					<a href="https://angie.software/en/api/">https://angie.software/en/api/</a>
+					<br />
+					For purchasing Angie Pro please contact the sales team:
+					{' '}
+					<a href="https://wbsrv.ru/angie-pro/">https://wbsrv.ru/angie-pro/</a>
+				</div>
 			</div>
-		</div>);
+		);
 	}
-};
+}

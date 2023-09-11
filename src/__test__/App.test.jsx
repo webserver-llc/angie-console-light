@@ -116,7 +116,7 @@ describe('<App />', () => {
 			const wrapper = shallow(<App.Component />);
 			wrapper.setState({ loading: false });
 
-			expect(wrapper.prop('className')).to.equal(styles['dashboard']);
+			expect(wrapper.prop('className')).to.equal(styles['console']);
 			expect(wrapper.find('Disclaimer')).to.have.lengthOf(0);
 
 			const header = wrapper.find('Header');

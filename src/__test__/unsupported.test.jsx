@@ -17,7 +17,7 @@ describe('<Unsupported />', () => {
 	it('render()', () => {
 		const wrapper = mount(<Unsupported />);
 
-		assert(wrapper.find(`.${ styles['dashboard'] }`).length === 1, 'Unexpected root element');
+		assert(wrapper.find(`.${ styles['console'] }`).length === 1, 'Unexpected root element');
 
 		const simpleHeader = wrapper.find(`.${ headerStyles['header'] }`);
 

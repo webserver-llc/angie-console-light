@@ -21,7 +21,7 @@ describe('AppSettings', () => {
 
 		const appset = new AppSettings();
 
-		assert(appset.SETTINGS_KEY_NAME === '__ANGIE_DASHBOARD', 'Unexpected "SETTINGS_KEY_NAME" value');
+		assert(appset.SETTINGS_KEY_NAME === '__ANGIE_CONSOLE', 'Unexpected "SETTINGS_KEY_NAME" value');
 		assert(
 			appset.defaults.updatingPeriod === DEFAULT_UPDATING_PERIOD,
 			'Unexpected "defaults.updatingPeriod" value'

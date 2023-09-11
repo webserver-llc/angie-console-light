@@ -17,13 +17,13 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const package = require('./package.json');
 const ENV = process.env.NODE_ENV || 'development';
 const PRODUCTION_BUILD = ENV === 'production';
-const FILE_NAME = process.env.FILE_NAME || 'dashboard_dev';
-const DASHBOARD_TYPE = process.env.DASHBOARD_TYPE || 'dashboard';
+const FILE_NAME = process.env.FILE_NAME || 'console_dev';
+const CONSOLE_TYPE = process.env.CONSOLE_TYPE || 'console';
 const PROXY_TARGET = process.env.PROXY_TARGET || 'https://monitor.angie.software';
 
 const plugins = [
     new HtmlWebpackPlugin({
-        title: 'Angie Dashboard',
+        title: 'Angie Console Light',
         filename: `${FILE_NAME}.html`,
         template: 'src/index.ejs',
         ...(
@@ -35,7 +35,7 @@ const plugins = [
 
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(ENV),
-        __ENV__: JSON.stringify(DASHBOARD_TYPE),
+        __ENV__: JSON.stringify(CONSOLE_TYPE),
         __APP_VERSION__: JSON.stringify(package.version),
     }),
 

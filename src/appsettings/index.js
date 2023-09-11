@@ -15,7 +15,7 @@ import {
 
 export class AppSettings {
 	constructor() {
-		this.SETTINGS_KEY_NAME = '__ANGIE_DASHBOARD';
+		this.SETTINGS_KEY_NAME = '__ANGIE_CONSOLE';
 		this.defaults = {
 			updatingPeriod: DEFAULT_UPDATING_PERIOD,
 			warnings4xxThresholdPercent: DEFAULT_4XX_THRESHOLD_PERCENT,
