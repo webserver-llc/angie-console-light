@@ -104,7 +104,7 @@ export class App extends React.Component {
 				<div className={styles['error-block']}>
 					{ subContent }
 					<p>
-						For&nbsp;more information please refer to&nbsp;the&nbsp;following
+						For&nbsp;more information please refer to&nbsp;the&nbsp;following&nbsp;
 						<a href="https://angie.software/en/">documentation.</a>
 					</p>
 				</div>

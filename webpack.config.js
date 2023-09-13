@@ -19,7 +19,7 @@ const ENV = process.env.NODE_ENV || 'development';
 const PRODUCTION_BUILD = ENV === 'production';
 const FILE_NAME = process.env.FILE_NAME || 'console_dev';
 const CONSOLE_TYPE = process.env.CONSOLE_TYPE || 'console';
-const PROXY_TARGET = process.env.PROXY_TARGET || 'https://monitor.angie.software';
+const PROXY_TARGET = process.env.PROXY_TARGET || 'https://console.angie.software';
 
 const plugins = [
     new HtmlWebpackPlugin({
