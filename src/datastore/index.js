@@ -55,11 +55,17 @@ export const startObserve = function loop(force = false) {
 			Array.from(OBSERVED).map(([, instance]) =>
 				instance.api.get()
 					.then(data => data, err => err)
-					.then((data) => ({
-						data: data && data.error ? null : data,
-						api: instance.api,
-						timeStart
-					}))
+					.then((data) => {
+						if (data.status === 403) {
+							availableApiEndpoints.removeEndpoint(instance.api.path);
+							OBSERVED.delete(instance.api.toString());
+						}
+						return {
+							data: data && data.error ? null : data,
+							api: instance.api,
+							timeStart
+						};
+					})
 			)
 		).then((data) => {
 			data.forEach(({ api, data, timeStart }) => {

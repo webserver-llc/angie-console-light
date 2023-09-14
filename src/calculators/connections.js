@@ -8,6 +8,7 @@
 import utils from './utils.js';
 
 export default (connections, previous) => {
+	if (connections === null) return null;
 	connections.current = connections.active + connections.idle;
 
 	connections.accepted_s = utils.calculateSpeed(

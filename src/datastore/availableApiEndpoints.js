@@ -49,4 +49,25 @@ export default class AvailableApiEndpoints {
 	fillFirstLevel(endpoints) {
 		this.firstLevel = Object.keys(endpoints);
 	}
+
+	removeEndpoint(path) {
+		const isAvailable = this.firstLevelIncludes(path[0]);
+
+		if (
+			isAvailable &&
+			this.secondLevelIncludes(path[0]) &&
+			this.thirdLevelIncludes(path[0], path[1])
+		) {
+			const index = this.secondLevel[path[0]].indexOf(path[1]);
+			this.secondLevel[path[0]].splice(index, 1);
+			if (this.secondLevel[path[0]].length !== 0) {
+				return;
+			}
+		}
+
+		if (isAvailable) {
+			const index = this.firstLevel.indexOf(path[0]);
+			this.firstLevel.splice(index, 1);
+		}
+	}
 }

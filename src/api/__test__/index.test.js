@@ -51,28 +51,6 @@ describe('Api', () => {
 		it('default value', () => {
 			expect(Api.isAngiePro() === false).toBeTruthy();
 		});
-
-		// it('define pro', () => {
-		// 	Api.defineAngieVersion('PRO');
-		// 	assert(Api.isAngiePro() === true, 'should be true')
-		//
-		// 	Api.defineAngieVersion('pro');
-		// 	assert(Api.isAngiePro() === true, 'should be true')
-		//
-		// 	Api.defineAngieVersion('pro p1');
-		// 	assert(Api.isAngiePro() === true, 'should be true')
-		// })
-		//
-		// it('define oss', () => {
-		// 	Api.defineAngieVersion();
-		// 	assert(Api.isAngiePro() === false, 'should be true')
-		//
-		// 	Api.defineAngieVersion('hot');
-		// 	assert(Api.isAngiePro() === false, 'should be true')
-		//
-		// 	Api.defineAngieVersion('1.2.0');
-		// 	assert(Api.isAngiePro() === false, 'should be true')
-		// })
 	});
 
 	describe('checkWritePermissions()', () => {
@@ -169,27 +147,11 @@ describe('Api', () => {
 
 		it('Correct path', () => {
 			window.fetch = jest.fn(_fetchInner);
-			const spyDefineAngieVersion = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => {});
 
 			Api.checkApiAvailability();
-			expect(window.fetch.mock.calls[0][0] === `${ API_PATH }/angie/`).toBeTruthy();
+			expect(window.fetch.mock.calls[0][0] === `${ API_PATH }/`).toBeTruthy();
 
 			window.fetch = _fetchInner;
-			spyDefineAngieVersion.mockRestore();
-		});
-
-		it('Correct method', done => {
-			const spyApiGet = jest.spyOn(ApiProxy.prototype, 'get').mockClear();
-			const spyDefineAngieVersion = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => {});
-
-			Api.checkApiAvailability().then(() => {
-				expect(spyApiGet).toHaveBeenCalled();
-				expect(spyApiGet.mock.calls[0].length === 0).toBeTruthy();
-
-				spyApiGet.mockRestore();
-				spyDefineAngieVersion.mockRestore();
-				done();
-			});
 		});
 
 		it('Returns Promise', () => {
@@ -201,8 +163,6 @@ describe('Api', () => {
 		it('Handles 401', done => {
 			const _done = error => {
 				window.fetch = _fetchInner;
-				spyDefineAngieVersion.mockRestore();
-
 				done(error);
 			};
 
@@ -212,8 +172,6 @@ describe('Api', () => {
 					return Promise.resolve({ error: {} });
 				}
 			});
-
-			const spyDefineAngieVersion = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => {});
 
 			Api.checkApiAvailability()
 				.then(

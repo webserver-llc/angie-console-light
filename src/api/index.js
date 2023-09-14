@@ -14,6 +14,7 @@ import mapperHttpResponse from './mappers/httpResponse.js';
 import mapperHttpUpstreams from './mappers/httpUpstreams.js';
 import mapperStreamServerZones from './mappers/streamServerZones.js';
 
+import calculateAngie from '../calculators/angie.js';
 import calculateServerZones from '../calculators/serverzones.js';
 import calculateLocationZones from '../calculators/locationzones.js';
 import calculateConnections from '../calculators/connections.js';
@@ -70,21 +71,34 @@ export function defineAngieVersion(build) {
 	}
 }
 
-export const checkApiAvailability = () => {
-	const angieApi = api.angie;
+export const checkApiAvailability = () => window.fetch(`${API_PATH}/`).then(response => {
+	let err = false;
 
-	return angieApi.get().then(response => {
-		// eslint-disable-next-line no-use-before-define
-		apiUtils.defineAngieVersion(response.build);
-		return response;
-	}).catch((err) => {
-		if (err.status === 401) {
-			throw { type: 'basic_auth' };
-		}
+	if (response.status > 299) {
+		err = true;
+	}
 
-		throw { type: 'api_not_found' };
-	});
-};
+	return response
+		.json()
+		.then((data) => {
+			if (err) {
+				throw data;
+			}
+			return data;
+		})
+		.catch((data) => {
+			throw {
+				error: data.error ? `${data.error}: ${data.description}` : null,
+				status: response.status,
+			};
+		});
+}).catch((err) => {
+	if (err.status === 401) {
+		throw { type: 'basic_auth' };
+	}
+
+	throw { type: 'api_not_found' };
+});
 
 export const initialLoad = ({
 	subscribe,
@@ -92,7 +106,7 @@ export const initialLoad = ({
 	availableApiEndpoints
 }) => {
 	const apis = [
-		api.angie,
+		api.angie.process(calculateAngie),
 		api.connections.process(calculateConnections),
 		api.http.server_zones.setMapper(mapperHttpResponse).process(calculateServerZones),
 		api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones),

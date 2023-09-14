@@ -71,6 +71,9 @@ export default class ApiProxy {
 					return data;
 				})
 				.catch((data) => {
+					if (response.status === 403) {
+						data.error = 'Forbidden';
+					}
 					throw {
 						error: data.error ? `${data.error}: ${data.description}` : null,
 						status: response.status,

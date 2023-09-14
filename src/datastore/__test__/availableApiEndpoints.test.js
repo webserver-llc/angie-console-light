@@ -87,12 +87,44 @@ describe('Datastore AvailableApiEndpoints', () => {
 		expect(instance.thirdLevelIncludes('http', 'test_1')).toBe(true);
 	});
 
-	it('fillFirstLevel', () => {
+	it('fillFirstLevel()', () => {
 		const instance = new AvailableApiEndpoints();
 
 		instance.fillFirstLevel({ http: {}, stream: {} });
 
 		// firstLevel
 		expect(instance.firstLevel).toEqual(['http', 'stream']);
+	});
+
+	describe('removeEndpoint()', () => {
+		let instance;
+
+		beforeEach(() => {
+			instance = new AvailableApiEndpoints();
+		});
+
+		it('remove on first level', () => {
+			instance.fillFirstLevel({ angie: {} });
+			instance.removeEndpoint(['angie']);
+			expect(instance.getFirstLevel()).toBeArrayOfSize(0);
+		});
+
+		it('remove on third level', async () => {
+			instance.fillFirstLevel({ http: {} });
+			instance.fillThirdLevel('http', { server_zones: {}, location_zones: {} });
+			expect(instance.getThirdLevel('http')).toBeArrayOfSize(2);
+			instance.removeEndpoint(['http', 'server_zones']);
+			expect(instance.firstLevelIncludes('http')).toBeTrue();
+			expect(instance.getThirdLevel('http')).toBeArrayOfSize(1);
+		});
+
+		it('remove third level and first level', async () => {
+			instance.fillFirstLevel({ http: {} });
+			instance.fillThirdLevel('http', { server_zones: {} });
+			expect(instance.getThirdLevel('http')).toBeArrayOfSize(1);
+			instance.removeEndpoint(['http', 'server_zones']);
+			expect(instance.firstLevelIncludes('http')).toBeFalse();
+			expect(instance.getThirdLevel('http')).toBeArrayOfSize(0);
+		});
 	});
 });
