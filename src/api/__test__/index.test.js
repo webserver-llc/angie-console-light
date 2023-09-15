@@ -357,6 +357,7 @@ describe('Api', () => {
 				{ upstreams: {} }
 			];
 			let fetchCall = 0;
+			datastore.availableApiEndpoints.reset();
 
 			window.fetch = jest.fn(path =>
 				Promise.resolve({
@@ -433,6 +434,10 @@ describe('Api', () => {
 			}, {
 				path: 'stream/server_zones',
 				processor: calculateStreamZones
+			},
+			{
+				path: 'stream/upstreams',
+				processor: calculateStreamUpstreams
 			}
 			];
 

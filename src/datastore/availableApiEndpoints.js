@@ -32,7 +32,7 @@ export default class AvailableApiEndpoints {
 	}
 
 	fillThirdLevel(secondLevelEndpoint, endpoints) {
-		this.secondLevel[secondLevelEndpoint] = Object.keys(endpoints);
+		this.secondLevel[secondLevelEndpoint].push(...Object.keys(endpoints));
 	}
 
 	secondLevelIncludes(endpoint) {
@@ -47,7 +47,7 @@ export default class AvailableApiEndpoints {
 	}
 
 	fillFirstLevel(endpoints) {
-		this.firstLevel = Object.keys(endpoints);
+		this.firstLevel.push(...Object.keys(endpoints));
 	}
 
 	removeEndpoint(path) {
@@ -69,5 +69,13 @@ export default class AvailableApiEndpoints {
 			const index = this.firstLevel.indexOf(path[0]);
 			this.firstLevel.splice(index, 1);
 		}
+	}
+
+	reset() {
+		this.firstLevel = [];
+		this.secondLevel = {
+			http: [],
+			stream: []
+		};
 	}
 }

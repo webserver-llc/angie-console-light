@@ -22,7 +22,7 @@ import calculateSharedZones from '../calculators/sharedzones.js';
 import calculateCaches from '../calculators/caches.js';
 import calculateUpstreams from '../calculators/upstreams.js';
 import calculateResolvers from '../calculators/resolvers.js';
-import { zones as calculateStreamZones } from '../calculators/stream.js';
+import { zones as calculateStreamZones, upstreams as calculateStreamUpstreams } from '../calculators/stream.js';
 import mapperResolvers from './mappers/resolvers.js';
 
 const api = new Proxy({}, {
@@ -100,6 +100,10 @@ export const checkApiAvailability = () => window.fetch(`${API_PATH}/`).then(resp
 	throw { type: 'api_not_found' };
 });
 
+export const apiStreamUpstreams = api.stream.upstreams
+	.setMapper(mapperHttpUpstreams)
+	.process(calculateStreamUpstreams);
+
 export const initialLoad = ({
 	subscribe,
 	unsubscribe,
@@ -115,6 +119,7 @@ export const initialLoad = ({
 		api.http.upstreams.setMapper(mapperHttpUpstreams).process(calculateUpstreams),
 		api.resolvers.setMapper(mapperResolvers).process(calculateResolvers),
 		api.stream.server_zones.setMapper(mapperStreamServerZones).process(calculateStreamZones),
+		apiStreamUpstreams,
 	];
 
 	return window.fetch(`${API_PATH}/`)

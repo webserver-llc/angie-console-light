@@ -6,7 +6,7 @@ export default (response) => {
 	}
 
 	Object.keys(response).forEach((key) => {
-		const { ssl, sessions, data, connections } = response[key];
+		const { ssl = {}, sessions, data, connections } = response[key];
 
 		delete response[key].ssl;
 		delete response[key].sessions;
@@ -20,10 +20,10 @@ export default (response) => {
 		response[key].discarded = connections.discarded;
 
 		response[key].ssl = {};
-		response[key].ssl.handshakes = ssl.handshaked;
-		response[key].ssl.handshakes_failed = ssl.failed;
-		response[key].ssl.handshakes_timedout = ssl.timedout;
-		response[key].ssl.session_reuses = ssl.reuses;
+		response[key].ssl.handshakes = ssl.handshaked || 0;
+		response[key].ssl.handshakes_failed = ssl.failed || 0;
+		response[key].ssl.handshakes_timedout = ssl.timedout || 0;
+		response[key].ssl.session_reuses = ssl.reuses || 0;
 
 		response[key].sessions = {};
 		response[key].sessions['2xx'] = sessions.success;

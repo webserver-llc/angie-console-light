@@ -226,6 +226,10 @@ export default class UpstreamsList extends SortableTable {
 	}
 
 	renderEditButton(writePermission = false) {
+		if (this.props.isStream) {
+			return null;
+		}
+
 		if (envUtils.isDemoEnv()) {
 			return (
 				<span

@@ -8,7 +8,7 @@
 import React from 'react';
 import { UpstreamsBox } from '../upstreams/upstreams.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
-import api from '../../../../api';
+import { apiStreamUpstreams } from '../../../../api';
 import { upstreams } from '../../../../calculators/stream.js';
 
 export class StreamUpstreams extends React.Component {
@@ -28,5 +28,5 @@ export class StreamUpstreams extends React.Component {
 }
 
 export default DataBinder(StreamUpstreams, [
-	api.stream.upstreams.process(upstreams)
+	apiStreamUpstreams
 ]);

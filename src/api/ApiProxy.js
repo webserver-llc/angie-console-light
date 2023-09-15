@@ -11,6 +11,7 @@ export default class ApiProxy {
 		this.path = [pathStart];
 		this.processors = [];
 		this.mapper = null;
+		this.mock = null;
 		this.__API_PROXY = true; /* Duck typing for tests */
 
 		this.proxy = new Proxy(this, {
@@ -45,6 +46,11 @@ export default class ApiProxy {
 			credentials: 'same-origin',
 			...otherParams,
 		};
+
+		if (typeof this.mock === 'function') {
+			const response = this.mock(params);
+			return this.mapper ? Promise.resolve(this.mapper(response)) : Promise.resolve(response);
+		}
 
 		if (data) {
 			params.body = JSON.stringify(data);
@@ -109,6 +115,11 @@ export default class ApiProxy {
 
 	setMapper(fn) {
 		this.mapper = fn;
+		return this.proxy;
+	}
+
+	setMock(fn) {
+		this.mock = fn;
 		return this.proxy;
 	}
 

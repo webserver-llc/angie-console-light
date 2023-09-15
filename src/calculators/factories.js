@@ -25,7 +25,7 @@ export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer) {
 				if (upstreamsKey === 'upstreams') {
 					peer.server_req_s = utils.calculateSpeed(previousPeer.requests, peer.requests, period);
 				} else if (upstreamsKey === 'tcp_upstreams') {
-					peer.server_conn_s = utils.calculateSpeed(previousPeer.connections, peer.connections, period);
+					peer.server_conn_s = utils.calculateSpeed(previousPeer.requests, peer.requests, period);
 				}
 
 				peer.server_sent_s = utils.calculateSpeed(previousPeer.sent, peer.sent, period);

@@ -16,7 +16,9 @@ export default (response) => {
 			} = peers[key];
 			peers[key].id = key;
 			peers[key].name = key;
-			peers[key].responses = formatHttpResponse(peers[key].responses);
+			if (peers[key].responses) {
+				peers[key].responses = formatHttpResponse(peers[key].responses);
+			}
 			peers[key].active = current;
 			peers[key].requests = total;
 			peers[key].selected = last;

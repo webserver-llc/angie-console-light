@@ -30,7 +30,6 @@ describe('Calculators – factories', () => {
 				{
 					id: 1,
 					requests: 30,
-					connections: 2,
 					sent: 101,
 					received: 99,
 					max_conns: 10,
@@ -46,7 +45,6 @@ describe('Calculators – factories', () => {
 				}, {
 					id: 2,
 					requests: 0,
-					connections: 0,
 					sent: 0,
 					received: 0,
 					max_conns: 0,
@@ -108,7 +106,6 @@ describe('Calculators – factories', () => {
 			peer = {
 				id: 1,
 				requests: 100,
-				connections: 9,
 				sent: 100500,
 				received: 99500,
 				max_conns: 10,
@@ -273,14 +270,14 @@ describe('Calculators – factories', () => {
 			expect(spyDateNow).toHaveBeenCalled();
 			expect(spyUtilsCalculateSpeed).toHaveBeenCalledTimes(3);
 			// calculateSpeed 1st call 1st arg
-			expect(spyUtilsCalculateSpeed.mock.calls[0][0]).toBe(2);
+			expect(spyUtilsCalculateSpeed.mock.calls[0][0]).toBe(30);
 			// calculateSpeed 1st call 2nd arg
-			expect(spyUtilsCalculateSpeed.mock.calls[0][1]).toBe(9);
+			expect(spyUtilsCalculateSpeed.mock.calls[0][1]).toBe(100);
 			// calculateSpeed 1st call 3rd arg
 			expect(spyUtilsCalculateSpeed.mock.calls[0][2]).toBe(period);
 			expect(peer.server_req_s).toBeUndefined();
 			// peer.server_conn_s
-			expect(peer.server_conn_s).toBe(9);
+			expect(peer.server_conn_s).toBe(100);
 			// calculateSpeed 2nd call 1st arg
 			expect(spyUtilsCalculateSpeed.mock.calls[1][0]).toBe(101);
 			// calculateSpeed 2nd call 2nd arg

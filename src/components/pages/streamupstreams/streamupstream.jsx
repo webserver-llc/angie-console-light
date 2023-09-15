@@ -24,7 +24,7 @@ export default class StreamUpstream extends UpstreamsList {
 
 	renderPeers(peers) {
 		return (
-			<table className={ `${ styles.table } ${ styles.wide }` }>
+			<table className={`${ styles.table } ${ styles.wide }`}>
 				<thead>
 					<tr>
 						<TableSortControl
@@ -39,128 +39,76 @@ export default class StreamUpstream extends UpstreamsList {
 						<th colSpan="4">Connection</th>
 						<th colSpan="4">Traffic</th>
 						<th colSpan="2">Server checks</th>
-						<th colSpan="4">Health monitors</th>
-						<th colSpan="3">Response time</th>
-						<th colSpan="4">SSL</th>
 					</tr>
-					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
-						<th className={ styles['left-align'] }>Name</th>
-						<th className={ styles['left-align'] }>
-							<span className={ styles.hinted } {...tooltips.useTooltip('Total downtime', 'hint')}>DT</span>
+					<tr className={`${ styles['right-align'] } ${ styles['sub-header'] }`}>
+						<th className={styles['left-align']}>Name</th>
+						<th>
+							<span className={styles.hinted} {...tooltips.useTooltip('Total downtime', 'hint')}>DT</span>
 						</th>
-						<th className={ `${ styles['center-align'] } ${ styles.bdr }` }>
-							<span className={ styles.hinted } {...tooltips.useTooltip('Weight', 'hint')}>W</span>
+						<th className={`${ styles.bdr }`}>
+							<span className={styles.hinted} {...tooltips.useTooltip('Weight', 'hint')}>W</span>
 						</th>
 						<th>Total</th>
 						<th>Conn/s</th>
 						<th>Active</th>
-						<th className={ styles.bdr }>Limit</th>
+						<th className={styles.bdr}>Limit</th>
 						<th>Sent/s</th>
 						<th>Rcvd/s</th>
 						<th>Sent</th>
-						<th className={ styles.bdr }>Rcvd</th>
+						<th className={styles.bdr}>Rcvd</th>
 						<th>Fails</th>
-						<th className={ styles.bdr }>Unavail</th>
-						<th>Checks</th>
-						<th>Fails</th>
-						<th>Unhealthy</th>
-						<th className={ `${ styles.bdr } ${ styles['left-align'] }` }>Last</th>
-						<th>Connect</th>
-						<th>First byte</th>
-						<th className={ styles.bdr }>Response</th>
-						<th>Handshakes</th>
-						<th>Handshakes<br/>Failed</th>
-						<th>Session<br/>Reuses</th>
-						<th>Verify<br/>Failures</th>
+						<th className={styles.bdr}>Unavail</th>
 					</tr>
 				</thead>
 
-				<tbody className={ styles['right-align'] }>
+				<tbody className={styles['right-align']}>
 					{
 						peers.length === 0 ?
 							this.renderEmptyList()
-						:
-							peers.map(peer => {
-								const { ssl } = peer;
+							:
+							peers.map(peer => (
+								<tr>
+									<td className={styles[peer.state]} />
 
-								return (
-									<tr>
-										<td className={ styles[peer.state] } />
+									{ this.getCheckbox(peer) }
 
-										{ this.getCheckbox(peer) }
+									<td className={`${ styles['left-align'] } ${ styles.bold } ${ styles.address }`}>
+										<span className={styles['address-container']} {...tooltips.useTooltip(<PeerTooltip peer={peer} />)}>
+											{ peer.backup ? <span>b&nbsp;</span> : null }
+											{ peer.server }
+										</span>
 
-										<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.address }` }>
-											<span className={ styles['address-container'] } {...tooltips.useTooltip(<PeerTooltip peer={peer} />)}>
-												{ peer.backup ? <span>b&nbsp;</span> : null }{ peer.server }
-											</span>
-
-											{
-												this.state.editMode ?
-													<span className={ styles['edit-peer'] } onClick={() => this.editSelectedUpstream(peer)} />
+										{
+											this.state.editMode ?
+												<span className={styles['edit-peer']} onClick={() => this.editSelectedUpstream(peer)} />
 												: null
-											}
-										</td>
+										}
+									</td>
 
-										<td>{ utils.formatUptime(peer.downtime, true) }</td>
-										<td className={ styles.bdr }>{ peer.weight }</td>
-										<td>
-											<span className={ styles.hinted } {...tooltips.useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
-												{ peer.connections }
-											</span>
-										</td>
-										<td>{ peer.server_conn_s }</td>
-										<td>{ peer.active }</td>
-										<td className={ styles.bdr}>
-											{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }
-										</td>
-										<td className={ styles.px60}>
-											{ utils.formatReadableBytes(peer.server_sent_s) }
-										</td>
-										<td className={ styles.px60}>
-											{ utils.formatReadableBytes(peer.server_rcvd_s) }
-										</td>
-										<td>{ utils.formatReadableBytes(peer.sent) }</td>
-										<td className={ styles.bdr}>{ utils.formatReadableBytes(peer.received) }</td>
-										<td>{ peer.fails }</td>
-										<td>{ peer.unavail }</td>
-										<td>{ peer.health_checks.checks }</td>
-										<td>{ peer.health_checks.fails }</td>
-										<td>{ peer.health_checks.unhealthy }</td>
-										<td className={`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }${peer.health_status === false ? (' ' + styles['red-flash']) : ''}`}>
-											{ peer.health_status === null ? '–' :
-												peer.health_status ? 'passed' : 'failed' }
-										</td>
-
-										<td>{ utils.formatMs(peer.connect_time) }</td>
-										<td>{ utils.formatMs(peer.first_byte_time) }</td>
-										<td className={ styles.bdr}>{ utils.formatMs(peer.response_time) }</td>
-
-										<td>{ ssl ? ssl.handshakes : '–' }</td>
-										<td>
-											{
-												ssl
-													? tableUtils.tooltipRowsContent(
-														ssl.handshakes_failed,
-														utils.getSSLHandhsakesFailures(ssl),
-														'hint'
-													)
-													: '–'
-											}
-										</td>
-										<td>{ ssl ? ssl.session_reuses : '–' }</td>
-										<td>
-											{
-												ssl
-													? tableUtils.tooltipRowsContent(
-														...utils.getSSLVeryfiedFailures(ssl),
-														'hint'
-													)
-													: '–'
-											}
-										</td>
-									</tr>
-								);
-							})
+									<td>{ utils.formatUptime(peer.downtime, true) }</td>
+									<td className={styles.bdr}>{ peer.weight }</td>
+									<td>
+										<span className={styles.hinted} {...tooltips.useTooltip(<ConnectionsTooltip peer={peer} />, 'hint')}>
+											{ peer.requests }
+										</span>
+									</td>
+									<td>{ peer.server_conn_s }</td>
+									<td>{ peer.active }</td>
+									<td className={styles.bdr}>
+										{ peer.max_conns === Infinity ? <span>&infin;</span> : peer.max_conns }
+									</td>
+									<td className={styles.px60}>
+										{ utils.formatReadableBytes(peer.server_sent_s) }
+									</td>
+									<td className={styles.px60}>
+										{ utils.formatReadableBytes(peer.server_rcvd_s) }
+									</td>
+									<td>{ utils.formatReadableBytes(peer.sent) }</td>
+									<td className={styles.bdr}>{ utils.formatReadableBytes(peer.received) }</td>
+									<td>{ peer.fails }</td>
+									<td>{ peer.unavail }</td>
+								</tr>
+							))
 					}
 				</tbody>
 			</table>

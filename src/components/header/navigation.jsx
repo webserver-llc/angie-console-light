@@ -43,6 +43,11 @@ export const SECTIONS = [
 		statusKey: 'tcp_zones'
 	},
 	{
+		title: 'TCP/UDP Upstreams',
+		hash: '#tcp_upstreams',
+		statusKey: 'tcp_upstreams'
+	},
+	{
 		title: 'Caches',
 		hash: '#caches',
 		statusKey: 'caches'

@@ -5,8 +5,7 @@
  *
  */
 import React from 'react';
-import api, { streamUpstreamsApi } from '../../../api';
-import { upstreams as calculateStreamUpstreams } from '../../../calculators/stream.js';
+import api, { apiStreamUpstreams, streamUpstreamsApi } from '../../../api';
 import calculateSharedZones from '../../../calculators/sharedzones.js';
 import UpstreamsContainer from '../../upstreams/upstreamscontainer.jsx';
 import StreamUpstream from './streamupstream.jsx';
@@ -22,7 +21,7 @@ export class StreamUpstreams extends React.Component {
 				component={StreamUpstream}
 				upstreams={upstreams}
 				upstreamsApi={streamUpstreamsApi}
-				isStream={true}
+				isStream
 			/>
 		);
 	}
@@ -30,5 +29,5 @@ export class StreamUpstreams extends React.Component {
 
 export default DataBinder(StreamUpstreams, [
 	api.slabs.process(calculateSharedZones),
-	api.stream.upstreams.process(calculateStreamUpstreams)
+	apiStreamUpstreams
 ]);

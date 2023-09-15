@@ -583,7 +583,7 @@ describe('<UpstreamsList />', () => {
 				slab: 'slab_test'
 			},
 			showOnlyFailed: false,
-			isStream: 'isStream_test',
+			isStream: false,
 			upstreamsApi: 'upstreamsApi_test'
 		};
 		const wrapper = shallow(
@@ -593,6 +593,29 @@ describe('<UpstreamsList />', () => {
 
 		afterAll(() => {
 			wrapper.unmount();
+		});
+
+		it('isStream = true', async () => {
+			const propsWithIsStream = { ...props, isStream: true };
+			const wrapper = shallow(
+				<UpstreamsList {...propsWithIsStream} />
+			);
+			const instance = wrapper.instance();
+			jest.spyOn(envUtils, 'isDemoEnv').mockClear().mockImplementation(() => true);
+			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
+				prop_from_useTooltip: true
+			}));
+
+			expect(instance.renderEditButton(false)).toBeNull();
+			expect(instance.renderEditButton(true)).toBeNull();
+			expect(envUtils.isDemoEnv).not.toHaveBeenCalled();
+			expect(apiUtils.isAngiePro).not.toHaveBeenCalled();
+			expect(tooltips.useTooltip).not.toHaveBeenCalled();
+
+			apiUtils.isAngiePro.mockRestore();
+			envUtils.isDemoEnv.mockRestore();
+			tooltips.useTooltip.mockRestore();
 		});
 
 		it('isDemoEnv = true', () => {
@@ -689,7 +712,7 @@ describe('<UpstreamsList />', () => {
 				slab: 'slab_test'
 			},
 			showOnlyFailed: false,
-			isStream: 'isStream_test',
+			isStream: false,
 			upstreamsApi: 'upstreamsApi_test'
 		};
 		const wrapper = shallow(
@@ -805,7 +828,7 @@ describe('<UpstreamsList />', () => {
 		expect(wrapper.childAt(0).prop('upstream')).toEqual(props.upstream);
 		expect(wrapper.childAt(0).prop('peers')).toBeNull();
 		// upstreams editor, prop isStream
-		expect(wrapper.childAt(0).prop('isStream')).toBe('isStream_test');
+		expect(wrapper.childAt(0).prop('isStream')).toBe(false);
 		// upstreams editor, prop onClose
 		expect(wrapper.childAt(0).prop('onClose').name).toBe('bound closeEditor');
 		// upstreams editor, prop upstreamsApi

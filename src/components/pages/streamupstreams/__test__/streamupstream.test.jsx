@@ -57,7 +57,7 @@ describe('<StreamUpstream />', () => {
 			server: 'test_server_1',
 			downtime: 1000,
 			weight: 1,
-			connections: 20,
+			requests: 20,
 			server_conn_s: 100000,
 			active: 10000,
 			max_conns: Infinity,
@@ -66,29 +66,16 @@ describe('<StreamUpstream />', () => {
 			sent: 400,
 			received: 399,
 			fails: 1,
-			unavail: 2,
-			health_checks: {
-				checks: 24,
-				fails: 3,
-				unhealthy: 0
-			},
-			health_status: null,
-			connect_time: 999,
-			first_byte_time: 9,
-			response_time: 11
+			unavail: 2
 		}, {
 			id: 2,
 			state: 'up',
 			backup: true,
 			server: 'test_server_2',
-			max_conns: '123/s',
-			health_checks: {},
-			health_status: false
+			max_conns: '123/s'
 		}, {
 			id: 3,
-			state: 'up',
-			health_checks: {},
-			health_status: true
+			state: 'up'
 		}];
 		const wrapper = shallow(
 			<StreamUpstream
@@ -151,12 +138,8 @@ describe('<StreamUpstream />', () => {
 		expect(headRow.childAt(4).prop('colSpan')).toBe('4');
 		// head row 1, child 6 colspan
 		expect(headRow.childAt(5).prop('colSpan')).toBe('2');
-		// head row 1, child 7 colspan
-		expect(headRow.childAt(6).prop('colSpan')).toBe('4');
-		// head row 1, child 8 colspan
-		expect(headRow.childAt(7).prop('colSpan')).toBe('3');
 		// head row 2, children length
-		expect(table.childAt(0).childAt(1).children()).toHaveLength(24);
+		expect(table.childAt(0).childAt(1).children()).toHaveLength(13);
 
 		// TODO: Add tests for SSL stat cells
 
@@ -247,38 +230,11 @@ describe('<StreamUpstream />', () => {
 		expect(tbody.childAt(0).childAt(13).text()).toBe('1');
 		// [peer 1] unavail
 		expect(tbody.childAt(0).childAt(14).text()).toBe('2');
-		// [peer 1] health_checks.checks
-		expect(tbody.childAt(0).childAt(15).text()).toBe('24');
-		// [peer 1] health_checks.fails
-		expect(tbody.childAt(0).childAt(16).text()).toBe('3');
-		// [peer 1] health_checks.unhealthy
-		expect(tbody.childAt(0).childAt(17).text()).toBe('0');
-		// [peer 1] health_status className
-		expect(tbody.childAt(0).childAt(18).prop('className')).toBe(`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }`);
-		// [peer 1] health_status
-		expect(tbody.childAt(0).childAt(18).text()).toBe('–');
-		// [peer 1] connect_time
-		expect(tbody.childAt(0).childAt(19).text()).toBe('ms_formatted');
-		// [peer 1] first_byte_time
-		expect(tbody.childAt(0).childAt(20).text()).toBe('ms_formatted');
-		// [peer 1] response_time
-		expect(tbody.childAt(0).childAt(21).text()).toBe('ms_formatted');
 
 		// [peer 2] address-container text
 		expect(tbody.childAt(1).childAt(2).childAt(0).text()).toBe('b test_server_2');
 		// [peer 2] max_conns
 		expect(tbody.childAt(1).childAt(8).text()).toBe('123/s');
-		// [peer 2] health_status className
-		expect(tbody.childAt(1).childAt(18).prop('className')).toBe(
-			`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash } ${ styles['red-flash'] }`
-		);
-		// [peer 2] health_status
-		expect(tbody.childAt(1).childAt(18).text()).toBe('failed');
-
-		// [peer 3] health_status className
-		expect(tbody.childAt(2).childAt(18).prop('className')).toBe(`${ styles['left-align'] } ${ styles.bdr } ${ styles.flash }`);
-		// [peer 3] health_status
-		expect(tbody.childAt(2).childAt(18).text()).toBe('passed');
 
 		expect(tooltips.useTooltip).toHaveBeenCalledTimes(8);
 		// useTooltip, call 3, arg 1
@@ -342,20 +298,6 @@ describe('<StreamUpstream />', () => {
 		expect(utils.formatReadableBytes.mock.calls[9][0]).toBeUndefined();
 		expect(utils.formatReadableBytes.mock.calls[10][0]).toBeUndefined();
 		expect(utils.formatReadableBytes.mock.calls[11][0]).toBeUndefined();
-
-		expect(utils.formatMs).toHaveBeenCalledTimes(9);
-		// formatMs call 1, arg 1
-		expect(utils.formatMs.mock.calls[0][0]).toBe(999);
-		// formatMs call 2, arg 1
-		expect(utils.formatMs.mock.calls[1][0]).toBe(9);
-		// formatMs call 3, arg 1
-		expect(utils.formatMs.mock.calls[2][0]).toBe(11);
-		expect(utils.formatMs.mock.calls[3][0]).toBeUndefined();
-		expect(utils.formatMs.mock.calls[4][0]).toBeUndefined();
-		expect(utils.formatMs.mock.calls[5][0]).toBeUndefined();
-		expect(utils.formatMs.mock.calls[6][0]).toBeUndefined();
-		expect(utils.formatMs.mock.calls[7][0]).toBeUndefined();
-		expect(utils.formatMs.mock.calls[8][0]).toBeUndefined();
 
 		// [editMode = false] edit-peer
 		expect(table.find(`.${ styles['edit-peer'] }`)).toHaveLength(0);
