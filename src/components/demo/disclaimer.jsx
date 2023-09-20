@@ -37,7 +37,7 @@ export default class Disclaimer extends React.Component {
 					<br />
 					For more information on configuration please visit
 					{' '}
-					<a href="https://angie.software/en/api/">https://angie.software/en/api/</a>
+					<a href="https://angie.software/en/console/">https://angie.software/en/console/</a>
 					<br />
 					For purchasing Angie Pro please contact the sales team:
 					{' '}

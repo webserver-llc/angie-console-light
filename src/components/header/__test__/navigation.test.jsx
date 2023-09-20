@@ -242,7 +242,8 @@ describe('<Navigation />', () => {
 				);
 				const link = wrapper.find('a');
 
-				SECTIONS.forEach(({ hash, statusKey }) => {
+				SECTIONS.forEach(({ hash, statusKey, hidden }) => {
+					if (hidden === true) return;
 					const _link = link.filter(`[href="${ hash }"]`);
 
 					// link for "${ statusKey }"

@@ -62,6 +62,11 @@ export const SECTIONS = [
 		hash: '#resolvers',
 		statusKey: 'resolvers'
 	},
+	{
+		title: 'Config Files',
+		hash: '#config_files',
+		hidden: true,
+	}
 ];
 
 export class Navigation extends React.Component {
@@ -96,6 +101,7 @@ export class Navigation extends React.Component {
 	render() {
 		const { statuses } = this.props;
 		const tabs = SECTIONS
+			.filter(({ hidden }) => typeof hidden !== 'boolean' || hidden === false)
 			.filter(({ statusKey }) => {
 				if (statusKey === 'server_zones') {
 					return (

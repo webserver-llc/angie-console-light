@@ -25,6 +25,7 @@ import ZoneSync from './components/pages/zonesync.jsx';
 import Resolvers from './components/pages/resolvers.jsx';
 import Workers from './components/pages/workers.jsx';
 import Disclaimer from './components/demo/disclaimer.jsx';
+import ConfigFiles from './components/pages/configfiles/configfiles.jsx';
 import datastore, { STORE, startObserve, play, pause } from './datastore';
 import { apiUtils } from './api';
 import envUtils from './env';
@@ -44,6 +45,7 @@ export const SECTIONS = {
 	'#cluster': ZoneSync,
 	'#resolvers': Resolvers,
 	'#workers': Workers,
+	'#config_files': ConfigFiles,
 };
 
 export const Errors = {

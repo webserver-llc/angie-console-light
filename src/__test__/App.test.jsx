@@ -24,7 +24,7 @@ describe('<App />', () => {
 			() => Promise.reject({ type: '' })
 		);
 
-		const newHash = '#new_hash';
+		const newHash = '#caches';
 		let wrapper = shallow(<App.Component />);
 
 		expect(wrapper.state('hash')).toBe(history.location.hash || '#');

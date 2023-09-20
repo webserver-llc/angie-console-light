@@ -19,11 +19,15 @@ const ENV = process.env.NODE_ENV || 'development';
 const PRODUCTION_BUILD = ENV === 'production';
 const CONSOLE_TYPE = process.env.CONSOLE_TYPE || 'console';
 const PROXY_TARGET = process.env.PROXY_TARGET || 'https://console.angie.software';
-const YANDEX_METRICA_ID = process.env.YANDEX_METRICA_ID || '90924256';
+const YANDEX_METRICA_ID = process.env.YANDEX_METRICA_ID || 'XXXXXX';
 
 const template = CONSOLE_TYPE === 'demo' ? 'src/index.demo.ejs' : 'src/index.ejs';
 
 const plugins = [
+	new webpack.IgnorePlugin({
+		resourceRegExp: /^((fs)|(path)|(os)|(crypto)|(source-map-support))$/,
+		contextRegExp: /vs\/language\/typescript\/lib/
+	}),
 	new HtmlWebpackPlugin({
 		title: 'Angie Console Light',
 		filename: '../index.html',
@@ -86,6 +90,7 @@ const cssLoaderConfiguration = (() => {
 
 	return {
 		test: /\.css$/,
+		exclude: /node_modules/,
 		use
 	};
 })();
@@ -112,9 +117,13 @@ const babelOptions = {
 
 const config = {
 	mode: PRODUCTION_BUILD ? 'production' : 'development',
-	entry: './src/index.js',
+	entry: {
+		app: './src/index.js',
+		'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js'
+	},
 	output: {
-		filename: '[name].index.js',
+		globalObject: 'self',
+		filename: '[name].bundle.js',
 		path: path.join(__dirname, `/dist/${CONSOLE_TYPE}/assets`),
 		publicPath: 'assets/',
 	},
@@ -158,7 +167,16 @@ const config = {
 				test: /\.(woff|svg)$/,
 				type: 'asset/inline',
 			},
-			cssLoaderConfiguration
+			cssLoaderConfiguration,
+			{
+				test: /\.ttf$/,
+				type: 'asset/resource'
+			},
+			{
+				test: /\.css$/,
+				include: /node_modules/,
+				use: ['style-loader', 'css-loader']
+			}
 		]
 	},
 	performance: {

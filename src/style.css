@@ -22,6 +22,24 @@ th {
 	text-align: left;
 }
 
+button {
+  display: inline-block;
+  height: 26px;
+  font-size: 13px;
+  border: 1px solid #bbb8bb;
+  border-radius: 4px;
+  padding: 0 15px;
+  color: #989a9c;
+  margin: 0 3px;
+  cursor: pointer;
+  vertical-align: middle;
+  background-color: white;
+}
+
+button:hover {
+	background-color: #eee;
+}
+
 .console {
 	padding-top: 60px;
 	height: 100%;
@@ -81,6 +99,6 @@ h1 {
 	margin: 5px 0;
 }
 
-.disclaimer {
-
+.fr {
+	float: right;
 }

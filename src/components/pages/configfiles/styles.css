@@ -1,0 +1,23 @@
+.container {
+  position: relative;
+}
+
+.content {
+  position: relative;
+}
+
+.content-controls {
+  padding: 10px 0;
+  display: flex;
+  justify-content: flex-end;
+  position: sticky;
+  background-color: white;
+  top: 100px;
+  z-index: 3;
+}
+
+.button-icon-copy {
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+}

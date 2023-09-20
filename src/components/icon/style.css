@@ -44,3 +44,8 @@
 	composes: icon;
 	background-image: url('/img/pencil.svg');
 }
+
+.copy {
+	composes: icon;
+	background-image: url('/img/copy.svg');
+}

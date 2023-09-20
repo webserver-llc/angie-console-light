@@ -69,7 +69,7 @@ describe('<Disclaimer /> (demo)', () => {
 		// links length
 		expect(links.length).toBe(2);
 		// 1nd link href
-		expect(links.get(0).props.href).toBe('https://angie.software/en/api/');
+		expect(links.get(0).props.href).toBe('https://angie.software/en/console/');
 		// 2rd link href
 		expect(links.get(1).props.href).toBe('https://wbsrv.ru/angie-pro/');
 

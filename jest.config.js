@@ -16,7 +16,7 @@ module.exports = {
 		'^#/(.*)$': '<rootDir>/src/$1'
 	},
 	transformIgnorePatterns: [
-		'/node_modules/(?!(preact|foo)/)'
+		'/node_modules/(?!(preact|monaco-editor)/)',
 	],
 	transform: {
 		'\\.[jt]sx?$': 'babel-jest'

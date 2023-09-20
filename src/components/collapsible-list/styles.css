@@ -1,0 +1,23 @@
+.triggerClose, .triggerOpen {
+  padding: 10px;
+  background-color: #e3e3e3;
+  width: 100%;
+  box-sizing: border-box; 
+  display: inline-block;
+  margin-bottom: 2px;
+  font-weight: bold;
+  position: sticky;
+  top: 60px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.triggerClose:after {
+    content:'+';
+    float: right;
+}
+
+.triggerOpen:after {
+    content:'-';
+    float: right;
+}

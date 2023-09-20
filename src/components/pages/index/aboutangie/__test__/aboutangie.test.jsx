@@ -132,7 +132,11 @@ describe('<AboutAngie IndexPage />', () => {
 				build: 'PRO',
 				version: '0.0.1',
 				address: 'localhost',
-				load_time: 1599571720025
+				load_time: 1599571720025,
+				config_files: {
+					'/etc/angie.conf': 'foo',
+					'/etc/types.conf': 'bar'
+				}
 			}
 		};
 		const wrapper = shallow(
@@ -158,6 +162,7 @@ describe('<AboutAngie IndexPage />', () => {
 
 		const table = wrapper.find('table');
 
+		expect(wrapper.find('a#config-files').exists()).toBeTrue();
 		// table length
 		expect(table).toHaveLength(1);
 		// table className
