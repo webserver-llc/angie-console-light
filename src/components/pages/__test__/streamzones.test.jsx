@@ -70,7 +70,7 @@ describe('<StreamZones Page />', () => {
 			let cells = rows.at(0).find('td');
 
 			// row 1, cells length
-			expect(cells.length).toBe(16);
+			expect(cells.length).toBe(15);
 
 			let cell = cells.at(0);
 

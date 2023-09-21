@@ -34,7 +34,7 @@ describe('Mapper - Stream Server Zones', () => {
 				ssl: {
 					handshakes: 24,
 					session_reuses: 0,
-					handshakes_timedout: 0,
+					handshake_timeout: 0,
 					handshakes_failed: 0,
 				},
 				connections: 24,

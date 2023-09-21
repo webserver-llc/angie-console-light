@@ -22,7 +22,7 @@ export default (response) => {
 		response[key].ssl = {};
 		response[key].ssl.handshakes = ssl.handshaked || 0;
 		response[key].ssl.handshakes_failed = ssl.failed || 0;
-		response[key].ssl.handshakes_timedout = ssl.timedout || 0;
+		response[key].ssl.handshake_timeout = ssl.timedout || 0;
 		response[key].ssl.session_reuses = ssl.reuses || 0;
 
 		response[key].sessions = {};

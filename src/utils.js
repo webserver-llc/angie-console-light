@@ -130,35 +130,11 @@ export const getSSLHandhsakesFailures = (ssl) => {
 	const result = [];
 
 	if (ssl) {
-		if ('no_common_protocol' in ssl) {
-			result.push({
-				id: 'no_common_protocol',
-				label: 'No common protocol',
-				value: ssl.no_common_protocol,
-			});
-		}
-
-		if ('no_common_cipher' in ssl) {
-			result.push({
-				id: 'no_common_cipher',
-				label: 'No common cipher',
-				value: ssl.no_common_cipher,
-			});
-		}
-
 		if ('handshake_timeout' in ssl) {
 			result.push({
 				id: 'handshake_timeout',
-				label: 'Handshake timeout',
+				label: 'Handshake timedout',
 				value: ssl.handshake_timeout,
-			});
-		}
-
-		if ('peer_rejected_cert' in ssl) {
-			result.push({
-				id: 'peer_rejected_cert',
-				label: 'Rejected cert',
-				value: ssl.peer_rejected_cert,
 			});
 		}
 	}
