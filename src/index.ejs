@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html>
-	<head>
+
+<head>
+	<%= htmlWebpackPlugin.tags.headTags %>
 		<meta charset="UTF-8">
-		<title><%= htmlWebpackPlugin.options.title %></title>
-		<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22256%22 height=%22256%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%220%22 fill=%22%23000000%22></rect><path d=%22M84.16 80.96L63.10 80.96L60.49 72.23L38.80 72.23L36.19 80.96L15.85 80.96L38.44 19.04L61.57 19.04L84.16 80.96ZM49.51 36.32L42.94 58.37L56.35 58.37L49.87 36.32L49.51 36.32Z%22 fill=%22%23fff%22></path></svg>" />
-	</head>
-	<body></body>
+		<title>
+			<%= htmlWebpackPlugin.options.title %>
+		</title>
+		<link rel="icon" type="image/svg+xml"
+			href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22256%22 height=%22256%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%220%22 fill=%22%23000000%22></rect><path d=%22M84.16 80.96L63.10 80.96L60.49 72.23L38.80 72.23L36.19 80.96L15.85 80.96L38.44 19.04L61.57 19.04L84.16 80.96ZM49.51 36.32L42.94 58.37L56.35 58.37L49.87 36.32L49.51 36.32Z%22 fill=%22%23fff%22></path></svg>" />
+</head>
+
+<body>
+	<%= htmlWebpackPlugin.tags.bodyTags %>
+</body>
+
 </html>

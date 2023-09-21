@@ -11,27 +11,21 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HTMLInlineCSSWebpackPlugin = require('html-inline-css-webpack-plugin').default;
-const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 const packageFile = require('./package.json');
 
 const ENV = process.env.NODE_ENV || 'development';
 const PRODUCTION_BUILD = ENV === 'production';
-const FILE_NAME = process.env.FILE_NAME || 'console_dev';
 const CONSOLE_TYPE = process.env.CONSOLE_TYPE || 'console';
 const PROXY_TARGET = process.env.PROXY_TARGET || 'https://console.angie.software';
 
 const plugins = [
 	new HtmlWebpackPlugin({
 		title: 'Angie Console Light',
-		filename: `${FILE_NAME}.html`,
+		filename: '../index.html',
 		template: 'src/index.ejs',
-		...(
-			PRODUCTION_BUILD
-				? { inject: 'body' }
-				: {}
-		)
+		inject: false,
 	}),
 
 	new webpack.DefinePlugin({
@@ -45,7 +39,6 @@ const plugins = [
 
 if (PRODUCTION_BUILD) {
 	plugins.push(new HTMLInlineCSSWebpackPlugin());
-	plugins.push(new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/\.js$/]));
 }
 
 const cssLoaderConfiguration = (() => {
@@ -117,28 +110,27 @@ const config = {
 	mode: PRODUCTION_BUILD ? 'production' : 'development',
 	entry: './src/index.js',
 	output: {
-		filename: 'index.js',
-		path: path.join(__dirname, '/dist/'),
-		publicPath: '/',
+		filename: '[name].index.js',
+		path: path.join(__dirname, `/dist/${CONSOLE_TYPE}/assets`),
+		publicPath: 'assets/',
 	},
 	devServer: {
 		static: {
-			directory: path.join(__dirname, '/dist/')
+			directory: path.join(__dirname, `/dist/${CONSOLE_TYPE}/`)
 		},
 		hot: true,
 		port: 8082,
-		proxy: [{
-			context: ['/api', '/status'],
-			target: PROXY_TARGET,
-			secure: true,
-			changeOrigin: true
-		}],
+		proxy: {
+			'/api': {
+				target: PROXY_TARGET,
+				secure: true,
+				changeOrigin: true
+			}
+		},
 		devMiddleware: {
 			writeToDisk: true
 		},
-		historyApiFallback: {
-			index: `${FILE_NAME}.html`,
-		},
+		historyApiFallback: true,
 	},
 	plugins,
 
