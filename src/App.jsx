@@ -28,6 +28,8 @@ import Disclaimer from './components/demo/disclaimer.jsx';
 import datastore, { STORE, startObserve, play, pause } from './datastore';
 import { apiUtils } from './api';
 import envUtils from './env';
+import { SECTIONS as NAVIGATION_SECTIONS } from './components/header/navigation.jsx';
+import { ymService } from './services/yandex-metrica';
 
 export const history = createHistory();
 
@@ -51,6 +53,20 @@ export const Errors = {
 };
 
 export class App extends React.Component {
+	static sendAnalytics(hash) {
+		if (hash === '#') {
+			ymService.sendHit(hash, 'Index');
+			return;
+		}
+
+		const currentSection = NAVIGATION_SECTIONS.find(s => s.hash === hash);
+		if (currentSection) {
+			ymService.sendHit(currentSection.hash, currentSection.title);
+		} else {
+			console.warn('Route not found. Check Navigation component');
+		}
+	}
+
 	constructor() {
 		super();
 
@@ -63,9 +79,13 @@ export class App extends React.Component {
 
 	componentDidMount() {
 		history.listen(({ hash }) => {
+			hash = hash || '#';
+
 			this.setState({
-				hash: hash || '#'
+				hash
 			});
+
+			App.sendAnalytics(hash);
 		});
 
 		apiUtils.checkApiAvailability().then(() =>
@@ -76,6 +96,8 @@ export class App extends React.Component {
 		}).catch((err) => {
 			this.setState({ loading: false, error: err.type });
 		});
+
+		App.sendAnalytics(location.hash || '#');
 	}
 
 	render() {

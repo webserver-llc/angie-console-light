@@ -19,12 +19,15 @@ const ENV = process.env.NODE_ENV || 'development';
 const PRODUCTION_BUILD = ENV === 'production';
 const CONSOLE_TYPE = process.env.CONSOLE_TYPE || 'console';
 const PROXY_TARGET = process.env.PROXY_TARGET || 'https://console.angie.software';
+const YANDEX_METRICA_ID = process.env.YANDEX_METRICA_ID || '90924256';
+
+const template = CONSOLE_TYPE === 'demo' ? 'src/index.demo.ejs' : 'src/index.ejs';
 
 const plugins = [
 	new HtmlWebpackPlugin({
 		title: 'Angie Console Light',
 		filename: '../index.html',
-		template: 'src/index.ejs',
+		template,
 		inject: false,
 	}),
 
@@ -32,6 +35,7 @@ const plugins = [
 		'process.env.NODE_ENV': JSON.stringify(ENV),
 		__ENV__: JSON.stringify(CONSOLE_TYPE),
 		__APP_VERSION__: JSON.stringify(packageFile.version),
+		__YANDEX_METRICA_ID__: JSON.stringify(YANDEX_METRICA_ID),
 	}),
 
 	new ESLintPlugin(),
