@@ -110,7 +110,7 @@ describe('<UpstreamsList />', () => {
 	it('toggleEditMode()', () => {
 		const upstream = {
 			name: '%!£@$',
-			peers: [{ server: '127.0.0.1' }]
+			peers: [{ name: '127.0.0.1' }]
 		};
 		const wrapper = shallow(
 			<UpstreamsList

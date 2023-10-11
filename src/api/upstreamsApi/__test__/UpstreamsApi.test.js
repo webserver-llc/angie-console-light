@@ -42,7 +42,7 @@ describe('UpstreamsApi', () => {
 	it('getPeer()', async () => {
 		const upstreamName = 'upstream_1';
 		const peer = {
-			server: 'peer_1',
+			name: 'peer_1',
 		};
 
 		const spyApiProxyGet = jest.spyOn(ApiProxy.prototype, 'get').mockClear();
@@ -51,9 +51,9 @@ describe('UpstreamsApi', () => {
 
 		expect(spyApiProxyGet).toHaveBeenCalledTimes(2);
 		expect(window.fetch.mock.calls[0][0] ===
-        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}?defaults=on`).toBeTruthy();
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.name}?defaults=on`).toBeTruthy();
 		expect(window.fetch.mock.calls[1][0] ===
-        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`).toBeTruthy();
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.name}/`).toBeTruthy();
 
 		spyApiProxyGet.mockRestore();
 	});
@@ -88,7 +88,7 @@ describe('UpstreamsApi', () => {
 	it('deletePeer()', () => {
 		const upstreamName = 'upstream_1';
 		const peer = {
-			server: 'peer_1',
+			name: 'peer_1',
 		};
 
 		const spyApiProxyDel = jest.spyOn(ApiProxy.prototype, 'del').mockClear();
@@ -98,7 +98,7 @@ describe('UpstreamsApi', () => {
 		expect(promise instanceof Promise).toBeTruthy();
 		expect(spyApiProxyDel).toHaveBeenCalled();
 		expect(window.fetch.mock.calls[0][0] ===
-        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`).toBeTruthy();
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.name}/`).toBeTruthy();
 
 		spyApiProxyDel.mockRestore();
 	});
@@ -106,7 +106,7 @@ describe('UpstreamsApi', () => {
 	it('updatePeer()', () => {
 		const upstreamName = 'upstream_1';
 		const peer = {
-			server: 'peer_1',
+			name: 'peer_1',
 		};
 		const peerData = {
 			name: 'test_peer_new',
@@ -119,7 +119,7 @@ describe('UpstreamsApi', () => {
 		expect(promise instanceof Promise).toBeTruthy();
 		expect(spyApiProxyPatch).toHaveBeenCalled();
 		expect(window.fetch.mock.calls[0][0] ===
-        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.server}/`).toBeTruthy();
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.name}/`).toBeTruthy();
 		expect('body' in window.fetch.mock.calls[0][1]).toBeTruthy();
 
 		const body = JSON.parse(window.fetch.mock.calls[0][1].body);
