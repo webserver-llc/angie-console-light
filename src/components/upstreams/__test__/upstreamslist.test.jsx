@@ -148,10 +148,6 @@ describe('<UpstreamsList />', () => {
 		expect(apiUtils.isWritable).toHaveBeenCalled();
 		// checkWritePermissions called
 		expect(apiUtils.checkWritePermissions).toHaveBeenCalled();
-		// checkWritePermissions arg
-		expect(apiUtils.checkWritePermissions.mock.calls[0][0]).toBe(upstream.name);
-		// checkWritePermissions arg
-		expect(apiUtils.checkWritePermissions.mock.calls[0][1]).toBe('127.0.0.1:80');
 		// checkWritePermissions.then called
 		expect(thenSpy).toHaveBeenCalled();
 		expect(thenSpy.mock.calls[0][0]).toBeInstanceOf(Function);

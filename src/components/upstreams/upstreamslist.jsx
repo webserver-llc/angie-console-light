@@ -18,7 +18,6 @@ import UpstreamStatsTooltip from './UpstreamStatsTooltip.jsx';
 import styles from './style.css';
 import tableStyles from '../table/style.css';
 import tooltips from '../../tooltips/index.jsx';
-import { getServerName } from '../../api/upstreamsApi/utils';
 
 export const FILTER_OPTIONS = {
 	all: 'Show all',
@@ -62,11 +61,9 @@ export default class UpstreamsList extends SortableTable {
 		}
 
 		if (apiUtils.isWritable() === null) {
-			const { name, peers } = this.props.upstream;
-			const server = getServerName(peers[0]);
-			apiUtils.checkWritePermissions(name, server).then((result) => {
+			apiUtils.checkWritePermissions().then((result) => {
 				if (result === null) {
-					return apiUtils.checkWritePermissions(name, server, true);
+					return apiUtils.checkWritePermissions(true);
 				}
 				return result;
 			}).then((result) => {

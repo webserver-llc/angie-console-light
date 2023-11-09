@@ -43,15 +43,17 @@ export const streamUpstreamsApi = new UpstreamsApi('stream');
 export let isAngieProFlag = false;
 let apiWritePermissions = null;
 
-export const checkWritePermissions = (upstream, server, sendCredentials = false) =>
-	api.config.http.upstreams[upstream].servers[server].get({
+export const checkWritePermissions = (sendCredentials = false) =>
+	api.config.http.upstreams.__ANGIE_TEST_UPSTREAM__.servers.__ANGIE_TEST_SERVER__.del({
 		credentials: sendCredentials ? 'same-origin' : 'omit'
 	}).then(() => {
 		apiWritePermissions = true;
 		return apiWritePermissions;
 	}).catch(({ status }) => {
-		if ([403, 404, 405].indexOf(status) !== -1) {
+		if (status === 405) {
 			apiWritePermissions = false;
+		} else if (status === 404) {
+			apiWritePermissions = true;
 		} else {
 			apiWritePermissions = null;
 		}

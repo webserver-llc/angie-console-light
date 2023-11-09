@@ -21,11 +21,7 @@ import { zones as calculateStreamZones, upstreams as calculateStreamUpstreams } 
 import calculateCaches from '../../calculators/caches.js';
 import calculateSharedZones from '../../calculators/sharedzones.js';
 import calculateConnections from '../../calculators/connections.js';
-import calculateSSL from '../../calculators/ssl.js';
-import calculateRequests from '../../calculators/requests.js';
-import calculateZoneSync from '../../calculators/zonesync.js';
 import calculateResolvers from '../../calculators/resolvers.js';
-import calculateWorkers from '../../calculators/workers.js';
 
 describe('Api', () => {
 	it('Returns new instance of ApiProxy', () => {
@@ -76,15 +72,15 @@ describe('Api', () => {
 		it('Correct path', () => {
 			window.fetch = jest.fn(_fetchInner);
 
-			Api.checkWritePermissions('CONSOLE_INIT', '__TEST_FOR_WRITE__');
+			Api.checkWritePermissions();
 
-			expect(window.fetch.mock.calls[0][0]).toBe(`${ API_PATH }/config/http/upstreams/CONSOLE_INIT/servers/__TEST_FOR_WRITE__/`);
+			expect(window.fetch.mock.calls[0][0]).toBe(`${ API_PATH }/config/http/upstreams/__ANGIE_TEST_UPSTREAM__/servers/__ANGIE_TEST_SERVER__/`);
 
 			window.fetch = _fetchInner;
 		});
 
 		it('Correct method', done => {
-			const spyApiGet = jest.spyOn(ApiProxy.prototype, 'get').mockClear();
+			const spyApiGet = jest.spyOn(ApiProxy.prototype, 'del').mockClear();
 
 			Api.checkWritePermissions().then(() => {
 				expect(spyApiGet).toHaveBeenCalled();
@@ -97,18 +93,18 @@ describe('Api', () => {
 			result: false
 		}, {
 			status: 404,
-			result: false
+			result: true
 		}, {
 			status: 403,
-			result: false
+			result: null
 		}, {
 			status: 401,
 			result: null
 		}].map(({ status, result }) => {
 			it(`Handles ${ status } status`, done => {
-				const originGet = ApiProxy.prototype.get;
+				const originGet = ApiProxy.prototype.del;
 
-				ApiProxy.prototype.get = () => Promise.reject({ status });
+				ApiProxy.prototype.del = () => Promise.reject({ status });
 
 				Api.checkWritePermissions().then(_result => {
 					expect(_result === result).toBeTruthy();
