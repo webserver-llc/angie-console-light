@@ -62,14 +62,14 @@ describe('<UpstreamsEditor />', () => {
 	});
 
 	const props = {
-		peers: new Map([
+		servers: new Map([
 			['test_4', {
 				id: 4,
 				server: 'test_server_4'
 			}]
 		]),
 		upstream: { name: 'upstream_test' },
-		upstreamsApi: { getPeer(){
+		upstreamsApi: { getServer(){
 			return Promise.resolve({});
 		} }
 	};
@@ -86,15 +86,15 @@ describe('<UpstreamsEditor />', () => {
 		jest.spyOn(utils, 'formData').mockClear().mockImplementation((data = {}) => data);
 
 		let wrapper = shallow(
-			<UpstreamsEditor {...({ ...props, peers: null })} />
+			<UpstreamsEditor {...({ ...props, servers: null })} />
 		);
 
-		// [no peers] this.state
+		// [no servers] this.state
 		expect(wrapper.state()).toEqual({
 			success: false,
 			loading: false,
 			errorMessages: null,
-			shouldClearPeers: false,
+			shouldClearServers: false,
 			data: {},
 			initialData: {}
 		});
@@ -133,20 +133,20 @@ describe('<UpstreamsEditor />', () => {
 		expect(closeErrorsSpy.mock.calls[0][0] instanceof UpstreamsEditor).toBe(true);
 
 		wrapper = shallow(
-			<UpstreamsEditor {...({ ...props, peers: new Map() })} />,
+			<UpstreamsEditor {...({ ...props, servers: new Map() })} />,
 		);
 
-		// [no peers] this.state
+		// [no servers] this.state
 		expect(wrapper.state()).toEqual({
 			success: false,
 			loading: false,
 			errorMessages: null,
-			shouldClearPeers: false,
+			shouldClearServers: false,
 		});
 
 		wrapper = shallow(
 			<UpstreamsEditor {...({ ...props,
-				peers: new Map([
+				servers: new Map([
 					['test_1', {}],
 					['test_2', {}],
 					['test_3', {}]
@@ -160,14 +160,14 @@ describe('<UpstreamsEditor />', () => {
 		expect(wrapper.state('initialData')).toEqual({});
 
 		const thenSpy = jest.fn();
-		const getPeerSpy = jest.fn(() => ({
+		const getServerSpy = jest.fn(() => ({
 			then: thenSpy
 		}));
 
 		wrapper = shallow(
 			<UpstreamsEditor {...({ ...props,
 				upstreamsApi: {
-					getPeer: getPeerSpy
+					getServer: getServerSpy
 				} })}
 			/>
 		);
@@ -176,14 +176,11 @@ describe('<UpstreamsEditor />', () => {
 		expect(wrapper.state('loading')).toBe(true);
 		expect(wrapper.state('data')).toBeUndefined();
 		expect(wrapper.state('initialData')).toBeUndefined();
-		// upstreamsApi.getPeer called once
-		expect(getPeerSpy).toHaveBeenCalled();
-		// upstreamsApi.getPeer call args
-		expect(getPeerSpy).toHaveBeenLastCalledWith('upstream_test', {
-			id: 4,
-			server: 'test_server_4'
-		});
-		// upstreamsApi.getPeer().then called once
+		// upstreamsApi.getServer called once
+		expect(getServerSpy).toHaveBeenCalled();
+		// upstreamsApi.getServer call args
+		expect(getServerSpy).toHaveBeenLastCalledWith('upstream_test', 'test_4');
+		// upstreamsApi.getServer().then called once
 		expect(thenSpy).toHaveBeenCalled();
 		expect(thenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
@@ -324,14 +321,14 @@ describe('<UpstreamsEditor />', () => {
 		const initialData = {
 			server: 'test_server_before'
 		};
-		const updatePeerSpy = jest.fn((_, { server }) => `updatePeer_result_${ server }`);
+		const updateServerSpy = jest.fn((_, server) => `updateServer_result_${ server }`);
 		const wrapper = shallow(<UpstreamsEditor
 			{...props}
 			upstreamsApi={{
-				getPeer(){
+				getServer(){
 					return Promise.resolve({});
 				},
-				updatePeer: updatePeerSpy
+				updateServer: updateServerSpy
 			}}
 		/>);
 		const instance = wrapper.instance();
@@ -343,8 +340,11 @@ describe('<UpstreamsEditor />', () => {
 		const nextThenSpy = jest.fn(() => ({
 			catch: catchSpy
 		}));
-		const thenSpy = jest.fn(() => ({
+		const next0ThenSpy = jest.fn(() => ({
 			then: nextThenSpy
+		}));
+		const thenSpy = jest.fn(() => ({
+			then: next0ThenSpy
 		}));
 
 		jest.spyOn(instance, 'closeErrors').mockClear().mockImplementation(() => {});
@@ -385,14 +385,11 @@ describe('<UpstreamsEditor />', () => {
 		// this.validate, first "then" cb, Promise.all called
 		expect(Promise.all).toHaveBeenCalled();
 		// this.validate, first "then" cb, Promise.all call args
-		expect(Promise.all.mock.calls[0][0]).toEqual([ 'updatePeer_result_test_server_4' ]);
+		expect(Promise.all.mock.calls[0][0]).toEqual([ 'updateServer_result_test_4' ]);
 		// upstreamsApi.updatePeer called once
-		expect(updatePeerSpy).toHaveBeenCalled();
+		expect(updateServerSpy).toHaveBeenCalled();
 		// upstreamsApi.updatePeer call args
-		expect(updatePeerSpy).toHaveBeenLastCalledWith('upstream_test', {
-			id: 4,
-			server: 'test_server_4'
-		}, {
+		expect(updateServerSpy).toHaveBeenLastCalledWith('upstream_test', 'test_4', {
 			...data,
 			normalized_by_normalizeOutputData: true
 		});
@@ -449,21 +446,21 @@ describe('<UpstreamsEditor />', () => {
 		// this.validate, catch call, this.showErrors call args
 		expect(instance.showErrors.mock.calls[0][0]).toEqual(['test error', 'another test error']);
 
-		const createPeerThenSpy = jest.fn(() => 'create_peer_result');
-		const createPeerSpy = jest.fn(() => ({
-			then: createPeerThenSpy
+		const createServerThenSpy = jest.fn(() => 'create_server_result');
+		const createServerSpy = jest.fn(() => ({
+			then: createServerThenSpy
 		}));
 
 		thenSpy.mockClear();
 		Promise.all.mockClear();
 		wrapper.setProps({
 			...props,
-			peers: null,
+			servers: null,
 			upstreamsApi: {
-				getPeer(){
+				getServer(){
 					return Promise.resolve({});
 				},
-				createPeer: createPeerSpy
+				createServer: createServerSpy
 			}
 		});
 
@@ -473,19 +470,19 @@ describe('<UpstreamsEditor />', () => {
 		expect(thenSpy).toHaveBeenCalled();
 		expect(thenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 		// [isAdd = true] this.validate, first "then" callback result
-		expect(thenSpy.mock.calls[0][0]()).toBe('create_peer_result');
+		expect(thenSpy.mock.calls[0][0]()).toBe('create_server_result');
 		// upstreamsApi.createPeer called
-		expect(createPeerSpy).toHaveBeenCalled();
+		expect(createServerSpy).toHaveBeenCalled();
 		// upstreamsApi.createPeer call 1st arg
-		expect(createPeerSpy.mock.calls[0][0]).toBe('upstream_test');
+		expect(createServerSpy.mock.calls[0][0]).toBe('upstream_test');
 		// upstreamsApi.createPeer call 2nd arg
-		expect(createPeerSpy.mock.calls[0][1]).toEqual(wrapper.state('data'));
+		expect(createServerSpy.mock.calls[0][1]).toEqual(wrapper.state('data'));
 		// createPeer, 1st "then" cb called
-		expect(createPeerThenSpy).toHaveBeenCalled();
-		expect(createPeerThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
+		expect(createServerThenSpy).toHaveBeenCalled();
+		expect(createServerThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
 		setStateSpy.mockReset();
-		createPeerThenSpy.mock.calls[0][0]();
+		createServerThenSpy.mock.calls[0][0]();
 
 		// createPeer, 1st "then" cb, this.setState called
 		expect(setStateSpy).toHaveBeenCalled();
@@ -562,24 +559,25 @@ describe('<UpstreamsEditor />', () => {
 	});
 
 	it('remove()', () => {
-		const deletePeerThenSpy = jest.fn(() => 'deletePeer_result');
-		const deletePeerSpy = jest.fn((_, id) => ({
-			then: deletePeerThenSpy
+		const deleteServerThenSpy = jest.fn(() => 'deleteServer_result');
+		const deleteServerSpy = jest.fn((_, id) => ({
+			then: deleteServerThenSpy
 		}));
 		const wrapper = shallow(
 			<UpstreamsEditor
 				{...props}
 				upstreamsApi={{
-					getPeer(){
+					getServer(){
 						return Promise.resolve({});
 					},
-					deletePeer: deletePeerSpy
+					deleteServer: deleteServerSpy
 				}}
 			/>
 		);
 		const instance = wrapper.instance();
 		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
-		const catchSpy = jest.fn();
+		const then0Spy = jest.fn();
+		const catchSpy = jest.fn(() => ({ then: then0Spy }));
 		const thenSpy = jest.fn(() => ({
 			catch: catchSpy
 		}));
@@ -595,20 +593,17 @@ describe('<UpstreamsEditor />', () => {
 		expect(Promise.all).toHaveBeenCalled();
 		// Promise.all call args
 		expect(Promise.all.mock.calls[0][0]).toEqual([
-			'deletePeer_result'
+			'deleteServer_result'
 		]);
 		// upstreamsApi.deletePeer called
-		expect(deletePeerSpy).toHaveBeenCalled();
+		expect(deleteServerSpy).toHaveBeenCalled();
 		// upstreamsApi.deletePeer call args
-		expect(deletePeerSpy).toHaveBeenLastCalledWith('upstream_test', {
-			id: 4,
-			server: 'test_server_4'
-		});
+		expect(deleteServerSpy).toHaveBeenLastCalledWith('upstream_test', 'test_4');
 		// upstreamsApi.deletePeer "then" called
-		expect(deletePeerThenSpy).toHaveBeenCalled();
-		expect(deletePeerThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
+		expect(deleteServerThenSpy).toHaveBeenCalled();
+		expect(deleteServerThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 		// upstreamsApi.deletePeer "then" call arg result
-		expect(deletePeerThenSpy.mock.calls[0][0]()).toBe('test_server_4');
+		expect(deleteServerThenSpy.mock.calls[0][0]()).toBe('test_4');
 		// Promise.all, "then" called
 		expect(thenSpy).toHaveBeenCalled();
 		expect(thenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
@@ -620,7 +615,7 @@ describe('<UpstreamsEditor />', () => {
 		// this.setState call args
 		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			success: true,
-			shouldClearPeers: true,
+			shouldClearServers: true,
 			successMessage: 'Servers 1, 2, 3 successfully removed'
 		});
 		// Promise.all, "catch" called
@@ -643,117 +638,132 @@ describe('<UpstreamsEditor />', () => {
 		wrapper.unmount();
 	});
 
-	it('validate()', () => {
+	it('validate()', async () => {
 		const wrapper = shallow(<UpstreamsEditor {...props} />);
 		const instance = wrapper.instance();
 
-		jest.spyOn(Promise, 'resolve').mockClear().mockImplementation(() => true);
-		jest.spyOn(Promise, 'reject').mockClear().mockImplementation(errors => errors);
+		// jest.spyOn(Promise, 'resolve').mockClear().mockImplementation(() => true);
+		// jest.spyOn(Promise, 'reject').mockClear().mockImplementation(errors => errors);
 
-		let result = instance.validate({});
+		let result = await instance.validate({});
 
 		// [empty data] result
-		expect(result).toBe(true);
+		expect(result).toBe();
 
-		result = instance.validate({ server: '127.0.0.1' });
+		result = await instance.validate({ server: '127.0.0.1' });
 
 		// [server is IP] result
-		expect(result).toBe(true);
+		expect(result).toBe();
 
-		result = instance.validate({ server: 'localhost' });
+		result = await instance.validate({ server: 'localhost' });
 
 		// [valid non-IP server, no service] result
-		expect(result).toBe(true);
+		expect(result).toBe();
 
-		result = instance.validate({ server: '' });
+		try {
+			result = await instance.validate({ server: '' });
+		} catch (error) {
+			// [invalid non-IP server] result
+			expect(error).toEqual(['Invalid server address or port']);
+		}
 
-		// [invalid non-IP server] result
-		expect(result).toEqual(['Invalid server address or port']);
+		try {
+			result = await instance.validate({
+				server: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'
+			});
+		} catch (error) {
+			// [invalid non-IP server] result
+			expect(error).toEqual(['Invalid server address or port']);
+		}
 
-		result = instance.validate({
-			server: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'
-		});
-
-		// [too long non-IP server] result
-		expect(result).toEqual(['Invalid server address or port']);
-
-		result = instance.validate({
+		result = await instance.validate({
 			server: 'localhost',
 			service: 'test_service'
 		});
-
 		// [valid non-IP server, valid service] result
-		expect(result).toBe(true);
+		expect(result).toBe();
 
-		result = instance.validate({
-			server: 'localhost',
-			service: 'test service'
-		});
-
+		try {
+			await instance.validate({
+				server: 'localhost',
+				service: 'test service'
+			});
+		} catch (error) {
 		// [valid non-IP server, invalid service] result
-		expect(result).toEqual(['Invalid server address or service setting']);
+			expect(error).toEqual(['Invalid server address or service setting']);
+		}
 
-		result = instance.validate({
-			server: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
-			service: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'
-		});
-
+		try {
+			await instance.validate({
+				server: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
+				service: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'
+			});
+		} catch (error) {
 		// [valid non-IP server and service, but sum of both length is too long] result
-		expect(result).toEqual(['Invalid server address or service setting']);
+			expect(error).toEqual(['Invalid server address or service setting']);
+		}
 
-		const getPeerThenSpy = jest.fn(() => 'getPeerThen_result');
-		const getPeerSpy = jest.fn(() => ({
-			then: getPeerThenSpy
+		const getServerThenSpy = jest.fn(() => 'getServerThen_result');
+		const getServerSpy = jest.fn(() => ({
+			then: getServerThenSpy
 		}));
 
 		wrapper.setProps({
-			peers: new Map([
+			servers: new Map([
 				['test_1', { id: 1 }],
 				['test_2', { id: 2 }]
 			]),
 			upstreamsApi: {
-				getPeer: getPeerSpy
+				getServer: getServerSpy
 			}
 		});
-		result = instance.validate({});
+		result = await instance.validate({});
 
 		// [peers.size > 1] result
-		expect(result).toBe('getPeerThen_result');
-		// upstreamsApi.getPeer called
-		expect(getPeerSpy).toHaveBeenCalled();
-		// upstreamsApi.getPeer call args
-		expect(getPeerSpy).toHaveBeenLastCalledWith('upstream_test', { id: 1 });
-		// upstreamsApi.getPeer "then" called
-		expect(getPeerThenSpy).toHaveBeenCalled();
-		expect(getPeerThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
-		expect(getPeerThenSpy.mock.calls[0][0]({})).toBeUndefined();
-		// upstreamsApi.getPeer "then" callback, with error
-		expect(getPeerThenSpy.mock.calls[0][0]({ error: true })).toEqual(['No such server (please, check if it still exists)']);
+		expect(result).toBe('getServerThen_result');
+		// upstreamsApi.getServer called
+		expect(getServerSpy).toHaveBeenCalled();
+		// upstreamsApi.getServer call args
+		expect(getServerSpy).toHaveBeenLastCalledWith('upstream_test', 'test_1');
+		// upstreamsApi.getServer "then" called
+		expect(getServerThenSpy).toHaveBeenCalled();
+		expect(getServerThenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
+		expect(getServerThenSpy.mock.calls[0][0]({})).toBeUndefined();
+		// upstreamsApi.getServer "then" callback, with error
+		try {
+			await getServerThenSpy.mock.calls[0][0]({ error: true });
+		} catch (error) {
+			expect(error).toEqual(['No such server (please, check if it still exists)']);
+		}
 
-		wrapper.setProps({ peers: null });
-		result = instance.validate({ server: '127.0.0.1' });
+		wrapper.setProps({ servers: null });
+		result = await instance.validate({ server: '127.0.0.1' });
 
 		// [no peers] result
-		expect(result).toBe(true);
+		expect(result).toBe();
 
-		result = instance.validate({});
-
-		// [props.isStream = true, invalid non-IP server] result
-		expect(result).toEqual(['Invalid server address or port']);
+		try {
+			await instance.validate({});
+		} catch (error) {
+			// [props.isStream = true, invalid non-IP server] result
+			expect(error).toEqual(['Invalid server address or port']);
+		}
 
 		wrapper.setProps({ isStream: true });
-		result = instance.validate({ server: 'localhost' });
+		try {
+			await instance.validate({ server: 'localhost' });
+		} catch (error) {
+		// [props.isStream = true, invalid non-IP server] result
+			expect(error).toEqual(['Invalid server address or port']);
+		}
+
+		result = await instance.validate({ server: 'localhost:1234' });
 
 		// [props.isStream = true, invalid non-IP server] result
-		expect(result).toEqual(['Invalid server address or port']);
+		expect(result).toBe();
 
-		result = instance.validate({ server: 'localhost:1234' });
-
-		// [props.isStream = true, invalid non-IP server] result
-		expect(result).toBe(true);
-
-		Promise.resolve.mockRestore();
-		Promise.reject.mockRestore();
+		// Promise.resolve.mockRestore();
+		// Promise.reject.mockRestore();
 		wrapper.unmount();
 	});
 
@@ -789,7 +799,7 @@ describe('<UpstreamsEditor />', () => {
 		const wrapper = shallow(
 			<UpstreamsEditor
 				{...props}
-				peers={null}
+				servers={null}
 				isStream
 			/>
 		);
@@ -1049,7 +1059,7 @@ describe('<UpstreamsEditor />', () => {
 		// [isStream = false] radio group children count
 		expect(radio.children()).toHaveLength(3);
 
-		wrapper.setProps({ peers: new Map([
+		wrapper.setProps({ servers: new Map([
 			['test_1', {
 				id: 'test_1',
 				server: 'test_server_1'
@@ -1062,7 +1072,7 @@ describe('<UpstreamsEditor />', () => {
 		});
 
 		// [peers.length = 1] title text
-		expect(wrapper.childAt(0).childAt(0).text()).toBe('Edit server test_server_1 "upstream_test"');
+		expect(wrapper.childAt(0).childAt(0).text()).toBe('Edit server test_1 "upstream_test"');
 
 		content = wrapper.childAt(2).childAt(0);
 
@@ -1100,7 +1110,7 @@ describe('<UpstreamsEditor />', () => {
 		// footer, save text
 		expect(footer.childAt(1).text()).toBe('Save');
 
-		wrapper.setProps({ peers: new Map([
+		wrapper.setProps({ servers: new Map([
 			['test_1', {
 				id: 'test_1',
 				server: 'test_server_1'
@@ -1129,11 +1139,11 @@ describe('<UpstreamsEditor />', () => {
 		// servers list, child 2, child 1
 		expect(serversGroup.childAt(1).childAt(0).type()).toBe('li');
 		// servers list, child 2, child 1 text
-		expect(serversGroup.childAt(1).childAt(0).text()).toBe('test_server_1');
+		expect(serversGroup.childAt(1).childAt(0).text()).toBe('test_1');
 		// servers list, child 2, child 2
 		expect(serversGroup.childAt(1).childAt(1).type()).toBe('li');
 		// servers list, child 2, child 2 text
-		expect(serversGroup.childAt(1).childAt(1).text()).toBe('test_server_2');
+		expect(serversGroup.childAt(1).childAt(1).text()).toBe('test_2');
 
 		wrapper.setState({ loading: true });
 

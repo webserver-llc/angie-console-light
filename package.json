@@ -19,6 +19,9 @@
   },
   "author": "Ivan Poluyanov <ip@nginx.com>",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=16.15.0 <17"
+  },
   "overrides": {
     "minimist": "1.2.6",
     "cheerio": "1.0.0-rc.10",

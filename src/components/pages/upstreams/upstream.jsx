@@ -150,7 +150,7 @@ export default class Upstream extends UpstreamsList {
 
 						{this.getSelectAllCheckbox(peers)}
 
-						<th colSpan="3">Server</th>
+						<th colSpan="3">Peer</th>
 						<th colSpan="2">Requests</th>
 						<th colSpan={this.state.columnsExpanded ? 6 : 3}>Responses</th>
 						<th colSpan="2">Conns</th>
@@ -241,7 +241,6 @@ export default class Upstream extends UpstreamsList {
 						: peers.map((peer, i) => {
 							const {
 								responses: { codes },
-								ssl,
 							} = peer;
 
 							return (
@@ -258,7 +257,7 @@ export default class Upstream extends UpstreamsList {
 											{...tooltips.useTooltip(<PeerTooltip peer={peer} />)}
 										>
 											{peer.backup ? <span>b&nbsp;</span> : null}
-											{peer.server}
+											{peer.name}
 										</div>
 
 										{this.state.editMode ? (
@@ -267,6 +266,8 @@ export default class Upstream extends UpstreamsList {
 												onClick={() => this.editSelectedUpstream(peer)}
 											/>
 										) : null}
+
+										<div className={styles['below-title-text']}>{peer.server}</div>
 									</td>
 									<td className={styles['left-align']}>
 										{utils.formatUptime(peer.downtime, true)}

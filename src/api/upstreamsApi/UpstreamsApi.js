@@ -6,41 +6,49 @@
  */
 
 import api from '../index.js';
-import { getServerName } from './utils.js';
 
 export default class UpstreamsApi {
 	constructor(apiPrefix) {
 		this.apiPrefix = apiPrefix;
 	}
 
-	getPeer(upstreamName, peer) {
-		const peerId = getServerName(peer);
-		return api.config[this.apiPrefix].upstreams[upstreamName].servers[peerId]
-			.get({ searchParams: { defaults: 'on' } })
-			.then((defaultData = {}) =>
-				api.config[this.apiPrefix].upstreams[upstreamName].servers[peerId]
-					.get()
-					.then((data = {}) => ({ ...defaultData, ...data })),
-			);
+	getServers(upstreamName) {
+		const getServersByUpstream = (sendCredentials = false) =>
+			api.config[this.apiPrefix].upstreams[upstreamName].servers.get({
+				credentials: sendCredentials ? 'same-origin' : 'omit',
+				searchParams: { defaults: 'on' }
+			}).catch(({ status }) => {
+				if (status === 405 || status === 404) {
+					return null;
+				} if (status === 401 && sendCredentials === false){
+					return getServersByUpstream(true);
+				}
+				return null;
+			});
+
+		return getServersByUpstream(upstreamName);
 	}
 
-	createPeer(upstreamName, peerData) {
+	getServer(upstreamName, serverName) {
+		return api.config[this.apiPrefix].upstreams[upstreamName].servers[serverName]
+			.get({ searchParams: { defaults: 'on' } });
+	}
+
+	createServer(upstreamName, peerData) {
 		return api.config[this.apiPrefix].upstreams[upstreamName].servers[
 			peerData.server
 		].put(peerData);
 	}
 
-	deletePeer(upstreamName, peer) {
-		const peerId = getServerName(peer);
+	deleteServer(upstreamName, serverName) {
 		return api.config[this.apiPrefix].upstreams[upstreamName].servers[
-			peerId
+			serverName
 		].del();
 	}
 
-	updatePeer(upstreamName, peer, peerData) {
-		const peerId = getServerName(peer);
+	updateServer(upstreamName, serverName, peerData) {
 		return api.config[this.apiPrefix].upstreams[upstreamName].servers[
-			peerId
+			serverName
 		].patch(peerData);
 	}
 }

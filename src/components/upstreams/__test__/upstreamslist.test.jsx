@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import UpstreamsList, { FILTER_OPTIONS } from '../upstreamslist.jsx';
 import SortableTable from '../../table/sortabletable.jsx';
 import appsettings from '../../../appsettings';
@@ -40,7 +40,7 @@ describe('<UpstreamsList />', () => {
 		const editSelectedUpstreamSpy = jest.spyOn(UpstreamsList.prototype.editSelectedUpstream, 'bind').mockClear();
 		const showEditorSpy = jest.spyOn(UpstreamsList.prototype.showEditor, 'bind').mockClear();
 		const closeEditorSpy = jest.spyOn(UpstreamsList.prototype.closeEditor, 'bind').mockClear();
-		const selectAllPeersSpy = jest.spyOn(UpstreamsList.prototype.selectAllPeers, 'bind').mockClear();
+		const selectAllServersSpy = jest.spyOn(UpstreamsList.prototype.selectAllServers, 'bind').mockClear();
 		const selectPeerSpy = jest.spyOn(UpstreamsList.prototype.selectPeer, 'bind').mockClear();
 		const wrapper = shallow(
 			<UpstreamsList {...props} />
@@ -51,9 +51,9 @@ describe('<UpstreamsList />', () => {
 		// state editor
 		expect(wrapper.state('editor')).toBe(false);
 		// state selectedPeers
-		expect(wrapper.state('selectedPeers')).toBeInstanceOf(Map);
+		expect(wrapper.state('selectedServers')).toBeInstanceOf(Map);
 		// state selectedPeers size
-		expect(wrapper.state('selectedPeers').size).toBe(0);
+		expect(wrapper.state('selectedServers').size).toBe(0);
 		// state filtering
 		expect(wrapper.state('filtering')).toBe('get_settings_result');
 
@@ -86,10 +86,10 @@ describe('<UpstreamsList />', () => {
 		expect(closeEditorSpy).toHaveBeenCalled();
 		// this.closeEditor.bind arg
 		expect(closeEditorSpy.mock.calls[0][0] instanceof UpstreamsList).toBe(true);
-		// this.selectAllPeers.bind called once
-		expect(selectAllPeersSpy).toHaveBeenCalled();
-		// this.selectAllPeers.bind arg
-		expect(selectAllPeersSpy.mock.calls[0][0] instanceof UpstreamsList).toBe(true);
+		// this.selectAllServers.bind called once
+		expect(selectAllServersSpy).toHaveBeenCalled();
+		// this.selectAllServers.bind arg
+		expect(selectAllServersSpy.mock.calls[0][0] instanceof UpstreamsList).toBe(true);
 		// this.selectPeer.bind called once
 		expect(selectPeerSpy).toHaveBeenCalled();
 		// this.selectPeer.bind arg
@@ -101,7 +101,7 @@ describe('<UpstreamsList />', () => {
 		editSelectedUpstreamSpy.mockRestore();
 		showEditorSpy.mockRestore();
 		closeEditorSpy.mockRestore();
-		selectAllPeersSpy.mockRestore();
+		selectAllServersSpy.mockRestore();
 		selectPeerSpy.mockRestore();
 		UpstreamsList.prototype.FILTERING_SETTINGS_KEY = undefined;
 		appsettings.getSetting.mockRestore();
@@ -114,6 +114,12 @@ describe('<UpstreamsList />', () => {
 		};
 		const wrapper = shallow(
 			<UpstreamsList
+				upstreamsApi={{
+					getServers: jest.fn()
+						.mockResolvedValueOnce(null)
+						.mockResolvedValueOnce({})
+						.mockResolvedValueOnce({ '127.0.0.1': { weight: 1 } })
+				}}
 				upstream={upstream}
 			/>
 		);
@@ -133,87 +139,30 @@ describe('<UpstreamsList />', () => {
 		upstream.name = 'test_1';
 		wrapper.setProps({ upstream });
 
-		let isWritableResult = null;
-		const thenSpy = jest.fn();
-
-		jest.spyOn(apiUtils, 'isWritable').mockClear().mockImplementation(() => isWritableResult);
 		jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
-		jest.spyOn(apiUtils, 'checkWritePermissions').mockClear().mockImplementation(() => ({
-			then: () => ({ then: thenSpy })
-		}));
-
-		instance.toggleEditMode();
-
-		// isWritable called
-		expect(apiUtils.isWritable).toHaveBeenCalled();
-		// checkWritePermissions called
-		expect(apiUtils.checkWritePermissions).toHaveBeenCalled();
-		// checkWritePermissions.then called
-		expect(thenSpy).toHaveBeenCalled();
-		expect(thenSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
 		jest.spyOn(instance, 'toggleEditMode').mockClear().mockImplementation(() => {});
-		thenSpy.mock.calls[0][0](true);
+		instance.toggleEditMode();
 
 		// this.toggleEditMode called
 		expect(instance.toggleEditMode).toHaveBeenCalled();
 		// alert not called
 		expect(window.alert).not.toHaveBeenCalled();
 
-		instance.toggleEditMode.mockReset();
-		thenSpy.mock.calls[0][0](false);
-
-		// this.toggleEditMode not called
-		expect(instance.toggleEditMode).not.toHaveBeenCalled();
-		// alert called
-		expect(window.alert).toHaveBeenCalled();
-
-		instance.toggleEditMode.mockReset();
-		window.alert.mockReset();
-		thenSpy.mock.calls[0][0](null);
-
-		// this.toggleEditMode not called
-		expect(instance.toggleEditMode).not.toHaveBeenCalled();
-		// alert not called
-		expect(window.alert).not.toHaveBeenCalled();
-
-		instance.toggleEditMode.mockRestore();
-
-		// this.setState not called
-		expect(stateSpy).not.toHaveBeenCalled();
-
-		isWritableResult = true;
-		instance.toggleEditMode();
-		wrapper.update();
-
-		// this.setState called once
-		expect(stateSpy).toHaveBeenCalled();
-		// this.setState call 1, args
-		expect(stateSpy.mock.calls[0][0]).toEqual({
-			editMode: true
-		});
-
-		instance.toggleEditMode();
-
-		// this.setState called twice
-		expect(stateSpy).toHaveBeenCalledTimes(2);
-		// this.setState call 2, args
-		expect(stateSpy.mock.calls[1][0]).toEqual({
-			editMode: false,
-			selectedPeers: new Map()
-		});
-
 		stateSpy.mockRestore();
 		window.alert.mockRestore();
-		apiUtils.isWritable.mockRestore();
 		apiUtils.isAngiePro.mockRestore();
 		wrapper.unmount();
 	});
-
 	it('editSelectedUpstream()', () => {
-		const wrapper = shallow(
-			<UpstreamsList {...props} />
+		const wrapper = mount(
+			<UpstreamsList upstream={{ name: 'backend-upstream', peers: [{ name: '127.0.0.1' }] }} />
 		);
+		wrapper.setState({
+			editMode: true,
+			servers: new Map([ [['example.backend.com', '127.0.0.1'], { weight: 5 }] ]),
+			selectedServers: new Map()
+		});
 		const instance = wrapper.instance();
 		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
@@ -226,31 +175,18 @@ describe('<UpstreamsList />', () => {
 		// [no peer, no selectedPeers] this.showEditor not called
 		expect(instance.showEditor).not.toHaveBeenCalled();
 
-		const peer = { id: 'peer_1' };
-
-		instance.editSelectedUpstream(peer);
-		wrapper.update();
+		instance.editSelectedUpstream('example.backend.com', { weight: 5 });
+		// wrapper.update();
 
 		// [with peer, no selectedPeers] this.setState called once
 		expect(stateSpy).toHaveBeenCalled();
 		// [with peer, no selectedPeers] this.setState call args
 		expect(stateSpy.mock.calls[0][0]).toEqual({
-			selectedPeers: new Map([[peer.id, peer]])
+			selectedServers: new Map([['example.backend.com', { weight: 5 }]])
 		});
 		// [with peer, no selectedPeers] this.showEditor called once
 		expect(instance.showEditor).toHaveBeenCalled();
 		// [with peer, no selectedPeers] this.showEditor call args
-		expect(instance.showEditor.mock.calls[0][0]).toBe('edit');
-
-		stateSpy.mockReset();
-		instance.showEditor.mockReset();
-		instance.editSelectedUpstream();
-
-		// [no peer, with selectedPeers] this.setState not called
-		expect(stateSpy).not.toHaveBeenCalled();
-		// [no peer, with selectedPeers] this.showEditor called once
-		expect(instance.showEditor).toHaveBeenCalled();
-		// [no peer, with selectedPeers] this.showEditor call args
 		expect(instance.showEditor.mock.calls[0][0]).toBe('edit');
 
 		stateSpy.mockRestore();
@@ -400,35 +336,34 @@ describe('<UpstreamsList />', () => {
 		wrapper.unmount();
 	});
 
-	it('selectAllPeers()', () => {
-		const peers = [
-			{ id: 'test_1' }
-		];
-		const wrapper = shallow(
-			<UpstreamsList {...props} />
+	it('selectAllServers()', async () => {
+		const servers = new Map([ [['example.backend.com', '127.0.0.1'], { weight: 5 }] ]);
+		const wrapper = mount(
+			<UpstreamsList upstream={{ name: 'backend-upstream', peers: [{ name: '127.0.0.1' }] }} />
 		);
+		wrapper.setState({
+			editMode: true,
+			servers,
+			selectedServers: new Map()
+		});
+		wrapper.update();
 		const instance = wrapper.instance();
 		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
-		instance.selectAllPeers(peers);
+		instance.selectAllServers();
 
 		// [reset selected] this.setState called
 		expect(stateSpy).toHaveBeenCalled();
 		// [reset selected] this.setState call arg
 		expect(stateSpy.mock.calls[0][0]).toEqual({
-			selectedPeers: new Map([])
+			selectedServers: new Map(Array.from(servers).map(([[serverName], server]) => [serverName, server]))
 		});
 
-		stateSpy.mockReset();
-		instance.selectAllPeers(peers, true);
+		wrapper.update();
+		wrapper.instance().selectAllServers();
 
-		// this.setState called
-		expect(stateSpy).toHaveBeenCalled();
-		// this.setState call arg
-		expect(stateSpy.mock.calls[0][0]).toEqual({
-			selectedPeers: new Map([
-				[peers[0].id, peers[0]]
-			])
+		expect(stateSpy.mock.calls[1][0]).toEqual({
+			selectedServers: new Map()
 		});
 
 		stateSpy.mockRestore();
@@ -476,13 +411,13 @@ describe('<UpstreamsList />', () => {
 		);
 		const instance = wrapper.instance();
 
-		jest.spyOn(instance, 'selectAllPeers').mockClear().mockImplementation(() => 'selectAllPeers_result');
+		jest.spyOn(instance, 'selectAllServers').mockClear().mockImplementation(() => 'selectAllPeers_result');
 
 		expect(instance.getSelectAllCheckbox()).toBeNull();
 
 		wrapper.setState({ editMode: true });
 
-		let checkbox = shallow(instance.getSelectAllCheckbox([]));
+		const checkbox = shallow(instance.getSelectAllCheckbox());
 
 		// checkbox html tag
 		expect(checkbox.name()).toBe('th');
@@ -501,17 +436,10 @@ describe('<UpstreamsList />', () => {
 		expect(checkbox.childAt(0).prop('onChange')({
 			target: { checked: 'target_checked' }
 		})).toBe('selectAllPeers_result');
-		// this.selectAllPeers called once
-		expect(instance.selectAllPeers).toHaveBeenCalled();
-		// this.selectAllPeers call arguments
-		expect(instance.selectAllPeers).toHaveBeenCalledWith([], 'target_checked');
+		// this.selectAllServers called once
+		expect(instance.selectAllServers).toHaveBeenCalled();
 
-		checkbox = shallow(instance.getSelectAllCheckbox([1, 2, 3]));
-
-		// [peers differs from selectedPeers] checkbox, input checked
-		expect(checkbox.childAt(0).prop('checked')).toBe(false);
-
-		instance.selectAllPeers.mockRestore();
+		instance.selectAllServers.mockRestore();
 		wrapper.unmount();
 	});
 
@@ -603,8 +531,8 @@ describe('<UpstreamsList />', () => {
 				prop_from_useTooltip: true
 			}));
 
-			expect(instance.renderEditButton(false)).toBeNull();
-			expect(instance.renderEditButton(true)).toBeNull();
+			expect(instance.renderEditButton()).toBeNull();
+			expect(instance.renderEditButton()).toBeNull();
 			expect(envUtils.isDemoEnv).not.toHaveBeenCalled();
 			expect(apiUtils.isAngiePro).not.toHaveBeenCalled();
 			expect(tooltips.useTooltip).not.toHaveBeenCalled();
@@ -620,7 +548,7 @@ describe('<UpstreamsList />', () => {
 			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
 				prop_from_useTooltip: true
 			}));
-			const editButton = shallow(instance.renderEditButton(false));
+			const editButton = shallow(instance.renderEditButton());
 
 			// has class
 			expect(editButton.prop('className')).toBe(styles['edit-label']);
@@ -634,12 +562,12 @@ describe('<UpstreamsList />', () => {
 			tooltips.useTooltip.mockRestore();
 		});
 
-		it('isWritable = false, isAngiePro = false', () => {
+		it('isAngiePro = false', () => {
 			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);
 			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
 				prop_from_useTooltip: true
 			}));
-			const editButton = shallow(instance.renderEditButton(false));
+			const editButton = shallow(instance.renderEditButton());
 
 			// has class
 			expect(editButton.prop('className')).toBe(styles['edit-disable']);
@@ -654,35 +582,9 @@ describe('<UpstreamsList />', () => {
 			tooltips.useTooltip.mockRestore();
 		});
 
-		it('isWritable = true, isAngiePro = false', () => {
-			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);
-			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
-				prop_from_useTooltip: true
-			}));
-			const editButton = shallow(instance.renderEditButton(true));
-
-			// has class
-			expect(editButton.prop('className')).toBe(styles['edit-disable']);
-			// useTooltip called once
-			expect(tooltips.useTooltip).toHaveBeenCalled();
-			// useTooltip call arg
-			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Available in Angie PRO only');
-			// useTooltip call arg
-			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
-
-			apiUtils.isAngiePro.mockRestore();
-			tooltips.useTooltip.mockRestore();
-		});
-
-		it('isWritable = false, isAngiePro = true', () => {
+		it('isAngiePro = true', () => {
 			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
-			expect(instance.renderEditButton(false)).toBeNull();
-			apiUtils.isAngiePro.mockRestore();
-		});
-
-		it('isWritable = true, isAngiePro = true', () => {
-			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
-			const editButton = shallow(instance.renderEditButton(true));
+			const editButton = shallow(instance.renderEditButton());
 
 			// has class
 			expect(editButton.prop('className')).toBe(styles.edit);
@@ -715,9 +617,7 @@ describe('<UpstreamsList />', () => {
 			<UpstreamsList {...props} />
 		);
 		const instance = wrapper.instance();
-		let isWritableResult = false;
 
-		jest.spyOn(apiUtils, 'isWritable').mockClear().mockImplementation(() => isWritableResult);
 		jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
 		jest.spyOn(instance, 'filterPeers').mockClear().mockImplementation(peers => peers);
 		jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
@@ -731,8 +631,6 @@ describe('<UpstreamsList />', () => {
 		expect(instance.filterPeers).toHaveBeenCalled();
 		// [showOnlyFailed = false] this.filterPeers call args
 		expect(instance.filterPeers).toHaveBeenCalledWith(props.upstream.peers);
-		// [isWritable returns false] isWritable called twice
-		expect(apiUtils.isWritable).toHaveReturnedTimes(2);
 		// wrapper className
 		expect(wrapper.prop('className')).toBe(styles['upstreams-list']);
 		// wrapper id
@@ -773,7 +671,7 @@ describe('<UpstreamsList />', () => {
 		// head title text
 		expect(wrapper.childAt(1).childAt(0).text()).toBe('test_name');
 		// [writePermission = false, state.editMode = false, upstream.zoneSize = null] head children length
-		expect(wrapper.childAt(1).children()).toHaveLength(1);
+		expect(wrapper.childAt(1).children()).toHaveLength(2);
 		// this.renderPeers result
 		expect(wrapper.childAt(2).text()).toBe('renderPeers_result');
 		// this.renderPeers called once
@@ -796,9 +694,7 @@ describe('<UpstreamsList />', () => {
 		// useTooltip call arg props
 		expect(tooltips.useTooltip.mock.calls[0][0].props.upstream).toEqual(props.upstream);
 
-		apiUtils.isWritable.mockClear();
 		instance.renderPeers.mockClear();
-		isWritableResult = null;
 		wrapper.setState({
 			sortOrder: 'desc',
 			editor: 'test_editor'
@@ -816,13 +712,11 @@ describe('<UpstreamsList />', () => {
 		// [2] peers order
 		expect(instance.renderPeers.mock.calls[0][0][4].id).toBe('test_4');
 
-		// [isWritable returns null] isWritable called twice
-		expect(apiUtils.isWritable).toHaveBeenCalledTimes(2);
 		// upstreams editor
 		expect(wrapper.childAt(0).name()).toBe('UpstreamsEditor');
 		// upstreams editor, prop upstream
 		expect(wrapper.childAt(0).prop('upstream')).toEqual(props.upstream);
-		expect(wrapper.childAt(0).prop('peers')).toBeNull();
+		expect(wrapper.childAt(0).prop('servers')).toBeNull();
 		// upstreams editor, prop isStream
 		expect(wrapper.childAt(0).prop('isStream')).toBe(false);
 		// upstreams editor, prop onClose
@@ -836,22 +730,18 @@ describe('<UpstreamsList />', () => {
 		// [state.editMode = false] head, toggle el onClick
 		expect(wrapper.childAt(2).childAt(1).prop('onClick').name).toBe('bound toggleEditMode');
 
-		const selectedPeers = new Map([
+		const selectedServers = new Map([
 			['test_1', props.upstream.peers[0]]
 		]);
 
-		apiUtils.isWritable.mockClear();
-		isWritableResult = true;
 		wrapper.setState({
 			editor: 'edit',
 			editMode: true,
-			selectedPeers
+			selectedServers
 		});
 
-		// [isWritable returns true] isWritable called once
-		expect(apiUtils.isWritable).toHaveBeenCalled();
 		// [state.editor = edit] upstreams editor, prop peers
-		expect(wrapper.childAt(0).prop('peers')).toEqual(selectedPeers);
+		expect(wrapper.childAt(0).prop('servers')).toEqual(selectedServers);
 		// [writePermission = true, state.editMode = true, upstream.zoneSize = null] head children length
 		expect(wrapper.childAt(2).children()).toHaveLength(4);
 		// [state.editMode = false] head, toggle el className
@@ -914,7 +804,6 @@ describe('<UpstreamsList />', () => {
 		tooltips.useTooltip.mockRestore();
 		instance.renderPeers.mockRestore();
 
-		apiUtils.isWritable.mockRestore();
 		apiUtils.isAngiePro.mockRestore();
 		instance.editSelectedUpstream.mockRestore();
 		wrapper.unmount();

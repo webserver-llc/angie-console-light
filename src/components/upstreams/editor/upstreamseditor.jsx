@@ -23,6 +23,10 @@ const RGX_HTTP_SERVER_ADDRESS =
 	/^([\w-]|(\.(?!\.+)))[\w-.]*(\:(\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 
 export default class UpstreamsEditor extends React.Component {
+	static defaultProps = {
+		reloadUpstreamServers: () => {}
+	}
+	
 	static normalizeInputData(data) {
 		// Remove "s" ending
 		Object.keys(data).forEach((key) => {
@@ -54,23 +58,23 @@ export default class UpstreamsEditor extends React.Component {
 	}
 
 	constructor(props) {
-		super();
+		super(props);
 
 		this.state = {
 			success: false,
 			loading: false,
-			shouldClearPeers: false,
+			shouldClearServers: false,
 			errorMessages: null,
 		};
 
-		if (!props.peers || props.peers.size > 1) {
+		if (!props.servers || props.servers.size > 1) {
 			this.state.data = utils.formData();
 			this.state.initialData = {};
-		} else if (props.peers && props.peers.size === 1) {
+		} else if (props.servers && props.servers.size === 1) {
 			this.state.loading = true;
 
 			props.upstreamsApi
-				.getPeer(props.upstream.name, Array.from(props.peers)[0][1])
+				.getServer(props.upstream.name, Array.from(props.servers)[0][0])
 				.then((data) => {
 					const normalizedData = UpstreamsEditor.normalizeInputData(
 						utils.formData(data),
@@ -132,8 +136,8 @@ export default class UpstreamsEditor extends React.Component {
 	}
 
 	save() {
-		const { upstreamsApi, peers } = this.props;
-		const isAdd = !peers;
+		const { upstreamsApi, servers, reloadUpstreamServers } = this.props;
+		const isAdd = !servers;
 		this.closeErrors();
 
 		this.setState({
@@ -144,7 +148,7 @@ export default class UpstreamsEditor extends React.Component {
 			.then(() => {
 				if (isAdd) {
 					return upstreamsApi
-						.createPeer(this.props.upstream.name, this.state.data)
+						.createServer(this.props.upstream.name, this.state.data)
 						.then(() => {
 							this.setState({
 								success: true,
@@ -154,10 +158,10 @@ export default class UpstreamsEditor extends React.Component {
 				}
 
 				return Promise.all(
-					Array.from(peers).map(([peerId, peer]) =>
-						upstreamsApi.updatePeer(
+					Array.from(servers).map(([serverName]) =>
+						upstreamsApi.updateServer(
 							this.props.upstream.name,
-							peer,
+							serverName,
 							UpstreamsEditor.normalizeOutputData(
 								this.state.data,
 								this.state.initialData,
@@ -171,6 +175,7 @@ export default class UpstreamsEditor extends React.Component {
 					});
 				});
 			})
+			.then(() => reloadUpstreamServers())
 			.then(() => {
 				this.setState({
 					loading: false,
@@ -203,27 +208,29 @@ export default class UpstreamsEditor extends React.Component {
 	}
 
 	close() {
-		this.props.onClose(this.state.shouldClearPeers);
+		this.props.onClose(this.state.shouldClearServers);
 	}
 
 	remove() {
-		const peersArray = Array.from(this.props.peers);
+		const { reloadUpstreamServers } = this.props;
+		const serversArray = Array.from(this.props.servers);
 
 		Promise.all(
-			peersArray.map(([peerId, peer]) =>
+			serversArray.map(([serverName, peer]) =>
 				this.props.upstreamsApi
-					.deletePeer(this.props.upstream.name, peer)
-					.then(() => peer.server),
+					.deleteServer(this.props.upstream.name, serverName)
+					.then(() => serverName),
 			),
 		)
 			.then((servers) => {
 				this.setState({
 					success: true,
-					shouldClearPeers: true,
+					shouldClearServers: true,
 					successMessage: `Servers ${servers.join(', ')} successfully removed`,
 				});
 			})
-			.catch(({ error }) => this.showErrors([error]));
+			.catch(({ error }) => this.showErrors([error]))
+			.then(() => reloadUpstreamServers());
 	}
 
 	validate(data) {
@@ -234,10 +241,10 @@ export default class UpstreamsEditor extends React.Component {
 			: RGX_HTTP_SERVER_ADDRESS;
 		const errorMessages = [];
 
-		const multiplePeers = this.props.peers && this.props.peers.size > 1;
-		const isAdd = !this.props.peers;
+		const multipleServers = this.props.servers && this.props.servers.size > 1;
+		const isAdd = !this.props.servers;
 
-		if (!multiplePeers && isAdd && !data.server) {
+		if (!multipleServers && isAdd && !data.server) {
 			valid = false;
 			errorMessages.push('Invalid server address or port');
 		}
@@ -256,11 +263,11 @@ export default class UpstreamsEditor extends React.Component {
 			}
 		}
 
-		if (valid && multiplePeers) {
-			const peersArray = Array.from(this.props.peers);
+		if (valid && multipleServers) {
+			const serversArray = Array.from(this.props.servers);
 
 			return this.props.upstreamsApi
-				.getPeer(this.props.upstream.name, peersArray[0][1])
+				.getServer(this.props.upstream.name, serversArray[0][0])
 				.then((data) => {
 					if (data.error) {
 						errorMessages.push(
@@ -288,18 +295,18 @@ export default class UpstreamsEditor extends React.Component {
 	}
 
 	render() {
-		const { upstream, peers, isStream } = this.props;
+		const { upstream, servers, isStream } = this.props;
 
 		let title = '';
-		const isAdd = !peers || peers.size === 0;
+		const isAdd = !servers || servers.size === 0;
 
-		let peersArray;
+		let serversArray;
 
 		if (isAdd) {
 			title = `Add server to "${upstream.name}"`;
 		} else {
-			peersArray = Array.from(peers);
-			title = `Edit ${peers.size > 1 ? 'servers' : `server ${peersArray[0][1].server}`
+			serversArray = Array.from(servers);
+			title = `Edit ${servers.size > 1 ? 'servers' : `server ${serversArray[0][0]}`
 			} "${upstream.name}"`;
 		}
 
@@ -329,13 +336,13 @@ export default class UpstreamsEditor extends React.Component {
 			content = (
 				<div>
 					<div className={styles.content}>
-						{!isAdd && peersArray.length > 1 ? (
+						{!isAdd && serversArray.length > 1 ? (
 							<div className={styles['form-group']}>
 								<label>Selected servers</label>
 
 								<ul className={styles['servers-list']}>
-									{peersArray.map(([peerId, peer]) => (
-										<li key={peer.id}>{peer.server}</li>
+									{serversArray.map(([serverName, server]) => (
+										<li key={serverName}>{serverName}</li>
 									))}
 								</ul>
 							</div>

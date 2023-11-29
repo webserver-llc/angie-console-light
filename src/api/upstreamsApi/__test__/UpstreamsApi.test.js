@@ -39,26 +39,22 @@ describe('UpstreamsApi', () => {
 		expect(testUpstreamsApi.apiPrefix === apiPrefix).toBeTruthy();
 	});
 
-	it('getPeer()', async () => {
+	it('getServer()', async () => {
 		const upstreamName = 'upstream_1';
-		const peer = {
-			name: 'peer_1',
-		};
+		const peer = 'peer_1';
 
 		const spyApiProxyGet = jest.spyOn(ApiProxy.prototype, 'get').mockClear();
 
-		await testUpstreamsApi.getPeer(upstreamName, peer);
+		await testUpstreamsApi.getServer(upstreamName, peer);
 
-		expect(spyApiProxyGet).toHaveBeenCalledTimes(2);
+		expect(spyApiProxyGet).toHaveBeenCalledTimes(1);
 		expect(window.fetch.mock.calls[0][0] ===
-        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.name}?defaults=on`).toBeTruthy();
-		expect(window.fetch.mock.calls[1][0] ===
-        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.name}/`).toBeTruthy();
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer}?defaults=on`).toBeTruthy();
 
 		spyApiProxyGet.mockRestore();
 	});
 
-	it('createPeer()', () => {
+	it('createServer()', () => {
 		const upstreamName = 'upstream_1';
 		const peerData = {
 			name: 'test_peer',
@@ -67,7 +63,7 @@ describe('UpstreamsApi', () => {
 
 		const spyApiProxyPut = jest.spyOn(ApiProxy.prototype, 'put').mockClear();
 
-		const promise = testUpstreamsApi.createPeer(upstreamName, peerData);
+		const promise = testUpstreamsApi.createServer(upstreamName, peerData);
 
 		expect(promise instanceof Promise).toBeTruthy();
 		expect(spyApiProxyPut).toHaveBeenCalled();
@@ -85,41 +81,37 @@ describe('UpstreamsApi', () => {
 		spyApiProxyPut.mockRestore();
 	});
 
-	it('deletePeer()', () => {
+	it('deleteServer()', () => {
 		const upstreamName = 'upstream_1';
-		const peer = {
-			name: 'peer_1',
-		};
+		const peer = 'peer_1';
 
 		const spyApiProxyDel = jest.spyOn(ApiProxy.prototype, 'del').mockClear();
 
-		const promise = testUpstreamsApi.deletePeer(upstreamName, peer);
+		const promise = testUpstreamsApi.deleteServer(upstreamName, peer);
 
 		expect(promise instanceof Promise).toBeTruthy();
 		expect(spyApiProxyDel).toHaveBeenCalled();
 		expect(window.fetch.mock.calls[0][0] ===
-        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.name}/`).toBeTruthy();
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer}/`).toBeTruthy();
 
 		spyApiProxyDel.mockRestore();
 	});
 
-	it('updatePeer()', () => {
+	it('updateServer()', () => {
 		const upstreamName = 'upstream_1';
-		const peer = {
-			name: 'peer_1',
-		};
+		const peer = 'peer_1';
 		const peerData = {
 			name: 'test_peer_new',
 		};
 
 		const spyApiProxyPatch = jest.spyOn(ApiProxy.prototype, 'patch').mockClear();
 
-		const promise = testUpstreamsApi.updatePeer(upstreamName, peer, peerData);
+		const promise = testUpstreamsApi.updateServer(upstreamName, peer, peerData);
 
 		expect(promise instanceof Promise).toBeTruthy();
 		expect(spyApiProxyPatch).toHaveBeenCalled();
 		expect(window.fetch.mock.calls[0][0] ===
-        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer.name}/`).toBeTruthy();
+        `${API_PATH}/config/${apiPrefix}/upstreams/${upstreamName}/servers/${peer}/`).toBeTruthy();
 		expect('body' in window.fetch.mock.calls[0][1]).toBeTruthy();
 
 		const body = JSON.parse(window.fetch.mock.calls[0][1].body);

@@ -15,6 +15,7 @@ import appsettings from '../../appsettings';
 import UpstreamsEditor from './editor/upstreamseditor.jsx';
 import { SharedZoneTooltip } from '../pages/tooltips.jsx';
 import UpstreamStatsTooltip from './UpstreamStatsTooltip.jsx';
+import UpstreamServersList from './upstreamserverslist.jsx';
 import styles from './style.css';
 import tableStyles from '../table/style.css';
 import tooltips from '../../tooltips/index.jsx';
@@ -35,7 +36,9 @@ export default class UpstreamsList extends SortableTable {
 			...this.state,
 			editMode: false,
 			editor: false,
+			servers: new Map(),
 			selectedPeers: new Map(),
+			selectedServers: new Map(),
 			filtering: appsettings.getSetting(this.FILTERING_SETTINGS_KEY, 'all'),
 		};
 
@@ -46,61 +49,69 @@ export default class UpstreamsList extends SortableTable {
 		this.editSelectedUpstream = this.editSelectedUpstream.bind(this);
 		this.showEditor = this.showEditor.bind(this);
 		this.closeEditor = this.closeEditor.bind(this);
-		this.selectAllPeers = this.selectAllPeers.bind(this);
+		this.selectAllServers = this.selectAllServers.bind(this);
 		this.selectPeer = this.selectPeer.bind(this);
+		this.getCheckboxServer = this.getCheckboxServer.bind(this);
+		this.getSelectAllCheckbox = this.getSelectAllCheckbox.bind(this);
+		this.getUpstreamServers = this.getUpstreamServers.bind(this);
+	}
+
+	getUpstreamServers() {
+		return this.props.upstreamsApi.getServers(this.props.upstream.name).then(data => {
+			if (data) {
+				const dict = new Map(this.props
+					.upstream.peers.reduce((acc, item) => { acc.push([item.name, item.server]); return acc; }, []));
+				const servers = Object.entries(data).map(([key, value]) => [[key, dict.get(key)], value]);
+				const state = {
+					editMode: true,
+					servers: new Map(servers),
+					selectedServers: new Map(),
+				};
+
+				this.setState(state);
+			} else {
+				this.setState({
+					editMode: false,
+					servers: new Map(),
+					selectedServers: new Map()
+				});
+				alert('Sorry, API is read-only, please make it writable.');
+			}
+		});
 	}
 
 	toggleEditMode() {
 		if (envUtils.isDemoEnv()) return;
 
+		if (this.state.editMode) {
+			this.setState({
+				editMode: false,
+				servers: new Map(),
+				selectedServers: new Map()
+			});
+			return;
+		}
+
 		if (/[^\x20-\x7F]/.test(this.props.upstream.name)) {
 			alert(
 				'Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names',
 			);
-			return;
 		}
 
-		if (apiUtils.isWritable() === null) {
-			apiUtils.checkWritePermissions().then((result) => {
-				if (result === null) {
-					return apiUtils.checkWritePermissions(true);
-				}
-				return result;
-			}).then((result) => {
-				if (result === true) {
-					this.toggleEditMode();
-				} else if (result === false) {
-					alert('Sorry, API is read-only, please make it writable.');
-				}
-			});
-
-			return;
-		}
-
-		const editMode = !this.state.editMode;
-
-		const state = {
-			editMode,
-		};
-
-		if (!editMode) {
-			state.selectedPeers = new Map();
-		}
-
-		this.setState(state);
+		return this.getUpstreamServers();
 	}
 
-	editSelectedUpstream(peer) {
-		if (peer) {
+	editSelectedUpstream(serverName, server) {
+		if (server) {
 			this.setState({
-				selectedPeers: new Map([[peer.id, peer]]),
+				selectedServers: new Map([[serverName, server]]),
 			});
 
 			this.showEditor('edit');
 			return;
 		}
 
-		if (this.state.selectedPeers.size > 0) {
+		if (this.state.selectedServers.size > 0) {
 			this.showEditor('edit');
 		}
 	}
@@ -146,6 +157,23 @@ export default class UpstreamsList extends SortableTable {
 		);
 	}
 
+	renderServersOrPeers(peers) {
+		const { editMode, servers } = this.state;
+
+		if (!editMode) {
+			return this.renderPeers(peers);
+		}
+
+		return (
+			<UpstreamServersList
+				servers={servers}
+				editSelectedUpstream={this.editSelectedUpstream}
+				renderAllSelectCheckbox={this.getSelectAllCheckbox}
+				renderSelectCheckbox={this.getCheckboxServer}
+			/>
+		);
+	}
+
 	renderPeers() { }
 
 	filterPeers(data, filtering = this.state.filtering) {
@@ -176,11 +204,30 @@ export default class UpstreamsList extends SortableTable {
 		});
 	}
 
-	selectAllPeers(allPeers, state) {
+	selectAllServers() {
+		if (this.state.servers.size === this.state.selectedServers.size) {
+			this.setState({
+				selectedServers: new Map()
+			});
+		} else {
+			this.setState({
+				selectedServers: new Map(
+					Array.from(this.state.servers).map(([[ serverName ], server]) => [serverName, server])
+				),
+			});
+		}
+	}
+
+	selectServer(serverName, server) {
+		const { selectedServers } = this.state;
+
+		if (!selectedServers.has(serverName)) {
+			selectedServers.set(serverName, server);
+		} else {
+			selectedServers.delete(serverName);
+		}
 		this.setState({
-			selectedPeers: new Map(
-				state ? allPeers.map((peer) => [peer.id, peer]) : [],
-			),
+			selectedServers: new Map(selectedServers),
 		});
 	}
 
@@ -198,15 +245,27 @@ export default class UpstreamsList extends SortableTable {
 		});
 	}
 
-	getSelectAllCheckbox(peers) {
+	getSelectAllCheckbox() {
 		return this.state.editMode ? (
 			<th rowSpan="2" className={tableStyles.checkbox}>
 				<input
 					type="checkbox"
-					onChange={(evt) => this.selectAllPeers(peers, evt.target.checked)}
-					checked={this.state.selectedPeers.size === peers.length}
+					onChange={() => this.selectAllServers()}
+					checked={this.state.selectedServers.size === this.state.servers.size}
 				/>
 			</th>
+		) : null;
+	}
+
+	getCheckboxServer(serverName, server) {
+		return this.state.editMode ? (
+			<td className={tableStyles.checkbox}>
+				<input
+					type="checkbox"
+					onChange={() => this.selectServer(serverName, server)}
+					checked={this.state.selectedServers.has(serverName)}
+				/>
+			</td>
 		) : null;
 	}
 
@@ -222,7 +281,8 @@ export default class UpstreamsList extends SortableTable {
 		) : null;
 	}
 
-	renderEditButton(writePermission = false) {
+	renderEditButton() {
+		// TODO TECH-28
 		if (this.props.isStream) {
 			return null;
 		}
@@ -255,18 +315,14 @@ export default class UpstreamsList extends SortableTable {
 			);
 		}
 
-		if (writePermission) {
-			return (
-				<span
-					className={
-						this.state.editMode ? styles['edit-active'] : styles.edit
-					}
-					onClick={this.toggleEditMode}
-				/>
-			);
-		}
-
-		return null;
+		return (
+			<span
+				className={
+					this.state.editMode ? styles['edit-active'] : styles.edit
+				}
+				onClick={this.toggleEditMode}
+			/>
+		);
 	}
 
 	render() {
@@ -298,20 +354,18 @@ export default class UpstreamsList extends SortableTable {
 			});
 		}
 
-		const writePermission =
-			apiUtils.isWritable() === true || apiUtils.isWritable() === null;
-
 		return (
 			<div className={styles['upstreams-list']} id={`upstream-${name}`}>
 				{this.state.editor ? (
 					<UpstreamsEditor
 						upstream={upstream}
-						peers={
-							this.state.editor === 'edit' ? this.state.selectedPeers : null
+						servers={
+							this.state.editor === 'edit' ? this.state.selectedServers : null
 						}
 						isStream={this.props.isStream}
 						onClose={this.closeEditor}
 						upstreamsApi={this.props.upstreamsApi}
+						reloadUpstreamServers={this.getUpstreamServers}
 					/>
 				) : null}
 
@@ -341,9 +395,9 @@ export default class UpstreamsList extends SortableTable {
 						{name}
 					</h2>
 
-					{this.renderEditButton(writePermission)}
+					{this.renderEditButton()}
 
-					{writePermission && this.state.editMode
+					{ this.state.editMode
 						? [
 							<span
 								className={styles.btn}
@@ -377,8 +431,7 @@ export default class UpstreamsList extends SortableTable {
 						</span>
 					) : null}
 				</div>
-
-				{this.renderPeers(peers)}
+				{this.renderServersOrPeers(peers)}
 			</div>
 		);
 	}
