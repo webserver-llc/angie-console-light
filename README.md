@@ -12,59 +12,76 @@
   ·
   <a href="https://angie.software/en/console/">Documentaion</a>
   ·
-  <a href="https://angie.software/en">Website</a>
+  <a href="https://angie.software/en/">Website</a>
   ·
 </h4>
+
 
 ## Preview
 
 ![Angie Consoe Light](Angie-Console-Light.jpg)
 
+
 ## Development
 
-Ensure you have all dependencies installed:
-```
+Make sure all dependencies are installed:
+
+```bash
 yarn install
 ```
 
-To start develop the project you should run:
+If your API prefix is not ``/api``,
+change it in the ``src/constants.js`` file.
 
-```bash
-yarn run start-dev 
-```
-
-By default it's use https://console.angie.software as api server. Otherwise if you want use own server you should set *PROXY_TARGET* before start.
+By default, the development configuration uses
+https://console.angie.software
+for the API server.
+Set the *PROXY_TARGET* environment variable
+to use a custom server for development:
 
 ```bash
 PROXY_TARGET=%YOUR_ANGIE_SERVER% yarn run start-dev
 ```
 
-If you use different api prefix then `/api`, you can change for appropriate in `src/constants.js`
 
-Open http://localhost:8082 in your browser.
+Finally, open
+http://localhost:8082
+in the browser.
+
 
 ### Testing
 
-To not have tests mixed with sources all test files should be placed in related `__test__` folders in the project.
+We use [Jest](https://jestjs.io/) for testing.
+To separate the tests from other source code,
+all test files are placed under ``__test__``.
 
-```
+Run tests:
+
+```bash
 yarn test
 ```
-Running the above command will Jest.
 
-### Build
 
-Ensure you have all dependencies installed:
-```
+### Building
+
+Make sure all dependencies are installed:
+
+```bash
 yarn install
 ```
 
-To build the project run:
+Build the project:
 ```
 yarn build
 ```
-The result will be placed in `dist/console`.
 
-### Publish on server
+The result will appear under ``dist/console``.
 
-Put folder `dist/console` on your server and config Angie according to [guide](https://angie.software/en/console/#installation-and-configuration)
+
+### Publishing
+
+Publish the newly built ``dist/console`` directory
+on your server
+and follow
+[our guide](https://angie.software/en/console/#installation-and-configuration)
+to configure Angie.
