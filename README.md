@@ -13,7 +13,6 @@
   <a href="https://angie.software/en/console/">Documentation</a>
   ·
   <a href="https://angie.software/en/">Website</a>
-  ·
 </h4>
 
 

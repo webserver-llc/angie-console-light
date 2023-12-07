@@ -1,5 +1,4 @@
-/*
-*
+/**
  * Copyright 2023-present, Web Server LLC
  * Copyright 2017-present, Nginx, Inc.
  * Copyright 2017-present, Ivan Poluyanov
@@ -7,7 +6,3 @@
  * All rights reserved.
  *
  */
-import * as React from 'preact';
-
-export * from 'preact';
-export default React;
