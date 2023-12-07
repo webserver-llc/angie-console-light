@@ -10,7 +10,7 @@
   ·
   <a href="https://angie.software/en/console/#installation-and-configuration">Installation and configuration</a>
   ·
-  <a href="https://angie.software/en/console/">Documentaion</a>
+  <a href="https://angie.software/en/console/">Documentation</a>
   ·
   <a href="https://angie.software/en/">Website</a>
   ·
