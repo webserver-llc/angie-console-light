@@ -284,11 +284,6 @@ export default class UpstreamsList extends SortableTable {
 	}
 
 	renderEditButton() {
-		// TODO TECH-28
-		if (this.props.isStream) {
-			return null;
-		}
-
 		if (envUtils.isDemoEnv()) {
 			return (
 				<span

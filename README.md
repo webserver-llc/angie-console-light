@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://angie.software/en/_static/logo_black.svg" width="242", height="62">
+    <img src="logo.svg" width="242", height="62">
 </div>
 
 <h1 align="center">Angie Console Light</h1>

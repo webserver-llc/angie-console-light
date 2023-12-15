@@ -521,29 +521,6 @@ describe('<UpstreamsList />', () => {
 			wrapper.unmount();
 		});
 
-		it('isStream = true', async () => {
-			const propsWithIsStream = { ...props, isStream: true };
-			const wrapper = shallow(
-				<UpstreamsList {...propsWithIsStream} />
-			);
-			const instance = wrapper.instance();
-			jest.spyOn(envUtils, 'isDemoEnv').mockClear().mockImplementation(() => true);
-			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);
-			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
-				prop_from_useTooltip: true
-			}));
-
-			expect(instance.renderEditButton()).toBeNull();
-			expect(instance.renderEditButton()).toBeNull();
-			expect(envUtils.isDemoEnv).not.toHaveBeenCalled();
-			expect(apiUtils.isAngiePro).not.toHaveBeenCalled();
-			expect(tooltips.useTooltip).not.toHaveBeenCalled();
-
-			apiUtils.isAngiePro.mockRestore();
-			envUtils.isDemoEnv.mockRestore();
-			tooltips.useTooltip.mockRestore();
-		});
-
 		it('isDemoEnv = true', () => {
 			jest.spyOn(envUtils, 'isDemoEnv').mockClear().mockImplementation(() => true);
 			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);

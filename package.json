@@ -1,12 +1,12 @@
 {
   "name": "angie-console-light",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Angie Console Light",
   "main": "index.js",
   "scripts": {
     "clean-dist": "rm -rf ./dist",
-    "build": "yarn clean-dist && NODE_ENV=production FILE_NAME=console webpack",
-    "build-demo": "yarn clean-dist && NODE_ENV=production FILE_NAME=demo CONSOLE_TYPE=demo webpack",
+    "build": "NODE_ENV=production FILE_NAME=console webpack",
+    "build-demo": "NODE_ENV=production FILE_NAME=demo CONSOLE_TYPE=demo webpack",
     "build-all": "yarn clean-dist && yarn build && yarn build-demo",
     "scan": "yarn audit --groups dependencies",
     "scan-dev": "yarn audit --groups devDependencies",
