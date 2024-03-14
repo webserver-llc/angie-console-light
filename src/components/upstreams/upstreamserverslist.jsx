@@ -27,6 +27,14 @@ export default function UpstreamServerList(
 		);
 	}
 
+	function getStateServer(down){
+		if (down === 'drain') {
+			return down;
+		}
+
+		return down ? 'down' : 'up';
+	}
+
 	function renderTbody() {
 		if (servers.size === 0) {
 			return renderEmptyList();
@@ -34,7 +42,7 @@ export default function UpstreamServerList(
 
 		return Array.from(servers).map(([[ serverName, serverDomain ], server]) => (
 			<tr>
-				<td className={styles[server.down ? 'down' : 'up']} />
+				<td className={styles[getStateServer(server.down)]} />
 				{renderSelectCheckbox(serverName, server)}
 				<td
 					className={`${styles['left-align']} ${styles.bold} ${styles.address}`}
@@ -50,7 +58,7 @@ export default function UpstreamServerList(
 					{serverDomain ? <div className={styles['below-title-text']}>{serverDomain}</div> : null }
 				</td>
 				<td>{server.weight}</td>
-				<td>{server.down ? 'down' : 'up'}</td>
+				<td>{getStateServer(server.down)}</td>
 				<td>{server.max_conns}</td>
 				<td>{server.max_fails}</td>
 				<td>{server.fail_timeout}</td>

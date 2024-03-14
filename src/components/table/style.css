@@ -132,7 +132,8 @@ td.status {
 	background-color: #6bc544;
 }
 
-.warning, .checking {
+.warning,
+.checking {
 	composes: status;
 	background-color: #ffab08;
 }
@@ -147,11 +148,13 @@ td.status {
 	background-color: #8dc63f;
 }
 
-.unavail, .unhealthy {
+.unavail,
+.unhealthy {
 	composes: status;
 	background-color: #f26c4f;
 }
 
+.drain,
 .draining {
 	composes: status;
 	background-color: #55b2da;
@@ -163,7 +166,7 @@ td.status {
 }
 
 .flash {
-	transition: color 6s cubic-bezier(1,.005,.665,-.045), background-color 6s cubic-bezier(1,.005,.665,-.045);
+	transition: color 6s cubic-bezier(1, .005, .665, -.045), background-color 6s cubic-bezier(1, .005, .665, -.045);
 }
 
 .red-flash {
@@ -175,7 +178,7 @@ td.status {
 .collapse-columns {
 	background-color: #e2e5e8;
 	cursor: pointer;
-	padding: 0!important;
+	padding: 0 !important;
 	color: #989a9c;
 	width: 20px;
 	text-align: center;
@@ -285,7 +288,7 @@ td.status {
 .table td.inner-table {
 	padding: 0;
 	border-bottom: initial;
-	background-color: transparent;	
+	background-color: transparent;
 }
 
 [data-expandable="true"] {
@@ -323,15 +326,15 @@ td.status {
 	position: relative;
 }
 
-.promo-header-cell > span {
+.promo-header-cell>span {
 	position: absolute;
-	font-size: 12px;	
+	font-size: 12px;
 	bottom: -10px;
 	color: red;
 	font-weight: bold;
 }
 
-.promo-header-cell > span > span {
+.promo-header-cell>span>span {
 	color: black;
 }
 

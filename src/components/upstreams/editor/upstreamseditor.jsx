@@ -125,11 +125,9 @@ export default class UpstreamsEditor extends React.Component {
 	handleRadioChange({ target }) {
 		const { data } = this.state;
 
-		if (target.id === 'drain') {
-			delete data.down;
-			data.drain = true;
+		if (target.value === "drain") {
+			data.down = target.value;
 		} else {
-			delete data.drain;
 			data.down = target.value === 'true';
 		}
 
@@ -461,6 +459,20 @@ export default class UpstreamsEditor extends React.Component {
 								{' '}
 								Down
 							</label>
+							
+							{!isStream &&
+								<label>
+									<input
+										name="state"
+										value="drain"
+										type="radio"
+										onChange={this.handleRadioChange}
+										checked={data.down === "drain"}
+									/>
+									{' '}
+									Drain
+								</label>
+							}
 						</div>
 
 						{this.state.errorMessages !== null ? (

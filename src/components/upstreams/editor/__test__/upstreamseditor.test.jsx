@@ -287,14 +287,14 @@ describe('<UpstreamsEditor />', () => {
 		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
 		instance.handleRadioChange({ target: {
-			id: 'drain'
+			value: 'drain'
 		} });
 
 		// [drain change] this.setState called
 		expect(setStateSpy).toHaveBeenCalled();
 		// [drain change] this.setState call args
 		expect(setStateSpy.mock.calls[0][0]).toEqual({
-			data: { drain: true }
+			data: { down: 'drain' }
 		});
 
 		setStateSpy.mockReset();
@@ -1059,7 +1059,7 @@ describe('<UpstreamsEditor />', () => {
 		radio = content.childAt(2);
 
 		// [isStream = false] radio group children count
-		expect(radio.children()).toHaveLength(3);
+		expect(radio.children()).toHaveLength(4);
 
 		wrapper.setProps({ servers: new Map([
 			['test_1', {
