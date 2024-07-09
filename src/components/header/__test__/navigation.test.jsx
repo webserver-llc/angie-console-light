@@ -42,7 +42,7 @@ describe('<Navigation />', () => {
 		const wrapper = shallow(
 			<Navigation
 				statuses={defaultStatuses()}
-				hash="#"
+				pathname="/"
 			/>
 		);
 		const openSettingsSpy = jest.spyOn(Navigation.prototype.openSettings, 'bind').mockClear();
@@ -71,12 +71,12 @@ describe('<Navigation />', () => {
 		const wrapper = shallow(
 			<Navigation
 				statuses={defaultStatuses()}
-				hash="#"
+				pathname="/"
 			/>
 		);
 		const instance = wrapper.instance();
 		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
-		const closeStub = jest.spyOn(instance, 'closeSettings').mockClear().mockImplementation(() => {});
+		const closeStub = jest.spyOn(instance, 'closeSettings').mockClear().mockImplementation(() => { });
 
 		instance.openSettings();
 		wrapper.update();
@@ -106,7 +106,7 @@ describe('<Navigation />', () => {
 		const wrapper = shallow(
 			<Navigation
 				statuses={defaultStatuses()}
-				hash="#"
+				pathname="/"
 			/>
 		);
 		const instance = wrapper.instance();
@@ -130,12 +130,12 @@ describe('<Navigation />', () => {
 			const wrapper = shallow(
 				<Navigation
 					statuses={defaultStatuses()}
-					hash="#"
+					pathname="/"
 				/>
 			);
-			const container = wrapper.find(`.${ styles.nav }`);
-			const tabs = container.find(`.${ styles['nav-flex'] }`);
-			const settings = container.find(`.${ styles.settings.split(' ').join('.') }`);
+			const container = wrapper.find(`.${styles.nav}`);
+			const tabs = container.find(`.${styles['nav-flex']}`);
+			const settings = container.find(`.${styles.settings.split(' ').join('.')}`);
 			const settingsIcon = settings.find('Icon');
 
 			// container length
@@ -171,10 +171,10 @@ describe('<Navigation />', () => {
 			const wrapper = shallow(
 				<Navigation
 					statuses={customStatuses}
-					hash="#"
+					pathname="/"
 				/>
 			);
-			const container = wrapper.find(`.${ styles.nav }`);
+			const container = wrapper.find(`.${styles.nav}`);
 
 			// container length
 			expect(container.length).toBe(1);
@@ -195,24 +195,24 @@ describe('<Navigation />', () => {
 				const wrapper = shallow(
 					<Navigation
 						statuses={customStatuses}
-						hash="#"
+						pathname="/"
 					/>
 				);
 				const section = SECTIONS.find(({ statusKey }) => statusKey === 'server_zones');
-				const link = wrapper.find(`a.${ styles.navlink }`);
+				const link = wrapper.find(`a.${styles.navlink}`);
 
 				// link href
-				expect(link.prop('href')).toBe(section.hash);
+				expect(link.prop('href')).toBe(section.pathname);
 				// link title
 				expect(link.prop('title')).toBe(section.title);
 				// link anchor
-				expect(link.find(`span.${ styles.anchor }`).text()).toBe(section.title);
+				expect(link.find(`span.${styles.anchor}`).text()).toBe(section.title);
 
 				wrapper.unmount();
 			});
 
-			([ 'server_zones', 'location_zones' ]).map(statusKey => {
-				it(`${ statusKey } ready`, () => {
+			(['server_zones', 'location_zones']).map(statusKey => {
+				it(`${statusKey} ready`, () => {
 					const customStatuses = defaultStatuses();
 
 					customStatuses[statusKey].ready = true;
@@ -220,16 +220,16 @@ describe('<Navigation />', () => {
 					const wrapper = shallow(
 						<Navigation
 							statuses={customStatuses}
-							hash="#"
+							pathname="/"
 						/>
 					);
-					const link = wrapper.find(`a.${ styles.navlink }`);
+					const link = wrapper.find(`a.${styles.navlink}`);
 					const section = SECTIONS.find(({ statusKey }) => statusKey === 'server_zones');
 
 					// link length
 					expect(link.length).toBe(1);
 					// link href
-					expect(link.prop('href')).toBe(section.hash);
+					expect(link.prop('href')).toBe(section.pathname);
 
 					wrapper.unmount();
 				});
@@ -239,14 +239,14 @@ describe('<Navigation />', () => {
 				const wrapper = shallow(
 					<Navigation
 						statuses={readyStatuses()}
-						hash="#caches"
+						pathname="/caches"
 					/>
 				);
 				const link = wrapper.find('a');
 
-				SECTIONS.forEach(({ hash, statusKey, hidden }) => {
+				SECTIONS.forEach(({ pathname, statusKey, hidden }) => {
 					if (hidden === true) return;
-					const _link = link.filter(`[href="${ hash }"]`);
+					const _link = link.filter(`[href="${pathname}"]`);
 
 					// link for "${ statusKey }"
 					expect(_link.length).toBe(1);
@@ -274,10 +274,10 @@ describe('<Navigation />', () => {
 				const wrapper = shallow(
 					<Navigation
 						statuses={customStatuses}
-						hash="#"
+						pathname="/"
 					/>
 				);
-				const icons = wrapper.find(`.${ styles['nav-flex'] }`).find('Icon');
+				const icons = wrapper.find(`.${styles['nav-flex']}`).find('Icon');
 
 				// icons length
 				expect(icons.length).toBe(4);
@@ -310,81 +310,81 @@ describe('<Navigation />', () => {
 				const wrapper = shallow(
 					<Navigation
 						statuses={customStatuses}
-						hash="#"
+						pathname="/"
 					/>
 				);
 
 				// undefined|test_status
-				expect(wrapper.find('a[href="#server_zones"] Icon').length).toBe(0);
+				expect(wrapper.find('a[href="/server_zones"] Icon').length).toBe(0);
 
 				customStatuses.server_zones.status = 'ok';
 				wrapper.setProps(customStatuses);
 
 				// ok|test_status
-				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('ok');
+				expect(wrapper.find('a[href="/server_zones"] Icon').prop('type')).toBe('ok');
 
 				customStatuses.server_zones.status = 'test_status';
 				customStatuses.location_zones.status = 'ok';
 				wrapper.setProps(customStatuses);
 
 				// test_status|ok
-				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('test_status');
+				expect(wrapper.find('a[href="/server_zones"] Icon').prop('type')).toBe('test_status');
 
 				customStatuses.server_zones.status = 'ok';
 				customStatuses.location_zones.status = 'warning';
 				wrapper.setProps(customStatuses);
 
 				// ok|warning
-				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('warning');
+				expect(wrapper.find('a[href="/server_zones"] Icon').prop('type')).toBe('warning');
 
 				customStatuses.server_zones.status = 'warning';
 				customStatuses.location_zones.status = 'ok';
 				wrapper.setProps(customStatuses);
 
 				// warning|ok
-				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('warning');
+				expect(wrapper.find('a[href="/server_zones"] Icon').prop('type')).toBe('warning');
 
 				customStatuses.server_zones.status = 'warning';
 				customStatuses.location_zones.status = 'warning';
 				wrapper.setProps(customStatuses);
 
 				// warning|warning
-				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('warning');
+				expect(wrapper.find('a[href="/server_zones"] Icon').prop('type')).toBe('warning');
 
 				customStatuses.server_zones.status = 'ok';
 				customStatuses.location_zones.status = 'danger';
 				wrapper.setProps(customStatuses);
 
 				// ok|danger
-				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('danger');
+				expect(wrapper.find('a[href="/server_zones"] Icon').prop('type')).toBe('danger');
 
 				customStatuses.server_zones.status = 'danger';
 				customStatuses.location_zones.status = 'ok';
 				wrapper.setProps(customStatuses);
 
 				// danger|ok
-				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('danger');
+				expect(wrapper.find('a[href="/server_zones"] Icon').prop('type')).toBe('danger');
 
 				customStatuses.server_zones.status = 'danger';
 				customStatuses.location_zones.status = 'danger';
 				wrapper.setProps(customStatuses);
 
 				// danger|danger
-				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('danger');
+				expect(wrapper.find('a[href="/server_zones"] Icon').prop('type')).toBe('danger');
 
 				customStatuses.server_zones.status = 'danger';
 				customStatuses.location_zones.status = 'warning';
 				wrapper.setProps(customStatuses);
 
 				// danger|warning
-				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('danger');
+				expect(wrapper.find('a[href="/server_zones"] Icon').prop('type')).toBe('danger');
 
 				customStatuses.server_zones.status = 'warning';
 				customStatuses.location_zones.status = 'danger';
 				wrapper.setProps(customStatuses);
 
 				// warning|danger
-				expect(wrapper.find('a[href="#server_zones"] Icon').prop('type')).toBe('danger');
+				expect(wrapper.find('a[href="/server_zones"] Icon').prop('type')).toBe('danger');
 
 				wrapper.unmount();
 			});
@@ -395,7 +395,7 @@ describe('<Navigation />', () => {
 			const wrapper = shallow(
 				<Navigation
 					statuses={statuses}
-					hash="#"
+					pathname="/"
 				/>
 			);
 

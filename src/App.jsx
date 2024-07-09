@@ -37,17 +37,17 @@ import { ymService } from './services/yandex-metrica';
 export const history = createHistory();
 
 export const SECTIONS = {
-	'#': Index,
-	'#server_zones': ServerZones,
-	'#upstreams': Upstreams,
-	'#tcp_zones': StreamZones,
-	'#tcp_upstreams': StreamUpstreams,
-	'#caches': Caches,
-	'#shared_zones': SharedZones,
-	'#cluster': ZoneSync,
-	'#resolvers': Resolvers,
-	'#workers': Workers,
-	'#config_files': ConfigFiles,
+	'/': Index,
+	'/server_zones': ServerZones,
+	'/upstreams': Upstreams,
+	'/tcp_zones': StreamZones,
+	'/tcp_upstreams': StreamUpstreams,
+	'/caches': Caches,
+	'/shared_zones': SharedZones,
+	'/cluster': ZoneSync,
+	'/resolvers': Resolvers,
+	'/workers': Workers,
+	'/config_files': ConfigFiles,
 };
 
 export const Errors = {
@@ -57,15 +57,16 @@ export const Errors = {
 };
 
 export class App extends React.Component {
-	static sendAnalytics(hash) {
-		if (hash === '#') {
-			ymService.sendHit(hash, 'Index');
+	static sendAnalytics(pathname) {
+		if (pathname === '/') {
+			ymService.sendHit('#', 'Index');
 			return;
 		}
 
-		const currentSection = NAVIGATION_SECTIONS.find(s => s.hash === hash);
+		const currentSection = NAVIGATION_SECTIONS.find(s => s.pathname === pathname);
 		if (currentSection) {
-			ymService.sendHit(currentSection.hash, currentSection.title);
+			// save backward capability with hash navigation in yandex-metrica
+			ymService.sendHit(currentSection.pathname.replace('/', '#'), currentSection.title);
 		} else {
 			console.warn('Route not found. Check Navigation component');
 		}
@@ -75,23 +76,13 @@ export class App extends React.Component {
 		super();
 
 		this.state = {
-			hash: history.location.hash || '#',
 			loading: true,
+			pathname: history.location.pathname,
 			error: undefined,
 		};
 	}
 
 	componentDidMount() {
-		history.listen(({ hash }) => {
-			hash = hash || '#';
-
-			this.setState({
-				hash
-			});
-
-			App.sendAnalytics(hash);
-		});
-
 		apiUtils.checkApiAvailability().then(() =>
 			apiUtils.initialLoad(datastore)
 		).then(() => {
@@ -101,7 +92,7 @@ export class App extends React.Component {
 			this.setState({ loading: false, error: err.type });
 		});
 
-		App.sendAnalytics(location.hash || '#');
+		App.sendAnalytics(location.pathname || '/');
 	}
 
 	render() {
@@ -123,12 +114,12 @@ export class App extends React.Component {
 			let subContent = null;
 
 			if (error in Errors) {
-				subContent = <p>{ Errors[error] }</p>;
+				subContent = <p>{Errors[error]}</p>;
 			}
 
 			content = (
 				<div className={styles['error-block']}>
-					{ subContent }
+					{subContent}
 					<p>
 						For&nbsp;more information please refer to&nbsp;the&nbsp;following&nbsp;
 						<a href="https://angie.software/en/">documentation.</a>
@@ -136,7 +127,7 @@ export class App extends React.Component {
 				</div>
 			);
 		} else {
-			const Page = SECTIONS[this.state.hash];
+			const Page = SECTIONS[this.state.pathname];
 
 			content = <Page />;
 		}
@@ -150,7 +141,7 @@ export class App extends React.Component {
 						: null
 				}
 
-				<Header hash={this.state.hash} navigation={!error} statuses={STORE.__STATUSES} />
+				<Header pathname={this.state.pathname} navigation={!error} statuses={STORE.__STATUSES} />
 
 				<div className={styles.content}>
 					{
@@ -159,7 +150,7 @@ export class App extends React.Component {
 							: null
 					}
 
-					{ content }
+					{content}
 				</div>
 			</div>
 		);

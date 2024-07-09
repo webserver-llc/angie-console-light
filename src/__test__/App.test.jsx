@@ -21,30 +21,11 @@ describe('<App />', () => {
 		history.replace({ hash: '' });
 	});
 
-	it('Listen history', () => {
-		jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(
-			() => Promise.reject({ type: '' })
-		);
-
-		const newHash = '#caches';
-		let wrapper = shallow(<App.Component />);
-
-		expect(wrapper.state('hash')).toBe(history.location.hash || '#');
-
-		history.replace({ hash: newHash });
-
-		wrapper = shallow(<App.Component />);
-
-		expect(wrapper.state('hash')).toBe(newHash);
-
-		apiUtils.checkApiAvailability.mockRestore();
-	});
-
 	describe('componentDidMount()', () => {
 		it('Default flow', async () => {
 			jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(() => Promise.resolve());
 			jest.spyOn(apiUtils, 'initialLoad').mockClear().mockImplementation(() => Promise.resolve());
-			jest.spyOn(datastore, 'startObserve').mockClear().mockImplementation(() => {});
+			jest.spyOn(datastore, 'startObserve').mockClear().mockImplementation(() => { });
 
 			const wrapper = shallow(<App.Component />);
 			const instance = wrapper.instance();
@@ -69,7 +50,7 @@ describe('<App />', () => {
 			const error = 'test_error';
 
 			jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(() => Promise.reject({ type: error }));
-			jest.spyOn(apiUtils, 'checkWritePermissions').mockClear().mockImplementation(() => {});
+			jest.spyOn(apiUtils, 'checkWritePermissions').mockClear().mockImplementation(() => { });
 			jest.spyOn(apiUtils, 'initialLoad').mockClear().mockImplementation(() => Promise.resolve());
 
 			const wrapper = shallow(<App.Component />);
@@ -98,13 +79,13 @@ describe('<App />', () => {
 			const instance = wrapper.instance();
 
 			expect(wrapper.prop('className')).toBe(styles.splash);
-			expect(wrapper.find(`.${ styles.logo }`)).toHaveLength(1);
+			expect(wrapper.find(`.${styles.logo}`)).toHaveLength(1);
 
 			const loader = wrapper.find('Loader');
 
 			expect(loader).toHaveLength(1);
 			expect(loader.hasClass(styles.loader)).toBe(true);
-			expect(wrapper.find(`.${ styles.loading }`)).toHaveLength(1);
+			expect(wrapper.find(`.${styles.loading}`)).toHaveLength(1);
 
 			apiUtils.checkApiAvailability.mockRestore();
 		});
@@ -123,7 +104,7 @@ describe('<App />', () => {
 			const header = wrapper.find('Header');
 
 			expect(header).toHaveLength(1);
-			expect(header.prop('hash')).toBe(wrapper.state('hash'));
+			expect(header.prop('pathname')).toBe('/');
 			expect(header.prop('navigation')).toBe(true);
 			expect(header.prop('statuses')).toBe(STORE.__STATUSES);
 
@@ -134,10 +115,10 @@ describe('<App />', () => {
 			expect(updatingControl.prop('pause')).toBe(pause);
 			expect(updatingControl.prop('update')).toBe(startObserve);
 
-			Object.keys(SECTIONS).forEach(id => {
-				wrapper.setState({ hash: id });
+			Object.keys(SECTIONS).forEach(pathname => {
+				wrapper.setState({ pathname });
 
-				expect(wrapper.find(SECTIONS[id].name)).toHaveLength(1);
+				expect(wrapper.find(SECTIONS[pathname].name)).toHaveLength(1);
 			});
 
 			apiUtils.checkApiAvailability.mockRestore();
@@ -150,21 +131,21 @@ describe('<App />', () => {
 
 			const wrapper = shallow(<App.Component />);
 			wrapper.setState({ loading: false });
-			const errBlockSelector = `.${ styles['error-block'] }`;
+			const errBlockSelector = `.${styles['error-block']}`;
 
 			expect(wrapper.find(errBlockSelector)).toHaveLength(0);
 
 			wrapper.setState({ error: 'some_unknown_error' });
 
 			expect(wrapper.find(errBlockSelector)).toHaveLength(1);
-			expect(wrapper.find(`${ errBlockSelector } p`)).toHaveLength(1);
+			expect(wrapper.find(`${errBlockSelector} p`)).toHaveLength(1);
 			expect(wrapper.find('Header').prop('navigation')).toBe(false);
 			expect(wrapper.find('UpdatingControl')).toHaveLength(0);
 
 			Object.keys(Errors).forEach(error => {
 				wrapper.setState({ error });
 
-				const p = wrapper.find(`${ errBlockSelector } p`);
+				const p = wrapper.find(`${errBlockSelector} p`);
 
 				expect(p).toHaveLength(2);
 				expect(p.first().text()).toBe(Errors[error]);

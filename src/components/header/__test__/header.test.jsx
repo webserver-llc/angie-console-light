@@ -20,22 +20,22 @@ describe('<Header />', () => {
 			const wrapper = shallow(<Header />);
 
 			// element length
-			expect(wrapper.find(`.${ styles.header }`).length).toBe(1);
+			expect(wrapper.find(`.${styles.header}`).length).toBe(1);
 		});
 
-		it('props.hash = "#"', () => {
-			const wrapper = shallow(<Header hash="#" />);
+		it('props.pathname = "/server_zones"', () => {
+			const wrapper = shallow(<Header pathname="/server_zones" />);
 			const link = wrapper.find('a');
 
 			// link length
 			expect(link.length).toBe(1);
 			// link className
-			expect(link.prop('className')).toBe(styles.logoactive);
+			expect(link.prop('className')).toBe(styles.logo);
 			// link href
-			expect(link.prop('href')).toBe('#');
+			expect(link.prop('href')).toBe('/');
 		});
 
-		it('other props.hash', () => {
+		it('other props.pathname', () => {
 			const wrapper = shallow(<Header />);
 			const link = wrapper.find('a');
 
@@ -44,7 +44,7 @@ describe('<Header />', () => {
 			// link className
 			expect(link.prop('className')).toBe(styles.logo);
 			// link href
-			expect(link.prop('href')).toBe('#');
+			expect(link.prop('href')).toBe('/');
 		});
 
 		it('no props.navigation', () => {

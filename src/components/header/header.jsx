@@ -14,15 +14,16 @@ import styles from './style.css';
 
 export default class Header extends React.Component {
 	render() {
-		return (<div className={ styles.header }>
-			<a className={this.props.hash === '#' ? styles.logoactive : styles.logo} href="#" />
+		return (
+			<div className={styles.header}>
+				<a className={this.props.pathname === '/' ? styles.logoactive : styles.logo} href="/" />
 
-			{
-				this.props.navigation ?
-					<Navigation {...this.props} />
-				: null
-			}
-		</div>);
+				{
+					this.props.navigation ?
+						<Navigation {...this.props} />
+						: null
+				}
+			</div>
+		);
 	}
 }
-

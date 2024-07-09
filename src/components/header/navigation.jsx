@@ -31,42 +31,42 @@ import styles from './style.css';
 export const SECTIONS = [
 	{
 		title: 'HTTP Zones',
-		hash: '#server_zones',
+		pathname: '/server_zones',
 		statusKey: 'server_zones'
 	},
 	{
 		title: 'HTTP Upstreams',
-		hash: '#upstreams',
+		pathname: '/upstreams',
 		statusKey: 'upstreams'
 	},
 	{
 		title: 'TCP/UDP Zones',
-		hash: '#tcp_zones',
+		pathname: '/tcp_zones',
 		statusKey: 'tcp_zones'
 	},
 	{
 		title: 'TCP/UDP Upstreams',
-		hash: '#tcp_upstreams',
+		pathname: '/tcp_upstreams',
 		statusKey: 'tcp_upstreams'
 	},
 	{
 		title: 'Caches',
-		hash: '#caches',
+		pathname: '/caches',
 		statusKey: 'caches'
 	},
 	{
 		title: 'Shared Zones',
-		hash: '#shared_zones',
+		pathname: '/shared_zones',
 		statusKey: 'shared_zones'
 	},
 	{
 		title: 'Resolvers',
-		hash: '#resolvers',
+		pathname: '/resolvers',
 		statusKey: 'resolvers'
 	},
 	{
 		title: 'Config Files',
-		hash: '#config_files',
+		pathname: '/config_files',
 		hidden: true,
 	}
 ];
@@ -140,11 +140,11 @@ export class Navigation extends React.Component {
 
 				return (
 					<a
-						className={this.props.hash === section.hash ? styles.navlinkactive : styles.navlink}
-						href={section.hash}
+						className={this.props.pathname === section.pathname ? styles.navlinkactive : styles.navlink}
+						href={section.pathname}
 						title={section.title}
 					>
-						{ statusIcon }
+						{statusIcon}
 
 						<span className={styles.anchor}>{section.title}</span>
 					</a>
@@ -152,9 +152,9 @@ export class Navigation extends React.Component {
 			});
 
 		return (
-			<div className={`${ styles.nav } ${tabs.length > 6 ? styles['nav-wide'] : styles['nav-small']}`}>
+			<div className={`${styles.nav} ${tabs.length > 6 ? styles['nav-wide'] : styles['nav-small']}`}>
 				<div className={styles['nav-flex']}>
-					{ tabs }
+					{tabs}
 				</div>
 
 				<span className={styles.settings} onClick={this.openSettings}>
