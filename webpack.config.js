@@ -12,6 +12,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HTMLInlineCSSWebpackPlugin = require('html-inline-css-webpack-plugin').default;
 const ESLintPlugin = require('eslint-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const packageFile = require('./package.json');
 
@@ -43,6 +44,12 @@ const plugins = [
 	}),
 
 	new ESLintPlugin(),
+
+	new CopyWebpackPlugin({
+		patterns: [
+			{ from: './img', to: 'images' }
+		]
+	}),
 ];
 
 if (PRODUCTION_BUILD) {

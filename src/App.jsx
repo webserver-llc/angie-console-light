@@ -28,6 +28,7 @@ import Resolvers from './components/pages/resolvers.jsx';
 import Workers from './components/pages/workers.jsx';
 import Disclaimer from './components/demo/disclaimer.jsx';
 import ConfigFiles from './components/pages/configfiles/configfiles.jsx';
+import FaviconManager from './components/favicon-manager/index.js';
 import datastore, { STORE, startObserve, play, pause } from './datastore';
 import { apiUtils } from './api';
 import envUtils from './env';
@@ -123,12 +124,12 @@ export class App extends React.Component {
 			let subContent = null;
 
 			if (error in Errors) {
-				subContent = <p>{ Errors[error] }</p>;
+				subContent = <p>{Errors[error]}</p>;
 			}
 
 			content = (
 				<div className={styles['error-block']}>
-					{ subContent }
+					{subContent}
 					<p>
 						For&nbsp;more information please refer to&nbsp;the&nbsp;following&nbsp;
 						<a href="https://angie.software/en/">documentation.</a>
@@ -143,6 +144,7 @@ export class App extends React.Component {
 
 		return (
 			<div className={styles.console}>
+				<FaviconManager statuses={STORE.__STATUSES} />
 
 				{
 					envUtils.isDemoEnv() ?
@@ -159,7 +161,7 @@ export class App extends React.Component {
 							: null
 					}
 
-					{ content }
+					{content}
 				</div>
 			</div>
 		);
