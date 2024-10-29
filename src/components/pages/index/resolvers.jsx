@@ -22,7 +22,7 @@ export class Resolvers extends React.Component {
 
 		return (
 			<IndexBox
-				title="Resolvers"
+				title="DNS Резолверы"
 				status={store.__STATUSES.resolvers.status}
 				href="#resolvers"
 			>
@@ -32,9 +32,17 @@ export class Resolvers extends React.Component {
 					alerts={stats.alerts}
 				/>
 
-				<h4>Traffic</h4>
-				<p>Req/s: { stats.traffic.in ? stats.traffic.in : 0 }</p>
-				<p>Resp/s: { stats.traffic.out ? stats.traffic.out : 0 }</p>
+				<h4>Трафик</h4>
+				<p>
+					Зпр/сек:
+					{' '}
+					{stats.traffic.in ? stats.traffic.in : 0}
+				</p>
+				<p>
+					Отв/сек:
+					{' '}
+					{stats.traffic.out ? stats.traffic.out : 0}
+				</p>
 			</IndexBox>
 		);
 	}
