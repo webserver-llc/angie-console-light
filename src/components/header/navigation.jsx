@@ -30,42 +30,42 @@ import styles from './style.css';
 
 export const SECTIONS = [
 	{
-		title: 'HTTP Zones',
+		title: 'HTTP Зоны',
 		hash: '#server_zones',
 		statusKey: 'server_zones'
 	},
 	{
-		title: 'HTTP Upstreams',
+		title: 'HTTP Апстримы',
 		hash: '#upstreams',
 		statusKey: 'upstreams'
 	},
 	{
-		title: 'TCP/UDP Zones',
+		title: 'TCP/UDP Зоны',
 		hash: '#tcp_zones',
 		statusKey: 'tcp_zones'
 	},
 	{
-		title: 'TCP/UDP Upstreams',
+		title: 'TCP/UDP Апстримы',
 		hash: '#tcp_upstreams',
 		statusKey: 'tcp_upstreams'
 	},
 	{
-		title: 'Caches',
+		title: 'Кеши',
 		hash: '#caches',
 		statusKey: 'caches'
 	},
 	{
-		title: 'Shared Zones',
+		title: 'Общие Зоны',
 		hash: '#shared_zones',
 		statusKey: 'shared_zones'
 	},
 	{
-		title: 'Resolvers',
+		title: 'DNS Резолвер',
 		hash: '#resolvers',
 		statusKey: 'resolvers'
 	},
 	{
-		title: 'Config Files',
+		title: 'Конфиг. файлы',
 		hash: '#config_files',
 		hidden: true,
 	}
@@ -144,7 +144,7 @@ export class Navigation extends React.Component {
 						href={section.hash}
 						title={section.title}
 					>
-						{ statusIcon }
+						{statusIcon}
 
 						<span className={styles.anchor}>{section.title}</span>
 					</a>
@@ -152,9 +152,9 @@ export class Navigation extends React.Component {
 			});
 
 		return (
-			<div className={`${ styles.nav } ${tabs.length > 6 ? styles['nav-wide'] : styles['nav-small']}`}>
+			<div className={`${styles.nav} ${tabs.length > 6 ? styles['nav-wide'] : styles['nav-small']}`}>
 				<div className={styles['nav-flex']}>
-					{ tabs }
+					{tabs}
 				</div>
 
 				<span className={styles.settings} onClick={this.openSettings}>
