@@ -105,7 +105,7 @@ describe('<Connections IndexPage />', () => {
 		// [Conns tab] accepted block className
 		expect(indexBox.childAt(0).prop('className')).toBe(styles.counter);
 		// [Conns tab] accepted block text
-		expect(indexBox.childAt(0).text()).toBe('Accepted:10');
+		expect(indexBox.childAt(0).text()).toBe('Принято:10');
 		// [Conns tab] tabs className
 		expect(indexBox.childAt(1).prop('className')).toBe(styles.tabs);
 		// [Conns tab] Connections tab className
@@ -113,7 +113,7 @@ describe('<Connections IndexPage />', () => {
 		// [Conns tab] Connections tab onClick
 		expect(indexBox.childAt(1).childAt(0).prop('onClick').name).toBe('bound changeTab');
 		// [Conns tab] Connections tab text
-		expect(indexBox.childAt(1).childAt(0).text()).toBe('Connections');
+		expect(indexBox.childAt(1).childAt(0).text()).toBe('Соединения');
 
 		// changeTab called once
 		expect(changeTabBindSpy).toHaveBeenCalledTimes(1);
