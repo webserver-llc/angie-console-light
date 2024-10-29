@@ -51,8 +51,8 @@ export default class Settings extends React.Component {
 		this.setState({ updatingPeriod: updatingPeriod || 1000 });
 	}
 
-	changePercentThreshold(prop, evt){
-		let value = evt.target.value;
+	changePercentThreshold(prop, evt) {
+		let { value } = evt.target;
 
 		if (value >= 100) {
 			value = 100;
@@ -79,65 +79,84 @@ export default class Settings extends React.Component {
 	render() {
 		const { statuses } = this.props;
 
-		return (<div className={ styles.settings }>
-			<h2 className={ styles.title }>Options</h2>
+		return (
+			<div className={styles.settings}>
+				<h2 className={styles.title}>Параметры</h2>
 
-			<div className={ styles.section }>
-				Update every <NumberControl value={this.state.updatingPeriod} onChange={this.changeUpdatePeriod} /> sec
+				<div className={styles.section}>
+					Обновлять каждые
+
+					<NumberControl value={this.state.updatingPeriod} onChange={this.changeUpdatePeriod} />
+
+					сек
+				</div>
+
+				<div className={styles.section}>
+					Пороговое значение ошибок для 4xx
+					<NumberInput
+						defaultValue={this.state.warnings4xxThresholdPercent}
+						onChange={this.changePercentThreshold.bind(this, 'warnings4xxThresholdPercent')}
+						className={styles.input}
+					/>
+					{' '}
+					%
+				</div>
+
+				<div className={styles.section}>
+					Вычислять за последние
+					<NumberInput
+						defaultValue={this.state.cacheDataInterval / 1000}
+						className={styles['wide-input']}
+						onChange={this.changeCacheHitRatioInteval}
+					/>
+					{' '}
+					сек
+				</div>
+
+				{
+					statuses.zone_sync && statuses.zone_sync.ready ? (
+						<div className={styles.section}>
+							Нету пороговых значений для синхронизированных данных
+
+							<NumberInput
+								defaultValue={this.state.zonesyncPendingThreshold}
+								onChange={this.changePercentThreshold.bind(this, 'zonesyncPendingThreshold')}
+								className={styles.input}
+							/>
+							{' '}
+							%
+						</div>
+					)
+						: null
+				}
+
+				{
+					statuses.resolvers && statuses.resolvers.ready ? (
+						<div className={styles.section}>
+							Пороговое значение ошибок DNS
+
+							<NumberInput
+								defaultValue={this.state.resolverErrorsThreshold}
+								onChange={this.changePercentThreshold.bind(this, 'resolverErrorsThreshold')}
+								className={styles.input}
+							/>
+							{' '}
+							%
+						</div>
+					)
+						: null
+				}
+
+				<div className={styles.section}>
+					<button onClick={this.save} className={styles.save}>Сохранить</button>
+					<button onClick={this.props.close} className={styles.cancel}>Закрыть</button>
+				</div>
+
+				<span className={styles.version}>
+					v
+					{VERSION}
+				</span>
 			</div>
-
-			<div className={ styles.section }>4xx warnings threshold
-				<NumberInput
-					defaultValue={this.state.warnings4xxThresholdPercent}
-					onChange={this.changePercentThreshold.bind(this, 'warnings4xxThresholdPercent')}
-					className={ styles.input }
-				/> %
-			</div>
-
-			<div className={ styles.section }>
-				Calculate hit ratio for the past
-
-				<NumberInput
-					defaultValue={this.state.cacheDataInterval / 1000}
-					className={ styles['wide-input'] }
-					onChange={this.changeCacheHitRatioInteval}
-				/> sec
-			</div>
-
-			{
-				statuses.zone_sync && statuses.zone_sync.ready ?
-					<div className={ styles.section }>
-						Non synced data threshold
-
-						<NumberInput
-							defaultValue={this.state.zonesyncPendingThreshold}
-							onChange={this.changePercentThreshold.bind(this, 'zonesyncPendingThreshold')}
-							className={ styles.input }
-						/> %
-					</div>
-				: null
-			}
-
-			{
-				statuses.resolvers && statuses.resolvers.ready ?
-					<div className={ styles.section }>
-						Resolver errors threshold
-
-						<NumberInput
-							defaultValue={this.state.resolverErrorsThreshold}
-							onChange={this.changePercentThreshold.bind(this, 'resolverErrorsThreshold')}
-							className={ styles.input }
-						/> %
-					</div>
-				: null
-			}
-
-			<div className={ styles.section }>
-				<button onClick={this.save} className={ styles.save }>Save</button>
-				<button onClick={this.props.close} className={ styles.cancel }>Cancel</button>
-			</div>
-			
-			<span className={ styles.version }>v{ VERSION }</span>
-		</div>);
+		);
 	}
 }
