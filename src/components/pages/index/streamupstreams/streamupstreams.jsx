@@ -11,7 +11,6 @@ import React from 'react';
 import { UpstreamsBox } from '../upstreams/upstreams.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
 import { apiStreamUpstreams } from '../../../../api';
-import { upstreams } from '../../../../calculators/stream.js';
 
 export class StreamUpstreams extends React.Component {
 	render() {
@@ -20,7 +19,7 @@ export class StreamUpstreams extends React.Component {
 
 		return (
 			<UpstreamsBox
-				title="TCP/UDP Upstreams"
+				title="TCP/UDP Апстримы"
 				stats={stats}
 				status={store.__STATUSES.tcp_upstreams.status}
 				href="#tcp_upstreams"

@@ -32,7 +32,7 @@ describe('<StreamUpstreams IndexPage />', () => {
 		const box = wrapper.find('UpstreamsBox');
 
 		// UpstreamsBox title
-		expect(box.prop('title')).toBe('TCP/UDP Upstreams');
+		expect(box.prop('title')).toBe('TCP/UDP Апстримы');
 		// UpstreamsBox stats
 		expect(box.prop('stats')).toBe('test_stats');
 		// UpstreamsBox status
