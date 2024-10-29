@@ -24,7 +24,7 @@ export class Caches extends React.Component {
 
 		return (
 			<IndexBox
-				title="Caches"
+				title="Кеши"
 				status={store.__STATUSES.caches.status}
 				href="#caches"
 			>
@@ -35,9 +35,19 @@ export class Caches extends React.Component {
 					href="#caches"
 				/>
 
-				<h4>Caches states</h4>
-				<p><Icon type="sun" className={ styles.icon } />Warm: { stats.states.warm }</p>
-				<p><Icon type="snowflake" className={ `${ styles.icon } ${ styles.snowflakeIcon }` } />Cold: { stats.states.cold }</p>
+				<h4>Состояние</h4>
+				<p>
+					<Icon type="sun" className={styles.icon} />
+					Прогретые:
+					{' '}
+					{stats.states.warm}
+				</p>
+				<p>
+					<Icon type="snowflake" className={`${styles.icon} ${styles.snowflakeIcon}`} />
+					Холодные:
+					{' '}
+					{stats.states.cold}
+				</p>
 			</IndexBox>
 		);
 	}
