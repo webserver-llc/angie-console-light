@@ -49,34 +49,34 @@ describe('<Caches Page />', () => {
 			// useTooltip call 1, arg 2
 			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint');
 
-			hintedEl = wrapper.find(`thead span.${ styles.hinted }`).at(0);
+			hintedEl = wrapper.find(`thead span.${styles.hinted}`).at(0);
 
 			// first hinted el prop
-			expect(hintedEl.text()).toBe('State');
+			expect(hintedEl.text()).toBe('Состояние');
 			// first hinted el prop
 			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
 			// useTooltip call 2, arg 1
-			expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Memory usage = Used memory pages / Total memory pages');
+			expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Использовано памяти = Использовано страниц памяти / Всего старниц памяти');
 			// useTooltip call 2, arg 2
 			expect(tooltips.useTooltip.mock.calls[1][1]).toBe('hint');
 
-			hintedEl = wrapper.find(`thead span.${ styles.hinted }`).at(1);
+			hintedEl = wrapper.find(`thead span.${styles.hinted}`).at(1);
 
 			// first hinted el prop
-			expect(hintedEl.text()).toBe('Memory usage');
+			expect(hintedEl.text()).toBe('Использовано памяти');
 			// first hinted el prop
 			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
 			// useTooltip call 3, arg 1
-			expect(tooltips.useTooltip.mock.calls[2][0]).toBe('Disk usage = Used / Max size');
+			expect(tooltips.useTooltip.mock.calls[2][0]).toBe('Использовано диска = Использовано / Максимальный размер');
 			// useTooltip call 3, arg 2
 			expect(tooltips.useTooltip.mock.calls[2][1]).toBe('hint');
 
-			hintedEl = wrapper.find(`thead span.${ styles.hinted }`).at(2);
+			hintedEl = wrapper.find(`thead span.${styles.hinted}`).at(2);
 
 			// first hinted el prop
-			expect(hintedEl.text()).toBe('Disk usage');
+			expect(hintedEl.text()).toBe('Использовано диска');
 			// first hinted el prop
 			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
@@ -95,39 +95,41 @@ describe('<Caches Page />', () => {
 			jest.spyOn(Caches, 'formatReadableBytes').mockClear().mockImplementation(a => a);
 
 			const wrapper = shallow(
-				<Caches data={{ caches: new Map([
-					['test_1', {
-						cold: false,
-						slab: 'test_slab_1',
-						zoneSize: 30,
-						max_size: 500,
-						size: 430,
-						warning: false,
-						danger: false,
-						used: 100,
-						traffic: {
-							s_served: 3,
-							s_written: 2,
-							s_bypassed: 1
-						},
-						hit_percents_generic: 10
-					}], ['test_2', {
-						cold: true,
-						slab: 'test_slab_2',
-						zoneSize: undefined,
-						max_size: '501',
-						size: 431,
-						warning: true,
-						danger: true,
-						used: 101,
-						traffic: {
-							s_served: 4,
-							s_written: 3,
-							s_bypassed: 2
-						},
-						hit_percents_generic: 11
-					}]
-				]) }}
+				<Caches data={{
+					caches: new Map([
+						['test_1', {
+							cold: false,
+							slab: 'test_slab_1',
+							zoneSize: 30,
+							max_size: 500,
+							size: 430,
+							warning: false,
+							danger: false,
+							used: 100,
+							traffic: {
+								s_served: 3,
+								s_written: 2,
+								s_bypassed: 1
+							},
+							hit_percents_generic: 10
+						}], ['test_2', {
+							cold: true,
+							slab: 'test_slab_2',
+							zoneSize: undefined,
+							max_size: '501',
+							size: 431,
+							warning: true,
+							danger: true,
+							used: 101,
+							traffic: {
+								s_served: 4,
+								s_written: 3,
+								s_bypassed: 2
+							},
+							hit_percents_generic: 11
+						}]
+					])
+				}}
 				/>
 			);
 			const rows = wrapper.find('tbody tr');
@@ -135,11 +137,11 @@ describe('<Caches Page />', () => {
 			let hintedEl;
 
 			// row 1, cell 1, className
-			expect(cells.at(0).prop('className')).toBe(`${ styles.bold } ${ styles.bdr }`);
+			expect(cells.at(0).prop('className')).toBe(`${styles.bold} ${styles.bdr}`);
 			// row 1, cell 1, text
 			expect(cells.at(0).text()).toBe('test_1');
 			// row 1, cell 2, className
-			expect(cells.at(1).prop('className')).toBe(`${ styles.bdr } ${ styles['center-align'] }`);
+			expect(cells.at(1).prop('className')).toBe(`${styles.bdr} ${styles['center-align']}`);
 			hintedEl = cells.at(1).find('span');
 			// row 1, cell 2, useTooltip arg 1
 			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Warm');
@@ -189,7 +191,7 @@ describe('<Caches Page />', () => {
 			// row 1, cell 8, text
 			expect(cells.at(7).text()).toBe('2');
 			// row 1, cell 9, className
-			expect(cells.at(8).prop('className')).toBe(`${ styles.bdr } ${ styles['right-align'] }`);
+			expect(cells.at(8).prop('className')).toBe(`${styles.bdr} ${styles['right-align']}`);
 			// row 1, cell 9, text
 			expect(cells.at(8).text()).toBe('1');
 			// row 1, cell 10, GaugeIndicator
@@ -200,11 +202,11 @@ describe('<Caches Page />', () => {
 			cells = rows.at(1).find('td');
 
 			// row 2, cell 1, className
-			expect(cells.at(0).prop('className')).toBe(`${ styles.bold } ${ styles.bdr }`);
+			expect(cells.at(0).prop('className')).toBe(`${styles.bold} ${styles.bdr}`);
 			// row 2, cell 1, text
 			expect(cells.at(0).text()).toBe('test_2');
 			// row 2, cell 2, className
-			expect(cells.at(1).prop('className')).toBe(`${ styles.bdr } ${ styles['center-align'] }`);
+			expect(cells.at(1).prop('className')).toBe(`${styles.bdr} ${styles['center-align']}`);
 			hintedEl = cells.at(1).find('span');
 			// row 2, cell 2, useTooltip arg 1
 			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Cold');
@@ -248,7 +250,7 @@ describe('<Caches Page />', () => {
 			// row 2, cell 8, text
 			expect(cells.at(7).text()).toBe('3');
 			// row 2, cell 9, className
-			expect(cells.at(8).prop('className')).toBe(`${ styles.bdr } ${ styles['right-align'] }`);
+			expect(cells.at(8).prop('className')).toBe(`${styles.bdr} ${styles['right-align']}`);
 			// row 2, cell 9, text
 			expect(cells.at(8).text()).toBe('2');
 			// row 2, cell 10, GaugeIndicator
@@ -295,63 +297,65 @@ describe('<Caches Page />', () => {
 			jest.spyOn(Caches, 'formatReadableBytes').mockClear().mockImplementation(a => a);
 
 			const wrapper = shallow(
-				<Caches data={{ caches: new Map([
-					['test_1', {
-						cold: false,
-						slab: 'test_slab_1',
-						zoneSize: 30,
-						shards: {
-							'/var/cache/angie/proxy_cache/test_slab_1_1': {
-								size: 1064960,
-								max_size: 16777216,
-								warning: false,
-								danger: false,
-								cold: false
+				<Caches data={{
+					caches: new Map([
+						['test_1', {
+							cold: false,
+							slab: 'test_slab_1',
+							zoneSize: 30,
+							shards: {
+								'/var/cache/angie/proxy_cache/test_slab_1_1': {
+									size: 1064960,
+									max_size: 16777216,
+									warning: false,
+									danger: false,
+									cold: false
+								},
+								'/var/cache/angie/proxy_cache/test_slab_1_2': {
+									size: 28672,
+									max_size: 16777216,
+									warning: false,
+									danger: false,
+									cold: false
+								}
 							},
-							'/var/cache/angie/proxy_cache/test_slab_1_2': {
-								size: 28672,
-								max_size: 16777216,
-								warning: false,
-								danger: false,
-								cold: false
-							}
-						},
-						traffic: {
-							s_served: 3,
-							s_written: 2,
-							s_bypassed: 1
-						},
-						hit_percents_generic: 10
-					}], ['test_2', {
-						cold: true,
-						slab: 'test_slab_2',
-						zoneSize: undefined,
-						shards: {
-							'/var/cache/angie/proxy_cache/test_slab_2_1': {
-								size: 1024960,
-								max_size: 16777216,
-								warning: true,
-								danger: true,
-								used: 100,
-								cold: false
+							traffic: {
+								s_served: 3,
+								s_written: 2,
+								s_bypassed: 1
 							},
-							'/var/cache/angie/proxy_cache/test_slab_2_2': {
-								size: 38672,
-								max_size: 16777216,
-								warning: true,
-								danger: true,
-								used: 101,
-								cold: true
-							}
-						},
-						traffic: {
-							s_served: 4,
-							s_written: 3,
-							s_bypassed: 2
-						},
-						hit_percents_generic: 11
-					}]
-				]) }}
+							hit_percents_generic: 10
+						}], ['test_2', {
+							cold: true,
+							slab: 'test_slab_2',
+							zoneSize: undefined,
+							shards: {
+								'/var/cache/angie/proxy_cache/test_slab_2_1': {
+									size: 1024960,
+									max_size: 16777216,
+									warning: true,
+									danger: true,
+									used: 100,
+									cold: false
+								},
+								'/var/cache/angie/proxy_cache/test_slab_2_2': {
+									size: 38672,
+									max_size: 16777216,
+									warning: true,
+									danger: true,
+									used: 101,
+									cold: true
+								}
+							},
+							traffic: {
+								s_served: 4,
+								s_written: 3,
+								s_bypassed: 2
+							},
+							hit_percents_generic: 11
+						}]
+					])
+				}}
 				/>
 			);
 			let expandableAllControl = wrapper.find('table thead tr').at(0).find('th').at(0);
