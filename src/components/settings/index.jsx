@@ -116,7 +116,7 @@ export default class Settings extends React.Component {
 				{
 					statuses.zone_sync && statuses.zone_sync.ready ? (
 						<div className={styles.section}>
-							Нету пороговых значений для синхронизированных данных
+							Пороговое значение для несинхронизированных данных
 
 							<NumberInput
 								defaultValue={this.state.zonesyncPendingThreshold}
