@@ -60,7 +60,7 @@ export const SECTIONS = [
 		statusKey: 'shared_zones'
 	},
 	{
-		title: 'DNS Резолвер',
+		title: 'DNS Резолверы',
 		hash: '#resolvers',
 		statusKey: 'resolvers'
 	},
