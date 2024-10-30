@@ -21,13 +21,13 @@ export default function UpstreamServerList(
 		return (
 			<tr>
 				<td className={styles['left-align']} colSpan={30}>
-					No servers found in this upstream group.
+					Не найдены сервера в этой группе апстримов.
 				</td>
 			</tr>
 		);
 	}
 
-	function getStateServer(down){
+	function getStateServer(down) {
 		if (down === 'drain') {
 			return down;
 		}
@@ -40,7 +40,7 @@ export default function UpstreamServerList(
 			return renderEmptyList();
 		}
 
-		return Array.from(servers).map(([[ serverName, serverDomain ], server]) => (
+		return Array.from(servers).map(([[serverName, serverDomain], server]) => (
 			<tr>
 				<td className={styles[getStateServer(server.down)]} />
 				{renderSelectCheckbox(serverName, server)}
@@ -55,7 +55,7 @@ export default function UpstreamServerList(
 						className={styles['edit-peer']}
 						onClick={() => editSelectedUpstream(serverName, server)}
 					/>
-					{serverDomain ? <div className={styles['below-title-text']}>{serverDomain}</div> : null }
+					{serverDomain ? <div className={styles['below-title-text']}>{serverDomain}</div> : null}
 				</td>
 				<td>{server.weight}</td>
 				<td>{getStateServer(server.down)}</td>
@@ -72,9 +72,9 @@ export default function UpstreamServerList(
 				<tr>
 					<th />
 					{renderAllSelectCheckbox()}
-					<th>Server</th>
-					<th>Weight</th>
-					<th>State</th>
+					<th>Сервер</th>
+					<th>Вес</th>
+					<th>Состония</th>
 					<th>Max_conns</th>
 					<th>Max_fails</th>
 					<th>Fail_timeout</th>

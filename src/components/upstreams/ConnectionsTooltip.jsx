@@ -12,17 +12,26 @@ import React from 'react';
 import styles from './tooltip.css';
 import utils from '#/utils.js';
 
-export default function ConnectionsTooltip({ peer }){
+export default function ConnectionsTooltip({ peer }) {
 	return (
 		<div>
 			{
-				peer.selected ?
+				peer.selected ? (
 					<div>
-						<div>Last: {utils.formatDate(peer.selected)}</div>
-						<div>({utils.formatUptime(new Date().getTime() - Date.parse(peer.selected))} ago)</div>
+						<div>
+							Последний:
+							{utils.formatDate(peer.selected)}
+						</div>
+						<div>
+							(
+							{utils.formatUptime(new Date().getTime() - Date.parse(peer.selected))}
+							{' '}
+							назад)
+						</div>
 					</div>
-					: 'Last: unknown'
+				)
+					: 'Последний: неизвестный'
 			}
 		</div>
 	);
-};
+}

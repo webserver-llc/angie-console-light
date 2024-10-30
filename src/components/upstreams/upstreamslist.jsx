@@ -23,11 +23,11 @@ import tableStyles from '../table/style.css';
 import tooltips from '../../tooltips/index.jsx';
 
 export const FILTER_OPTIONS = {
-	all: 'Show all',
-	up: 'Up',
-	failed: 'Failed',
-	checking: 'Checking',
-	down: 'Down',
+	all: 'Показать все',
+	up: 'Работающие',
+	failed: 'Упавшие',
+	checking: 'Проверяются',
+	down: 'Выключеные',
 };
 
 export default class UpstreamsList extends SortableTable {
@@ -150,10 +150,9 @@ export default class UpstreamsList extends SortableTable {
 		return (
 			<tr>
 				<td className={tableStyles['left-align']} colSpan={30}>
-					No servers with '
+					Не одного сервера c '
 					{this.state.filtering}
-					' state found in this upstream
-					group.
+					' состонием найдено в этой группе.
 				</td>
 			</tr>
 		);
@@ -214,7 +213,7 @@ export default class UpstreamsList extends SortableTable {
 		} else {
 			this.setState({
 				selectedServers: new Map(
-					Array.from(this.state.servers).map(([[ serverName ], server]) => [serverName, server])
+					Array.from(this.state.servers).map(([[serverName], server]) => [serverName, server])
 				),
 			});
 		}
@@ -291,11 +290,9 @@ export default class UpstreamsList extends SortableTable {
 				>
 					<span className={styles['edit-icon']} />
 					<span className={styles['promo-text']}>
-						Available in
+						Доступно только в
 						{' '}
 						<span>Angie PRO</span>
-						{' '}
-						only&nbsp;
 					</span>
 				</span>
 			);
@@ -394,28 +391,28 @@ export default class UpstreamsList extends SortableTable {
 
 					{this.renderEditButton()}
 
-					{ this.state.editMode
+					{this.state.editMode
 						? [
 							<span
 								className={styles.btn}
 								key="edit"
 								onClick={() => this.editSelectedUpstream()}
 							>
-								Edit selected
+								Редактировать
 							</span>,
 							<span
 								className={styles.btn}
 								key="add"
 								onClick={this.addUpstream}
 							>
-								Add server
+								Добавить сервер
 							</span>,
 						]
 						: null}
 
 					{upstream.zoneSize !== null ? (
 						<span className={styles['zone-capacity']}>
-							Zone:
+							Зона:
 							{' '}
 							<span
 								{...tooltips.useTooltip(
