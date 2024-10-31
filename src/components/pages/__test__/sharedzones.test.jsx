@@ -87,10 +87,10 @@ describe('<SharedZones Page />', () => {
 		});
 
 		it('return value', () => {
-			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => {});
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => { });
 
 			const wrapper = shallow(<SharedZones data={{ slabs: [] }} />);
-			const table = wrapper.find(`.${ styles.table }`);
+			const table = wrapper.find(`.${styles.table}`);
 			const sortControl = table.find('TableSortControl');
 
 			// wrapper html tag
@@ -108,11 +108,11 @@ describe('<SharedZones Page />', () => {
 			// TableSortControl "onChange" prop
 			expect(sortControl.prop('onChange').name).toBe('bound changeSorting');
 			// hinted element length
-			expect(wrapper.find(`.${ styles.hinted }`).length).toBe(1);
+			expect(wrapper.find(`.${styles.hinted}`).length).toBe(1);
 			// useTooltip called once
 			expect(tooltips.useTooltip).toHaveBeenCalledTimes(1);
 			// useTooltip 1st arg
-			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Memory usage = Used memory pages / Total memory pages');
+			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Использовано памяти = Использовано страниц / Всего страниц памяти');
 			// useTooltip 2nd arg
 			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint');
 

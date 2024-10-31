@@ -23,7 +23,7 @@ export default class Locations extends SortableTable {
 		return 'locationsSortOrder';
 	}
 
-	render(){
+	render() {
 		const { data } = this.props;
 		let component = null;
 
@@ -38,9 +38,9 @@ export default class Locations extends SortableTable {
 
 			component = (
 				<div>
-					<h1>Location Zones</h1>
+					<h1>Зона Location</h1>
 
-					<table className={`${ styles.table } ${ styles.wide }`}>
+					<table className={`${styles.table} ${styles.wide}`}>
 						<thead>
 							<tr>
 								<TableSortControl
@@ -49,25 +49,25 @@ export default class Locations extends SortableTable {
 									order={this.state.sortOrder}
 									onChange={this.changeSorting}
 								/>
-								<th>Zone</th>
-								<th colSpan="2">Requests</th>
-								<th colSpan="6">Responses</th>
-								<th colSpan="4">Traffic</th>
+								<th>Зона</th>
+								<th colSpan="2">Запросы</th>
+								<th colSpan="6">Ответы</th>
+								<th colSpan="4">Трафик</th>
 							</tr>
-							<tr className={`${ styles['right-align'] } ${ styles['sub-header'] }`}>
+							<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
 								<th className={styles.bdr} />
-								<th>Total</th>
-								<th className={styles.bdr}>Req/s</th>
+								<th>Всего</th>
+								<th className={styles.bdr}>Зпр./сек</th>
 								<th>1xx</th>
 								<th>2xx</th>
 								<th>3xx</th>
 								<th>4xx</th>
 								<th>5xx</th>
-								<th className={styles.bdr}>Total</th>
-								<th>Sent/s</th>
-								<th>Rcvd/s</th>
-								<th>Sent</th>
-								<th>Rcvd</th>
+								<th className={styles.bdr}>Всего</th>
+								<th>Отп./сек</th>
+								<th>Плч./сек</th>
+								<th>Отправлено</th>
+								<th>Получено</th>
 							</tr>
 						</thead>
 						<tbody className={styles['right-align']}>
@@ -86,13 +86,13 @@ export default class Locations extends SortableTable {
 									return (
 										<tr>
 											<td className={status} />
-											<td className={`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`}>{ name }</td>
-											<td>{ location.requests }</td>
-											<td className={styles.bdr}>{ location.zone_req_s }</td>
-											<td>{ tableUtils.responsesTextWithTooltip(location.responses['1xx'], codes, '1') }</td>
-											<td>{ tableUtils.responsesTextWithTooltip(location.responses['2xx'], codes, '2') }</td>
-											<td>{ tableUtils.responsesTextWithTooltip(location.responses['3xx'], codes, '3') }</td>
-											<td className={`${ styles.flash }${ location['4xxChanged'] ? (` ${ styles['red-flash']}`) : '' }`}>
+											<td className={`${styles['left-align']} ${styles.bold} ${styles.bdr}`}>{name}</td>
+											<td>{location.requests}</td>
+											<td className={styles.bdr}>{location.zone_req_s}</td>
+											<td>{tableUtils.responsesTextWithTooltip(location.responses['1xx'], codes, '1')}</td>
+											<td>{tableUtils.responsesTextWithTooltip(location.responses['2xx'], codes, '2')}</td>
+											<td>{tableUtils.responsesTextWithTooltip(location.responses['3xx'], codes, '3')}</td>
+											<td className={`${styles.flash}${location['4xxChanged'] ? (` ${styles['red-flash']}`) : ''}`}>
 												{
 													tableUtils.responsesTextWithTooltip(
 														location.responses['4xx'] + location.discarded,
@@ -106,14 +106,14 @@ export default class Locations extends SortableTable {
 													)
 												}
 											</td>
-											<td className={`${ styles.flash }${ location['5xxChanged'] ? (` ${ styles['red-flash']}`) : '' }`}>
-												{ tableUtils.responsesTextWithTooltip(location.responses['5xx'], codes, '5') }
+											<td className={`${styles.flash}${location['5xxChanged'] ? (` ${styles['red-flash']}`) : ''}`}>
+												{tableUtils.responsesTextWithTooltip(location.responses['5xx'], codes, '5')}
 											</td>
-											<td className={styles.bdr}>{ location.responses.total }</td>
-											<td className={styles.px60}>{ utils.formatReadableBytes(location.sent_s) }</td>
-											<td className={styles.px60}>{ utils.formatReadableBytes(location.rcvd_s) }</td>
-											<td className={styles.px60}>{ utils.formatReadableBytes(location.data.sent) }</td>
-											<td className={styles.px60}>{ utils.formatReadableBytes(location.data.received) }</td>
+											<td className={styles.bdr}>{location.responses.total}</td>
+											<td className={styles.px60}>{utils.formatReadableBytes(location.sent_s)}</td>
+											<td className={styles.px60}>{utils.formatReadableBytes(location.rcvd_s)}</td>
+											<td className={styles.px60}>{utils.formatReadableBytes(location.data.sent)}</td>
+											<td className={styles.px60}>{utils.formatReadableBytes(location.data.received)}</td>
 										</tr>
 									);
 								})

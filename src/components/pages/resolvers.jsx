@@ -22,61 +22,64 @@ export class Resolvers extends SortableTable {
 	}
 
 	render() {
-		let resolvers = Array.from(this.props.data.resolvers);
+		const resolvers = Array.from(this.props.data.resolvers);
 
 		if (this.state.sortOrder === 'desc') {
 			resolvers.sort(([nameA, a], [nameB, b]) => a.alert ? -1 : 1);
 		}
 
-		return (<div>
-			<h1>Resolvers</h1>
+		return (
+			<div>
+				<h1>DNS Резолверы</h1>
 
-			<table className={ `${ styles.table } ${ styles.wide }` }>
-				<thead>
-					<tr>
-						<TableSortControl order={this.state.sortOrder} onChange={this.changeSorting} />
-						<th>Zone</th>
-						<th colSpan={3}>Requests</th>
-						<th colSpan={8}>Responses</th>
-					</tr>
-					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
-						<th className={ styles.bdr } />
-						<th>Name</th>
-						<th>SRV</th>
-						<th className={ styles.bdr }>Address</th>
-						<th>Success</th>
-						<th>Format error</th>
-						<th>Server failure</th>
-						<th>Host not found</th>
-						<th>Unimplemented</th>
-						<th>Operation refused</th>
-						<th>Unknown</th>
-						<th>Timed out</th>
-					</tr>
-				</thead>
-				<tbody className={ styles['right-align'] }>
-					{
-						resolvers.map(([resolver, { requests, responses, alert }]) =>
-							<tr>
-								<td className={ alert ? styles.alert : styles.ok } />
-								<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ resolver }</td>
-								<td>{ requests.name }</td>
-								<td>{ requests.srv }</td>
-								<td className={ styles.bdr }>{ requests.addr }</td>
-								<td>{ responses.noerror }</td>
-								<td>{ responses.formerr }</td>
-								<td>{ responses.servfail }</td>
-								<td>{ responses.nxdomain }</td>
-								<td>{ responses.notimp }</td>
-								<td>{ responses.refused }</td>
-								<td>{ responses.unknown }</td>
-								<td>{ responses.timedout }</td>
-							</tr>
-						)
-					}
-				</tbody>
-			</table>
-		</div>);
+				<table className={`${styles.table} ${styles.wide}`}>
+					<thead>
+						<tr>
+							<TableSortControl order={this.state.sortOrder} onChange={this.changeSorting} />
+							<th>Зона</th>
+							<th colSpan={3}>Запросы</th>
+							<th colSpan={8}>Ответы</th>
+						</tr>
+						<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
+							<th className={styles.bdr} />
+							<th>Имя</th>
+							<th>SRV</th>
+							<th className={styles.bdr}>Адрес</th>
+							<th>Успешных</th>
+							<th>Ошибок формата запроса</th>
+							<th>Сервер не завершил запрос</th>
+							<th>Ресурсов не найдено</th>
+							<th>Неимплементированные</th>
+							<th>Отказано в операции</th>
+							<th>Неизвестных</th>
+							<th>Истекших</th>
+						</tr>
+					</thead>
+					<tbody className={styles['right-align']}>
+						{
+							resolvers.map(([resolver, { requests, responses, alert }]) => (
+								<tr>
+									<td className={alert ? styles.alert : styles.ok} />
+									<td className={`${styles['left-align']} ${styles.bold} ${styles.bdr}`}>{resolver}</td>
+									<td>{requests.name}</td>
+									<td>{requests.srv}</td>
+									<td className={styles.bdr}>{requests.addr}</td>
+									<td>{responses.noerror}</td>
+									<td>{responses.formerr}</td>
+									<td>{responses.servfail}</td>
+									<td>{responses.nxdomain}</td>
+									<td>{responses.notimp}</td>
+									<td>{responses.refused}</td>
+									<td>{responses.unknown}</td>
+									<td>{responses.timedout}</td>
+								</tr>
+							)
+							)
+						}
+					</tbody>
+				</table>
+			</div>
+		);
 	}
 }
 

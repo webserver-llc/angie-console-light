@@ -10,44 +10,96 @@
 import React from 'react';
 import styles from './tooltip.css';
 
-export default function UpstreamStatsTooltip({ upstream }){
+export default function UpstreamStatsTooltip({ upstream }) {
 	let queueInfo = null;
 
 	if (upstream.queue) {
-		queueInfo = (<div className={ styles.column }>
-			<div>Q-Size: {upstream.queue.size}/{upstream.queue.max_size}</div>
-			<div>Overflows: {upstream.queue.overflows} </div>
-		</div>);
+		queueInfo = (
+			<div className={styles.column}>
+				<div>
+					Q-Size:
+					{upstream.queue.size}
+					/
+					{upstream.queue.max_size}
+				</div>
+				<div>
+					Overflows:
+					{upstream.queue.overflows}
+				</div>
+			</div>
+		);
 	}
 
-	return (<div>
-		<h5 className={ styles.h5 }>Upstream: { upstream.name }</h5>
+	return (
+		<div>
+			<h5 className={styles.h5}>
+				Апстрим:
+				{upstream.name}
+			</h5>
 
-		<div className={ styles.columns }>
-			<div className={ styles.column }>
-				<div><span className={ `${ styles['status-tag'] } ${ styles['status_up'] }` } /> Up: { upstream.stats.up }</div>
-				<div><span className={ `${ styles['status-tag'] } ${ styles['status_unhealthy'] }` } /> Failed: { upstream.stats.failed }</div>
-				<div><span className={ `${ styles['status-tag'] } ${ styles['status_draining'] }` } /> Drain: { upstream.stats.draining }</div>
-				<div><span className={ `${ styles['status-tag'] } ${ styles['status_down'] }` } /> Down: { upstream.stats.down }</div>
+			<div className={styles.columns}>
+				<div className={styles.column}>
+					<div>
+						<span className={`${styles['status-tag']} ${styles.status_up}`} />
+						{' '}
+						Работает:
+						{' '}
+						{upstream.stats.up}
+					</div>
+					<div>
+						<span className={`${styles['status-tag']} ${styles.status_unhealthy}`} />
+						{' '}
+						Упавших:
+						{' '}
+						{upstream.stats.failed}
+					</div>
+					<div>
+						<span className={`${styles['status-tag']} ${styles.status_draining}`} />
+						{' '}
+						Drain:
+						{' '}
+						{upstream.stats.draining}
+					</div>
+					<div>
+						<span className={`${styles['status-tag']} ${styles.status_down}`} />
+						{' '}
+						Выключенных:
+						{' '}
+						{upstream.stats.down}
+					</div>
 
-				{
-					upstream.stats.checking ?
-						<div><span className={ `${ styles['status-tag'] } ${ styles['status_checking'] }` } /> Checking: { upstream.stats.checking }</div>
-					: null
-				}
-			</div>
+					{
+						upstream.stats.checking ? (
+							<div>
+								<span className={`${styles['status-tag']} ${styles.status_checking}`} />
+								{' '}
+								Проверяющих:
+								{' '}
+								{upstream.stats.checking}
+							</div>
+						)
+							: null
+					}
+				</div>
 
-			{ queueInfo }
+				{queueInfo}
 
-			<div className={ styles.column }>
-				{
-					typeof upstream.keepalive === 'number' ?
-						<div>Keepalive: { upstream.keepalive }</div>
-					: null
-				}
-				<div>Zombies: { upstream.zombies }</div>
+				<div className={styles.column}>
+					{
+						typeof upstream.keepalive === 'number' ? (
+							<div>
+								Keepalive:
+								{upstream.keepalive}
+							</div>
+						)
+							: null
+					}
+					<div>
+						Zombies:
+						{upstream.zombies}
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>);
-};
-
+	);
+}

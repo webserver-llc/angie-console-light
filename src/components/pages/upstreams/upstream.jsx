@@ -72,7 +72,7 @@ export default class Upstream extends UpstreamsList {
 		return (
 			<table
 				className={`${styles.table} ${styles.wide}${this.state.hoveredColumns ? ` ${styles['hovered-expander']}` : ''
-				}`}
+					}`}
 			>
 				<colgroup>
 					<col width="10px" />
@@ -125,14 +125,12 @@ export default class Upstream extends UpstreamsList {
 									{configured_health_checks ? (
 										<th colSpan="3" className={styles['promo-header-cell']}>
 											<span>
-												Available in
+												Доступно только в
 												{' '}
 												<span>Angie PRO</span>
-												{' '}
-												only
 											</span>
 										</th>
-									) : null }
+									) : null}
 								</tr>
 							)
 							: null
@@ -152,22 +150,22 @@ export default class Upstream extends UpstreamsList {
 
 						{this.getSelectAllCheckbox(peers)}
 
-						<th colSpan="3">Peer</th>
-						<th colSpan="2">Requests</th>
-						<th colSpan={this.state.columnsExpanded ? 6 : 3}>Responses</th>
-						<th colSpan="2">Conns</th>
-						<th colSpan="4">Traffic</th>
-						<th colSpan="2">Server checks</th>
+						<th colSpan="3">Пир</th>
+						<th colSpan="2">Запросы</th>
+						<th colSpan={this.state.columnsExpanded ? 6 : 3}>Ответы</th>
+						<th colSpan="2">Соединения</th>
+						<th colSpan="4">Трафик</th>
+						<th colSpan="2">Проверки сервера</th>
 						{configured_health_checks ? (
-							<th colSpan="3">Health monitors</th>
-						) : null }
+							<th colSpan="3">Мониторинг работоспособности</th>
+						) : null}
 					</tr>
 					<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
-						<th className={styles['left-align']}>Name</th>
+						<th className={styles['left-align']}>Имя</th>
 						<th className={styles['left-align']}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Total downtime', 'hint')}
+								{...tooltips.useTooltip('Всего простоя', 'hint')}
 							>
 								DT
 							</span>
@@ -175,14 +173,14 @@ export default class Upstream extends UpstreamsList {
 						<th className={`${styles['center-align']} ${styles.bdr}`}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Weight', 'hint')}
+								{...tooltips.useTooltip('Вес', 'hint')}
 							>
 								W
 							</span>
 						</th>
 
-						<th>Total</th>
-						<th className={styles.bdr}>Req/s</th>
+						<th>Всего</th>
+						<th className={styles.bdr}>Зпр./сек</th>
 
 						{this.state.columnsExpanded ? (
 							[
@@ -207,7 +205,7 @@ export default class Upstream extends UpstreamsList {
 						<th className={styles['center-align']}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Active', 'hint')}
+								{...tooltips.useTooltip('Активные', 'hint')}
 							>
 								A
 							</span>
@@ -215,23 +213,23 @@ export default class Upstream extends UpstreamsList {
 						<th className={`${styles['center-align']} ${styles.bdr}`}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Limit', 'hint')}
+								{...tooltips.useTooltip('Ограничения', 'hint')}
 							>
 								L
 							</span>
 						</th>
 
-						<th>Sent/s</th>
-						<th>Rcvd/s</th>
-						<th>Sent</th>
-						<th className={styles.bdr}>Rcvd</th>
-						<th>Fails</th>
-						<th className={styles.bdr}>Unavail</th>
+						<th>Отп/сек</th>
+						<th>Плч/сек</th>
+						<th>Отправлено</th>
+						<th className={styles.bdr}>Получено</th>
+						<th>Ошибок</th>
+						<th className={styles.bdr}>Недоступно</th>
 						{configured_health_checks ? (
 							[
-								<th key="checks">Checks</th>,
-								<th key="fails">Fails</th>,
-								<th key="last">Last</th>,
+								<th key="checks">Проверок</th>,
+								<th key="fails">Ошибок</th>,
+								<th key="last">Последний</th>,
 							]
 						) : null}
 					</tr>
@@ -340,7 +338,7 @@ export default class Upstream extends UpstreamsList {
 
 									<td
 										className={`${styles.flash}${peer['4xxChanged'] ? ` ${styles['red-flash']}` : ''
-										}`}
+											}`}
 									>
 										{tableUtils.responsesTextWithTooltip(
 											peer.responses['4xx'],
@@ -350,7 +348,7 @@ export default class Upstream extends UpstreamsList {
 									</td>
 									<td
 										className={`${styles.bdr} ${styles.flash}${peer['5xxChanged'] ? ` ${styles['red-flash']}` : ''
-										}`}
+											}`}
 									>
 										{tableUtils.responsesTextWithTooltip(
 											peer.responses['5xx'],

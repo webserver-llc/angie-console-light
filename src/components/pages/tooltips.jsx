@@ -11,20 +11,38 @@ import React from 'react';
 import Icon from '../icon/icon.jsx';
 import styles from '../tooltip/style.css';
 
-export const CacheStateTooltip = () => (
-	<div>
-		<div className={ styles.row }>
-			<Icon type="sun" className={ styles.icon } /> Warm &ndash; using metadata in shmem
-		</div>
+export function CacheStateTooltip() {
+	return (
+		<div>
+			<div className={styles.row}>
+				<Icon type="sun" className={styles.icon} />
+				{' '}
+				Warm &ndash; using metadata in shmem
+			</div>
 
-		<div className={ styles.row }>
-			<Icon type="snowflake" className={ styles.icon } /> Cold &ndash; loading metadata
+			<div className={styles.row}>
+				<Icon type="snowflake" className={styles.icon} />
+				{' '}
+				Cold &ndash; loading metadata
+			</div>
 		</div>
-	</div>
-);
+	);
+}
 
-export const SharedZoneTooltip = ({ zone }) => (<div>
-	Used memory pages: { zone.pages.used } <br />
-	Total pages: { zone.pages.total } <br />
-	Memory usage = Used pages / Total pages
-</div>);
+export function SharedZoneTooltip({ zone }) {
+	return (
+		<div>
+			Использовано страниц памяти:
+			{' '}
+			{zone.pages.used}
+			{' '}
+			<br />
+			Всего страниц:
+			{' '}
+			{zone.pages.total}
+			{' '}
+			<br />
+			Страниц памяти = Использованы страницы / Всего страниц
+		</div>
+	);
+}

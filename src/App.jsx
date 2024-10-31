@@ -113,7 +113,7 @@ export class App extends React.Component {
 				<div className={styles.splash}>
 					<span className={styles.logo} />
 					<Loader className={styles.loader} />
-					<span className={styles.loading}>Loading...</span>
+					<span className={styles.loading}>Загрузка...</span>
 				</div>
 			);
 		}

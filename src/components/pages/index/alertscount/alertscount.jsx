@@ -24,28 +24,28 @@ export default class AlertsCount extends React.Component {
 		const { total, alerts, warnings } = this.props;
 
 		if (alerts !== undefined || warnings !== undefined) {
-			const alertsTitle = this.props.alerts > 0 ? 'Alerts' : this.props.warnings > 0 ? 'Warnings' : 'Problems';
+			const alertsTitle = this.props.alerts > 0 ? 'Сигналов' : this.props.warnings > 0 ? 'Предупреждений' : 'Проблем';
 			const alertsStyleName = this.props.alerts > 0 ? styles.alert : this.props.warnings > 0 ? styles.warning : styles.ok;
 
 			alertsPart = (
 				<>
 					/
-					<a className={ alertsStyleName } href={ this.props.href }>
-						<span className={ styles.label }>{ alertsTitle }</span>
-						{ this.props.alerts || this.props.warnings || 0 }
+					<a className={alertsStyleName} href={this.props.href}>
+						<span className={styles.label}>{alertsTitle}</span>
+						{this.props.alerts || this.props.warnings || 0}
 					</a>
 				</>
 			);
 		}
 
 		return (
-			<div className={ styles.alerts }>
-				<span className={ styles.num }>
-					<span className={ styles.label }>Total</span>
-					{ this.props.total }
+			<div className={styles.alerts}>
+				<span className={styles.num}>
+					<span className={styles.label}>Всего</span>
+					{this.props.total}
 				</span>
 
-				{ alertsPart }
+				{alertsPart}
 			</div>
 		);
 	}

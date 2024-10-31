@@ -80,7 +80,7 @@ export default class UpstreamsContainer extends React.Component {
 		});
 	}
 
-	upstreamRef(isLast, ref){
+	upstreamRef(isLast, ref) {
 		if (isLast && this.intersectionObserver && ref) {
 			this.intersectionObserver.observe(ref.base);
 		}
@@ -109,72 +109,94 @@ export default class UpstreamsContainer extends React.Component {
 					writePermission={this.props.writePermission}
 					upstreamsApi={this.props.upstreamsApi}
 					isStream={this.props.isStream}
-					ref={ this.upstreamRef.bind(this, i == upstreamsToShow.length - 1) }
+					ref={this.upstreamRef.bind(this, i == upstreamsToShow.length - 1)}
 				/>);
 			}
 		});
 
 		if (children.length === 0) {
-			children = <div className={ styles.msg }>
-				All upstream servers appear to be just fine — nothing to show here.
-				Toggle "Failed only" to show all upstreams.
-			</div>;
+			children = (
+				<div className={styles.msg}>
+					Все апстримы работают нормально.
+					Переключите "Только проблемные", чтобы увидеть все апстримы.
+				</div>
+			);
 		}
 
-		return (<div className={ styles['upstreams-container'] }>
-			<span className={ styles['toggle-failed'] }>
-				Failed only
-				<span
-					className={this.state.showOnlyFailed ? styles['toggler-active'] : styles.toggler}
-					onClick={this.toggleFailed}>
-					<span className={ styles['toggler-point'] } />
+		return (
+			<div className={styles['upstreams-container']}>
+				<span className={styles['toggle-failed']}>
+					Только проблемные
+					<span
+						className={this.state.showOnlyFailed ? styles['toggler-active'] : styles.toggler}
+						onClick={this.toggleFailed}
+					>
+						<span className={styles['toggler-point']} />
+					</span>
 				</span>
-			</span>
 
-			<h1>{ this.props.title }</h1>
+				<h1>{this.props.title}</h1>
 
-			<span
-				className={this.state.showUpstreamsList ? styles['list-toggler-opened'] : styles['list-toggler']}
-				onClick={this.toggleUpstreamsList}
-			>
-				{ this.state.showUpstreamsList ? 'Hide' : 'Show'} upstreams list
-			</span>
+				<span
+					className={this.state.showUpstreamsList ? styles['list-toggler-opened'] : styles['list-toggler']}
+					onClick={this.toggleUpstreamsList}
+				>
+					{this.state.showUpstreamsList ? 'Скрыть' : 'Показать'}
+					{' '}
+					список апстримов
+				</span>
 
-			{
-				this.state.showUpstreamsList ?
-					<div className={ styles['upstreams-catalog'] }>
-						<div className={ styles['upstreams-summary'] }>
-							<strong>Total:</strong> { __STATS.total } upstreams
-							({ __STATS.servers.all } servers)
+				{
+					this.state.showUpstreamsList ? (
+						<div className={styles['upstreams-catalog']}>
+							<div className={styles['upstreams-summary']}>
+								<strong>Всего:</strong>
+								{' '}
+								{__STATS.total}
+								{' '}
+								апстрима
+								(
+								{__STATS.servers.all}
+								{' '}
+								сервера)
 
-							<span className={ styles['red-text'] }>
-								<strong>With problems:</strong> { __STATS.failures } upstreams
-								({ __STATS.servers.failed } servers)
-							</span>
+								<span className={styles['red-text']}>
+									<strong>С проблемами:</strong>
+									{' '}
+									{__STATS.failures}
+									{' '}
+									апстрима
+									(
+									{__STATS.servers.failed}
+									{' '}
+									сервера)
+								</span>
+							</div>
+
+							<div className={styles['upstreams-navlinks']}>
+								{
+									upstreams.map(([name, upstream], i) => {
+										if (this.state.showOnlyFailed && upstream.hasFailedPeer || !this.state.showOnlyFailed) {
+											return (
+												<span
+													onClick={() => this.scrollTo(name, i)}
+													className={upstream.hasFailedPeer ? styles['upstream-link-failed'] : styles['upstream-link']}
+													key={name}
+												>
+													<span className={styles.dashed}>{name}</span>
+												</span>
+											);
+										}
+									})
+								}
+							</div>
 						</div>
+					)
+						: null
+				}
 
-						<div className={ styles['upstreams-navlinks'] }>
-							{
-								upstreams.map(([name, upstream], i) => {
-									if (this.state.showOnlyFailed && upstream.hasFailedPeer || !this.state.showOnlyFailed) {
-										return (
-											<span
-												onClick={() => this.scrollTo(name, i)}
-												className={upstream.hasFailedPeer ? styles['upstream-link-failed'] : styles['upstream-link']}
-												key={name}
-											>
-												<span className={ styles.dashed }>{name}</span>
-											</span>
-										);
-									}
-								})
-							}
-						</div>
-					</div>
-				: null
-			}
-
-			{ children }
-		</div>);
+				{children}
+			</div>
+		);
 	}
-};
+}

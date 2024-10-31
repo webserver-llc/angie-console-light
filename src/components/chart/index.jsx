@@ -31,7 +31,7 @@ export const TimeWindows = new Map([
 export const TimeWindowDefault = '5m';
 
 export default class Chart extends React.Component {
-	constructor(props){
+	constructor(props) {
 		super(props);
 
 		let selectedTimeWindow = appsettings.getSetting('timeWindow');
@@ -74,15 +74,15 @@ export default class Chart extends React.Component {
 		this.redraw();
 	}
 
-	componentDidMount(what){
+	componentDidMount(what) {
 		this.settingsListener = appsettings.subscribe(this.onSettingsChange, 'timeWindow');
 	}
 
-	componentWillUnmount(){
+	componentWillUnmount() {
 		appsettings.unsubscribe(this.settingsListener);
 	}
 
-	componentWillReceiveProps(nextProps){
+	componentWillReceiveProps(nextProps) {
 		const nextData = nextProps.data;
 		const { data } = this.props;
 
@@ -105,14 +105,12 @@ export default class Chart extends React.Component {
 						const reducedIndex = index - indiciesShift;
 
 						if (memo === '') {
-							return reducedIndex > 0 ? `${ reducedIndex }` : '0';
-						} else {
-							if (memo === '0') {
-								return `${ memo },${ index - initialIndicies[0] }`;
-							} else {
-								return `${ memo },${ reducedIndex }`;
-							}
+							return reducedIndex > 0 ? `${reducedIndex}` : '0';
 						}
+						if (memo === '0') {
+							return `${memo},${index - initialIndicies[0]}`;
+						}
+						return `${memo},${reducedIndex}`;
 					}, '');
 			}
 
@@ -120,20 +118,20 @@ export default class Chart extends React.Component {
 		}
 	}
 
-	shouldComponentUpdate(nextProps, nextState){
+	shouldComponentUpdate(nextProps, nextState) {
 		if (this.state.dndIsInProgress) {
 			return this.state.dndPointsIndicies !== nextState.dndPointsIndicies;
-		} else return true;
+		} return true;
 	}
 
-	onSettingsChange(value){
+	onSettingsChange(value) {
 		this.redraw({
 			selectedTimeWindow: value,
 			dndPointsIndicies: null
 		});
 	}
 
-	onMouseLeave(){
+	onMouseLeave() {
 		if (this.mouseMoveTimer !== null) {
 			clearTimeout(this.mouseMoveTimer);
 			this.mouseMoveTimer = null;
@@ -145,13 +143,13 @@ export default class Chart extends React.Component {
 		});
 	}
 
-	drawCursorLine(){
+	drawCursorLine() {
 		if (!this.state.dndIsInProgress) {
 			this.setState({ mouseOffsetX: this.mouseOffsetX });
 		}
 	}
 
-	onMouseDown(evt){
+	onMouseDown(evt) {
 		this.dndStartX = evt.offsetX;
 		this.dndMoveX = evt.offsetX;
 
@@ -167,14 +165,14 @@ export default class Chart extends React.Component {
 		this.redraw(nextState);
 	}
 
-	onMouseUp(){
+	onMouseUp() {
 		const nextState = {
 			dndIsInProgress: false
 		};
 
 		if (
 			this.state.dndPointsIndicies !== null &&
-			this.state.dndPointsIndicies.includes(`${ this.props.data.data.length - 1 }`)
+			this.state.dndPointsIndicies.includes(`${this.props.data.data.length - 1}`)
 		) {
 			nextState.dndPointsIndicies = null;
 		}
@@ -182,7 +180,7 @@ export default class Chart extends React.Component {
 		this.redraw(nextState);
 	}
 
-	onMouseMove(evt){
+	onMouseMove(evt) {
 		const { offsetX } = evt;
 
 		if (this.state.dndIsInProgress) {
@@ -196,7 +194,7 @@ export default class Chart extends React.Component {
 				const dndPointsIndicies = this.state.dndPointsIndicies.split(',');
 				let k;
 
-				switch(this.state.selectedTimeWindow){
+				switch (this.state.selectedTimeWindow) {
 					case '1m':
 						k = 20;
 						break;
@@ -209,7 +207,6 @@ export default class Chart extends React.Component {
 						k = 5;
 						break;
 				}
-
 
 				const path = (offsetX < this.dndStartX ? -1 : 1) * Math.floor(Math.abs(offsetX - this.dndStartX) / k);
 
@@ -228,18 +225,16 @@ export default class Chart extends React.Component {
 									const changedIndex = index - path;
 
 									if (memo === '') {
-										return changedIndex > 0 ? `${ changedIndex }` : '0';
-									} else {
-										if (memo === '0') {
-											return `${ memo },${ index - initialIndicies[0] }`;
-										} else if (changedIndex > maxIndex) {
-											const pathOverflow = changedIndex - maxIndex;
-
-											return `${ memo - pathOverflow },${ maxIndex }`;
-										} else {
-											return `${ memo },${ changedIndex }`;
-										}
+										return changedIndex > 0 ? `${changedIndex}` : '0';
 									}
+									if (memo === '0') {
+										return `${memo},${index - initialIndicies[0]}`;
+									} if (changedIndex > maxIndex) {
+										const pathOverflow = changedIndex - maxIndex;
+
+										return `${memo - pathOverflow},${maxIndex}`;
+									}
+									return `${memo},${changedIndex}`;
 								}, ''
 							)
 						});
@@ -259,12 +254,12 @@ export default class Chart extends React.Component {
 		}
 	}
 
-	emulateDnd(direction, toBorder){
+	emulateDnd(direction, toBorder) {
 		const { data: { data } } = this.props;
 		const { dndPointsIndicies } = this.state;
 		const pointsIndicies = (
-				dndPointsIndicies !== null ? dndPointsIndicies : this.pointsIndicies
-			).split(',').map(i => parseInt(i, 10));
+			dndPointsIndicies !== null ? dndPointsIndicies : this.pointsIndicies
+		).split(',').map(i => parseInt(i, 10));
 		const indiciesDiff = pointsIndicies[1] - pointsIndicies[0];
 		let nextDndPointsIndicies;
 
@@ -281,10 +276,10 @@ export default class Chart extends React.Component {
 			if (direction > 0) {
 				nextDndPointsIndicies = null;
 			} else {
-				nextDndPointsIndicies = `0,${ indiciesDiff }`;
+				nextDndPointsIndicies = `0,${indiciesDiff}`;
 			}
 		} else {
-			nextDndPointsIndicies = `${ pointsIndicies[0] + direction * indiciesDiff },${ pointsIndicies[1] + direction * indiciesDiff }`;
+			nextDndPointsIndicies = `${pointsIndicies[0] + direction * indiciesDiff},${pointsIndicies[1] + direction * indiciesDiff}`;
 		}
 
 		this.redraw({
@@ -292,7 +287,7 @@ export default class Chart extends React.Component {
 		});
 	}
 
-	deferredHighlightMetric(metric){
+	deferredHighlightMetric(metric) {
 		this.highlightedMetric = metric;
 
 		if (this.highlightMetricTimer === null) {
@@ -303,7 +298,7 @@ export default class Chart extends React.Component {
 		}
 	}
 
-	highlightMetric(){
+	highlightMetric() {
 		this.highlightMetricTimer = null;
 
 		if (this.highlightedMetric !== this.state.highlightedMetric) {
@@ -313,30 +308,30 @@ export default class Chart extends React.Component {
 		}
 	}
 
-	toggleMetric(name){
+	toggleMetric(name) {
 		const { disabledMetrics } = this.state;
 
 		this.redraw({
 			disabledMetrics: disabledMetrics.includes(name) ?
-					disabledMetrics.filter(metric => metric !== name)
+				disabledMetrics.filter(metric => metric !== name)
 				: disabledMetrics.concat(name),
 			highlightedMetric: null
 		});
 	}
 
-	redraw(nextState = {}, nextProps){
+	redraw(nextState = {}, nextProps) {
 		const {
 			colors,
 			labels,
 			data: { data }
-		} = nextProps ? nextProps : this.props;
+		} = nextProps || this.props;
 		const {
 			disabledMetrics,
 			highlightedMetric,
 			selectedTimeWindow,
 			timeEnd,
 			dndPointsIndicies
-		} = Object.assign({}, this.state, nextState);
+		} = { ...this.state, ...nextState };
 		const {
 			width, height,
 			offsetLeft, offsetTop, offsetBottom, offsetRight,
@@ -399,17 +394,19 @@ export default class Chart extends React.Component {
 					this.toRender.yMax = [
 						<text
 							key="y-max-label"
-							className={ styles['y-label'] }
-							x={ offsetLeft - textOffset }
-							y={ offsetTop }
-						>{ yMax }</text>,
+							className={styles['y-label']}
+							x={offsetLeft - textOffset}
+							y={offsetTop}
+						>
+							{yMax}
+						</text>,
 						<line
 							key="y-max-line"
-							className={ styles['x-line'] }
-							x1={ offsetLeft }
-							x2={ offsetLeft + chartWidth }
-							y1={ offsetTop }
-							y2={ offsetTop }
+							className={styles['x-line']}
+							x1={offsetLeft}
+							x2={offsetLeft + chartWidth}
+							y1={offsetTop}
+							y2={offsetTop}
 						/>
 					];
 
@@ -418,17 +415,19 @@ export default class Chart extends React.Component {
 					this.toRender.yMid = [
 						<text
 							key="y-mid-label"
-							className={ styles['y-label'] }
-							x={ offsetLeft - textOffset }
-							y={ yMidCoord }
-						>{ yMax / 2 }</text>,
+							className={styles['y-label']}
+							x={offsetLeft - textOffset}
+							y={yMidCoord}
+						>
+							{yMax / 2}
+						</text>,
 						<line
 							key="y-mid-line"
-							className={ styles['x-line'] }
-							x1={ offsetLeft }
-							x2={ offsetLeft + chartWidth }
-							y1={ yMidCoord }
-							y2={ yMidCoord }
+							className={styles['x-line']}
+							x1={offsetLeft}
+							x2={offsetLeft + chartWidth}
+							y1={yMidCoord}
+							y2={yMidCoord}
 						/>
 					];
 				}
@@ -450,11 +449,11 @@ export default class Chart extends React.Component {
 
 							if (i === 0) {
 								charts[key] = {
-									path: `M ${ x } ${ y }`,
+									path: `M ${x} ${y}`,
 									coordinates: [[x, y]]
 								};
 							} else {
-								charts[key].path += ` L ${ x } ${ y }`;
+								charts[key].path += ` L ${x} ${y}`;
 								charts[key].coordinates.push([x, y]);
 							}
 
@@ -478,10 +477,10 @@ export default class Chart extends React.Component {
 
 						this.toRender.charts.push(
 							<path
-								key={ `chart_${ key }` }
-								className={ `${ styles.line }${ isFaded ? (' ' + styles.faded) : '' }` }
+								key={`chart_${key}`}
+								className={`${styles.line}${isFaded ? (` ${styles.faded}`) : ''}`}
 								style={{ stroke: colors.get(key) }}
-								d={ charts[key].path }
+								d={charts[key].path}
 							/>
 						);
 
@@ -502,10 +501,10 @@ export default class Chart extends React.Component {
 						if (prevKey === null) {
 							this.toRender.areas.push(
 								<path
-									key={ `chart-area_${ key }` }
-									className={ `${ styles.area }${ isFaded ? (' ' + styles.faded) : '' }` }
+									key={`chart-area_${key}`}
+									className={`${styles.area}${isFaded ? (` ${styles.faded}`) : ''}`}
 									style={{ fill: colors.get(key) }}
-									d={ `${ charts[key].path } V ${ offsetTop + chartHeight } H ${ charts[key].coordinates[0][0] } V ${ charts[key].coordinates[0][1] }` }
+									d={`${charts[key].path} V ${offsetTop + chartHeight} H ${charts[key].coordinates[0][0]} V ${charts[key].coordinates[0][1]}`}
 								/>
 							);
 						} else {
@@ -513,10 +512,10 @@ export default class Chart extends React.Component {
 
 							this.toRender.areas.push(
 								<path
-									key={ `chart-area_${ key }` }
-									className={ `${ styles.area }${ isFaded ? (' ' + styles.faded) : '' }` }
+									key={`chart-area_${key}`}
+									className={`${styles.area}${isFaded ? (` ${styles.faded}`) : ''}`}
 									style={{ fill: colors.get(key) }}
-									d={ `${ charts[key].path } V ${ prevChart.coordinates[prevChart.coordinates.length - 1][1] }${ prevChart.coordinates.reduce((memo, [x, y]) => `L ${ x } ${ y } ${ memo }`, '') } V ${ prevChart.coordinates[0][1] }` }
+									d={`${charts[key].path} V ${prevChart.coordinates[prevChart.coordinates.length - 1][1]}${prevChart.coordinates.reduce((memo, [x, y]) => `L ${x} ${y} ${memo}`, '')} V ${prevChart.coordinates[0][1]}`}
 								/>
 							);
 						}
@@ -524,37 +523,37 @@ export default class Chart extends React.Component {
 
 					const reversedKey = metrics[metrics.length - 1 - i];
 					let legendItemStyleName = styles.legend__item;
-					let isDisabled = disabledMetrics.includes(reversedKey);
+					const isDisabled = disabledMetrics.includes(reversedKey);
 
 					if (isDisabled) {
-						legendItemStyleName += ` ${ styles.legend__item_disabled }`;
+						legendItemStyleName += ` ${styles.legend__item_disabled}`;
 					}
 
 					this.toRender.legend.push(
 						<span
-							key={ `legend_${ reversedKey }` }
-							className={ legendItemStyleName }
-							onClick={ this.toggleMetric.bind(this, reversedKey) }
-							onMouseOver={ isDisabled ? null : this.deferredHighlightMetric.bind(this, reversedKey) }
-							onMouseLeave={ isDisabled ? null : this.deferredHighlightMetric.bind(this, null) }
+							key={`legend_${reversedKey}`}
+							className={legendItemStyleName}
+							onClick={this.toggleMetric.bind(this, reversedKey)}
+							onMouseOver={isDisabled ? null : this.deferredHighlightMetric.bind(this, reversedKey)}
+							onMouseLeave={isDisabled ? null : this.deferredHighlightMetric.bind(this, null)}
 						>
 							<span
-								className={ styles.legend__color }
+								className={styles.legend__color}
 								style={{ background: colors.get(reversedKey) }}
 							/>
-							{ labels.has(reversedKey) ? labels.get(reversedKey) : reversedKey }
+							{labels.has(reversedKey) ? labels.get(reversedKey) : reversedKey}
 						</span>
 					);
 				}
 			}
 
-			this.pointsIndicies = `${ firstPointIndex },${ data.length - 1 }`;
+			this.pointsIndicies = `${firstPointIndex},${data.length - 1}`;
 		}
 
 		if (xStep !== null) {
 			let ticksStep;
 
-			switch(selectedTimeWindow){
+			switch (selectedTimeWindow) {
 				case '1m':
 					ticksStep = 10;
 					break;
@@ -594,17 +593,19 @@ export default class Chart extends React.Component {
 			let onClick = null;
 
 			if (key === selectedTimeWindow) {
-				className += ` ${ styles.timewindow__item_selected }`;
+				className += ` ${styles.timewindow__item_selected}`;
 			} else {
 				onClick = this.selectTimeWindow.bind(null, key);
 			}
 
 			this.timeWindowControls.push(
 				<div
-					key={ key }
-					className={ className }
-					onClick={ onClick }
-				>{ key }</div>
+					key={key}
+					className={className}
+					onClick={onClick}
+				>
+					{key}
+				</div>
 			);
 		});
 
@@ -613,8 +614,8 @@ export default class Chart extends React.Component {
 
 		if (this.dndAllowed) {
 			const pointsIndicies = (
-					dndPointsIndicies !== null ? dndPointsIndicies : this.pointsIndicies
-				).split(',');
+				dndPointsIndicies !== null ? dndPointsIndicies : this.pointsIndicies
+			).split(',');
 
 			if (pointsIndicies[0] > 0) {
 				backDndAllowed = true;
@@ -627,29 +628,37 @@ export default class Chart extends React.Component {
 
 		this.dndControls = [
 			<div
-				key={ 0 }
-				className={ `${ styles['dnd-controls__control'] }${ backDndAllowed ? '' : (' ' + styles['dnd-controls__control_disabled']) }` }
+				key={0}
+				className={`${styles['dnd-controls__control']}${backDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
 				title="Click to view the oldest data"
-				onClick={ backDndAllowed ? this.emulateDnd.bind(this, -1, true) : null }
-			>&#171;</div>,
+				onClick={backDndAllowed ? this.emulateDnd.bind(this, -1, true) : null}
+			>
+				&#171;
+			</div>,
 			<div
-				key={ 1 }
-				className={ `${ styles['dnd-controls__control'] }${ backDndAllowed ? '' : (' ' + styles['dnd-controls__control_disabled']) }` }
-				title={ `Click to go back for ${ selectedTimeWindow }` }
-				onClick={ backDndAllowed ? this.emulateDnd.bind(this, -1, false) : null }
-			>&#8249;</div>,
+				key={1}
+				className={`${styles['dnd-controls__control']}${backDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
+				title={`Click to go back for ${selectedTimeWindow}`}
+				onClick={backDndAllowed ? this.emulateDnd.bind(this, -1, false) : null}
+			>
+				&#8249;
+			</div>,
 			<div
-				key={ 2 }
-				className={ `${ styles['dnd-controls__control'] }${ forwardDndAllowed ? '' : (' ' + styles['dnd-controls__control_disabled']) }` }
-				title={ `Click to go forward for ${ selectedTimeWindow }` }
-				onClick={ forwardDndAllowed ? this.emulateDnd.bind(this, 1, false) : null }
-			>&#8250;</div>,
+				key={2}
+				className={`${styles['dnd-controls__control']}${forwardDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
+				title={`Click to go forward for ${selectedTimeWindow}`}
+				onClick={forwardDndAllowed ? this.emulateDnd.bind(this, 1, false) : null}
+			>
+				&#8250;
+			</div>,
 			<div
-				key={ 3 }
-				className={ `${ styles['dnd-controls__control'] }${ forwardDndAllowed ? '' : (' ' + styles['dnd-controls__control_disabled']) }` }
+				key={3}
+				className={`${styles['dnd-controls__control']}${forwardDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
 				title="Click to return to live mode"
-				onClick={ forwardDndAllowed ? this.emulateDnd.bind(this, 1, true) : null }
-			>&#187;</div>
+				onClick={forwardDndAllowed ? this.emulateDnd.bind(this, 1, true) : null}
+			>
+				&#187;
+			</div>
 		];
 
 		if (Object.keys(nextState).length > 0) {
@@ -657,11 +666,11 @@ export default class Chart extends React.Component {
 		}
 	}
 
-	selectTimeWindow(key){
-		appsettings.setSetting('timeWindow', key)
+	selectTimeWindow(key) {
+		appsettings.setSetting('timeWindow', key);
 	}
 
-	render(){
+	render() {
 		const { colors, labels } = this.props;
 		const {
 			mouseOffsetX,
@@ -705,137 +714,145 @@ export default class Chart extends React.Component {
 			}
 		}
 
-		let mouseTrackerClass = `${ styles['mouse-tracker'] }${ this.dndAllowed ? (' ' + styles['mouse-tracker_drag']) : '' }`;
+		let mouseTrackerClass = `${styles['mouse-tracker']}${this.dndAllowed ? (` ${styles['mouse-tracker_drag']}`) : ''}`;
 
 		if (dndIsInProgress) {
-			mouseTrackerClass += ` ${ styles['mouse-tracker_dragging'] }`;
+			mouseTrackerClass += ` ${styles['mouse-tracker_dragging']}`;
 		} else if (activePoint) {
 			this.toRender.tooltipPoints = [];
 			colors.forEach((color, key) => {
 				if (key in activePoint.values) {
 					this.toRender.tooltipPoints.push(
 						<div
-							key={ `tooltip_${ key }` }
-							className={ styles.tooltip__point }
+							key={`tooltip_${key}`}
+							className={styles.tooltip__point}
 						>
 							<div
-								className={ styles.tooltip__value }
+								className={styles.tooltip__value}
 								style={{ color }}
-							>{ activePoint.values[key] }</div>
-							<div className={ styles.tooltip__metric }>
-								{ labels.has(key) ? labels.get(key) : key }
+							>
+								{activePoint.values[key]}
+							</div>
+							<div className={styles.tooltip__metric}>
+								{labels.has(key) ? labels.get(key) : key}
 							</div>
 						</div>
 					);
 				}
 			});
 
-			cursorLineTransform = `translate(${ activePoint.x })`;
+			cursorLineTransform = `translate(${activePoint.x})`;
 		}
 
 		return (
-			<div className={ styles.container }>
-				<div className={ styles['dnd-controls'] }>{ this.dndControls }</div>
-				<div className={ styles.timewindow }>{ this.timeWindowControls }</div>
+			<div className={styles.container}>
+				<div className={styles['dnd-controls']}>{this.dndControls}</div>
+				<div className={styles.timewindow}>{this.timeWindowControls}</div>
 
 				{
-					activePoint ?
+					activePoint ? (
 						<div
-							className={ styles.tooltip }
-							style={ activePoint.x > chartWidth / 2 ? {
-								right: `${ width - activePoint.x + 8 }px`
+							className={styles.tooltip}
+							style={activePoint.x > chartWidth / 2 ? {
+								right: `${width - activePoint.x + 8}px`
 							} : {
-								left: `${ activePoint.x + 8 }px`
+								left: `${activePoint.x + 8}px`
 							}}
 						>
-							{ this.toRender.tooltipPoints }
+							{this.toRender.tooltipPoints}
 
 							<div
 								key="tooltip__time"
-								className={ styles.tooltip__time }
-							>{
-								new Date(activePoint._ts * 1000).toLocaleString('en-US', {
-									hour: '2-digit',
-									minute: '2-digit',
-									second: '2-digit',
-									hour12: false
-								})
-							}</div>
+								className={styles.tooltip__time}
+							>
+								{
+									new Date(activePoint._ts * 1000).toLocaleString('en-US', {
+										hour: '2-digit',
+										minute: '2-digit',
+										second: '2-digit',
+										hour12: false
+									})
+								}
+							</div>
 						</div>
-					: null
+					)
+						: null
 				}
 
 				<div
-					className={ mouseTrackerClass }
+					className={mouseTrackerClass}
 					style={{
-						width: `${ chartWidth }px`,
-						height: `${ chartHeight }px`,
-						top: `${ offsetTop }px`,
-						left: `${ offsetLeft }px`
+						width: `${chartWidth}px`,
+						height: `${chartHeight}px`,
+						top: `${offsetTop}px`,
+						left: `${offsetLeft}px`
 					}}
-					onMouseMove={ this.onMouseMove }
-					onMouseLeave={ this.onMouseLeave }
-					onMouseDown={ this.dndAllowed ? this.onMouseDown : null }
-					onMouseUp={ this.dndAllowed ? this.onMouseUp : null }
+					onMouseMove={this.onMouseMove}
+					onMouseLeave={this.onMouseLeave}
+					onMouseDown={this.dndAllowed ? this.onMouseDown : null}
+					onMouseUp={this.dndAllowed ? this.onMouseUp : null}
 				/>
 
 				<svg
 					version="1.1"
 					baseProfile="full"
-					width={ `${ width }` }
-					height={ `${ height }` }
+					width={`${width}`}
+					height={`${height}`}
 					xmlns="http://www.w3.org/2000/svg"
-					className={ styles.svg }
+					className={styles.svg}
 				>
 					<path
-						className={ styles['x-axis'] }
-						d={ this.ticks.reduce((memo, tick) => {
-							return `${ memo }${ memo ? ' ' : '' }M ${ tick.x } ${ xAxisY } V ${ xAxisY + tickSize }`;
-						}, '') }
+						className={styles['x-axis']}
+						d={this.ticks.reduce((memo, tick) => `${memo}${memo ? ' ' : ''}M ${tick.x} ${xAxisY} V ${xAxisY + tickSize}`, '')}
 					/>
 					<text
-						className={ styles['y-label'] }
-						x={ offsetLeft - textOffset }
-						y={ height - offsetBottom }
-					>0</text>
+						className={styles['y-label']}
+						x={offsetLeft - textOffset}
+						y={height - offsetBottom}
+					>
+						0
+					</text>
 					<line
-						className={ styles['x-axis'] }
-						x1={ offsetLeft }
-						x2={ offsetLeft + chartWidth }
-						y1={ xAxisY }
-						y2={ xAxisY }
+						className={styles['x-axis']}
+						x1={offsetLeft}
+						x2={offsetLeft + chartWidth}
+						y1={xAxisY}
+						y2={xAxisY}
 					/>
 					<line
-						className={ styles['cursor-line'] }
+						className={styles['cursor-line']}
 						x1="0"
 						x2="0"
-						y1={ offsetTop - 10 }
-						y2={ offsetTop + chartHeight + 6 }
-						transform={ cursorLineTransform }
+						y1={offsetTop - 10}
+						y2={offsetTop + chartHeight + 6}
+						transform={cursorLineTransform}
 						style={{
 							opacity: activePoint ? 1 : 0
 						}}
 					/>
 
-					{ this.ticks.map(({ x, y, label }, i) =>
+					{this.ticks.map(({ x, y, label }, i) => (
 						<text
-							key={ i }
-							className={ styles['x-label'] }
-							x={ x }
-							y={ y }
-						>{ label }</text>
-					) }
+							key={i}
+							className={styles['x-label']}
+							x={x}
+							y={y}
+						>
+							{label}
+						</text>
+					)
+					)}
 
-					{ this.toRender.yMax }
-					{ this.toRender.yMid }
-					{ this.toRender.charts }
-					{ this.toRender.areas }
+					{this.toRender.yMax}
+					{this.toRender.yMid}
+					{this.toRender.charts}
+					{this.toRender.areas}
 				</svg>
-				<div className={ styles.legend }>{ this.toRender.legend }</div>
+				<div className={styles.legend}>{this.toRender.legend}</div>
 			</div>
 		);
 	}
-};
+}
 
 Chart.defaultProps = {
 	labels: new Map()

@@ -24,7 +24,7 @@ export class SharedZones extends SortableTable {
 	}
 
 	render() {
-		let slabs = Array.from(this.props.data.slabs);
+		const slabs = Array.from(this.props.data.slabs);
 
 		if (this.state.sortOrder === 'desc') {
 			slabs.sort(([nameA, a], [nameB, b]) =>
@@ -32,47 +32,51 @@ export class SharedZones extends SortableTable {
 			);
 		}
 
-		return (<div>
-			<h1>Shared Zones</h1>
+		return (
+			<div>
+				<h1>Общие зоны</h1>
 
-			<table className={ styles.table }>
-				<thead>
-					<tr>
-						<TableSortControl
-							singleRow={true}
-							secondSortLabel="Sort by size - large first"
-							order={this.state.sortOrder}
-							onChange={this.changeSorting}
-						/>
-						<th>Zone</th>
-						<th>Total memory pages</th>
-						<th>Used memory pages</th>
-						<th>
-							<span
-								className={ styles.hinted }
-								{...tooltips.useTooltip('Memory usage = Used memory pages / Total memory pages', 'hint')}
-							>Memory usage</span>
-						</th>
-					</tr>
-				</thead>
+				<table className={styles.table}>
+					<thead>
+						<tr>
+							<TableSortControl
+								singleRow
+								secondSortLabel="Sort by size - large first"
+								order={this.state.sortOrder}
+								onChange={this.changeSorting}
+							/>
+							<th>Зона</th>
+							<th>Всего страниц памяти</th>
+							<th>Использовано страниц памяти</th>
+							<th>
+								<span
+									className={styles.hinted}
+									{...tooltips.useTooltip('Использовано памяти = Использовано страниц / Всего страниц памяти', 'hint')}
+								>
+									Использовано памяти
+								</span>
+							</th>
+						</tr>
+					</thead>
 
-				<tbody>
-					{
-						slabs.map(([zoneName, zone]) => {
-							return (<tr>
-								<td className={ styles.status } />
-								<td className={ styles.bold }>{ zoneName }</td>
-								<td>{ zone.pages.total }</td>
-								<td>{ zone.pages.used }</td>
-								<td>
-									<ProgressBar percentage={zone.percentSize} />
-								</td>
-							</tr>);
-						})
-					}
-				</tbody>
-			</table>
-		</div>);
+					<tbody>
+						{
+							slabs.map(([zoneName, zone]) => (
+								<tr>
+									<td className={styles.status} />
+									<td className={styles.bold}>{zoneName}</td>
+									<td>{zone.pages.total}</td>
+									<td>{zone.pages.used}</td>
+									<td>
+										<ProgressBar percentage={zone.percentSize} />
+									</td>
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+			</div>
+		);
 	}
 }
 

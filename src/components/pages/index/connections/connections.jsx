@@ -27,13 +27,13 @@ export class Connections extends React.Component {
 		this.setState({ tab });
 	}
 
-	getCurrentCell(value){
+	getCurrentCell(value) {
 		return (
 			<td className={styles.current}>
-				{ value }
+				{value}
 				{
 					typeof value == 'number' ?
-						<span className={styles.current__sec}>/s</span>
+						<span className={styles.current__sec}>/сек</span>
 						: null
 				}
 			</td>
@@ -46,7 +46,7 @@ export class Connections extends React.Component {
 		const isConnsTab = this.state.tab === 'conns';
 
 		if (!isConnsTab) {
-			tabsStyleName += ` ${ styles.tabs_ssl }`;
+			tabsStyleName += ` ${styles.tabs_ssl}`;
 		}
 
 		return (
@@ -54,7 +54,7 @@ export class Connections extends React.Component {
 				{
 					isConnsTab ? (
 						<span className={styles.counter}>
-							Accepted:
+							Принято:
 							{connections.accepted}
 						</span>
 					)
@@ -63,7 +63,7 @@ export class Connections extends React.Component {
 
 				<div className={tabsStyleName}>
 					<div className={isConnsTab ? styles['tab-active'] : styles.tab} onClick={this.changeTab.bind(this, 'conns')}>
-						<span>Connections</span>
+						<span>Соединения</span>
 					</div>
 				</div>
 
@@ -71,18 +71,18 @@ export class Connections extends React.Component {
 					isConnsTab ? (
 						<table className={styles.table}>
 							<tr>
-								<th>Current</th>
-								<th>Accepted/s</th>
-								<th>Active</th>
-								<th>Idle</th>
-								<th>Dropped</th>
+								<th>Текущие</th>
+								<th>Принято/сек</th>
+								<th>Активные</th>
+								<th>Простаивающие</th>
+								<th>Сброшенные</th>
 							</tr>
 							<tr>
-								<td>{ connections.current }</td>
-								<td>{ connections.accepted_s }</td>
-								<td>{ connections.active }</td>
-								<td>{ connections.idle }</td>
-								<td>{ connections.dropped }</td>
+								<td>{connections.current}</td>
+								<td>{connections.accepted_s}</td>
+								<td>{connections.active}</td>
+								<td>{connections.idle}</td>
+								<td>{connections.dropped}</td>
 							</tr>
 						</table>
 					)

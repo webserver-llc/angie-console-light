@@ -27,9 +27,9 @@ const RGX_HTTP_SERVER_ADDRESS =
 
 export default class UpstreamsEditor extends React.Component {
 	static defaultProps = {
-		reloadUpstreamServers: () => {}
+		reloadUpstreamServers: () => { }
 	}
-	
+
 	static normalizeInputData(data) {
 		// Remove "s" ending
 		Object.keys(data).forEach((key) => {
@@ -304,11 +304,11 @@ export default class UpstreamsEditor extends React.Component {
 		let serversArray;
 
 		if (isAdd) {
-			title = `Add server to "${upstream.name}"`;
+			title = `Добавить серевер в "${upstream.name}"`;
 		} else {
 			serversArray = Array.from(servers);
-			title = `Edit ${servers.size > 1 ? 'servers' : `server ${serversArray[0][0]}`
-			} "${upstream.name}"`;
+			title = `Редактировать ${servers.size > 1 ? 'сервера' : `сервер ${serversArray[0][0]}`
+				} "${upstream.name}"`;
 		}
 
 		let content = null;
@@ -351,7 +351,7 @@ export default class UpstreamsEditor extends React.Component {
 							<div>
 								{isAdd ? (
 									<div className={styles['form-group']}>
-										<label htmlFor="server">Server address</label>
+										<label htmlFor="server">Адрес сервера</label>
 										<input
 											id="server"
 											name="server"
@@ -383,7 +383,7 @@ export default class UpstreamsEditor extends React.Component {
 												checked={data.backup}
 												onChange={this.handleFormChange}
 											/>
-											Add as backup server
+											Добавить как бэкап
 										</label>
 									</div>
 								) : null}
@@ -445,7 +445,7 @@ export default class UpstreamsEditor extends React.Component {
 									checked={data.down === false}
 								/>
 								{' '}
-								Up
+								Работает
 							</label>
 
 							<label>
@@ -457,9 +457,9 @@ export default class UpstreamsEditor extends React.Component {
 									checked={data.down === true}
 								/>
 								{' '}
-								Down
+								Выключен
 							</label>
-							
+
 							{!isStream &&
 								<label>
 									<input
@@ -493,7 +493,7 @@ export default class UpstreamsEditor extends React.Component {
 					<div className={styles.footer}>
 						{!isAdd ? (
 							<div className={styles.remove} onClick={this.remove}>
-								Remove
+								Удалить
 							</div>
 						) : null}
 
@@ -502,7 +502,7 @@ export default class UpstreamsEditor extends React.Component {
 						</div>
 
 						<div className={styles.cancel} onClick={this.close}>
-							Cancel
+							Отмена
 						</div>
 					</div>
 				</div>

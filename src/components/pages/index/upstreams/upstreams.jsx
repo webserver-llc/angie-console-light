@@ -33,10 +33,20 @@ export class UpstreamsBox extends React.Component {
 					href={href}
 				/>
 
-				<h4>Servers</h4>
-				<p>All: { stats.servers.all } / Up: { stats.servers.up }</p>
-				<p className={ stats.servers.failed > 0 ? styles.red : undefined }>
-					Failed: { stats.servers.failed }
+				<h4>Серверы</h4>
+				<p>
+					Все:
+					{' '}
+					{stats.servers.all}
+					{' '}
+					/ Работают:
+					{' '}
+					{stats.servers.up}
+				</p>
+				<p className={stats.servers.failed > 0 ? styles.red : undefined}>
+					Упало:
+					{' '}
+					{stats.servers.failed}
 				</p>
 			</IndexBox>
 		);
@@ -50,7 +60,7 @@ export class Upstreams extends React.Component {
 
 		return (
 			<UpstreamsBox
-				title="HTTP Upstreams"
+				title="HTTP Апстримы"
 				stats={stats}
 				status={store.__STATUSES.upstreams.status}
 				href="#upstreams"

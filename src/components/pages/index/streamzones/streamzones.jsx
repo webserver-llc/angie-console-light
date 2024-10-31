@@ -23,17 +23,37 @@ export class StreamZones extends React.Component {
 
 		return (
 			<IndexBox
-				title="TCP/UDP Zones"
+				title="TCP/UDP Зоны"
 				status={store.__STATUSES.tcp_zones.status}
 				href="#tcp_zones"
 			>
-				<p>Conn total: { stats.conn_total }</p>
-				<p>Conn current: { stats.conn_current }</p>
-				<p>Conn/s: { stats.conn_s }</p>
+				<p>
+					Соед. всего:
+					{' '}
+					{stats.conn_total}
+				</p>
+				<p>
+					Соед. текущие:
+					{' '}
+					{stats.conn_current}
+				</p>
+				<p>
+					Соед./сек:
+					{' '}
+					{stats.conn_s}
+				</p>
 
-				<h4>Traffic</h4>
-				<p>In: { stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/s` : 0 }</p>
-				<p>Out: { stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/s` : 0 }</p>
+				<h4>Трафик</h4>
+				<p>
+					Вхд:
+					{' '}
+					{stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/сек` : 0}
+				</p>
+				<p>
+					Исх:
+					{' '}
+					{stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/сек` : 0}
+				</p>
 			</IndexBox>
 		);
 	}

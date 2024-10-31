@@ -27,40 +27,40 @@ export class StreamZones extends React.Component {
 
 		return (
 			<div>
-				<h1>TCP/UDP Zones</h1>
+				<h1>TCP/UDP Зоны</h1>
 
 				<table className={styles.table}>
 					<thead>
 						<tr>
 							<th>Zone</th>
-							<th colSpan={3}>Connections</th>
-							<th colSpan={4}>Sessions</th>
-							<th colSpan={4}>Traffic</th>
+							<th colSpan={3}>Соединения</th>
+							<th colSpan={4}>Сессии</th>
+							<th colSpan={4}>Трафик</th>
 							<th colSpan={4}>SSL</th>
 						</tr>
-						<tr className={`${ styles['right-align'] } ${ styles['sub-header'] }`}>
+						<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
 							<th className={styles.bdr} />
-							<th>Current</th>
-							<th>Total</th>
-							<th className={styles.bdr}>Conn/s</th>
+							<th>Текущие</th>
+							<th>Всего</th>
+							<th className={styles.bdr}>Соед./сек</th>
 							<th>2xx</th>
 							<th>4xx</th>
 							<th>5xx</th>
-							<th className={styles.bdr}>Total</th>
-							<th>Sent/s</th>
-							<th>Rcvd/s</th>
-							<th>Sent</th>
-							<th className={styles.bdr}>Rcvd</th>
-							<th>Handshakes</th>
+							<th className={styles.bdr}>Всего</th>
+							<th>Отп./сек</th>
+							<th>Плч./сек</th>
+							<th>Отправлено</th>
+							<th className={styles.bdr}>Получено</th>
+							<th>Рукопожатий</th>
 							<th>
-								Handshakes
+								Неудачных
 								<br />
-								Failed
+								рукопожатий
 							</th>
 							<th>
-								Session
+								Сессий
 								<br />
-								Reuses
+								Переиспользованных
 							</th>
 						</tr>
 					</thead>
@@ -71,23 +71,23 @@ export class StreamZones extends React.Component {
 
 								return (
 									<tr>
-										<td className={`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`}>{ name }</td>
-										<td>{ zone.processing }</td>
-										<td>{ zone.connections }</td>
-										<td className={styles.bdr}>{ zone.zone_conn_s }</td>
-										<td>{ zone.sessions['2xx'] }</td>
-										<td className={`${ styles.flash }${zone['4xxChanged'] ? (` ${ styles['red-flash']}`) : ''}`}>
-											{ zone.sessions['4xx'] }
+										<td className={`${styles['left-align']} ${styles.bold} ${styles.bdr}`}>{name}</td>
+										<td>{zone.processing}</td>
+										<td>{zone.connections}</td>
+										<td className={styles.bdr}>{zone.zone_conn_s}</td>
+										<td>{zone.sessions['2xx']}</td>
+										<td className={`${styles.flash}${zone['4xxChanged'] ? (` ${styles['red-flash']}`) : ''}`}>
+											{zone.sessions['4xx']}
 										</td>
-										<td className={`${ styles.flash }${zone['5xxChanged'] ? (` ${ styles['red-flash']}`) : ''}`}>
-											{ zone.sessions['5xx'] }
+										<td className={`${styles.flash}${zone['5xxChanged'] ? (` ${styles['red-flash']}`) : ''}`}>
+											{zone.sessions['5xx']}
 										</td>
-										<td className={styles.bdr}>{ zone.sessions.total }</td>
-										<td className={styles.px60}>{ utils.formatReadableBytes(zone.sent_s) }</td>
-										<td className={styles.px60}>{ utils.formatReadableBytes(zone.rcvd_s) }</td>
-										<td className={styles.px60}>{ utils.formatReadableBytes(zone.sent) }</td>
-										<td className={`${ styles.px60 } ${ styles.bdr }`}>{ utils.formatReadableBytes(zone.received) }</td>
-										<td>{ ssl ? ssl.handshakes : '–' }</td>
+										<td className={styles.bdr}>{zone.sessions.total}</td>
+										<td className={styles.px60}>{utils.formatReadableBytes(zone.sent_s)}</td>
+										<td className={styles.px60}>{utils.formatReadableBytes(zone.rcvd_s)}</td>
+										<td className={styles.px60}>{utils.formatReadableBytes(zone.sent)}</td>
+										<td className={`${styles.px60} ${styles.bdr}`}>{utils.formatReadableBytes(zone.received)}</td>
+										<td>{ssl ? ssl.handshakes : '–'}</td>
 										<td>
 											{
 												ssl
@@ -99,7 +99,7 @@ export class StreamZones extends React.Component {
 													: '–'
 											}
 										</td>
-										<td>{ ssl ? ssl.session_reuses : '–' }</td>
+										<td>{ssl ? ssl.session_reuses : '–'}</td>
 									</tr>
 								);
 							})

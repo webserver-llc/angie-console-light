@@ -60,7 +60,7 @@ export class Caches extends ExpandableTable {
 
 		return (
 			<div>
-				<h1>Caches</h1>
+				<h1>Кеши</h1>
 
 				<table className={styles.table}>
 					<colgroup>
@@ -71,41 +71,41 @@ export class Caches extends ExpandableTable {
 					<thead>
 						<tr>
 							{this.renderExpandingAllControl({ rowSpan: 2 })}
-							<th>Zone</th>
+							<th>Зона</th>
 							<th>
 								<span
 									className={styles.hinted}
 									{...tooltips.useTooltip(<CacheStateTooltip />, 'hint')}
 								>
-									State
+									Состояние
 								</span>
 							</th>
 							<th>
 								<span
 									className={styles.hinted}
 									{...tooltips.useTooltip(
-										'Memory usage = Used memory pages / Total memory pages',
+										'Использовано памяти = Использовано страниц памяти / Всего старниц памяти',
 										'hint',
 									)}
 								>
-									Memory usage
+									Использовано памяти
 								</span>
 							</th>
-							<th>Max size</th>
-							<th>Used</th>
+							<th>Макс. размер</th>
+							<th>Использовано</th>
 							<th>
 								<span
 									className={styles.hinted}
 									{...tooltips.useTooltip(
-										'Disk usage = Used / Max size',
+										'Использовано диска = Использовано / Максимальный размер',
 										'hint',
 									)}
 								>
-									Disk usage
+									Использовано диска
 								</span>
 							</th>
-							<th colSpan="3">Traffic</th>
-							<th>Hit Ratio</th>
+							<th colSpan="3">Трафик</th>
+							<th>Попадание</th>
 						</tr>
 
 						<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
@@ -115,9 +115,9 @@ export class Caches extends ExpandableTable {
 							<th className={styles.bdr} />
 							<th className={styles.bdr} />
 							<th className={styles.bdr} />
-							<th>Served</th>
-							<th>Written</th>
-							<th className={styles.bdr}>Bypassed</th>
+							<th>Предоставлено</th>
+							<th>Записано</th>
+							<th className={styles.bdr}>Мимо</th>
 							<th />
 						</tr>
 					</thead>
@@ -125,17 +125,15 @@ export class Caches extends ExpandableTable {
 					<tbody>
 						{Array.from(caches).map(([cacheName, cache]) => {
 							let comp;
-							
+
 							if (typeof cache.max_size === 'number') {
-								comp = Caches.formatReadableBytes(cache.max_size, 'GB')
+								comp = Caches.formatReadableBytes(cache.max_size, 'GB');
+							} else if (cache.shards) {
+								comp = <span>-</span>;
 							} else {
-								if (cache.shards) {
-									comp = <span>-</span>;
-								} else {
-									comp = <span>&infin;</span>;
-								}
+								comp = <span>&infin;</span>;
 							}
-							
+
 							const result = [
 								<tr
 									data-expandable={
@@ -180,17 +178,17 @@ export class Caches extends ExpandableTable {
 									</td>
 									<td className={styles.bdr}>
 										{typeof cache.max_size === 'number' &&
-                    typeof cache.size === 'number' ? (
-												<ProgressBar
-													warning={cache.warning}
-													danger={cache.danger}
-													percentage={
-														typeof cache.max_size !== 'number' ? -1 : cache.used
-													}
-												/>
-											) : (
-												<span>-</span>
-											)}
+											typeof cache.size === 'number' ? (
+											<ProgressBar
+												warning={cache.warning}
+												danger={cache.danger}
+												percentage={
+													typeof cache.max_size !== 'number' ? -1 : cache.used
+												}
+											/>
+										) : (
+											<span>-</span>
+										)}
 									</td>
 									<td className={styles['right-align']}>
 										{Caches.formatReadableBytes(cache.traffic.s_served)}
@@ -218,7 +216,7 @@ export class Caches extends ExpandableTable {
 											<table className={`${styles.table} ${styles.wide}`}>
 												<thead>
 													<tr>
-														<th>Path</th>
+														<th>Путь</th>
 														<th>
 															<span
 																className={styles.hinted}
@@ -227,20 +225,20 @@ export class Caches extends ExpandableTable {
 																	'hint',
 																)}
 															>
-																State
+																Состояние
 															</span>
 														</th>
-														<th>Max size</th>
-														<th>Used</th>
+														<th>Макс. размер</th>
+														<th>Использовано</th>
 														<th>
 															<span
 																className={styles.hinted}
 																{...tooltips.useTooltip(
-																	'Disk usage = Used / Max size',
+																	'Использовано диска = Использовано / Макс. размер',
 																	'hint',
 																)}
 															>
-																Disk usage
+																Использовано диска
 															</span>
 														</th>
 													</tr>
@@ -287,17 +285,17 @@ export class Caches extends ExpandableTable {
 															</td>
 															<td className={styles.bdr}>
 																{typeof shard.max_size === 'number' &&
-                    						typeof shard.size === 'number' ? (
-																		<ProgressBar
-																			warning={shard.warning}
-																			danger={shard.danger}
-																			percentage={
-																				typeof shard.max_size !== 'number' ? -1 : shard.used
-																			}
-																		/>
-																	) : (
-																		<span>-</span>
-																	)}
+																	typeof shard.size === 'number' ? (
+																	<ProgressBar
+																		warning={shard.warning}
+																		danger={shard.danger}
+																		percentage={
+																			typeof shard.max_size !== 'number' ? -1 : shard.used
+																		}
+																	/>
+																) : (
+																	<span>-</span>
+																)}
 															</td>
 														</tr>
 													))}

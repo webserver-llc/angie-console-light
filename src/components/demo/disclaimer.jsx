@@ -35,13 +35,13 @@ export default class Disclaimer extends React.Component {
 			<div className={styles.disclaimer}>
 				<div className={styles['disclaimer-close']} onClick={this.close}>x</div>
 				<div className={styles['disclaimer-content']}>
-					Below is the example of the Angie Console Light. This page collects real time data from a demo instance of Angie.
+					Здесь приведен пример работы Angie Console Light. Эта страница собирает реальные данные из демо-версии веб-сервера Angie.
 					<br />
-					For more information on configuration please visit
+					Узнать подробнее о настройке Angie Console Light можно на нашем сайте:
 					{' '}
-					<a href="https://angie.software/en/console/">https://angie.software/en/console/</a>
+					<a href="https://angie.software/angie/docs/configuration/monitoring/">https://angie.software/angie/docs/configuration/monitoring/</a>
 					<br />
-					For purchasing Angie Pro please contact the sales team:
+					Для покупки Angie Pro свяжитесь с нами:
 					{' '}
 					<a href="https://wbsrv.ru/angie-pro/">https://wbsrv.ru/angie-pro/</a>
 				</div>
