@@ -51,11 +51,11 @@ export class StreamZones extends React.Component {
 							<th>Плч./сек</th>
 							<th>Отправлено</th>
 							<th className={styles.bdr}>Получено</th>
-							<th>Handshakes</th>
+							<th>Рукопожатий</th>
 							<th>
-								Handshakes
+								Неудачных
 								<br />
-								упавших
+								рукопожатий
 							</th>
 							<th>
 								Сессий

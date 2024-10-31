@@ -70,7 +70,7 @@ export default class StreamZones extends SortableTable {
 								<th>Плч./сек</th>
 								<th>Отправлено</th>
 								<th className={styles.bdr}>Получено</th>
-								<th>Handshaked</th>
+								<th>Рукопожатий</th>
 								<th>Переиспользовано</th>
 								<th>Истекло</th>
 								<th>Упавших</th>

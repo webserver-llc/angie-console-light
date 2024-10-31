@@ -21,7 +21,7 @@ export const Colors = new Map([
 export const Labels = new Map([
 	['passed', 'Пройдено'],
 	['rejected', 'Отклонено'],
-	['exhausted', 'Exhausted'],
+	['exhausted', 'Сброшено'],
 	['skipped', 'Пропущено'],
 ]);
 

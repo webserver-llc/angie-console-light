@@ -115,7 +115,7 @@ export class Caches extends ExpandableTable {
 							<th className={styles.bdr} />
 							<th className={styles.bdr} />
 							<th className={styles.bdr} />
-							<th>Предаставлено</th>
+							<th>Предоставлено</th>
 							<th>Записано</th>
 							<th className={styles.bdr}>Мимо</th>
 							<th />

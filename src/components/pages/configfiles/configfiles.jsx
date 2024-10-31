@@ -33,7 +33,7 @@ export class ConfigFiles extends React.Component {
 		let extension = '';
 		try {
 			[, extension] = file.match(/.(\w+)$/);
-		} catch (e) {}
+		} catch (e) { }
 
 		return (
 			<div className={styles.content}>
@@ -41,7 +41,7 @@ export class ConfigFiles extends React.Component {
 					<button type="button" onClick={() => ConfigFiles.handleCopyCode(code)}>
 						<Icon className={styles['button-icon-copy']} type="copy" />
 						{' '}
-						Copy
+						Скопировать
 					</button>
 				</div>
 				<Editor code={code} extension={extension} />
@@ -55,23 +55,22 @@ export class ConfigFiles extends React.Component {
 		if (!angie.config_files) {
 			return (
 				<div>
-					The
 					{' '}
 					<i>config_files</i>
 					{' '}
-					object is unavailable;
-					check your configuration and ensure the
+					объект не доступен;
+					проверьте конфиг-файл и убедитесь, что
 					{' '}
 					<i>api_config_files</i>
 					{' '}
-					directive is enabled.
+					директива включена.
 				</div>
 			);
 		}
 
 		return (
 			<div className={styles.container}>
-				<h1>Config Files</h1>
+				<h1>Конфиг файлы</h1>
 				{Object.keys(angie.config_files)
 					.map(file => (
 						<CollapsibleList

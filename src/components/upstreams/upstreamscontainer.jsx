@@ -118,7 +118,7 @@ export default class UpstreamsContainer extends React.Component {
 			children = (
 				<div className={styles.msg}>
 					Все апстримы работают нормально.
-					Переключите "Только проблемные" что бы увидеть все апстримы.
+					Переключите "Только проблемные", чтобы увидеть все апстримы.
 				</div>
 			);
 		}
