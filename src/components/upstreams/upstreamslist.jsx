@@ -150,9 +150,9 @@ export default class UpstreamsList extends SortableTable {
 		return (
 			<tr>
 				<td className={tableStyles['left-align']} colSpan={30}>
-					Не одного сервера c '
+					Ни одного сервера c '
 					{this.state.filtering}
-					' состонием найдено в этой группе.
+					' состоянием найдено в этой группе.
 				</td>
 			</tr>
 		);

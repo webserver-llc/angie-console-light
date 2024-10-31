@@ -74,7 +74,7 @@ export default function UpstreamServerList(
 					{renderAllSelectCheckbox()}
 					<th>Сервер</th>
 					<th>Вес</th>
-					<th>Состония</th>
+					<th>Состояние</th>
 					<th>Max_conns</th>
 					<th>Max_fails</th>
 					<th>Fail_timeout</th>
