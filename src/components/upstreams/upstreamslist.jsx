@@ -304,7 +304,7 @@ export default class UpstreamsList extends SortableTable {
 					className={
 						styles['edit-disable']
 					}
-					{...tooltips.useTooltip('Available in Angie PRO only', 'hint-right')}
+					{...tooltips.useTooltip('Доступно только в Angie PRO', 'hint-right')}
 				/>
 			);
 		}

@@ -32,7 +32,7 @@ export class StreamZones extends React.Component {
 				<table className={styles.table}>
 					<thead>
 						<tr>
-							<th>Zone</th>
+							<th>Зона</th>
 							<th colSpan={3}>Соединения</th>
 							<th colSpan={4}>Сессии</th>
 							<th colSpan={4}>Трафик</th>
