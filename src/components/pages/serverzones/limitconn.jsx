@@ -49,12 +49,12 @@ export default class LimitConn extends ChartsTable {
 		return Array.from(this.props.data).map(
 			([name, { obj: zone, history }]) => {
 				let cn = styles['chart-container'];
-				let title = 'Нажмите чтобы увидеть график';
+				let title = 'Нажмите, чтобы увидеть график';
 				let chart = null;
 
 				if (activeCharts.includes(name)) {
 					cn += ` ${styles['chart-container_active']}`;
-					title = 'Нажмите чтобы скрыть график';
+					title = 'Нажмите, чтобы скрыть график';
 					chart = (
 						<tr
 							key={`chart_${name}`}

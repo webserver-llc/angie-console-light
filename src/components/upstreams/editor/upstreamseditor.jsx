@@ -304,10 +304,10 @@ export default class UpstreamsEditor extends React.Component {
 		let serversArray;
 
 		if (isAdd) {
-			title = `Добавить серевер в "${upstream.name}"`;
+			title = `Добавить сервер в "${upstream.name}"`;
 		} else {
 			serversArray = Array.from(servers);
-			title = `Редактировать ${servers.size > 1 ? 'сервера' : `сервер ${serversArray[0][0]}`
+			title = `Редактировать ${servers.size > 1 ? 'сервер' : `сервер ${serversArray[0][0]}`
 				} "${upstream.name}"`;
 		}
 
@@ -339,7 +339,7 @@ export default class UpstreamsEditor extends React.Component {
 					<div className={styles.content}>
 						{!isAdd && serversArray.length > 1 ? (
 							<div className={styles['form-group']}>
-								<label>Selected servers</label>
+								<label>Выбранные серверы</label>
 
 								<ul className={styles['servers-list']}>
 									{serversArray.map(([serverName, server]) => (
@@ -368,7 +368,7 @@ export default class UpstreamsEditor extends React.Component {
 
 								{data.host ? (
 									<div className={styles['form-group']}>
-										<strong>Domain name:</strong>
+										<strong>Доменное имя:</strong>
 										{' '}
 										{data.host}
 									</div>
@@ -434,7 +434,7 @@ export default class UpstreamsEditor extends React.Component {
 						</div>
 
 						<div className={styles.radio}>
-							<span className={styles.title}>Set state</span>
+							<span className={styles.title}>Установить состояние</span>
 
 							<label>
 								<input
@@ -470,7 +470,7 @@ export default class UpstreamsEditor extends React.Component {
 										checked={data.down === "drain"}
 									/>
 									{' '}
-									Drain
+									Готовится к остановке
 								</label>
 							}
 						</div>
@@ -498,7 +498,7 @@ export default class UpstreamsEditor extends React.Component {
 						) : null}
 
 						<div className={styles.save} onClick={this.save}>
-							{isAdd ? 'Add' : 'Save'}
+							{isAdd ? 'Добавить' : 'Сохранить'}
 						</div>
 
 						<div className={styles.cancel} onClick={this.close}>
