@@ -20,7 +20,7 @@ export class StreamUpstreams extends React.Component {
 
 		return (
 			<UpstreamsContainer
-				title="TCP/UDP Апстримы"
+				title="TCP/UDP-апстримы"
 				component={StreamUpstream}
 				upstreams={upstreams}
 				upstreamsApi={streamUpstreamsApi}

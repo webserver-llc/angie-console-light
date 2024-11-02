@@ -19,7 +19,7 @@ describe('<ServerZones IndexPage />', () => {
 			const indexBox = wrapper.find('IndexBox');
 
 			// IndexBox title
-			expect(indexBox.prop('title')).toBe('HTTP Зоны');
+			expect(indexBox.prop('title')).toBe('HTTP-зоны');
 			// IndexBox status
 			expect(indexBox.prop('status')).toBe('ok');
 			// IndexBox href

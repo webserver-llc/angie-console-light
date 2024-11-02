@@ -43,7 +43,7 @@ describe('<Caches IndexPage />', () => {
 		const indexBox = wrapper.find('IndexBox');
 
 		// IndexBox title
-		expect(indexBox.prop('title')).toBe('Кеши');
+		expect(indexBox.prop('title')).toBe('Кэши');
 		// IndexBox status
 		expect(indexBox.prop('status')).toBe('ok');
 		// IndexBox href

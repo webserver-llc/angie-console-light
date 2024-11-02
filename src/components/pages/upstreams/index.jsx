@@ -21,7 +21,7 @@ export class Upstreams extends React.Component {
 
 		return (
 			<UpstreamsContainer
-				title="HTTP Апстримы"
+				title="HTTP-апстримы"
 				component={Upstream}
 				upstreams={upstreams}
 				upstreamsApi={httpUpstreamsApi}

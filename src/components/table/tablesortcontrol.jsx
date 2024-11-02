@@ -67,8 +67,8 @@ export default class TableSortControl extends React.Component {
 }
 
 TableSortControl.defaultProps = {
-	firstSortLabel: 'Sort by conf order',
-	secondSortLabel: 'Sort by status - failed first',
+	firstSortLabel: 'Отсортировать по порядку в конфигурации',
+	secondSortLabel: 'Отсортировать по статусу – сначала проблемные',
 	isActive: true,
 	rowSpan: 2,
 };

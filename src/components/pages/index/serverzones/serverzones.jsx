@@ -65,7 +65,7 @@ export class ServerZones extends React.Component {
 
 		return (
 			<IndexBox
-				title="HTTP Зоны"
+				title="HTTP-зоны"
 				status={
 					statuses.includes('danger') ?
 						'danger'

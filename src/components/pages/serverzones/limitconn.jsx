@@ -27,7 +27,7 @@ export const Labels = new Map([
 
 export default class LimitConn extends ChartsTable {
 	getTitle() {
-		return 'Зона Limit Conn';
+		return 'Зоны ограничения соединений (Limit Conn)';
 	}
 
 	getHeadRow() {

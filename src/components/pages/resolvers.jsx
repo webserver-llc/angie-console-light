@@ -30,7 +30,7 @@ export class Resolvers extends SortableTable {
 
 		return (
 			<div>
-				<h1>DNS Резолверы</h1>
+				<h1>DNS-резолверы</h1>
 
 				<table className={`${styles.table} ${styles.wide}`}>
 					<thead>

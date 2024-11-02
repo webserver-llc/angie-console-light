@@ -54,7 +54,7 @@ export class Connections extends React.Component {
 				{
 					isConnsTab ? (
 						<span className={styles.counter}>
-							Принято:
+							Принято: 
 							{connections.accepted}
 						</span>
 					)

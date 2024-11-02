@@ -30,7 +30,7 @@ export const Labels = new Map([
 
 export default class LimitReq extends ChartsTable {
 	getTitle() {
-		return 'Зоны Limit Req';
+		return 'Зоны ограничения запросов (Limit Req)';
 	}
 
 	getHeadRow() {

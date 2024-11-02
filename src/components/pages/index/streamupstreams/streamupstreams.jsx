@@ -19,7 +19,7 @@ export class StreamUpstreams extends React.Component {
 
 		return (
 			<UpstreamsBox
-				title="TCP/UDP Апстримы"
+				title="TCP/UDP-апстримы"
 				stats={stats}
 				status={store.__STATUSES.tcp_upstreams.status}
 				href="#tcp_upstreams"

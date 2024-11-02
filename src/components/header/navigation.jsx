@@ -30,37 +30,37 @@ import styles from './style.css';
 
 export const SECTIONS = [
 	{
-		title: 'HTTP Зоны',
+		title: 'HTTP-зоны',
 		hash: '#server_zones',
 		statusKey: 'server_zones'
 	},
 	{
-		title: 'HTTP Апстримы',
+		title: 'HTTP-апстримы',
 		hash: '#upstreams',
 		statusKey: 'upstreams'
 	},
 	{
-		title: 'TCP/UDP Зоны',
+		title: 'TCP/UDP-зоны',
 		hash: '#tcp_zones',
 		statusKey: 'tcp_zones'
 	},
 	{
-		title: 'TCP/UDP Апстримы',
+		title: 'TCP/UDP-апстримы',
 		hash: '#tcp_upstreams',
 		statusKey: 'tcp_upstreams'
 	},
 	{
-		title: 'Кеши',
+		title: 'Кэши',
 		hash: '#caches',
 		statusKey: 'caches'
 	},
 	{
-		title: 'Общие Зоны',
+		title: 'Общие зоны',
 		hash: '#shared_zones',
 		statusKey: 'shared_zones'
 	},
 	{
-		title: 'DNS Резолверы',
+		title: 'DNS-резолверы',
 		hash: '#resolvers',
 		statusKey: 'resolvers'
 	},

@@ -81,10 +81,10 @@ export default class Settings extends React.Component {
 
 		return (
 			<div className={styles.settings}>
-				<h2 className={styles.title}>Параметры</h2>
+				<h2 className={styles.title}>Настройки</h2>
 
 				<div className={styles.section}>
-					Обновлять каждые
+					Обновлять данные консоли каждые
 
 					<NumberControl value={this.state.updatingPeriod} onChange={this.changeUpdatePeriod} />
 
@@ -92,7 +92,7 @@ export default class Settings extends React.Component {
 				</div>
 
 				<div className={styles.section}>
-					Пороговое значение ошибок для 4xx
+					Пороговое значение предупреждений для 4xx
 					<NumberInput
 						defaultValue={this.state.warnings4xxThresholdPercent}
 						onChange={this.changePercentThreshold.bind(this, 'warnings4xxThresholdPercent')}
@@ -103,7 +103,7 @@ export default class Settings extends React.Component {
 				</div>
 
 				<div className={styles.section}>
-					Вычислять за последние
+					Вычислять соотношение успешных попаданий в кэш за последние
 					<NumberInput
 						defaultValue={this.state.cacheDataInterval / 1000}
 						className={styles['wide-input']}
@@ -133,7 +133,7 @@ export default class Settings extends React.Component {
 				{
 					statuses.resolvers && statuses.resolvers.ready ? (
 						<div className={styles.section}>
-							Пороговое значение ошибок DNS
+							Пороговое значение ошибок для DNS
 
 							<NumberInput
 								defaultValue={this.state.resolverErrorsThreshold}

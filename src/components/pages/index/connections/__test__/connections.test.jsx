@@ -105,7 +105,7 @@ describe('<Connections IndexPage />', () => {
 		// [Conns tab] accepted block className
 		expect(indexBox.childAt(0).prop('className')).toBe(styles.counter);
 		// [Conns tab] accepted block text
-		expect(indexBox.childAt(0).text()).toBe('Принято:10');
+		expect(indexBox.childAt(0).text()).toBe('Принято: 10');
 		// [Conns tab] tabs className
 		expect(indexBox.childAt(1).prop('className')).toBe(styles.tabs);
 		// [Conns tab] Connections tab className

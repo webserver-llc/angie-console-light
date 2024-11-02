@@ -24,7 +24,7 @@ export class Caches extends React.Component {
 
 		return (
 			<IndexBox
-				title="Кеши"
+				title="Кэши"
 				status={store.__STATUSES.caches.status}
 				href="#caches"
 			>

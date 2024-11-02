@@ -60,7 +60,7 @@ export class Caches extends ExpandableTable {
 
 		return (
 			<div>
-				<h1>Кеши</h1>
+				<h1>Кэши</h1>
 
 				<table className={styles.table}>
 					<colgroup>

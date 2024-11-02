@@ -47,8 +47,8 @@ export class StreamZones extends React.Component {
 							<th>4xx</th>
 							<th>5xx</th>
 							<th className={styles.bdr}>Всего</th>
-							<th>Отп./сек</th>
-							<th>Плч./сек</th>
+							<th>Отпр./сек</th>
+							<th>Получ./сек</th>
 							<th>Отправлено</th>
 							<th className={styles.bdr}>Получено</th>
 							<th>Рукопожатий</th>
