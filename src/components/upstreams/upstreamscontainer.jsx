@@ -162,7 +162,7 @@ export default class UpstreamsContainer extends React.Component {
 								<span className={styles['red-text']}>
 									<strong>Проблемных:</strong>
 									{' '}
-									{__STATS.failures}
+									{__STATS.failures.toString()}
 									{' '}
 									(пиров –
 									{' '}
