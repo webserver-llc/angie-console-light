@@ -54,7 +54,7 @@ export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer) {
 		case 'unavail':
 		case 'unhealthy':
 			STATS.servers.failed++;
-			STATS.failures++;
+			STATS.failures.increment(upstream.name);
 			upstream.stats.failed++;
 			upstream.hasFailedPeer = true;
 			break;
@@ -116,6 +116,23 @@ export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { sl
 		return null;
 	}
 
+	function FailuresCounter() {
+		this.counter = 0;
+		this.keys = [];
+		// eslint-disable-next-line
+		this.increment = function (key) {
+			if (this.keys.indexOf(key) === -1) {
+				this.keys.push(key);
+				this.counter++;
+			}
+		};
+	}
+
+	// eslint-disable-next-line
+	FailuresCounter.prototype.toString = function () {
+		return this.counter;
+	};
+
 	const STATS = {
 		total: 0,
 		servers: {
@@ -125,7 +142,7 @@ export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { sl
 			failed: 0,
 			draining: 0
 		},
-		failures: 0,
+		failures: new FailuresCounter(),
 		warnings: 0,
 		alerts: 0,
 		status: 'ok'
