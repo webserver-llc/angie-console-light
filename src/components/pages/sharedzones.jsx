@@ -41,7 +41,7 @@ export class SharedZones extends SortableTable {
 						<tr>
 							<TableSortControl
 								singleRow
-								secondSortLabel="Sort by size - large first"
+								secondSortLabel="Отсортировать по размеру – сначала большие"
 								order={this.state.sortOrder}
 								onChange={this.changeSorting}
 							/>
@@ -51,7 +51,7 @@ export class SharedZones extends SortableTable {
 							<th>
 								<span
 									className={styles.hinted}
-									{...tooltips.useTooltip('Использовано памяти = Использовано страниц / Всего страниц памяти', 'hint')}
+									{...tooltips.useTooltip('Использовано памяти = использовано страниц / всего страниц', 'hint')}
 								>
 									Использовано памяти
 								</span>

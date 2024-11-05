@@ -35,16 +35,16 @@ export class UpstreamsBox extends React.Component {
 
 				<h4>Серверы</h4>
 				<p>
-					Все:
+					Всего:
 					{' '}
 					{stats.servers.all}
 					{' '}
-					/ Работают:
+					/ Активные:
 					{' '}
 					{stats.servers.up}
 				</p>
 				<p className={stats.servers.failed > 0 ? styles.red : undefined}>
-					Упало:
+					Проблемные:
 					{' '}
 					{stats.servers.failed}
 				</p>
@@ -60,7 +60,7 @@ export class Upstreams extends React.Component {
 
 		return (
 			<UpstreamsBox
-				title="HTTP Апстримы"
+				title="HTTP-апстримы"
 				stats={stats}
 				status={store.__STATUSES.upstreams.status}
 				href="#upstreams"

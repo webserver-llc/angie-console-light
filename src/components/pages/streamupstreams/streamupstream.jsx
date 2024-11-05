@@ -70,7 +70,7 @@ export default class StreamUpstream extends UpstreamsList {
             <th colSpan="4">Трафик</th>
             <th colSpan="2">Проверки сервера</th>
             {configured_health_checks ? (
-              <th colSpan="3">Мониторинг работоспособности</th>
+              <th colSpan="3">Проверки работоспособности</th>
             ) : null}
           </tr>
           <tr className={`${styles['right-align']} ${styles['sub-header']}`}>
@@ -80,7 +80,7 @@ export default class StreamUpstream extends UpstreamsList {
                 className={styles.hinted}
                 {...tooltips.useTooltip('Общий простой', 'hint')}
               >
-                DT
+                Простой
               </span>
             </th>
             <th className={`${styles.bdr}`}>
@@ -88,12 +88,12 @@ export default class StreamUpstream extends UpstreamsList {
                 className={styles.hinted}
                 {...tooltips.useTooltip('Вес', 'hint')}
               >
-                W
+                Вес
               </span>
             </th>
             <th>Всего</th>
             <th>Соед./сек</th>
-            <th>Активные</th>
+            <th>Активных</th>
             <th className={styles.bdr}>Ограниченных</th>
             <th>Отпр./сек</th>
             <th>Получ./сек</th>
@@ -105,7 +105,7 @@ export default class StreamUpstream extends UpstreamsList {
               ? [
                 <th key="checks">Проверок</th>,
                 <th key="fails">Ошибок</th>,
-                <th key="last">Последний</th>,
+                <th key="last">Последняя проверка</th>,
               ]
               : null}
           </tr>

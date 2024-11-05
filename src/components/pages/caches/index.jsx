@@ -84,7 +84,7 @@ export class Caches extends ExpandableTable {
 								<span
 									className={styles.hinted}
 									{...tooltips.useTooltip(
-										'Использовано памяти = Использовано страниц памяти / Всего старниц памяти',
+										'Использовано памяти = использовано страниц памяти / всего старниц памяти',
 										'hint',
 									)}
 								>

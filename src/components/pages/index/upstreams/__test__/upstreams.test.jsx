@@ -49,10 +49,10 @@ describe('<UpstreamsBox IndexPage />', () => {
 		// AlertsCount href
 		expect(indexBox.childAt(0).prop('href')).toBe('#test_block');
 		// all / up row
-		expect(indexBox.childAt(2).text()).toBe('Все: 3 / Работают: 3');
+		expect(indexBox.childAt(2).text()).toBe('Всего: 3 / Активные: 3');
 		expect(indexBox.childAt(3).prop('className')).toBeUndefined();
 		// failed row
-		expect(indexBox.childAt(3).text()).toBe('Упало: 0');
+		expect(indexBox.childAt(3).text()).toBe('Проблемные: 0');
 
 		props.stats.servers.up = 2;
 		props.stats.servers.failed = 1;
@@ -60,11 +60,11 @@ describe('<UpstreamsBox IndexPage />', () => {
 		indexBox = wrapper.find('IndexBox');
 
 		// all / up row
-		expect(indexBox.childAt(2).text()).toBe('Все: 3 / Работают: 2');
+		expect(indexBox.childAt(2).text()).toBe('Всего: 3 / Активные: 2');
 		// failed row className
 		expect(indexBox.childAt(3).prop('className')).toBe(styles.red);
 		// failed row
-		expect(indexBox.childAt(3).text()).toBe('Упало: 1');
+		expect(indexBox.childAt(3).text()).toBe('Проблемные: 1');
 
 		wrapper.unmount();
 	});
@@ -91,7 +91,7 @@ describe('<Upstreams IndexPage />', () => {
 		const box = wrapper.find('UpstreamsBox');
 
 		// UpstreamsBox title
-		expect(box.prop('title')).toBe('HTTP Апстримы');
+		expect(box.prop('title')).toBe('HTTP-апстримы');
 		// UpstreamsBox stats
 		expect(box.prop('stats')).toBe('test_stats');
 		// UpstreamsBox status

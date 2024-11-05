@@ -38,7 +38,7 @@ describe('<Resolvers IndexPage />', () => {
 		const indexBox = wrapper.find('IndexBox');
 
 		// IndexBox title
-		expect(indexBox.prop('title')).toBe('DNS Резолверы');
+		expect(indexBox.prop('title')).toBe('DNS-резолверы');
 		// IndexBox status
 		expect(indexBox.prop('status')).toBe('ok');
 		// IndexBox href

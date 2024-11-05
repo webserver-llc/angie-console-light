@@ -57,7 +57,7 @@ describe('<Caches Page />', () => {
 			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
 			// useTooltip call 2, arg 1
-			expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Использовано памяти = Использовано страниц памяти / Всего старниц памяти');
+			expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Использовано памяти = использовано страниц памяти / всего старниц памяти');
 			// useTooltip call 2, arg 2
 			expect(tooltips.useTooltip.mock.calls[1][1]).toBe('hint');
 

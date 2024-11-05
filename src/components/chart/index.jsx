@@ -24,11 +24,11 @@ export const chartDimensions = {
 	tickSize: 6
 };
 export const TimeWindows = new Map([
-	['1m', 60],
-	['5m', 5 * 60],
-	['15m', 15 * 60]
+	['1 мин.', 60],
+	['5 мин.', 5 * 60],
+	['15 мин.', 15 * 60]
 ]);
-export const TimeWindowDefault = '5m';
+export const TimeWindowDefault = '5 мин.';
 
 export default class Chart extends React.Component {
 	constructor(props) {
@@ -630,7 +630,7 @@ export default class Chart extends React.Component {
 			<div
 				key={0}
 				className={`${styles['dnd-controls__control']}${backDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
-				title="Click to view the oldest data"
+				title="Нажмите, чтобы просмотреть самые старые данные"
 				onClick={backDndAllowed ? this.emulateDnd.bind(this, -1, true) : null}
 			>
 				&#171;
@@ -638,7 +638,7 @@ export default class Chart extends React.Component {
 			<div
 				key={1}
 				className={`${styles['dnd-controls__control']}${backDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
-				title={`Click to go back for ${selectedTimeWindow}`}
+				title={`Нажмите, чтобы вернуться к ${selectedTimeWindow}`}
 				onClick={backDndAllowed ? this.emulateDnd.bind(this, -1, false) : null}
 			>
 				&#8249;
@@ -646,7 +646,7 @@ export default class Chart extends React.Component {
 			<div
 				key={2}
 				className={`${styles['dnd-controls__control']}${forwardDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
-				title={`Click to go forward for ${selectedTimeWindow}`}
+				title={`Нажмите, чтобы перейти к ${selectedTimeWindow}`}
 				onClick={forwardDndAllowed ? this.emulateDnd.bind(this, 1, false) : null}
 			>
 				&#8250;
@@ -654,7 +654,7 @@ export default class Chart extends React.Component {
 			<div
 				key={3}
 				className={`${styles['dnd-controls__control']}${forwardDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
-				title="Click to return to live mode"
+				title="Нажмите, чтобы вернуться к интерактивному режиму"
 				onClick={forwardDndAllowed ? this.emulateDnd.bind(this, 1, true) : null}
 			>
 				&#187;
