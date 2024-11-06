@@ -151,7 +151,7 @@ export default class UpstreamsList extends SortableTable {
 			<tr>
 				<td className={tableStyles['left-align']} colSpan={30}>
 					В этой группе не найдено ни одного сервера c состоянием '
-					{this.state.filtering}
+					{FILTER_OPTIONS[this.state.filtering]}
 					'.
 				</td>
 			</tr>
