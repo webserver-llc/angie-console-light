@@ -17,13 +17,13 @@ export function CacheStateTooltip() {
 			<div className={styles.row}>
 				<Icon type="sun" className={styles.icon} />
 				{' '}
-				Warm &ndash; using metadata in shmem
+				Горячий &ndash; метаданные загружены в память
 			</div>
 
 			<div className={styles.row}>
 				<Icon type="snowflake" className={styles.icon} />
 				{' '}
-				Cold &ndash; loading metadata
+				Холодный &ndash; метаданные загружаются
 			</div>
 		</div>
 	);
@@ -42,7 +42,7 @@ export function SharedZoneTooltip({ zone }) {
 			{zone.pages.total}
 			{' '}
 			<br />
-			Использовано памяти = использовано страниц / всего страниц
+			Загрузка памяти = использовано страниц / всего страниц
 		</div>
 	);
 }

@@ -38,7 +38,7 @@ export default class StreamZones extends SortableTable {
 
 			component = (
 				<div>
-					<h1>Серверные зоны (Server)</h1>
+					<h1>Серверные зоны</h1>
 
 					<table className={`${styles.table} ${styles.wide}`}>
 						<thead>

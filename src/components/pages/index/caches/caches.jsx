@@ -38,7 +38,7 @@ export class Caches extends React.Component {
 				<h4>Состояние</h4>
 				<p>
 					<Icon type="sun" className={styles.icon} />
-					Прогретые:
+					Горячие:
 					{' '}
 					{stats.states.warm}
 				</p>

@@ -112,7 +112,7 @@ describe('<SharedZones Page />', () => {
 			// useTooltip called once
 			expect(tooltips.useTooltip).toHaveBeenCalledTimes(1);
 			// useTooltip 1st arg
-			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Использовано памяти = использовано страниц / всего страниц');
+			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Загрузка памяти = использовано страниц / всего страниц');
 			// useTooltip 2nd arg
 			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint');
 

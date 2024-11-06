@@ -205,7 +205,7 @@ export default class Upstream extends UpstreamsList {
 						<th className={styles['center-align']}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Активные', 'hint')}
+								{...tooltips.useTooltip('Активных', 'hint')}
 							>
 								Активн.
 							</span>

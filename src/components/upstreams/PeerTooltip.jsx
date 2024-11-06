@@ -49,7 +49,7 @@ export default function PeerTooltip({ peer }) {
 			}
 
 			<div className={styles.row}>
-				Всего простаивает:
+				Простаивает:
 				{' '}
 				{utils.formatUptime(peer.downtime)}
 			</div>

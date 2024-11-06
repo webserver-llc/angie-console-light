@@ -412,7 +412,7 @@ export default class UpstreamsList extends SortableTable {
 
 					{upstream.zoneSize !== null ? (
 						<span className={styles['zone-capacity']}>
-							Зона:
+							Загрузка памяти:
 							{' '}
 							<span
 								{...tooltips.useTooltip(

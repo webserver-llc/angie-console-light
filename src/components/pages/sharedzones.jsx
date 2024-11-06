@@ -51,9 +51,9 @@ export class SharedZones extends SortableTable {
 							<th>
 								<span
 									className={styles.hinted}
-									{...tooltips.useTooltip('Использовано памяти = использовано страниц / всего страниц', 'hint')}
+									{...tooltips.useTooltip('Загрузка памяти = использовано страниц / всего страниц', 'hint')}
 								>
-									Использовано памяти
+									Загрузка памяти
 								</span>
 							</th>
 						</tr>

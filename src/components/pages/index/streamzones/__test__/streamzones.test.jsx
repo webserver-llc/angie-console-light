@@ -39,7 +39,7 @@ describe('<StreamZones IndexPage />', () => {
 		let indexBox = wrapper.find('IndexBox');
 
 		// IndexBox title
-		expect(indexBox.prop('title')).toBe('TCP/UDP Зоны');
+		expect(indexBox.prop('title')).toBe('TCP/UDP-зоны');
 		// IndexBox status
 		expect(indexBox.prop('status')).toBe('danger');
 		// IndexBox href
