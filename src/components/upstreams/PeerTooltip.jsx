@@ -31,6 +31,12 @@ export default function PeerTooltip({ peer }) {
 				(не прошел активную проверку работоспособности)
 			</span>
 		);
+	} else if (peer.state === 'checking') {
+		state = <span className={styles[`status_${peer.state}`]}>На проверке</span>;
+	} else if (peer.state === 'up') {
+		state = <span className={styles[`status_${peer.state}`]}>Активен</span>;
+	} else if (peer.state === 'down') {
+		state = <span className={styles[`status_${peer.state}`]}>Выключен</span>;
 	} else {
 		state = <span className={styles[`status_${peer.state}`]}>{peer.state}</span>;
 	}
