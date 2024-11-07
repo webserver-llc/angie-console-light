@@ -31,7 +31,7 @@ export default function ConnectionsTooltip({ title = 'Последний', peer 
 						</div>
 					</div>
 				)
-					: `${title}: неизвестный`
+					: `${title}: неизвестно`
 			}
 		</div>
 	);

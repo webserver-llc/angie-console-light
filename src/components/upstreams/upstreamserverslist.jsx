@@ -32,7 +32,7 @@ export default function UpstreamServerList(
 			return down;
 		}
 
-		return down ? 'down' : 'up';
+		return down ? 'Выключен' : 'Активный';
 	}
 
 	function renderTbody() {
@@ -75,9 +75,9 @@ export default function UpstreamServerList(
 					<th>Сервер</th>
 					<th>Вес</th>
 					<th>Состояние</th>
-					<th>Max_conns</th>
-					<th>Max_fails</th>
-					<th>Fail_timeout</th>
+					<th>Предел соединений (max_conns)</th>
+					<th>Предел сбоев (max_fails)</th>
+					<th>Таймаут подсчета сбоев (fail_timeout)</th>
 				</tr>
 			</thead>
 			<tbody className={styles['right-align']}>

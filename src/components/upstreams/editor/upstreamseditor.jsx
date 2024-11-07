@@ -304,10 +304,10 @@ export default class UpstreamsEditor extends React.Component {
 		let serversArray;
 
 		if (isAdd) {
-			title = `Добавить сервер в "${upstream.name}"`;
+			title = `Добавление сервера в "${upstream.name}"`;
 		} else {
 			serversArray = Array.from(servers);
-			title = `Редактировать ${servers.size > 1 ? 'сервер' : `сервер ${serversArray[0][0]}`
+			title = `Редактирование ${servers.size > 1 ? 'сервера' : `сервера ${serversArray[0][0]}`
 				} "${upstream.name}"`;
 		}
 
@@ -402,7 +402,7 @@ export default class UpstreamsEditor extends React.Component {
 								/>
 							</div>
 							<div className={styles['form-group']}>
-								<label htmlFor="max_conns">max_conns</label>
+								<label htmlFor="max_conns">Max_conns</label>
 								<NumberInput
 									className={styles.input}
 									id="max_conns"
@@ -412,7 +412,7 @@ export default class UpstreamsEditor extends React.Component {
 								/>
 							</div>
 							<div className={styles['form-group']}>
-								<label htmlFor="max_fails">max_fails</label>
+								<label htmlFor="max_fails">Max_fails</label>
 								<NumberInput
 									id="max_fails"
 									name="max_fails"
@@ -422,7 +422,7 @@ export default class UpstreamsEditor extends React.Component {
 								/>
 							</div>
 							<div className={styles['form-group']}>
-								<label htmlFor="fail_timeout">fail_timeout</label>
+								<label htmlFor="fail_timeout">Fail_timeout</label>
 								<NumberInput
 									id="fail_timeout"
 									className={styles.input}
@@ -434,7 +434,7 @@ export default class UpstreamsEditor extends React.Component {
 						</div>
 
 						<div className={styles.radio}>
-							<span className={styles.title}>Установить состояние</span>
+							<span className={styles.title}>Состояние</span>
 
 							<label>
 								<input

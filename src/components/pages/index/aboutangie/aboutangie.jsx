@@ -23,7 +23,7 @@ export function AboutAngieTooltip({ data }) {
 	return (
 		<div>
 			<div className={tooltipStyles.row}>
-				Reloads:
+				Перезагрузок:
 				{' '}
 				{data.angie.generation}
 			</div>
@@ -66,11 +66,11 @@ export class AboutAngie extends React.Component {
 				</div>
 				<table className={styles.table}>
 					<tr>
-						<th>Адрес</th>
+						<th>Адрес:</th>
 						<td>{angie.address}</td>
 					</tr>
 					<tr>
-						<th>Последняя перезагрузка</th>
+						<th>Последняя перезагрузка:</th>
 						<td>
 							<span className={styles.uptime} {...tooltips.useTooltip(<AboutAngieTooltip data={this.props.data} />)}>
 								{ utils.formatUptime(Date.now() - Date.parse(angie.load_time)) }
