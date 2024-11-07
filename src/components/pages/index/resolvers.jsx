@@ -34,12 +34,12 @@ export class Resolvers extends React.Component {
 
 				<h4>Трафик</h4>
 				<p>
-					Запр./сек:
+					Запр./сек.:
 					{' '}
 					{stats.traffic.in ? stats.traffic.in : 0}
 				</p>
 				<p>
-					Отв./сек:
+					Отв./сек.:
 					{' '}
 					{stats.traffic.out ? stats.traffic.out : 0}
 				</p>

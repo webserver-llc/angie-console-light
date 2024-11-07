@@ -57,14 +57,14 @@ export default function UpstreamStatsTooltip({ upstream }) {
 					<div>
 						<span className={`${styles['status-tag']} ${styles.status_draining}`} />
 						{' '}
-						Готовящихся к выключению:
+						Разгружаемых:
 						{' '}
 						{upstream.stats.draining}
 					</div>
 					<div>
 						<span className={`${styles['status-tag']} ${styles.status_down}`} />
 						{' '}
-						Выключенных пиров:
+						Недоступных пиров:
 						{' '}
 						{upstream.stats.down}
 					</div>

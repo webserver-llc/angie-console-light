@@ -26,7 +26,7 @@ export class Requests extends React.Component {
 				<table className={ styles.table }>
 					<tr>
 						<th>Текущие</th>
-						<th>Запр./сек</th>
+						<th>Запр./сек.</th>
 					</tr>
 					<tr>
 						<td>{ requests.current }</td>

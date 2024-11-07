@@ -38,21 +38,21 @@ export class StreamZones extends React.Component {
 					{stats.conn_current}
 				</p>
 				<p>
-					Соед./сек:
+					Соед./сек.:
 					{' '}
 					{stats.conn_s}
 				</p>
 
 				<h4>Трафик</h4>
 				<p>
-					Вхд:
+					Входящий:
 					{' '}
-					{stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/сек` : 0}
+					{stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/сек.` : 0}
 				</p>
 				<p>
-					Исх:
+					Исходящий:
 					{' '}
-					{stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/сек` : 0}
+					{stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/сек.` : 0}
 				</p>
 			</IndexBox>
 		);

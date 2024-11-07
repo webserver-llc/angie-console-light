@@ -34,7 +34,7 @@ export default class StreamUpstream extends UpstreamsList {
           {envUtils.isDemoEnv() ? (
             <tr>
               <TableSortControl
-                secondSortLabel="Отсортировать по статусу – сначала выключенные"
+                secondSortLabel="Отсортировать по статусу &mdash; сначала недоступные"
                 rowSpan={3}
                 order={this.state.sortOrder}
                 onChange={this.changeSorting}
@@ -57,7 +57,7 @@ export default class StreamUpstream extends UpstreamsList {
           <tr>
             {!envUtils.isDemoEnv() ? (
               <TableSortControl
-                secondSortLabel="Отсортировать по статусу – сначала выключенные"
+                secondSortLabel="Отсортировать по статусу &mdash; сначала недоступные"
                 order={this.state.sortOrder}
                 onChange={this.changeSorting}
               />
@@ -92,11 +92,11 @@ export default class StreamUpstream extends UpstreamsList {
               </span>
             </th>
             <th>Всего</th>
-            <th>Соед./сек</th>
+            <th>Соед./сек.</th>
             <th>Активных</th>
             <th className={styles.bdr}>Ограниченных</th>
-            <th>Отпр./сек</th>
-            <th>Получ./сек</th>
+            <th>Отпр./сек.</th>
+            <th>Получ./сек.</th>
             <th>Отправлено</th>
             <th className={styles.bdr}>Принято</th>
             <th>Ошибок</th>

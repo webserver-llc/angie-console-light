@@ -41,7 +41,7 @@ export class SharedZones extends SortableTable {
 						<tr>
 							<TableSortControl
 								singleRow
-								secondSortLabel="Отсортировать по размеру – сначала большие"
+								secondSortLabel="Отсортировать по размеру &mdash; сначала большие"
 								order={this.state.sortOrder}
 								onChange={this.changeSorting}
 							/>

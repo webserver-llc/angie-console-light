@@ -383,7 +383,7 @@ export default class UpstreamsEditor extends React.Component {
 												checked={data.backup}
 												onChange={this.handleFormChange}
 											/>
-											Добавить как бекап
+											Добавить как запасной
 										</label>
 									</div>
 								) : null}
@@ -457,7 +457,7 @@ export default class UpstreamsEditor extends React.Component {
 									checked={data.down === true}
 								/>
 								{' '}
-								Выключен
+								Недоступный
 							</label>
 
 							{!isStream &&
@@ -470,7 +470,7 @@ export default class UpstreamsEditor extends React.Component {
 										checked={data.down === "drain"}
 									/>
 									{' '}
-									Готовится к остановке
+									Разгружаемый
 								</label>
 							}
 						</div>

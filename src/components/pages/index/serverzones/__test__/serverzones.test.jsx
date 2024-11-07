@@ -80,9 +80,9 @@ describe('<ServerZones IndexPage />', () => {
 			// trafficBlock
 			expect(indexBox.childAt(1).type()).toBe('div');
 			// trafficBlock, row 2, text
-			expect(indexBox.childAt(1).childAt(1).text()).toBe('Вхд: 0');
+			expect(indexBox.childAt(1).childAt(1).text()).toBe('Входящий: 0');
 			// trafficBlock, row 3, text
-			expect(indexBox.childAt(1).childAt(2).text()).toBe('Исх: 0');
+			expect(indexBox.childAt(1).childAt(2).text()).toBe('Исходящий: 0');
 
 			props.data.server_zones.__STATS.traffic = {
 				in: 50,
@@ -92,9 +92,9 @@ describe('<ServerZones IndexPage />', () => {
 			indexBox = wrapper.find('IndexBox');
 
 			// trafficBlock, row 2, text
-			expect(indexBox.childAt(1).childAt(1).text()).toBe('Вхд: 50/сек');
+			expect(indexBox.childAt(1).childAt(1).text()).toBe('Входящий.: 50/сек.');
 			// trafficBlock, row 3, text
-			expect(indexBox.childAt(1).childAt(2).text()).toBe('Исх: 45/сек');
+			expect(indexBox.childAt(1).childAt(2).text()).toBe('Исходящий.: 45/сек.');
 			// formatReadableBytes called twice
 			expect(utils.formatReadableBytes).toHaveBeenCalledTimes(2);
 			// formatReadableBytes call 1, arg

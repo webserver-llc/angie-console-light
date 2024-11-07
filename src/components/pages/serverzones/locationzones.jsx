@@ -57,15 +57,15 @@ export default class Locations extends SortableTable {
 							<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
 								<th className={styles.bdr} />
 								<th>Всего</th>
-								<th className={styles.bdr}>Запр./сек</th>
+								<th className={styles.bdr}>Запр./сек.</th>
 								<th>1xx</th>
 								<th>2xx</th>
 								<th>3xx</th>
 								<th>4xx</th>
 								<th>5xx</th>
 								<th className={styles.bdr}>Всего</th>
-								<th>Отпр./сек</th>
-								<th>Получ./сек</th>
+								<th>Отпр./сек.</th>
+								<th>Получ./сек.</th>
 								<th>Отправлено</th>
 								<th>Получено</th>
 							</tr>

@@ -49,11 +49,11 @@ describe('<StreamZones IndexPage />', () => {
 		// current row
 		expect(indexBox.childAt(1).text()).toBe('Соед. текущие: 1');
 		// conn/s row
-		expect(indexBox.childAt(2).text()).toBe('Соед./сек: 3');
+		expect(indexBox.childAt(2).text()).toBe('Соед./сек.: 3');
 		// traffic in row
-		expect(indexBox.childAt(4).text()).toBe('Вхд: 0');
+		expect(indexBox.childAt(4).text()).toBe('Входящий: 0');
 		// traffic out row
-		expect(indexBox.childAt(5).text()).toBe('Исх: 0');
+		expect(indexBox.childAt(5).text()).toBe('Исходящий: 0');
 
 		props.data.server_zones.__STATS.traffic = {
 			in: 3,
@@ -63,9 +63,9 @@ describe('<StreamZones IndexPage />', () => {
 		indexBox = wrapper.find('IndexBox');
 
 		// traffic in row
-		expect(indexBox.childAt(4).text()).toBe('Вхд: 3/сек');
+		expect(indexBox.childAt(4).text()).toBe('Входящий: 3/сек.');
 		// traffic out row
-		expect(indexBox.childAt(5).text()).toBe('Исх: 2/сек');
+		expect(indexBox.childAt(5).text()).toBe('Исходящий: 2/сек.');
 		// formatReadableBytes called twice
 		expect(utils.formatReadableBytes).toHaveBeenCalledTimes(2);
 		// formatReadableBytes call 1, arg

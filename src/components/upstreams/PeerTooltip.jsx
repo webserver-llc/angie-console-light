@@ -36,7 +36,7 @@ export default function PeerTooltip({ peer }) {
 	} else if (peer.state === 'up') {
 		state = <span className={styles[`status_${peer.state}`]}>Активный</span>;
 	} else if (peer.state === 'down') {
-		state = <span className={styles[`status_${peer.state}`]}>Выключен</span>;
+		state = <span className={styles[`status_${peer.state}`]}>Недоступный</span>;
 	} else {
 		state = <span className={styles[`status_${peer.state}`]}>{peer.state}</span>;
 	}
@@ -51,7 +51,7 @@ export default function PeerTooltip({ peer }) {
 			<div className={styles.row}>{state}</div>
 
 			{
-				peer.backup ? <div className={styles.row}>Тип: бекап</div> : null
+				peer.backup ? <div className={styles.row}>Тип: запасной</div> : null
 			}
 
 			<div className={styles.row}>
@@ -63,7 +63,7 @@ export default function PeerTooltip({ peer }) {
 			{
 				peer.isHttp && peer.downstart ? (
 					<div className={styles.row}>
-						Выключен с:
+						Недоступен с:
 						{' '}
 						{utils.formatDate(peer.downstart)}
 					</div>

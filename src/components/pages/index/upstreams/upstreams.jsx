@@ -35,7 +35,7 @@ export class UpstreamsBox extends React.Component {
 
 				<h4>Серверы</h4>
 				<p>
-					Всего:
+					Пиров:
 					{' '}
 					{stats.servers.all}
 					{' '}

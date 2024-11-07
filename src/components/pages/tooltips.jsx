@@ -17,13 +17,13 @@ export function CacheStateTooltip() {
 			<div className={styles.row}>
 				<Icon type="sun" className={styles.icon} />
 				{' '}
-				Горячий &ndash; метаданные загружены в память
+				Горячий &mdash; метаданные загружены в память
 			</div>
 
 			<div className={styles.row}>
 				<Icon type="snowflake" className={styles.icon} />
 				{' '}
-				Холодный &ndash; метаданные загружаются
+				Холодный &mdash; метаданные загружаются
 			</div>
 		</div>
 	);

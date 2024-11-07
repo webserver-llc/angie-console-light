@@ -21,7 +21,7 @@ export const Colors = new Map([
 ]);
 
 export const Labels = new Map([
-	['passed', 'Пройдено'],
+	['passed', 'Передано'],
 	['delayed', 'Задержано'],
 	['rejected', 'Отклонено'],
 	['exhausted', 'Сброшено'],
@@ -38,7 +38,7 @@ export default class LimitReq extends ChartsTable {
 			<tr>
 				<th />
 				<th>Зона</th>
-				<th>Пройдено</th>
+				<th>Передано</th>
 				<th>Задержано</th>
 				<th>Отклонено</th>
 				<th>Сброшено</th>

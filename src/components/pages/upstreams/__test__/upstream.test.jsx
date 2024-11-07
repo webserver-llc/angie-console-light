@@ -269,7 +269,7 @@ describe('<Upstream />', () => {
 		const tableSortControl = table.find('TableSortControl');
 
 		// TableSortControl secondSortLabel
-		expect(tableSortControl.prop('secondSortLabel')).toBe('Отсортировать по статусу – сначала выключенные');
+		expect(tableSortControl.prop('secondSortLabel')).toBe('Отсортировать по статусу &mdash; сначала недоступные');
 		// TableSortControl order
 		expect(tableSortControl.prop('order')).toBe(wrapper.state('sortOrder'));
 		// TableSortControl onChange

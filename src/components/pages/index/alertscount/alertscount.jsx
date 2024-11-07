@@ -24,7 +24,7 @@ export default class AlertsCount extends React.Component {
 		const { total, alerts, warnings } = this.props;
 
 		if (alerts !== undefined || warnings !== undefined) {
-			const alertsTitle = this.props.alerts > 0 ? 'С ошибками' : this.props.warnings > 0 ? 'Предупреждений' : 'Проблем';
+			const alertsTitle = this.props.alerts > 0 ? 'С ошибками' : this.props.warnings > 0 ? 'Предупрежд.' : 'Проблем';
 			const alertsStyleName = this.props.alerts > 0 ? styles.alert : this.props.warnings > 0 ? styles.warning : styles.ok;
 
 			alertsPart = (

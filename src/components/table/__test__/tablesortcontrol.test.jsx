@@ -81,7 +81,7 @@ describe('<TableSortControl />', () => {
 		// useTooltip called
 		expect(tooltips.useTooltip).toHaveBeenCalledTimes(1);
 		// useTooltip call args
-		expect(tooltips.useTooltip).toHaveBeenCalledWith('Отсортировать по статусу – сначала проблемные', 'hint-right');
+		expect(tooltips.useTooltip).toHaveBeenCalledWith('Отсортировать по статусу &mdash; сначала проблемные', 'hint-right');
 		// wrapper text
 		expect(wrapper.text()).toBe('▴');
 

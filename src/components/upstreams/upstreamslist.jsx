@@ -27,7 +27,7 @@ export const FILTER_OPTIONS = {
 	up: 'Активные',
 	failed: 'Проблемные',
 	checking: 'На проверке',
-	down: 'Выключены',
+	down: 'Недоступные',
 };
 
 export default class UpstreamsList extends SortableTable {

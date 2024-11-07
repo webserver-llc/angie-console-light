@@ -42,13 +42,13 @@ export class StreamZones extends React.Component {
 							<th className={styles.bdr} />
 							<th>Текущих</th>
 							<th>Всего</th>
-							<th className={styles.bdr}>Соед./сек</th>
+							<th className={styles.bdr}>Соед./сек.</th>
 							<th>2xx</th>
 							<th>4xx</th>
 							<th>5xx</th>
 							<th className={styles.bdr}>Всего</th>
-							<th>Отпр./сек</th>
-							<th>Получ./сек</th>
+							<th>Отпр./сек.</th>
+							<th>Получ./сек.</th>
 							<th>Отправлено</th>
 							<th className={styles.bdr}>Получено</th>
 							<th>Рукопожатий</th>

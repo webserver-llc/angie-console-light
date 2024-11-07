@@ -59,15 +59,15 @@ export default class StreamZones extends SortableTable {
 								<th className={styles.bdr} />
 								<th>Текущие</th>
 								<th>Всего</th>
-								<th className={styles.bdr}>Запр./сек</th>
+								<th className={styles.bdr}>Запр./сек.</th>
 								<th>1xx</th>
 								<th>2xx</th>
 								<th>3xx</th>
 								<th>4xx</th>
 								<th>5xx</th>
 								<th className={styles.bdr}>Всего</th>
-								<th>Отпр./сек</th>
-								<th>Получ./сек</th>
+								<th>Отпр./сек.<div className=""></div></th>
+								<th>Получ./сек.</th>
 								<th>Отправлено</th>
 								<th className={styles.bdr}>Получено</th>
 								<th>Рукопожатий</th>
