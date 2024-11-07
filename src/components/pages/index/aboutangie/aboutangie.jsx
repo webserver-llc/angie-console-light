@@ -60,17 +60,17 @@ export class AboutAngie extends React.Component {
 					{this.renderLinkToDocs()}
 					{angie.config_files ?
 						(
-							<a href="#config_files" id="config-files" className={`${commonStyles.fr}`}>Configs</a>
+							<a href="#config_files" id="config-files" className={`${commonStyles.fr}`}>Конфиг-файлы</a>
 						)
 						: null}
 				</div>
 				<table className={styles.table}>
 					<tr>
-						<th>Address</th>
+						<th>Адрес</th>
 						<td>{angie.address}</td>
 					</tr>
 					<tr>
-						<th>Last reload</th>
+						<th>Последняя перезагрузка</th>
 						<td>
 							<span className={styles.uptime} {...tooltips.useTooltip(<AboutAngieTooltip data={this.props.data} />)}>
 								{ utils.formatUptime(Date.now() - Date.parse(angie.load_time)) }

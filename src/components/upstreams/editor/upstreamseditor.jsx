@@ -153,7 +153,7 @@ export default class UpstreamsEditor extends React.Component {
 						.then(() => {
 							this.setState({
 								success: true,
-								successMessage: 'Server added successfully',
+								successMessage: 'Сервер успешно добавлен',
 							});
 						});
 				}
@@ -172,7 +172,7 @@ export default class UpstreamsEditor extends React.Component {
 				).then(() => {
 					this.setState({
 						success: true,
-						successMessage: 'Changes saved',
+						successMessage: 'Изменения сохранены',
 					});
 				});
 			})
@@ -227,7 +227,7 @@ export default class UpstreamsEditor extends React.Component {
 				this.setState({
 					success: true,
 					shouldClearServers: true,
-					successMessage: `Servers ${servers.join(', ')} successfully removed`,
+					successMessage: `Серверы ${servers.join(', ')} успешно удалены`,
 				});
 			})
 			.catch(({ error }) => this.showErrors([error]))
@@ -247,20 +247,20 @@ export default class UpstreamsEditor extends React.Component {
 
 		if (!multipleServers && isAdd && !data.server) {
 			valid = false;
-			errorMessages.push('Invalid server address or port');
+			errorMessages.push('Неверный адрес или порт сервера');
 		}
 
 		if ('server' in data && !isIP(data.server)) {
 			if (!addressRegexp.test(data.server) || data.server.length > 253) {
 				valid = false;
-				errorMessages.push('Invalid server address or port');
+				errorMessages.push('Неверный адрес или порт сервера');
 			} else if (
 				data.service &&
 				(!RGX_SERVICE_SETTING.test(data.service) ||
 					data.server.length + data.service.length > 253)
 			) {
 				valid = false;
-				errorMessages.push('Invalid server address or service setting');
+				errorMessages.push('Неверный адрес сервера или настройка сервиса');
 			}
 		}
 
@@ -272,7 +272,7 @@ export default class UpstreamsEditor extends React.Component {
 				.then((data) => {
 					if (data.error) {
 						errorMessages.push(
-							'No such server (please, check if it still exists)',
+							'Сервер не найден (убедитесь, что сервер существует)',
 						);
 						valid = false;
 						return Promise.reject(errorMessages);
@@ -383,7 +383,7 @@ export default class UpstreamsEditor extends React.Component {
 												checked={data.backup}
 												onChange={this.handleFormChange}
 											/>
-											Добавить как бэкап
+											Добавить как бекап
 										</label>
 									</div>
 								) : null}
@@ -392,7 +392,7 @@ export default class UpstreamsEditor extends React.Component {
 
 						<div className={styles['forms-mini']}>
 							<div className={styles['form-group']}>
-								<label htmlFor="weight">weight</label>
+								<label htmlFor="weight">Вес</label>
 								<NumberInput
 									id="weight"
 									name="weight"
@@ -445,7 +445,7 @@ export default class UpstreamsEditor extends React.Component {
 									checked={data.down === false}
 								/>
 								{' '}
-								Работает
+								Активный
 							</label>
 
 							<label>

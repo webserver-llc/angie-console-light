@@ -32,9 +32,9 @@ export class ZoneSync extends React.Component {
 					warnings={stats.warnings}
 				/>
 
-				<h4>Messages/s</h4>
-				<p>In: { stats.traffic.in ? stats.traffic.in : 0 }</p>
-				<p>Out: { stats.traffic.out ? stats.traffic.out : 0 }</p>
+				<h4>Сообщ./сек</h4>
+				<p>Вхд: { stats.traffic.in ? stats.traffic.in : 0 }</p>
+				<p>Исх: { stats.traffic.out ? stats.traffic.out : 0 }</p>
 			</IndexBox>
 		);
 	}

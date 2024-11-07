@@ -19,14 +19,14 @@ export class Requests extends React.Component {
 		const { data: { requests } } = this.props;
 
 		return (<IndexBox className={this.props.className}>
-			<span className={ styles.counter }>Total:{ requests.total }</span>
-			<h3 className={ styles.h3 }>Requests</h3>
+			<span className={ styles.counter }>Всего:{ requests.total }</span>
+			<h3 className={ styles.h3 }>Запросы</h3>
 
 			{
 				<table className={ styles.table }>
 					<tr>
-						<th>Current</th>
-						<th>Req/s</th>
+						<th>Текущие</th>
+						<th>Запр./сек</th>
 					</tr>
 					<tr>
 						<td>{ requests.current }</td>

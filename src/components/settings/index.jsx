@@ -88,7 +88,7 @@ export default class Settings extends React.Component {
 
 					<NumberControl value={this.state.updatingPeriod} onChange={this.changeUpdatePeriod} />
 
-					сек
+					сек.
 				</div>
 
 				<div className={styles.section}>
@@ -110,7 +110,7 @@ export default class Settings extends React.Component {
 						onChange={this.changeCacheHitRatioInteval}
 					/>
 					{' '}
-					сек
+					сек.
 				</div>
 
 				{

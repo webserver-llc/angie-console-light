@@ -21,7 +21,7 @@ export default function UpstreamServerList(
 		return (
 			<tr>
 				<td className={styles['left-align']} colSpan={30}>
-					Не найдены сервера в этой группе апстримов.
+					В этой группе апстримов не найдены серверы.
 				</td>
 			</tr>
 		);

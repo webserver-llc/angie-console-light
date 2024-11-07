@@ -34,7 +34,7 @@ export default function PeerTooltip({ peer }) {
 	} else if (peer.state === 'checking') {
 		state = <span className={styles[`status_${peer.state}`]}>На проверке</span>;
 	} else if (peer.state === 'up') {
-		state = <span className={styles[`status_${peer.state}`]}>Активен</span>;
+		state = <span className={styles[`status_${peer.state}`]}>Активный</span>;
 	} else if (peer.state === 'down') {
 		state = <span className={styles[`status_${peer.state}`]}>Выключен</span>;
 	} else {

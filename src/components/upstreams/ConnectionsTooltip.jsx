@@ -19,8 +19,8 @@ export default function ConnectionsTooltip({ title = 'Последний', peer 
 				peer.selected ? (
 					<div>
 						<div>
-							{title}
-							:
+							Последний:
+							{' '}
 							{utils.formatDate(peer.selected)}
 						</div>
 						<div>

@@ -71,9 +71,15 @@ export default class StreamZones extends SortableTable {
 								<th>Отправлено</th>
 								<th className={styles.bdr}>Получено</th>
 								<th>Рукопожатий</th>
-								<th>Переиспользовано</th>
-								<th>Истекло</th>
-								<th>Упавших</th>
+								<th>Повторных
+									<br/>
+									использований</th>
+								<th>Истекло время
+									<br/>
+									ожидания</th>
+								<th>Неудачных
+									<br/>
+									рукопожатий</th>
 							</tr>
 						</thead>
 						<tbody className={styles['right-align']}>
