@@ -145,7 +145,7 @@ export default class StreamUpstream extends UpstreamsList {
                   <span
                     className={styles.hinted}
                     {...tooltips.useTooltip(
-                      <ConnectionsTooltip peer={peer} />,
+                      <ConnectionsTooltip title="Последнее" peer={peer} />,
                       'hint',
                     )}
                   >
