@@ -25,7 +25,7 @@ describe('<LimitReq />', () => {
 		const wrapper = shallow(<LimitReq />);
 
 		// return value
-		expect(wrapper.instance().getTitle()).toBe('Limit Req');
+		expect(wrapper.instance().getTitle()).toBe('Зоны ограничения запросов (Limit Req)');
 
 		wrapper.unmount();
 	});
@@ -83,9 +83,9 @@ describe('<LimitReq />', () => {
 		// [group 1, row 1] attr key
 		expect(row.key).toBe('data_test');
 		// [group 1, row 1] attr className
-		expect(row.props.className).toBe(`${ styles['chart-container'] } ${ styles['chart-container_active'] }`);
+		expect(row.props.className).toBe(`${styles['chart-container']} ${styles['chart-container_active']}`);
 		// [group 1, row 1] attr title
-		expect(row.props.title).toBe('Click to hide rate graph');
+		expect(row.props.title).toBe('Нажмите, чтобы скрыть график');
 		// [group 1, row 1] attr onClick
 		expect(row.props.onClick).toBe('toggleChart_bind_test');
 		// [group 1, row 1] children length
@@ -93,7 +93,7 @@ describe('<LimitReq />', () => {
 		// [group 1, row 1] child 1, nodeName
 		expect(row.props.children[0].type).toBe('td');
 		// [group 1, row 1] child 1, className
-		expect(row.props.children[0].props.className).toBe(`${ styles['center-align'] } ${ styles.bdr } ${ styles['chart-icon'] }`);
+		expect(row.props.children[0].props.className).toBe(`${styles['center-align']} ${styles.bdr} ${styles['chart-icon']}`);
 		// [group 1, row 1] child 1, child nodeName
 		expect(row.props.children[0].props.children.type).toBe('div');
 		// [group 1, row 1] child 1, child className
@@ -101,7 +101,7 @@ describe('<LimitReq />', () => {
 		// [group 1, row 1] child 2, nodeName
 		expect(row.props.children[1].type).toBe('td');
 		// [group 1, row 1] child 2, className
-		expect(row.props.children[1].props.className).toBe(`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`);
+		expect(row.props.children[1].props.className).toBe(`${styles['left-align']} ${styles.bold} ${styles.bdr}`);
 		// [group 1, row 1] child 2, child
 		expect(row.props.children[1].props.children).toBe('test');
 		// [group 1, row 1] child 3, nodeName
@@ -144,7 +144,7 @@ describe('<LimitReq />', () => {
 		// [group 1, row 2] child nodeName
 		expect(row.props.children.type).toBe('td');
 		// [group 1, row 2] child colspan
-		expect(row.props.children.props.colspan).toBe('7');
+		expect(row.props.children.props.colSpan).toBe('7');
 		// [group 1, row 2] child className
 		expect(row.props.children.props.className).toBe(styles['left-align']);
 		// [group 1, row 2] Chart in open row
@@ -165,7 +165,7 @@ describe('<LimitReq />', () => {
 		// [group 2, row 1] attr className
 		expect(row.props.className).toBe(styles['chart-container']);
 		// [group 2, row 1] attr title
-		expect(row.props.title).toBe('Click to view rate graph');
+		expect(row.props.title).toBe('Нажмите, чтобы увидеть график');
 
 		// [group 2, row 1] attr onClick
 		expect(row.props.onClick).toBe('toggleChart_bind_test');
@@ -174,7 +174,7 @@ describe('<LimitReq />', () => {
 		// [group 2, row 1] child 1, nodeName
 		expect(row.props.children[0].type).toBe('td');
 		// [group 2, row 1] child 1, className
-		expect(row.props.children[0].props.className).toBe(`${ styles['center-align'] } ${ styles.bdr } ${ styles['chart-icon'] }`);
+		expect(row.props.children[0].props.className).toBe(`${styles['center-align']} ${styles.bdr} ${styles['chart-icon']}`);
 		// [group 2, row 1] child 1, child nodeName
 		expect(row.props.children[0].props.children.type).toBe('div');
 		// [group 2, row 1] child 1, child className
@@ -182,7 +182,7 @@ describe('<LimitReq />', () => {
 		// [group 2, row 1] child 2, nodeName
 		expect(row.props.children[1].type).toBe('td');
 		// [group 2, row 1] child 2, className
-		expect(row.props.children[1].props.className).toBe(`${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }`);
+		expect(row.props.children[1].props.className).toBe(`${styles['left-align']} ${styles.bold} ${styles.bdr}`);
 		// [group 2, row 1] child 2, child
 		expect(row.props.children[1].props.children).toBe('test_1');
 		// [group 2, row 1] child 3, nodeName

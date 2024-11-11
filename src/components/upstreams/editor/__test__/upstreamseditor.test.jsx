@@ -71,9 +71,11 @@ describe('<UpstreamsEditor />', () => {
 			}]
 		]),
 		upstream: { name: 'upstream_test' },
-		upstreamsApi: { getServer(){
-			return Promise.resolve({});
-		} }
+		upstreamsApi: {
+			getServer() {
+				return Promise.resolve({});
+			}
+		}
 	};
 
 	it('constructor()', () => {
@@ -147,12 +149,14 @@ describe('<UpstreamsEditor />', () => {
 		});
 
 		wrapper = shallow(
-			<UpstreamsEditor {...({ ...props,
+			<UpstreamsEditor {...({
+				...props,
 				servers: new Map([
 					['test_1', {}],
 					['test_2', {}],
 					['test_3', {}]
-				]) })}
+				])
+			})}
 			/>
 		);
 
@@ -167,10 +171,12 @@ describe('<UpstreamsEditor />', () => {
 		}));
 
 		wrapper = shallow(
-			<UpstreamsEditor {...({ ...props,
+			<UpstreamsEditor {...({
+				...props,
 				upstreamsApi: {
 					getServer: getServerSpy
-				} })}
+				}
+			})}
 			/>
 		);
 
@@ -240,11 +246,13 @@ describe('<UpstreamsEditor />', () => {
 
 		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
-		instance.handleFormChange({ target: {
-			name: 'form_field_1',
-			type: 'checkbox',
-			checked: false
-		} });
+		instance.handleFormChange({
+			target: {
+				name: 'form_field_1',
+				type: 'checkbox',
+				checked: false
+			}
+		});
 
 		// [checkbox changed] this.setState called
 		expect(setStateSpy).toHaveBeenCalled();
@@ -256,11 +264,13 @@ describe('<UpstreamsEditor />', () => {
 		});
 
 		setStateSpy.mockReset();
-		instance.handleFormChange({ target: {
-			name: 'form_field_2',
-			type: 'text',
-			value: 'test value 2'
-		} });
+		instance.handleFormChange({
+			target: {
+				name: 'form_field_2',
+				type: 'text',
+				value: 'test value 2'
+			}
+		});
 
 		// [text input changed] this.setState called
 		expect(setStateSpy).toHaveBeenCalled();
@@ -280,15 +290,19 @@ describe('<UpstreamsEditor />', () => {
 		const wrapper = shallow(<UpstreamsEditor {...props} />);
 		const instance = wrapper.instance();
 
-		wrapper.setState({ data: {
-			down: true
-		} });
+		wrapper.setState({
+			data: {
+				down: true
+			}
+		});
 
 		const setStateSpy = jest.spyOn(instance, 'setState').mockClear();
 
-		instance.handleRadioChange({ target: {
-			value: 'drain'
-		} });
+		instance.handleRadioChange({
+			target: {
+				value: 'drain'
+			}
+		});
 
 		// [drain change] this.setState called
 		expect(setStateSpy).toHaveBeenCalled();
@@ -298,10 +312,12 @@ describe('<UpstreamsEditor />', () => {
 		});
 
 		setStateSpy.mockReset();
-		instance.handleRadioChange({ target: {
-			id: 'test_id',
-			value: 'true'
-		} });
+		instance.handleRadioChange({
+			target: {
+				id: 'test_id',
+				value: 'true'
+			}
+		});
 
 		// this.setState called
 		expect(setStateSpy).toHaveBeenCalled();
@@ -323,11 +339,11 @@ describe('<UpstreamsEditor />', () => {
 		const initialData = {
 			server: 'test_server_before'
 		};
-		const updateServerSpy = jest.fn((_, server) => `updateServer_result_${ server }`);
+		const updateServerSpy = jest.fn((_, server) => `updateServer_result_${server}`);
 		const wrapper = shallow(<UpstreamsEditor
 			{...props}
 			upstreamsApi={{
-				getServer(){
+				getServer() {
 					return Promise.resolve({});
 				},
 				updateServer: updateServerSpy
@@ -349,7 +365,7 @@ describe('<UpstreamsEditor />', () => {
 			then: next0ThenSpy
 		}));
 
-		jest.spyOn(instance, 'closeErrors').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'closeErrors').mockClear().mockImplementation(() => { });
 		jest.spyOn(instance, 'validate').mockClear().mockImplementation(() => ({
 			then: thenSpy
 		}));
@@ -387,7 +403,7 @@ describe('<UpstreamsEditor />', () => {
 		// this.validate, first "then" cb, Promise.all called
 		expect(Promise.all).toHaveBeenCalled();
 		// this.validate, first "then" cb, Promise.all call args
-		expect(Promise.all.mock.calls[0][0]).toEqual([ 'updateServer_result_test_4' ]);
+		expect(Promise.all.mock.calls[0][0]).toEqual(['updateServer_result_test_4']);
 		// upstreamsApi.updatePeer called once
 		expect(updateServerSpy).toHaveBeenCalled();
 		// upstreamsApi.updatePeer call args
@@ -413,7 +429,7 @@ describe('<UpstreamsEditor />', () => {
 		// Promise.all, first "then", this.setState call args
 		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			success: true,
-			successMessage: 'Changes saved'
+			successMessage: 'Изменения сохранены'
 		});
 		// this.validate, second "then" called
 		expect(nextThenSpy).toHaveBeenCalled();
@@ -432,13 +448,13 @@ describe('<UpstreamsEditor />', () => {
 		expect(catchSpy).toHaveBeenCalled();
 		expect(catchSpy.mock.calls[0][0]).toBeInstanceOf(Function);
 
-		jest.spyOn(instance, 'showErrors').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'showErrors').mockClear().mockImplementation(() => { });
 		catchSpy.mock.calls[0][0]({ error: 'test error' });
 
 		// this.validate, catch call, this.showErrors called
 		expect(instance.showErrors).toHaveBeenCalled();
 		// this.validate, catch call, this.showErrors call args
-		expect(instance.showErrors.mock.calls[0][0]).toEqual([ 'test error' ]);
+		expect(instance.showErrors.mock.calls[0][0]).toEqual(['test error']);
 
 		instance.showErrors.mockClear();
 		catchSpy.mock.calls[0][0](['test error', 'another test error']);
@@ -459,7 +475,7 @@ describe('<UpstreamsEditor />', () => {
 			...props,
 			servers: null,
 			upstreamsApi: {
-				getServer(){
+				getServer() {
 					return Promise.resolve({});
 				},
 				createServer: createServerSpy
@@ -491,7 +507,7 @@ describe('<UpstreamsEditor />', () => {
 		// createPeer, 1st "then" cb, this.setState call args
 		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			success: true,
-			successMessage: 'Server added successfully'
+			successMessage: 'Сервер успешно добавлен',
 		});
 		// this.validate, first "then" cb, Promise.all not called
 		expect(Promise.all).not.toHaveBeenCalled();
@@ -569,7 +585,7 @@ describe('<UpstreamsEditor />', () => {
 			<UpstreamsEditor
 				{...props}
 				upstreamsApi={{
-					getServer(){
+					getServer() {
 						return Promise.resolve({});
 					},
 					deleteServer: deleteServerSpy
@@ -618,7 +634,7 @@ describe('<UpstreamsEditor />', () => {
 		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			success: true,
 			shouldClearServers: true,
-			successMessage: 'Servers 1, 2, 3 successfully removed'
+			successMessage: 'Серверы 1, 2, 3 успешно удалены'
 		});
 		// Promise.all, "catch" called
 		expect(catchSpy).toHaveBeenCalled();
@@ -666,7 +682,7 @@ describe('<UpstreamsEditor />', () => {
 			result = await instance.validate({ server: '' });
 		} catch (error) {
 			// [invalid non-IP server] result
-			expect(error).toEqual(['Invalid server address or port']);
+			expect(error).toEqual(['Неверный адрес или порт сервера']);
 		}
 
 		try {
@@ -675,7 +691,7 @@ describe('<UpstreamsEditor />', () => {
 			});
 		} catch (error) {
 			// [invalid non-IP server] result
-			expect(error).toEqual(['Invalid server address or port']);
+			expect(error).toEqual(['Неверный адрес или порт сервера']);
 		}
 
 		result = await instance.validate({
@@ -691,8 +707,8 @@ describe('<UpstreamsEditor />', () => {
 				service: 'test service'
 			});
 		} catch (error) {
-		// [valid non-IP server, invalid service] result
-			expect(error).toEqual(['Invalid server address or service setting']);
+			// [valid non-IP server, invalid service] result
+			expect(error).toEqual(['Неверный адрес сервера или настройка сервиса']);
 		}
 
 		try {
@@ -701,8 +717,8 @@ describe('<UpstreamsEditor />', () => {
 				service: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'
 			});
 		} catch (error) {
-		// [valid non-IP server and service, but sum of both length is too long] result
-			expect(error).toEqual(['Invalid server address or service setting']);
+			// [valid non-IP server and service, but sum of both length is too long] result
+			expect(error).toEqual(['Неверный адрес сервера или настройка сервиса']);
 		}
 
 		const getServerThenSpy = jest.fn(() => 'getServerThen_result');
@@ -735,7 +751,7 @@ describe('<UpstreamsEditor />', () => {
 		try {
 			await getServerThenSpy.mock.calls[0][0]({ error: true });
 		} catch (error) {
-			expect(error).toEqual(['No such server (please, check if it still exists)']);
+			expect(error).toEqual(['Сервер не найден (убедитесь, что сервер существует)']);
 		}
 
 		wrapper.setProps({ servers: null });
@@ -748,15 +764,15 @@ describe('<UpstreamsEditor />', () => {
 			await instance.validate({});
 		} catch (error) {
 			// [props.isStream = true, invalid non-IP server] result
-			expect(error).toEqual(['Invalid server address or port']);
+			expect(error).toEqual(['Неверный адрес или порт сервера']);
 		}
 
 		wrapper.setProps({ isStream: true });
 		try {
 			await instance.validate({ server: 'localhost' });
 		} catch (error) {
-		// [props.isStream = true, invalid non-IP server] result
-			expect(error).toEqual(['Invalid server address or port']);
+			// [props.isStream = true, invalid non-IP server] result
+			expect(error).toEqual(['Неверный адрес или порт сервера']);
 		}
 
 		result = await instance.validate({ server: 'localhost:1234' });
@@ -833,7 +849,7 @@ describe('<UpstreamsEditor />', () => {
 		// title className
 		expect(wrapper.childAt(0).prop('className')).toBe(styles.header);
 		// title text
-		expect(wrapper.childAt(0).text()).toBe('Add server to "upstream_test"');
+		expect(wrapper.childAt(0).text()).toBe('Добавление сервера в "upstream_test"');
 		// close el className
 		expect(wrapper.childAt(1).prop('className')).toBe(styles.close);
 		expect(wrapper.childAt(1).prop('onClick')).toBeInstanceOf(Function);
@@ -1025,7 +1041,7 @@ describe('<UpstreamsEditor />', () => {
 		// footer, save onClick name
 		expect(footer.childAt(0).prop('onClick').name).toBe('bound save');
 		// footer, save text
-		expect(footer.childAt(0).text()).toBe('Add');
+		expect(footer.childAt(0).text()).toBe('Добавить');
 		// footer, cancel className
 		expect(footer.childAt(1).prop('className')).toBe(styles.cancel);
 		expect(footer.childAt(1).prop('onClick')).toBeInstanceOf(Function);
@@ -1049,7 +1065,7 @@ describe('<UpstreamsEditor />', () => {
 		// domain name className
 		expect(serversGroup.childAt(1).prop('className')).toBe(styles['form-group']);
 		// domain name text
-		expect(serversGroup.childAt(1).text()).toBe('Domain name: host_test');
+		expect(serversGroup.childAt(1).text()).toBe('Доменное имя: host_test');
 
 		formsMini = content.childAt(1);
 
@@ -1061,12 +1077,14 @@ describe('<UpstreamsEditor />', () => {
 		// [isStream = false] radio group children count
 		expect(radio.children()).toHaveLength(4);
 
-		wrapper.setProps({ servers: new Map([
-			['test_1', {
-				id: 'test_1',
-				server: 'test_server_1'
-			}]
-		]) });
+		wrapper.setProps({
+			servers: new Map([
+				['test_1', {
+					id: 'test_1',
+					server: 'test_server_1'
+				}]
+			])
+		});
 		wrapper.setState({
 			data,
 			loading: false,
@@ -1074,7 +1092,7 @@ describe('<UpstreamsEditor />', () => {
 		});
 
 		// [peers.length = 1] title text
-		expect(wrapper.childAt(0).childAt(0).text()).toBe('Edit server test_1 "upstream_test"');
+		expect(wrapper.childAt(0).childAt(0).text()).toBe('Редактирование сервера test_1 "upstream_test"');
 
 		content = wrapper.childAt(2).childAt(0);
 
@@ -1110,20 +1128,22 @@ describe('<UpstreamsEditor />', () => {
 		// footer, remove onClick name
 		expect(footer.childAt(0).prop('onClick').name).toBe('bound remove');
 		// footer, save text
-		expect(footer.childAt(1).text()).toBe('Save');
+		expect(footer.childAt(1).text()).toBe('Сохранить');
 
-		wrapper.setProps({ servers: new Map([
-			['test_1', {
-				id: 'test_1',
-				server: 'test_server_1'
-			}], ['test_2', {
-				id: 'test_2',
-				server: 'test_server_2'
-			}]
-		]) });
+		wrapper.setProps({
+			servers: new Map([
+				['test_1', {
+					id: 'test_1',
+					server: 'test_server_1'
+				}], ['test_2', {
+					id: 'test_2',
+					server: 'test_server_2'
+				}]
+			])
+		});
 
 		// [peers.length = 1] title text
-		expect(wrapper.childAt(0).childAt(0).text()).toBe('Edit servers "upstream_test"');
+		expect(wrapper.childAt(0).childAt(0).text()).toBe('Редактирование сервера "upstream_test"');
 
 		content = wrapper.childAt(2).childAt(0);
 		serversGroup = content.childAt(0);

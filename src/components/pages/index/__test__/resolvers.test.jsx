@@ -56,7 +56,7 @@ describe('<Resolvers IndexPage />', () => {
 		let traffic = indexBox.find('p');
 
 		// Traffic req/s
-		expect(traffic.at(0).text()).toBe('Зпр./сек.: 0');
+		expect(traffic.at(0).text()).toBe('Запр./сек.: 0');
 		// Traffic resp/s
 		expect(traffic.at(1).text()).toBe('Отв./сек.: 0');
 
@@ -65,7 +65,7 @@ describe('<Resolvers IndexPage />', () => {
 		traffic = wrapper.find('IndexBox p');
 
 		// Traffic req/s
-		expect(traffic.at(0).text()).toBe('Зпр./сек.: 20');
+		expect(traffic.at(0).text()).toBe('Запр./сек.: 20');
 		// Traffic resp/s
 		expect(traffic.at(1).text()).toBe('Отв./сек.: 19');
 

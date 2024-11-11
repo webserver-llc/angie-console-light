@@ -59,18 +59,18 @@ describe('<ZoneSync IndexPage />', () => {
 		let traffic = indexBox.find('p');
 
 		// Traffic req/s
-		expect(traffic.at(0).text()).toBe('In: 0');
+		expect(traffic.at(0).text()).toBe('Входящий: 0');
 		// Traffic resp/s
-		expect(traffic.at(1).text()).toBe('Out: 0');
+		expect(traffic.at(1).text()).toBe('Исходящий: 0');
 
 		data.zone_sync.__STATS.traffic = { in: 20, out: 19 };
 		wrapper.setProps({ data, store });
 		traffic = wrapper.find('IndexBox p');
 
 		// Traffic req/s
-		expect(traffic.at(0).text()).toBe('In: 20');
+		expect(traffic.at(0).text()).toBe('Входящий: 20');
 		// Traffic resp/s
-		expect(traffic.at(1).text()).toBe('Out: 19');
+		expect(traffic.at(1).text()).toBe('Исходящий: 19');
 
 		wrapper.unmount();
 	});

@@ -1,4 +1,5 @@
 /*
+/*
 *
  * Copyright 2023-present, Web Server LLC
  * Copyright 2017-present, Nginx, Inc.
@@ -51,7 +52,7 @@ describe('<Chart />', () => {
 		const onMouseUpSpy = jest.spyOn(Chart.prototype.onMouseUp, 'bind').mockClear();
 		const highlightMetricSpy = jest.spyOn(Chart.prototype.highlightMetric, 'bind').mockClear();
 		const onSettingsChangeSpy = jest.spyOn(Chart.prototype.onSettingsChange, 'bind').mockClear();
-		const redrawStub = jest.spyOn(Chart.prototype, 'redraw').mockClear().mockImplementation(function (){
+		const redrawStub = jest.spyOn(Chart.prototype, 'redraw').mockClear().mockImplementation(function () {
 			this.ticks = [];
 			this.toRender = {};
 		});
@@ -130,7 +131,7 @@ describe('<Chart />', () => {
 		// selectedTimeWindow state when timeWindow is unknown
 		expect(wrapper.state('selectedTimeWindow')).toBe(TimeWindowDefault);
 
-		timeWindow = '1m';
+		timeWindow = '1 мин.';
 		wrapper = shallow(
 			<Chart {...props} />
 		);
@@ -171,7 +172,7 @@ describe('<Chart />', () => {
 		);
 		const instance = wrapper.instance();
 
-		jest.spyOn(appsettings, 'unsubscribe').mockClear().mockImplementation(() => {});
+		jest.spyOn(appsettings, 'unsubscribe').mockClear().mockImplementation(() => { });
 
 		instance.settingsListener = subscribeResult;
 		instance.componentWillUnmount();
@@ -196,7 +197,7 @@ describe('<Chart />', () => {
 		const instance = wrapper.instance();
 
 		jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(() => updatingPeriod);
-		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => { });
 
 		instance.componentWillReceiveProps(nextData);
 
@@ -276,7 +277,7 @@ describe('<Chart />', () => {
 		);
 		const instance = wrapper.instance();
 
-		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => { });
 
 		instance.onSettingsChange(value);
 
@@ -328,7 +329,7 @@ describe('<Chart />', () => {
 	/* TODO something use state in Chart.tsx. Tests fails if run all tests */
 	it('drawCursorLine()', () => {
 		let wrapper;
-		let	instance;
+		let instance;
 
 		wrapper = shallow(
 			<Chart {...props} />
@@ -369,7 +370,7 @@ describe('<Chart />', () => {
 		);
 		const instance = wrapper.instance();
 
-		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => { });
 
 		instance.onMouseDown({ offsetX });
 
@@ -408,7 +409,7 @@ describe('<Chart />', () => {
 		);
 		const instance = wrapper.instance();
 
-		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => { });
 
 		instance.onMouseUp();
 
@@ -457,8 +458,8 @@ describe('<Chart />', () => {
 			setTimeoutCallback = fn;
 			return setTimeoutId;
 		});
-		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => {});
-		jest.spyOn(instance, 'drawCursorLine').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => { });
+		jest.spyOn(instance, 'drawCursorLine').mockClear().mockImplementation(() => { });
 
 		instance.onMouseMove({ offsetX: 100 });
 
@@ -494,7 +495,7 @@ describe('<Chart />', () => {
 		// this.dndMoveX
 		expect(instance.dndMoveX).toBe(100);
 
-		wrapper.setState({ selectedTimeWindow: '15m' });
+		wrapper.setState({ selectedTimeWindow: '15 мин.' });
 		instance.dndMoveX = 120;
 		instance.onMouseMove({ offsetX: 140 });
 
@@ -503,7 +504,7 @@ describe('<Chart />', () => {
 		// this.dndStartX [selectedTW 15m]
 		expect(instance.dndStartX).toBe(260);
 
-		wrapper.setState({ selectedTimeWindow: '5m' });
+		wrapper.setState({ selectedTimeWindow: '5 мин.' });
 		instance.dndMoveX = 280;
 		instance.onMouseMove({ offsetX: 200 });
 
@@ -512,7 +513,7 @@ describe('<Chart />', () => {
 		// this.dndStartX [selectedTW 5m]
 		expect(instance.dndStartX).toBe(140);
 
-		wrapper.setState({ selectedTimeWindow: '1m' });
+		wrapper.setState({ selectedTimeWindow: '1 мин.' });
 		instance.dndMoveX = 160;
 		instance.onMouseMove({ offsetX: 200 });
 
@@ -597,7 +598,7 @@ describe('<Chart />', () => {
 		);
 		const instance = wrapper.instance();
 
-		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => { });
 
 		instance.pointsIndicies = '1,3';
 		instance.emulateDnd(-1);
@@ -676,7 +677,7 @@ describe('<Chart />', () => {
 		);
 		const instance = wrapper.instance();
 
-		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => { });
 
 		instance.highlightMetricTimer = 2;
 		instance.highlightedMetric = 'test_metric';
@@ -704,7 +705,7 @@ describe('<Chart />', () => {
 		);
 		const instance = wrapper.instance();
 
-		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'redraw').mockClear().mockImplementation(() => { });
 
 		instance.toggleMetric('test_metric');
 
@@ -778,7 +779,7 @@ describe('<Chart />', () => {
 
 				if (key === selectedTimeWindow) {
 					// [el ${ i }] className attr
-					expect(el.props.className).toBe(`${ styles.timewindow__item } ${ styles.timewindow__item_selected }`);
+					expect(el.props.className).toBe(`${styles.timewindow__item} ${styles.timewindow__item_selected}`);
 					// [el ${ i }] onClick attr
 					expect(el.props.onClick).toBeUndefined();
 				} else {
@@ -798,10 +799,10 @@ describe('<Chart />', () => {
 			expect(selectTWBindSpy).toHaveBeenCalledTimes(2);
 			expect(selectTWBindSpy.mock.calls[0][0]).toBeNull();
 			// selectTimeWindow.bind call 1, arg 2
-			expect(selectTWBindSpy.mock.calls[0][1]).toBe('1m');
+			expect(selectTWBindSpy.mock.calls[0][1]).toBe('1 мин.');
 			expect(selectTWBindSpy.mock.calls[1][0]).toBeNull();
 			// selectTimeWindow.bind call 2, arg 2
-			expect(selectTWBindSpy.mock.calls[1][1]).toBe('15m');
+			expect(selectTWBindSpy.mock.calls[1][1]).toBe('15 мин.');
 
 			// this.setState not called
 			expect(stateSpy).not.toHaveBeenCalled();
@@ -873,7 +874,7 @@ describe('<Chart />', () => {
 			// getYMax 1st arg
 			expect(utils.getYMax.mock.calls[0][0]).toEqual(data);
 			// getYMax 2nd arg
-			expect(utils.getYMax.mock.calls[0][1]).toEqual([ 'passed', 'delayed', 'rejected' ]);
+			expect(utils.getYMax.mock.calls[0][1]).toEqual(['passed', 'delayed', 'rejected']);
 			// getYMax 3rd arg
 			expect(utils.getYMax.mock.calls[0][2]).toEqual([]);
 			// this.points[0]._ts
@@ -911,7 +912,7 @@ describe('<Chart />', () => {
 			// this.toRender.charts[0] key
 			expect(instance.toRender.charts[0].key).toBe('chart_rejected');
 			// this.toRender.charts[0] className
-			expect(instance.toRender.charts[0].props.className).toBe(`${ styles.line } ${ styles.faded }`);
+			expect(instance.toRender.charts[0].props.className).toBe(`${styles.line} ${styles.faded}`);
 			// this.toRender.charts[0] style
 			expect(instance.toRender.charts[0].props.style).toEqual({ stroke: '#FF2323' });
 			// this.toRender.charts[0] d
@@ -923,7 +924,7 @@ describe('<Chart />', () => {
 			// this.toRender.charts[1] key
 			expect(instance.toRender.charts[1].key).toBe('chart_delayed');
 			// this.toRender.charts[1] className
-			expect(instance.toRender.charts[1].props.className).toBe(`${ styles.line } ${ styles.faded }`);
+			expect(instance.toRender.charts[1].props.className).toBe(`${styles.line} ${styles.faded}`);
 			// this.toRender.charts[1] style
 			expect(instance.toRender.charts[1].props.style).toEqual({ stroke: '#EBC906' });
 			// this.toRender.charts[1] d
@@ -948,7 +949,7 @@ describe('<Chart />', () => {
 			// this.toRender.areas[0] key
 			expect(instance.toRender.areas[0].key).toBe('chart-area_rejected');
 			// this.toRender.areas[0] className
-			expect(instance.toRender.areas[0].props.className).toBe(`${ styles.area } ${ styles.faded }`);
+			expect(instance.toRender.areas[0].props.className).toBe(`${styles.area} ${styles.faded}`);
 			// this.toRender.areas[0] style
 			expect(instance.toRender.areas[0].props.style).toEqual({ fill: '#FF2323' });
 			// this.toRender.areas[0] d
@@ -960,7 +961,7 @@ describe('<Chart />', () => {
 			// this.toRender.areas[1] key
 			expect(instance.toRender.areas[1].key).toBe('chart-area_delayed');
 			// this.toRender.areas[1] className
-			expect(instance.toRender.areas[1].props.className).toBe(`${ styles.area } ${ styles.faded }`);
+			expect(instance.toRender.areas[1].props.className).toBe(`${styles.area} ${styles.faded}`);
 			// this.toRender.areas[1] style
 			expect(instance.toRender.areas[1].props.style).toEqual({ fill: '#EBC906' });
 			// this.toRender.areas[1] d
@@ -1198,7 +1199,7 @@ describe('<Chart />', () => {
 				expect(instance.toRender.areas[2].props.d).toBe('M 50 165 L 1130 105 V 205L 1130 205 L 50 215  V 215');
 			});
 
-			wrapper.setState({ selectedTimeWindow: '15m' });
+			wrapper.setState({ selectedTimeWindow: '15 мин.' });
 			instance.redraw();
 
 			// this.ticks length
@@ -1223,7 +1224,7 @@ describe('<Chart />', () => {
 				colors: Colors,
 				labels: Labels
 			});
-			wrapper.setState({ selectedTimeWindow: '1m' });
+			wrapper.setState({ selectedTimeWindow: '1 мин.' });
 			instance.redraw();
 
 			// this.ticks length
@@ -1427,7 +1428,7 @@ describe('<Chart />', () => {
 			);
 
 			// legend disabled className
-			expect(disabledLegendItem.props.className).toBe(`${ styles.legend__item } ${ styles.legend__item_disabled }`);
+			expect(disabledLegendItem.props.className).toBe(`${styles.legend__item} ${styles.legend__item_disabled}`);
 			// legend disabled onMouseOver
 			expect(disabledLegendItem.props.onMouseOver).toBeUndefined();
 			// legend disabled onMouseLeave
@@ -1485,7 +1486,7 @@ describe('<Chart />', () => {
 				expect(el.key).toBe(i);
 				// [no data, el ${ i }] className attr
 				expect(el.props.className).toBe(
-					`${ styles['dnd-controls__control'] } ${ styles['dnd-controls__control_disabled'] }`
+					`${styles['dnd-controls__control']} ${styles['dnd-controls__control_disabled']}`
 				);
 				// [no data, el ${ i }] onClick attr
 				expect(el.props.onClick).toBeUndefined();
@@ -1505,7 +1506,7 @@ describe('<Chart />', () => {
 				expect(el.key).toBe(i);
 				// [data, el ${ i }] className attr
 				expect(el.props.className).toBe(
-					`${ styles['dnd-controls__control'] } ${ styles['dnd-controls__control_disabled'] }`
+					`${styles['dnd-controls__control']} ${styles['dnd-controls__control_disabled']}`
 				);
 				// [data, el ${ i }] onClick attr
 				expect(el.props.onClick).toBeUndefined();
@@ -1634,11 +1635,11 @@ describe('<Chart />', () => {
 			// legend disabled className
 			expect(instance.toRender.legend.find(
 				legend => legend.key === 'legend_passed'
-			).props.className).toBe(`${ styles.legend__item } ${ styles.legend__item_disabled }`);
+			).props.className).toBe(`${styles.legend__item} ${styles.legend__item_disabled}`);
 			// chart faded className
 			expect(instance.toRender.charts.find(
 				chart => chart.key === 'chart_rejected'
-			).props.className).toBe(`${ styles.line } ${ styles.faded }`);
+			).props.className).toBe(`${styles.line} ${styles.faded}`);
 			// this.points length
 			expect(instance.points).toHaveLength(4);
 			// [timeWindow 5m] this.points[0].x
@@ -1655,7 +1656,7 @@ describe('<Chart />', () => {
 			// this.setState arg
 			expect(setStateSpy.mock.calls[0][0]).toEqual(state);
 
-			instance.redraw({ selectedTimeWindow: '15m' });
+			instance.redraw({ selectedTimeWindow: '15 мин.' });
 			wrapper.update();
 
 			// this.points length
@@ -1752,7 +1753,7 @@ describe('<Chart />', () => {
 		);
 		const instance = wrapper.instance();
 
-		jest.spyOn(appsettings, 'setSetting').mockClear().mockImplementation(() => {});
+		jest.spyOn(appsettings, 'setSetting').mockClear().mockImplementation(() => { });
 
 		instance.selectTimeWindow('test');
 
@@ -1791,9 +1792,9 @@ describe('<Chart />', () => {
 			];
 			instance.forceUpdate();
 
-			const container = wrapper.find(`.${ styles.container }`);
-			const dndControls = container.find(`.${ styles['dnd-controls'] }`);
-			const timeWindow = container.find(`.${ styles.timewindow }`);
+			const container = wrapper.find(`.${styles.container}`);
+			const dndControls = container.find(`.${styles['dnd-controls']}`);
+			const timeWindow = container.find(`.${styles.timewindow}`);
 
 			// container
 			expect(container).toHaveLength(1);
@@ -1802,7 +1803,7 @@ describe('<Chart />', () => {
 			// timewindow inner
 			expect(timeWindow.text()).toBe('timeWindowControls__test');
 
-			const mouseTracker = container.find(`.${ styles['mouse-tracker'] }`);
+			const mouseTracker = container.find(`.${styles['mouse-tracker']}`);
 
 			// mouse-tracker className
 			expect(mouseTracker.prop('className')).toBe(styles['mouse-tracker']);
@@ -1822,12 +1823,12 @@ describe('<Chart />', () => {
 			// mouse-tracker onMouseUp
 			expect(mouseTracker.prop('onMouseUp')).toBeUndefined();
 
-			const svg = container.find(`svg.${ styles.svg }`);
-			const ticksLines = svg.find(`path.${ styles['x-axis'] }`);
-			const yLabel = svg.find(`text.${ styles['y-label'] }`);
-			const xAxis = svg.find(`line.${ styles['x-axis'] }`);
-			const cursorLine = svg.find(`line.${ styles['cursor-line'] }`);
-			const ticksLabels = svg.find(`text.${ styles['x-label'] }`);
+			const svg = container.find(`svg.${styles.svg}`);
+			const ticksLines = svg.find(`path.${styles['x-axis']}`);
+			const yLabel = svg.find(`text.${styles['y-label']}`);
+			const xAxis = svg.find(`line.${styles['x-axis']}`);
+			const cursorLine = svg.find(`line.${styles['cursor-line']}`);
+			const ticksLabels = svg.find(`text.${styles['x-label']}`);
 
 			// svg width
 			expect(svg.prop('width')).toBe('1150');
@@ -1882,7 +1883,7 @@ describe('<Chart />', () => {
 			// this.toRender.areas
 			expect(svg.childAt(9).text()).toBe('toRender_areas__test');
 			// this.toRender.legend
-			expect(container.find(`div.${ styles.legend }`).text()).toBe('legend__test');
+			expect(container.find(`div.${styles.legend}`).text()).toBe('legend__test');
 		});
 
 		it('mouseOffsetX, dndIsInProgress, dndAllowed', () => {
@@ -1921,17 +1922,17 @@ describe('<Chart />', () => {
 			// tooltip points child 2, text
 			expect(tooltipPoints.props.children[1].props.children).toBe('Passed');
 
-			const tooltip = wrapper.find(`div.${ styles.tooltip }`);
+			const tooltip = wrapper.find(`div.${styles.tooltip}`);
 
 			// tooltip style
 			expect(tooltip.prop('style')).toEqual({ left: '18px' });
 			// tooltip points
-			expect(tooltip.find(`div.${ styles.tooltip__point }`)).toHaveLength(1);
+			expect(tooltip.find(`div.${styles.tooltip__point}`)).toHaveLength(1);
 			// tooltip time
-			expect(tooltip.find(`div.${ styles.tooltip__time }`)).toHaveLength(1);
+			expect(tooltip.find(`div.${styles.tooltip__time}`)).toHaveLength(1);
 
 			// cursor-line transform
-			expect(wrapper.find(`svg line.${ styles['cursor-line'] }`).prop('transform')).toBe('translate(10)');
+			expect(wrapper.find(`svg line.${styles['cursor-line']}`).prop('transform')).toBe('translate(10)');
 
 			wrapper.setProps({
 				data: {
@@ -1954,7 +1955,7 @@ describe('<Chart />', () => {
 				wrapper.instance().toRender.tooltipPoints[0].props.children[0].props.children
 			).toBe(51);
 			// tooltip style
-			expect(wrapper.find(`div.${ styles.tooltip }`).prop('style')).toEqual({ right: '258px' });
+			expect(wrapper.find(`div.${styles.tooltip}`).prop('style')).toEqual({ right: '258px' });
 
 			wrapper.setState({ mouseOffsetX: 40 });
 
@@ -1967,13 +1968,13 @@ describe('<Chart />', () => {
 			wrapper.setState({ dndIsInProgress: true });
 
 			// mouse-tracker_drag
-			expect(wrapper.find(`.${ styles['mouse-tracker_drag'] }`)).toHaveLength(1);
+			expect(wrapper.find(`.${styles['mouse-tracker_drag']}`)).toHaveLength(1);
 			// mouse-tracker_dragging
-			expect(wrapper.find(`.${ styles['mouse-tracker_dragging'] }`)).toHaveLength(1);
+			expect(wrapper.find(`.${styles['mouse-tracker_dragging']}`)).toHaveLength(1);
 			// mouse-tracker onMouseDown
-			expect(wrapper.find(`.${ styles['mouse-tracker'] }`).prop('onMouseDown').name).toBe('bound onMouseDown');
+			expect(wrapper.find(`.${styles['mouse-tracker']}`).prop('onMouseDown').name).toBe('bound onMouseDown');
 			// mouse-tracker onMouseUp
-			expect(wrapper.find(`.${ styles['mouse-tracker'] }`).prop('onMouseUp').name).toBe('bound onMouseUp');
+			expect(wrapper.find(`.${styles['mouse-tracker']}`).prop('onMouseUp').name).toBe('bound onMouseUp');
 		});
 	});
 });

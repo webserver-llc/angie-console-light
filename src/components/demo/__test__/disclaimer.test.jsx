@@ -54,14 +54,14 @@ describe('<Disclaimer /> (demo)', () => {
 	});
 
 	it('render()', () => {
-		const closeEl = wrapper.find(`.${ styles['disclaimer-close'] }`);
-		const contentEl = wrapper.find(`.${ styles['disclaimer-content'] }`);
+		const closeEl = wrapper.find(`.${styles['disclaimer-close']}`);
+		const contentEl = wrapper.find(`.${styles['disclaimer-content']}`);
 
 		// root el length
-		expect(wrapper.find(`.${ styles.disclaimer }`).length).toBe(1);
+		expect(wrapper.find(`.${styles.disclaimer}`).length).toBe(1);
 		// close element length
 		expect(closeEl.length).toBe(1);
-    	// onClick handler
+		// onClick handler
 		expect(closeEl.prop('onClick').name).toBe('bound close');
 		// content element length
 		expect(contentEl.length).toBe(1);
@@ -71,9 +71,9 @@ describe('<Disclaimer /> (demo)', () => {
 		// links length
 		expect(links.length).toBe(2);
 		// 1nd link href
-		expect(links.get(0).props.href).toBe('https://angie.software/en/console/');
+		expect(links.get(0).props.href).toBe('https://angie.software/angie/docs/configuration/monitoring/');
 		// 2rd link href
-		expect(links.get(1).props.href).toBe('https://wbsrv.ru/angie-pro/');
+		expect(links.get(1).props.href).toBe('https://angie.software/angie/pro/');
 
 		wrapper.setState({ opened: false });
 

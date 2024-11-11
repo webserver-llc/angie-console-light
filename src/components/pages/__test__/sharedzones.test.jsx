@@ -102,7 +102,7 @@ describe('<SharedZones Page />', () => {
 			// TableSortControl "singleRow" prop
 			expect(sortControl.prop('singleRow')).toBe(true);
 			// TableSortControl "secondSortLabel" prop
-			expect(sortControl.prop('secondSortLabel')).toBe('Отсортировать по размеру &mdash; сначала большие');
+			expect(sortControl.prop('secondSortLabel')).toBe('Отсортировать по размеру — сначала большие');
 			// TableSortControl "order" prop
 			expect(sortControl.prop('order')).toBe(wrapper.state('sortOrder'));
 			// TableSortControl "onChange" prop

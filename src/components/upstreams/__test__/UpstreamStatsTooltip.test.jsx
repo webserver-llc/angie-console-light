@@ -35,7 +35,7 @@ describe('<UpstreamStatsTooltip />', () => {
 		// child 1, className
 		expect(wrapper.childAt(0).prop('className')).toBe(styles.h5);
 		// child 1, text
-		expect(wrapper.childAt(0).text()).toBe('Upstream: test_upstream');
+		expect(wrapper.childAt(0).text()).toBe('Апстрим: test_upstream');
 		// child 2, className
 		expect(wrapper.childAt(1).prop('className')).toBe(styles.columns);
 		// columns length
@@ -48,28 +48,28 @@ describe('<UpstreamStatsTooltip />', () => {
 		// column 1, children length
 		expect(column.children()).toHaveLength(4);
 		// status up, tag className
-		expect(column.childAt(0).childAt(0).prop('className')).toBe(`${ styles['status-tag'] } ${ styles.status_up }`);
+		expect(column.childAt(0).childAt(0).prop('className')).toBe(`${styles['status-tag']} ${styles.status_up}`);
 		// status up, text
-		expect(column.childAt(0).text()).toBe(' Up: up_num');
+		expect(column.childAt(0).text()).toBe(' Активных пиров: up_num');
 		// status up, tag className
-		expect(column.childAt(1).childAt(0).prop('className')).toBe(`${ styles['status-tag'] } ${ styles.status_unhealthy }`);
+		expect(column.childAt(1).childAt(0).prop('className')).toBe(`${styles['status-tag']} ${styles.status_unhealthy}`);
 		// status up, text
-		expect(column.childAt(1).text()).toBe(' Failed: failed_num');
+		expect(column.childAt(1).text()).toBe(' Проблемных пиров: failed_num');
 		// status up, tag className
-		expect(column.childAt(2).childAt(0).prop('className')).toBe(`${ styles['status-tag'] } ${ styles.status_draining }`);
+		expect(column.childAt(2).childAt(0).prop('className')).toBe(`${styles['status-tag']} ${styles.status_draining}`);
 		// status up, text
-		expect(column.childAt(2).text()).toBe(' Drain: draining_num');
+		expect(column.childAt(2).text()).toBe(' Разгружаемых: draining_num');
 		// status up, tag className
-		expect(column.childAt(3).childAt(0).prop('className')).toBe(`${ styles['status-tag'] } ${ styles.status_down }`);
+		expect(column.childAt(3).childAt(0).prop('className')).toBe(`${styles['status-tag']} ${styles.status_down}`);
 		// status up, text
-		expect(column.childAt(3).text()).toBe(' Down: down_num');
+		expect(column.childAt(3).text()).toBe(' Недоступных пиров: down_num');
 
 		column = wrapper.childAt(1).childAt(1);
 
 		// column 1, children length
 		expect(column.children()).toHaveLength(1);
 		// zombies text
-		expect(column.childAt(0).text()).toBe('Zombies: zombies_number');
+		expect(column.childAt(0).text()).toBe('Zombie-пиров: zombies_number');
 
 		wrapper.unmount();
 	});
@@ -101,23 +101,23 @@ describe('<UpstreamStatsTooltip />', () => {
 		// column 1, children length
 		expect(column.children()).toHaveLength(5);
 		// status checking, tag className
-		expect(column.childAt(4).childAt(0).prop('className')).toBe(`${ styles['status-tag'] } ${ styles.status_checking }`);
+		expect(column.childAt(4).childAt(0).prop('className')).toBe(`${styles['status-tag']} ${styles.status_checking}`);
 		// status checking, text
-		expect(column.childAt(4).text()).toBe(' Checking: checking_num');
+		expect(column.childAt(4).text()).toBe(' На проверке: checking_num');
 
 		column = wrapper.childAt(1).childAt(1);
 
 		// column 1, className
 		expect(column.prop('className')).toBe(styles.column);
-		expect(column.childAt(0).text()).toBe('Q-Size: size_num/max_size_num');
-		expect(column.childAt(1).text()).toBe('Overflows: overflows_num ');
+		expect(column.childAt(0).text()).toBe('Q-Size:size_num/max_size_num');
+		expect(column.childAt(1).text()).toBe('Overflows:overflows_num');
 
 		column = wrapper.childAt(1).childAt(2);
 
 		// column 1, children length
 		expect(column.children()).toHaveLength(2);
 		// keepalive text
-		expect(column.childAt(0).text()).toBe('Keepalive: 123');
+		expect(column.childAt(0).text()).toBe('Keepalive-пиров: 123');
 
 		wrapper.unmount();
 	});

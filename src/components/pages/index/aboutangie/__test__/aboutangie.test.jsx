@@ -112,7 +112,7 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 		// child 1 className
 		expect(children.at(0).prop('className')).toBe(tooltipStyles.row);
 		// child 1 text
-		expect(children.at(0).text()).toBe('Reloads: 11');
+		expect(children.at(0).text()).toBe('Перезагрузок: 11');
 
 		utils.formatDate.mockRestore();
 		wrapper.unmount();
@@ -151,7 +151,7 @@ describe('<AboutAngie IndexPage />', () => {
 		// IndexBox className
 		expect(wrapper.find('IndexBox').prop('className')).toBe('test');
 
-		const link = wrapper.find(`a.${ styles.release }`);
+		const link = wrapper.find(`a.${styles.release}`);
 
 		// link length
 		expect(link).toHaveLength(1);

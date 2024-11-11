@@ -82,8 +82,8 @@ describe('<Upstream />', () => {
 		);
 		const instance = wrapper.instance();
 
-		jest.spyOn(instance, 'setState').mockClear().mockImplementation(() => {});
-		jest.spyOn(appsettings, 'setSetting').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'setState').mockClear().mockImplementation(() => { });
+		jest.spyOn(appsettings, 'setSetting').mockClear().mockImplementation(() => { });
 
 		instance.toggleColumns();
 
@@ -242,7 +242,7 @@ describe('<Upstream />', () => {
 			() => <tr id="renderEmptyList_result" />
 		);
 		jest.spyOn(instance, 'getCheckbox').mockClear().mockImplementation(
-			({ id }) => <td id={`getCheckbox_result_${ id }`} />
+			({ id }) => <td id={`getCheckbox_result_${id}`} />
 		);
 		jest.spyOn(utils, 'formatUptime').mockClear().mockImplementation(() => 'time_formatted');
 		jest.spyOn(utils, 'formatReadableBytes').mockClear().mockImplementation(() => 'readable_bytes_formatted');
@@ -262,14 +262,14 @@ describe('<Upstream />', () => {
 		// table html tag
 		expect(table.type()).toBe('table');
 		// table className
-		expect(table.prop('className')).toBe(`${ styles.table } ${ styles.wide }`);
+		expect(table.prop('className')).toBe(`${styles.table} ${styles.wide}`);
 		// [editMode = false, columnsExpanded = false] table col length
 		expect(wrapper.find('table col')).toHaveLength(20);
 
 		const tableSortControl = table.find('TableSortControl');
 
 		// TableSortControl secondSortLabel
-		expect(tableSortControl.prop('secondSortLabel')).toBe('Отсортировать по статусу &mdash; сначала недоступные');
+		expect(tableSortControl.prop('secondSortLabel')).toBe('Отсортировать по статусу — сначала недоступные');
 		// TableSortControl order
 		expect(tableSortControl.prop('order')).toBe(wrapper.state('sortOrder'));
 		// TableSortControl onChange
@@ -298,7 +298,7 @@ describe('<Upstream />', () => {
 		// [columnsExpanded = false] head row 2, children length
 		expect(table.find('thead').childAt(1).children()).toHaveLength(19);
 
-		const headTooltips = table.find(`thead .${ styles.hinted }`);
+		const headTooltips = table.find(`thead .${styles.hinted}`);
 
 		// thead tooltips length
 		expect(headTooltips).toHaveLength(4);
@@ -312,19 +312,19 @@ describe('<Upstream />', () => {
 		expect(headTooltips.at(3).prop('prop_from_useTooltip')).toBe(true);
 		expect(tooltips.useTooltip).toHaveBeenCalledTimes(4);
 		// useTooltip, call 2, arg 1
-		expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Total downtime');
+		expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Общий простой');
 		// useTooltip, call 2, arg 2
 		expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint');
 		// useTooltip, call 3, arg 1
-		expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Weight');
+		expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Вес');
 		// useTooltip, call 3, arg 2
 		expect(tooltips.useTooltip.mock.calls[1][1]).toBe('hint');
 		// useTooltip, call 4, arg 1
-		expect(tooltips.useTooltip.mock.calls[2][0]).toBe('Active');
+		expect(tooltips.useTooltip.mock.calls[2][0]).toBe('Активных');
 		// useTooltip, call 4, arg 2
 		expect(tooltips.useTooltip.mock.calls[2][1]).toBe('hint');
 		// useTooltip, call 5, arg 1
-		expect(tooltips.useTooltip.mock.calls[3][0]).toBe('Limit');
+		expect(tooltips.useTooltip.mock.calls[3][0]).toBe('Ограниченных');
 		// useTooltip, call 5, arg 2
 		expect(tooltips.useTooltip.mock.calls[3][1]).toBe('hint');
 
@@ -386,11 +386,11 @@ describe('<Upstream />', () => {
 		// [peer 1] collapse-columns onClick
 		expect(tbody.childAt(0).childAt(7).prop('onClick').name).toBe('bound toggleColumns');
 		// [peer 1] responses 4xx className
-		expect(tbody.childAt(0).childAt(8).prop('className')).toBe(`${ styles.flash } ${ styles['red-flash'] }`);
+		expect(tbody.childAt(0).childAt(8).prop('className')).toBe(`${styles.flash} ${styles['red-flash']}`);
 		// [peer 1] responses 4xx
 		expect(tbody.childAt(0).childAt(8).text()).toBe('10');
 		// [peer 1] responses 5xx className
-		expect(tbody.childAt(0).childAt(9).prop('className')).toBe(`${ styles.bdr } ${ styles.flash }`);
+		expect(tbody.childAt(0).childAt(9).prop('className')).toBe(`${styles.bdr} ${styles.flash}`);
 		// [peer 1] responses 5xx
 		expect(tbody.childAt(0).childAt(9).text()).toBe('2');
 		// [peer 1] active className
@@ -398,7 +398,7 @@ describe('<Upstream />', () => {
 		// [peer 1] active
 		expect(tbody.childAt(0).childAt(10).text()).toBe('10000');
 		// [peer 1] max_conns className
-		expect(tbody.childAt(0).childAt(11).prop('className')).toBe(`${ styles['center-align'] } ${ styles.bdr }`);
+		expect(tbody.childAt(0).childAt(11).prop('className')).toBe(`${styles['center-align']} ${styles.bdr}`);
 		// [peer 1] max_conns
 		expect(tbody.childAt(0).childAt(11).text()).toBe('∞');
 		// [peer 1] server_sent_s className
@@ -436,7 +436,7 @@ describe('<Upstream />', () => {
 		// [peer 2] responses 4xx className
 		expect(tbody.childAt(1).childAt(7).prop('className')).toBe(styles.flash);
 		// [peer 2] responses 5xx className
-		expect(tbody.childAt(1).childAt(8).prop('className')).toBe(`${ styles.bdr } ${ styles.flash } ${ styles['red-flash'] }`);
+		expect(tbody.childAt(1).childAt(8).prop('className')).toBe(`${styles.bdr} ${styles.flash} ${styles['red-flash']}`);
 		// [peer 2] max_conns
 		expect(tbody.childAt(1).childAt(10).text()).toBe('123/s');
 
@@ -549,7 +549,7 @@ describe('<Upstream />', () => {
 		expect(utils.formatReadableBytes.mock.calls[11][0]).toBeUndefined();
 
 		// [editMode = false] edit-peer
-		expect(table.find(`.${ styles['edit-peer'] }`)).toHaveLength(0);
+		expect(table.find(`.${styles['edit-peer']}`)).toHaveLength(0);
 
 		/**
 		 * Non empty list in edit mode + expanded columns
@@ -565,7 +565,7 @@ describe('<Upstream />', () => {
 		);
 
 		// table className
-		expect(table.prop('className')).toBe(`${ styles.table } ${ styles.wide } ${ styles['hovered-expander'] }`);
+		expect(table.prop('className')).toBe(`${styles.table} ${styles.wide} ${styles['hovered-expander']}`);
 		// [editMode = true, columnsExpanded = true] table col length
 		expect(wrapper.find('table col')).toHaveLength(23);
 		// [columnsExpanded = true] head row 1, child 5 colspan
@@ -786,7 +786,7 @@ describe('<Upstream />', () => {
 			() => <tr id="renderEmptyList_result" />
 		);
 		jest.spyOn(instance, 'getCheckbox').mockClear().mockImplementation(
-			({ id }) => <td id={`getCheckbox_result_${ id }`} />
+			({ id }) => <td id={`getCheckbox_result_${id}`} />
 		);
 		jest.spyOn(utils, 'formatUptime').mockClear().mockImplementation(() => 'time_formatted');
 		jest.spyOn(utils, 'formatReadableBytes').mockClear().mockImplementation(() => 'readable_bytes_formatted');

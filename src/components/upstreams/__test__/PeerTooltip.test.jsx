@@ -61,15 +61,15 @@ describe('<PeerTooltip />', () => {
 		// peer state, className
 		expect(wrapper.childAt(2).childAt(0).childAt(0).prop('className')).toBe(styles.status_unavail);
 		// peer state, text
-		expect(wrapper.childAt(2).childAt(0).text()).toBe('failed (Passive health check failed)');
+		expect(wrapper.childAt(2).childAt(0).text()).toBe('Проблемный (не прошел пассивную проверку работоспособности)');
 		// peer type, className
 		expect(wrapper.childAt(3).prop('className')).toBe(styles.row);
 		// peer type, text
-		expect(wrapper.childAt(3).text()).toBe('Type: backup');
+		expect(wrapper.childAt(3).text()).toBe('Тип: запасной');
 		// peer downtime, className
 		expect(wrapper.childAt(4).prop('className')).toBe(styles.row);
 		// peer downtime, text
-		expect(wrapper.childAt(4).text()).toBe('Total downtime: formatted_uptime');
+		expect(wrapper.childAt(4).text()).toBe('Простаивает: formatted_uptime');
 		// formatUptime called once
 		expect(utils.formatUptime).toHaveBeenCalled();
 		// formatUptime call arg
@@ -77,7 +77,7 @@ describe('<PeerTooltip />', () => {
 		// peer downstart, className
 		expect(wrapper.childAt(5).prop('className')).toBe(styles.row);
 		// peer downstart, text
-		expect(wrapper.childAt(5).text()).toBe('Down since: formatted_date ');
+		expect(wrapper.childAt(5).text()).toBe('Недоступен с: formatted_date');
 		// formatDate called once
 		expect(utils.formatDate).toHaveBeenCalled();
 		// formatDate call arg
@@ -112,7 +112,7 @@ describe('<PeerTooltip />', () => {
 		// peer state, className
 		expect(wrapper.childAt(1).childAt(0).childAt(0).prop('className')).toBe(styles.status_unavail);
 		// peer state, text
-		expect(wrapper.childAt(1).childAt(0).text()).toBe('failed (Active health check failed)');
+		expect(wrapper.childAt(1).childAt(0).text()).toBe('Проблемный (не прошел активную проверку работоспособности)');
 		// formatDate not called
 		expect(utils.formatDate).not.toHaveBeenCalled();
 
@@ -139,7 +139,7 @@ describe('<PeerTooltip />', () => {
 		// peer state, className
 		expect(wrapper.childAt(1).childAt(0).prop('className')).toBe(styles.status_up);
 		// peer state, text
-		expect(wrapper.childAt(1).childAt(0).text()).toBe('up');
+		expect(wrapper.childAt(1).childAt(0).text()).toBe('Активный');
 		// formatDate not called
 		expect(utils.formatDate).not.toHaveBeenCalled();
 

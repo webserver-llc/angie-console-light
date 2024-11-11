@@ -262,11 +262,11 @@ describe('<Caches Page />', () => {
 			// row 1, Caches.formatReadableBytes call 1, arg 1
 			expect(Caches.formatReadableBytes.mock.calls[0][0]).toBe(500);
 			// row 1, Caches.formatReadableBytes call 1, arg 2
-			expect(Caches.formatReadableBytes.mock.calls[0][1]).toBe('ГБ');
+			expect(Caches.formatReadableBytes.mock.calls[0][1]).toBe('GB');
 			// row 1, Caches.formatReadableBytes call 2, arg 1
 			expect(Caches.formatReadableBytes.mock.calls[1][0]).toBe(430);
 			// row 1, Caches.formatReadableBytes call 2, arg 2
-			expect(Caches.formatReadableBytes.mock.calls[1][1]).toBe('ГБ');
+			expect(Caches.formatReadableBytes.mock.calls[1][1]).toBe('GB');
 			// row 1, Caches.formatReadableBytes call 3, arg 1
 			expect(Caches.formatReadableBytes.mock.calls[2][0]).toBe(3);
 			// row 1, Caches.formatReadableBytes call 4, arg 1
@@ -276,7 +276,7 @@ describe('<Caches Page />', () => {
 			// row 2, Caches.formatReadableBytes call 1, arg 1
 			expect(Caches.formatReadableBytes.mock.calls[5][0]).toBe(431);
 			// row 2, Caches.formatReadableBytes call 1, arg 2
-			expect(Caches.formatReadableBytes.mock.calls[5][1]).toBe('ГБ');
+			expect(Caches.formatReadableBytes.mock.calls[5][1]).toBe('GB');
 			// row 2, Caches.formatReadableBytes call 2, arg 1
 			expect(Caches.formatReadableBytes.mock.calls[6][0]).toBe(4);
 			// row 2, Caches.formatReadableBytes call 3, arg 1
@@ -448,7 +448,7 @@ describe('<Caches Page />', () => {
 			// row 2, cell 2, Icon
 			expect(hintElementRow2.name()).toBe('span');
 			// row 2, cell 2, useTooltip arg 1
-			expect(hintElementRow2.prop('useTooltip_prop_1')).toBe('Холодный');
+			expect(hintElementRow2.prop('useTooltip_prop_1')).toBe('{Холодный}');
 			// row 2, cell 2, useTooltip arg 2
 			expect(hintElementRow2.prop('useTooltip_prop_2')).toBe('hint');
 			// row 2, cell 3

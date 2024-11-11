@@ -92,9 +92,9 @@ describe('<ServerZones IndexPage />', () => {
 			indexBox = wrapper.find('IndexBox');
 
 			// trafficBlock, row 2, text
-			expect(indexBox.childAt(1).childAt(1).text()).toBe('Входящий.: 50/сек.');
+			expect(indexBox.childAt(1).childAt(1).text()).toBe('Входящий: 50/сек.');
 			// trafficBlock, row 3, text
-			expect(indexBox.childAt(1).childAt(2).text()).toBe('Исходящий.: 45/сек.');
+			expect(indexBox.childAt(1).childAt(2).text()).toBe('Исходящий: 45/сек.');
 			// formatReadableBytes called twice
 			expect(utils.formatReadableBytes).toHaveBeenCalledTimes(2);
 			// formatReadableBytes call 1, arg

@@ -99,7 +99,7 @@ describe('<StreamUpstream />', () => {
 			() => <tr id="renderEmptyList_result" />
 		);
 		jest.spyOn(instance, 'getCheckbox').mockClear().mockImplementation(
-			({ id }) => <td id={`getCheckbox_result_${ id }`} />
+			({ id }) => <td id={`getCheckbox_result_${id}`} />
 		);
 		jest.spyOn(utils, 'formatUptime').mockClear().mockImplementation(() => 'time_formatted');
 		jest.spyOn(utils, 'formatReadableBytes').mockClear().mockImplementation(() => 'readable_bytes_formatted');
@@ -113,12 +113,12 @@ describe('<StreamUpstream />', () => {
 		// table html tag
 		expect(table.type()).toBe('table');
 		// table className
-		expect(table.prop('className')).toBe(`${ styles.table } ${ styles.wide }`);
+		expect(table.prop('className')).toBe(`${styles.table} ${styles.wide}`);
 
 		const tableSortControl = table.find('TableSortControl');
 
 		// TableSortControl secondSortLabel
-		expect(tableSortControl.prop('secondSortLabel')).toBe('Отсортировать по статусу &mdash; сначала недоступные');
+		expect(tableSortControl.prop('secondSortLabel')).toBe('Отсортировать по статусу — сначала недоступные');
 		// TableSortControl order
 		expect(tableSortControl.prop('order')).toBe(wrapper.state('sortOrder'));
 		// TableSortControl onChange
@@ -145,7 +145,7 @@ describe('<StreamUpstream />', () => {
 
 		// TODO: Add tests for SSL stat cells
 
-		const headTooltips = table.find(`thead .${ styles.hinted }`);
+		const headTooltips = table.find(`thead .${styles.hinted}`);
 
 		// thead tooltips length
 		expect(headTooltips).toHaveLength(2);
@@ -156,11 +156,11 @@ describe('<StreamUpstream />', () => {
 		// useTooltip called twice
 		expect(tooltips.useTooltip).toHaveBeenCalledTimes(2);
 		// useTooltip, call 1, arg 1
-		expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Total downtime');
+		expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Общий простой');
 		// useTooltip, call 1, arg 2
 		expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint');
 		// useTooltip, call 2, arg 1
-		expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Weight');
+		expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Вес');
 		// useTooltip, call 2, arg 2
 		expect(tooltips.useTooltip.mock.calls[1][1]).toBe('hint');
 
@@ -302,14 +302,14 @@ describe('<StreamUpstream />', () => {
 		expect(utils.formatReadableBytes.mock.calls[11][0]).toBeUndefined();
 
 		// [editMode = false] edit-peer
-		expect(table.find(`.${ styles['edit-peer'] }`)).toHaveLength(0);
+		expect(table.find(`.${styles['edit-peer']}`)).toHaveLength(0);
 
 		wrapper.setState({ editMode: true });
 		table = shallow(
 			instance.renderPeers(peers)
 		);
 
-		const editPeer = table.find(`.${ styles['edit-peer'] }`);
+		const editPeer = table.find(`.${styles['edit-peer']}`);
 
 		// [editMode = true] edit-peer
 		expect(editPeer).toHaveLength(3);
