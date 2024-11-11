@@ -133,6 +133,23 @@ export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { sl
 		return null;
 	}
 
+	function FailuresCounter() {
+		this.counter = 0;
+		this.keys = [];
+		// eslint-disable-next-line
+		this.increment = function (key) {
+			if (this.keys.indexOf(key) === -1) {
+				this.keys.push(key);
+				this.counter++;
+			}
+		};
+	}
+
+	// eslint-disable-next-line
+	FailuresCounter.prototype.toString = function () {
+		return this.counter;
+	};
+
 	const STATS = {
 		total: 0,
 		servers: {
