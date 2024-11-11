@@ -27,7 +27,7 @@ describe('<Caches Page />', () => {
 		// formatReadableBytes arg 2
 		expect(utils.formatReadableBytes.mock.calls[0][1]).toBe('MB');
 		// formatReadableBytes arg 3
-		expect(utils.formatReadableBytes.mock.calls[0][2]).toEqual({ 0: 'B', 1: 'KB', 2: 'MB', 3: 'GB', 4: 'TB' });
+		expect(utils.formatReadableBytes.mock.calls[0][2]).toEqual({ 0: 'Б', 1: 'КБ', 2: 'МБ', 3: 'ГБ', 4: 'ТБ' });
 
 		utils.formatReadableBytes.mockRestore();
 	});
@@ -57,26 +57,26 @@ describe('<Caches Page />', () => {
 			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
 			// useTooltip call 2, arg 1
-			expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Использовано памяти = Использовано страниц памяти / Всего старниц памяти');
+			expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Загрузка памяти = использовано страниц памяти / всего старниц памяти');
 			// useTooltip call 2, arg 2
 			expect(tooltips.useTooltip.mock.calls[1][1]).toBe('hint');
 
 			hintedEl = wrapper.find(`thead span.${styles.hinted}`).at(1);
 
 			// first hinted el prop
-			expect(hintedEl.text()).toBe('Использовано памяти');
+			expect(hintedEl.text()).toBe('Загрузка памяти');
 			// first hinted el prop
 			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
 			// useTooltip call 3, arg 1
-			expect(tooltips.useTooltip.mock.calls[2][0]).toBe('Использовано диска = Использовано / Максимальный размер');
+			expect(tooltips.useTooltip.mock.calls[2][0]).toBe('Загрузка диска = использовано / макс. размер');
 			// useTooltip call 3, arg 2
 			expect(tooltips.useTooltip.mock.calls[2][1]).toBe('hint');
 
 			hintedEl = wrapper.find(`thead span.${styles.hinted}`).at(2);
 
 			// first hinted el prop
-			expect(hintedEl.text()).toBe('Использовано диска');
+			expect(hintedEl.text()).toBe('Загрузка диска');
 			// first hinted el prop
 			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
@@ -144,7 +144,7 @@ describe('<Caches Page />', () => {
 			expect(cells.at(1).prop('className')).toBe(`${styles.bdr} ${styles['center-align']}`);
 			hintedEl = cells.at(1).find('span');
 			// row 1, cell 2, useTooltip arg 1
-			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Warm');
+			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Горячий');
 			// row 1, cell 2, useTooltip arg 2
 			expect(hintedEl.prop('useTooltip_prop_2')).toBe('hint');
 			// row 1, cell 2, Icon
@@ -209,7 +209,7 @@ describe('<Caches Page />', () => {
 			expect(cells.at(1).prop('className')).toBe(`${styles.bdr} ${styles['center-align']}`);
 			hintedEl = cells.at(1).find('span');
 			// row 2, cell 2, useTooltip arg 1
-			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Cold');
+			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Холодный');
 			// row 2, cell 2, useTooltip arg 2
 			expect(hintedEl.prop('useTooltip_prop_2')).toBe('hint');
 			// row 2, cell 2, Icon
@@ -366,7 +366,7 @@ describe('<Caches Page />', () => {
 			expect(expandableAllControl.prop('rowSpan')).toBe(2);
 			// all expandable control, type
 			expect(expandableAllControl.type()).toBe('th');
-			expect(expandableAllControl.prop('useTooltip_prop_1')).toBe('Show all exsists shards');
+			expect(expandableAllControl.prop('useTooltip_prop_1')).toBe('Показать все существующие шарды');
 			expect(expandableAllControl.prop('useTooltip_prop_2')).toBe('hint-right');
 
 			let rows = wrapper.find('[data-expandable="true"]');
@@ -425,7 +425,7 @@ describe('<Caches Page />', () => {
 			// row 1, cell 2, Icon
 			expect(hintElementRow1.name()).toBe('span');
 			// row 1, cell 2, useTooltip arg 1
-			expect(hintElementRow1.prop('useTooltip_prop_1')).toBe('Warm');
+			expect(hintElementRow1.prop('useTooltip_prop_1')).toBe('Горячий');
 			// row 1, cell 2, useTooltip arg 2
 			expect(hintElementRow1.prop('useTooltip_prop_2')).toBe('hint');
 			// row 1, cell 3
@@ -448,7 +448,7 @@ describe('<Caches Page />', () => {
 			// row 2, cell 2, Icon
 			expect(hintElementRow2.name()).toBe('span');
 			// row 2, cell 2, useTooltip arg 1
-			expect(hintElementRow2.prop('useTooltip_prop_1')).toBe('Cold');
+			expect(hintElementRow2.prop('useTooltip_prop_1')).toBe('{Холодный}');
 			// row 2, cell 2, useTooltip arg 2
 			expect(hintElementRow2.prop('useTooltip_prop_2')).toBe('hint');
 			// row 2, cell 3

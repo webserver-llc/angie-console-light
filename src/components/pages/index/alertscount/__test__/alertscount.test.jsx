@@ -90,7 +90,7 @@ describe('<AlertsCount IndexPage />', () => {
 		// "alerts/warnings" el className
 		expect(wrapper.childAt(2).prop('className')).toBe(styles.warning);
 		// "alerts/warnings" el, child 1 text
-		expect(wrapper.childAt(2).childAt(0).text()).toBe('Предупреждений');
+		expect(wrapper.childAt(2).childAt(0).text()).toBe('Предупрежд.');
 		// "alerts/warnings" el, child 2 text
 		expect(wrapper.childAt(2).childAt(1).text()).toBe('11');
 
@@ -103,7 +103,7 @@ describe('<AlertsCount IndexPage />', () => {
 		// "alerts/warnings" el className
 		expect(wrapper.childAt(2).prop('className')).toBe(styles.alert);
 		// "alerts/warnings" el, child 1 text
-		expect(wrapper.childAt(2).childAt(0).text()).toBe('Сигналов');
+		expect(wrapper.childAt(2).childAt(0).text()).toBe('С ошибками');
 		// "alerts/warnings" el, child 2 text
 		expect(wrapper.childAt(2).childAt(1).text()).toBe('2');
 

@@ -25,15 +25,14 @@ describe('Tooltips', () => {
 		);
 		const text = wrapper.text();
 
-		expect(text).toContain('Used memory pages: 98');
-		expect(text).toContain('Total pages: 100');
+		expect(text).toContain('Использовано страниц памяти: 98 Всего страниц памяти: 100 Загрузка памяти = использовано страниц / всего страниц');
 
 		wrapper.unmount();
 	});
 
 	it('<CacheStateTooltip />', () => {
 		const wrapper = shallow(<CacheStateTooltip />);
-		const rows = wrapper.find(`.${ styles.row }`);
+		const rows = wrapper.find(`.${styles.row}`);
 		let icon;
 
 		// wrapper html tag

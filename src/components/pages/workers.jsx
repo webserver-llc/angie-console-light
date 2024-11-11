@@ -223,10 +223,10 @@ export class Workers extends SortableTable {
 							isInline
 						/>
 
-						<th>Req/s</th>
+						<th>Запр./сек.</th>
 						<TableSortControl
-							firstSortLabel='Sort by Req/s - desc'
-							secondSortLabel='Sort by Req/s - asc'
+							firstSortLabel='Отсортировать по убыванию запр./сек.'
+							secondSortLabel='Отсортировать по возрастанию запр./сек.'
 							order={this.state.sortOrderByReqPerSec}
 							onChange={this.changeSortingBy.bind(this, 'sortOrderByReqPerSec')}
 							isActive={this.state.activeSort === 'sortOrderByReqPerSec'}

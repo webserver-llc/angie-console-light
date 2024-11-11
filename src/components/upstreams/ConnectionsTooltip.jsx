@@ -12,7 +12,7 @@ import React from 'react';
 import styles from './tooltip.css';
 import utils from '#/utils.js';
 
-export default function ConnectionsTooltip({ peer }) {
+export default function ConnectionsTooltip({ title = 'Последний', peer }) {
 	return (
 		<div>
 			{
@@ -20,6 +20,7 @@ export default function ConnectionsTooltip({ peer }) {
 					<div>
 						<div>
 							Последний:
+							{' '}
 							{utils.formatDate(peer.selected)}
 						</div>
 						<div>
@@ -30,7 +31,7 @@ export default function ConnectionsTooltip({ peer }) {
 						</div>
 					</div>
 				)
-					: 'Последний: неизвестный'
+					: `${title}: неизвестно`
 			}
 		</div>
 	);

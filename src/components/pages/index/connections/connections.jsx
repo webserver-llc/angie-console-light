@@ -33,7 +33,7 @@ export class Connections extends React.Component {
 				{value}
 				{
 					typeof value == 'number' ?
-						<span className={styles.current__sec}>/сек</span>
+						<span className={styles.current__sec}>/сек.</span>
 						: null
 				}
 			</td>
@@ -55,6 +55,7 @@ export class Connections extends React.Component {
 					isConnsTab ? (
 						<span className={styles.counter}>
 							Принято:
+							{' '}
 							{connections.accepted}
 						</span>
 					)
@@ -72,7 +73,7 @@ export class Connections extends React.Component {
 						<table className={styles.table}>
 							<tr>
 								<th>Текущие</th>
-								<th>Принято/сек</th>
+								<th>Принято/сек.</th>
 								<th>Активные</th>
 								<th>Простаивающие</th>
 								<th>Сброшенные</th>

@@ -10,10 +10,10 @@
 export const formatUptime = (ms, short = false) => {
 	if (ms < 60000) {
 		if (ms < 1000) {
-			return `${ms}ms`;
+			return `${ms} мс. `;
 		}
 
-		return `${Math.floor(ms / 1000)}.${Math.floor((ms % 1000) / 10)}s`;
+		return `${Math.floor(ms / 1000)}.${Math.floor((ms % 1000) / 10)} сек. `;
 	}
 
 	let result = '';
@@ -24,15 +24,15 @@ export const formatUptime = (ms, short = false) => {
 	const minutes = Math.floor(((sec % 86400) % 3600) / 60);
 
 	if (days) {
-		result += `${days}d `;
+		result += `${days} дн. `;
 	}
 
 	if (days || hours) {
-		result += `${hours}h `;
+		result += `${hours} ч. `;
 	}
 
 	if ((days || hours || minutes) && !(short && days > 0)) {
-		result += `${minutes}m`;
+		result += `${minutes} мин. `;
 	}
 
 	return result;
@@ -41,7 +41,7 @@ export const formatUptime = (ms, short = false) => {
 export const formatReadableBytes = (
 	bytes,
 	maxMeasurementUnit,
-	units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB' },
+	units = { 0: 'Б', 1: 'КБ', 2: 'МБ', 3: 'ГБ', 4: 'ТБ' },
 ) => {
 	if (isNaN(parseFloat(bytes)) || !isFinite(bytes) || bytes === 0) return '0';
 
@@ -100,7 +100,7 @@ export const formatLastCheckDate = (timestamp) => {
 	if (unixTimestamp < 0) {
 		// eslint-disable-next-line no-console
 		console.warn(
-			'Incorrect timestamp or invalid datetime setting on PC. Check your settings',
+			'На компьютере установлены некорректная дата или время. Пожалуйста, проверьте настройки.',
 			timestamp,
 		);
 		return '-';
@@ -134,7 +134,7 @@ export const getSSLHandhsakesFailures = (ssl) => {
 		if ('handshake_timeout' in ssl) {
 			result.push({
 				id: 'handshake_timeout',
-				label: 'Handshake timedout',
+				label: 'Время ожидания рукопожатия истекло',
 				value: ssl.handshake_timeout,
 			});
 		}
@@ -151,7 +151,7 @@ export const getSSLVeryfiedFailures = (ssl) => {
 		if ('no_cert' in ssl.verify_failures) {
 			result.push({
 				id: 'no_cert',
-				label: 'No certificate',
+				label: 'Отсутствует сертификат',
 				value: ssl.verify_failures.no_cert,
 			});
 
@@ -161,7 +161,7 @@ export const getSSLVeryfiedFailures = (ssl) => {
 		if ('expired_cert' in ssl.verify_failures) {
 			result.push({
 				id: 'expired_cert',
-				label: 'Expired cert',
+				label: 'Сертификат истек',
 				value: ssl.verify_failures.expired_cert,
 			});
 
@@ -171,7 +171,7 @@ export const getSSLVeryfiedFailures = (ssl) => {
 		if ('revoked_cert' in ssl.verify_failures) {
 			result.push({
 				id: 'revoked_cert',
-				label: 'Revoked cert',
+				label: 'Сертификат отозван',
 				value: ssl.verify_failures.revoked_cert,
 			});
 
@@ -181,7 +181,7 @@ export const getSSLVeryfiedFailures = (ssl) => {
 		if ('hostname_mismatch' in ssl.verify_failures) {
 			result.push({
 				id: 'hostname_mismatch',
-				label: 'Hostname mismatch',
+				label: 'Доменное имя и имя хоста не совпадают',
 				value: ssl.verify_failures.hostname_mismatch,
 			});
 
@@ -191,7 +191,7 @@ export const getSSLVeryfiedFailures = (ssl) => {
 		if ('other' in ssl.verify_failures) {
 			result.push({
 				id: 'other',
-				label: 'Other verify failures',
+				label: 'Другая ошибка проверки сертификата',
 				value: ssl.verify_failures.other,
 			});
 
@@ -207,11 +207,11 @@ export const formatNumber = (value) =>
 
 export const isEmptyObj = (obj) => {
 	if (obj === undefined) {
-		throw new Error("Argument doesn't set or undefined");
+		throw new Error('Значение не установлено или не определено');
 	}
 
 	if (obj === null) {
-		throw new Error('Null is not available argument');
+		throw new Error('Недопустимое значение');
 	}
 
 	// eslint-disable-next-line no-restricted-syntax

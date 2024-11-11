@@ -45,11 +45,11 @@ export class Caches extends ExpandableTable {
 
 	static formatReadableBytes(value, measurementUnit) {
 		return utils.formatReadableBytes(value, measurementUnit, {
-			0: 'B',
-			1: 'KB',
-			2: 'MB',
-			3: 'GB',
-			4: 'TB',
+			0: 'Б',
+			1: 'КБ',
+			2: 'МБ',
+			3: 'ГБ',
+			4: 'ТБ',
 		});
 	}
 
@@ -60,7 +60,7 @@ export class Caches extends ExpandableTable {
 
 		return (
 			<div>
-				<h1>Кеши</h1>
+				<h1>Кэши</h1>
 
 				<table className={styles.table}>
 					<colgroup>
@@ -84,28 +84,32 @@ export class Caches extends ExpandableTable {
 								<span
 									className={styles.hinted}
 									{...tooltips.useTooltip(
-										'Использовано памяти = Использовано страниц памяти / Всего старниц памяти',
+										'Загрузка памяти = использовано страниц памяти / всего старниц памяти',
 										'hint',
 									)}
 								>
-									Использовано памяти
+									Загрузка памяти
 								</span>
 							</th>
 							<th>Макс. размер</th>
-							<th>Использовано</th>
+							<th>Использовано
+							</th>
 							<th>
 								<span
 									className={styles.hinted}
 									{...tooltips.useTooltip(
-										'Использовано диска = Использовано / Максимальный размер',
+										'Загрузка диска = использовано / макс. размер',
 										'hint',
 									)}
 								>
-									Использовано диска
+									Загрузка диска
 								</span>
 							</th>
 							<th colSpan="3">Трафик</th>
-							<th>Попадание</th>
+							<th>Коэффициент
+								<br/>
+								попадания
+							</th>
 						</tr>
 
 						<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
@@ -115,9 +119,9 @@ export class Caches extends ExpandableTable {
 							<th className={styles.bdr} />
 							<th className={styles.bdr} />
 							<th className={styles.bdr} />
-							<th>Предоставлено</th>
-							<th>Записано</th>
-							<th className={styles.bdr}>Мимо</th>
+							<th>Передано из кэша</th>
+							<th>Записано в кэш</th>
+							<th className={styles.bdr}>В обход кэша</th>
 							<th />
 						</tr>
 					</thead>
@@ -147,11 +151,11 @@ export class Caches extends ExpandableTable {
 									</td>
 									<td className={`${styles.bdr} ${styles['center-align']}`}>
 										{cache.cold ? (
-											<span {...tooltips.useTooltip('Cold', 'hint')}>
+											<span {...tooltips.useTooltip('Холодный', 'hint')}>
 												<Icon type="snowflake" className={cachesStyles.icon} />
 											</span>
 										) : (
-											<span {...tooltips.useTooltip('Warm', 'hint')}>
+											<span {...tooltips.useTooltip('Горячий', 'hint')}>
 												<Icon type="sun" className={cachesStyles.icon} />
 											</span>
 										)}
@@ -234,11 +238,11 @@ export class Caches extends ExpandableTable {
 															<span
 																className={styles.hinted}
 																{...tooltips.useTooltip(
-																	'Использовано диска = Использовано / Макс. размер',
+																	'Загрузка диска = использовано / макс. размер',
 																	'hint',
 																)}
 															>
-																Использовано диска
+																Загрузка диска
 															</span>
 														</th>
 													</tr>
@@ -252,7 +256,7 @@ export class Caches extends ExpandableTable {
 															>
 																{shard.cold ? (
 																	<span
-																		{...tooltips.useTooltip('Cold', 'hint')}
+																		{...tooltips.useTooltip('{Холодный}', 'hint')}
 																	>
 																		<Icon
 																			type="snowflake"
@@ -261,7 +265,7 @@ export class Caches extends ExpandableTable {
 																	</span>
 																) : (
 																	<span
-																		{...tooltips.useTooltip('Warm', 'hint')}
+																		{...tooltips.useTooltip('Горячий', 'hint')}
 																	>
 																		<Icon
 																			type="sun"

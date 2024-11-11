@@ -19,7 +19,7 @@ export const Colors = new Map([
 	['skipped', '#000ADD'],
 ]);
 export const Labels = new Map([
-	['passed', 'Пройдено'],
+	['passed', 'Передано'],
 	['rejected', 'Отклонено'],
 	['exhausted', 'Сброшено'],
 	['skipped', 'Пропущено'],
@@ -27,7 +27,7 @@ export const Labels = new Map([
 
 export default class LimitConn extends ChartsTable {
 	getTitle() {
-		return 'Зона Limit Conn';
+		return 'Зоны ограничения соединений (Limit Conn)';
 	}
 
 	getHeadRow() {
@@ -35,7 +35,7 @@ export default class LimitConn extends ChartsTable {
 			<tr>
 				<th />
 				<th>Зона</th>
-				<th>Пройдено</th>
+				<th>Передано</th>
 				<th>Отклонено</th>
 				<th>Сброшено</th>
 				<th>Пропущено</th>

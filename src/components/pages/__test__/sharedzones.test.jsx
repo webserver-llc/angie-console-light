@@ -102,7 +102,7 @@ describe('<SharedZones Page />', () => {
 			// TableSortControl "singleRow" prop
 			expect(sortControl.prop('singleRow')).toBe(true);
 			// TableSortControl "secondSortLabel" prop
-			expect(sortControl.prop('secondSortLabel')).toBe('Sort by size - large first');
+			expect(sortControl.prop('secondSortLabel')).toBe('Отсортировать по размеру — сначала большие');
 			// TableSortControl "order" prop
 			expect(sortControl.prop('order')).toBe(wrapper.state('sortOrder'));
 			// TableSortControl "onChange" prop
@@ -112,7 +112,7 @@ describe('<SharedZones Page />', () => {
 			// useTooltip called once
 			expect(tooltips.useTooltip).toHaveBeenCalledTimes(1);
 			// useTooltip 1st arg
-			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Использовано памяти = Использовано страниц / Всего страниц памяти');
+			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Загрузка памяти = использовано страниц / всего страниц');
 			// useTooltip 2nd arg
 			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint');
 

@@ -16,6 +16,7 @@ import {
 	limitConnReqHistoryLimit,
 	limitConnReqFactory,
 	limitConnReqCalculator,
+	FailuresCounter,
 } from '../factories.js';
 import utils from '../utils.js';
 import appsettings from '../../appsettings';
@@ -27,36 +28,38 @@ describe('Calculators – factories', () => {
 		const slabs = 'slabs_test';
 		const name = 'test_upstream';
 		const previousState = new Map([
-			[ name, { peers: [
-				{
-					id: 1,
-					requests: 30,
-					sent: 101,
-					received: 99,
-					max_conns: 10,
-					health_checks: {
-						last_passed: 'passed'
-					},
-					state: 'up',
-					responses: {
-						'4xx': 0,
-						'5xx': 0
-					},
-					previous_peer_state_duck_test: true
-				}, {
-					id: 2,
-					requests: 0,
-					sent: 0,
-					received: 0,
-					max_conns: 0,
-					health_checks: {},
-					state: 'down',
-					responses: {
-						'4xx': 0,
-						'5xx': 0
+			[name, {
+				peers: [
+					{
+						id: 1,
+						requests: 30,
+						sent: 101,
+						received: 99,
+						max_conns: 10,
+						health_checks: {
+							last_passed: 'passed'
+						},
+						state: 'up',
+						responses: {
+							'4xx': 0,
+							'5xx': 0
+						},
+						previous_peer_state_duck_test: true
+					}, {
+						id: 2,
+						requests: 0,
+						sent: 0,
+						received: 0,
+						max_conns: 0,
+						health_checks: {},
+						state: 'down',
+						responses: {
+							'4xx': 0,
+							'5xx': 0
+						}
 					}
-				}
-			] } ]
+				]
+			}]
 		]);
 		let STATS; let upstream; let
 			peer;
@@ -67,10 +70,10 @@ describe('Calculators – factories', () => {
 		previousState.lastUpdate = ts - period;
 
 		beforeAll(() => {
-			 spyDateNow = jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
-			 spyUtilsCalculateSpeed = jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
-			 spyUtilsIs4xxThresholdReached = jest.spyOn(utils, 'is4xxThresholdReached').mockClear().mockImplementation(() => is4xxThresholdReached);
-			 spyUtilsHandleErrors = jest.spyOn(utils, 'handleErrors').mockClear().mockImplementation(() => {});
+			spyDateNow = jest.spyOn(Date, 'now').mockClear().mockImplementation(() => ts);
+			spyUtilsCalculateSpeed = jest.spyOn(utils, 'calculateSpeed').mockClear().mockImplementation((a, b) => b);
+			spyUtilsIs4xxThresholdReached = jest.spyOn(utils, 'is4xxThresholdReached').mockClear().mockImplementation(() => is4xxThresholdReached);
+			spyUtilsHandleErrors = jest.spyOn(utils, 'handleErrors').mockClear().mockImplementation(() => { });
 		});
 
 		beforeEach(() => {
@@ -87,7 +90,7 @@ describe('Calculators – factories', () => {
 					failed: 0,
 					draining: 0
 				},
-				failures: 0,
+				failures: new FailuresCounter(),
 				warnings: 0,
 				alerts: 0,
 				status: 'ok'
@@ -136,7 +139,7 @@ describe('Calculators – factories', () => {
 			it(title, () => {
 				let _previousState = null;
 
-				switch (i){
+				switch (i) {
 					case 1:
 						upstream.name = 'unknown_upstream';
 						_previousState = previousState;
@@ -163,7 +166,7 @@ describe('Calculators – factories', () => {
 				// handleErrors not called
 				expect(spyUtilsHandleErrors).not.toHaveBeenCalled();
 				// STATS
-				expect(STATS).toEqual({
+				expect({ ...STATS, failures: STATS.failures.toString() }).toEqual({
 					servers: {
 						all: 1,
 						up: 1,
@@ -236,7 +239,7 @@ describe('Calculators – factories', () => {
 			// handleErrors 2nd arg
 			expect(spyUtilsHandleErrors.mock.calls[0][1]).toEqual(peer);
 			// STATS
-			expect(STATS).toEqual({
+			expect({ ...STATS, failures: STATS.failures.toString() }).toEqual({
 				servers: {
 					all: 1,
 					up: 1,
@@ -305,7 +308,7 @@ describe('Calculators – factories', () => {
 			// handleErrors not called
 			expect(spyUtilsHandleErrors).not.toHaveBeenCalled();
 			// STATS
-			expect(STATS).toEqual({
+			expect({ ...STATS, failures: STATS.failures.toString() }).toEqual({
 				servers: {
 					all: 1,
 					up: 1,
@@ -367,7 +370,7 @@ describe('Calculators – factories', () => {
 			// handleErrors not called
 			expect(spyUtilsHandleErrors).not.toHaveBeenCalled();
 			// STATS
-			expect(STATS).toEqual({
+			expect({ ...STATS, failures: STATS.failures.toString() }).toEqual({
 				servers: {
 					all: 1,
 					up: 1,
@@ -442,7 +445,7 @@ describe('Calculators – factories', () => {
 			handlePeer('', STATS, previousState, upstream, peer);
 
 			// STATS
-			expect(STATS).toEqual({
+			expect({ ...STATS, failures: STATS.failures.toString() }).toEqual({
 				servers: {
 					all: 1,
 					up: 0,
@@ -476,7 +479,7 @@ describe('Calculators – factories', () => {
 			handlePeer('', STATS, previousState, upstream, peer);
 
 			// STATS
-			expect(STATS).toEqual({
+			expect({ ...STATS, failures: STATS.failures.toString() }).toEqual({
 				servers: {
 					all: 1,
 					up: 0,
@@ -511,7 +514,7 @@ describe('Calculators – factories', () => {
 			handlePeer('', STATS, previousState, upstream, peer);
 
 			// STATS
-			expect(STATS).toEqual({
+			expect({ ...STATS, failures: STATS.failures.toString() }).toEqual({
 				servers: {
 					all: 1,
 					up: 0,
@@ -546,7 +549,7 @@ describe('Calculators – factories', () => {
 			handlePeer('', STATS, previousState, upstream, peer);
 
 			// STATS
-			expect(STATS).toEqual({
+			expect({ ...STATS, failures: STATS.failures.toString() }).toEqual({
 				servers: {
 					all: 1,
 					up: 0,
@@ -580,7 +583,7 @@ describe('Calculators – factories', () => {
 			handlePeer('', STATS, previousState, upstream, peer);
 
 			// STATS
-			expect(STATS).toEqual({
+			expect({ ...STATS, failures: STATS.failures.toString() }).toEqual({
 				servers: {
 					all: 1,
 					up: 0,
@@ -614,7 +617,7 @@ describe('Calculators – factories', () => {
 			handlePeer('upstreams', STATS, previousState, upstream, peer);
 
 			// STATS
-			expect(STATS).toEqual({
+			expect({ ...STATS, failures: STATS.failures.toString() }).toEqual({
 				servers: {
 					all: 1,
 					up: 1,
@@ -637,7 +640,7 @@ describe('Calculators – factories', () => {
 			handlePeer('', STATS, previousState, upstream, peer);
 
 			// STATS
-			expect(STATS).toEqual({
+			expect({ ...STATS, failures: STATS.failures.toString() }).toEqual({
 				servers: {
 					all: 1,
 					up: 1,
@@ -663,12 +666,12 @@ describe('Calculators – factories', () => {
 		const upstream = {
 			duck_test_for_upstream: true,
 			zone: 'upstreamZone',
-			peers: [ 1, 2 ]
+			peers: [1, 2]
 		};
 		const name = 'upstream_name';
 		let handlePeerSpy;
 
-		const spyUtilsPickZoneSite = jest.spyOn(utils, 'pickZoneSize').mockClear().mockImplementation(() => {});
+		const spyUtilsPickZoneSite = jest.spyOn(utils, 'pickZoneSize').mockClear().mockImplementation(() => { });
 		const spyHandlePeerBind = jest.spyOn(handlePeer, 'bind').mockClear().mockImplementation(() => {
 			handlePeerSpy = jest.fn();
 
@@ -797,8 +800,8 @@ describe('Calculators – factories', () => {
 			};
 
 			upstreamsMap = new Map([
-				[ 'test_upstream', {} ],
-				[ 'test_upstream_1', {} ]
+				['test_upstream', {}],
+				['test_upstream_1', {}]
 			]);
 
 			const result = upstreamsCalculator(upstreamsKey, upstreams, previousState, STORE);
@@ -810,7 +813,8 @@ describe('Calculators – factories', () => {
 			// handleUpstreams.bind 2nd arg
 			expect(spyHandleUpstreamsBind.mock.calls[0][1]).toBe(upstreamsKey);
 			// handleUpstreams.bind 3rd arg
-			expect(spyHandleUpstreamsBind.mock.calls[0][2]).toEqual(STATS);
+			const stats = spyHandleUpstreamsBind.mock.calls[0][2];
+			expect({ ...stats, failures: stats.failures.toString() }).toEqual(STATS);
 			// handleUpstreams.bind 4th arg
 			expect(spyHandleUpstreamsBind.mock.calls[0][3]).toBe(previousState);
 			// handleUpstreams.bind 5th arg
@@ -826,7 +830,7 @@ describe('Calculators – factories', () => {
 			// __STATUSES status
 			expect(STORE.__STATUSES[upstreamsKey].status).toBe('ok');
 			// upstreams.__STATS
-			expect(result.__STATS).toEqual(STATS);
+			expect({ ...result.__STATS, failures: result.__STATS.failures.toString() }).toEqual(STATS);
 
 			upstreamsMap.__STATS = STATS;
 

@@ -30,7 +30,7 @@ export class Resolvers extends SortableTable {
 
 		return (
 			<div>
-				<h1>DNS Резолверы</h1>
+				<h1>DNS-резолверы</h1>
 
 				<table className={`${styles.table} ${styles.wide}`}>
 					<thead>
@@ -42,17 +42,17 @@ export class Resolvers extends SortableTable {
 						</tr>
 						<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
 							<th className={styles.bdr} />
-							<th>Имя</th>
+							<th>A, AAAA</th>
 							<th>SRV</th>
-							<th className={styles.bdr}>Адрес</th>
-							<th>Успешных</th>
-							<th>Ошибок формата запроса</th>
+							<th className={styles.bdr}>PTR</th>
+							<th>Успешные</th>
+							<th>Ошибок формата</th>
 							<th>Сервер не завершил запрос</th>
-							<th>Ресурсов не найдено</th>
-							<th>Неимплементированные</th>
-							<th>Отказано в операции</th>
-							<th>Неизвестных</th>
-							<th>Истекших</th>
+							<th>Ошибок имени</th>
+							<th>Запрос не поддерживается</th>
+							<th>Запрос отклонен</th>
+							<th>Неизвестных ошибок</th>
+							<th>Истекло время ожидания</th>
 						</tr>
 					</thead>
 					<tbody className={styles['right-align']}>

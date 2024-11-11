@@ -38,14 +38,14 @@ export class ServerZones extends React.Component {
 				<div>
 					<h4>Трафик</h4>
 					<p>
-						Вхд:
+						Входящий:
 						{' '}
-						{stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/сек` : 0}
+						{stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/сек.` : 0}
 					</p>
 					<p>
-						Исх:
+						Исходящий:
 						{' '}
-						{stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/сек` : 0}
+						{stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/сек.` : 0}
 					</p>
 				</div>
 			);
@@ -65,7 +65,7 @@ export class ServerZones extends React.Component {
 
 		return (
 			<IndexBox
-				title="HTTP Зоны"
+				title="HTTP-зоны"
 				status={
 					statuses.includes('danger') ?
 						'danger'

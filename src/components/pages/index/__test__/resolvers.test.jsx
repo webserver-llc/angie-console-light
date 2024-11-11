@@ -38,7 +38,7 @@ describe('<Resolvers IndexPage />', () => {
 		const indexBox = wrapper.find('IndexBox');
 
 		// IndexBox title
-		expect(indexBox.prop('title')).toBe('DNS Резолверы');
+		expect(indexBox.prop('title')).toBe('DNS-резолверы');
 		// IndexBox status
 		expect(indexBox.prop('status')).toBe('ok');
 		// IndexBox href
@@ -56,18 +56,18 @@ describe('<Resolvers IndexPage />', () => {
 		let traffic = indexBox.find('p');
 
 		// Traffic req/s
-		expect(traffic.at(0).text()).toBe('Зпр/сек: 0');
+		expect(traffic.at(0).text()).toBe('Запр./сек.: 0');
 		// Traffic resp/s
-		expect(traffic.at(1).text()).toBe('Отв/сек: 0');
+		expect(traffic.at(1).text()).toBe('Отв./сек.: 0');
 
 		data.resolvers.__STATS.traffic = { in: 20, out: 19 };
 		wrapper.setProps({ data, store });
 		traffic = wrapper.find('IndexBox p');
 
 		// Traffic req/s
-		expect(traffic.at(0).text()).toBe('Зпр/сек: 20');
+		expect(traffic.at(0).text()).toBe('Запр./сек.: 20');
 		// Traffic resp/s
-		expect(traffic.at(1).text()).toBe('Отв/сек: 19');
+		expect(traffic.at(1).text()).toBe('Отв./сек.: 19');
 
 		wrapper.unmount();
 	});

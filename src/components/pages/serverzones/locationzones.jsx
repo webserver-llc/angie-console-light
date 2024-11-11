@@ -38,14 +38,14 @@ export default class Locations extends SortableTable {
 
 			component = (
 				<div>
-					<h1>Зона Location</h1>
+					<h1>Зоны путей (Location)</h1>
 
 					<table className={`${styles.table} ${styles.wide}`}>
 						<thead>
 							<tr>
 								<TableSortControl
-									firstSortLabel="Sort by zone - asc"
-									secondSortLabel="Sort by conf order"
+									firstSortLabel="Отсортировать по алфавиту"
+									secondSortLabel="Отсортировать по порядку в конфигурации"
 									order={this.state.sortOrder}
 									onChange={this.changeSorting}
 								/>
@@ -57,15 +57,15 @@ export default class Locations extends SortableTable {
 							<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
 								<th className={styles.bdr} />
 								<th>Всего</th>
-								<th className={styles.bdr}>Зпр./сек</th>
+								<th className={styles.bdr}>Запр./сек.</th>
 								<th>1xx</th>
 								<th>2xx</th>
 								<th>3xx</th>
 								<th>4xx</th>
 								<th>5xx</th>
 								<th className={styles.bdr}>Всего</th>
-								<th>Отп./сек</th>
-								<th>Плч./сек</th>
+								<th>Отпр./сек.</th>
+								<th>Получ./сек.</th>
 								<th>Отправлено</th>
 								<th>Получено</th>
 							</tr>

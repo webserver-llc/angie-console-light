@@ -150,26 +150,24 @@ export default class UpstreamsContainer extends React.Component {
 					this.state.showUpstreamsList ? (
 						<div className={styles['upstreams-catalog']}>
 							<div className={styles['upstreams-summary']}>
-								<strong>Всего:</strong>
+								<strong>Всего апстримов:</strong>
 								{' '}
 								{__STATS.total}
 								{' '}
-								апстрима
-								(
-								{__STATS.servers.all}
+								(пиров –
 								{' '}
-								сервера)
+								{__STATS.servers.all}
+								)
 
 								<span className={styles['red-text']}>
-									<strong>С проблемами:</strong>
+									<strong>Проблемных:</strong>
 									{' '}
 									{__STATS.failures.toString()}
 									{' '}
-									апстрима
-									(
-									{__STATS.servers.failed}
+									(пиров –
 									{' '}
-									сервера)
+									{__STATS.servers.failed}
+									)
 								</span>
 							</div>
 

@@ -43,7 +43,7 @@ export default class Disclaimer extends React.Component {
 					<br />
 					Для покупки Angie Pro свяжитесь с нами:
 					{' '}
-					<a href="https://wbsrv.ru/angie-pro/">https://wbsrv.ru/angie-pro/</a>
+					<a href="https://angie.software/angie/pro/">https://angie.software/angie/pro/</a>
 				</div>
 			</div>
 		);

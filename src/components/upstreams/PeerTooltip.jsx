@@ -18,19 +18,25 @@ export default function PeerTooltip({ peer }) {
 	if (peer.state === 'unavail') {
 		state = (
 			<span>
-				<span className={styles.status_unavail}>failed</span>
+				<span className={styles.status_unavail}>Проблемный</span>
 				{' '}
-				(Passive health check failed)
+				(не прошел пассивную проверку работоспособности)
 			</span>
 		);
 	} else if (peer.state === 'unhealthy') {
 		state = (
 			<span>
-				<span className={styles.status_unavail}>failed</span>
+				<span className={styles.status_unavail}>Проблемный</span>
 				{' '}
-				(Active health check failed)
+				(не прошел активную проверку работоспособности)
 			</span>
 		);
+	} else if (peer.state === 'checking') {
+		state = <span className={styles[`status_${peer.state}`]}>На проверке</span>;
+	} else if (peer.state === 'up') {
+		state = <span className={styles[`status_${peer.state}`]}>Активный</span>;
+	} else if (peer.state === 'down') {
+		state = <span className={styles[`status_${peer.state}`]}>Недоступный</span>;
 	} else {
 		state = <span className={styles[`status_${peer.state}`]}>{peer.state}</span>;
 	}
@@ -45,18 +51,20 @@ export default function PeerTooltip({ peer }) {
 			<div className={styles.row}>{state}</div>
 
 			{
-				peer.backup ? <div className={styles.row}>Тип: backup</div> : null
+				peer.backup ? <div className={styles.row}>Тип: запасной</div> : null
 			}
 
 			<div className={styles.row}>
-				Всего простаивает:
+				Простаивает:
+				{' '}
 				{utils.formatUptime(peer.downtime)}
 			</div>
 
 			{
 				peer.isHttp && peer.downstart ? (
 					<div className={styles.row}>
-						Выключен с:
+						Недоступен с:
+						{' '}
 						{utils.formatDate(peer.downstart)}
 					</div>
 				) : null

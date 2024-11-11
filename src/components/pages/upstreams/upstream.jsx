@@ -111,7 +111,7 @@ export default class Upstream extends UpstreamsList {
 							(
 								<tr>
 									<TableSortControl
-										secondSortLabel="Sort by status - down first"
+										secondSortLabel="Отсортировать по статусу &mdash; сначала недоступные"
 										rowSpan={3}
 										order={this.state.sortOrder}
 										onChange={this.changeSorting}
@@ -140,7 +140,7 @@ export default class Upstream extends UpstreamsList {
 							!envUtils.isDemoEnv() ?
 								(
 									<TableSortControl
-										secondSortLabel="Sort by status - down first"
+										secondSortLabel="Отсортировать по статусу &mdash; сначала недоступные"
 										order={this.state.sortOrder}
 										onChange={this.changeSorting}
 									/>
@@ -157,7 +157,7 @@ export default class Upstream extends UpstreamsList {
 						<th colSpan="4">Трафик</th>
 						<th colSpan="2">Проверки сервера</th>
 						{configured_health_checks ? (
-							<th colSpan="3">Мониторинг работоспособности</th>
+							<th colSpan="3">Проверки работоспособности</th>
 						) : null}
 					</tr>
 					<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
@@ -165,9 +165,9 @@ export default class Upstream extends UpstreamsList {
 						<th className={styles['left-align']}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Всего простоя', 'hint')}
+								{...tooltips.useTooltip('Общий простой', 'hint')}
 							>
-								DT
+								Простой
 							</span>
 						</th>
 						<th className={`${styles['center-align']} ${styles.bdr}`}>
@@ -175,12 +175,12 @@ export default class Upstream extends UpstreamsList {
 								className={styles.hinted}
 								{...tooltips.useTooltip('Вес', 'hint')}
 							>
-								W
+								Вес
 							</span>
 						</th>
 
 						<th>Всего</th>
-						<th className={styles.bdr}>Зпр./сек</th>
+						<th className={styles.bdr}>Запр./сек.</th>
 
 						{this.state.columnsExpanded ? (
 							[
@@ -205,22 +205,22 @@ export default class Upstream extends UpstreamsList {
 						<th className={styles['center-align']}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Активные', 'hint')}
+								{...tooltips.useTooltip('Активных', 'hint')}
 							>
-								A
+								Активн.
 							</span>
 						</th>
 						<th className={`${styles['center-align']} ${styles.bdr}`}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Ограничения', 'hint')}
+								{...tooltips.useTooltip('Ограниченных', 'hint')}
 							>
-								L
+								Огр.
 							</span>
 						</th>
 
-						<th>Отп/сек</th>
-						<th>Плч/сек</th>
+						<th>Отпр./сек.</th>
+						<th>Получ./сек.</th>
 						<th>Отправлено</th>
 						<th className={styles.bdr}>Получено</th>
 						<th>Ошибок</th>
@@ -229,7 +229,7 @@ export default class Upstream extends UpstreamsList {
 							[
 								<th key="checks">Проверок</th>,
 								<th key="fails">Ошибок</th>,
-								<th key="last">Последний</th>,
+								<th key="last">Последняя проверка</th>,
 							]
 						) : null}
 					</tr>

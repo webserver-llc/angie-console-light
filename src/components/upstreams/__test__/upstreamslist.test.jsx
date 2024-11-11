@@ -128,7 +128,7 @@ describe('<UpstreamsList />', () => {
 		const instance = wrapper.instance();
 		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
-		jest.spyOn(window, 'alert').mockClear().mockImplementation(() => {});
+		jest.spyOn(window, 'alert').mockClear().mockImplementation(() => { });
 
 		instance.toggleEditMode();
 
@@ -143,7 +143,7 @@ describe('<UpstreamsList />', () => {
 
 		jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
 
-		jest.spyOn(instance, 'toggleEditMode').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'toggleEditMode').mockClear().mockImplementation(() => { });
 		instance.toggleEditMode();
 
 		// this.toggleEditMode called
@@ -162,13 +162,13 @@ describe('<UpstreamsList />', () => {
 		);
 		wrapper.setState({
 			editMode: true,
-			servers: new Map([ [['example.backend.com', '127.0.0.1'], { weight: 5 }] ]),
+			servers: new Map([[['example.backend.com', '127.0.0.1'], { weight: 5 }]]),
 			selectedServers: new Map()
 		});
 		const instance = wrapper.instance();
 		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
-		jest.spyOn(instance, 'showEditor').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'showEditor').mockClear().mockImplementation(() => { });
 
 		instance.editSelectedUpstream();
 
@@ -202,7 +202,7 @@ describe('<UpstreamsList />', () => {
 		);
 		const instance = wrapper.instance();
 
-		jest.spyOn(instance, 'showEditor').mockClear().mockImplementation(() => {});
+		jest.spyOn(instance, 'showEditor').mockClear().mockImplementation(() => { });
 
 		instance.addUpstream();
 
@@ -262,7 +262,7 @@ describe('<UpstreamsList />', () => {
 		const instance = wrapper.instance();
 		const stateSpy = jest.spyOn(instance, 'setState').mockClear();
 
-		jest.spyOn(appsettings, 'setSetting').mockClear().mockImplementation(() => {});
+		jest.spyOn(appsettings, 'setSetting').mockClear().mockImplementation(() => { });
 
 		instance.FILTERING_SETTINGS_KEY = 'FILTERING_SETTINGS_KEY';
 		instance.changeFilterRule({ target: { value: 'test_value' } });
@@ -297,7 +297,7 @@ describe('<UpstreamsList />', () => {
 		// empty list html tag
 		expect(emptyList.name()).toBe('tr');
 		// empty list text
-		expect(emptyList.text()).toBe("No servers with 'filtering_test' state found in this upstream group.");
+		expect(emptyList.text()).toBe("В этой группе не найдено ни одного сервера c состоянием ''.");
 		// empty list, child className
 		expect(emptyList.childAt(0).prop('className')).toBe(tableStyles['left-align']);
 		// empty list, child colSpan
@@ -339,7 +339,7 @@ describe('<UpstreamsList />', () => {
 	});
 
 	it('selectAllServers()', async () => {
-		const servers = new Map([ [['example.backend.com', '127.0.0.1'], { weight: 5 }] ]);
+		const servers = new Map([[['example.backend.com', '127.0.0.1'], { weight: 5 }]]);
 		const wrapper = mount(
 			<UpstreamsList upstream={{ name: 'backend-upstream', peers: [{ name: '127.0.0.1' }] }} />
 		);
@@ -553,7 +553,7 @@ describe('<UpstreamsList />', () => {
 			// useTooltip called once
 			expect(tooltips.useTooltip).toHaveBeenCalled();
 			// useTooltip call arg
-			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Available in Angie PRO only');
+			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Доступно только в Angie PRO');
 			// useTooltip call arg
 			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
 

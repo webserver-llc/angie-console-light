@@ -34,6 +34,7 @@ export default function UpstreamStatsTooltip({ upstream }) {
 		<div>
 			<h5 className={styles.h5}>
 				Апстрим:
+				{' '}
 				{upstream.name}
 			</h5>
 
@@ -42,28 +43,28 @@ export default function UpstreamStatsTooltip({ upstream }) {
 					<div>
 						<span className={`${styles['status-tag']} ${styles.status_up}`} />
 						{' '}
-						Работает:
+						Активных пиров:
 						{' '}
 						{upstream.stats.up}
 					</div>
 					<div>
 						<span className={`${styles['status-tag']} ${styles.status_unhealthy}`} />
 						{' '}
-						Упавших:
+						Проблемных пиров:
 						{' '}
 						{upstream.stats.failed}
 					</div>
 					<div>
 						<span className={`${styles['status-tag']} ${styles.status_draining}`} />
 						{' '}
-						Drain:
+						Разгружаемых:
 						{' '}
 						{upstream.stats.draining}
 					</div>
 					<div>
 						<span className={`${styles['status-tag']} ${styles.status_down}`} />
 						{' '}
-						Выключенных:
+						Недоступных пиров:
 						{' '}
 						{upstream.stats.down}
 					</div>
@@ -73,7 +74,7 @@ export default function UpstreamStatsTooltip({ upstream }) {
 							<div>
 								<span className={`${styles['status-tag']} ${styles.status_checking}`} />
 								{' '}
-								Проверяющих:
+								На проверке:
 								{' '}
 								{upstream.stats.checking}
 							</div>
@@ -88,14 +89,16 @@ export default function UpstreamStatsTooltip({ upstream }) {
 					{
 						typeof upstream.keepalive === 'number' ? (
 							<div>
-								Keepalive:
+								Keepalive-пиров:
+								{' '}
 								{upstream.keepalive}
 							</div>
 						)
 							: null
 					}
 					<div>
-						Zombies:
+						Zombie-пиров:
+						{' '}
 						{upstream.zombies}
 					</div>
 				</div>

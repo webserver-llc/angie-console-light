@@ -24,7 +24,7 @@ export class Caches extends React.Component {
 
 		return (
 			<IndexBox
-				title="Кеши"
+				title="Кэши"
 				status={store.__STATUSES.caches.status}
 				href="#caches"
 			>
@@ -38,7 +38,7 @@ export class Caches extends React.Component {
 				<h4>Состояние</h4>
 				<p>
 					<Icon type="sun" className={styles.icon} />
-					Прогретые:
+					Горячие:
 					{' '}
 					{stats.states.warm}
 				</p>

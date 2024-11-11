@@ -21,7 +21,7 @@ export default function UpstreamServerList(
 		return (
 			<tr>
 				<td className={styles['left-align']} colSpan={30}>
-					Не найдены сервера в этой группе апстримов.
+					В этой группе апстримов не найдены серверы.
 				</td>
 			</tr>
 		);
@@ -32,7 +32,7 @@ export default function UpstreamServerList(
 			return down;
 		}
 
-		return down ? 'down' : 'up';
+		return down ? 'Недоступен' : 'Активный';
 	}
 
 	function renderTbody() {
@@ -75,9 +75,9 @@ export default function UpstreamServerList(
 					<th>Сервер</th>
 					<th>Вес</th>
 					<th>Состояние</th>
-					<th>Max_conns</th>
-					<th>Max_fails</th>
-					<th>Fail_timeout</th>
+					<th>Макс. число соединений (max_conns)</th>
+					<th>Макс. число попыток связи (max_fails)</th>
+					<th>Таймаут попыток, сек. (fail_timeout)</th>
 				</tr>
 			</thead>
 			<tbody className={styles['right-align']}>

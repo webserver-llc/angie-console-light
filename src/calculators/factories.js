@@ -110,6 +110,23 @@ export function handleUpstreams(upstreamsKey, STATS, previousState, slabs, upstr
 	return upstream;
 }
 
+export function FailuresCounter(counter = 0) {
+	this.counter = counter;
+	this.keys = [];
+	// eslint-disable-next-line
+	this.increment = function (key) {
+		if (this.keys.indexOf(key) === -1) {
+			this.keys.push(key);
+			this.counter++;
+		}
+	};
+}
+
+// eslint-disable-next-line
+FailuresCounter.prototype.toString = function () {
+	return this.counter;
+};
+
 export function upstreamsCalculator(upstreamsKey, upstreams, previousState, { slabs, __STATUSES }) {
 	if (upstreams === null || Object.keys(upstreams).length === 0) {
 		__STATUSES[upstreamsKey].ready = false;

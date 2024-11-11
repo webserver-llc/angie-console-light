@@ -24,10 +24,10 @@ import tooltips from '../../tooltips/index.jsx';
 
 export const FILTER_OPTIONS = {
 	all: 'Показать все',
-	up: 'Работающие',
-	failed: 'Упавшие',
-	checking: 'Проверяются',
-	down: 'Выключеные',
+	up: 'Активные',
+	failed: 'Проблемные',
+	checking: 'На проверке',
+	down: 'Недоступные',
 };
 
 export default class UpstreamsList extends SortableTable {
@@ -77,7 +77,7 @@ export default class UpstreamsList extends SortableTable {
 					servers: new Map(),
 					selectedServers: new Map()
 				});
-				alert('Sorry, API is read-only, please make it writable.');
+				alert('API доступен только для чтения, сделайте его доступным для записи.');
 			}
 		});
 	}
@@ -96,7 +96,7 @@ export default class UpstreamsList extends SortableTable {
 
 		if (/[^\x20-\x7F]/.test(this.props.upstream.name)) {
 			alert(
-				'Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names',
+				'Конфигурация недоступна для апстримов с именами, содержащими не-ASCII символы.',
 			);
 		}
 
@@ -150,9 +150,9 @@ export default class UpstreamsList extends SortableTable {
 		return (
 			<tr>
 				<td className={tableStyles['left-align']} colSpan={30}>
-					Ни одного сервера c '
-					{this.state.filtering}
-					' состоянием найдено в этой группе.
+					В этой группе не найдено ни одного сервера c состоянием '
+					{FILTER_OPTIONS[this.state.filtering]}
+					'.
 				</td>
 			</tr>
 		);
@@ -412,7 +412,7 @@ export default class UpstreamsList extends SortableTable {
 
 					{upstream.zoneSize !== null ? (
 						<span className={styles['zone-capacity']}>
-							Зона:
+							Загрузка памяти:
 							{' '}
 							<span
 								{...tooltips.useTooltip(

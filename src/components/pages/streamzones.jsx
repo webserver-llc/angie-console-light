@@ -27,7 +27,7 @@ export class StreamZones extends React.Component {
 
 		return (
 			<div>
-				<h1>TCP/UDP Зоны</h1>
+				<h1>TCP/UDP-зоны</h1>
 
 				<table className={styles.table}>
 					<thead>
@@ -40,15 +40,15 @@ export class StreamZones extends React.Component {
 						</tr>
 						<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
 							<th className={styles.bdr} />
-							<th>Текущие</th>
+							<th>Текущих</th>
 							<th>Всего</th>
-							<th className={styles.bdr}>Соед./сек</th>
+							<th className={styles.bdr}>Соед./сек.</th>
 							<th>2xx</th>
 							<th>4xx</th>
 							<th>5xx</th>
 							<th className={styles.bdr}>Всего</th>
-							<th>Отп./сек</th>
-							<th>Плч./сек</th>
+							<th>Отпр./сек.</th>
+							<th>Получ./сек.</th>
 							<th>Отправлено</th>
 							<th className={styles.bdr}>Получено</th>
 							<th>Рукопожатий</th>
@@ -58,9 +58,9 @@ export class StreamZones extends React.Component {
 								рукопожатий
 							</th>
 							<th>
-								Сессий
+								Повторных
 								<br />
-								Переиспользованных
+								использований
 							</th>
 						</tr>
 					</thead>
