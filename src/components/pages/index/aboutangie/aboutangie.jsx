@@ -60,7 +60,7 @@ export class AboutAngie extends React.Component {
 					{this.renderLinkToDocs()}
 					{angie.config_files ?
 						(
-							<a href="#config_files" id="config-files" className={`${commonStyles.fr}`}>Конфиг-файлы</a>
+							<a href="#config_files" id="config-files" className={`${commonStyles.fr}`}>Конфигурация</a>
 						)
 						: null}
 				</div>

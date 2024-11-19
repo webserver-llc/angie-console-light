@@ -65,7 +65,7 @@ export const SECTIONS = [
 		statusKey: 'resolvers'
 	},
 	{
-		title: 'Конфиг. файлы',
+		title: 'Конфигурация',
 		hash: '#config_files',
 		hidden: true,
 	}

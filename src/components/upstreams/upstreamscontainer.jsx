@@ -154,7 +154,7 @@ export default class UpstreamsContainer extends React.Component {
 								{' '}
 								{__STATS.total}
 								{' '}
-								(пиров –
+								(пиров:
 								{' '}
 								{__STATS.servers.all}
 								)
@@ -164,7 +164,7 @@ export default class UpstreamsContainer extends React.Component {
 									{' '}
 									{__STATS.failures.toString()}
 									{' '}
-									(пиров –
+									(пиров:
 									{' '}
 									{__STATS.servers.failed}
 									)

@@ -55,11 +55,12 @@ export class ConfigFiles extends React.Component {
 		if (!angie.config_files) {
 			return (
 				<div>
+					Объект
 					{' '}
 					<i>config_files</i>
 					{' '}
-					объект не доступен;
-					проверьте конфиг-файл и убедитесь, что директива
+					недоступен;
+					проверьте конфигурацию и убедитесь, что директива
 					{' '}
 					<i>api_config_files</i>
 					{' '}
@@ -70,7 +71,7 @@ export class ConfigFiles extends React.Component {
 
 		return (
 			<div className={styles.container}>
-				<h1>Конфиг-файлы</h1>
+				<h1>Конфигурация</h1>
 				{Object.keys(angie.config_files)
 					.map(file => (
 						<CollapsibleList
