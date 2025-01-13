@@ -14,7 +14,7 @@ global.ResizeObserver = ResizeObserver;
 global.setImmediate = global.setImmediate || ((fn, ...args) => global.setTimeout(fn, 0, ...args));
 global.clearImmediate = global.clearImmediate || ((...args) => global.clearTimeout(...args));
 global.IntersectionObserver = class IntersectionObserver {
-	constructor() {}
+	constructor() { }
 
 	disconnect() {
 		return null;
@@ -49,3 +49,20 @@ Object.defineProperty(window, 'matchMedia', {
 
 expect.extend(matchers);
 configure({ adapter: new Adapter() });
+
+jest.mock('react-i18next', () => ({
+	withNamespaces: () => Component => {
+		Component.defaultProps = {
+			...Component.defaultProps,
+			t: (i18nKey) => i18nKey,
+			i18n: {
+				changeLanguage: () => new Promise(() => { }),
+			},
+		};
+		return Component;
+	},
+	reactI18nextModule: {
+		type: '3rdParty',
+		init: jest.fn(),
+	},
+}));
