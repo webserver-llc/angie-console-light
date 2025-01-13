@@ -2,15 +2,15 @@ import i18n from 'i18next';
 import { reactI18nextModule } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import translationEN from '../locales/en/translation.json';
-import translationRU from '../locales/ru/translation.json';
+import connectionsEN from '../locales/en/pages/index/connections.json';
+import connectionsRU from '../locales/ru/pages/index/connections.json';
 
 const resources = {
 	en: {
-		translation: translationEN,
+		'page.index.connections': connectionsEN,
 	},
 	ru: {
-		translation: translationRU,
+		'page.index.connections': connectionsRU,
 	}
 };
 
@@ -22,7 +22,7 @@ i18n
 
 		resources,
 		fallbackLng: 'en',
-		debug: true,
+		debug: process.env.NODE_ENV === 'development',
 
 		keySeparator: false,
 

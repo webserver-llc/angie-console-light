@@ -29,34 +29,22 @@ export class Connections extends React.Component {
 		this.setState({ tab });
 	}
 
-	getCurrentCell(value) {
-		return (
-			<td className={styles.current}>
-				{value}
-				{
-					typeof value == 'number' ?
-						<span className={styles.current__sec}>/сек.</span>
-						: null
-				}
-			</td>
-		);
-	}
-
 	render() {
-		const { props: { t, data: { connections, ssl } }, state: { tab } } = this;
+		const { props: { t, className, data: { connections } }, state: { tab } } = this;
 		let tabsStyleName = styles.tabs;
-		const isConnsTab = this.state.tab === 'conns';
+		const isConnsTab = tab === 'conns';
 
 		if (!isConnsTab) {
 			tabsStyleName += ` ${styles.tabs_ssl}`;
 		}
 
 		return (
-			<IndexBox className={this.props.className}>
+			<IndexBox className={className}>
 				{
 					isConnsTab ? (
 						<span className={styles.counter}>
-							Принято:
+							{t('Accepted')}
+							:
 							{' '}
 							{connections.accepted}
 						</span>
@@ -66,8 +54,7 @@ export class Connections extends React.Component {
 
 				<div className={tabsStyleName}>
 					<div className={isConnsTab ? styles['tab-active'] : styles.tab} onClick={this.changeTab.bind(this, 'conns')}>
-						<span>Соединения</span>
-						<span>{t('Welcome to React')}</span>
+						<span>{t('Connections')}</span>
 					</div>
 				</div>
 
@@ -75,11 +62,11 @@ export class Connections extends React.Component {
 					isConnsTab ? (
 						<table className={styles.table}>
 							<tr>
-								<th>Текущие</th>
-								<th>Принято/сек.</th>
-								<th>Активные</th>
-								<th>Простаивающие</th>
-								<th>Сброшенные</th>
+								<th>{t('Current')}</th>
+								<th>{t('Accepted')}</th>
+								<th>{t('Active')}</th>
+								<th>{t('Idle')}</th>
+								<th>{t('Dropped')}</th>
 							</tr>
 							<tr>
 								<td>{connections.current}</td>
@@ -97,6 +84,6 @@ export class Connections extends React.Component {
 	}
 }
 
-export default DataBinder(withNamespaces()(Connections), [
+export default DataBinder(withNamespaces('page.index.connections')(Connections), [
 	api.connections.process(calculateConnections),
 ]);

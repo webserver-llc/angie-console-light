@@ -27,7 +27,7 @@ describe('ConfigFiles', () => {
 
 	it('render()', async () => {
 		const wrapper = shallow(<ConfigFiles data={data} />);
-		expect(wrapper.find('h1').text()).toBe('Конфиг-файлы');
+		expect(wrapper.find('h1').text()).toBe('Конфигурация');
 		expect(wrapper.find('CollapsibleList').length).toBe(2);
 
 		const collapsibleList = wrapper.find('CollapsibleList');
