@@ -8,6 +8,8 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
+
 import IndexBox from '../indexbox/indexbox.jsx';
 import DataBinder from '#/components/databinder/databinder.jsx';
 import api from '#/api';
@@ -41,7 +43,7 @@ export class Connections extends React.Component {
 	}
 
 	render() {
-		const { props: { data: { connections, ssl } }, state: { tab } } = this;
+		const { props: { t, data: { connections, ssl } }, state: { tab } } = this;
 		let tabsStyleName = styles.tabs;
 		const isConnsTab = this.state.tab === 'conns';
 
@@ -65,6 +67,7 @@ export class Connections extends React.Component {
 				<div className={tabsStyleName}>
 					<div className={isConnsTab ? styles['tab-active'] : styles.tab} onClick={this.changeTab.bind(this, 'conns')}>
 						<span>Соединения</span>
+						<span>{t('Welcome to React')}</span>
 					</div>
 				</div>
 
@@ -94,6 +97,6 @@ export class Connections extends React.Component {
 	}
 }
 
-export default DataBinder(Connections, [
+export default DataBinder(withNamespaces()(Connections), [
 	api.connections.process(calculateConnections),
 ]);
