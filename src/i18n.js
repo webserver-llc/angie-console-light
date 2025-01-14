@@ -2,18 +2,22 @@ import i18n from 'i18next';
 import { reactI18nextModule } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
+import appEN from '../locales/en/app.json';
 import settingsEN from '../locales/en/settings.json';
 import connectionsEN from '../locales/en/pages/index/connections.json';
 
+import appRU from '../locales/ru/app.json';
 import settingsRU from '../locales/ru/settings.json';
 import connectionsRU from '../locales/ru/pages/index/connections.json';
 
 const resources = {
 	en: {
+		app: appEN,
 		settings: settingsEN,
 		'page.index.connections': connectionsEN,
 	},
 	ru: {
+		app: appRU,
 		settings: settingsRU,
 		'page.index.connections': connectionsRU,
 	}
