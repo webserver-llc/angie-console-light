@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import DataBinder from '../databinder/databinder.jsx';
 import api from '../../api';
 
@@ -30,46 +31,69 @@ import styles from './style.css';
 
 export const SECTIONS = [
 	{
-		title: 'HTTP-зоны',
+		title: 'HTTP Zones',
 		hash: '#server_zones',
 		statusKey: 'server_zones'
 	},
 	{
-		title: 'HTTP-апстримы',
+		title: 'HTTP Upstreams',
 		hash: '#upstreams',
 		statusKey: 'upstreams'
 	},
 	{
-		title: 'TCP/UDP-зоны',
+		title: 'TCP/UDP Zones',
 		hash: '#tcp_zones',
 		statusKey: 'tcp_zones'
 	},
 	{
-		title: 'TCP/UDP-апстримы',
+		title: 'TCP/UDP Upstreams',
 		hash: '#tcp_upstreams',
 		statusKey: 'tcp_upstreams'
 	},
 	{
-		title: 'Кэши',
+		title: 'Caches',
 		hash: '#caches',
 		statusKey: 'caches'
 	},
 	{
-		title: 'Общие зоны',
+		title: 'Shared Zones',
 		hash: '#shared_zones',
 		statusKey: 'shared_zones'
 	},
 	{
-		title: 'DNS-резолверы',
+		title: 'Resolvers',
 		hash: '#resolvers',
 		statusKey: 'resolvers'
 	},
 	{
-		title: 'Конфигурация',
+		title: 'Config Files',
 		hash: '#config_files',
 		hidden: true,
 	}
 ];
+
+const SectionLocales = {
+	en: {
+		'HTTP Zones': 'HTTP Zones',
+		'HTTP Upstreams': 'HTTP Upstreams',
+		'TCP/UDP Zones': 'TCP/UDP Zones',
+		'TCP/UDP Upstreams': 'TCP/UDP Upstreams',
+		Caches: 'Caches',
+		'Shared Zones': 'Shared Zones',
+		Resolvers: 'Resolvers',
+		'Config Files': 'Config Files'
+	},
+	ru: {
+		'HTTP Zones': 'HTTP-зоны',
+		'HTTP Upstreams': 'HTTP-апстримы',
+		'TCP/UDP Zones': 'TCP/UDP-зоны',
+		'TCP/UDP Upstreams': 'TCP/UDP-апстримы',
+		Caches: 'Кэши',
+		'Shared Zones': 'Общие зоны',
+		Resolvers: 'DNS-резолверы',
+		'Config Files': 'Конфигурация'
+	}
+};
 
 export class Navigation extends React.Component {
 	constructor(props) {
@@ -101,7 +125,7 @@ export class Navigation extends React.Component {
 	}
 
 	render() {
-		const { statuses } = this.props;
+		const { statuses, i18n } = this.props;
 		const tabs = SECTIONS
 			.filter(({ hidden }) => typeof hidden !== 'boolean' || hidden === false)
 			.filter(({ statusKey }) => {
@@ -146,7 +170,7 @@ export class Navigation extends React.Component {
 					>
 						{statusIcon}
 
-						<span className={styles.anchor}>{section.title}</span>
+						<span className={styles.anchor}>{SectionLocales?.[i18n.language]?.[section.title] || section.title}</span>
 					</a>
 				);
 			});
@@ -175,7 +199,7 @@ export class Navigation extends React.Component {
 	}
 }
 
-export default DataBinder(Navigation, [
+export default DataBinder(withNamespaces('header')(Navigation), [
 	api.http.server_zones.setMapper(mapperHttpResponse).process(calculateServerZones),
 	api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones),
 	api.stream.server_zones.setMapper(mapperStreamServerZones).process(calculateStreamZones),
