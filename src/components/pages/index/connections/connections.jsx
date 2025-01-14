@@ -84,6 +84,6 @@ export class Connections extends React.Component {
 	}
 }
 
-export default DataBinder(withNamespaces('page.index.connections')(Connections), [
+export default DataBinder(withNamespaces('pages.index.connections')(Connections), [
 	api.connections.process(calculateConnections),
 ]);

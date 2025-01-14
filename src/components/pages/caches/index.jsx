@@ -321,7 +321,7 @@ export class Caches extends ExpandableTable {
 	}
 }
 
-export default DataBinder(withNamespaces('page.cache')(Caches), [
+export default DataBinder(withNamespaces('pages.cache')(Caches), [
 	api.slabs.process(sharedZonesCalculator),
 	api.http.caches.process(cacheCalculator),
 ]);

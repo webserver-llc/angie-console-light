@@ -22,16 +22,16 @@ const resources = {
 		chart: chartEN,
 		demo: demoEN,
 		settings: settingsEN,
-		'page.cache': cacheEN,
-		'page.index.connections': connectionsEN,
+		'pages.cache': cacheEN,
+		'pages.index.connections': connectionsEN,
 	},
 	ru: {
 		app: appRU,
 		chart: chartRU,
 		demo: demoRU,
 		settings: settingsRU,
-		'page.cache': cacheRU,
-		'page.index.connections': connectionsRU,
+		'pages.cache': cacheRU,
+		'pages.index.connections': connectionsRU,
 	}
 };
 
