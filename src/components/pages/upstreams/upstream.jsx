@@ -282,7 +282,7 @@ export default class Upstream extends UpstreamsList {
 										<span
 											className={styles.hinted}
 											{...tooltips.useTooltip(
-												<ConnectionsTooltip peer={peer} />,
+												<ConnectionsTooltip title="Последний" peer={peer} />,
 												'hint',
 											)}
 										>

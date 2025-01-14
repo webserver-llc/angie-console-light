@@ -8,6 +8,7 @@ import demoEN from '../locales/en/demo.json';
 import settingsEN from '../locales/en/settings.json';
 import cacheEN from '../locales/en/pages/cache.json';
 import connectionsEN from '../locales/en/pages/index/connections.json';
+import connectionsTooltipsEN from '../locales/en/upstreams/connections-tooltip.json';
 
 import appRU from '../locales/ru/app.json';
 import chartRU from '../locales/ru/chart.json';
@@ -15,6 +16,7 @@ import demoRU from '../locales/ru/demo.json';
 import settingsRU from '../locales/ru/settings.json';
 import cacheRU from '../locales/ru/pages/cache.json';
 import connectionsRU from '../locales/ru/pages/index/connections.json';
+import connectionsTooltipsRU from '../locales/ru/upstreams/connections-tooltip.json';
 
 const resources = {
 	en: {
@@ -24,6 +26,7 @@ const resources = {
 		settings: settingsEN,
 		'pages.cache': cacheEN,
 		'pages.index.connections': connectionsEN,
+		'upstreams.connections-tooltip': connectionsTooltipsEN,
 	},
 	ru: {
 		app: appRU,
@@ -32,6 +35,7 @@ const resources = {
 		settings: settingsRU,
 		'pages.cache': cacheRU,
 		'pages.index.connections': connectionsRU,
+		'upstreams.connections-tooltip': connectionsTooltipsRU,
 	}
 };
 

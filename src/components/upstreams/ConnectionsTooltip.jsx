@@ -8,18 +8,19 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 
-import styles from './tooltip.css';
 import utils from '#/utils.js';
 
-export default function ConnectionsTooltip({ title = 'Последний', peer }) {
+function ConnectionsTooltip({ title = 'Last', peer, t }) {
 	return (
 		<div>
 			{
 				peer.selected ? (
 					<div>
 						<div>
-							Последний:
+							{t('Last')}
+							:
 							{' '}
 							{utils.formatDate(peer.selected)}
 						</div>
@@ -27,7 +28,8 @@ export default function ConnectionsTooltip({ title = 'Последний', peer 
 							(
 							{utils.formatUptime(new Date().getTime() - Date.parse(peer.selected))}
 							{' '}
-							назад)
+							{t('ago')}
+							)
 						</div>
 					</div>
 				)
@@ -36,3 +38,5 @@ export default function ConnectionsTooltip({ title = 'Последний', peer 
 		</div>
 	);
 }
+
+export default withNamespaces('upstreams.connections-tooltip')(ConnectionsTooltip);
