@@ -9,6 +9,7 @@ import settingsEN from '../locales/en/settings.json';
 import cacheEN from '../locales/en/pages/cache.json';
 import connectionsEN from '../locales/en/pages/index/connections.json';
 import connectionsTooltipsEN from '../locales/en/upstreams/connections-tooltip.json';
+import peerTooltipEN from '../locales/en/upstreams/peer-tooltip.json';
 
 import appRU from '../locales/ru/app.json';
 import chartRU from '../locales/ru/chart.json';
@@ -17,6 +18,7 @@ import settingsRU from '../locales/ru/settings.json';
 import cacheRU from '../locales/ru/pages/cache.json';
 import connectionsRU from '../locales/ru/pages/index/connections.json';
 import connectionsTooltipsRU from '../locales/ru/upstreams/connections-tooltip.json';
+import peerTooltipRU from '../locales/ru/upstreams/peer-tooltip.json';
 
 const resources = {
 	en: {
@@ -27,6 +29,7 @@ const resources = {
 		'pages.cache': cacheEN,
 		'pages.index.connections': connectionsEN,
 		'upstreams.connections-tooltip': connectionsTooltipsEN,
+		'upstreams.peer-tooltip': peerTooltipEN,
 	},
 	ru: {
 		app: appRU,
@@ -36,6 +39,7 @@ const resources = {
 		'pages.cache': cacheRU,
 		'pages.index.connections': connectionsRU,
 		'upstreams.connections-tooltip': connectionsTooltipsRU,
+		'upstreams.peer-tooltip': peerTooltipRU,
 	}
 };
 

@@ -1,0 +1,11 @@
+{
+  "Failed": "Failed",
+  "Passive health check failed": "Passive health check failed",
+  "Active health check failed": "Active health check failed",
+  "Checking": "Checking",
+  "Up": "Up",
+  "Down": "Down",
+  "Type: backup": "Тип: запаcной",
+  "Total downtime:": "Total downtime:",
+  "Down since:": "Down since:"
+}
