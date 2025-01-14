@@ -64,14 +64,15 @@ export default class ExpandableTable extends React.Component {
 
 	renderExpandingAllControl(props = {}) {
 		if (!this.getExpandableItems().length) return null;
+		const { t } = this.props;
 		return (
 			<th
 				{...props}
 				onClick={this.handleClickExpandingAll}
 				className={`${styles.sorter} ${styles.sorterActive} ${styles['hovered-expander']}`}
-				{...tooltips.useTooltip('Показать все существующие шарды', 'hint-right')}
+				{...tooltips.useTooltip(t('Show all exsists shards'), 'hint-right')}
 			>
-				{this.isExpandingAll() ? '▴' : '▾' }
+				{this.isExpandingAll() ? '▴' : '▾'}
 			</th>
 		);
 	}
@@ -82,3 +83,8 @@ export default class ExpandableTable extends React.Component {
 
 	render() { return <div />; }
 }
+
+ExpandableTable.defaultProps = {
+	// i18n for testing component
+	t: (key) => key,
+};

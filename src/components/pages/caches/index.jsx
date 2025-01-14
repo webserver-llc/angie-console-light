@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import api from '#/api';
 import DataBinder from '../../databinder/databinder.jsx';
@@ -92,7 +93,8 @@ export class Caches extends ExpandableTable {
 								</span>
 							</th>
 							<th>Макс. размер</th>
-							<th>Использовано
+							<th>
+								Использовано
 							</th>
 							<th>
 								<span
@@ -106,8 +108,9 @@ export class Caches extends ExpandableTable {
 								</span>
 							</th>
 							<th colSpan="3">Трафик</th>
-							<th>Коэффициент
-								<br/>
+							<th>
+								Коэффициент
+								<br />
 								попадания
 							</th>
 						</tr>
@@ -183,16 +186,16 @@ export class Caches extends ExpandableTable {
 									<td className={styles.bdr}>
 										{typeof cache.max_size === 'number' &&
 											typeof cache.size === 'number' ? (
-											<ProgressBar
-												warning={cache.warning}
-												danger={cache.danger}
-												percentage={
-													typeof cache.max_size !== 'number' ? -1 : cache.used
-												}
-											/>
-										) : (
-											<span>-</span>
-										)}
+												<ProgressBar
+													warning={cache.warning}
+													danger={cache.danger}
+													percentage={
+														typeof cache.max_size !== 'number' ? -1 : cache.used
+													}
+												/>
+											) : (
+												<span>-</span>
+											)}
 									</td>
 									<td className={styles['right-align']}>
 										{Caches.formatReadableBytes(cache.traffic.s_served)}
@@ -290,16 +293,16 @@ export class Caches extends ExpandableTable {
 															<td className={styles.bdr}>
 																{typeof shard.max_size === 'number' &&
 																	typeof shard.size === 'number' ? (
-																	<ProgressBar
-																		warning={shard.warning}
-																		danger={shard.danger}
-																		percentage={
-																			typeof shard.max_size !== 'number' ? -1 : shard.used
-																		}
-																	/>
-																) : (
-																	<span>-</span>
-																)}
+																		<ProgressBar
+																			warning={shard.warning}
+																			danger={shard.danger}
+																			percentage={
+																				typeof shard.max_size !== 'number' ? -1 : shard.used
+																			}
+																		/>
+																	) : (
+																		<span>-</span>
+																	)}
 															</td>
 														</tr>
 													))}
@@ -318,7 +321,7 @@ export class Caches extends ExpandableTable {
 	}
 }
 
-export default DataBinder(Caches, [
+export default DataBinder(withNamespaces('page.cache')(Caches), [
 	api.slabs.process(sharedZonesCalculator),
 	api.http.caches.process(cacheCalculator),
 ]);

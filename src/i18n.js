@@ -6,12 +6,14 @@ import appEN from '../locales/en/app.json';
 import chartEN from '../locales/en/chart.json';
 import demoEN from '../locales/en/demo.json';
 import settingsEN from '../locales/en/settings.json';
+import cacheEN from '../locales/en/pages/cache.json';
 import connectionsEN from '../locales/en/pages/index/connections.json';
 
 import appRU from '../locales/ru/app.json';
 import chartRU from '../locales/ru/chart.json';
 import demoRU from '../locales/ru/demo.json';
 import settingsRU from '../locales/ru/settings.json';
+import cacheRU from '../locales/ru/pages/cache.json';
 import connectionsRU from '../locales/ru/pages/index/connections.json';
 
 const resources = {
@@ -20,6 +22,7 @@ const resources = {
 		chart: chartEN,
 		demo: demoEN,
 		settings: settingsEN,
+		'page.cache': cacheEN,
 		'page.index.connections': connectionsEN,
 	},
 	ru: {
@@ -27,6 +30,7 @@ const resources = {
 		chart: chartRU,
 		demo: demoRU,
 		settings: settingsRU,
+		'page.cache': cacheRU,
 		'page.index.connections': connectionsRU,
 	}
 };

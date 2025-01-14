@@ -35,7 +35,7 @@ export class Resolvers extends SortableTable {
 				<table className={`${styles.table} ${styles.wide}`}>
 					<thead>
 						<tr>
-							<TableSortControl order={this.state.sortOrder} onChange={this.changeSorting} />
+							<TableSortControl firstSortLabel="Отсортировать по порядку в конфигурации" secondSortLabel="Отсортировать по статусу — сначала проблемные" order={this.state.sortOrder} onChange={this.changeSorting} />
 							<th>Зона</th>
 							<th colSpan={3}>Запросы</th>
 							<th colSpan={8}>Ответы</th>

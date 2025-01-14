@@ -72,7 +72,7 @@ export default class Upstream extends UpstreamsList {
 		return (
 			<table
 				className={`${styles.table} ${styles.wide}${this.state.hoveredColumns ? ` ${styles['hovered-expander']}` : ''
-					}`}
+				}`}
 			>
 				<colgroup>
 					<col width="10px" />
@@ -111,6 +111,7 @@ export default class Upstream extends UpstreamsList {
 							(
 								<tr>
 									<TableSortControl
+										firstSortLabel="Отсортировать по порядку в конфигурации"
 										secondSortLabel="Отсортировать по статусу &mdash; сначала недоступные"
 										rowSpan={3}
 										order={this.state.sortOrder}
@@ -140,6 +141,7 @@ export default class Upstream extends UpstreamsList {
 							!envUtils.isDemoEnv() ?
 								(
 									<TableSortControl
+										firstSortLabel="Отсортировать по порядку в конфигурации"
 										secondSortLabel="Отсортировать по статусу &mdash; сначала недоступные"
 										order={this.state.sortOrder}
 										onChange={this.changeSorting}
@@ -338,7 +340,7 @@ export default class Upstream extends UpstreamsList {
 
 									<td
 										className={`${styles.flash}${peer['4xxChanged'] ? ` ${styles['red-flash']}` : ''
-											}`}
+										}`}
 									>
 										{tableUtils.responsesTextWithTooltip(
 											peer.responses['4xx'],
@@ -348,7 +350,7 @@ export default class Upstream extends UpstreamsList {
 									</td>
 									<td
 										className={`${styles.bdr} ${styles.flash}${peer['5xxChanged'] ? ` ${styles['red-flash']}` : ''
-											}`}
+										}`}
 									>
 										{tableUtils.responsesTextWithTooltip(
 											peer.responses['5xx'],

@@ -366,7 +366,7 @@ describe('<Caches Page />', () => {
 			expect(expandableAllControl.prop('rowSpan')).toBe(2);
 			// all expandable control, type
 			expect(expandableAllControl.type()).toBe('th');
-			expect(expandableAllControl.prop('useTooltip_prop_1')).toBe('Показать все существующие шарды');
+			expect(expandableAllControl.prop('useTooltip_prop_1')).toBe('Show all exsists shards');
 			expect(expandableAllControl.prop('useTooltip_prop_2')).toBe('hint-right');
 
 			let rows = wrapper.find('[data-expandable="true"]');

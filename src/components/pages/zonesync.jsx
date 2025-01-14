@@ -25,7 +25,7 @@ export class ZoneSync extends SortableTable {
 			data: { zone_sync }
 		} = this.props;
 		const { status } = zone_sync;
-		let zones = Array.from(zone_sync.zones);
+		const zones = Array.from(zone_sync.zones);
 
 		if (this.state.sortOrder === 'desc') {
 			zones.sort(([nameA, a], [nameB, b]) =>
@@ -33,75 +33,77 @@ export class ZoneSync extends SortableTable {
 			);
 		}
 
-		return (<div>
-			<h1>Instance Status</h1>
+		return (
+			<div>
+				<h1>Instance Status</h1>
 
-			<table className={ `${ styles.table } ${ styles.thin }` }>
-				<thead>
-					<tr>
-						<th colSpan={2}>In</th>
-						<th colSpan={2}>Out</th>
-						<th>Nodes online</th>
-					</tr>
-					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
-						<th>messages</th>
-						<th className={ styles.bdr }>bytes</th>
-						<th>messages</th>
-						<th className={ styles.bdr }>bytes</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody className={ styles['right-align'] }>
-					<tr>
-						<td>{ status.msgs_in }</td>
-						<td className={ styles.bdr }>{ status.bytes_in }</td>
-						<td>{ status.msgs_out }</td>
-						<td className={ styles.bdr }>{ status.bytes_out }</td>
-						<td>{ status.nodes_online }</td>
-					</tr>
-				</tbody>
-			</table>
+				<table className={`${styles.table} ${styles.thin}`}>
+					<thead>
+						<tr>
+							<th colSpan={2}>In</th>
+							<th colSpan={2}>Out</th>
+							<th>Nodes online</th>
+						</tr>
+						<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
+							<th>messages</th>
+							<th className={styles.bdr}>bytes</th>
+							<th>messages</th>
+							<th className={styles.bdr}>bytes</th>
+							<th />
+						</tr>
+					</thead>
+					<tbody className={styles['right-align']}>
+						<tr>
+							<td>{status.msgs_in}</td>
+							<td className={styles.bdr}>{status.bytes_in}</td>
+							<td>{status.msgs_out}</td>
+							<td className={styles.bdr}>{status.bytes_out}</td>
+							<td>{status.nodes_online}</td>
+						</tr>
+					</tbody>
+				</table>
 
-			<br/>
-			<h1>Zones</h1>
+				<br />
+				<h1>Zones</h1>
 
-			<table className={ `${ styles.table } ${ styles.thin }` }>
-				<thead>
-					<tr>
-						<TableSortControl order={this.state.sortOrder} onChange={this.changeSorting} />
-						<th>Zone</th>
-						<th colspan={2}>Records</th>
-					</tr>
-					<tr className={ `${ styles['right-align'] } ${ styles['sub-header'] }` }>
-						<th className={ styles.bdr } />
-						<th>Total</th>
-						<th>Pending</th>
-					</tr>
-				</thead>
-				<tbody className={ styles['right-align'] }>
-					{
-						zones.map(([name, zone]) => {
-							let zoneStatus = styles.ok;
+				<table className={`${styles.table} ${styles.thin}`}>
+					<thead>
+						<tr>
+							<TableSortControl firstSortLabel="Отсортировать по порядку в конфигурации" secondSortLabel="Отсортировать по статусу — сначала проблемные" order={this.state.sortOrder} onChange={this.changeSorting} />
+							<th>Zone</th>
+							<th colSpan={2}>Records</th>
+						</tr>
+						<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
+							<th className={styles.bdr} />
+							<th>Total</th>
+							<th>Pending</th>
+						</tr>
+					</thead>
+					<tbody className={styles['right-align']}>
+						{
+							zones.map(([name, zone]) => {
+								let zoneStatus = styles.ok;
 
-							if (zone.alert) {
-								zoneStatus = styles.alert;
-							} else if (zone.warning) {
-								zoneStatus = styles.warning;
-							}
+								if (zone.alert) {
+									zoneStatus = styles.alert;
+								} else if (zone.warning) {
+									zoneStatus = styles.warning;
+								}
 
-							return (
-								<tr>
-									<td className={ zoneStatus } />
-									<td className={ `${ styles['left-align'] } ${ styles.bold } ${ styles.bdr }` }>{ name }</td>
-									<td>{ zone.records_total }</td>
-									<td>{ zone.records_pending }</td>
-								</tr>
-							);
-						})
-					}
-				</tbody>
-			</table>
-		</div>);
+								return (
+									<tr>
+										<td className={zoneStatus} />
+										<td className={`${styles['left-align']} ${styles.bold} ${styles.bdr}`}>{name}</td>
+										<td>{zone.records_total}</td>
+										<td>{zone.records_pending}</td>
+									</tr>
+								);
+							})
+						}
+					</tbody>
+				</table>
+			</div>
+		);
 	}
 }
 
