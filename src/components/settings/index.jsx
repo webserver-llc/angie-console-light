@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import {
 	VERSION,
 	MIN_CACHE_DATA_INTERVAL,
@@ -20,8 +21,9 @@ import NumberControl from './NumberControl.jsx';
 import NumberInput from '../numberinput/numberinput.jsx';
 
 import styles from './style.css';
+import LanguageControl from './LanguageControl.jsx';
 
-export default class Settings extends React.Component {
+class Settings extends React.Component {
 	constructor() {
 		super();
 
@@ -77,22 +79,22 @@ export default class Settings extends React.Component {
 	}
 
 	render() {
-		const { statuses } = this.props;
+		const { statuses, t } = this.props;
 
 		return (
 			<div className={styles.settings}>
-				<h2 className={styles.title}>Настройки</h2>
+				<h2 className={styles.title}>{t('Options')}</h2>
 
 				<div className={styles.section}>
-					Обновлять данные консоли каждые
+					{t('Update every')}
 
 					<NumberControl value={this.state.updatingPeriod} onChange={this.changeUpdatePeriod} />
 
-					сек.
+					{t('sec')}
 				</div>
 
 				<div className={styles.section}>
-					Пороговое значение предупреждений для 4xx
+					{t('4xx warnings threshold')}
 					<NumberInput
 						defaultValue={this.state.warnings4xxThresholdPercent}
 						onChange={this.changePercentThreshold.bind(this, 'warnings4xxThresholdPercent')}
@@ -103,20 +105,20 @@ export default class Settings extends React.Component {
 				</div>
 
 				<div className={styles.section}>
-					Вычислять соотношение успешных попаданий в кэш за последние
+					{t('Calculate hit ratio for the past')}
 					<NumberInput
 						defaultValue={this.state.cacheDataInterval / 1000}
 						className={styles['wide-input']}
 						onChange={this.changeCacheHitRatioInteval}
 					/>
 					{' '}
-					сек.
+					{t('sec')}
 				</div>
 
 				{
 					statuses.zone_sync && statuses.zone_sync.ready ? (
 						<div className={styles.section}>
-							Пороговое значение для несинхронизированных данных
+							{t('Non synced data threshold')}
 
 							<NumberInput
 								defaultValue={this.state.zonesyncPendingThreshold}
@@ -133,7 +135,7 @@ export default class Settings extends React.Component {
 				{
 					statuses.resolvers && statuses.resolvers.ready ? (
 						<div className={styles.section}>
-							Пороговое значение ошибок для DNS
+							{t('Resolver errors threshold')}
 
 							<NumberInput
 								defaultValue={this.state.resolverErrorsThreshold}
@@ -148,8 +150,14 @@ export default class Settings extends React.Component {
 				}
 
 				<div className={styles.section}>
-					<button onClick={this.save} className={styles.save}>Сохранить</button>
-					<button onClick={this.props.close} className={styles.cancel}>Закрыть</button>
+					{t('Change language')}
+
+					<LanguageControl />
+				</div>
+
+				<div className={styles.section}>
+					<button onClick={this.save} className={styles.save}>{t('Save')}</button>
+					<button onClick={this.props.close} className={styles.cancel}>{t('Close')}</button>
 				</div>
 
 				<span className={styles.version}>
@@ -160,3 +168,5 @@ export default class Settings extends React.Component {
 		);
 	}
 }
+
+export default withNamespaces('settings')(Settings);
