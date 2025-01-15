@@ -12,8 +12,9 @@ import connectionsTooltipsEN from '../locales/en/upstreams/connections-tooltip.j
 import peerTooltipEN from '../locales/en/upstreams/peer-tooltip.json';
 import upstreamStatsTooltipEN from '../locales/en/upstreams/upstream-stats-tooltip.json';
 import upstreamsContainerEN from '../locales/en/upstreams/upstreams-container.json';
-import upstreamServerListEN from '../locales/en/upstreams/upstream-server-list.json';
+import upstreamServersListEN from '../locales/en/upstreams/upstream-servers-list.json';
 import upstreamsListEN from '../locales/en/upstreams/upstreams-list.json';
+import upstreamsEditorEN from '../locales/en/upstreams/editor/upstreams-editor.json';
 
 import appRU from '../locales/ru/app.json';
 import chartRU from '../locales/ru/chart.json';
@@ -25,8 +26,9 @@ import connectionsTooltipsRU from '../locales/ru/upstreams/connections-tooltip.j
 import peerTooltipRU from '../locales/ru/upstreams/peer-tooltip.json';
 import upstreamStatsTooltipRU from '../locales/ru/upstreams/upstream-stats-tooltip.json';
 import upstreamsContainerRU from '../locales/ru/upstreams/upstreams-container.json';
-import upstreamServerListRU from '../locales/ru/upstreams/upstream-server-list.json';
+import upstreamServersListRU from '../locales/ru/upstreams/upstream-servers-list.json';
 import upstreamsListRU from '../locales/ru/upstreams/upstreams-list.json';
+import upstreamsEditorRU from '../locales/ru/upstreams/editor/upstreams-editor.json';
 
 const resources = {
 	en: {
@@ -40,8 +42,9 @@ const resources = {
 		'upstreams.peer-tooltip': peerTooltipEN,
 		'upstreams.upstream-stats-tooltip': upstreamStatsTooltipEN,
 		'upstreams.upstreams-container': upstreamsContainerEN,
-		'upstreams.upstream-server-list': upstreamServerListEN,
-		'upstreams.upstreams-list': upstreamsListEN
+		'upstreams.upstream-servers-list': upstreamServersListEN,
+		'upstreams.upstreams-list': upstreamsListEN,
+		'upstreams.editor.upstreams-editor': upstreamsEditorEN
 	},
 	ru: {
 		app: appRU,
@@ -54,8 +57,9 @@ const resources = {
 		'upstreams.peer-tooltip': peerTooltipRU,
 		'upstreams.upstream-stats-tooltip': upstreamStatsTooltipRU,
 		'upstreams.upstreams-container': upstreamsContainerRU,
-		'upstreams.upstream-server-list': upstreamServerListRU,
-		'upstreams.upstreams-list': upstreamsListRU
+		'upstreams.upstream-servers-list': upstreamServersListRU,
+		'upstreams.upstreams-list': upstreamsListRU,
+		'upstreams.editor.upstreams-editor': upstreamsEditorRU
 	}
 };
 
