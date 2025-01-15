@@ -553,7 +553,7 @@ describe('<UpstreamsList />', () => {
 			// useTooltip called once
 			expect(tooltips.useTooltip).toHaveBeenCalled();
 			// useTooltip call arg
-			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Available in Angie PRO only');
+			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Available only in Angie PRO');
 			// useTooltip call arg
 			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
 

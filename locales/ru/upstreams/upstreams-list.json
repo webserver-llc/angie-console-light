@@ -7,9 +7,8 @@
   "Sorry, API is read-only, please make it writable.": "API доступен только для чтения, сделайте его доступным для записи.",
   "Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names": "Конфигурация недоступна для апстримов с именами, содержащими не-ASCII символы.",
   "No servers found in this upstream group": "В этой группе не найдено ни одного сервера c состоянием",
-  "Available in": "Доступно в",
-  "only": "только",
-  "Available in Angie PRO only": "Доступно только в Angie PRO",
+  "Available only in": "Доступно только в",
+  "Available only in Angie PRO": "Доступно только в Angie PRO",
   "Edit selected": "Редактировать",
   "Add server": "Добавить сервер",
   "Zone": "Загрузка памяти:"

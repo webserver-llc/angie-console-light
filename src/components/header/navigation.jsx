@@ -84,13 +84,13 @@ const SectionLocales = {
 		'Config Files': 'Config Files'
 	},
 	ru: {
-		'HTTP Zones': 'HTTP-зоны',
-		'HTTP Upstreams': 'HTTP-апстримы',
-		'TCP/UDP Zones': 'TCP/UDP-зоны',
-		'TCP/UDP Upstreams': 'TCP/UDP-апстримы',
+		'HTTP Zones': 'HTTP Зоны',
+		'HTTP Upstreams': 'HTTP Апстримы',
+		'TCP/UDP Zones': 'TCP/UDP Зоны',
+		'TCP/UDP Upstreams': 'TCP/UDP Апстримы',
 		Caches: 'Кэши',
 		'Shared Zones': 'Общие зоны',
-		Resolvers: 'DNS-резолверы',
+		Resolvers: 'DNS Резолверы',
 		'Config Files': 'Конфигурация'
 	}
 };

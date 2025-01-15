@@ -150,7 +150,10 @@ class UpstreamsContainer extends React.Component {
 					this.state.showUpstreamsList ? (
 						<div className={styles['upstreams-catalog']}>
 							<div className={styles['upstreams-summary']}>
-								<strong>{t('Total:')}</strong>
+								<strong>
+									{t('Total')}
+									:
+								</strong>
 								{' '}
 								{__STATS.total}
 								{' '}

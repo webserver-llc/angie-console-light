@@ -296,11 +296,9 @@ export default class UpstreamsList extends SortableTable {
 				>
 					<span className={styles['edit-icon']} />
 					<span className={styles['promo-text']}>
-						{t('Available in')}
+						{t('Available only in')}
 						{' '}
 						<span>Angie PRO</span>
-						{' '}
-						{t('only')}
 						&nbsp;
 					</span>
 				</span>
@@ -313,7 +311,7 @@ export default class UpstreamsList extends SortableTable {
 					className={
 						styles['edit-disable']
 					}
-					{...tooltips.useTooltip(`${t('Available in Angie PRO only')}`, 'hint-right')}
+					{...tooltips.useTooltip(`${t('Available only in Angie PRO')}`, 'hint-right')}
 				/>
 			);
 		}
