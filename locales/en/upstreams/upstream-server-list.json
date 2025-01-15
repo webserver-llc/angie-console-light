@@ -1,0 +1,11 @@
+{
+  "No servers found in this upstream group.": "No servers found in this upstream group.",
+  "down": "down",
+  "up": "up",
+  "Server": "Server",
+  "Weight": "Weight",
+  "State": "State",
+  "Max_conns": "Max_conns",
+  "Max_fails": "Max_fails",
+  "Fail_timeout": "Fail_timeout"
+}
