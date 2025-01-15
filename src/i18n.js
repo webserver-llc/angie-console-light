@@ -11,6 +11,7 @@ import connectionsEN from '../locales/en/pages/index/connections.json';
 import connectionsTooltipsEN from '../locales/en/upstreams/connections-tooltip.json';
 import peerTooltipEN from '../locales/en/upstreams/peer-tooltip.json';
 import upstreamStatsTooltipEN from '../locales/en/upstreams/upstream-stats-tooltip.json';
+import upstreamsContainerEN from '../locales/en/upstreams/upstreams-container.json';
 
 import appRU from '../locales/ru/app.json';
 import chartRU from '../locales/ru/chart.json';
@@ -21,6 +22,7 @@ import connectionsRU from '../locales/ru/pages/index/connections.json';
 import connectionsTooltipsRU from '../locales/ru/upstreams/connections-tooltip.json';
 import peerTooltipRU from '../locales/ru/upstreams/peer-tooltip.json';
 import upstreamStatsTooltipRU from '../locales/ru/upstreams/upstream-stats-tooltip.json';
+import upstreamsContainerRU from '../locales/ru/upstreams/upstreams-container.json';
 
 const resources = {
 	en: {
@@ -32,7 +34,8 @@ const resources = {
 		'pages.index.connections': connectionsEN,
 		'upstreams.connections-tooltip': connectionsTooltipsEN,
 		'upstreams.peer-tooltip': peerTooltipEN,
-		'upstreams.upstream-stats-tooltip': upstreamStatsTooltipEN
+		'upstreams.upstream-stats-tooltip': upstreamStatsTooltipEN,
+		'upstreams.upstreams-container': upstreamsContainerEN,
 	},
 	ru: {
 		app: appRU,
@@ -43,7 +46,8 @@ const resources = {
 		'pages.index.connections': connectionsRU,
 		'upstreams.connections-tooltip': connectionsTooltipsRU,
 		'upstreams.peer-tooltip': peerTooltipRU,
-		'upstreams.upstream-stats-tooltip': upstreamStatsTooltipRU
+		'upstreams.upstream-stats-tooltip': upstreamStatsTooltipRU,
+		'upstreams.upstreams-container': upstreamsContainerRU,
 	}
 };
 

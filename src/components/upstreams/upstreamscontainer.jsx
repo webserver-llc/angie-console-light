@@ -8,11 +8,12 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import styles from './style.css';
 
 export const UPSTREAM_GROUP_LENGTH = 70;
 
-export default class UpstreamsContainer extends React.Component {
+class UpstreamsContainer extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -88,7 +89,7 @@ export default class UpstreamsContainer extends React.Component {
 
 	render() {
 		let children = [];
-		let { upstreams } = this.props;
+		let { upstreams, t } = this.props;
 		const { __STATS } = upstreams;
 
 		upstreams = Array.from(upstreams);
@@ -117,8 +118,7 @@ export default class UpstreamsContainer extends React.Component {
 		if (children.length === 0) {
 			children = (
 				<div className={styles.msg}>
-					Все апстримы работают нормально.
-					Переключите "Только проблемные", чтобы увидеть все апстримы.
+					{t('All upstream servers appear to be just fine — nothing to show here. Toggle \"Failed only\" to show all upstreams.')}
 				</div>
 			);
 		}
@@ -126,7 +126,7 @@ export default class UpstreamsContainer extends React.Component {
 		return (
 			<div className={styles['upstreams-container']}>
 				<span className={styles['toggle-failed']}>
-					Только проблемные
+					{t('Failed only')}
 					<span
 						className={this.state.showOnlyFailed ? styles['toggler-active'] : styles.toggler}
 						onClick={this.toggleFailed}
@@ -141,32 +141,37 @@ export default class UpstreamsContainer extends React.Component {
 					className={this.state.showUpstreamsList ? styles['list-toggler-opened'] : styles['list-toggler']}
 					onClick={this.toggleUpstreamsList}
 				>
-					{this.state.showUpstreamsList ? 'Скрыть' : 'Показать'}
+					{this.state.showUpstreamsList ? t('Hide') : t('Show')}
 					{' '}
-					список апстримов
+					{t('upstreams list')}
 				</span>
 
 				{
 					this.state.showUpstreamsList ? (
 						<div className={styles['upstreams-catalog']}>
 							<div className={styles['upstreams-summary']}>
-								<strong>Всего апстримов:</strong>
+								<strong>{t('Total:')}</strong>
 								{' '}
 								{__STATS.total}
 								{' '}
-								(пиров:
+								(
+								{t('upstreams')}
+								:
 								{' '}
 								{__STATS.servers.all}
 								)
 
 								<span className={styles['red-text']}>
-									<strong>Проблемных:</strong>
+									<strong>{t('With problems:')}</strong>
 									{' '}
 									{__STATS.failures.toString()}
 									{' '}
-									(пиров:
+									(
+									{t('upstreams')}
+									:
 									{' '}
 									{__STATS.servers.failed}
+									{' '}
 									)
 								</span>
 							</div>
@@ -198,3 +203,5 @@ export default class UpstreamsContainer extends React.Component {
 		);
 	}
 }
+
+export default withNamespaces('upstreams.upstreams-container')(UpstreamsContainer);
