@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import appsettings from '#/appsettings';
 import utils from '#/utils.js';
@@ -20,7 +21,7 @@ import {
 } from '#/components/upstreams';
 import tooltips from '#/tooltips/index.jsx';
 
-export default class Upstream extends UpstreamsList {
+class Upstream extends UpstreamsList {
 	constructor(props) {
 		super(props);
 
@@ -395,3 +396,5 @@ export default class Upstream extends UpstreamsList {
 		);
 	}
 }
+
+export default withNamespaces('upstreams.upstreams-list')(Upstream);

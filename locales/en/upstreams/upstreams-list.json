@@ -1,0 +1,16 @@
+{
+  "Show all": "Show all",
+  "Up": "Up",
+  "Failed": "Failed",
+  "Checking": "Checking",
+  "Down": "Down",
+  "Sorry, API is read-only, please make it writable.": "Sorry, API is read-only, please make it writable.",
+  "Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names": "Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names",
+  "No servers found in this upstream group": "No servers found in this upstream group",
+  "Available in": "Available in",
+  "only": "only",
+  "Available in Angie PRO only": "Available in Angie PRO only",
+  "Edit selected": "Edit selected",
+  "Add server": "Add server",
+  "Zone": "Zone:"
+}

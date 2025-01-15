@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import UpstreamsList from '../../upstreams/upstreamslist.jsx';
 import utils from '#/utils.js';
@@ -17,7 +18,7 @@ import PeerTooltip from '../../upstreams/PeerTooltip.jsx';
 import ConnectionsTooltip from '../../upstreams/ConnectionsTooltip.jsx';
 import { TableSortControl, styles } from '#/components/table';
 
-export default class StreamUpstream extends UpstreamsList {
+class StreamUpstream extends UpstreamsList {
 	get SORTING_SETTINGS_KEY() {
 		return `sorting-stream-upstreams-${this.props.name}`;
 	}
@@ -195,3 +196,5 @@ export default class StreamUpstream extends UpstreamsList {
 		);
 	}
 }
+
+export default withNamespaces('upstreams.upstreams-list')(StreamUpstream);
