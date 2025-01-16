@@ -1,0 +1,9 @@
+{
+  "Limit Req": "Limit Conn",
+  "Zone": "Zone",
+  "Passed": "Passed",
+  "Delayed": "Delayed",
+  "Rejected": "Rejected",
+  "Exhausted": "Exhausted",
+  "Skipped": "Skipped"
+}

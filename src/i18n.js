@@ -10,6 +10,7 @@ import settingsEN from '../locales/en/settings.json';
 import cachesEN from '../locales/en/pages/caches.json';
 import configfilesEN from '../locales/en/pages/configfiles.json';
 import limitConnEN from '../locales/en/pages/serverzones/limitconn.json';
+import limitReqEN from '../locales/en/pages/serverzones/limitreq.json';
 import connectionsEN from '../locales/en/pages/index/connections.json';
 import connectionsTooltipsEN from '../locales/en/upstreams/connections-tooltip.json';
 import peerTooltipEN from '../locales/en/upstreams/peer-tooltip.json';
@@ -27,6 +28,7 @@ import settingsRU from '../locales/ru/settings.json';
 import cachesRU from '../locales/ru/pages/caches.json';
 import configfilesRU from '../locales/ru/pages/configfiles.json';
 import limitConnRU from '../locales/ru/pages/serverzones/limitconn.json';
+import limitReqRU from '../locales/ru/pages/serverzones/limitreq.json';
 import connectionsRU from '../locales/ru/pages/index/connections.json';
 import connectionsTooltipsRU from '../locales/ru/upstreams/connections-tooltip.json';
 import peerTooltipRU from '../locales/ru/upstreams/peer-tooltip.json';
@@ -46,6 +48,7 @@ const resources = {
 		'pages.caches': cachesEN,
 		'pages.configfiles': configfilesEN,
 		'pages.serverzones.limitconn': limitConnEN,
+		'pages.serverzones.limitReq': limitReqEN,
 		'pages.index.connections': connectionsEN,
 		'upstreams.connections-tooltip': connectionsTooltipsEN,
 		'upstreams.peer-tooltip': peerTooltipEN,
@@ -64,6 +67,7 @@ const resources = {
 		'pages.caches': cachesRU,
 		'pages.configfiles': configfilesRU,
 		'pages.serverzones.limitconn': limitConnRU,
+		'pages.serverzones.limitreq': limitReqRU,
 		'pages.index.connections': connectionsRU,
 		'upstreams.connections-tooltip': connectionsTooltipsRU,
 		'upstreams.peer-tooltip': peerTooltipRU,
