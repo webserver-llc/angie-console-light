@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import api, { apiStreamUpstreams, streamUpstreamsApi } from '../../../api';
 import calculateSharedZones from '../../../calculators/sharedzones.js';
 import UpstreamsContainer from '../../upstreams/upstreamscontainer.jsx';
@@ -16,11 +17,11 @@ import DataBinder from '../../databinder/databinder.jsx';
 
 export class StreamUpstreams extends React.Component {
 	render() {
-		const { data: { upstreams } } = this.props;
+		const { t, data: { upstreams } } = this.props;
 
 		return (
 			<UpstreamsContainer
-				title="TCP/UDP-апстримы"
+				title={t('TCP/UDP Upstreams')}
 				component={StreamUpstream}
 				upstreams={upstreams}
 				upstreamsApi={streamUpstreamsApi}
@@ -30,7 +31,7 @@ export class StreamUpstreams extends React.Component {
 	}
 }
 
-export default DataBinder(StreamUpstreams, [
+export default DataBinder(withNamespaces('pages.streamupstreams')(StreamUpstreams), [
 	api.slabs.process(calculateSharedZones),
 	apiStreamUpstreams
 ]);

@@ -78,7 +78,7 @@ export default class UpstreamsList extends SortableTable {
 					servers: new Map(),
 					selectedServers: new Map()
 				});
-				alert(t('Sorry, API is read-only, please make it writable.'));
+				alert(t('Sorry, API is read-only, please make it writable.', { ns: 'upstreams.upstreams-list' }));
 			}
 		});
 	}
@@ -98,7 +98,7 @@ export default class UpstreamsList extends SortableTable {
 		const { t } = this.props;
 		if (/[^\x20-\x7F]/.test(this.props.upstream.name)) {
 			alert(
-				t('Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names')
+				t('Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names', { ns: 'upstreams.upstreams-list' })
 			);
 		}
 
@@ -153,10 +153,10 @@ export default class UpstreamsList extends SortableTable {
 		return (
 			<tr>
 				<td className={tableStyles['left-align']} colSpan={30}>
-					{t('No servers found in this upstream group')}
+					{t('No servers found in this upstream group', { ns: 'upstreams.upstreams-list' })}
 					{' '}
 					'
-					{t(FILTER_OPTIONS[this.state.filtering])}
+					{t(FILTER_OPTIONS[this.state.filtering], { ns: 'upstreams.upstreams-list' })}
 					'.
 				</td>
 			</tr>
@@ -296,7 +296,7 @@ export default class UpstreamsList extends SortableTable {
 				>
 					<span className={styles['edit-icon']} />
 					<span className={styles['promo-text']}>
-						{t('Available only in')}
+						{t('Available only in', { ns: 'upstreams.upstreams-list' })}
 						{' '}
 						<span>Angie PRO</span>
 						&nbsp;
@@ -311,7 +311,7 @@ export default class UpstreamsList extends SortableTable {
 					className={
 						styles['edit-disable']
 					}
-					{...tooltips.useTooltip(`${t('Available only in Angie PRO')}`, 'hint-right')}
+					{...tooltips.useTooltip(`${t('Available only in Angie PRO', { ns: 'upstreams.upstreams-list' })}`, 'hint-right')}
 				/>
 			);
 		}
@@ -381,7 +381,7 @@ export default class UpstreamsList extends SortableTable {
 							key={value}
 							selected={this.state.filtering === value}
 						>
-							{t(FILTER_OPTIONS[value])}
+							{t(FILTER_OPTIONS[value], { ns: 'upstreams.upstreams-list' })}
 						</option>
 					))}
 				</select>
@@ -405,21 +405,21 @@ export default class UpstreamsList extends SortableTable {
 								key="edit"
 								onClick={() => this.editSelectedUpstream()}
 							>
-								{t('Edit selected')}
+								{t('Edit selected', { ns: 'upstreams.upstreams-list' })}
 							</span>,
 							<span
 								className={styles.btn}
 								key="add"
 								onClick={this.addUpstream}
 							>
-								{t('Add server')}
+								{t('Add server', { ns: 'upstreams.upstreams-list' })}
 							</span>,
 						]
 						: null}
 
 					{upstream.zoneSize !== null ? (
 						<span className={styles['zone-capacity']}>
-							{t('Zone')}
+							{t('Zone', { ns: 'upstreams.upstreams-list' })}
 							{' '}
 							<span
 								{...tooltips.useTooltip(
