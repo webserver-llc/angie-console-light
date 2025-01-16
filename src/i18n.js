@@ -20,6 +20,7 @@ import streamZonesEN from '../locales/en/pages/streamzones.json';
 import sharedZonesEN from '../locales/en/pages/sharedzones.json';
 import tooltipsEN from '../locales/en/pages/tooltips.json';
 import aboutAngieEN from '../locales/en/pages/index/aboutangie.json';
+import requestsEN from '../locales/en/pages/index/requests.json';
 import connectionsEN from '../locales/en/pages/index/connections.json';
 import connectionsTooltipsEN from '../locales/en/upstreams/connections-tooltip.json';
 import peerTooltipEN from '../locales/en/upstreams/peer-tooltip.json';
@@ -47,6 +48,7 @@ import sharedZonesRU from '../locales/ru/pages/sharedzones.json';
 import streamZonesRU from '../locales/ru/pages/streamzones.json';
 import tooltipsRU from '../locales/ru/pages/tooltips.json';
 import aboutAngieRU from '../locales/ru/pages/index/aboutangie.json';
+import requestsRU from '../locales/ru/pages/index/requests.json';
 import connectionsRU from '../locales/ru/pages/index/connections.json';
 import connectionsTooltipsRU from '../locales/ru/upstreams/connections-tooltip.json';
 import peerTooltipRU from '../locales/ru/upstreams/peer-tooltip.json';
@@ -77,6 +79,7 @@ const resources = {
 		'pages.tooltips': tooltipsEN,
 		'pages.index.aboutangie': aboutAngieEN,
 		'pages.index.connections': connectionsEN,
+		'pages.index.requests': requestsEN,
 		'upstreams.connections-tooltip': connectionsTooltipsEN,
 		'upstreams.peer-tooltip': peerTooltipEN,
 		'upstreams.upstream-stats-tooltip': upstreamStatsTooltipEN,
@@ -105,6 +108,7 @@ const resources = {
 		'pages.tooltips': tooltipsRU,
 		'pages.index.aboutangie': aboutAngieRU,
 		'pages.index.connections': connectionsRU,
+		'pages.index.requests': requestsRU,
 		'upstreams.connections-tooltip': connectionsTooltipsRU,
 		'upstreams.peer-tooltip': peerTooltipRU,
 		'upstreams.upstream-stats-tooltip': upstreamStatsTooltipRU,
