@@ -43,7 +43,7 @@ describe('<Caches IndexPage />', () => {
 		const indexBox = wrapper.find('IndexBox');
 
 		// IndexBox title
-		expect(indexBox.prop('title')).toBe('Кэши');
+		expect(indexBox.prop('title')).toBe('Caches');
 		// IndexBox status
 		expect(indexBox.prop('status')).toBe('ok');
 		// IndexBox href
@@ -69,7 +69,7 @@ describe('<Caches IndexPage />', () => {
 		// Icon 1, className
 		expect(states.at(0).childAt(0).prop('className')).toBe(styles.icon);
 		// state label 1
-		expect(states.at(0).text()).toContain('Горячие: 10');
+		expect(states.at(0).text()).toContain('Warm: 10');
 		// Icon 2
 		expect(states.at(1).childAt(0).name()).toBe('Icon');
 		// Icon 2, type
@@ -77,7 +77,7 @@ describe('<Caches IndexPage />', () => {
 		// Icon 2, className
 		expect(states.at(1).childAt(0).prop('className')).toBe(`${styles.icon} ${styles.snowflakeIcon}`);
 		// state label 2
-		expect(states.at(1).text()).toContain('Холодные: 30');
+		expect(states.at(1).text()).toContain('Cold: 30');
 
 		wrapper.unmount();
 	});
