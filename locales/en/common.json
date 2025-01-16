@@ -14,5 +14,8 @@
   "Sort by conf order": "Sort by conf order",
   "Total": "Total",
   "Problems": "Problems",
-  "Warnings": "Warnings"
+  "Warnings": "Warnings",
+  "Peer": "Peer",
+  "Servers": "Servers",
+  "Active": "Active"
 }
