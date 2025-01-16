@@ -51,6 +51,16 @@ class Upstream extends UpstreamsList {
 		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
 	}
 
+	formatUptime(ms, short = false) {
+		const { t } = this.props;
+		return utils.formatUptime(ms, short, utils.translateUptimeUnits({ t }));
+	}
+
+	formatLastCheckDate(date) {
+		const { t } = this.props;
+		return utils.formatLastCheckDate(date, utils.translateUptimeUnits({ t }));
+	}
+
 	toggleColumns() {
 		const columnsExpanded = !this.state.columnsExpanded;
 
@@ -79,7 +89,7 @@ class Upstream extends UpstreamsList {
 		return (
 			<table
 				className={`${styles.table} ${styles.wide}${this.state.hoveredColumns ? ` ${styles['hovered-expander']}` : ''
-				}`}
+					}`}
 			>
 				<colgroup>
 					<col width="10px" />
@@ -279,7 +289,7 @@ class Upstream extends UpstreamsList {
 										<div className={styles['below-title-text']}>{peer.server}</div>
 									</td>
 									<td className={styles['left-align']}>
-										{utils.formatUptime(peer.downtime, true)}
+										{this.formatUptime(peer.downtime, true)}
 									</td>
 									<td className={`${styles['center-align']} ${styles.bdr}`}>
 										{peer.weight}
@@ -347,7 +357,7 @@ class Upstream extends UpstreamsList {
 
 									<td
 										className={`${styles.flash}${peer['4xxChanged'] ? ` ${styles['red-flash']}` : ''
-										}`}
+											}`}
 									>
 										{tableUtils.responsesTextWithTooltip(
 											peer.responses['4xx'],
@@ -357,7 +367,7 @@ class Upstream extends UpstreamsList {
 									</td>
 									<td
 										className={`${styles.bdr} ${styles.flash}${peer['5xxChanged'] ? ` ${styles['red-flash']}` : ''
-										}`}
+											}`}
 									>
 										{tableUtils.responsesTextWithTooltip(
 											peer.responses['5xx'],
@@ -390,7 +400,7 @@ class Upstream extends UpstreamsList {
 											<td key="health_checks_checks">{peer.health_checks.checks}</td>,
 											<td key="health_checks_fails">{peer.health_checks.fails}</td>,
 											<td key="health_checks_last">
-												{utils.formatLastCheckDate(peer.health_checks.last)}
+												{this.formatLastCheckDate(peer.health_checks.last)}
 											</td>
 										]
 									) : null}

@@ -16,6 +16,10 @@ import utils from '#/utils.js';
 function PeerTooltip({ peer, t }) {
 	let state = null;
 
+	function formatUptime(ms, short = false) {
+		return utils.formatUptime(ms, short, utils.translateUptimeUnits({ t }));
+	}
+
 	if (peer.state === 'unavail') {
 		state = (
 			<span>
@@ -62,7 +66,7 @@ function PeerTooltip({ peer, t }) {
 			<div className={styles.row}>
 				{t('Total downtime:')}
 				{' '}
-				{utils.formatUptime(peer.downtime)}
+				{formatUptime(peer.downtime)}
 			</div>
 
 			{

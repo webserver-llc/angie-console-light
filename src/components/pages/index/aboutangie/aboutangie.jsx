@@ -39,6 +39,11 @@ AboutAngieTooltip.defaultProps = {
 };
 
 export class AboutAngie extends React.Component {
+	formatUptime(ms, short = false) {
+		const { t } = this.props;
+		return utils.formatUptime(ms, short, utils.translateUptimeUnits({ t }));
+	}
+
 	renderLinkToDocs() {
 		const { props: { data: { angie } } } = this;
 
@@ -86,7 +91,7 @@ export class AboutAngie extends React.Component {
 						</th>
 						<td>
 							<span className={styles.uptime} {...tooltips.useTooltip(<AboutAngieTooltip t={t} data={this.props.data} />)}>
-								{utils.formatUptime(Date.now() - Date.parse(angie.load_time))}
+								{this.formatUptime(Date.now() - Date.parse(angie.load_time))}
 							</span>
 						</td>
 					</tr>

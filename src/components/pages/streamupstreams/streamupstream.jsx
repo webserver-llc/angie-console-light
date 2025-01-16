@@ -32,6 +32,16 @@ class StreamUpstream extends UpstreamsList {
 		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
 	}
 
+	formatUptime(ms, short = false) {
+		const { t } = this.props;
+		return utils.formatUptime(ms, short, utils.translateUptimeUnits({ t }));
+	}
+
+	formatLastCheckDate(date) {
+		const { t } = this.props;
+		return utils.formatLastCheckDate(date, utils.translateUptimeUnits({ t }));
+	}
+
 	renderPeers(peers) {
 		const { t } = this.props;
 		const { configured_health_checks } = this.props.upstream;
@@ -148,7 +158,7 @@ class StreamUpstream extends UpstreamsList {
 									) : null}
 								</td>
 
-								<td>{utils.formatUptime(peer.downtime, true)}</td>
+								<td>{this.formatUptime(peer.downtime, true)}</td>
 								<td className={styles.bdr}>{peer.weight}</td>
 								<td>
 									<span
@@ -191,7 +201,7 @@ class StreamUpstream extends UpstreamsList {
 											{peer.health_checks.fails}
 										</td>,
 										<td key="health_checks_last">
-											{utils.formatLastCheckDate(peer.health_checks.last)}
+											{this.formatLastCheckDate(peer.health_checks.last)}
 										</td>,
 									]
 									: null}

@@ -13,6 +13,10 @@ import { withNamespaces } from 'react-i18next';
 import utils from '#/utils.js';
 
 function ConnectionsTooltip({ title = 'Last', peer, t }) {
+	function formatUptime(ms, short = false) {
+		return utils.formatUptime(ms, short, utils.translateUptimeUnits({ t }));
+	}
+
 	return (
 		<div>
 			{
@@ -26,7 +30,7 @@ function ConnectionsTooltip({ title = 'Last', peer, t }) {
 						</div>
 						<div>
 							(
-							{utils.formatUptime(new Date().getTime() - Date.parse(peer.selected))}
+							{formatUptime(new Date().getTime() - Date.parse(peer.selected))}
 							{' '}
 							{t('ago')}
 							)
