@@ -11,5 +11,8 @@
   "Click to view rate graph": "Нажмите, чтобы увидеть график",
   "Click to hide rate graph": "Нажмите, чтобы скрыть график",
   "Sort by zone - asc": "Отсортировать по алфавиту",
-  "Sort by conf order": "Отсортировать по порядку в конфигурации"
+  "Sort by conf order": "Отсортировать по порядку в конфигурации",
+  "Total": "Всего",
+  "Problems": "Проблем",
+  "Warnings": "Предупрежд."
 }

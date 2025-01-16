@@ -11,5 +11,8 @@
   "Click to view rate graph": "Click to view rate graph",
   "Click to hide rate graph": "Click to hide rate graph",
   "Sort by zone - asc": "Sort by zone - asc",
-  "Sort by conf order": "Sort by conf order"
+  "Sort by conf order": "Sort by conf order",
+  "Total": "Total",
+  "Problems": "Problems",
+  "Warnings": "Warnings"
 }
