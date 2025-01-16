@@ -14,6 +14,7 @@ import limitReqEN from '../locales/en/pages/serverzones/limitreq.json';
 import locationZonesEN from '../locales/en/pages/serverzones/locationzones.json';
 import serverZonesEN from '../locales/en/pages/serverzones/serverzones.json';
 import streamUpstreamsEN from '../locales/en/pages/streamupstreams.json';
+import upstreamsEN from '../locales/en/pages/upstreams.json';
 import connectionsEN from '../locales/en/pages/index/connections.json';
 import connectionsTooltipsEN from '../locales/en/upstreams/connections-tooltip.json';
 import peerTooltipEN from '../locales/en/upstreams/peer-tooltip.json';
@@ -35,6 +36,7 @@ import limitReqRU from '../locales/ru/pages/serverzones/limitreq.json';
 import locationZonesRU from '../locales/ru/pages/serverzones/locationzones.json';
 import serverZonesRU from '../locales/ru/pages/serverzones/serverzones.json';
 import streamUpstreamsRU from '../locales/ru/pages/streamupstreams.json';
+import upstreamsRU from '../locales/ru/pages/upstreams.json';
 import connectionsRU from '../locales/ru/pages/index/connections.json';
 import connectionsTooltipsRU from '../locales/ru/upstreams/connections-tooltip.json';
 import peerTooltipRU from '../locales/ru/upstreams/peer-tooltip.json';
@@ -58,6 +60,7 @@ const resources = {
 		'pages.serverzones.locationzones': locationZonesEN,
 		'pages.serverzones.serverzones': serverZonesEN,
 		'pages.streamupstreams': streamUpstreamsEN,
+		'pages.upstreams': upstreamsEN,
 		'pages.index.connections': connectionsEN,
 		'upstreams.connections-tooltip': connectionsTooltipsEN,
 		'upstreams.peer-tooltip': peerTooltipEN,
@@ -80,6 +83,7 @@ const resources = {
 		'pages.serverzones.locationzones': locationZonesRU,
 		'pages.serverzones.serverzones': serverZonesRU,
 		'pages.streamupstreams': streamUpstreamsRU,
+		'pages.upstreams': upstreamsRU,
 		'pages.index.connections': connectionsRU,
 		'upstreams.connections-tooltip': connectionsTooltipsRU,
 		'upstreams.peer-tooltip': peerTooltipRU,

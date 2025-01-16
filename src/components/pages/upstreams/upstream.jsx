@@ -46,6 +46,11 @@ class Upstream extends UpstreamsList {
 		return `filtering-http-upstreams-${this.props.name}`;
 	}
 
+	formatReadableBytes(value) {
+		const { t } = this.props;
+		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
+	}
+
 	toggleColumns() {
 		const columnsExpanded = !this.state.columnsExpanded;
 
@@ -69,6 +74,7 @@ class Upstream extends UpstreamsList {
 	}
 
 	renderPeers(peers) {
+		const { t } = this.props;
 		const { configured_health_checks } = this.props.upstream;
 		return (
 			<table
@@ -112,8 +118,8 @@ class Upstream extends UpstreamsList {
 							(
 								<tr>
 									<TableSortControl
-										firstSortLabel="Отсортировать по порядку в конфигурации"
-										secondSortLabel="Отсортировать по статусу &mdash; сначала недоступные"
+										firstSortLabel={t('Sort by zone - asc')}
+										secondSortLabel={t('Sort by conf order')}
 										rowSpan={3}
 										order={this.state.sortOrder}
 										onChange={this.changeSorting}
@@ -127,7 +133,7 @@ class Upstream extends UpstreamsList {
 									{configured_health_checks ? (
 										<th colSpan="3" className={styles['promo-header-cell']}>
 											<span>
-												Доступно только в
+												{t('Available only in')}
 												{' '}
 												<span>Angie PRO</span>
 											</span>
@@ -142,8 +148,8 @@ class Upstream extends UpstreamsList {
 							!envUtils.isDemoEnv() ?
 								(
 									<TableSortControl
-										firstSortLabel="Отсортировать по порядку в конфигурации"
-										secondSortLabel="Отсортировать по статусу &mdash; сначала недоступные"
+										firstSortLabel={t('Sort by zone - asc')}
+										secondSortLabel={t('Sort by conf order')}
 										order={this.state.sortOrder}
 										onChange={this.changeSorting}
 									/>
@@ -153,37 +159,37 @@ class Upstream extends UpstreamsList {
 
 						{this.getSelectAllCheckbox(peers)}
 
-						<th colSpan="3">Пир</th>
-						<th colSpan="2">Запросы</th>
-						<th colSpan={this.state.columnsExpanded ? 6 : 3}>Ответы</th>
-						<th colSpan="2">Соединения</th>
-						<th colSpan="4">Трафик</th>
-						<th colSpan="2">Проверки сервера</th>
+						<th colSpan="3">{t('Peer')}</th>
+						<th colSpan="2">{t('Requests')}</th>
+						<th colSpan={this.state.columnsExpanded ? 6 : 3}>{t('Responses')}</th>
+						<th colSpan="2">{t('Conns')}</th>
+						<th colSpan="4">{t('Traffic')}</th>
+						<th colSpan="2">{t('Server checks')}</th>
 						{configured_health_checks ? (
-							<th colSpan="3">Проверки работоспособности</th>
+							<th colSpan="3">{t('Health monitors')}</th>
 						) : null}
 					</tr>
 					<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
-						<th className={styles['left-align']}>Имя</th>
+						<th className={styles['left-align']}>{t('Name')}</th>
 						<th className={styles['left-align']}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Общий простой', 'hint')}
+								{...tooltips.useTooltip(t('Total downtime'), 'hint')}
 							>
-								Простой
+								{t('TD')}
 							</span>
 						</th>
 						<th className={`${styles['center-align']} ${styles.bdr}`}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Вес', 'hint')}
+								{...tooltips.useTooltip(t('Weight'), 'hint')}
 							>
-								Вес
+								{t('Weight')}
 							</span>
 						</th>
 
-						<th>Всего</th>
-						<th className={styles.bdr}>Запр./сек.</th>
+						<th>{t('Total')}</th>
+						<th className={styles.bdr}>{t('Req/s')}</th>
 
 						{this.state.columnsExpanded ? (
 							[
@@ -208,33 +214,33 @@ class Upstream extends UpstreamsList {
 						<th className={styles['center-align']}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Активных', 'hint')}
+								{...tooltips.useTooltip(t('Active'), 'hint')}
 							>
-								Активн.
+								{t('Active_short')}
 							</span>
 						</th>
 						<th className={`${styles['center-align']} ${styles.bdr}`}>
 							<span
 								className={styles.hinted}
-								{...tooltips.useTooltip('Ограниченных', 'hint')}
+								{...tooltips.useTooltip(t('Limit'), 'hint')}
 							>
-								Огр.
+								{t('Limit_short')}
 							</span>
 						</th>
 
-						<th>Отпр./сек.</th>
-						<th>Получ./сек.</th>
-						<th>Отправлено</th>
-						<th className={styles.bdr}>Получено</th>
-						<th>Ошибок</th>
-						<th className={styles.bdr}>Недоступно</th>
-						{configured_health_checks ? (
-							[
-								<th key="checks">Проверок</th>,
-								<th key="fails">Ошибок</th>,
-								<th key="last">Последняя проверка</th>,
+						<th>{t('Sent/s')}</th>
+						<th>{t('Rcvd/s')}</th>
+						<th>{t('Sent')}</th>
+						<th className={styles.bdr}>{t('Rcvd')}</th>
+						<th>{t('Fails')}</th>
+						<th className={styles.bdr}>{t('Unavail')}</th>
+						{configured_health_checks
+							? [
+								<th key="checks">{t('Checks')}</th>,
+								<th key="fails">{t('Fails')}</th>,
+								<th key="last">{t('Last')}</th>,
 							]
-						) : null}
+							: null}
 					</tr>
 				</thead>
 
@@ -283,7 +289,7 @@ class Upstream extends UpstreamsList {
 										<span
 											className={styles.hinted}
 											{...tooltips.useTooltip(
-												<ConnectionsTooltip title="Последний" peer={peer} />,
+												<ConnectionsTooltip title={t('Last')} peer={peer} />,
 												'hint',
 											)}
 										>
@@ -370,13 +376,13 @@ class Upstream extends UpstreamsList {
 									</td>
 
 									<td className={styles.px60}>
-										{utils.formatReadableBytes(peer.server_sent_s)}
+										{this.formatReadableBytes(peer.server_sent_s)}
 									</td>
 									<td className={styles.px60}>
-										{utils.formatReadableBytes(peer.server_rcvd_s)}
+										{this.formatReadableBytes(peer.server_rcvd_s)}
 									</td>
-									<td>{utils.formatReadableBytes(peer.sent)}</td>
-									<td>{utils.formatReadableBytes(peer.received)}</td>
+									<td>{this.formatReadableBytes(peer.sent)}</td>
+									<td>{this.formatReadableBytes(peer.received)}</td>
 									<td>{peer.fails}</td>
 									<td className={styles.bdr}>{peer.unavail}</td>
 									{configured_health_checks ? (
@@ -397,4 +403,4 @@ class Upstream extends UpstreamsList {
 	}
 }
 
-export default withNamespaces('upstreams.upstreams-list')(Upstream);
+export default withNamespaces('pages.upstreams')(Upstream);
