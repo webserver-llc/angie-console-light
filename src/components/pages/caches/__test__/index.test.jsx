@@ -10,7 +10,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Caches } from '../index.jsx';
-import utils from '../../../../utils.js';
 import tooltips from '../../../../tooltips/index.jsx';
 import styles from '../../../table/style.css';
 
@@ -35,31 +34,31 @@ describe('<Caches Page />', () => {
 			hintedEl = wrapper.find(`thead span.${styles.hinted}`).at(0);
 
 			// first hinted el prop
-			expect(hintedEl.text()).toBe('Состояние');
+			expect(hintedEl.text()).toBe('State');
 			// first hinted el prop
 			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
 			// useTooltip call 2, arg 1
-			expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Загрузка памяти = использовано страниц памяти / всего старниц памяти');
+			expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Memory usage = Used memory pages / Total memory pages');
 			// useTooltip call 2, arg 2
 			expect(tooltips.useTooltip.mock.calls[1][1]).toBe('hint');
 
 			hintedEl = wrapper.find(`thead span.${styles.hinted}`).at(1);
 
 			// first hinted el prop
-			expect(hintedEl.text()).toBe('Загрузка памяти');
+			expect(hintedEl.text()).toBe('Memory usage');
 			// first hinted el prop
 			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
 			// useTooltip call 3, arg 1
-			expect(tooltips.useTooltip.mock.calls[2][0]).toBe('Загрузка диска = использовано / макс. размер');
+			expect(tooltips.useTooltip.mock.calls[2][0]).toBe('Disk usage = Used / Max size');
 			// useTooltip call 3, arg 2
 			expect(tooltips.useTooltip.mock.calls[2][1]).toBe('hint');
 
 			hintedEl = wrapper.find(`thead span.${styles.hinted}`).at(2);
 
 			// first hinted el prop
-			expect(hintedEl.text()).toBe('Загрузка диска');
+			expect(hintedEl.text()).toBe('Disk usage');
 			// first hinted el prop
 			expect(hintedEl.prop('passed_by_useTooltip')).toBe(true);
 
@@ -126,7 +125,7 @@ describe('<Caches Page />', () => {
 			expect(cells.at(1).prop('className')).toBe(`${styles.bdr} ${styles['center-align']}`);
 			hintedEl = cells.at(1).find('span');
 			// row 1, cell 2, useTooltip arg 1
-			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Горячий');
+			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Warm');
 			// row 1, cell 2, useTooltip arg 2
 			expect(hintedEl.prop('useTooltip_prop_2')).toBe('hint');
 			// row 1, cell 2, Icon
@@ -191,7 +190,7 @@ describe('<Caches Page />', () => {
 			expect(cells.at(1).prop('className')).toBe(`${styles.bdr} ${styles['center-align']}`);
 			hintedEl = cells.at(1).find('span');
 			// row 2, cell 2, useTooltip arg 1
-			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Холодный');
+			expect(hintedEl.prop('useTooltip_prop_1')).toBe('Cold');
 			// row 2, cell 2, useTooltip arg 2
 			expect(hintedEl.prop('useTooltip_prop_2')).toBe('hint');
 			// row 2, cell 2, Icon
@@ -379,7 +378,7 @@ describe('<Caches Page />', () => {
 			// row 1, cell 2, Icon
 			expect(hintElementRow1.name()).toBe('span');
 			// row 1, cell 2, useTooltip arg 1
-			expect(hintElementRow1.prop('useTooltip_prop_1')).toBe('Горячий');
+			expect(hintElementRow1.prop('useTooltip_prop_1')).toBe('Warm');
 			// row 1, cell 2, useTooltip arg 2
 			expect(hintElementRow1.prop('useTooltip_prop_2')).toBe('hint');
 			// row 1, cell 3
@@ -402,7 +401,7 @@ describe('<Caches Page />', () => {
 			// row 2, cell 2, Icon
 			expect(hintElementRow2.name()).toBe('span');
 			// row 2, cell 2, useTooltip arg 1
-			expect(hintElementRow2.prop('useTooltip_prop_1')).toBe('{Холодный}');
+			expect(hintElementRow2.prop('useTooltip_prop_1')).toBe('{Cold}');
 			// row 2, cell 2, useTooltip arg 2
 			expect(hintElementRow2.prop('useTooltip_prop_2')).toBe('hint');
 			// row 2, cell 3

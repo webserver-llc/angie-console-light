@@ -1,3 +1,20 @@
 {
-  "Show all exsists shards": "Показать все существующие шарды"
+  "Caches": "Кэши",
+  "Show all exsists shards": "Показать все существующие шарды",
+  "Zone": "Зона",
+  "State": "Состояние",
+  "Memory usage = Used memory pages / Total memory pages": "Загрузка памяти = использовано страниц памяти / всего старниц памяти",
+  "Memory usage": "Загрузка памяти",
+  "Max size": "Макс. размер",
+  "Used": "Использовано",
+  "Disk usage = Used / Max size": "Использовано диска = Использовано / Максимальный размер",
+  "Disk usage": "Использовано диска",
+  "Traffic": "Трафик",
+  "Hit Ratio": "Коэффициент попадания",
+  "Served": "Предоставлено",
+  "Written": "Записано",
+  "Bypassed": "Мимо",
+  "Cold": "Холодный",
+  "Warm": "Горячий",
+  "Path": "Путь"
 }

@@ -52,12 +52,13 @@ export class Caches extends ExpandableTable {
 
 	render() {
 		const {
+			t,
 			data: { caches },
 		} = this.props;
 
 		return (
 			<div>
-				<h1>Кэши</h1>
+				<h1>{t('Caches')}</h1>
 
 				<table className={styles.table}>
 					<colgroup>
@@ -68,46 +69,44 @@ export class Caches extends ExpandableTable {
 					<thead>
 						<tr>
 							{this.renderExpandingAllControl({ rowSpan: 2 })}
-							<th>Зона</th>
+							<th>{t('Zone')}</th>
 							<th>
 								<span
 									className={styles.hinted}
 									{...tooltips.useTooltip(<CacheStateTooltip />, 'hint')}
 								>
-									Состояние
+									{t('State')}
 								</span>
 							</th>
 							<th>
 								<span
 									className={styles.hinted}
 									{...tooltips.useTooltip(
-										'Загрузка памяти = использовано страниц памяти / всего старниц памяти',
+										t('Memory usage = Used memory pages / Total memory pages'),
 										'hint',
 									)}
 								>
-									Загрузка памяти
+									{t('Memory usage')}
 								</span>
 							</th>
-							<th>Макс. размер</th>
+							<th>{t('Max size')}</th>
 							<th>
-								Использовано
+								{t('Used')}
 							</th>
 							<th>
 								<span
 									className={styles.hinted}
 									{...tooltips.useTooltip(
-										'Загрузка диска = использовано / макс. размер',
+										t('Disk usage = Used / Max size'),
 										'hint',
 									)}
 								>
-									Загрузка диска
+									{t('Disk usage')}
 								</span>
 							</th>
-							<th colSpan="3">Трафик</th>
+							<th colSpan="3">{t('Traffic')}</th>
 							<th>
-								Коэффициент
-								<br />
-								попадания
+								{t('Hit Ratio')}
 							</th>
 						</tr>
 
@@ -118,9 +117,9 @@ export class Caches extends ExpandableTable {
 							<th className={styles.bdr} />
 							<th className={styles.bdr} />
 							<th className={styles.bdr} />
-							<th>Передано из кэша</th>
-							<th>Записано в кэш</th>
-							<th className={styles.bdr}>В обход кэша</th>
+							<th>{t('Served')}</th>
+							<th>{t('Written')}</th>
+							<th className={styles.bdr}>{t('Bypassed')}</th>
 							<th />
 						</tr>
 					</thead>
@@ -150,11 +149,11 @@ export class Caches extends ExpandableTable {
 									</td>
 									<td className={`${styles.bdr} ${styles['center-align']}`}>
 										{cache.cold ? (
-											<span {...tooltips.useTooltip('Холодный', 'hint')}>
+											<span {...tooltips.useTooltip(t('Cold'), 'hint')}>
 												<Icon type="snowflake" className={cachesStyles.icon} />
 											</span>
 										) : (
-											<span {...tooltips.useTooltip('Горячий', 'hint')}>
+											<span {...tooltips.useTooltip(t('Warm'), 'hint')}>
 												<Icon type="sun" className={cachesStyles.icon} />
 											</span>
 										)}
@@ -219,7 +218,7 @@ export class Caches extends ExpandableTable {
 											<table className={`${styles.table} ${styles.wide}`}>
 												<thead>
 													<tr>
-														<th>Путь</th>
+														<th>{t('Path')}</th>
 														<th>
 															<span
 																className={styles.hinted}
@@ -228,20 +227,20 @@ export class Caches extends ExpandableTable {
 																	'hint',
 																)}
 															>
-																Состояние
+																{t('State')}
 															</span>
 														</th>
-														<th>Макс. размер</th>
-														<th>Использовано</th>
+														<th>{t('Max size')}</th>
+														<th>{t('Used')}</th>
 														<th>
 															<span
 																className={styles.hinted}
 																{...tooltips.useTooltip(
-																	'Загрузка диска = использовано / макс. размер',
+																	t('Disk usage = Used / Max size'),
 																	'hint',
 																)}
 															>
-																Загрузка диска
+																{t('Disk usage')}
 															</span>
 														</th>
 													</tr>
@@ -255,7 +254,7 @@ export class Caches extends ExpandableTable {
 															>
 																{shard.cold ? (
 																	<span
-																		{...tooltips.useTooltip('{Холодный}', 'hint')}
+																		{...tooltips.useTooltip(`{${t('Cold')}}`, 'hint')}
 																	>
 																		<Icon
 																			type="snowflake"
@@ -264,7 +263,7 @@ export class Caches extends ExpandableTable {
 																	</span>
 																) : (
 																	<span
-																		{...tooltips.useTooltip('Горячий', 'hint')}
+																		{...tooltips.useTooltip(t('Warm'), 'hint')}
 																	>
 																		<Icon
 																			type="sun"

@@ -1,3 +1,20 @@
 {
-  "Show all exsists shards": "Show all exsists shards"
+  "Caches": "Caches",
+  "Show all exsists shards": "Show all exsists shards",
+  "Zone": "Zone",
+  "State": "State",
+  "Memory usage = Used memory pages / Total memory pages": "Memory usage = Used memory pages / Total memory pages",
+  "Memory usage": "Memory usage",
+  "Max size": "Max size",
+  "Used": "Used",
+  "Disk usage = Used / Max size": "Disk usage = Used / Max size",
+  "Disk usage": "Disk usage",
+  "Traffic": "Traffic",
+  "Hit Ratio": "Hit Ratio",
+  "Served": "Served",
+  "Written": "Written",
+  "Bypassed": "Bypassed",
+  "Cold": "Cold",
+  "Warm": "Warm",
+  "Path": "Path"
 }
