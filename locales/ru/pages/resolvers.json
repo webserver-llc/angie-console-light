@@ -1,0 +1,14 @@
+{
+  "Resolvers": "DNS-резолверы",
+  "Zone": "Зона",
+  "Requests": "Запросы",
+  "Responses": "Ответы",
+  "Success": "Успешных",
+  "Format error": "Ошибок формата",
+  "Server failure": "Сервер не завершил запрос",
+  "Host not found": "Ошибок имени",
+  "Unimplemented": "Запрос не поддерживается",
+  "Operation refused": "Запрос отклонен",
+  "Unknown": "Операция отклонена",
+  "Timed out": "Истекло время ожидания"
+}

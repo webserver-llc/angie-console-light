@@ -1,0 +1,14 @@
+{
+  "Resolvers": "Resolvers",
+  "Zone": "Zone",
+  "Requests": "Requests",
+  "Responses": "Responses",
+  "Success": "Success",
+  "Format error": "Format error",
+  "Server failure": "Server failure",
+  "Host not found": "Host not found",
+  "Unimplemented": "Unimplemented",
+  "Operation refused": "Operation refused",
+  "Unknown": "Unknown",
+  "Timed out": "Timed out"
+}
