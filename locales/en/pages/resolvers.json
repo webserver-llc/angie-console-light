@@ -1,6 +1,9 @@
 {
   "Resolvers": "Resolvers",
   "Zone": "Zone",
+  "Traffic": "Traffic",
+  "Req/s": "Req/s",
+  "Resp/s": "Resp/s",
   "Requests": "Requests",
   "Responses": "Responses",
   "Success": "Success",

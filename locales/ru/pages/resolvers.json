@@ -1,5 +1,8 @@
 {
   "Resolvers": "DNS-резолверы",
+  "Traffic": "Трафик",
+  "Req/s": "Получ./сек.",
+  "Resp/s": "Отв./сек.",
   "Zone": "Зона",
   "Requests": "Запросы",
   "Responses": "Ответы",

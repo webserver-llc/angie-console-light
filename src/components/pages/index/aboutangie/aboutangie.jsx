@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import IndexBox from '../indexbox/indexbox.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
@@ -19,17 +20,23 @@ import styles from './style.css';
 import tooltipStyles from '../../../tooltip/style.css';
 import { getHrefDocs } from './utils.js';
 
-export function AboutAngieTooltip({ data }) {
+export function AboutAngieTooltip({ t, data }) {
 	return (
 		<div>
 			<div className={tooltipStyles.row}>
-				Перезагрузок:
+				{t('Reload')}
+				:
 				{' '}
 				{data.angie.generation}
 			</div>
 		</div>
 	);
 }
+
+AboutAngieTooltip.defaultProps = {
+	// i18n for testing
+	t: key => key
+};
 
 export class AboutAngie extends React.Component {
 	renderLinkToDocs() {
@@ -52,7 +59,7 @@ export class AboutAngie extends React.Component {
 	}
 
 	render() {
-		const { props: { data: { angie } } } = this;
+		const { props: { t, data: { angie } } } = this;
 
 		return (
 			<IndexBox className={this.props.className}>
@@ -60,20 +67,26 @@ export class AboutAngie extends React.Component {
 					{this.renderLinkToDocs()}
 					{angie.config_files ?
 						(
-							<a href="#config_files" id="config-files" className={`${commonStyles.fr}`}>Конфигурация</a>
+							<a href="#config_files" id="config-files" className={`${commonStyles.fr}`}>{t('Config Files')}</a>
 						)
 						: null}
 				</div>
 				<table className={styles.table}>
 					<tr>
-						<th>Адрес:</th>
+						<th>
+							{t('Address')}
+							:
+						</th>
 						<td>{angie.address}</td>
 					</tr>
 					<tr>
-						<th>Последняя перезагрузка:</th>
+						<th>
+							{t('Last reload')}
+							:
+						</th>
 						<td>
-							<span className={styles.uptime} {...tooltips.useTooltip(<AboutAngieTooltip data={this.props.data} />)}>
-								{ utils.formatUptime(Date.now() - Date.parse(angie.load_time)) }
+							<span className={styles.uptime} {...tooltips.useTooltip(<AboutAngieTooltip t={t} data={this.props.data} />)}>
+								{utils.formatUptime(Date.now() - Date.parse(angie.load_time))}
 							</span>
 						</td>
 					</tr>
@@ -83,7 +96,7 @@ export class AboutAngie extends React.Component {
 	}
 }
 
-export default DataBinder(AboutAngie, [
+export default DataBinder(withNamespaces('pages.index.aboutangie')(AboutAngie), [
 	api.angie,
 	api.processes
 ]);

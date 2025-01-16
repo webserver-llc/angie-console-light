@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import IndexBox from './indexbox/indexbox.jsx';
 import AlertsCount from './alertscount/alertscount.jsx';
 import DataBinder from '../../databinder/databinder.jsx';
@@ -17,12 +18,12 @@ import calculateResolvers from '../../../calculators/resolvers.js';
 
 export class Resolvers extends React.Component {
 	render() {
-		const { props: { data, store } } = this;
+		const { props: { t, data, store } } = this;
 		const stats = data.resolvers.__STATS;
 
 		return (
 			<IndexBox
-				title="DNS-резолверы"
+				title={t('Resolvers')}
 				status={store.__STATUSES.resolvers.status}
 				href="#resolvers"
 			>
@@ -32,14 +33,16 @@ export class Resolvers extends React.Component {
 					alerts={stats.alerts}
 				/>
 
-				<h4>Трафик</h4>
+				<h4>{t('Traffic')}</h4>
 				<p>
-					Запр./сек.:
+					{t('Req/s')}
+					:
 					{' '}
 					{stats.traffic.in ? stats.traffic.in : 0}
 				</p>
 				<p>
-					Отв./сек.:
+					{t('Resp/s')}
+					:
 					{' '}
 					{stats.traffic.out ? stats.traffic.out : 0}
 				</p>
@@ -48,6 +51,6 @@ export class Resolvers extends React.Component {
 	}
 }
 
-export default DataBinder(Resolvers, [
+export default DataBinder(withNamespaces('pages.resolvers')(Resolvers), [
 	api.resolvers.setMapper(mapperResolvers).process(calculateResolvers)
 ]);
