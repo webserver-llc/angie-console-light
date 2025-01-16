@@ -39,20 +39,19 @@ describe('Utils', () => {
 		expect(formatReadableBytes('qwe')).toBe('0');
 		expect(formatReadableBytes(0)).toBe('0');
 
-		expect(formatReadableBytes(7)).toBe('7.00 Б');
-		expect(formatReadableBytes(16)).toBe('16.0 Б');
-		expect(formatReadableBytes(406)).toBe('406 Б');
-		expect(formatReadableBytes(1001)).toBe('1001 Б');
+		expect(formatReadableBytes(7)).toBe('7.00 B');
+		expect(formatReadableBytes(16)).toBe('16.0 B');
+		expect(formatReadableBytes(406)).toBe('406 B');
+		expect(formatReadableBytes(1001)).toBe('1001 B');
 
-		expect(formatReadableBytes(534591)).toBe('522 КБ');
+		expect(formatReadableBytes(534591)).toBe('522 KiB');
+		expect(formatReadableBytes(9524000)).toBe('9.08 MiB');
+		expect(formatReadableBytes(9524000, 'KiB')).toBe('9301 KiB');
+		expect(formatReadableBytes(9524000, 'B')).toBe('9524000 B');
 
-		expect(formatReadableBytes(9524000)).toBe('9.08 МБ');
-		expect(formatReadableBytes(9524000, 'KiB')).toBe('9.08 МБ');
-		expect(formatReadableBytes(9524000, 'B')).toBe('9.08 МБ');
+		expect(formatReadableBytes(2548575999)).toBe('2.37 GiB');
 
-		expect(formatReadableBytes(2548575999)).toBe('2.37 ГБ');
-
-		expect(formatReadableBytes(5799511627775)).toBe('5.27 ТБ');
+		expect(formatReadableBytes(5799511627775)).toBe('5.27 TiB');
 
 		const customUnits = {
 			0: 'b',

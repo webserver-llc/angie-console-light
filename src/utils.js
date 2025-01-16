@@ -41,7 +41,7 @@ export const formatUptime = (ms, short = false) => {
 export const formatReadableBytes = (
 	bytes,
 	maxMeasurementUnit,
-	units = { 0: 'Б', 1: 'КБ', 2: 'МБ', 3: 'ГБ', 4: 'ТБ' },
+	units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB' },
 ) => {
 	if (isNaN(parseFloat(bytes)) || !isFinite(bytes) || bytes === 0) return '0';
 
@@ -100,7 +100,7 @@ export const formatLastCheckDate = (timestamp) => {
 	if (unixTimestamp < 0) {
 		// eslint-disable-next-line no-console
 		console.warn(
-			'На компьютере установлены некорректная дата или время. Пожалуйста, проверьте настройки.',
+			'Incorrect timestamp or invalid datetime setting on PC. Check your settings',
 			timestamp,
 		);
 		return '-';
