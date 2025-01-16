@@ -1,4 +1,5 @@
 {
+  "HTTP Zones": "HTTP Zones",
   "Server Zones": "Server Zones",
   "Zone": "Zone",
   "Requests": "Requests",
@@ -13,5 +14,8 @@
   "Handshaked": "Handshaked",
   "Reuses": "Reuses",
   "Timedout": "Timedout",
-  "Failed": "Failed"
+  "Failed": "Failed",
+  "In": "In",
+  "Out": "Out",
+  "sec": "sec"
 }
