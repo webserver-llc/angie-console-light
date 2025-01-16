@@ -3,6 +3,7 @@ import { reactI18nextModule } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 import appEN from '../locales/en/app.json';
+import commonEN from '../locales/en/pages/common.json';
 import chartEN from '../locales/en/chart.json';
 import demoEN from '../locales/en/demo.json';
 import settingsEN from '../locales/en/settings.json';
@@ -17,6 +18,7 @@ import upstreamsListEN from '../locales/en/upstreams/upstreams-list.json';
 import upstreamsEditorEN from '../locales/en/upstreams/editor/upstreams-editor.json';
 
 import appRU from '../locales/ru/app.json';
+import commonRU from '../locales/ru/pages/common.json';
 import chartRU from '../locales/ru/chart.json';
 import demoRU from '../locales/ru/demo.json';
 import settingsRU from '../locales/ru/settings.json';
@@ -36,6 +38,7 @@ const resources = {
 		chart: chartEN,
 		demo: demoEN,
 		settings: settingsEN,
+		common: commonEN,
 		'pages.caches': cachesEN,
 		'pages.index.connections': connectionsEN,
 		'upstreams.connections-tooltip': connectionsTooltipsEN,
@@ -51,6 +54,7 @@ const resources = {
 		chart: chartRU,
 		demo: demoRU,
 		settings: settingsRU,
+		common: commonRU,
 		'pages.caches': cachesRU,
 		'pages.index.connections': connectionsRU,
 		'upstreams.connections-tooltip': connectionsTooltipsRU,
@@ -72,7 +76,12 @@ i18n
 		resources,
 		fallbackLng: 'en',
 		debug: process.env.NODE_ENV === 'development',
+		ns: ['common'],
+		defaultNS: ['common'],
 
+		fallbackNS: 'common',
+
+		nsSeparator: false,
 		keySeparator: false,
 
 		interpolation: {

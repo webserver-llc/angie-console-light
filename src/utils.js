@@ -84,6 +84,15 @@ export const formatReadableBytes = (
 	return `${(bytes / 1024 ** measure).toFixed(precision)} ${units[measure]}`;
 };
 
+export function translateReadableBytesUnits({ t, units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB' } }) {
+	return Object
+		.entries(units)
+		.reduce((acc, [key, value]) => {
+			acc[key] = t(value);
+			return acc;
+		}, {});
+}
+
 export const formatMs = (ms) => (ms === undefined ? '–' : `${ms}ms`);
 
 export const formatDate = (timestamp) => {

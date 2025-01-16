@@ -10,6 +10,7 @@
 import {
 	formatUptime,
 	formatReadableBytes,
+	translateReadableBytesUnits,
 	formatMs,
 	formatDate,
 	formatLastCheckDate,
@@ -66,6 +67,26 @@ describe('Utils', () => {
 		expect(formatReadableBytes(5799511627775, 'Mb', customUnits)).toBe('5530845 Mb');
 		expect(formatReadableBytes(5799511627775, 'Kb', customUnits)).toBe('5663585574 Kb');
 		expect(formatReadableBytes(5799511627775, 'b', customUnits)).toBe('5799511627775 b');
+	});
+
+	it('translateReadableBytesUnits()', () => {
+		expect(translateReadableBytesUnits({ t: (value) => `i18n ${value}` })).toEqual({
+			0: 'i18n B',
+			1: 'i18n KiB',
+			2: 'i18n MiB',
+			3: 'i18n GiB',
+			4: 'i18n TiB'
+		});
+		expect(translateReadableBytesUnits({
+			t: (value) => `i18n ${value}`,
+			units: { 0: 'b', 1: 'Kb', 2: 'Mb', 3: 'Gb', 4: 'Tb' }
+		})).toEqual({
+			0: 'i18n b',
+			1: 'i18n Kb',
+			2: 'i18n Mb',
+			3: 'i18n Gb',
+			4: 'i18n Tb'
+		});
 	});
 
 	it('formatMs()', () => {
