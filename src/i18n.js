@@ -68,7 +68,7 @@ const resources = {
 		'pages.caches': cachesEN,
 		'pages.configfiles': configfilesEN,
 		'pages.serverzones.limitconn': limitConnEN,
-		'pages.serverzones.limitReq': limitReqEN,
+		'pages.serverzones.limitreq': limitReqEN,
 		'pages.serverzones.locationzones': locationZonesEN,
 		'pages.serverzones.serverzones': serverZonesEN,
 		'pages.streamupstreams': streamUpstreamsEN,
