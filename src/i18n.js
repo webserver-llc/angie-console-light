@@ -3,11 +3,12 @@ import { reactI18nextModule } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 import appEN from '../locales/en/app.json';
-import commonEN from '../locales/en/pages/common.json';
+import commonEN from '../locales/en/common.json';
 import chartEN from '../locales/en/chart.json';
 import demoEN from '../locales/en/demo.json';
 import settingsEN from '../locales/en/settings.json';
 import cachesEN from '../locales/en/pages/caches.json';
+import configfilesEN from '../locales/en/pages/configfiles.json';
 import connectionsEN from '../locales/en/pages/index/connections.json';
 import connectionsTooltipsEN from '../locales/en/upstreams/connections-tooltip.json';
 import peerTooltipEN from '../locales/en/upstreams/peer-tooltip.json';
@@ -18,11 +19,12 @@ import upstreamsListEN from '../locales/en/upstreams/upstreams-list.json';
 import upstreamsEditorEN from '../locales/en/upstreams/editor/upstreams-editor.json';
 
 import appRU from '../locales/ru/app.json';
-import commonRU from '../locales/ru/pages/common.json';
+import commonRU from '../locales/ru/common.json';
 import chartRU from '../locales/ru/chart.json';
 import demoRU from '../locales/ru/demo.json';
 import settingsRU from '../locales/ru/settings.json';
 import cachesRU from '../locales/ru/pages/caches.json';
+import configfilesRU from '../locales/ru/pages/configfiles.json';
 import connectionsRU from '../locales/ru/pages/index/connections.json';
 import connectionsTooltipsRU from '../locales/ru/upstreams/connections-tooltip.json';
 import peerTooltipRU from '../locales/ru/upstreams/peer-tooltip.json';
@@ -40,6 +42,7 @@ const resources = {
 		settings: settingsEN,
 		common: commonEN,
 		'pages.caches': cachesEN,
+		'pages.configfiles': configfilesEN,
 		'pages.index.connections': connectionsEN,
 		'upstreams.connections-tooltip': connectionsTooltipsEN,
 		'upstreams.peer-tooltip': peerTooltipEN,
@@ -56,6 +59,7 @@ const resources = {
 		settings: settingsRU,
 		common: commonRU,
 		'pages.caches': cachesRU,
+		'pages.configfiles': configfilesRU,
 		'pages.index.connections': connectionsRU,
 		'upstreams.connections-tooltip': connectionsTooltipsRU,
 		'upstreams.peer-tooltip': peerTooltipRU,
