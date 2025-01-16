@@ -299,6 +299,7 @@ export const isIP = (value) => {
 export default {
 	formatUptime,
 	formatReadableBytes,
+	translateReadableBytesUnits,
 	formatMs,
 	formatDate,
 	formatNumber,
