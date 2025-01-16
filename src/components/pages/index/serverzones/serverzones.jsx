@@ -20,6 +20,11 @@ import calculateLocationZones from '#/calculators/locationzones.js';
 import utils from '#/utils.js';
 
 export class ServerZones extends React.Component {
+	formatReadableBytes(value) {
+		const { t } = this.props;
+		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
+	}
+
 	render() {
 		const { props: { t, data, store } } = this;
 		const statuses = [];
@@ -42,13 +47,13 @@ export class ServerZones extends React.Component {
 						{t('In')}
 						:
 						{' '}
-						{stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/${t('sec')}.` : 0}
+						{stats.traffic.in ? `${this.formatReadableBytes(stats.traffic.in)}/${t('sec')}.` : 0}
 					</p>
 					<p>
 						{t('Out')}
 						:
 						{' '}
-						{stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/${t('sec')}.` : 0}
+						{stats.traffic.out ? `${this.formatReadableBytes(stats.traffic.out)}/${t('sec')}.` : 0}
 					</p>
 				</div>
 			);
