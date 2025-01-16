@@ -17,5 +17,8 @@
   "Warnings": "Warnings",
   "Peer": "Peer",
   "Servers": "Servers",
-  "Active": "Active"
+  "Active": "Active",
+  "In": "In",
+  "Out": "Out",
+  "sec": "sec"
 }

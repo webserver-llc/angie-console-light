@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import IndexBox from '../indexbox/indexbox.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
@@ -18,47 +19,52 @@ import { zones } from '#/calculators/stream.js';
 
 export class StreamZones extends React.Component {
 	render() {
-		const { props: { data, store } } = this;
+		const { props: { t, data, store } } = this;
 		const stats = data.server_zones.__STATS;
 
 		return (
 			<IndexBox
-				title="TCP/UDP-зоны"
+				title={t('TCP/UDP Zones')}
 				status={store.__STATUSES.tcp_zones.status}
 				href="#tcp_zones"
 			>
 				<p>
-					Соед. всего:
+					{t('Conn total')}
+					:
 					{' '}
 					{stats.conn_total}
 				</p>
 				<p>
-					Соед. текущие:
+					{t('Conn current')}
+					:
 					{' '}
 					{stats.conn_current}
 				</p>
 				<p>
-					Соед./сек.:
+					{t('Conn/s')}
+					:
 					{' '}
 					{stats.conn_s}
 				</p>
 
-				<h4>Трафик</h4>
+				<h4>{t('Traffic')}</h4>
 				<p>
-					Входящий:
+					{t('In', { ns: 'common' })}
+					:
 					{' '}
-					{stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/сек.` : 0}
+					{stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/${t('sec', { ns: 'common' })}.` : 0}
 				</p>
 				<p>
-					Исходящий:
+					{t('Out', { ns: 'common' })}
+					:
 					{' '}
-					{stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/сек.` : 0}
+					{stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/${t('sec', { ns: 'common' })}.` : 0}
 				</p>
 			</IndexBox>
 		);
 	}
 }
 
-export default DataBinder(StreamZones, [
+export default DataBinder(withNamespaces('pages.streamzones')(StreamZones), [
 	api.stream.server_zones.setMapper(mapperStreamServerZones).process(zones)
 ]);

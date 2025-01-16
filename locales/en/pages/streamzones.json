@@ -16,5 +16,8 @@
   "Handshaked": "Handshaked",
   "Reuses": "Reuses",
   "Timedout": "Timedout",
-  "Failed": "Failed"
+  "Failed": "Failed",
+  "Conn/s": "Conn/s",
+  "Conn total": "Conn total",
+  "Conn current": "Conn current"
 }
