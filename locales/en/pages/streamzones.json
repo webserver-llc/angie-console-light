@@ -1,0 +1,20 @@
+{
+  "TCP/UDP Zones": "TCP/UDP Zones",
+  "Zone": "Zone",
+  "Total": "Total",
+  "Connections": "Connections",
+  "Requests": "Requests",
+  "Responses": "Responses",
+  "Traffic": "Traffic",
+  "Sessions": "Sessions",
+  "Req/s": "Req/s",
+  "Sent/s": "Sent/s",
+  "Rcvd/s": "Rcvd/s",
+  "Sent": "Sent",
+  "Rcvd": "Rcvd",
+  "Current": "Current",
+  "Handshaked": "Handshaked",
+  "Reuses": "Reuses",
+  "Timedout": "Timedout",
+  "Failed": "Failed"
+}
