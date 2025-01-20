@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import IndexBox from '../indexbox/indexbox.jsx';
 import AlertsCount from '../alertscount/alertscount.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
@@ -19,12 +20,12 @@ import styles from './style.css';
 
 export class Caches extends React.Component {
 	render() {
-		const { props: { data, store } } = this;
+		const { props: { t, data, store } } = this;
 		const stats = data.caches.__STATS;
 
 		return (
 			<IndexBox
-				title="Кэши"
+				title={t('Caches')}
 				status={store.__STATUSES.caches.status}
 				href="#caches"
 			>
@@ -35,16 +36,18 @@ export class Caches extends React.Component {
 					href="#caches"
 				/>
 
-				<h4>Состояние</h4>
+				<h4>{t('State')}</h4>
 				<p>
 					<Icon type="sun" className={styles.icon} />
-					Горячие:
+					{t('Warm')}
+					:
 					{' '}
 					{stats.states.warm}
 				</p>
 				<p>
 					<Icon type="snowflake" className={`${styles.icon} ${styles.snowflakeIcon}`} />
-					Холодные:
+					{t('Cold')}
+					:
 					{' '}
 					{stats.states.cold}
 				</p>
@@ -53,6 +56,6 @@ export class Caches extends React.Component {
 	}
 }
 
-export default DataBinder(Caches, [
+export default DataBinder(withNamespaces('pages.caches')(Caches), [
 	api.http.caches.process(calculateCaches)
 ]);

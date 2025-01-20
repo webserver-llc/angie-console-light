@@ -23,11 +23,11 @@ import tableStyles from '../table/style.css';
 import tooltips from '../../tooltips/index.jsx';
 
 export const FILTER_OPTIONS = {
-	all: 'Показать все',
-	up: 'Активные',
-	failed: 'Проблемные',
-	checking: 'На проверке',
-	down: 'Недоступные',
+	all: 'Show all',
+	up: 'Up',
+	failed: 'Failed',
+	checking: 'Checking',
+	down: 'Down',
 };
 
 export default class UpstreamsList extends SortableTable {
@@ -59,6 +59,7 @@ export default class UpstreamsList extends SortableTable {
 	}
 
 	getUpstreamServers() {
+		const { t } = this.props;
 		return this.props.upstreamsApi.getServers(this.props.upstream.name).then(data => {
 			if (data) {
 				const dict = new Map(this.props
@@ -77,7 +78,7 @@ export default class UpstreamsList extends SortableTable {
 					servers: new Map(),
 					selectedServers: new Map()
 				});
-				alert('API доступен только для чтения, сделайте его доступным для записи.');
+				alert(t('Sorry, API is read-only, please make it writable.', { ns: 'upstreams.upstreams-list' }));
 			}
 		});
 	}
@@ -94,9 +95,10 @@ export default class UpstreamsList extends SortableTable {
 			return;
 		}
 
+		const { t } = this.props;
 		if (/[^\x20-\x7F]/.test(this.props.upstream.name)) {
 			alert(
-				'Конфигурация недоступна для апстримов с именами, содержащими не-ASCII символы.',
+				t('Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names', { ns: 'upstreams.upstreams-list' })
 			);
 		}
 
@@ -147,11 +149,14 @@ export default class UpstreamsList extends SortableTable {
 	}
 
 	renderEmptyList() {
+		const { t } = this.props;
 		return (
 			<tr>
 				<td className={tableStyles['left-align']} colSpan={30}>
-					В этой группе не найдено ни одного сервера c состоянием '
-					{FILTER_OPTIONS[this.state.filtering]}
+					{t('No servers found in this upstream group', { ns: 'upstreams.upstreams-list' })}
+					{' '}
+					'
+					{t(FILTER_OPTIONS[this.state.filtering], { ns: 'upstreams.upstreams-list' })}
 					'.
 				</td>
 			</tr>
@@ -283,6 +288,7 @@ export default class UpstreamsList extends SortableTable {
 	}
 
 	renderEditButton() {
+		const { t } = this.props;
 		if (envUtils.isDemoEnv()) {
 			return (
 				<span
@@ -290,9 +296,10 @@ export default class UpstreamsList extends SortableTable {
 				>
 					<span className={styles['edit-icon']} />
 					<span className={styles['promo-text']}>
-						Доступно только в
+						{t('Available only in', { ns: 'upstreams.upstreams-list' })}
 						{' '}
 						<span>Angie PRO</span>
+						&nbsp;
 					</span>
 				</span>
 			);
@@ -304,7 +311,7 @@ export default class UpstreamsList extends SortableTable {
 					className={
 						styles['edit-disable']
 					}
-					{...tooltips.useTooltip('Доступно только в Angie PRO', 'hint-right')}
+					{...tooltips.useTooltip(`${t('Available only in Angie PRO', { ns: 'upstreams.upstreams-list' })}`, 'hint-right')}
 				/>
 			);
 		}
@@ -320,7 +327,7 @@ export default class UpstreamsList extends SortableTable {
 	}
 
 	render() {
-		const { name, upstream } = this.props;
+		const { t, name, upstream } = this.props;
 
 		let peers;
 
@@ -374,7 +381,7 @@ export default class UpstreamsList extends SortableTable {
 							key={value}
 							selected={this.state.filtering === value}
 						>
-							{FILTER_OPTIONS[value]}
+							{t(FILTER_OPTIONS[value], { ns: 'upstreams.upstreams-list' })}
 						</option>
 					))}
 				</select>
@@ -398,21 +405,21 @@ export default class UpstreamsList extends SortableTable {
 								key="edit"
 								onClick={() => this.editSelectedUpstream()}
 							>
-								Редактировать
+								{t('Edit selected', { ns: 'upstreams.upstreams-list' })}
 							</span>,
 							<span
 								className={styles.btn}
 								key="add"
 								onClick={this.addUpstream}
 							>
-								Добавить сервер
+								{t('Add server', { ns: 'upstreams.upstreams-list' })}
 							</span>,
 						]
 						: null}
 
 					{upstream.zoneSize !== null ? (
 						<span className={styles['zone-capacity']}>
-							Загрузка памяти:
+							{t('Zone', { ns: 'upstreams.upstreams-list' })}
 							{' '}
 							<span
 								{...tooltips.useTooltip(
@@ -430,3 +437,8 @@ export default class UpstreamsList extends SortableTable {
 		);
 	}
 }
+
+UpstreamsList.defaultProps = {
+	// i18n for testings
+	t: key => key,
+};

@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import utils from './utils.js';
 import styles from './style.css';
 import appsettings from '../../appsettings';
@@ -24,14 +25,14 @@ export const chartDimensions = {
 	tickSize: 6
 };
 export const TimeWindows = new Map([
-	['1 мин.', 60],
-	['5 мин.', 5 * 60],
-	['15 мин.', 15 * 60]
+	['1 min.', 60],
+	['5 min.', 5 * 60],
+	['15 min.', 15 * 60]
 ]);
-export const TimeWindowDefault = '5 мин.';
+export const TimeWindowDefault = '5 min.';
 
-export default class Chart extends React.Component {
-	constructor(props){
+class Chart extends React.Component {
+	constructor(props) {
 		super(props);
 
 		let selectedTimeWindow = appsettings.getSetting('timeWindow');
@@ -74,15 +75,15 @@ export default class Chart extends React.Component {
 		this.redraw();
 	}
 
-	componentDidMount(what){
+	componentDidMount(what) {
 		this.settingsListener = appsettings.subscribe(this.onSettingsChange, 'timeWindow');
 	}
 
-	componentWillUnmount(){
+	componentWillUnmount() {
 		appsettings.unsubscribe(this.settingsListener);
 	}
 
-	componentWillReceiveProps(nextProps){
+	componentWillReceiveProps(nextProps) {
 		const nextData = nextProps.data;
 		const { data } = this.props;
 
@@ -105,12 +106,12 @@ export default class Chart extends React.Component {
 						const reducedIndex = index - indiciesShift;
 
 						if (memo === '') {
-							return reducedIndex > 0 ? `${ reducedIndex }` : '0';
+							return reducedIndex > 0 ? `${reducedIndex}` : '0';
 						}
 						if (memo === '0') {
-							return `${ memo },${ index - initialIndicies[0] }`;
+							return `${memo},${index - initialIndicies[0]}`;
 						}
-						return `${ memo },${ reducedIndex }`;
+						return `${memo},${reducedIndex}`;
 					}, '');
 			}
 
@@ -118,20 +119,20 @@ export default class Chart extends React.Component {
 		}
 	}
 
-	shouldComponentUpdate(nextProps, nextState){
+	shouldComponentUpdate(nextProps, nextState) {
 		if (this.state.dndIsInProgress) {
 			return this.state.dndPointsIndicies !== nextState.dndPointsIndicies;
 		} return true;
 	}
 
-	onSettingsChange(value){
+	onSettingsChange(value) {
 		this.redraw({
 			selectedTimeWindow: value,
 			dndPointsIndicies: null
 		});
 	}
 
-	onMouseLeave(){
+	onMouseLeave() {
 		if (this.mouseMoveTimer !== null) {
 			clearTimeout(this.mouseMoveTimer);
 			this.mouseMoveTimer = null;
@@ -143,13 +144,13 @@ export default class Chart extends React.Component {
 		});
 	}
 
-	drawCursorLine(){
+	drawCursorLine() {
 		if (!this.state.dndIsInProgress) {
 			this.setState({ mouseOffsetX: this.mouseOffsetX });
 		}
 	}
 
-	onMouseDown(evt){
+	onMouseDown(evt) {
 		this.dndStartX = evt.offsetX;
 		this.dndMoveX = evt.offsetX;
 
@@ -165,14 +166,14 @@ export default class Chart extends React.Component {
 		this.redraw(nextState);
 	}
 
-	onMouseUp(){
+	onMouseUp() {
 		const nextState = {
 			dndIsInProgress: false
 		};
 
 		if (
 			this.state.dndPointsIndicies !== null &&
-			this.state.dndPointsIndicies.includes(`${ this.props.data.data.length - 1 }`)
+			this.state.dndPointsIndicies.includes(`${this.props.data.data.length - 1}`)
 		) {
 			nextState.dndPointsIndicies = null;
 		}
@@ -180,7 +181,7 @@ export default class Chart extends React.Component {
 		this.redraw(nextState);
 	}
 
-	onMouseMove(evt){
+	onMouseMove(evt) {
 		const { offsetX } = evt;
 
 		if (this.state.dndIsInProgress) {
@@ -194,16 +195,19 @@ export default class Chart extends React.Component {
 				const dndPointsIndicies = this.state.dndPointsIndicies.split(',');
 				let k;
 
-				switch (this.state.selectedTimeWindow){
-					case '1 мин.':
+				switch (this.state.selectedTimeWindow) {
+					// 1
+					case '1 min.':
 						k = 20;
 						break;
 
-					case '5 мин.':
+					// 2
+					case '5 min.':
 						k = 10;
 						break;
 
-					case '15 мин.':
+					// 3
+					case '15 min.':
 						k = 5;
 						break;
 				}
@@ -225,16 +229,16 @@ export default class Chart extends React.Component {
 									const changedIndex = index - path;
 
 									if (memo === '') {
-										return changedIndex > 0 ? `${ changedIndex }` : '0';
+										return changedIndex > 0 ? `${changedIndex}` : '0';
 									}
 									if (memo === '0') {
-										return `${ memo },${ index - initialIndicies[0] }`;
+										return `${memo},${index - initialIndicies[0]}`;
 									} if (changedIndex > maxIndex) {
 										const pathOverflow = changedIndex - maxIndex;
 
-										return `${ memo - pathOverflow },${ maxIndex }`;
+										return `${memo - pathOverflow},${maxIndex}`;
 									}
-									return `${ memo },${ changedIndex }`;
+									return `${memo},${changedIndex}`;
 								}, ''
 							)
 						});
@@ -254,7 +258,7 @@ export default class Chart extends React.Component {
 		}
 	}
 
-	emulateDnd(direction, toBorder){
+	emulateDnd(direction, toBorder) {
 		const { data: { data } } = this.props;
 		const { dndPointsIndicies } = this.state;
 		const pointsIndicies = (
@@ -276,10 +280,10 @@ export default class Chart extends React.Component {
 			if (direction > 0) {
 				nextDndPointsIndicies = null;
 			} else {
-				nextDndPointsIndicies = `0,${ indiciesDiff }`;
+				nextDndPointsIndicies = `0,${indiciesDiff}`;
 			}
 		} else {
-			nextDndPointsIndicies = `${ pointsIndicies[0] + direction * indiciesDiff },${ pointsIndicies[1] + direction * indiciesDiff }`;
+			nextDndPointsIndicies = `${pointsIndicies[0] + direction * indiciesDiff},${pointsIndicies[1] + direction * indiciesDiff}`;
 		}
 
 		this.redraw({
@@ -287,7 +291,7 @@ export default class Chart extends React.Component {
 		});
 	}
 
-	deferredHighlightMetric(metric){
+	deferredHighlightMetric(metric) {
 		this.highlightedMetric = metric;
 
 		if (this.highlightMetricTimer === null) {
@@ -298,7 +302,7 @@ export default class Chart extends React.Component {
 		}
 	}
 
-	highlightMetric(){
+	highlightMetric() {
 		this.highlightMetricTimer = null;
 
 		if (this.highlightedMetric !== this.state.highlightedMetric) {
@@ -308,7 +312,7 @@ export default class Chart extends React.Component {
 		}
 	}
 
-	toggleMetric(name){
+	toggleMetric(name) {
 		const { disabledMetrics } = this.state;
 
 		this.redraw({
@@ -319,9 +323,10 @@ export default class Chart extends React.Component {
 		});
 	}
 
-	redraw(nextState = {}, nextProps){
+	redraw(nextState = {}, nextProps) {
 		const {
 			colors,
+			t,
 			labels,
 			data: { data }
 		} = nextProps || this.props;
@@ -398,7 +403,7 @@ export default class Chart extends React.Component {
 							x={offsetLeft - textOffset}
 							y={offsetTop}
 						>
-							{ yMax }
+							{yMax}
 						</text>,
 						<line
 							key="y-max-line"
@@ -419,7 +424,7 @@ export default class Chart extends React.Component {
 							x={offsetLeft - textOffset}
 							y={yMidCoord}
 						>
-							{ yMax / 2 }
+							{yMax / 2}
 						</text>,
 						<line
 							key="y-mid-line"
@@ -449,11 +454,11 @@ export default class Chart extends React.Component {
 
 							if (i === 0) {
 								charts[key] = {
-									path: `M ${ x } ${ y }`,
+									path: `M ${x} ${y}`,
 									coordinates: [[x, y]]
 								};
 							} else {
-								charts[key].path += ` L ${ x } ${ y }`;
+								charts[key].path += ` L ${x} ${y}`;
 								charts[key].coordinates.push([x, y]);
 							}
 
@@ -477,8 +482,8 @@ export default class Chart extends React.Component {
 
 						this.toRender.charts.push(
 							<path
-								key={`chart_${ key }`}
-								className={`${ styles.line }${ isFaded ? (` ${ styles.faded}`) : '' }`}
+								key={`chart_${key}`}
+								className={`${styles.line}${isFaded ? (` ${styles.faded}`) : ''}`}
 								style={{ stroke: colors.get(key) }}
 								d={charts[key].path}
 							/>
@@ -501,10 +506,10 @@ export default class Chart extends React.Component {
 						if (prevKey === null) {
 							this.toRender.areas.push(
 								<path
-									key={`chart-area_${ key }`}
-									className={`${ styles.area }${ isFaded ? (` ${ styles.faded}`) : '' }`}
+									key={`chart-area_${key}`}
+									className={`${styles.area}${isFaded ? (` ${styles.faded}`) : ''}`}
 									style={{ fill: colors.get(key) }}
-									d={`${ charts[key].path } V ${ offsetTop + chartHeight } H ${ charts[key].coordinates[0][0] } V ${ charts[key].coordinates[0][1] }`}
+									d={`${charts[key].path} V ${offsetTop + chartHeight} H ${charts[key].coordinates[0][0]} V ${charts[key].coordinates[0][1]}`}
 								/>
 							);
 						} else {
@@ -512,10 +517,10 @@ export default class Chart extends React.Component {
 
 							this.toRender.areas.push(
 								<path
-									key={`chart-area_${ key }`}
-									className={`${ styles.area }${ isFaded ? (` ${ styles.faded}`) : '' }`}
+									key={`chart-area_${key}`}
+									className={`${styles.area}${isFaded ? (` ${styles.faded}`) : ''}`}
 									style={{ fill: colors.get(key) }}
-									d={`${ charts[key].path } V ${ prevChart.coordinates[prevChart.coordinates.length - 1][1] }${ prevChart.coordinates.reduce((memo, [x, y]) => `L ${ x } ${ y } ${ memo }`, '') } V ${ prevChart.coordinates[0][1] }`}
+									d={`${charts[key].path} V ${prevChart.coordinates[prevChart.coordinates.length - 1][1]}${prevChart.coordinates.reduce((memo, [x, y]) => `L ${x} ${y} ${memo}`, '')} V ${prevChart.coordinates[0][1]}`}
 								/>
 							);
 						}
@@ -526,12 +531,12 @@ export default class Chart extends React.Component {
 					const isDisabled = disabledMetrics.includes(reversedKey);
 
 					if (isDisabled) {
-						legendItemStyleName += ` ${ styles.legend__item_disabled }`;
+						legendItemStyleName += ` ${styles.legend__item_disabled}`;
 					}
 
 					this.toRender.legend.push(
 						<span
-							key={`legend_${ reversedKey }`}
+							key={`legend_${reversedKey}`}
 							className={legendItemStyleName}
 							onClick={this.toggleMetric.bind(this, reversedKey)}
 							onMouseOver={isDisabled ? null : this.deferredHighlightMetric.bind(this, reversedKey)}
@@ -541,28 +546,31 @@ export default class Chart extends React.Component {
 								className={styles.legend__color}
 								style={{ background: colors.get(reversedKey) }}
 							/>
-							{ labels.has(reversedKey) ? labels.get(reversedKey) : reversedKey }
+							{labels.has(reversedKey) ? labels.get(reversedKey) : reversedKey}
 						</span>
 					);
 				}
 			}
 
-			this.pointsIndicies = `${ firstPointIndex },${ data.length - 1 }`;
+			this.pointsIndicies = `${firstPointIndex},${data.length - 1}`;
 		}
 
 		if (xStep !== null) {
 			let ticksStep;
 
-			switch (selectedTimeWindow){
-				case '1 мин.':
+			switch (selectedTimeWindow) {
+				// 1
+				case '1 min.':
 					ticksStep = 10;
 					break;
 
-				case '5 мин.':
+				// 2
+				case '5 min.':
 					ticksStep = 60;
 					break;
 
-				case '15 мин.':
+				// 3
+				case '15 min.':
 					ticksStep = 180;
 					break;
 			}
@@ -593,7 +601,7 @@ export default class Chart extends React.Component {
 			let onClick = null;
 
 			if (key === selectedTimeWindow) {
-				className += ` ${ styles.timewindow__item_selected }`;
+				className += ` ${styles.timewindow__item_selected}`;
 			} else {
 				onClick = this.selectTimeWindow.bind(null, key);
 			}
@@ -604,7 +612,7 @@ export default class Chart extends React.Component {
 					className={className}
 					onClick={onClick}
 				>
-					{ key }
+					{t(key)}
 				</div>
 			);
 		});
@@ -629,32 +637,32 @@ export default class Chart extends React.Component {
 		this.dndControls = [
 			<div
 				key={0}
-				className={`${ styles['dnd-controls__control'] }${ backDndAllowed ? '' : (` ${ styles['dnd-controls__control_disabled']}`) }`}
-				title="Нажмите, чтобы просмотреть самые старые данные"
+				className={`${styles['dnd-controls__control']}${backDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
+				title={t('Click to view the oldest data')}
 				onClick={backDndAllowed ? this.emulateDnd.bind(this, -1, true) : null}
 			>
 				&#171;
 			</div>,
 			<div
 				key={1}
-				className={`${ styles['dnd-controls__control'] }${ backDndAllowed ? '' : (` ${ styles['dnd-controls__control_disabled']}`) }`}
-				title={`Нажмите, чтобы вернуться к ${selectedTimeWindow}`}
+				className={`${styles['dnd-controls__control']}${backDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
+				title={t('Click to go back for [selectedTimeWindow]', { selectedTimeWindow })}
 				onClick={backDndAllowed ? this.emulateDnd.bind(this, -1, false) : null}
 			>
 				&#8249;
 			</div>,
 			<div
 				key={2}
-				className={`${ styles['dnd-controls__control'] }${ forwardDndAllowed ? '' : (` ${ styles['dnd-controls__control_disabled']}`) }`}
-				title={`Нажмите, чтобы перейти к ${selectedTimeWindow}`}
+				className={`${styles['dnd-controls__control']}${forwardDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
+				title={t('Click to go forward for [selectedTimeWindow]', { selectedTimeWindow })}
 				onClick={forwardDndAllowed ? this.emulateDnd.bind(this, 1, false) : null}
 			>
 				&#8250;
 			</div>,
 			<div
 				key={3}
-				className={`${ styles['dnd-controls__control'] }${ forwardDndAllowed ? '' : (` ${ styles['dnd-controls__control_disabled']}`) }`}
-				title="Нажмите, чтобы вернуться к интерактивному режиму"
+				className={`${styles['dnd-controls__control']}${forwardDndAllowed ? '' : (` ${styles['dnd-controls__control_disabled']}`)}`}
+				title={t('Click to return to live mode')}
 				onClick={forwardDndAllowed ? this.emulateDnd.bind(this, 1, true) : null}
 			>
 				&#187;
@@ -666,11 +674,11 @@ export default class Chart extends React.Component {
 		}
 	}
 
-	selectTimeWindow(key){
+	selectTimeWindow(key) {
 		appsettings.setSetting('timeWindow', key);
 	}
 
-	render(){
+	render() {
 		const { colors, labels } = this.props;
 		const {
 			mouseOffsetX,
@@ -714,52 +722,52 @@ export default class Chart extends React.Component {
 			}
 		}
 
-		let mouseTrackerClass = `${ styles['mouse-tracker'] }${ this.dndAllowed ? (` ${ styles['mouse-tracker_drag']}`) : '' }`;
+		let mouseTrackerClass = `${styles['mouse-tracker']}${this.dndAllowed ? (` ${styles['mouse-tracker_drag']}`) : ''}`;
 
 		if (dndIsInProgress) {
-			mouseTrackerClass += ` ${ styles['mouse-tracker_dragging'] }`;
+			mouseTrackerClass += ` ${styles['mouse-tracker_dragging']}`;
 		} else if (activePoint) {
 			this.toRender.tooltipPoints = [];
 			colors.forEach((color, key) => {
 				if (key in activePoint.values) {
 					this.toRender.tooltipPoints.push(
 						<div
-							key={`tooltip_${ key }`}
+							key={`tooltip_${key}`}
 							className={styles.tooltip__point}
 						>
 							<div
 								className={styles.tooltip__value}
 								style={{ color }}
 							>
-								{ activePoint.values[key] }
+								{activePoint.values[key]}
 							</div>
 							<div className={styles.tooltip__metric}>
-								{ labels.has(key) ? labels.get(key) : key }
+								{labels.has(key) ? labels.get(key) : key}
 							</div>
 						</div>
 					);
 				}
 			});
 
-			cursorLineTransform = `translate(${ activePoint.x })`;
+			cursorLineTransform = `translate(${activePoint.x})`;
 		}
 
 		return (
 			<div className={styles.container}>
-				<div className={styles['dnd-controls']}>{ this.dndControls }</div>
-				<div className={styles.timewindow}>{ this.timeWindowControls }</div>
+				<div className={styles['dnd-controls']}>{this.dndControls}</div>
+				<div className={styles.timewindow}>{this.timeWindowControls}</div>
 
 				{
 					activePoint ? (
 						<div
 							className={styles.tooltip}
 							style={activePoint.x > chartWidth / 2 ? {
-								right: `${ width - activePoint.x + 8 }px`
+								right: `${width - activePoint.x + 8}px`
 							} : {
-								left: `${ activePoint.x + 8 }px`
+								left: `${activePoint.x + 8}px`
 							}}
 						>
-							{ this.toRender.tooltipPoints }
+							{this.toRender.tooltipPoints}
 
 							<div
 								key="tooltip__time"
@@ -782,10 +790,10 @@ export default class Chart extends React.Component {
 				<div
 					className={mouseTrackerClass}
 					style={{
-						width: `${ chartWidth }px`,
-						height: `${ chartHeight }px`,
-						top: `${ offsetTop }px`,
-						left: `${ offsetLeft }px`
+						width: `${chartWidth}px`,
+						height: `${chartHeight}px`,
+						top: `${offsetTop}px`,
+						left: `${offsetLeft}px`
 					}}
 					onMouseMove={this.onMouseMove}
 					onMouseLeave={this.onMouseLeave}
@@ -796,14 +804,14 @@ export default class Chart extends React.Component {
 				<svg
 					version="1.1"
 					baseProfile="full"
-					width={`${ width }`}
-					height={`${ height }`}
+					width={`${width}`}
+					height={`${height}`}
 					xmlns="http://www.w3.org/2000/svg"
 					className={styles.svg}
 				>
 					<path
 						className={styles['x-axis']}
-						d={this.ticks.reduce((memo, tick) => `${ memo }${ memo ? ' ' : '' }M ${ tick.x } ${ xAxisY } V ${ xAxisY + tickSize }`, '')}
+						d={this.ticks.reduce((memo, tick) => `${memo}${memo ? ' ' : ''}M ${tick.x} ${xAxisY} V ${xAxisY + tickSize}`, '')}
 					/>
 					<text
 						className={styles['y-label']}
@@ -831,24 +839,24 @@ export default class Chart extends React.Component {
 						}}
 					/>
 
-					{ this.ticks.map(({ x, y, label }, i) => (
+					{this.ticks.map(({ x, y, label }, i) => (
 						<text
 							key={i}
 							className={styles['x-label']}
 							x={x}
 							y={y}
 						>
-							{ label }
+							{label}
 						</text>
 					)
-					) }
+					)}
 
-					{ this.toRender.yMax }
-					{ this.toRender.yMid }
-					{ this.toRender.charts }
-					{ this.toRender.areas }
+					{this.toRender.yMax}
+					{this.toRender.yMid}
+					{this.toRender.charts}
+					{this.toRender.areas}
 				</svg>
-				<div className={styles.legend}>{ this.toRender.legend }</div>
+				<div className={styles.legend}>{this.toRender.legend}</div>
 			</div>
 		);
 	}
@@ -857,3 +865,5 @@ export default class Chart extends React.Component {
 Chart.defaultProps = {
 	labels: new Map()
 };
+
+export default withNamespaces('chart')(Chart);

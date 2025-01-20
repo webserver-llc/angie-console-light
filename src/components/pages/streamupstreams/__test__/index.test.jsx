@@ -24,7 +24,7 @@ describe('<StreamUpstreams Page />', () => {
 		const upstreamsContainer = wrapper.find('UpstreamsContainer');
 
 		// UpstreamsContainer title
-		expect(upstreamsContainer.prop('title')).toBe('TCP/UDP-апстримы');
+		expect(upstreamsContainer.prop('title')).toBe('TCP/UDP Upstreams');
 		// UpstreamsContainer component
 		expect(upstreamsContainer.prop('component').name).toBe('StreamUpstream');
 		// UpstreamsContainer upstreams

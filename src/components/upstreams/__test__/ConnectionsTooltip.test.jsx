@@ -16,6 +16,7 @@ describe('<ConnectionsTooltip />', () => {
 	it('peer.selected = false', () => {
 		const wrapper = shallow(
 			<ConnectionsTooltip
+				title="Last"
 				peer={{}}
 			/>
 		);
@@ -23,7 +24,7 @@ describe('<ConnectionsTooltip />', () => {
 		// children length
 		expect(wrapper.children()).toHaveLength(1);
 		// content
-		expect(wrapper.childAt(0).text()).toBe('Последний: неизвестно');
+		expect(wrapper.childAt(0).text()).toBe('Last: неизвестно');
 	});
 
 	it('peer.selected = true', () => {
@@ -34,6 +35,7 @@ describe('<ConnectionsTooltip />', () => {
 
 		const wrapper = shallow(
 			<ConnectionsTooltip
+				title="Last"
 				peer={{ selected: 'ts' }}
 			/>
 		);
@@ -43,13 +45,13 @@ describe('<ConnectionsTooltip />', () => {
 		// content blocks length
 		expect(wrapper.childAt(0).children()).toHaveLength(2);
 		// content blocks 1
-		expect(wrapper.childAt(0).childAt(0).text()).toBe('Последний: formatted_date');
+		expect(wrapper.childAt(0).childAt(0).text()).toBe('Last: formatted_date');
 		// formatDate called
 		expect(utils.formatDate).toHaveBeenCalled();
 		// formatDate call arg
 		expect(utils.formatDate.mock.calls[0][0]).toBe('ts');
 		// content blocks 2
-		expect(wrapper.childAt(0).childAt(1).text()).toBe('(formatted_uptime назад)');
+		expect(wrapper.childAt(0).childAt(1).text()).toBe('(formatted_uptime ago)');
 		// Date().getTime() called once
 		expect(Date.prototype.getTime).toHaveBeenCalled();
 		// Date.parse() called once

@@ -1,0 +1,8 @@
+{
+  "Access to /api/ location is forbidden. Check Angie configuration.": "Доступ к /api/ запрещен. Проверьте конфигурацию Angie.",
+  "No data received from /api/ location, but found deprecated /status/ location. Сheck Angie configuration.": "Нет данных по пути /api/, но обнаружен устаревший путь /status/. Проверьте конфигурацию Angie.",
+  "No data received from /api/ location. Check Angie configuration.": "Нет данных по пути /api/. Проверьте конфигурацию Angie.",
+  "Loading": "Загрузка...",
+  "For more information please refer to": "Подробнее см.",
+  "documentation": "документацию"
+}

@@ -36,7 +36,7 @@ describe('<Requests IndexPage />', () => {
 		// total row, className
 		expect(indexBox.childAt(0).prop('className')).toBe(styles.counter);
 		// total row, text
-		expect(indexBox.childAt(0).text()).toBe('Всего:1000');
+		expect(indexBox.childAt(0).text()).toBe('Total:1000');
 		// table
 		expect(indexBox.childAt(2).type()).toBe('table');
 		// table className

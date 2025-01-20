@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import api from '../../api';
 import DataBinder from '../databinder/databinder.jsx';
 import SortableTable from '../table/sortabletable.jsx';
@@ -22,6 +23,7 @@ export class Resolvers extends SortableTable {
 	}
 
 	render() {
+		const { t } = this.props;
 		const resolvers = Array.from(this.props.data.resolvers);
 
 		if (this.state.sortOrder === 'desc') {
@@ -30,29 +32,34 @@ export class Resolvers extends SortableTable {
 
 		return (
 			<div>
-				<h1>DNS-резолверы</h1>
+				<h1>{t('Resolvers')}</h1>
 
 				<table className={`${styles.table} ${styles.wide}`}>
 					<thead>
 						<tr>
-							<TableSortControl order={this.state.sortOrder} onChange={this.changeSorting} />
-							<th>Зона</th>
-							<th colSpan={3}>Запросы</th>
-							<th colSpan={8}>Ответы</th>
+							<TableSortControl
+								firstSortLabel={t('Sort by zone - asc')}
+								secondSortLabel={t('Sort by conf order')}
+								order={this.state.sortOrder}
+								onChange={this.changeSorting}
+							/>
+							<th>{t('Zone')}</th>
+							<th colSpan={3}>{t('Requests')}</th>
+							<th colSpan={8}>{t('Responses')}</th>
 						</tr>
 						<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
 							<th className={styles.bdr} />
 							<th>A, AAAA</th>
 							<th>SRV</th>
 							<th className={styles.bdr}>PTR</th>
-							<th>Успешные</th>
-							<th>Ошибок формата</th>
-							<th>Сервер не завершил запрос</th>
-							<th>Ошибок имени</th>
-							<th>Запрос не поддерживается</th>
-							<th>Запрос отклонен</th>
-							<th>Неизвестных ошибок</th>
-							<th>Истекло время ожидания</th>
+							<th>{t('Success')}</th>
+							<th>{t('Format error')}</th>
+							<th>{t('Server failure')}</th>
+							<th>{t('Host not found')}</th>
+							<th>{t('Unimplemented')}</th>
+							<th>{t('Operation refused')}</th>
+							<th>{t('Unknown')}</th>
+							<th>{t('Timed out')}</th>
 						</tr>
 					</thead>
 					<tbody className={styles['right-align']}>
@@ -83,6 +90,11 @@ export class Resolvers extends SortableTable {
 	}
 }
 
-export default DataBinder(Resolvers, [
+Resolvers.defaultProps = {
+	// i18n for testing
+	t: key => key,
+};
+
+export default DataBinder(withNamespaces('pages.resolvers')(Resolvers), [
 	api.resolvers.setMapper(mapperResolvers).process(calculateResolvers)
 ]);

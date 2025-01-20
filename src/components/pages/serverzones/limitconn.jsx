@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import ChartsTable from '../../charts-table/index.jsx';
 import Chart from '../../chart/index.jsx';
 import styles from '../../table/style.css';
@@ -18,43 +19,51 @@ export const Colors = new Map([
 	['exhausted', '#861DE3'],
 	['skipped', '#000ADD'],
 ]);
-export const Labels = new Map([
-	['passed', 'Передано'],
-	['rejected', 'Отклонено'],
-	['exhausted', 'Сброшено'],
-	['skipped', 'Пропущено'],
-]);
 
-export default class LimitConn extends ChartsTable {
+class LimitConn extends ChartsTable {
+	getLabels() {
+		const { t } = this.props;
+
+		return new Map([
+			['passed', t('Passed')],
+			['rejected', t('Rejected')],
+			['exhausted', t('Exhausted')],
+			['skipped', t('Skipped')],
+		]);
+	}
+
 	getTitle() {
-		return 'Зоны ограничения соединений (Limit Conn)';
+		const { t } = this.props;
+		return t('Limit Conn');
 	}
 
 	getHeadRow() {
+		const { t } = this.props;
 		return (
 			<tr>
 				<th />
-				<th>Зона</th>
-				<th>Передано</th>
-				<th>Отклонено</th>
-				<th>Сброшено</th>
-				<th>Пропущено</th>
+				<th>{t('Zone')}</th>
+				<th>{t('Passed')}</th>
+				<th>{t('Rejected')}</th>
+				<th>{t('Exhausted')}</th>
+				<th>{t('Skipped')}</th>
 			</tr>
 		);
 	}
 
 	getBody() {
+		const { t } = this.props;
 		const { activeCharts } = this.state;
 
 		return Array.from(this.props.data).map(
 			([name, { obj: zone, history }]) => {
 				let cn = styles['chart-container'];
-				let title = 'Нажмите, чтобы увидеть график';
+				let title = t('Click to view rate graph');
 				let chart = null;
 
 				if (activeCharts.includes(name)) {
 					cn += ` ${styles['chart-container_active']}`;
-					title = 'Нажмите, чтобы скрыть график';
+					title = t('Click to hide rate graph');
 					chart = (
 						<tr
 							key={`chart_${name}`}
@@ -67,7 +76,7 @@ export default class LimitConn extends ChartsTable {
 								<Chart
 									data={history}
 									colors={Colors}
-									labels={Labels}
+									labels={this.getLabels()}
 								/>
 							</td>
 						</tr>
@@ -96,3 +105,5 @@ export default class LimitConn extends ChartsTable {
 		);
 	}
 }
+
+export default withNamespaces('pages.serverzones.limitconn')(LimitConn);

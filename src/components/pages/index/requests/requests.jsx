@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import IndexBox from '../indexbox/indexbox.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
 import api from '../../../../api';
@@ -16,28 +17,32 @@ import styles from '../connections/style.css';
 
 export class Requests extends React.Component {
 	render() {
-		const { data: { requests } } = this.props;
+		const { t, data: { requests } } = this.props;
 
-		return (<IndexBox className={this.props.className}>
-			<span className={ styles.counter }>Всего:{ requests.total }</span>
-			<h3 className={ styles.h3 }>Запросы</h3>
+		return (
+			<IndexBox className={this.props.className}>
+				<span className={styles.counter}>
+					{t('Total')}
+					:
+					{requests.total}
+				</span>
+				<h3 className={styles.h3}>{t('Requests')}</h3>
 
-			{
-				<table className={ styles.table }>
+				<table className={styles.table}>
 					<tr>
-						<th>Текущие</th>
-						<th>Запр./сек.</th>
+						<th>{t('Current')}</th>
+						<th>{t('Req/s')}</th>
 					</tr>
 					<tr>
-						<td>{ requests.current }</td>
-						<td>{ requests.reqs }</td>
+						<td>{requests.current}</td>
+						<td>{requests.reqs}</td>
 					</tr>
 				</table>
-			}
-		</IndexBox>);
+			</IndexBox>
+		);
 	}
 }
 
-export default DataBinder(Requests, [
+export default DataBinder(withNamespaces('pages.index.requests')(Requests), [
 	api.http.requests.process(calculateRequests)
 ]);

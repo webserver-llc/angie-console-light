@@ -26,7 +26,7 @@ describe('<Settings />', () => {
 	};
 
 	it('constructor()', () => {
-		const getSettingStub = jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(a => `${ a }_test`);
+		const getSettingStub = jest.spyOn(appsettings, 'getSetting').mockClear().mockImplementation(a => `${a}_test`);
 		const changeUpdatePeriodSpy = jest.spyOn(Settings.prototype.changeUpdatePeriod, 'bind').mockClear();
 		const changeCacheHitRatioIntevalSpy = jest.spyOn(Settings.prototype.changeCacheHitRatioInteval, 'bind').mockClear();
 		const saveSpy = jest.spyOn(Settings.prototype.save, 'bind').mockClear();
@@ -85,7 +85,7 @@ describe('<Settings />', () => {
 			/>
 		);
 		const instance = wrapper.instance();
-		const setSettingStub = jest.spyOn(appsettings, 'setSetting').mockClear().mockImplementation(() => {});
+		const setSettingStub = jest.spyOn(appsettings, 'setSetting').mockClear().mockImplementation(() => { });
 
 		wrapper.setState({
 			updatingPeriod: 'updatingPeriod_test',
@@ -247,7 +247,7 @@ describe('<Settings />', () => {
 		// wrapper className
 		expect(wrapper.prop('className')).toBe(styles.settings);
 		// wrapper children size
-		expect(wrapper.children()).toHaveLength(8);
+		expect(wrapper.children()).toHaveLength(9);
 		// title
 		expect(wrapper.childAt(0).type()).toBe('h2');
 		// title className
@@ -307,19 +307,23 @@ describe('<Settings />', () => {
 		expect(wrapper.childAt(5).childAt(1).prop('className')).toBe(styles.input);
 		// controls className
 		expect(wrapper.childAt(6).prop('className')).toBe(styles.section);
+		// LanguageControl
+		expect(wrapper.childAt(6).childAt(1).name()).toBe('LanguageControl');
+		// controls className
+		expect(wrapper.childAt(7).prop('className')).toBe(styles.section);
 		// save className
-		expect(wrapper.childAt(6).childAt(0).prop('className')).toBe(styles.save);
-		expect(wrapper.childAt(6).childAt(0).prop('onClick')).toBeInstanceOf(Function);
+		expect(wrapper.childAt(7).childAt(0).prop('className')).toBe(styles.save);
+		expect(wrapper.childAt(7).childAt(0).prop('onClick')).toBeInstanceOf(Function);
 		// save onClick name
-		expect(wrapper.childAt(6).childAt(0).prop('onClick').name).toBe('bound save');
+		expect(wrapper.childAt(7).childAt(0).prop('onClick').name).toBe('bound save');
 		// cancel className
-		expect(wrapper.childAt(6).childAt(1).prop('className')).toBe(styles.cancel);
+		expect(wrapper.childAt(7).childAt(1).prop('className')).toBe(styles.cancel);
 		// cancel onClick
-		expect(wrapper.childAt(6).childAt(1).prop('onClick')).toBe('close_test');
+		expect(wrapper.childAt(7).childAt(1).prop('onClick')).toBe('close_test');
 		// version className
-		expect(wrapper.childAt(7).prop('className')).toBe(styles.version);
+		expect(wrapper.childAt(8).prop('className')).toBe(styles.version);
 		// version text
-		expect(wrapper.childAt(7).text()).toBe(`v${ VERSION }`);
+		expect(wrapper.childAt(8).text()).toBe(`v${VERSION}`);
 
 		expect(changePercentThresholdBindSpy).toHaveBeenCalledTimes(3);
 		// this.changePercentThreshold.bind call 1, arg 1
@@ -339,7 +343,7 @@ describe('<Settings />', () => {
 		wrapper.setProps({ statuses: {} });
 
 		// [no statuses.zone_sync, no statuses.resolvers] wrapper children size
-		expect(wrapper.children()).toHaveLength(6);
+		expect(wrapper.children()).toHaveLength(7);
 		expect(changePercentThresholdBindSpy).toHaveBeenCalledTimes(1);
 		// this.changePercentThreshold.bind call 1, arg 2
 		expect(changePercentThresholdBindSpy.mock.calls[0][1]).toBe('warnings4xxThresholdPercent');

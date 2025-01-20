@@ -1,0 +1,18 @@
+{
+  "HTTP Zones": "HTTP Zones",
+  "Server Zones": "Server Zones",
+  "Zone": "Zone",
+  "Requests": "Requests",
+  "Responses": "Responses",
+  "Traffic": "Traffic",
+  "Req/s": "Req/s",
+  "Sent/s": "Sent/s",
+  "Rcvd/s": "Rcvd/s",
+  "Sent": "Sent",
+  "Rcvd": "Rcvd",
+  "Current": "Current",
+  "Handshaked": "Handshaked",
+  "Reuses": "Reuses",
+  "Timedout": "Timed out",
+  "Failed": "Failed"
+}

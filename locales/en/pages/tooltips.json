@@ -1,0 +1,8 @@
+{
+  "Warm — using metadata in shmem": "Warm — using metadata in shmem",
+  "Cold — loading metadata": "Cold — loading metadata",
+  "Memory usage": "Memory usage",
+  "Used memory pages": "Used memory pages",
+  "Total memory pages": "Total memory pages",
+  "Memory usage = Used memory pages / Total memory pages": "Memory usage = Used memory pages / Total memory pages"
+}

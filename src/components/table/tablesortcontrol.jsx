@@ -43,11 +43,11 @@ export default class TableSortControl extends React.Component {
 		let className = styles.sorter;
 
 		if (isActive) {
-			className += ` ${ styles.sorterActive }`;
+			className += ` ${styles.sorterActive}`;
 		}
 
 		if (isInline) {
-			className += ` ${ styles.inlinSorter }`;
+			className += ` ${styles.inlinSorter}`;
 		}
 
 		return (
@@ -67,8 +67,8 @@ export default class TableSortControl extends React.Component {
 }
 
 TableSortControl.defaultProps = {
-	firstSortLabel: 'Отсортировать по порядку в конфигурации',
-	secondSortLabel: 'Отсортировать по статусу — сначала проблемные',
+	firstSortLabel: 'Sort by conf order',
+	secondSortLabel: 'Sort by status - failed first',
 	isActive: true,
 	rowSpan: 2,
 };

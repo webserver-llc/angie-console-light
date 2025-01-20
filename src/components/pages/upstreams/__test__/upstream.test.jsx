@@ -269,7 +269,7 @@ describe('<Upstream />', () => {
 		const tableSortControl = table.find('TableSortControl');
 
 		// TableSortControl secondSortLabel
-		expect(tableSortControl.prop('secondSortLabel')).toBe('Отсортировать по статусу — сначала недоступные');
+		expect(tableSortControl.prop('secondSortLabel')).toBe('Sort by conf order');
 		// TableSortControl order
 		expect(tableSortControl.prop('order')).toBe(wrapper.state('sortOrder'));
 		// TableSortControl onChange
@@ -312,19 +312,19 @@ describe('<Upstream />', () => {
 		expect(headTooltips.at(3).prop('prop_from_useTooltip')).toBe(true);
 		expect(tooltips.useTooltip).toHaveBeenCalledTimes(4);
 		// useTooltip, call 2, arg 1
-		expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Общий простой');
+		expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Total downtime');
 		// useTooltip, call 2, arg 2
 		expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint');
 		// useTooltip, call 3, arg 1
-		expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Вес');
+		expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Weight');
 		// useTooltip, call 3, arg 2
 		expect(tooltips.useTooltip.mock.calls[1][1]).toBe('hint');
 		// useTooltip, call 4, arg 1
-		expect(tooltips.useTooltip.mock.calls[2][0]).toBe('Активных');
+		expect(tooltips.useTooltip.mock.calls[2][0]).toBe('Active');
 		// useTooltip, call 4, arg 2
 		expect(tooltips.useTooltip.mock.calls[2][1]).toBe('hint');
 		// useTooltip, call 5, arg 1
-		expect(tooltips.useTooltip.mock.calls[3][0]).toBe('Ограниченных');
+		expect(tooltips.useTooltip.mock.calls[3][0]).toBe('Limit');
 		// useTooltip, call 5, arg 2
 		expect(tooltips.useTooltip.mock.calls[3][1]).toBe('hint');
 

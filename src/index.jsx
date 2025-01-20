@@ -8,6 +8,7 @@
  *
  */
 import 'whatwg-fetch';
+import './i18n.js';
 import React from 'react';
 
 import App from './App.jsx';

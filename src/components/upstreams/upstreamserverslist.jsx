@@ -8,10 +8,12 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import { styles } from '#/components/table';
 
-export default function UpstreamServerList(
+function UpstreamServerList(
 	{
+		t,
 		servers,
 		editSelectedUpstream,
 		renderSelectCheckbox,
@@ -21,7 +23,7 @@ export default function UpstreamServerList(
 		return (
 			<tr>
 				<td className={styles['left-align']} colSpan={30}>
-					В этой группе апстримов не найдены серверы.
+					{t('No servers found in this upstream group.')}
 				</td>
 			</tr>
 		);
@@ -32,7 +34,7 @@ export default function UpstreamServerList(
 			return down;
 		}
 
-		return down ? 'Недоступен' : 'Активный';
+		return down ? t('down') : t('up');
 	}
 
 	function renderTbody() {
@@ -72,12 +74,12 @@ export default function UpstreamServerList(
 				<tr>
 					<th />
 					{renderAllSelectCheckbox()}
-					<th>Сервер</th>
-					<th>Вес</th>
-					<th>Состояние</th>
-					<th>Макс. число соединений (max_conns)</th>
-					<th>Макс. число попыток связи (max_fails)</th>
-					<th>Таймаут попыток, сек. (fail_timeout)</th>
+					<th>{t('Server')}</th>
+					<th>{t('Weight')}</th>
+					<th>{t('State')}</th>
+					<th>{t('Max_conns')}</th>
+					<th>{t('Max_fails')}</th>
+					<th>{t('Fail_timeout')}</th>
 				</tr>
 			</thead>
 			<tbody className={styles['right-align']}>
@@ -86,3 +88,5 @@ export default function UpstreamServerList(
 		</table>
 	);
 }
+
+export default withNamespaces('upstreams.upstream-servers-list')(UpstreamServerList);

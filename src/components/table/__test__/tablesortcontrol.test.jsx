@@ -81,7 +81,7 @@ describe('<TableSortControl />', () => {
 		// useTooltip called
 		expect(tooltips.useTooltip).toHaveBeenCalledTimes(1);
 		// useTooltip call args
-		expect(tooltips.useTooltip).toHaveBeenCalledWith('Отсортировать по статусу — сначала проблемные', 'hint-right');
+		expect(tooltips.useTooltip).toHaveBeenCalledWith('Sort by status - failed first', 'hint-right');
 		// wrapper text
 		expect(wrapper.text()).toBe('▴');
 
@@ -96,7 +96,7 @@ describe('<TableSortControl />', () => {
 		// [props.order = desc] useTooltip called
 		expect(tooltips.useTooltip).toHaveBeenCalledTimes(1);
 		// [props.order = desc] useTooltip call args
-		expect(tooltips.useTooltip).toHaveBeenCalledWith('Отсортировать по порядку в конфигурации', 'hint-right');
+		expect(tooltips.useTooltip).toHaveBeenCalledWith('Sort by conf order', 'hint-right');
 		// wrapper text
 		expect(wrapper.text()).toBe('▾');
 

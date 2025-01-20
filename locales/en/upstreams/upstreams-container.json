@@ -1,0 +1,10 @@
+{
+  "All upstream servers appear to be just fine — nothing to show here. Toggle \"Failed only\" to show all upstreams.": "All upstream servers appear to be just fine — nothing to show here. Toggle \"Failed only\" to view all upstreams.",
+  "Failed only": "Failed only",
+  "upstreams list": "upstream list",
+  "Show": "Show",
+  "Hide": "Hide",
+  "Total": "Total",
+  "upstreams": "servers",
+  "With problems:": "Failed:"
+}

@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import utils from '#/utils.js';
 import tooltips from '#/tooltips/index.jsx';
@@ -18,13 +19,18 @@ import {
 	styles,
 } from '#/components/table';
 
-export default class StreamZones extends SortableTable {
+class StreamZones extends SortableTable {
 	get SORTING_SETTINGS_KEY() {
 		return 'streamZonesSortOrder';
 	}
 
+	formatReadableBytes(value) {
+		const { t } = this.props;
+		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
+	}
+
 	render() {
-		const { data } = this.props;
+		const { t, data } = this.props;
 		let component = null;
 
 		if (data) {
@@ -38,48 +44,51 @@ export default class StreamZones extends SortableTable {
 
 			component = (
 				<div>
-					<h1>Серверные зоны</h1>
+					<h1>{t('Server Zones')}</h1>
 
 					<table className={`${styles.table} ${styles.wide}`}>
 						<thead>
 							<tr>
 								<TableSortControl
-									firstSortLabel="Отсортировать по алфавиту"
-									secondSortLabel="Отсортировать по порядку в конфигурации"
+									firstSortLabel={t('Sort by zone - asc')}
+									secondSortLabel={t('Sort by conf order')}
 									order={this.state.sortOrder}
 									onChange={this.changeSorting}
 								/>
-								<th>Зона</th>
-								<th colSpan="3">Запросы</th>
-								<th colSpan="6">Ответы</th>
-								<th colSpan="4">Трафик</th>
+								<th>{t('Zone')}</th>
+								<th colSpan="3">{t('Requests')}</th>
+								<th colSpan="6">{t('Responses')}</th>
+								<th colSpan="4">{t('Traffic')}</th>
 								<th colSpan="4">SSL</th>
 							</tr>
 							<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
 								<th className={styles.bdr} />
-								<th>Текущие</th>
-								<th>Всего</th>
-								<th className={styles.bdr}>Запр./сек.</th>
+								<th>{t('Current')}</th>
+								<th>{t('Total')}</th>
+								<th className={styles.bdr}>{t('Req/s')}</th>
 								<th>1xx</th>
 								<th>2xx</th>
 								<th>3xx</th>
 								<th>4xx</th>
 								<th>5xx</th>
-								<th className={styles.bdr}>Всего</th>
-								<th>Отпр./сек.<div className=""></div></th>
-								<th>Получ./сек.</th>
-								<th>Отправлено</th>
-								<th className={styles.bdr}>Получено</th>
-								<th>Рукопожатий</th>
-								<th>Повторных
-									<br/>
-									использований</th>
-								<th>Истекло время
-									<br/>
-									ожидания</th>
-								<th>Неудачных
-									<br/>
-									рукопожатий</th>
+								<th className={styles.bdr}>{t('Total')}</th>
+								<th>
+									{t('Sent/s')}
+									<div className="" />
+								</th>
+								<th>{t('Rcvd/s')}</th>
+								<th>{t('Sent')}</th>
+								<th className={styles.bdr}>{t('Rcvd')}</th>
+								<th>{t('Handshaked')}</th>
+								<th style="max-width: 115px;white-space: initial;">
+									{t('Reuses')}
+								</th>
+								<th style="max-width: 115px;white-space: initial;">
+									{t('Timedout')}
+								</th>
+								<th style="max-width: 115px;white-space: initial;">
+									{t('Failed')}
+								</th>
 							</tr>
 						</thead>
 						<tbody className={styles['right-align']}>
@@ -126,10 +135,10 @@ export default class StreamZones extends SortableTable {
 												{tableUtils.responsesTextWithTooltip(zone.responses['5xx'], codes, '5')}
 											</td>
 											<td className={styles.bdr}>{zone.responses.total}</td>
-											<td className={styles.px60}>{utils.formatReadableBytes(zone.sent_s)}</td>
-											<td className={styles.px60}>{utils.formatReadableBytes(zone.rcvd_s)}</td>
-											<td className={styles.px60}>{utils.formatReadableBytes(zone.data.sent)}</td>
-											<td className={`${styles.px60} ${styles.bdr}`}>{utils.formatReadableBytes(zone.data.received)}</td>
+											<td className={styles.px60}>{this.formatReadableBytes(zone.sent_s)}</td>
+											<td className={styles.px60}>{this.formatReadableBytes(zone.rcvd_s)}</td>
+											<td className={styles.px60}>{this.formatReadableBytes(zone.data.sent)}</td>
+											<td className={`${styles.px60} ${styles.bdr}`}>{this.formatReadableBytes(zone.data.received)}</td>
 											<td>{ssl ? ssl.handshaked : '–'}</td>
 											<td>{ssl ? ssl.reuses : '–'}</td>
 											<td>{ssl ? ssl.timedout : '–'}</td>
@@ -147,3 +156,5 @@ export default class StreamZones extends SortableTable {
 		return component;
 	}
 }
+
+export default withNamespaces('pages.serverzones.serverzones')(StreamZones);
