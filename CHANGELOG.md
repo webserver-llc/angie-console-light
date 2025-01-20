@@ -3,6 +3,7 @@
 ## [v1.6.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.6.0) (2025-01-23)
 - Added i18n support. Available locales: en, ru
 - Added sticky header feature in table component
+- Added define Angie ADC as Angie PRO version
 
 ## [v1.4.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.4.0) (2024-08-08)
 - Added monitoring status display to the website's favicon
