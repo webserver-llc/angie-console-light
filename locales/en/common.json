@@ -15,15 +15,15 @@
   "d": "d",
   "Click to view rate graph": "Click to view rate graph",
   "Click to hide rate graph": "Click to hide rate graph",
-  "Sort by zone - asc": "Sort by zone - asc",
-  "Sort by conf order": "Sort by conf order",
+  "Sort by zone - asc": "Sort by zone — ascending",
+  "Sort by conf order": "Sort by configuration order",
   "Total": "Total",
   "Problems": "Problems",
   "Warnings": "Warnings",
-  "Peer": "Peer",
+  "Peer": "Total",
   "Servers": "Servers",
   "Active": "Active",
   "In": "In",
   "Out": "Out",
-  "sec": "sec"
+  "sec": "s"
 }

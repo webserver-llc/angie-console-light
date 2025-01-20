@@ -1,6 +1,6 @@
 {
   "Caches": "Caches",
-  "Show all exsists shards": "Show all exsists shards",
+  "Show all exsists shards": "Show all exsisting shards",
   "Zone": "Zone",
   "State": "State",
   "Memory usage = Used memory pages / Total memory pages": "Memory usage = Used memory pages / Total memory pages",
@@ -10,7 +10,7 @@
   "Disk usage = Used / Max size": "Disk usage = Used / Max size",
   "Disk usage": "Disk usage",
   "Traffic": "Traffic",
-  "Hit Ratio": "Hit Ratio",
+  "Hit Ratio": "Hit ratio",
   "Served": "Served",
   "Written": "Written",
   "Bypassed": "Bypassed",

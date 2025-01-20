@@ -1,5 +1,5 @@
 {
-  "TCP/UDP Zones": "TCP/UDP Зоны",
+  "TCP/UDP Zones": "TCP/UDP-зоны",
   "Zone": "Зона",
   "Total": "Всего",
   "Connections": "Соединения",
@@ -13,11 +13,11 @@
   "Sent": "Отправлено",
   "Rcvd": "Получено",
   "Current": "Текущие",
-  "Handshaked": "Рукопожатие",
+  "Handshaked": "Рукопожатий",
   "Reuses": "Повторных использований",
   "Timedout": "Истекло время ожидания",
   "Failed": "Неудачных рукопожатий",
   "Conn/s": "Соед./сек.",
   "Conn total": "Соед. всего",
-  "Conn current": "Соед. текущие"
+  "Conn current": "Соед. текущих"
 }

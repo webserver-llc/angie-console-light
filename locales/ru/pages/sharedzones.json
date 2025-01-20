@@ -3,6 +3,6 @@
   "Zone": "Зона",
   "Total memory pages": "Всего страниц памяти",
   "Used memory pages": "Использовано страниц памяти",
-  "Memory usage = Used memory pages / Total memory pages": "Загрузка памяти = Использовано страниц памяти / Всего страниц памяти",
+  "Memory usage = Used memory pages / Total memory pages": "Загрузка памяти = Использовано страниц / Всего страниц",
   "Memory usage": "Загрузка памяти"
 }
