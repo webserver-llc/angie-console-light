@@ -82,13 +82,15 @@ describe('Utils', () => {
 		expect(formatReadableBytes(2548575999)).toBe('2.37 GiB');
 
 		expect(formatReadableBytes(5799511627775)).toBe('5.27 TiB');
+		expect(formatReadableBytes(8125899906842623)).toBe('7.22 PiB');
 
 		const customUnits = {
 			0: 'b',
 			1: 'Kb',
 			2: 'Mb',
 			3: 'Gb',
-			4: 'Tb'
+			4: 'Tb',
+			5: 'Pb'
 		};
 
 		expect(formatReadableBytes(5799511627775, null, customUnits)).toBe('5.27 Tb');
@@ -104,7 +106,8 @@ describe('Utils', () => {
 			1: 'i18n KiB',
 			2: 'i18n MiB',
 			3: 'i18n GiB',
-			4: 'i18n TiB'
+			4: 'i18n TiB',
+			5: 'i18n PiB'
 		});
 		expect(translateReadableBytesUnits({
 			t: (value) => `i18n ${value}`,

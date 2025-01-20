@@ -50,7 +50,7 @@ export function translateUptimeUnits({ t, units = { 0: 'ms', 1: 's', 2: 'm', 3: 
 export const formatReadableBytes = (
 	bytes,
 	maxMeasurementUnit,
-	units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB' },
+	units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB', 5: 'PiB' },
 ) => {
 	if (isNaN(parseFloat(bytes)) || !isFinite(bytes) || bytes === 0) return '0';
 
@@ -66,7 +66,9 @@ export const formatReadableBytes = (
 		});
 	}
 
-	if (bytes > 1099511627775) {
+	if (bytes > 1125899906842623) {
+		measure = 5;
+	} else if (bytes > 1099511627775) {
 		measure = 4;
 	} else if (bytes > 1048575999 && bytes <= 1099511627775) {
 		measure = 3;
@@ -93,7 +95,7 @@ export const formatReadableBytes = (
 	return `${(bytes / 1024 ** measure).toFixed(precision)} ${units[measure]}`;
 };
 
-export function translateReadableBytesUnits({ t, units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB' } }) {
+export function translateReadableBytesUnits({ t, units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB', 5: 'PiB' } }) {
 	return Object
 		.entries(units)
 		.reduce((acc, [key, value]) => {
