@@ -72,29 +72,6 @@ export const SECTIONS = [
 	}
 ];
 
-const SectionLocales = {
-	en: {
-		'HTTP Zones': 'HTTP Zones',
-		'HTTP Upstreams': 'HTTP Upstreams',
-		'TCP/UDP Zones': 'TCP/UDP Zones',
-		'TCP/UDP Upstreams': 'TCP/UDP Upstreams',
-		Caches: 'Caches',
-		'Shared Zones': 'Shared Zones',
-		Resolvers: 'Resolvers',
-		'Config Files': 'Config Files'
-	},
-	ru: {
-		'HTTP Zones': 'HTTP Зоны',
-		'HTTP Upstreams': 'HTTP Апстримы',
-		'TCP/UDP Zones': 'TCP/UDP Зоны',
-		'TCP/UDP Upstreams': 'TCP/UDP Апстримы',
-		Caches: 'Кэши',
-		'Shared Zones': 'Общие зоны',
-		Resolvers: 'DNS Резолверы',
-		'Config Files': 'Конфигурация'
-	}
-};
-
 export class Navigation extends React.Component {
 	constructor(props) {
 		super(props);
@@ -125,7 +102,7 @@ export class Navigation extends React.Component {
 	}
 
 	render() {
-		const { statuses, i18n } = this.props;
+		const { statuses, t } = this.props;
 		const tabs = SECTIONS
 			.filter(({ hidden }) => typeof hidden !== 'boolean' || hidden === false)
 			.filter(({ statusKey }) => {
@@ -170,7 +147,7 @@ export class Navigation extends React.Component {
 					>
 						{statusIcon}
 
-						<span className={styles.anchor}>{SectionLocales?.[i18n.language]?.[section.title] || section.title}</span>
+						<span className={styles.anchor}>{t(section.title)}</span>
 					</a>
 				);
 			});
@@ -199,7 +176,7 @@ export class Navigation extends React.Component {
 	}
 }
 
-export default DataBinder(withNamespaces('header')(Navigation), [
+export default DataBinder(withNamespaces('navigation')(Navigation), [
 	api.http.server_zones.setMapper(mapperHttpResponse).process(calculateServerZones),
 	api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones),
 	api.stream.server_zones.setMapper(mapperStreamServerZones).process(calculateStreamZones),

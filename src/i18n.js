@@ -6,6 +6,7 @@ import appEN from '../locales/en/app.json';
 import commonEN from '../locales/en/common.json';
 import chartEN from '../locales/en/chart.json';
 import demoEN from '../locales/en/demo.json';
+import navigationEN from '../locales/en/navigation.json';
 import settingsEN from '../locales/en/settings.json';
 import cachesEN from '../locales/en/pages/caches.json';
 import configfilesEN from '../locales/en/pages/configfiles.json';
@@ -34,6 +35,7 @@ import appRU from '../locales/ru/app.json';
 import commonRU from '../locales/ru/common.json';
 import chartRU from '../locales/ru/chart.json';
 import demoRU from '../locales/ru/demo.json';
+import navigationRU from '../locales/ru/navigation.json';
 import settingsRU from '../locales/ru/settings.json';
 import cachesRU from '../locales/ru/pages/caches.json';
 import configfilesRU from '../locales/ru/pages/configfiles.json';
@@ -63,6 +65,7 @@ const resources = {
 		app: appEN,
 		chart: chartEN,
 		demo: demoEN,
+		navigation: navigationEN,
 		settings: settingsEN,
 		common: commonEN,
 		'pages.caches': cachesEN,
@@ -92,6 +95,7 @@ const resources = {
 		app: appRU,
 		chart: chartRU,
 		demo: demoRU,
+		navigation: navigationRU,
 		settings: settingsRU,
 		common: commonRU,
 		'pages.caches': cachesRU,
