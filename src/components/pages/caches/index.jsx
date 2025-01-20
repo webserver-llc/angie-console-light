@@ -215,7 +215,7 @@ export class Caches extends ExpandableTable {
 									>
 										<td colSpan="2" />
 										<td colSpan="10" className={styles['inner-table']}>
-											<table className={`${styles.table} ${styles.wide}`}>
+											<table className={`${styles.table} ${styles.wide} ${styles['no-sticky']}`}>
 												<thead>
 													<tr>
 														<th>{t('Path')}</th>
