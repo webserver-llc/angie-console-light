@@ -12,7 +12,6 @@ import { shallow } from 'enzyme';
 import ChartsTable from '../../../charts-table/index.jsx';
 import LimitReq, {
 	Colors,
-	Labels
 } from '../limitreq.jsx';
 import styles from '../../../table/style.css';
 
@@ -25,7 +24,7 @@ describe('<LimitReq />', () => {
 		const wrapper = shallow(<LimitReq />);
 
 		// return value
-		expect(wrapper.instance().getTitle()).toBe('Зоны ограничения запросов (Limit Req)');
+		expect(wrapper.instance().getTitle()).toBe('Limit Req');
 
 		wrapper.unmount();
 	});
@@ -85,7 +84,7 @@ describe('<LimitReq />', () => {
 		// [group 1, row 1] attr className
 		expect(row.props.className).toBe(`${styles['chart-container']} ${styles['chart-container_active']}`);
 		// [group 1, row 1] attr title
-		expect(row.props.title).toBe('Нажмите, чтобы скрыть график');
+		expect(row.props.title).toBe('Click to hide rate graph');
 		// [group 1, row 1] attr onClick
 		expect(row.props.onClick).toBe('toggleChart_bind_test');
 		// [group 1, row 1] children length
@@ -154,7 +153,7 @@ describe('<LimitReq />', () => {
 		// [group 1, row 2] Chart attr colors
 		expect(row.props.children.props.children.props.colors).toEqual(Colors);
 		// [group 1, row 2] Chart attr labels
-		expect(row.props.children.props.children.props.labels).toEqual(Labels);
+		expect(row.props.children.props.children.props.labels).toBeInstanceOf(Map);
 
 		row = body[1][0];
 
@@ -165,7 +164,7 @@ describe('<LimitReq />', () => {
 		// [group 2, row 1] attr className
 		expect(row.props.className).toBe(styles['chart-container']);
 		// [group 2, row 1] attr title
-		expect(row.props.title).toBe('Нажмите, чтобы увидеть график');
+		expect(row.props.title).toBe('Click to view rate graph');
 
 		// [group 2, row 1] attr onClick
 		expect(row.props.onClick).toBe('toggleChart_bind_test');

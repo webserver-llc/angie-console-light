@@ -8,9 +8,10 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import styles from './style.css';
 
-export default class AlertsCount extends React.Component {
+class AlertsCount extends React.Component {
 	shouldComponentUpdate(nextProps) {
 		return (
 			this.props.total !== nextProps.total ||
@@ -21,10 +22,10 @@ export default class AlertsCount extends React.Component {
 
 	render() {
 		let alertsPart = null;
-		const { total, alerts, warnings } = this.props;
+		const { t, total, alerts, warnings } = this.props;
 
 		if (alerts !== undefined || warnings !== undefined) {
-			const alertsTitle = this.props.alerts > 0 ? 'Проблем' : this.props.warnings > 0 ? 'Предупрежд.' : 'Проблем';
+			const alertsTitle = this.props.alerts > 0 ? t('Problems') : this.props.warnings > 0 ? t('Warnings') : t('Problems');
 			const alertsStyleName = this.props.alerts > 0 ? styles.alert : this.props.warnings > 0 ? styles.warning : styles.ok;
 
 			alertsPart = (
@@ -41,8 +42,8 @@ export default class AlertsCount extends React.Component {
 		return (
 			<div className={styles.alerts}>
 				<span className={styles.num}>
-					<span className={styles.label}>Всего</span>
-					{this.props.total}
+					<span className={styles.label}>{t('Total')}</span>
+					{total}
 				</span>
 
 				{alertsPart}
@@ -50,3 +51,5 @@ export default class AlertsCount extends React.Component {
 		);
 	}
 }
+
+export default withNamespaces()(AlertsCount);

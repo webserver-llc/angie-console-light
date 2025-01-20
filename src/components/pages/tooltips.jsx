@@ -8,41 +8,50 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import Icon from '../icon/icon.jsx';
 import styles from '../tooltip/style.css';
 
-export function CacheStateTooltip() {
+function CacheStateTooltip({ t }) {
 	return (
 		<div>
 			<div className={styles.row}>
 				<Icon type="sun" className={styles.icon} />
 				{' '}
-				Горячий &mdash; метаданные загружены в память
+				{t('Warm — using metadata in shmem')}
 			</div>
 
 			<div className={styles.row}>
 				<Icon type="snowflake" className={styles.icon} />
 				{' '}
-				Холодный &mdash; метаданные загружаются
+				{t('Cold — loading metadata')}
 			</div>
 		</div>
 	);
 }
 
-export function SharedZoneTooltip({ zone }) {
+CacheStateTooltip = withNamespaces('pages.tooltips')(CacheStateTooltip);
+
+function SharedZoneTooltip({ t, zone }) {
 	return (
 		<div>
-			Использовано страниц памяти:
+			{t('Used memory pages')}
+			:
 			{' '}
 			{zone.pages.used}
 			{' '}
 			<br />
-			Всего страниц памяти:
+			{t('Total memory pages')}
+			:
 			{' '}
 			{zone.pages.total}
 			{' '}
 			<br />
-			Загрузка памяти = использовано страниц / всего страниц
+			{t('Memory usage = Used memory pages / Total memory pages')}
 		</div>
 	);
 }
+
+SharedZoneTooltip = withNamespaces('pages.tooltips')(SharedZoneTooltip);
+
+export { CacheStateTooltip, SharedZoneTooltip };

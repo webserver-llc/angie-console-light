@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import utils from '#/utils.js';
 import tooltips from '#/tooltips/index.jsx';
@@ -18,13 +19,18 @@ import {
 	styles,
 } from '#/components/table';
 
-export default class Locations extends SortableTable {
+class LocationZones extends SortableTable {
 	get SORTING_SETTINGS_KEY() {
 		return 'locationsSortOrder';
 	}
 
+	formatReadableBytes(value) {
+		const { t } = this.props;
+		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
+	}
+
 	render() {
-		const { data } = this.props;
+		const { t, data } = this.props;
 		let component = null;
 
 		if (data) {
@@ -38,36 +44,36 @@ export default class Locations extends SortableTable {
 
 			component = (
 				<div>
-					<h1>Зоны путей (Location)</h1>
+					<h1>{t('Location Zones')}</h1>
 
 					<table className={`${styles.table} ${styles.wide}`}>
 						<thead>
 							<tr>
 								<TableSortControl
-									firstSortLabel="Отсортировать по алфавиту"
-									secondSortLabel="Отсортировать по порядку в конфигурации"
+									firstSortLabel={t('Sort by zone - asc')}
+									secondSortLabel={t('Sort by conf order')}
 									order={this.state.sortOrder}
 									onChange={this.changeSorting}
 								/>
-								<th>Зона</th>
-								<th colSpan="2">Запросы</th>
-								<th colSpan="6">Ответы</th>
-								<th colSpan="4">Трафик</th>
+								<th>{t('Zone')}</th>
+								<th colSpan="2">{t('Requests')}</th>
+								<th colSpan="6">{t('Responses')}</th>
+								<th colSpan="4">{t('Traffic')}</th>
 							</tr>
 							<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
 								<th className={styles.bdr} />
-								<th>Всего</th>
-								<th className={styles.bdr}>Запр./сек.</th>
+								<th>{t('Total')}</th>
+								<th className={styles.bdr}>{t('Req/s')}</th>
 								<th>1xx</th>
 								<th>2xx</th>
 								<th>3xx</th>
 								<th>4xx</th>
 								<th>5xx</th>
-								<th className={styles.bdr}>Всего</th>
-								<th>Отпр./сек.</th>
-								<th>Получ./сек.</th>
-								<th>Отправлено</th>
-								<th>Получено</th>
+								<th className={styles.bdr}>{t('Total')}</th>
+								<th>{t('Sent/s')}</th>
+								<th>{t('Rcvd/s')}</th>
+								<th>{t('Sent')}</th>
+								<th>{t('Rcvd')}</th>
 							</tr>
 						</thead>
 						<tbody className={styles['right-align']}>
@@ -110,10 +116,10 @@ export default class Locations extends SortableTable {
 												{tableUtils.responsesTextWithTooltip(location.responses['5xx'], codes, '5')}
 											</td>
 											<td className={styles.bdr}>{location.responses.total}</td>
-											<td className={styles.px60}>{utils.formatReadableBytes(location.sent_s)}</td>
-											<td className={styles.px60}>{utils.formatReadableBytes(location.rcvd_s)}</td>
-											<td className={styles.px60}>{utils.formatReadableBytes(location.data.sent)}</td>
-											<td className={styles.px60}>{utils.formatReadableBytes(location.data.received)}</td>
+											<td className={styles.px60}>{this.formatReadableBytes(location.sent_s)}</td>
+											<td className={styles.px60}>{this.formatReadableBytes(location.rcvd_s)}</td>
+											<td className={styles.px60}>{this.formatReadableBytes(location.data.sent)}</td>
+											<td className={styles.px60}>{this.formatReadableBytes(location.data.received)}</td>
 										</tr>
 									);
 								})
@@ -127,3 +133,5 @@ export default class Locations extends SortableTable {
 		return component;
 	}
 }
+
+export default withNamespaces('pages.serverzones.locationzones')(LocationZones);

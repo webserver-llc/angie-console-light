@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import IndexBox from '../indexbox/indexbox.jsx';
 import AlertsCount from '../alertscount/alertscount.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
@@ -18,7 +19,7 @@ import styles from './style.css';
 
 export class UpstreamsBox extends React.Component {
 	render() {
-		const { props: { title, stats, status, href } } = this;
+		const { props: { t, title, stats, status, href } } = this;
 
 		return (
 			<IndexBox
@@ -33,18 +34,23 @@ export class UpstreamsBox extends React.Component {
 					href={href}
 				/>
 
-				<h4>Серверы</h4>
+				<h4>{t('Servers', { ns: 'common' })}</h4>
 				<p>
-					Пиры:
+					{t('Peer', { ns: 'common' })}
+					:
 					{' '}
 					{stats.servers.all}
 					{' '}
-					/ Активные:
+					/
+					{' '}
+					{t('Active', { ns: 'common' })}
+					:
 					{' '}
 					{stats.servers.up}
 				</p>
 				<p className={stats.servers.failed > 0 ? styles.red : undefined}>
-					Проблемные:
+					{t('Problems', { ns: 'common' })}
+					:
 					{' '}
 					{stats.servers.failed}
 				</p>
@@ -53,22 +59,28 @@ export class UpstreamsBox extends React.Component {
 	}
 }
 
+UpstreamsBox.defaultProps = {
+	// i18n for testings
+	t: key => key
+};
+
 export class Upstreams extends React.Component {
 	render() {
-		const { props: { data, store } } = this;
+		const { props: { t, data, store } } = this;
 		const stats = data.upstreams.__STATS;
 
 		return (
 			<UpstreamsBox
-				title="HTTP-апстримы"
+				title={t('HTTP Upstreams')}
 				stats={stats}
 				status={store.__STATUSES.upstreams.status}
 				href="#upstreams"
+				t={t}
 			/>
 		);
 	}
 }
 
-export default DataBinder(Upstreams, [
+export default DataBinder(withNamespaces('pages.upstreams')(Upstreams), [
 	api.http.upstreams.setMapper(mapperHttpUpstreams).process(calculateUpstreams)
 ]);

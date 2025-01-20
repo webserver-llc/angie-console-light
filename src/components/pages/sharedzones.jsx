@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import api from '../../api';
 import SortableTable from '../table/sortabletable.jsx';
 import TableSortControl from '../table/tablesortcontrol.jsx';
@@ -24,6 +25,7 @@ export class SharedZones extends SortableTable {
 	}
 
 	render() {
+		const { t } = this.props;
 		const slabs = Array.from(this.props.data.slabs);
 
 		if (this.state.sortOrder === 'desc') {
@@ -34,26 +36,27 @@ export class SharedZones extends SortableTable {
 
 		return (
 			<div>
-				<h1>Общие зоны</h1>
+				<h1>{t('Shared Zones')}</h1>
 
 				<table className={styles.table}>
 					<thead>
 						<tr>
 							<TableSortControl
 								singleRow
-								secondSortLabel="Отсортировать по размеру &mdash; сначала большие"
+								firstSortLabel={t('Sort by zone - asc')}
+								secondSortLabel={t('Sort by conf order')}
 								order={this.state.sortOrder}
 								onChange={this.changeSorting}
 							/>
-							<th>Зона</th>
-							<th>Всего страниц памяти</th>
-							<th>Использовано страниц памяти</th>
+							<th>{t('Zone')}</th>
+							<th>{t('Total memory pages')}</th>
+							<th>{t('Used memory pages')}</th>
 							<th>
 								<span
 									className={styles.hinted}
-									{...tooltips.useTooltip('Загрузка памяти = использовано страниц / всего страниц', 'hint')}
+									{...tooltips.useTooltip(t('Memory usage = Used memory pages / Total memory pages'), 'hint')}
 								>
-									Загрузка памяти
+									{t('Memory usage')}
 								</span>
 							</th>
 						</tr>
@@ -80,6 +83,11 @@ export class SharedZones extends SortableTable {
 	}
 }
 
-export default DataBinder(SharedZones, [
+SharedZones.defaultProps = {
+	// i18n for testing
+	t: key => key,
+};
+
+export default DataBinder(withNamespaces('pages.sharedzones')(SharedZones), [
 	api.slabs.process(calculateSharedZones)
 ]);

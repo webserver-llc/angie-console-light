@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces, Trans } from 'react-i18next';
 import Clipboard from 'clipboard';
 import DataBinder from '../../databinder/databinder.jsx';
 import Editor from '../../editor/editor.jsx';
@@ -27,7 +28,7 @@ export class ConfigFiles extends React.Component {
 	}
 
 	renderEditor(file) {
-		const { props: { data: { angie } } } = this;
+		const { props: { t, data: { angie } } } = this;
 		const code = angie.config_files[file];
 
 		let extension = '';
@@ -41,7 +42,7 @@ export class ConfigFiles extends React.Component {
 					<button type="button" onClick={() => ConfigFiles.handleCopyCode(code)}>
 						<Icon className={styles['button-icon-copy']} type="copy" />
 						{' '}
-						Скопировать
+						{t('Copy')}
 					</button>
 				</div>
 				<Editor code={code} extension={extension} />
@@ -50,28 +51,29 @@ export class ConfigFiles extends React.Component {
 	}
 
 	render() {
-		const { props: { data: { angie } } } = this;
+		const { props: { t, data: { angie } } } = this;
 
 		if (!angie.config_files) {
 			return (
 				<div>
-					Объект
-					{' '}
-					<i>config_files</i>
-					{' '}
-					недоступен;
-					проверьте конфигурацию и убедитесь, что директива
-					{' '}
-					<i>api_config_files</i>
-					{' '}
-					включена.
+					<Trans>
+						The
+						{' '}
+						<i>config_files</i>
+						{' '}
+						object is unavailable; check your configuration and ensure the
+						{' '}
+						<i>api_config_files</i>
+						{' '}
+						directive is enabled.
+					</Trans>
 				</div>
 			);
 		}
 
 		return (
 			<div className={styles.container}>
-				<h1>Конфигурация</h1>
+				<h1>{t('Config Files')}</h1>
 				{Object.keys(angie.config_files)
 					.map(file => (
 						<CollapsibleList
@@ -87,6 +89,11 @@ export class ConfigFiles extends React.Component {
 	}
 }
 
-export default DataBinder(ConfigFiles, [
+ConfigFiles.defaultProps = {
+	// i18n for testing
+	t: key => key
+};
+
+export default DataBinder(withNamespaces('pages.configfiles')(ConfigFiles), [
 	api.angie,
 ]);

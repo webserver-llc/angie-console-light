@@ -297,7 +297,7 @@ describe('<UpstreamsList />', () => {
 		// empty list html tag
 		expect(emptyList.name()).toBe('tr');
 		// empty list text
-		expect(emptyList.text()).toBe("В этой группе не найдено ни одного сервера c состоянием ''.");
+		expect(emptyList.text()).toBe("No servers found in this upstream group ''.");
 		// empty list, child className
 		expect(emptyList.childAt(0).prop('className')).toBe(tableStyles['left-align']);
 		// empty list, child colSpan
@@ -553,7 +553,7 @@ describe('<UpstreamsList />', () => {
 			// useTooltip called once
 			expect(tooltips.useTooltip).toHaveBeenCalled();
 			// useTooltip call arg
-			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Доступно только в Angie PRO');
+			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Available only in Angie PRO');
 			// useTooltip call arg
 			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
 

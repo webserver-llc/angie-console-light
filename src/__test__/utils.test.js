@@ -9,7 +9,9 @@
  */
 import {
 	formatUptime,
+	translateUptimeUnits,
 	formatReadableBytes,
+	translateReadableBytesUnits,
 	formatMs,
 	formatDate,
 	formatLastCheckDate,
@@ -22,13 +24,41 @@ import {
 describe('Utils', () => {
 	it('formatUptime()', () => {
 		expect(formatUptime()).toBe('');
-		expect(formatUptime(999)).toBe('999 мс. ');
-		expect(formatUptime(59999)).toBe('59.99 сек. ');
-		expect(formatUptime(68342)).toBe('1 мин. ');
-		expect(formatUptime(120 * 1000)).toBe('2 мин. ');
-		expect(formatUptime(1.5 * 3600 * 1000)).toBe('1 ч. 30 мин. ');
-		expect(formatUptime(1.32 * 24 * 3600 * 1000)).toBe('1 дн. 7 ч. 40 мин. ');
-		expect(formatUptime(1.32 * 24 * 3600 * 1000, true)).toBe('1 дн. 7 ч. ');
+		expect(formatUptime(999)).toBe('999 ms ');
+		expect(formatUptime(59999)).toBe('59.99 s ');
+		expect(formatUptime(68342)).toBe('1 m ');
+		expect(formatUptime(120 * 1000)).toBe('2 m ');
+		expect(formatUptime(1.5 * 3600 * 1000)).toBe('1 h 30 m ');
+		expect(formatUptime(1.32 * 24 * 3600 * 1000)).toBe('1 d 7 h 40 m ');
+		expect(formatUptime(1.32 * 24 * 3600 * 1000, true)).toBe('1 d 7 h ');
+	});
+
+	it('translateUptimeUnits()', () => {
+		expect(translateUptimeUnits({
+			t: (key) => `i18n ${key}`,
+			units: {
+				0: 'a',
+				1: 'b',
+				2: 'c',
+				3: 'd',
+				4: 'f'
+			}
+		})).toEqual({
+			0: 'i18n a',
+			1: 'i18n b',
+			2: 'i18n c',
+			3: 'i18n d',
+			4: 'i18n f'
+		});
+		expect(translateUptimeUnits({
+			t: (key) => `i18n ${key}`,
+		})).toEqual({
+			0: 'i18n ms',
+			1: 'i18n s',
+			2: 'i18n m',
+			3: 'i18n h',
+			4: 'i18n d'
+		});
 	});
 
 	it('formatReadableBytes()', () => {
@@ -39,20 +69,19 @@ describe('Utils', () => {
 		expect(formatReadableBytes('qwe')).toBe('0');
 		expect(formatReadableBytes(0)).toBe('0');
 
-		expect(formatReadableBytes(7)).toBe('7.00 Б');
-		expect(formatReadableBytes(16)).toBe('16.0 Б');
-		expect(formatReadableBytes(406)).toBe('406 Б');
-		expect(formatReadableBytes(1001)).toBe('1001 Б');
+		expect(formatReadableBytes(7)).toBe('7.00 B');
+		expect(formatReadableBytes(16)).toBe('16.0 B');
+		expect(formatReadableBytes(406)).toBe('406 B');
+		expect(formatReadableBytes(1001)).toBe('1001 B');
 
-		expect(formatReadableBytes(534591)).toBe('522 КБ');
+		expect(formatReadableBytes(534591)).toBe('522 KiB');
+		expect(formatReadableBytes(9524000)).toBe('9.08 MiB');
+		expect(formatReadableBytes(9524000, 'KiB')).toBe('9301 KiB');
+		expect(formatReadableBytes(9524000, 'B')).toBe('9524000 B');
 
-		expect(formatReadableBytes(9524000)).toBe('9.08 МБ');
-		expect(formatReadableBytes(9524000, 'KiB')).toBe('9.08 МБ');
-		expect(formatReadableBytes(9524000, 'B')).toBe('9.08 МБ');
+		expect(formatReadableBytes(2548575999)).toBe('2.37 GiB');
 
-		expect(formatReadableBytes(2548575999)).toBe('2.37 ГБ');
-
-		expect(formatReadableBytes(5799511627775)).toBe('5.27 ТБ');
+		expect(formatReadableBytes(5799511627775)).toBe('5.27 TiB');
 
 		const customUnits = {
 			0: 'b',
@@ -67,6 +96,26 @@ describe('Utils', () => {
 		expect(formatReadableBytes(5799511627775, 'Mb', customUnits)).toBe('5530845 Mb');
 		expect(formatReadableBytes(5799511627775, 'Kb', customUnits)).toBe('5663585574 Kb');
 		expect(formatReadableBytes(5799511627775, 'b', customUnits)).toBe('5799511627775 b');
+	});
+
+	it('translateReadableBytesUnits()', () => {
+		expect(translateReadableBytesUnits({ t: (value) => `i18n ${value}` })).toEqual({
+			0: 'i18n B',
+			1: 'i18n KiB',
+			2: 'i18n MiB',
+			3: 'i18n GiB',
+			4: 'i18n TiB'
+		});
+		expect(translateReadableBytesUnits({
+			t: (value) => `i18n ${value}`,
+			units: { 0: 'b', 1: 'Kb', 2: 'Mb', 3: 'Gb', 4: 'Tb' }
+		})).toEqual({
+			0: 'i18n b',
+			1: 'i18n Kb',
+			2: 'i18n Mb',
+			3: 'i18n Gb',
+			4: 'i18n Tb'
+		});
 	});
 
 	it('formatMs()', () => {
@@ -188,11 +237,11 @@ describe('Utils', () => {
 
 	it('isEmptyObj()', () => {
 		// without argument
-		expect(() => isEmptyObj()).toThrow(/установлено/);
+		expect(() => isEmptyObj()).toThrow(/set/);
 		// with undefined argument
-		expect(() => isEmptyObj(undefined)).toThrow(/установлено/);
+		expect(() => isEmptyObj(undefined)).toThrow(/set/);
 		// with null argument
-		expect(() => isEmptyObj(null)).toThrow('Недопустимое значение');
+		expect(() => isEmptyObj(null)).toThrow('Null');
 		// empty object
 		expect(isEmptyObj({})).toBe(true);
 		// empty object
@@ -205,15 +254,15 @@ describe('Utils', () => {
 		// invalid timestamp
 		expect(formatLastCheckDate('2023-08-18T08:18:45Z')).toBe('-');
 		// ms
-		expect(formatLastCheckDate('2023-08-18T08:18:34Z')).toBe('363 мс. ');
+		expect(formatLastCheckDate('2023-08-18T08:18:34Z')).toBe('363 ms ');
 		// s
-		expect(formatLastCheckDate('2023-08-18T08:18:24Z')).toBe('10.36 сек. ');
+		expect(formatLastCheckDate('2023-08-18T08:18:24Z')).toBe('10.36 s ');
 		// m
-		expect(formatLastCheckDate('2023-08-18T08:17:00Z')).toBe('1 мин. ');
+		expect(formatLastCheckDate('2023-08-18T08:17:00Z')).toBe('1 m ');
 		// h
-		expect(formatLastCheckDate('2023-08-18T07:17:00Z')).toBe('1 ч. 1 мин. ');
+		expect(formatLastCheckDate('2023-08-18T07:17:00Z')).toBe('1 h 1 m ');
 		// h
-		expect(formatLastCheckDate('2023-08-16T07:17:00Z')).toBe('2 дн. 1 ч. 1 мин. ');
+		expect(formatLastCheckDate('2023-08-16T07:17:00Z')).toBe('2 d 1 h 1 m ');
 		consoleWarnMock.mockRestore();
 	});
 });

@@ -12,6 +12,7 @@
 /* eslint no-throw-literal: 0 */
 
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import Popup from '../../popup/popup.jsx';
 import Loader from '../../loader/loader.jsx';
 import NumberInput from '../../numberinput/numberinput.jsx';
@@ -25,7 +26,7 @@ const RGX_SERVER_ADDRESS =
 const RGX_HTTP_SERVER_ADDRESS =
 	/^([\w-]|(\.(?!\.+)))[\w-.]*(\:(\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 
-export default class UpstreamsEditor extends React.Component {
+class UpstreamsEditor extends React.Component {
 	static defaultProps = {
 		reloadUpstreamServers: () => { }
 	}
@@ -137,7 +138,7 @@ export default class UpstreamsEditor extends React.Component {
 	}
 
 	save() {
-		const { upstreamsApi, servers, reloadUpstreamServers } = this.props;
+		const { t, upstreamsApi, servers, reloadUpstreamServers } = this.props;
 		const isAdd = !servers;
 		this.closeErrors();
 
@@ -153,7 +154,7 @@ export default class UpstreamsEditor extends React.Component {
 						.then(() => {
 							this.setState({
 								success: true,
-								successMessage: 'Сервер успешно добавлен',
+								successMessage: t('Server added successfully'),
 							});
 						});
 				}
@@ -172,7 +173,7 @@ export default class UpstreamsEditor extends React.Component {
 				).then(() => {
 					this.setState({
 						success: true,
-						successMessage: 'Изменения сохранены',
+						successMessage: t('Changes saved'),
 					});
 				});
 			})
@@ -213,7 +214,7 @@ export default class UpstreamsEditor extends React.Component {
 	}
 
 	remove() {
-		const { reloadUpstreamServers } = this.props;
+		const { t, reloadUpstreamServers } = this.props;
 		const serversArray = Array.from(this.props.servers);
 
 		Promise.all(
@@ -227,7 +228,7 @@ export default class UpstreamsEditor extends React.Component {
 				this.setState({
 					success: true,
 					shouldClearServers: true,
-					successMessage: `Серверы ${servers.join(', ')} успешно удалены`,
+					successMessage: t('Servers {{servers}} successfully removed', { servers: servers.join(', ') }),
 				});
 			})
 			.catch(({ error }) => this.showErrors([error]))
@@ -235,6 +236,7 @@ export default class UpstreamsEditor extends React.Component {
 	}
 
 	validate(data) {
+		const { t } = this.props;
 		let valid = true;
 
 		const addressRegexp = this.props.isStream
@@ -247,20 +249,20 @@ export default class UpstreamsEditor extends React.Component {
 
 		if (!multipleServers && isAdd && !data.server) {
 			valid = false;
-			errorMessages.push('Неверный адрес или порт сервера');
+			errorMessages.push(t('Invalid server address or port'));
 		}
 
 		if ('server' in data && !isIP(data.server)) {
 			if (!addressRegexp.test(data.server) || data.server.length > 253) {
 				valid = false;
-				errorMessages.push('Неверный адрес или порт сервера');
+				errorMessages.push(t('Invalid server address or port'));
 			} else if (
 				data.service &&
 				(!RGX_SERVICE_SETTING.test(data.service) ||
 					data.server.length + data.service.length > 253)
 			) {
 				valid = false;
-				errorMessages.push('Неверный адрес сервера или настройка сервиса');
+				errorMessages.push(t('Invalid server address or service setting'));
 			}
 		}
 
@@ -272,7 +274,7 @@ export default class UpstreamsEditor extends React.Component {
 				.then((data) => {
 					if (data.error) {
 						errorMessages.push(
-							'Сервер не найден (убедитесь, что сервер существует)',
+							t('No such server (please, check if it still exists)'),
 						);
 						valid = false;
 						return Promise.reject(errorMessages);
@@ -296,7 +298,7 @@ export default class UpstreamsEditor extends React.Component {
 	}
 
 	render() {
-		const { upstream, servers, isStream } = this.props;
+		const { t, upstream, servers, isStream } = this.props;
 
 		let title = '';
 		const isAdd = !servers || servers.size === 0;
@@ -304,11 +306,10 @@ export default class UpstreamsEditor extends React.Component {
 		let serversArray;
 
 		if (isAdd) {
-			title = `Добавление сервера в "${upstream.name}"`;
+			title = t('Add server to [upstream_name]', { upstream_name: upstream.name });
 		} else {
 			serversArray = Array.from(servers);
-			title = `Редактирование ${servers.size > 1 ? 'сервера' : `сервера ${serversArray[0][0]}`
-				} "${upstream.name}"`;
+			title = `${t('Edit servers', { count: servers.size, server: servers.size === 1 && serversArray[0][0] })} "${upstream.name}"`;
 		}
 
 		let content = null;
@@ -339,7 +340,7 @@ export default class UpstreamsEditor extends React.Component {
 					<div className={styles.content}>
 						{!isAdd && serversArray.length > 1 ? (
 							<div className={styles['form-group']}>
-								<label>Выбранные серверы</label>
+								<label>{t('Selected servers')}</label>
 
 								<ul className={styles['servers-list']}>
 									{serversArray.map(([serverName, server]) => (
@@ -351,7 +352,7 @@ export default class UpstreamsEditor extends React.Component {
 							<div>
 								{isAdd ? (
 									<div className={styles['form-group']}>
-										<label htmlFor="server">Адрес сервера</label>
+										<label htmlFor="server">{t('Server address')}</label>
 										<input
 											id="server"
 											name="server"
@@ -368,7 +369,7 @@ export default class UpstreamsEditor extends React.Component {
 
 								{data.host ? (
 									<div className={styles['form-group']}>
-										<strong>Доменное имя:</strong>
+										<strong>{t('Domain name:')}</strong>
 										{' '}
 										{data.host}
 									</div>
@@ -383,7 +384,7 @@ export default class UpstreamsEditor extends React.Component {
 												checked={data.backup}
 												onChange={this.handleFormChange}
 											/>
-											Добавить как запасной
+											{t('Add as backup server')}
 										</label>
 									</div>
 								) : null}
@@ -392,7 +393,7 @@ export default class UpstreamsEditor extends React.Component {
 
 						<div className={styles['forms-mini']}>
 							<div className={styles['form-group']}>
-								<label htmlFor="weight">Вес</label>
+								<label htmlFor="weight">{t('weight')}</label>
 								<NumberInput
 									id="weight"
 									name="weight"
@@ -434,7 +435,7 @@ export default class UpstreamsEditor extends React.Component {
 						</div>
 
 						<div className={styles.radio}>
-							<span className={styles.title}>Состояние</span>
+							<span className={styles.title}>{t('Set state')}</span>
 
 							<label>
 								<input
@@ -445,7 +446,7 @@ export default class UpstreamsEditor extends React.Component {
 									checked={data.down === false}
 								/>
 								{' '}
-								Активный
+								{t('Up')}
 							</label>
 
 							<label>
@@ -457,7 +458,7 @@ export default class UpstreamsEditor extends React.Component {
 									checked={data.down === true}
 								/>
 								{' '}
-								Недоступный
+								{t('Down')}
 							</label>
 
 							{!isStream &&
@@ -470,7 +471,7 @@ export default class UpstreamsEditor extends React.Component {
 										checked={data.down === "drain"}
 									/>
 									{' '}
-									Разгружаемый
+									{t('Drain')}
 								</label>
 							}
 						</div>
@@ -493,16 +494,16 @@ export default class UpstreamsEditor extends React.Component {
 					<div className={styles.footer}>
 						{!isAdd ? (
 							<div className={styles.remove} onClick={this.remove}>
-								Удалить
+								{t('Remove')}
 							</div>
 						) : null}
 
 						<div className={styles.save} onClick={this.save}>
-							{isAdd ? 'Добавить' : 'Сохранить'}
+							{isAdd ? t('Add') : t('Save')}
 						</div>
 
 						<div className={styles.cancel} onClick={this.close}>
-							Отмена
+							{t('Cancel')}
 						</div>
 					</div>
 				</div>
@@ -521,3 +522,5 @@ export default class UpstreamsEditor extends React.Component {
 		);
 	}
 }
+
+export default withNamespaces('upstreams.editor.upstreams-editor')(UpstreamsEditor);

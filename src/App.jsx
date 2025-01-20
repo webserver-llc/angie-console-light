@@ -11,6 +11,7 @@
 
 import React from 'react';
 import { createBrowserHistory as createHistory } from 'history';
+import { withNamespaces } from 'react-i18next';
 
 import styles from './style.css';
 import Header from './components/header/header.jsx';
@@ -51,12 +52,6 @@ export const SECTIONS = {
 	'#config_files': ConfigFiles,
 };
 
-export const Errors = {
-	basic_auth: 'Access to /api/ location is forbidden. Check Angie configuration.',
-	old_status_found: 'No data received from /api/ location, but found deprecated /status/ location. Сheck Angie configuration.',
-	api_not_found: 'No data received from /api/ location. Check Angie configuration.'
-};
-
 export class App extends React.Component {
 	static sendAnalytics(hash) {
 		if (hash === '#') {
@@ -72,13 +67,20 @@ export class App extends React.Component {
 		}
 	}
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 
 		this.state = {
 			hash: history.location.hash || '#',
 			loading: true,
 			error: undefined,
+		};
+
+		const { t } = props;
+		this.errors = {
+			basic_auth: t('Access to /api/ location is forbidden. Check Angie configuration.'),
+			old_status_found: t('No data received from /api/ location, but found deprecated /status/ location. Сheck Angie configuration.'),
+			api_not_found: t('No data received from /api/ location. Check Angie configuration.')
 		};
 	}
 
@@ -106,6 +108,7 @@ export class App extends React.Component {
 	}
 
 	render() {
+		const { t } = this.props;
 		const { error, loading } = this.state;
 
 		if (loading) {
@@ -113,7 +116,7 @@ export class App extends React.Component {
 				<div className={styles.splash}>
 					<span className={styles.logo} />
 					<Loader className={styles.loader} />
-					<span className={styles.loading}>Загрузка...</span>
+					<span className={styles.loading}>{t('Loading')}</span>
 				</div>
 			);
 		}
@@ -123,16 +126,20 @@ export class App extends React.Component {
 		if (error) {
 			let subContent = null;
 
-			if (error in Errors) {
-				subContent = <p>{Errors[error]}</p>;
+			if (error in this.errors) {
+				subContent = <p>{this.errors[error]}</p>;
 			}
 
 			content = (
 				<div className={styles['error-block']}>
 					{subContent}
 					<p>
-						For&nbsp;more information please refer to&nbsp;the&nbsp;following&nbsp;
-						<a href="https://angie.software/en/">documentation.</a>
+						{t('For more information please refer to')}
+						{' '}
+						<a href="https://angie.software/en/">
+							{t('documentation')}
+							.
+						</a>
 					</p>
 				</div>
 			);
@@ -169,5 +176,5 @@ export class App extends React.Component {
 }
 
 export default {
-	Component: App,
+	Component: withNamespaces('app')(App),
 };

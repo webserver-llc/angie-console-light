@@ -1,0 +1,10 @@
+{
+  "HTTP Zones": "HTTP Zones",
+  "HTTP Upstreams": "HTTP Upstreams",
+  "TCP/UDP Zones": "TCP/UDP Zones",
+  "TCP/UDP Upstreams": "TCP/UDP Upstreams",
+  "Caches": "Caches",
+  "Shared Zones": "Shared Zones",
+  "Resolvers": "Resolvers",
+  "Config Files": "Config Files"
+}

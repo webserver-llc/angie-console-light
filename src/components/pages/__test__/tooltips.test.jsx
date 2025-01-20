@@ -25,7 +25,7 @@ describe('Tooltips', () => {
 		);
 		const text = wrapper.text();
 
-		expect(text).toContain('Использовано страниц памяти: 98 Всего страниц памяти: 100 Загрузка памяти = использовано страниц / всего страниц');
+		expect(text).toContain('Used memory pages: 98 Total memory pages: 100 Memory usage = Used memory pages / Total memory pages');
 
 		wrapper.unmount();
 	});
