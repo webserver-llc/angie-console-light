@@ -65,13 +65,24 @@ export const isWritable = () => apiWritePermissions;
 export const isAngiePro = () => isAngieProFlag;
 
 export function defineAngieVersion(build) {
-	if (!build) {
+	if (!build || typeof build !== 'string') {
 		isAngieProFlag = false;
-	} else if (typeof build === 'string' && build.toLowerCase().indexOf('pro') !== -1) {
-		isAngieProFlag = true;
-	} else {
-		isAngieProFlag = false;
+		return;
 	}
+
+	build = build.toLowerCase();
+
+	if (build.indexOf('pro') !== -1) {
+		isAngieProFlag = true;
+		return;
+	}
+
+	if (build.indexOf('adc') !== -1) {
+		isAngieProFlag = true;
+		return;
+	}
+
+	isAngieProFlag = false;
 }
 
 export const checkApiAvailability = () => window.fetch(`${API_PATH}/`).then(response => {
@@ -134,7 +145,7 @@ export const initialLoad = ({
 							availableApiEndpoints.fillFirstLevel(data);
 						}
 					})
-					.catch(() => {});
+					.catch(() => { });
 			}
 		})
 		.then(() =>
@@ -150,7 +161,7 @@ export const initialLoad = ({
 												availableApiEndpoints.fillThirdLevel(apiKey, data);
 											}
 										})
-										.catch(() => {});
+										.catch(() => { });
 								}
 							}
 						)

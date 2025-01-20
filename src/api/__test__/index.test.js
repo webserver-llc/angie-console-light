@@ -48,6 +48,14 @@ describe('Api', () => {
 		it('default value', () => {
 			expect(Api.isAngiePro() === false).toBeTruthy();
 		});
+		it('Pro build', () => {
+			Api.defineAngieVersion('Angie PRO');
+			expect(Api.isAngiePro() === true).toBeTruthy();
+		});
+		it('ADC build', () => {
+			Api.defineAngieVersion('Angie ADC');
+			expect(Api.isAngiePro() === true).toBeTruthy();
+		});
 	});
 
 	describe('checkWritePermissions()', () => {
@@ -75,7 +83,7 @@ describe('Api', () => {
 
 			Api.checkWritePermissions();
 
-			expect(window.fetch.mock.calls[0][0]).toBe(`${ API_PATH }/config/http/upstreams/__ANGIE_TEST_UPSTREAM__/servers/__ANGIE_TEST_SERVER__/`);
+			expect(window.fetch.mock.calls[0][0]).toBe(`${API_PATH}/config/http/upstreams/__ANGIE_TEST_UPSTREAM__/servers/__ANGIE_TEST_SERVER__/`);
 
 			window.fetch = _fetchInner;
 		});
@@ -102,7 +110,7 @@ describe('Api', () => {
 			status: 401,
 			result: null
 		}].map(({ status, result }) => {
-			it(`Handles ${ status } status`, done => {
+			it(`Handles ${status} status`, done => {
 				const originGet = ApiProxy.prototype.del;
 
 				ApiProxy.prototype.del = () => Promise.reject({ status });
@@ -120,7 +128,7 @@ describe('Api', () => {
 	describe('checkApiAvailability()', () => {
 		const _fetchInner = () => Promise.resolve({
 			status: 200,
-			json(){
+			json() {
 				return Promise.resolve({
 					version: '1.2.0',
 					build: '1.2.0',
@@ -146,13 +154,13 @@ describe('Api', () => {
 			window.fetch = jest.fn(_fetchInner);
 
 			Api.checkApiAvailability();
-			expect(window.fetch.mock.calls[0][0] === `${ API_PATH }/`).toBeTruthy();
+			expect(window.fetch.mock.calls[0][0] === `${API_PATH}/`).toBeTruthy();
 
 			window.fetch = _fetchInner;
 		});
 
 		it('Returns Promise', () => {
-			const spyApiGet = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => {});
+			const spyApiGet = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => { });
 			expect(Api.checkApiAvailability() instanceof Promise).toBeTruthy();
 			spyApiGet.mockRestore();
 		});
@@ -165,7 +173,7 @@ describe('Api', () => {
 
 			window.fetch = () => Promise.resolve({
 				status: 401,
-				json(){
+				json() {
 					return Promise.resolve({ error: {} });
 				}
 			});
@@ -184,7 +192,7 @@ describe('Api', () => {
 
 		it('Handles other errors', done => {
 			let status;
-			const spyDefineAngieVersion = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => {});
+			const spyDefineAngieVersion = jest.spyOn(Api.apiUtils, 'defineAngieVersion').mockClear().mockImplementation(() => { });
 
 			const _done = error => {
 				window.fetch = _fetchInner;
@@ -209,7 +217,7 @@ describe('Api', () => {
 
 			window.fetch = (...args) => Promise.resolve({
 				status: 404,
-				json(){
+				json() {
 					return Promise.resolve({ error: {} });
 				}
 			});
@@ -224,7 +232,7 @@ describe('Api', () => {
 
 		const _fetchInner = () => Promise.resolve({
 			status: 200,
-			json(){
+			json() {
 				return Promise.resolve();
 			}
 		});
@@ -237,7 +245,7 @@ describe('Api', () => {
 
 		beforeEach(() => {
 			spySubscribe = jest.spyOn(datastore, 'subscribe').mockClear().mockImplementation((apis, callback) => { callback(); });
-			spyUnsubscribe = jest.spyOn(datastore, 'unsubscribe').mockClear().mockImplementation(() => {});
+			spyUnsubscribe = jest.spyOn(datastore, 'unsubscribe').mockClear().mockImplementation(() => { });
 		});
 
 		afterEach(() => {
@@ -263,7 +271,7 @@ describe('Api', () => {
 			window.fetch = jest.fn(_fetchInner);
 
 			Api.initialLoad(datastore).then(() => {
-				expect(window.fetch).toHaveBeenCalledWith(`${ API_PATH }/`);
+				expect(window.fetch).toHaveBeenCalledWith(`${API_PATH}/`);
 
 				window.fetch = _fetch;
 
@@ -284,11 +292,11 @@ describe('Api', () => {
 			window.fetch = jest.fn(path =>
 				Promise.resolve({
 					status: letFetchSuccess ?
-						path === `${ API_PATH }/${ responses[0][2] }/` ?
+						path === `${API_PATH}/${responses[0][2]}/` ?
 							400
 							: 200
 						: 400,
-					json(){
+					json() {
 						return Promise.resolve(responses[fetchCall++]);
 					}
 				}));
@@ -323,11 +331,11 @@ describe('Api', () => {
 
 					expect(spyFillFirstLevel).toHaveBeenCalled();
 					expect(spyFillFirstLevel).toHaveBeenCalledWith(responses[0]);
-					expect(window.fetch).toHaveBeenCalledWith(`${ API_PATH }/${ _secondLevelEndpointsAsKeys[0] }/`);
+					expect(window.fetch).toHaveBeenCalledWith(`${API_PATH}/${_secondLevelEndpointsAsKeys[0]}/`);
 					expect(spyFillThirdLevel).toHaveBeenCalled();
 					expect(spyFillThirdLevel).toHaveBeenCalledWith(_secondLevelEndpointsAsKeys[0], responses[1]);
 
-					expect(window.fetch).toHaveBeenCalledWith(`${ API_PATH }/${ _secondLevelEndpointsAsKeys[1] }/`);
+					expect(window.fetch).toHaveBeenCalledWith(`${API_PATH}/${_secondLevelEndpointsAsKeys[1]}/`);
 
 					expect(spySubscribe).toHaveBeenCalled();
 				}).then(_done, _done);
@@ -337,7 +345,7 @@ describe('Api', () => {
 		it('catches json() errors', done => {
 			window.fetch = path => Promise.resolve({
 				status: 200,
-				json(){
+				json() {
 					return Promise.reject();
 				}
 			});
@@ -359,7 +367,7 @@ describe('Api', () => {
 			window.fetch = jest.fn(path =>
 				Promise.resolve({
 					status: 200,
-					json(){
+					json() {
 						return Promise.resolve(responses[fetchCall++]);
 					}
 				}));
@@ -378,7 +386,7 @@ describe('Api', () => {
 
 				// 1st API call
 
-				expect(window.fetch).toHaveBeenCalledWith(`${ API_PATH }/`);
+				expect(window.fetch).toHaveBeenCalledWith(`${API_PATH}/`);
 				expect(firstLevelEndpoints.length === Object.keys(responses[0]).length).toBeTruthy();
 
 				firstLevelEndpoints.forEach(ep => {
@@ -390,7 +398,7 @@ describe('Api', () => {
 				_secondLevelEndpointsAsKeys.forEach((ep, _i) => {
 					const i = _i + 1;
 					expect(window.fetch).toHaveBeenNthCalledWith(i + 1,
-						`${ API_PATH }/${ ep }/`
+						`${API_PATH}/${ep}/`
 					);
 
 					const endpoints = datastore.availableApiEndpoints.getThirdLevel(ep);
