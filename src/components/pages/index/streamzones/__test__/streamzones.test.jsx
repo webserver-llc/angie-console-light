@@ -63,9 +63,9 @@ describe('<StreamZones IndexPage />', () => {
 		indexBox = wrapper.find('IndexBox');
 
 		// traffic in row
-		expect(indexBox.childAt(4).text()).toBe('In: 3/sec.');
+		expect(indexBox.childAt(4).text()).toBe('In: 3/sec');
 		// traffic out row
-		expect(indexBox.childAt(5).text()).toBe('Out: 2/sec.');
+		expect(indexBox.childAt(5).text()).toBe('Out: 2/sec');
 		// formatReadableBytes called twice
 		expect(utils.formatReadableBytes).toHaveBeenCalledTimes(2);
 		// formatReadableBytes call 1, arg
