@@ -15,7 +15,7 @@ import tooltip from '#/components/tooltip';
 import styles from './style.css';
 
 export const tableUtils = {
-	responsesTextWithTooltip: (text, codes, codeGroup) => {
+	responsesTextWithTooltip: (text = 0, codes, codeGroup) => {
 		const codesArr = utils.getHTTPCodesArray(codes, codeGroup);
 
 		return tableUtils.tooltipRowsContent(
@@ -37,29 +37,29 @@ export const tableUtils = {
 				<span
 					className={styles.hinted}
 					{
-						...tooltips.useTooltip(
-							<div>
-								{
-									items.map(({ id, label, value }) => (
-										<div
-											key={id}
-											className={tooltip.styles['list-row']}
-										>
-											<div className={tooltip.styles['list-label']}>
-												{ label }
-												:
-											</div>
-											<div className={tooltip.styles['list-space']} />
-											<div className={tooltip.styles['list-value']}>{ value }</div>
+					...tooltips.useTooltip(
+						<div>
+							{
+								items.map(({ id, label, value }) => (
+									<div
+										key={id}
+										className={tooltip.styles['list-row']}
+									>
+										<div className={tooltip.styles['list-label']}>
+											{label}
+											:
 										</div>
-									))
-								}
-							</div>,
-							position
-						)
+										<div className={tooltip.styles['list-space']} />
+										<div className={tooltip.styles['list-value']}>{value}</div>
+									</div>
+								))
+							}
+						</div>,
+						position
+					)
 					}
 				>
-					{ text }
+					{text}
 
 				</span>
 			)
