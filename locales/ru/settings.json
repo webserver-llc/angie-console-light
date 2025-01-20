@@ -1,5 +1,5 @@
 {
-  "Options": "Параметры",
+  "Options": "Настройки",
   "Update every": "Обновлять каждые",
   "sec": "сек.",
   "4xx warnings threshold": "Пороговое значение ошибок для 4xx",
@@ -8,5 +8,5 @@
   "Resolver errors threshold": "Пороговое значение ошибок DNS",
   "Save": "Сохранить",
   "Close": "Закрыть",
-  "Change language": "Изменить язык"
+  "Change language": "Язык"
 }

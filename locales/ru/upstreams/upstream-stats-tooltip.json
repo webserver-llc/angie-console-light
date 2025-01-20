@@ -1,12 +1,12 @@
 {
-  "Q-Size:": "Q-Size:",
-  "Overflows:": "Overflows:",
+  "Q-Size:": "Размер очереди:",
+  "Overflows:": "Переполнения:",
   "Upstream:": "Апстрим:",
   "Up:": "Активных пиров:",
   "Failed:": "Проблемных пиров:",
   "Drain:": "Разгружаемых:",
-  "Down:": "Недоступных пиров:",
-  "Checking:": "Не проверке:",
+  "Down:": "Недоступных:",
+  "Checking:": "На проверке:",
   "Keepalive:": "Keepalive-пиров:",
   "Zombies:": "Zombie-пиров:"
 }

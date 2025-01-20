@@ -19,7 +19,7 @@ export default class LanguageControl extends React.Component {
 	render() {
 		return (
 			<select value={i18n.language} className={styles.select} onChange={LanguageControl.changeLanguage}>
-				<option value="ru">Русский</option>
+				<option value="ru">русский</option>
 				<option value="en">English</option>
 			</select>
 		);

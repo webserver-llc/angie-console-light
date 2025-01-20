@@ -1,17 +1,17 @@
 {
   "Resolvers": "DNS-резолверы",
   "Traffic": "Трафик",
-  "Req/s": "Получ./сек.",
+  "Req/s": "Запр./сек.",
   "Resp/s": "Отв./сек.",
   "Zone": "Зона",
   "Requests": "Запросы",
   "Responses": "Ответы",
-  "Success": "Успешных",
+  "Success": "Успешные",
   "Format error": "Ошибок формата",
   "Server failure": "Сервер не завершил запрос",
   "Host not found": "Ошибок имени",
   "Unimplemented": "Запрос не поддерживается",
   "Operation refused": "Запрос отклонен",
-  "Unknown": "Операция отклонена",
+  "Unknown": "Неизвестных ошибок",
   "Timed out": "Истекло время ожидания"
 }
