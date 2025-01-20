@@ -95,7 +95,10 @@ export const formatReadableBytes = (
 	return `${(bytes / 1024 ** measure).toFixed(precision)} ${units[measure]}`;
 };
 
-export function translateReadableBytesUnits({ t, units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB', 5: 'PiB' } }) {
+export function translateReadableBytesUnits({
+	t,
+	units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB', 5: 'PiB' }
+}) {
 	return Object
 		.entries(units)
 		.reduce((acc, [key, value]) => {
