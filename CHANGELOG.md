@@ -2,12 +2,13 @@
 
 ## [v1.6.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.6.0) (2025-01-23)
 ### Added
-- i18n supported. Available locales: en, ru
+- I18n supported. Available locales: en, ru
 - Sticky header feature in table component added
 - Pebibyte (PiB) units supported for data measurement.
 
 ### Fixed
 - Incorrect value counter fixed in HTTP Upstreams widget on index page
+- Default value now used on the HTTP Upstreams page in the response context
 
 ## [v1.4.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.4.0) (2024-08-08)
 - Monitoring status display added to the website's favicon
