@@ -47,13 +47,13 @@ export class ServerZones extends React.Component {
 						{t('In')}
 						:
 						{' '}
-						{stats.traffic.in ? `${this.formatReadableBytes(stats.traffic.in)}/${t('sec')}.` : 0}
+						{stats.traffic.in ? `${this.formatReadableBytes(stats.traffic.in)}/${t('sec')}` : 0}
 					</p>
 					<p>
 						{t('Out')}
 						:
 						{' '}
-						{stats.traffic.out ? `${this.formatReadableBytes(stats.traffic.out)}/${t('sec')}.` : 0}
+						{stats.traffic.out ? `${this.formatReadableBytes(stats.traffic.out)}/${t('sec')}` : 0}
 					</p>
 				</div>
 			);

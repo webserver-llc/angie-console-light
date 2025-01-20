@@ -57,13 +57,13 @@ export class StreamZones extends React.Component {
 					{t('In', { ns: 'common' })}
 					:
 					{' '}
-					{stats.traffic.in ? `${this.formatReadableBytes(stats.traffic.in)}/${t('sec', { ns: 'common' })}.` : 0}
+					{stats.traffic.in ? `${this.formatReadableBytes(stats.traffic.in)}/${t('sec', { ns: 'common' })}` : 0}
 				</p>
 				<p>
 					{t('Out', { ns: 'common' })}
 					:
 					{' '}
-					{stats.traffic.out ? `${this.formatReadableBytes(stats.traffic.out)}/${t('sec', { ns: 'common' })}.` : 0}
+					{stats.traffic.out ? `${this.formatReadableBytes(stats.traffic.out)}/${t('sec', { ns: 'common' })}` : 0}
 				</p>
 			</IndexBox>
 		);
