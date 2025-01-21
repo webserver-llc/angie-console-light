@@ -8,22 +8,23 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import styles from './tooltip.css';
 
-export default function UpstreamStatsTooltip({ upstream }) {
+function UpstreamStatsTooltip({ upstream, t }) {
 	let queueInfo = null;
 
 	if (upstream.queue) {
 		queueInfo = (
 			<div className={styles.column}>
 				<div>
-					Q-Size:
+					{t('Q-Size:')}
 					{upstream.queue.size}
 					/
 					{upstream.queue.max_size}
 				</div>
 				<div>
-					Overflows:
+					{t('Overflows:')}
 					{upstream.queue.overflows}
 				</div>
 			</div>
@@ -33,7 +34,7 @@ export default function UpstreamStatsTooltip({ upstream }) {
 	return (
 		<div>
 			<h5 className={styles.h5}>
-				Апстрим:
+				{t('Upstream:')}
 				{' '}
 				{upstream.name}
 			</h5>
@@ -43,28 +44,28 @@ export default function UpstreamStatsTooltip({ upstream }) {
 					<div>
 						<span className={`${styles['status-tag']} ${styles.status_up}`} />
 						{' '}
-						Активных пиров:
+						{t('Up:')}
 						{' '}
 						{upstream.stats.up}
 					</div>
 					<div>
 						<span className={`${styles['status-tag']} ${styles.status_unhealthy}`} />
 						{' '}
-						Проблемных пиров:
+						{t('Failed:')}
 						{' '}
 						{upstream.stats.failed}
 					</div>
 					<div>
 						<span className={`${styles['status-tag']} ${styles.status_draining}`} />
 						{' '}
-						Разгружаемых:
+						{t('Drain:')}
 						{' '}
 						{upstream.stats.draining}
 					</div>
 					<div>
 						<span className={`${styles['status-tag']} ${styles.status_down}`} />
 						{' '}
-						Недоступных пиров:
+						{t('Down:')}
 						{' '}
 						{upstream.stats.down}
 					</div>
@@ -74,7 +75,7 @@ export default function UpstreamStatsTooltip({ upstream }) {
 							<div>
 								<span className={`${styles['status-tag']} ${styles.status_checking}`} />
 								{' '}
-								На проверке:
+								{t('Checking:')}
 								{' '}
 								{upstream.stats.checking}
 							</div>
@@ -89,7 +90,7 @@ export default function UpstreamStatsTooltip({ upstream }) {
 					{
 						typeof upstream.keepalive === 'number' ? (
 							<div>
-								Keepalive-пиров:
+								{t('Keepalive:')}
 								{' '}
 								{upstream.keepalive}
 							</div>
@@ -97,7 +98,7 @@ export default function UpstreamStatsTooltip({ upstream }) {
 							: null
 					}
 					<div>
-						Zombie-пиров:
+						{t('Zombies:')}
 						{' '}
 						{upstream.zombies}
 					</div>
@@ -106,3 +107,5 @@ export default function UpstreamStatsTooltip({ upstream }) {
 		</div>
 	);
 }
+
+export default withNamespaces('upstreams.upstream-stats-tooltip')(UpstreamStatsTooltip);

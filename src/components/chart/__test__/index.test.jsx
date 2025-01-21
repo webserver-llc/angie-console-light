@@ -131,7 +131,7 @@ describe('<Chart />', () => {
 		// selectedTimeWindow state when timeWindow is unknown
 		expect(wrapper.state('selectedTimeWindow')).toBe(TimeWindowDefault);
 
-		timeWindow = '1 мин.';
+		timeWindow = '1 min.';
 		wrapper = shallow(
 			<Chart {...props} />
 		);
@@ -495,7 +495,7 @@ describe('<Chart />', () => {
 		// this.dndMoveX
 		expect(instance.dndMoveX).toBe(100);
 
-		wrapper.setState({ selectedTimeWindow: '15 мин.' });
+		wrapper.setState({ selectedTimeWindow: '15 min.' });
 		instance.dndMoveX = 120;
 		instance.onMouseMove({ offsetX: 140 });
 
@@ -504,7 +504,7 @@ describe('<Chart />', () => {
 		// this.dndStartX [selectedTW 15m]
 		expect(instance.dndStartX).toBe(260);
 
-		wrapper.setState({ selectedTimeWindow: '5 мин.' });
+		wrapper.setState({ selectedTimeWindow: '5 min.' });
 		instance.dndMoveX = 280;
 		instance.onMouseMove({ offsetX: 200 });
 
@@ -513,7 +513,7 @@ describe('<Chart />', () => {
 		// this.dndStartX [selectedTW 5m]
 		expect(instance.dndStartX).toBe(140);
 
-		wrapper.setState({ selectedTimeWindow: '1 мин.' });
+		wrapper.setState({ selectedTimeWindow: '1 min.' });
 		instance.dndMoveX = 160;
 		instance.onMouseMove({ offsetX: 200 });
 
@@ -799,10 +799,10 @@ describe('<Chart />', () => {
 			expect(selectTWBindSpy).toHaveBeenCalledTimes(2);
 			expect(selectTWBindSpy.mock.calls[0][0]).toBeNull();
 			// selectTimeWindow.bind call 1, arg 2
-			expect(selectTWBindSpy.mock.calls[0][1]).toBe('1 мин.');
+			expect(selectTWBindSpy.mock.calls[0][1]).toBe('1 min.');
 			expect(selectTWBindSpy.mock.calls[1][0]).toBeNull();
 			// selectTimeWindow.bind call 2, arg 2
-			expect(selectTWBindSpy.mock.calls[1][1]).toBe('15 мин.');
+			expect(selectTWBindSpy.mock.calls[1][1]).toBe('15 min.');
 
 			// this.setState not called
 			expect(stateSpy).not.toHaveBeenCalled();
@@ -1199,7 +1199,7 @@ describe('<Chart />', () => {
 				expect(instance.toRender.areas[2].props.d).toBe('M 50 165 L 1130 105 V 205L 1130 205 L 50 215  V 215');
 			});
 
-			wrapper.setState({ selectedTimeWindow: '15 мин.' });
+			wrapper.setState({ selectedTimeWindow: '15 min.' });
 			instance.redraw();
 
 			// this.ticks length
@@ -1224,7 +1224,7 @@ describe('<Chart />', () => {
 				colors: Colors,
 				labels: Labels
 			});
-			wrapper.setState({ selectedTimeWindow: '1 мин.' });
+			wrapper.setState({ selectedTimeWindow: '1 min.' });
 			instance.redraw();
 
 			// this.ticks length
@@ -1656,7 +1656,7 @@ describe('<Chart />', () => {
 			// this.setState arg
 			expect(setStateSpy.mock.calls[0][0]).toEqual(state);
 
-			instance.redraw({ selectedTimeWindow: '15 мин.' });
+			instance.redraw({ selectedTimeWindow: '15 min.' });
 			wrapper.update();
 
 			// this.points length
@@ -1720,7 +1720,8 @@ describe('<Chart />', () => {
 				]),
 				labels: new Map([
 					['passed', 'Some other title for passed metric']
-				])
+				]),
+				t: k => k,
 			};
 
 			instance.redraw({}, nextProps);

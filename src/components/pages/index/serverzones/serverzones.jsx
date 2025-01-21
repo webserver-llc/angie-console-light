@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import mapperHttpResponse from '../../../../api/mappers/httpResponse';
 import IndexBox from '../indexbox/indexbox.jsx';
@@ -19,8 +20,13 @@ import calculateLocationZones from '#/calculators/locationzones.js';
 import utils from '#/utils.js';
 
 export class ServerZones extends React.Component {
+	formatReadableBytes(value) {
+		const { t } = this.props;
+		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
+	}
+
 	render() {
-		const { props: { data, store } } = this;
+		const { props: { t, data, store } } = this;
 		const statuses = [];
 		let total = 0;
 		let warnings = 0;
@@ -36,16 +42,18 @@ export class ServerZones extends React.Component {
 
 			trafficBlock = (
 				<div>
-					<h4>Трафик</h4>
+					<h4>{t('Traffic')}</h4>
 					<p>
-						Входящий:
+						{t('In')}
+						:
 						{' '}
-						{stats.traffic.in ? `${utils.formatReadableBytes(stats.traffic.in)}/сек.` : 0}
+						{stats.traffic.in ? `${this.formatReadableBytes(stats.traffic.in)}/${t('sec', { ns: 'common' })}` : 0}
 					</p>
 					<p>
-						Исходящий:
+						{t('Out')}
+						:
 						{' '}
-						{stats.traffic.out ? `${utils.formatReadableBytes(stats.traffic.out)}/сек.` : 0}
+						{stats.traffic.out ? `${this.formatReadableBytes(stats.traffic.out)}/${t('sec', { ns: 'common' })}` : 0}
 					</p>
 				</div>
 			);
@@ -65,7 +73,7 @@ export class ServerZones extends React.Component {
 
 		return (
 			<IndexBox
-				title="HTTP-зоны"
+				title={t('HTTP Zones')}
 				status={
 					statuses.includes('danger') ?
 						'danger'
@@ -88,7 +96,12 @@ export class ServerZones extends React.Component {
 	}
 }
 
-export default DataBinder(ServerZones, [
+ServerZones.defaultProps = {
+	// i18n for testings
+	t: (key) => key
+};
+
+export default DataBinder(withNamespaces('pages.serverzones.serverzones')(ServerZones), [
 	api.http.server_zones.setMapper(mapperHttpResponse).process(calculateServerZones),
 	api.http.location_zones.setMapper(mapperHttpResponse).process(calculateLocationZones)
 ]);

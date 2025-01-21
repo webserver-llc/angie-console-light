@@ -118,7 +118,7 @@ describe('<StreamUpstream />', () => {
 		const tableSortControl = table.find('TableSortControl');
 
 		// TableSortControl secondSortLabel
-		expect(tableSortControl.prop('secondSortLabel')).toBe('Отсортировать по статусу — сначала недоступные');
+		expect(tableSortControl.prop('secondSortLabel')).toBe('Sort by conf order');
 		// TableSortControl order
 		expect(tableSortControl.prop('order')).toBe(wrapper.state('sortOrder'));
 		// TableSortControl onChange
@@ -156,11 +156,11 @@ describe('<StreamUpstream />', () => {
 		// useTooltip called twice
 		expect(tooltips.useTooltip).toHaveBeenCalledTimes(2);
 		// useTooltip, call 1, arg 1
-		expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Общий простой');
+		expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Total downtime');
 		// useTooltip, call 1, arg 2
 		expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint');
 		// useTooltip, call 2, arg 1
-		expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Вес');
+		expect(tooltips.useTooltip.mock.calls[1][0]).toBe('Weight');
 		// useTooltip, call 2, arg 2
 		expect(tooltips.useTooltip.mock.calls[1][1]).toBe('hint');
 

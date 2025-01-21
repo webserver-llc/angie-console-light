@@ -1,0 +1,10 @@
+{
+  "All upstream servers appear to be just fine — nothing to show here. Toggle \"Failed only\" to show all upstreams.": "Все апстримы работают нормально. Переключите \"Только проблемные\", чтобы увидеть все апстримы.",
+  "Failed only": "Только проблемные",
+  "upstreams list": "список апстримов",
+  "Show": "Показать",
+  "Hide": "Скрыть",
+  "Total": "Всего апстримов",
+  "upstreams": "серверов",
+  "With problems:": "Проблемные:"
+}

@@ -1,6 +1,6 @@
 {
   "name": "angie-console-light",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Angie Console Light",
   "main": "index.js",
   "scripts": {
@@ -50,6 +50,8 @@
     "history": "4.10.1",
     "html-inline-css-webpack-plugin": "1.11.1",
     "html-webpack-plugin": "5.5.0",
+    "i18next": "^24.2.1",
+    "i18next-browser-languagedetector": "^8.0.2",
     "mini-css-extract-plugin": "2.6.0",
     "monaco-editor": "0.41.0",
     "npm-font-open-sans": "1.1.0",
@@ -59,6 +61,7 @@
     "preact": "10.7.3",
     "react-collapsible": "^2.10.0",
     "react-dev-utils": "12.0.1",
+    "react-i18next": "^9.0.10",
     "regenerator-runtime": "0.13.9",
     "style-loader": "3.3.1",
     "webpack": "5.73.0",
@@ -68,6 +71,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.4",
     "babel-jest": "^29.6.4",
+    "copy-webpack-plugin": "6.3.1",
     "enzyme": "3.11.0",
     "enzyme-adapter-preact-pure": "4.0.1",
     "identity-obj-proxy": "^3.0.0",
@@ -76,7 +80,6 @@
     "jest-environment-jsdom": "^29.6.4",
     "jest-extended": "^4.0.1",
     "resize-observer-polyfill": "^1.5.1",
-    "webpack-dev-server": "4.9.2",
-    "copy-webpack-plugin": "6.3.1"
+    "webpack-dev-server": "4.9.2"
   }
 }

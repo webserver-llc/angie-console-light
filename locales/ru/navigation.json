@@ -1,0 +1,10 @@
+{
+  "HTTP Zones": "HTTP-зоны",
+  "HTTP Upstreams": "HTTP-апстримы",
+  "TCP/UDP Zones": "TCP/UDP-зоны",
+  "TCP/UDP Upstreams": "TCP/UDP-апстримы",
+  "Caches": "Кэши",
+  "Shared Zones": "Общие зоны",
+  "Resolvers": "DNS-резолверы",
+  "Config Files": "Конфигурация"
+}

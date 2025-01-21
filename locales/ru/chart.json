@@ -1,0 +1,9 @@
+{
+  "1 min.": "1 мин.",
+  "5 min.": "5 мин.",
+  "15 min.": "15 мин.",
+  "Click to view the oldest data": "Нажмите, чтобы просмотреть самые старые данные",
+  "Click to go back for [selectedTimeWindow]": "Нажмите, чтобы вернуться к {{selectedTimeWindow}}",
+  "Click to go forward for [selectedTimeWindow]": "Нажмите, чтобы перейти к {{selectedTimeWindow}}",
+  "Click to return to live mode": "Нажмите, чтобы вернуться к интерактивному режиму"
+}

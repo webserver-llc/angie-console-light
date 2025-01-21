@@ -8,6 +8,7 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import api from '#/api';
 import DataBinder from '../databinder/databinder.jsx';
@@ -19,48 +20,51 @@ import styles from '../table/style.css';
 import { tableUtils } from '#/components/table';
 
 export class StreamZones extends React.Component {
+	formatReadableBytes(value) {
+		const { t } = this.props;
+		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
+	}
+
 	render() {
-		const { data: {
+		const { t, data: {
 			server_zones,
 			limit_conns
 		} } = this.props;
 
 		return (
 			<div>
-				<h1>TCP/UDP-зоны</h1>
+				<h1>{t('TCP/UDP Zones')}</h1>
 
 				<table className={styles.table}>
 					<thead>
 						<tr>
-							<th>Зона</th>
-							<th colSpan={3}>Соединения</th>
-							<th colSpan={4}>Сессии</th>
-							<th colSpan={4}>Трафик</th>
+							<th>{t('Zone')}</th>
+							<th colSpan={3}>{t('Connections')}</th>
+							<th colSpan={4}>
+								{t('Sessions')}
+							</th>
+							<th colSpan={4}>{t('Traffic')}</th>
 							<th colSpan={4}>SSL</th>
 						</tr>
 						<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
 							<th className={styles.bdr} />
-							<th>Текущих</th>
-							<th>Всего</th>
-							<th className={styles.bdr}>Соед./сек.</th>
+							<th>{t('Current')}</th>
+							<th>{t('Total')}</th>
+							<th className={styles.bdr}>{t('Req/s')}</th>
 							<th>2xx</th>
 							<th>4xx</th>
 							<th>5xx</th>
-							<th className={styles.bdr}>Всего</th>
-							<th>Отпр./сек.</th>
-							<th>Получ./сек.</th>
-							<th>Отправлено</th>
-							<th className={styles.bdr}>Получено</th>
-							<th>Рукопожатий</th>
+							<th className={styles.bdr}>{t('Total')}</th>
+							<th>{t('Sent/s')}</th>
+							<th>{t('Rcvd/s')}</th>
+							<th>{t('Sent')}</th>
+							<th className={styles.bdr}>{t('Rcvd')}</th>
+							<th>{t('Handshaked')}</th>
 							<th>
-								Неудачных
-								<br />
-								рукопожатий
+								{t('Failed')}
 							</th>
 							<th>
-								Повторных
-								<br />
-								использований
+								{t('Reuses')}
 							</th>
 						</tr>
 					</thead>
@@ -83,10 +87,10 @@ export class StreamZones extends React.Component {
 											{zone.sessions['5xx']}
 										</td>
 										<td className={styles.bdr}>{zone.sessions.total}</td>
-										<td className={styles.px60}>{utils.formatReadableBytes(zone.sent_s)}</td>
-										<td className={styles.px60}>{utils.formatReadableBytes(zone.rcvd_s)}</td>
-										<td className={styles.px60}>{utils.formatReadableBytes(zone.sent)}</td>
-										<td className={`${styles.px60} ${styles.bdr}`}>{utils.formatReadableBytes(zone.received)}</td>
+										<td className={styles.px60}>{this.formatReadableBytes(zone.sent_s)}</td>
+										<td className={styles.px60}>{this.formatReadableBytes(zone.rcvd_s)}</td>
+										<td className={styles.px60}>{this.formatReadableBytes(zone.sent)}</td>
+										<td className={`${styles.px60} ${styles.bdr}`}>{this.formatReadableBytes(zone.received)}</td>
 										<td>{ssl ? ssl.handshakes : '–'}</td>
 										<td>
 											{
@@ -118,7 +122,7 @@ export class StreamZones extends React.Component {
 	}
 }
 
-export default DataBinder(StreamZones, [
+export default DataBinder(withNamespaces('pages.streamzones')(StreamZones), [
 	api.stream.server_zones.setMapper(mapperStreamServerZones),
 	api.stream.limit_conns.process(calculateStreamLimitConn),
 ]);

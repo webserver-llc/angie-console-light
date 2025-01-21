@@ -1,0 +1,8 @@
+{
+  "Limit Conn": "Limit Conn",
+  "Zone": "Zone",
+  "Passed": "Passed",
+  "Rejected": "Rejected",
+  "Exhausted": "Exhausted",
+  "Skipped": "Skipped"
+}

@@ -1,0 +1,9 @@
+{
+  "1 min.": "1 m",
+  "5 min.": "5 m",
+  "15 min.": "15 m",
+  "Click to view the oldest data": "Click to view the oldest data",
+  "Click to go back for [selectedTimeWindow]": "Click to go back to {{selectedTimeWindow}}",
+  "Click to go forward for [selectedTimeWindow]": "Click to go forward to {{selectedTimeWindow}}",
+  "Click to return to live mode": "Click to return to live mode"
+}

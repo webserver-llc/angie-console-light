@@ -44,7 +44,7 @@ describe('<App />', () => {
 		it('Default flow', async () => {
 			jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(() => Promise.resolve());
 			jest.spyOn(apiUtils, 'initialLoad').mockClear().mockImplementation(() => Promise.resolve());
-			jest.spyOn(datastore, 'startObserve').mockClear().mockImplementation(() => {});
+			jest.spyOn(datastore, 'startObserve').mockClear().mockImplementation(() => { });
 
 			const wrapper = shallow(<App.Component />);
 			const instance = wrapper.instance();
@@ -69,7 +69,7 @@ describe('<App />', () => {
 			const error = 'test_error';
 
 			jest.spyOn(apiUtils, 'checkApiAvailability').mockClear().mockImplementation(() => Promise.reject({ type: error }));
-			jest.spyOn(apiUtils, 'checkWritePermissions').mockClear().mockImplementation(() => {});
+			jest.spyOn(apiUtils, 'checkWritePermissions').mockClear().mockImplementation(() => { });
 			jest.spyOn(apiUtils, 'initialLoad').mockClear().mockImplementation(() => Promise.resolve());
 
 			const wrapper = shallow(<App.Component />);
@@ -98,13 +98,13 @@ describe('<App />', () => {
 			const instance = wrapper.instance();
 
 			expect(wrapper.prop('className')).toBe(styles.splash);
-			expect(wrapper.find(`.${ styles.logo }`)).toHaveLength(1);
+			expect(wrapper.find(`.${styles.logo}`)).toHaveLength(1);
 
 			const loader = wrapper.find('Loader');
 
 			expect(loader).toHaveLength(1);
 			expect(loader.hasClass(styles.loader)).toBe(true);
-			expect(wrapper.find(`.${ styles.loading }`)).toHaveLength(1);
+			expect(wrapper.find(`.${styles.loading}`)).toHaveLength(1);
 
 			apiUtils.checkApiAvailability.mockRestore();
 		});
@@ -150,24 +150,26 @@ describe('<App />', () => {
 
 			const wrapper = shallow(<App.Component />);
 			wrapper.setState({ loading: false });
-			const errBlockSelector = `.${ styles['error-block'] }`;
+			const errBlockSelector = `.${styles['error-block']}`;
 
 			expect(wrapper.find(errBlockSelector)).toHaveLength(0);
 
 			wrapper.setState({ error: 'some_unknown_error' });
 
 			expect(wrapper.find(errBlockSelector)).toHaveLength(1);
-			expect(wrapper.find(`${ errBlockSelector } p`)).toHaveLength(1);
+			expect(wrapper.find(`${errBlockSelector} p`)).toHaveLength(1);
 			expect(wrapper.find('Header').prop('navigation')).toBe(false);
 			expect(wrapper.find('UpdatingControl')).toHaveLength(0);
 
-			Object.keys(Errors).forEach(error => {
+			const instance = wrapper.instance();
+
+			Object.keys(instance.errors).forEach(error => {
 				wrapper.setState({ error });
 
-				const p = wrapper.find(`${ errBlockSelector } p`);
+				const p = wrapper.find(`${errBlockSelector} p`);
 
 				expect(p).toHaveLength(2);
-				expect(p.first().text()).toBe(Errors[error]);
+				expect(p.first().text()).toBe(instance.errors[error]);
 			});
 
 			apiUtils.checkApiAvailability.mockRestore();

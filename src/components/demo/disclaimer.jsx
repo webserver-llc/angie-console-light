@@ -8,9 +8,15 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import styles from './style.css';
 
-export default class Disclaimer extends React.Component {
+const Docs = {
+	ru: 'https://angie.software/angie/docs/configuration/monitoring/',
+	en: 'https://angie.software/en/console/',
+};
+
+class Disclaimer extends React.Component {
 	constructor() {
 		super();
 		this.state = {
@@ -27,6 +33,8 @@ export default class Disclaimer extends React.Component {
 	}
 
 	render() {
+		const { t, i18n } = this.props;
+
 		if (this.state.opened === false) {
 			return null;
 		}
@@ -35,13 +43,13 @@ export default class Disclaimer extends React.Component {
 			<div className={styles.disclaimer}>
 				<div className={styles['disclaimer-close']} onClick={this.close}>x</div>
 				<div className={styles['disclaimer-content']}>
-					Здесь приведен пример работы Angie Console Light. Эта страница собирает реальные данные из демо-версии веб-сервера Angie.
+					{t('Below is the example of the Angie Console Light. This page collects real time data from a demo instance of Angie.')}
 					<br />
-					Узнать подробнее о настройке Angie Console Light можно на нашем сайте:
+					{t('For more information on configuration please visit')}
 					{' '}
-					<a href="https://angie.software/angie/docs/configuration/monitoring/">https://angie.software/angie/docs/configuration/monitoring/</a>
+					<a href={Docs[i18n.language]}>{Docs[i18n.language]}</a>
 					<br />
-					Для покупки Angie Pro свяжитесь с нами:
+					{t('For purchasing Angie Pro please contact the sales team:')}
 					{' '}
 					<a href="https://angie.software/angie/pro/">https://angie.software/angie/pro/</a>
 				</div>
@@ -49,3 +57,5 @@ export default class Disclaimer extends React.Component {
 		);
 	}
 }
+
+export default withNamespaces('demo')(Disclaimer);

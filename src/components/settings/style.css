@@ -1,110 +1,111 @@
 .settings {
-	position: absolute;
-	top: 65px;
-	right: 10px;
-	background: #fff;
-	width: 440px;
-	border-radius: 5px;
-	padding: 0px 35px;
-	box-shadow: 0 0 20px 1px rgba(0,0,0,.3);
-	z-index: 10;
-	user-select: none;
+  position: absolute;
+  top: 65px;
+  right: 10px;
+  background: #fff;
+  width: 440px;
+  border-radius: 5px;
+  padding: 0px 35px;
+  box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  user-select: none;
 }
 
 .settings::before {
-	content: '';
-	border-color: transparent;
-	border-style: solid;
-	border-width: 10px;
-	border-bottom-color: #72818d;
-	border-top-width: 0;
-	top: -10px;
-	right: 20px;
-	position: absolute;
+  content: "";
+  border-color: transparent;
+  border-style: solid;
+  border-width: 10px;
+  border-bottom-color: #72818d;
+  border-top-width: 0;
+  top: -10px;
+  right: 20px;
+  position: absolute;
 }
 
 .title {
-	font-size: 18px;
-	color: #fff;
-	background-color: #72818d;
-	line-height: 60px;
-	padding: 0 35px;
-	border-radius: 5px 5px 0 0;
-	margin: 0 -35px 20px;
-	font-weight: normal;
+  font-size: 18px;
+  color: #fff;
+  background-color: #72818d;
+  line-height: 60px;
+  padding: 0 35px;
+  border-radius: 5px 5px 0 0;
+  margin: 0 -35px 20px;
+  font-weight: normal;
 }
 
 .input {
-	border-radius: 4px;
-	width: 36px;
-	height: 34px;
-	border: 1px solid #d9d9d9;
-	outline: 0;
-	padding: 0 5px;
-	font-size: 19px;
-	text-align: right;
-	margin: 0 5px;
+  border-radius: 4px;
+  width: 36px;
+  height: 34px;
+  border: 1px solid #d9d9d9;
+  outline: 0;
+  padding: 0 5px;
+  font-size: 16px;
+  text-align: right;
+  margin: 0 5px;
 }
 
 .wide-input {
-	composes: input;
-	width: 54px;
-	text-align: center;
+  composes: input;
+  width: 54px;
+  text-align: center;
 }
 
 .btn {
-	padding: 0 15px;
-	line-height: 42px;
-	height: 42px;
-	border-radius: 4px;
-	margin-right: 10px;
-	cursor: pointer;
-	border: 0;
-	font-size: 16px;
-	outline: none;
+  padding: 0 15px;
+  line-height: 42px;
+  height: 42px;
+  border-radius: 4px;
+  margin-right: 10px;
+  cursor: pointer;
+  border: 0;
+  font-size: 16px;
+  outline: none;
 }
 
 .save {
-	composes: btn;
-	color: #fff;
-	background-color: #8dc63f;
+  composes: btn;
+  color: #fff;
+  background-color: #8dc63f;
 }
 
 .save:hover {
-	background-color: #add674;
+  background-color: #add674;
 }
 
 .cancel {
-	composes: btn;
-	color: #000;
-	background-color: #e6e6e6;
+  composes: btn;
+  color: #000;
+  background-color: #e6e6e6;
 }
 
 .cancel:hover {
-	background-color: #d2d2d2;
+  background-color: #d2d2d2;
 }
 
 .section {
-	line-height: 40px;
-	margin-bottom: 15px;
+  line-height: 40px;
+  margin-bottom: 15px;
 }
 
 .help {
-	margin: 30px -35px 0;
-	padding: 20px 35px 15px;
-	border-top: 1px solid #ddd;
-	line-height: 30px;
+  margin: 30px -35px 0;
+  padding: 20px 35px 15px;
+  border-top: 1px solid #ddd;
+  line-height: 30px;
 }
 
 .help-link,
 .help-link:visited {
-	color: #2671c6;
+  color: #2671c6;
 }
 
 .version {
-	position: absolute;
-	right: 20px;
-	bottom: 20px;
-	color: #989a9c;
-	font-size: 14px
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  color: #989a9c;
+  font-size: 14px;
 }
+

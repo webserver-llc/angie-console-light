@@ -15,7 +15,7 @@ import styles from '../style.css';
 describe('<Index />', () => {
 	it('render()', () => {
 		const wrapper = shallow(<Index />);
-		const rows = wrapper.find(`.${ styles.row }`);
+		const rows = wrapper.find(`.${styles.row}`);
 
 		// rows length
 		expect(rows).toHaveLength(2);
@@ -24,7 +24,7 @@ describe('<Index />', () => {
 		// Connections className
 		expect(rows.at(0).find('Connections_binded').prop('className')).toBe(styles.connections);
 		// row 2 className
-		expect(rows.at(1).prop('className')).toBe(`${ styles.row } ${ styles['row-wrap'] }`);
+		expect(rows.at(1).prop('className')).toBe(`${styles.row} ${styles['row-wrap']}`);
 		// ServerZones
 		expect(rows.at(1).find('ServerZones_binded')).toHaveLength(1);
 

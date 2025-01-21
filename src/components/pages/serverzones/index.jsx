@@ -15,7 +15,7 @@ import calculateLocationZones from '../../../calculators/locationzones.js';
 import calculateHttpLimitConn from '../../../calculators/httplimitconn.js';
 import calculateHttpLimitReq from '../../../calculators/httplimitreq.js';
 import ServerZones from './serverzones.jsx';
-import Locations from './locationzones.jsx';
+import LocationZones from './locationzones.jsx';
 import LimitConn from './limitconn.jsx';
 import LimitReq from './limitreq.jsx';
 
@@ -30,13 +30,13 @@ export class HTTPZones extends React.Component {
 
 		return (
 			<div>
-				<ServerZones data={ server_zones } />
-				<br/>
-				<Locations data={ location_zones } />
-				<br/>
-				<LimitConn data={ limit_conns } />
-				<br/>
-				<LimitReq data={ limit_reqs } />
+				<ServerZones data={server_zones} />
+				<br />
+				<LocationZones data={location_zones} />
+				<br />
+				<LimitConn data={limit_conns} />
+				<br />
+				<LimitReq data={limit_reqs} />
 			</div>
 		);
 	}

@@ -8,26 +8,28 @@
  *
  */
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import { UpstreamsBox } from '../upstreams/upstreams.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
 import { apiStreamUpstreams } from '../../../../api';
 
 export class StreamUpstreams extends React.Component {
 	render() {
-		const { props: { data, store } } = this;
+		const { props: { t, data, store } } = this;
 		const stats = data.upstreams.__STATS;
 
 		return (
 			<UpstreamsBox
-				title="TCP/UDP-апстримы"
+				title={t('TCP/UDP Upstreams')}
 				stats={stats}
 				status={store.__STATUSES.tcp_upstreams.status}
 				href="#tcp_upstreams"
+				t={t}
 			/>
 		);
 	}
 }
 
-export default DataBinder(StreamUpstreams, [
+export default DataBinder(withNamespaces('pages.streamupstreams')(StreamUpstreams), [
 	apiStreamUpstreams
 ]);

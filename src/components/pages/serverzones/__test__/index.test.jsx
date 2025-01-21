@@ -26,7 +26,7 @@ describe('<HTTPZones Page />', () => {
 		// StreamZones props
 		expect(wrapper.find('StreamZones').prop('data')).toBe('test__server_zones');
 		// Locations props
-		expect(wrapper.find('Locations').prop('data')).toBe('test__location_zones');
+		expect(wrapper.find('LocationZones').prop('data')).toBe('test__location_zones');
 		// LimitConn props
 		expect(wrapper.find('LimitConn').prop('data')).toBe('test__limit_conns');
 		// LimitReq props

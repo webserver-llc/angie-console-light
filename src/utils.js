@@ -7,13 +7,13 @@
  * All rights reserved.
  *
  */
-export const formatUptime = (ms, short = false) => {
+export const formatUptime = (ms, short = false, units = { 0: 'ms', 1: 's', 2: 'm', 3: 'h', 4: 'd' }) => {
 	if (ms < 60000) {
 		if (ms < 1000) {
-			return `${ms} мс. `;
+			return `${ms} ${units[0]} `;
 		}
 
-		return `${Math.floor(ms / 1000)}.${Math.floor((ms % 1000) / 10)} сек. `;
+		return `${Math.floor(ms / 1000)}.${Math.floor((ms % 1000) / 10)} ${units[1]} `;
 	}
 
 	let result = '';
@@ -24,24 +24,33 @@ export const formatUptime = (ms, short = false) => {
 	const minutes = Math.floor(((sec % 86400) % 3600) / 60);
 
 	if (days) {
-		result += `${days} дн. `;
+		result += `${days} ${units[4]} `;
 	}
 
 	if (days || hours) {
-		result += `${hours} ч. `;
+		result += `${hours} ${units[3]} `;
 	}
 
 	if ((days || hours || minutes) && !(short && days > 0)) {
-		result += `${minutes} мин. `;
+		result += `${minutes} ${units[2]} `;
 	}
 
 	return result;
 };
 
+export function translateUptimeUnits({ t, units = { 0: 'ms', 1: 's', 2: 'm', 3: 'h', 4: 'd' } }) {
+	return Object
+		.entries(units)
+		.reduce((acc, [key, value]) => {
+			acc[key] = t(value);
+			return acc;
+		}, {});
+}
+
 export const formatReadableBytes = (
 	bytes,
 	maxMeasurementUnit,
-	units = { 0: 'Б', 1: 'КБ', 2: 'МБ', 3: 'ГБ', 4: 'ТБ' },
+	units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB', 5: 'PiB' },
 ) => {
 	if (isNaN(parseFloat(bytes)) || !isFinite(bytes) || bytes === 0) return '0';
 
@@ -57,7 +66,9 @@ export const formatReadableBytes = (
 		});
 	}
 
-	if (bytes > 1099511627775) {
+	if (bytes > 1125899906842623) {
+		measure = 5;
+	} else if (bytes > 1099511627775) {
 		measure = 4;
 	} else if (bytes > 1048575999 && bytes <= 1099511627775) {
 		measure = 3;
@@ -84,6 +95,18 @@ export const formatReadableBytes = (
 	return `${(bytes / 1024 ** measure).toFixed(precision)} ${units[measure]}`;
 };
 
+export function translateReadableBytesUnits({
+	t,
+	units = { 0: 'B', 1: 'KiB', 2: 'MiB', 3: 'GiB', 4: 'TiB', 5: 'PiB' }
+}) {
+	return Object
+		.entries(units)
+		.reduce((acc, [key, value]) => {
+			acc[key] = t(value);
+			return acc;
+		}, {});
+}
+
 export const formatMs = (ms) => (ms === undefined ? '–' : `${ms}ms`);
 
 export const formatDate = (timestamp) => {
@@ -95,17 +118,17 @@ export const formatDate = (timestamp) => {
 	return `${datetime.toISOString().slice(0, 10)} ${time[0]} ${time[1]}`;
 };
 
-export const formatLastCheckDate = (timestamp) => {
+export const formatLastCheckDate = (timestamp, units = { 0: 'ms', 1: 's', 2: 'm', 3: 'h', 4: 'd' }) => {
 	const unixTimestamp = Date.now() - new Date(timestamp).valueOf();
 	if (unixTimestamp < 0) {
 		// eslint-disable-next-line no-console
 		console.warn(
-			'На компьютере установлены некорректная дата или время. Пожалуйста, проверьте настройки.',
+			'Incorrect timestamp or invalid datetime setting on PC. Check your settings',
 			timestamp,
 		);
 		return '-';
 	}
-	return formatUptime(unixTimestamp);
+	return formatUptime(unixTimestamp, false, units);
 };
 
 export const getHTTPCodesArray = (codes, codeGroup) => {
@@ -134,7 +157,7 @@ export const getSSLHandhsakesFailures = (ssl) => {
 		if ('handshake_timeout' in ssl) {
 			result.push({
 				id: 'handshake_timeout',
-				label: 'Время ожидания рукопожатия истекло',
+				label: 'Handshake timedout',
 				value: ssl.handshake_timeout,
 			});
 		}
@@ -151,7 +174,7 @@ export const getSSLVeryfiedFailures = (ssl) => {
 		if ('no_cert' in ssl.verify_failures) {
 			result.push({
 				id: 'no_cert',
-				label: 'Отсутствует сертификат',
+				label: 'No certificate',
 				value: ssl.verify_failures.no_cert,
 			});
 
@@ -161,7 +184,7 @@ export const getSSLVeryfiedFailures = (ssl) => {
 		if ('expired_cert' in ssl.verify_failures) {
 			result.push({
 				id: 'expired_cert',
-				label: 'Сертификат истек',
+				label: 'Expired cert',
 				value: ssl.verify_failures.expired_cert,
 			});
 
@@ -171,7 +194,7 @@ export const getSSLVeryfiedFailures = (ssl) => {
 		if ('revoked_cert' in ssl.verify_failures) {
 			result.push({
 				id: 'revoked_cert',
-				label: 'Сертификат отозван',
+				label: 'Revoked cert',
 				value: ssl.verify_failures.revoked_cert,
 			});
 
@@ -181,7 +204,7 @@ export const getSSLVeryfiedFailures = (ssl) => {
 		if ('hostname_mismatch' in ssl.verify_failures) {
 			result.push({
 				id: 'hostname_mismatch',
-				label: 'Доменное имя и имя хоста не совпадают',
+				label: 'Hostname mismatch',
 				value: ssl.verify_failures.hostname_mismatch,
 			});
 
@@ -191,7 +214,7 @@ export const getSSLVeryfiedFailures = (ssl) => {
 		if ('other' in ssl.verify_failures) {
 			result.push({
 				id: 'other',
-				label: 'Другая ошибка проверки сертификата',
+				label: 'Other verify failures',
 				value: ssl.verify_failures.other,
 			});
 
@@ -207,11 +230,11 @@ export const formatNumber = (value) =>
 
 export const isEmptyObj = (obj) => {
 	if (obj === undefined) {
-		throw new Error('Значение не установлено или не определено');
+		throw new Error('Argument doesn\'t set or undefined');
 	}
 
 	if (obj === null) {
-		throw new Error('Недопустимое значение');
+		throw new Error('Null is not available argument');
 	}
 
 	// eslint-disable-next-line no-restricted-syntax
@@ -289,7 +312,9 @@ export const isIP = (value) => {
 
 export default {
 	formatUptime,
+	translateUptimeUnits,
 	formatReadableBytes,
+	translateReadableBytesUnits,
 	formatMs,
 	formatDate,
 	formatNumber,

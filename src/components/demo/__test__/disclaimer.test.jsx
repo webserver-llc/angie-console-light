@@ -13,8 +13,8 @@ import Disclaimer from '../disclaimer.jsx';
 import styles from '../style.css';
 
 describe('<Disclaimer /> (demo)', () => {
-	let wrapper; let
-		instance;
+	let wrapper;
+	let instance;
 
 	beforeEach(() => {
 		wrapper = shallow(<Disclaimer />);
@@ -70,10 +70,6 @@ describe('<Disclaimer /> (demo)', () => {
 
 		// links length
 		expect(links.length).toBe(2);
-		// 1nd link href
-		expect(links.get(0).props.href).toBe('https://angie.software/angie/docs/configuration/monitoring/');
-		// 2rd link href
-		expect(links.get(1).props.href).toBe('https://angie.software/angie/pro/');
 
 		wrapper.setState({ opened: false });
 

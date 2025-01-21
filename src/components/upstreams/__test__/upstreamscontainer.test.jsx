@@ -345,7 +345,7 @@ describe('<UpstreamsContainer />', () => {
 		// toggle upstreams list, onClick
 		expect(root.childAt(2).prop('onClick').name).toBe('bound toggleUpstreamsList');
 		// toggle upstreams list, text
-		expect(root.childAt(2).text()).toBe('Показать список апстримов');
+		expect(root.childAt(2).text()).toBe('Show upstreams list');
 		// upstream 1, component
 		expect(root.childAt(3).name()).toBe('TestComponent');
 		// upstream 1, upstream

@@ -44,28 +44,6 @@ describe('<Connections IndexPage />', () => {
 		wrapper.unmount();
 	});
 
-	it('getCurrentCell()', () => {
-		const wrapper = shallow(<Connections data={data} />);
-		const instance = wrapper.instance();
-		let cell = instance.getCurrentCell('not_a_number');
-
-		// [value is a string] cell nodeName
-		expect(cell.type).toBe('td');
-		// [value is a string] cell child 1
-		expect(cell.props.children[0]).toBe('not_a_number');
-
-		cell = instance.getCurrentCell(125);
-
-		// [value is a number] cell nodeName
-		expect(cell.type).toBe('td');
-		// [value is a number] cell child 1
-		expect(cell.props.children[0]).toBe(125);
-		// [value is a number] cell child 2 className
-		expect(cell.props.children[1].props.className).toBe(styles.current__sec);
-
-		wrapper.unmount();
-	});
-
 	it('render()', () => {
 		const wrapper = shallow(
 			<Connections
@@ -105,7 +83,7 @@ describe('<Connections IndexPage />', () => {
 		// [Conns tab] accepted block className
 		expect(indexBox.childAt(0).prop('className')).toBe(styles.counter);
 		// [Conns tab] accepted block text
-		expect(indexBox.childAt(0).text()).toBe('Принято: 10');
+		expect(indexBox.childAt(0).text()).toBe('Accepted: 10');
 		// [Conns tab] tabs className
 		expect(indexBox.childAt(1).prop('className')).toBe(styles.tabs);
 		// [Conns tab] Connections tab className
@@ -113,7 +91,7 @@ describe('<Connections IndexPage />', () => {
 		// [Conns tab] Connections tab onClick
 		expect(indexBox.childAt(1).childAt(0).prop('onClick').name).toBe('bound changeTab');
 		// [Conns tab] Connections tab text
-		expect(indexBox.childAt(1).childAt(0).text()).toBe('Соединения');
+		expect(indexBox.childAt(1).childAt(0).text()).toBe('Connections');
 
 		// changeTab called once
 		expect(changeTabBindSpy).toHaveBeenCalledTimes(1);

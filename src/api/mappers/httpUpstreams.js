@@ -19,6 +19,7 @@ export default (response) => {
 		const result = [];
 		Object.keys(peers).forEach((key) => {
 			const {
+				state,
 				data: { sent, received },
 				selected: { current, total, last },
 				health: { fails, unavailable, downtime, downstart, probes },
@@ -51,6 +52,7 @@ export default (response) => {
 					checks: probes.count,
 					fails: probes.fails,
 					last: probes.last,
+					last_passed: state !== 'unhealthy',
 				};
 			}
 			result.push(peers[key]);

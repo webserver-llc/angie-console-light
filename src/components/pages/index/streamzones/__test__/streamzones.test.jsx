@@ -39,21 +39,21 @@ describe('<StreamZones IndexPage />', () => {
 		let indexBox = wrapper.find('IndexBox');
 
 		// IndexBox title
-		expect(indexBox.prop('title')).toBe('TCP/UDP-зоны');
+		expect(indexBox.prop('title')).toBe('TCP/UDP Zones');
 		// IndexBox status
 		expect(indexBox.prop('status')).toBe('danger');
 		// IndexBox href
 		expect(indexBox.prop('href')).toBe('#tcp_zones');
 		// total row
-		expect(indexBox.childAt(0).text()).toBe('Соед. всего: 10');
+		expect(indexBox.childAt(0).text()).toBe('Conn total: 10');
 		// current row
-		expect(indexBox.childAt(1).text()).toBe('Соед. текущие: 1');
+		expect(indexBox.childAt(1).text()).toBe('Conn current: 1');
 		// conn/s row
-		expect(indexBox.childAt(2).text()).toBe('Соед./сек.: 3');
+		expect(indexBox.childAt(2).text()).toBe('Conn/s: 3');
 		// traffic in row
-		expect(indexBox.childAt(4).text()).toBe('Входящий: 0');
+		expect(indexBox.childAt(4).text()).toBe('In: 0');
 		// traffic out row
-		expect(indexBox.childAt(5).text()).toBe('Исходящий: 0');
+		expect(indexBox.childAt(5).text()).toBe('Out: 0');
 
 		props.data.server_zones.__STATS.traffic = {
 			in: 3,
@@ -63,9 +63,9 @@ describe('<StreamZones IndexPage />', () => {
 		indexBox = wrapper.find('IndexBox');
 
 		// traffic in row
-		expect(indexBox.childAt(4).text()).toBe('Входящий: 3/сек.');
+		expect(indexBox.childAt(4).text()).toBe('In: 3/sec');
 		// traffic out row
-		expect(indexBox.childAt(5).text()).toBe('Исходящий: 2/сек.');
+		expect(indexBox.childAt(5).text()).toBe('Out: 2/sec');
 		// formatReadableBytes called twice
 		expect(utils.formatReadableBytes).toHaveBeenCalledTimes(2);
 		// formatReadableBytes call 1, arg

@@ -429,7 +429,7 @@ describe('<UpstreamsEditor />', () => {
 		// Promise.all, first "then", this.setState call args
 		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			success: true,
-			successMessage: 'Изменения сохранены'
+			successMessage: 'Changes saved'
 		});
 		// this.validate, second "then" called
 		expect(nextThenSpy).toHaveBeenCalled();
@@ -507,7 +507,7 @@ describe('<UpstreamsEditor />', () => {
 		// createPeer, 1st "then" cb, this.setState call args
 		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			success: true,
-			successMessage: 'Сервер успешно добавлен',
+			successMessage: 'Server added successfully',
 		});
 		// this.validate, first "then" cb, Promise.all not called
 		expect(Promise.all).not.toHaveBeenCalled();
@@ -634,7 +634,7 @@ describe('<UpstreamsEditor />', () => {
 		expect(setStateSpy.mock.calls[0][0]).toEqual({
 			success: true,
 			shouldClearServers: true,
-			successMessage: 'Серверы 1, 2, 3 успешно удалены'
+			successMessage: 'Servers {{servers}} successfully removed'
 		});
 		// Promise.all, "catch" called
 		expect(catchSpy).toHaveBeenCalled();
@@ -682,7 +682,7 @@ describe('<UpstreamsEditor />', () => {
 			result = await instance.validate({ server: '' });
 		} catch (error) {
 			// [invalid non-IP server] result
-			expect(error).toEqual(['Неверный адрес или порт сервера']);
+			expect(error).toEqual(['Invalid server address or port']);
 		}
 
 		try {
@@ -691,7 +691,7 @@ describe('<UpstreamsEditor />', () => {
 			});
 		} catch (error) {
 			// [invalid non-IP server] result
-			expect(error).toEqual(['Неверный адрес или порт сервера']);
+			expect(error).toEqual(['Invalid server address or port']);
 		}
 
 		result = await instance.validate({
@@ -708,7 +708,7 @@ describe('<UpstreamsEditor />', () => {
 			});
 		} catch (error) {
 			// [valid non-IP server, invalid service] result
-			expect(error).toEqual(['Неверный адрес сервера или настройка сервиса']);
+			expect(error).toEqual(['Invalid server address or service setting']);
 		}
 
 		try {
@@ -718,7 +718,7 @@ describe('<UpstreamsEditor />', () => {
 			});
 		} catch (error) {
 			// [valid non-IP server and service, but sum of both length is too long] result
-			expect(error).toEqual(['Неверный адрес сервера или настройка сервиса']);
+			expect(error).toEqual(['Invalid server address or service setting']);
 		}
 
 		const getServerThenSpy = jest.fn(() => 'getServerThen_result');
@@ -751,7 +751,7 @@ describe('<UpstreamsEditor />', () => {
 		try {
 			await getServerThenSpy.mock.calls[0][0]({ error: true });
 		} catch (error) {
-			expect(error).toEqual(['Сервер не найден (убедитесь, что сервер существует)']);
+			expect(error).toEqual(['No such server (please, check if it still exists)']);
 		}
 
 		wrapper.setProps({ servers: null });
@@ -764,7 +764,7 @@ describe('<UpstreamsEditor />', () => {
 			await instance.validate({});
 		} catch (error) {
 			// [props.isStream = true, invalid non-IP server] result
-			expect(error).toEqual(['Неверный адрес или порт сервера']);
+			expect(error).toEqual(['Invalid server address or port']);
 		}
 
 		wrapper.setProps({ isStream: true });
@@ -772,7 +772,7 @@ describe('<UpstreamsEditor />', () => {
 			await instance.validate({ server: 'localhost' });
 		} catch (error) {
 			// [props.isStream = true, invalid non-IP server] result
-			expect(error).toEqual(['Неверный адрес или порт сервера']);
+			expect(error).toEqual(['Invalid server address or port']);
 		}
 
 		result = await instance.validate({ server: 'localhost:1234' });
@@ -849,7 +849,7 @@ describe('<UpstreamsEditor />', () => {
 		// title className
 		expect(wrapper.childAt(0).prop('className')).toBe(styles.header);
 		// title text
-		expect(wrapper.childAt(0).text()).toBe('Добавление сервера в "upstream_test"');
+		expect(wrapper.childAt(0).text()).toBe('Add server to [upstream_name]');
 		// close el className
 		expect(wrapper.childAt(1).prop('className')).toBe(styles.close);
 		expect(wrapper.childAt(1).prop('onClick')).toBeInstanceOf(Function);
@@ -1041,7 +1041,7 @@ describe('<UpstreamsEditor />', () => {
 		// footer, save onClick name
 		expect(footer.childAt(0).prop('onClick').name).toBe('bound save');
 		// footer, save text
-		expect(footer.childAt(0).text()).toBe('Добавить');
+		expect(footer.childAt(0).text()).toBe('Add');
 		// footer, cancel className
 		expect(footer.childAt(1).prop('className')).toBe(styles.cancel);
 		expect(footer.childAt(1).prop('onClick')).toBeInstanceOf(Function);
@@ -1065,7 +1065,7 @@ describe('<UpstreamsEditor />', () => {
 		// domain name className
 		expect(serversGroup.childAt(1).prop('className')).toBe(styles['form-group']);
 		// domain name text
-		expect(serversGroup.childAt(1).text()).toBe('Доменное имя: host_test');
+		expect(serversGroup.childAt(1).text()).toBe('Domain name: host_test');
 
 		formsMini = content.childAt(1);
 
@@ -1092,7 +1092,7 @@ describe('<UpstreamsEditor />', () => {
 		});
 
 		// [peers.length = 1] title text
-		expect(wrapper.childAt(0).childAt(0).text()).toBe('Редактирование сервера test_1 "upstream_test"');
+		expect(wrapper.childAt(0).childAt(0).text()).toBe('Edit servers "upstream_test"');
 
 		content = wrapper.childAt(2).childAt(0);
 
@@ -1128,7 +1128,7 @@ describe('<UpstreamsEditor />', () => {
 		// footer, remove onClick name
 		expect(footer.childAt(0).prop('onClick').name).toBe('bound remove');
 		// footer, save text
-		expect(footer.childAt(1).text()).toBe('Сохранить');
+		expect(footer.childAt(1).text()).toBe('Save');
 
 		wrapper.setProps({
 			servers: new Map([
@@ -1143,7 +1143,7 @@ describe('<UpstreamsEditor />', () => {
 		});
 
 		// [peers.length = 1] title text
-		expect(wrapper.childAt(0).childAt(0).text()).toBe('Редактирование сервера "upstream_test"');
+		expect(wrapper.childAt(0).childAt(0).text()).toBe('Edit servers "upstream_test"');
 
 		content = wrapper.childAt(2).childAt(0);
 		serversGroup = content.childAt(0);

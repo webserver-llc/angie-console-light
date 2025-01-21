@@ -1,0 +1,11 @@
+{
+  "No servers found in this upstream group.": "В этой группе апстримов не найдены серверы.",
+  "down": "Недоступен",
+  "up": "Активен",
+  "Server": "Сервер",
+  "Weight": "Вес",
+  "State": "Состояние",
+  "Max_conns": "Макс. число соединений (max_conns)",
+  "Max_fails": "Макс. число попыток связи (max_fails)",
+  "Fail_timeout": "Таймаут попыток, сек. (fail_timeout)"
+}

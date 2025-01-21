@@ -1,0 +1,12 @@
+{
+  "Location Zones": "Location Zones",
+  "Zone": "Zone",
+  "Requests": "Requests",
+  "Responses": "Responses",
+  "Traffic": "Traffic",
+  "Req/s": "Req/s",
+  "Sent/s": "Sent/s",
+  "Rcvd/s": "Rcvd/s",
+  "Sent": "Sent",
+  "Rcvd": "Rcvd"
+}
