@@ -20,7 +20,7 @@
   "author": "Ivan Poluyanov <ip@nginx.com>",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=16.15.0 <17"
+    "node": ">=19 <22"
   },
   "overrides": {
     "minimist": "1.2.6",
