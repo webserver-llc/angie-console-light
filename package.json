@@ -15,17 +15,17 @@
     "start-prod": "yarn clean-dist && NODE_ENV=production FILE_NAME=console webpack-dev-server",
     "start-demo-prod": "yarn clean-dist && NODE_ENV=production FILE_NAME=demo CONSOLE_TYPE=demo webpack-dev-server",
     "test": "jest",
-    "test-demo": "CONSOLE_TYPE=demo jest"
+    "test-demo": "CONSOLE_TYPE=demo jest",
+    "spellcheck": "npx cspell-cli -c cspell.config.json"
   },
   "author": "Ivan Poluyanov <ip@nginx.com>",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=19 <22"
   },
-  "overrides": {
+  "resolutions": {
     "minimist": "1.2.6",
-    "cheerio": "1.0.0-rc.10",
-    "loader-utils": "3.2.1"
+    "cheerio": "1.0.0-rc.10"
   },
   "dependencies": {
     "@babel/core": "7.18.2",
@@ -69,6 +69,7 @@
     "whatwg-fetch": "2.0.4"
   },
   "devDependencies": {
+    "@cspell/dict-ru_ru": "^2.2.4",
     "@types/jest": "^29.5.4",
     "babel-jest": "^29.6.4",
     "copy-webpack-plugin": "6.3.1",
