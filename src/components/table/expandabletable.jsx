@@ -70,7 +70,7 @@ export default class ExpandableTable extends React.Component {
 				{...props}
 				onClick={this.handleClickExpandingAll}
 				className={`${styles.sorter} ${styles.sorterActive} ${styles['hovered-expander']}`}
-				{...tooltips.useTooltip(t('Show all exsists shards'), 'hint-right')}
+				{...tooltips.useTooltip(t('Show all exists shards'), 'hint-right')}
 			>
 				{this.isExpandingAll() ? '▴' : '▾'}
 			</th>

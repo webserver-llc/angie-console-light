@@ -1,5 +1,6 @@
 {
-  "Accepted": "Принято/сек.",
+  "Accepted": "Принято",
+  "Accepted/s": "Принято/сек.",
   "Connections": "Соединения",
   "Current": "Текущие",
   "Active": "Активные",

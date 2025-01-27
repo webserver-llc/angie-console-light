@@ -79,7 +79,7 @@ export class App extends React.Component {
 		const { t } = props;
 		this.errors = {
 			basic_auth: t('Access to /api/ location is forbidden. Check Angie configuration.'),
-			old_status_found: t('No data received from /api/ location, but found deprecated /status/ location. Сheck Angie configuration.'),
+			old_status_found: t('No data received from /api/ location, but found deprecated /status/ location. Check Angie configuration.'),
 			api_not_found: t('No data received from /api/ location. Check Angie configuration.')
 		};
 	}

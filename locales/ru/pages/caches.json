@@ -1,6 +1,6 @@
 {
   "Caches": "Кэши",
-  "Show all exsists shards": "Показать все существующие шарды",
+  "Show all exists shards": "Показать все существующие шарды",
   "Zone": "Зона",
   "State": "Состояние",
   "Memory usage = Used memory pages / Total memory pages": "Загрузка памяти = использовано страниц / всего страниц",

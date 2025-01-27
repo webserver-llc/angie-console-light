@@ -309,7 +309,7 @@ class UpstreamsEditor extends React.Component {
 			title = t('Add server to [upstream_name]', { upstream_name: upstream.name });
 		} else {
 			serversArray = Array.from(servers);
-			title = `${t('Edit servers', { count: servers.size, server: servers.size === 1 && serversArray[0][0] })} "${upstream.name}"`;
+			title = `${t('Edit servers', { count: servers.size, server: servers.size === 1 ? serversArray[0][0] : "" })} "${upstream.name}"`;
 		}
 
 		let content = null;
