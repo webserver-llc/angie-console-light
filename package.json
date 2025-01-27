@@ -23,10 +23,9 @@
   "engines": {
     "node": ">=19 <22"
   },
-  "overrides": {
+  "resolutions": {
     "minimist": "1.2.6",
-    "cheerio": "1.0.0-rc.10",
-    "loader-utils": "3.2.1"
+    "cheerio": "1.0.0-rc.10"
   },
   "dependencies": {
     "@babel/core": "7.18.2",
