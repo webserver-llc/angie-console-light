@@ -7,7 +7,7 @@
   "No such server (please, check if it still exists)": "Сервер не найден (убедитесь, что сервер существует)",
   "Add server to [upstream_name]": "Добавить сервер в {{upstream_name}}",
   "Edit servers_one": "Редактирование сервера {{server}}",
-  "Edit servers_many": "Редактирование серверов",
+  "Edit servers": "Редактирование серверов",
   "Selected servers": "Выбранные серверы",
   "Server address": "Адрес сервера",
   "Domain name:": "Доменное имя:",
