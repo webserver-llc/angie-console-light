@@ -1,6 +1,6 @@
 {
   "Access to /api/ location is forbidden. Check Angie configuration.": "Access to /api/ location is forbidden. Please check Angie configuration.",
-  "No data received from /api/ location, but found deprecated /status/ location. Сheck Angie configuration.": "No data received from /api/ location, but found deprecated /status/ location. Please check Angie configuration.",
+  "No data received from /api/ location, but found deprecated /status/ location. Check Angie configuration.": "No data received from /api/ location, but found deprecated /status/ location. Please check Angie configuration.",
   "No data received from /api/ location. Check Angie configuration.": "No data received from /api/ location. Please check Angie configuration.",
   "Loading": "Loading...",
   "For more information please refer to": "For more information, please refer to the following",

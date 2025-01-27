@@ -1233,6 +1233,11 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@cspell/dict-ru_ru@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@cspell/dict-ru_ru/-/dict-ru_ru-2.2.4.tgz#a0b4a9272ca360b1721ef999e02559dc636d4043"
+  integrity sha512-Ub5Y318ZAaFJDAPgeImcLg8ksfthGhxMHsyHGkn9Uf3g9AZUlYsabs1HwgLmh9NtqDNjMlF52S9R11GFDdaWIw==
+
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.7"
   resolved "https://registry.npmjs.org/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz"
