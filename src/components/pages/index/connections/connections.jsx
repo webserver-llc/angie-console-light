@@ -63,7 +63,7 @@ export class Connections extends React.Component {
 						<table className={styles.table}>
 							<tr>
 								<th>{t('Current')}</th>
-								<th>{t('Accepted')}</th>
+								<th>{t('Accepted/s')}</th>
 								<th>{t('Active')}</th>
 								<th>{t('Idle')}</th>
 								<th>{t('Dropped')}</th>

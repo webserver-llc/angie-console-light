@@ -4,7 +4,7 @@
   "Peer": "Сервер",
   "Requests": "Запросы",
   "Responses": "Ответы",
-  "Conns": "Соеденения",
+  "Conns": "Соединения",
   "Traffic": "Трафик",
   "Server checks": "Проверки сервера",
   "Health monitors": "Проверки работоспособности",

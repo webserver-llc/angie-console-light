@@ -2,7 +2,7 @@
   "TCP/UDP Upstreams": "TCP/UDP Upstreams",
   "Available only in": "Available only in",
   "Peer": "Server",
-  "Connection": "Connection",
+  "Connection": "Connections",
   "Traffic": "Traffic",
   "Server checks": "Server checks",
   "Health monitors": "Health monitors",

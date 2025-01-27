@@ -131,7 +131,7 @@ describe('<ExpandableTable>', () => {
 		control.simulate('click');
 		expect(spyHandleClickExpandingAll).toHaveBeenCalledTimes(1);
 		// useTooltip call args
-		expect(tooltips.useTooltip).toHaveBeenCalledWith('Show all exsists shards', 'hint-right');
+		expect(tooltips.useTooltip).toHaveBeenCalledWith('Show all exists shards', 'hint-right');
 		control = shallow(instance.renderExpandingAllControl());
 		expect(control.children().text()).toBe('▾');
 		control.unmount();
