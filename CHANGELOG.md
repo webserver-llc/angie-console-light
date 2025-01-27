@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.6.1](https://github.com/webserver-llc/angie-console-light/releases/tag/1.6.1) (2025-01-29)
+
+### Fixed
+- Fixed typos in the project
+
 ## [v1.6.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.6.0) (2025-01-23)
 ### Added
 - I18n supported. Available locales: en, ru
