@@ -10,7 +10,7 @@
 import { apiUtils } from '../../../../api';
 
 export const docs = {
-	pro: 'https://wbsrv.ru/angie-pro/docs/',
+	pro: 'https://angie.software/angie/docs/',
 	default: 'https://angie.software/en/',
 };
 
