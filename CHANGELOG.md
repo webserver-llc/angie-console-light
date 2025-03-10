@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.7.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.7.0) (2025-03-24)
+
+### Added
+- New "busy" state for upstream peers in the statistics API, indicating that a peer has reached the limit configured by the "max_conns" option.
+
 ## [v1.6.1](https://github.com/webserver-llc/angie-console-light/releases/tag/1.6.1) (2025-01-27)
 
 ### Fixed

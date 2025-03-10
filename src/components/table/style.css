@@ -158,7 +158,8 @@ td.status {
 }
 
 .unavail,
-.unhealthy {
+.unhealthy,
+.busy {
   composes: status;
   background-color: #f26c4f;
 }

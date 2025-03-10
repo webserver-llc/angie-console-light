@@ -1,73 +1,76 @@
 .row {
-	white-space: nowrap;
-	margin-bottom: 5px;
+  white-space: nowrap;
+  margin-bottom: 5px;
 }
 
 .h5 {
-	font-size: 18px;
-	margin: 0 0 5px;
+  font-size: 18px;
+  margin: 0 0 5px;
 }
 
 .status-tag {
-	display: inline-block;
-	width: 26px;
-	height: 12px;
-	border-radius: 2px!important;
-	margin: 2px 5px 2px 0;
-	overflow: hidden;
-	padding: 0!important;
-	vertical-align: middle;
+  display: inline-block;
+  width: 26px;
+  height: 12px;
+  border-radius: 2px !important;
+  margin: 2px 5px 2px 0;
+  overflow: hidden;
+  padding: 0 !important;
+  vertical-align: middle;
 }
 
 .status {
-	padding: 0 7px;
-	border-radius: 4px
+  padding: 0 7px;
+  border-radius: 4px;
 }
 
 .status_up {
-	background-color: #8dc63f;
-	composes: status;
+  background-color: #8dc63f;
+  composes: status;
 }
 
-.status_unavail, .status_unhealthy {
-	background-color: #f26c4f;
-	composes: status;
+.status_unavail,
+.status_unhealthy,
+.status_busy {
+  background-color: #f26c4f;
+  composes: status;
 }
 
 .status_draining {
-	background-color: #55b2da;
-	composes: status;
+  background-color: #55b2da;
+  composes: status;
 }
 
 .status_down {
-	color: #000000;
-	background-color: #dcdcdc;
-	composes: status;
+  color: #000000;
+  background-color: #dcdcdc;
+  composes: status;
 }
 
 .status_ok {
-	background-color: #6bc544;
-	composes: status;
+  background-color: #6bc544;
+  composes: status;
 }
 
 .status_alert {
-	background-color: #ed1c24;
-	composes: status;
+  background-color: #ed1c24;
+  composes: status;
 }
 
 .status_warning,
 .status_checking {
-	background-color: #ffab08;
-	composes: status;
+  background-color: #ffab08;
+  composes: status;
 }
 
 .columns {
-	display: flex;
-	flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .column {
-	margin-right: 30px;
-	line-height: 25px;
-	min-height: 100px;
+  margin-right: 30px;
+  line-height: 25px;
+  min-height: 100px;
 }
+

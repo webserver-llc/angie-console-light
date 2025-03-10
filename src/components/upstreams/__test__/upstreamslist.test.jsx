@@ -311,6 +311,7 @@ describe('<UpstreamsList />', () => {
 			{ state: 'up' },
 			{ state: 'unavail' },
 			{ state: 'unhealthy' },
+			{ state: 'busy' },
 			{ state: 'checking' },
 			{ state: 'down' }
 		];
@@ -326,7 +327,8 @@ describe('<UpstreamsList />', () => {
 		// failed filtering
 		expect(instance.filterPeers(peers, 'failed')).toEqual([
 			{ state: 'unavail' },
-			{ state: 'unhealthy' }
+			{ state: 'unhealthy' },
+			{ state: 'busy' }
 		]);
 		// checking filtering
 		expect(instance.filterPeers(peers, 'checking')).toEqual([{ state: 'checking' }]);
