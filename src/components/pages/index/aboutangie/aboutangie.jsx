@@ -15,7 +15,6 @@ import DataBinder from '../../../databinder/databinder.jsx';
 import api from '#/api';
 import utils from '#/utils.js';
 import tooltips from '#/tooltips/index.jsx';
-import commonStyles from '#/style.css';
 import styles from './style.css';
 import tooltipStyles from '../../../tooltip/style.css';
 import { getHrefDocs } from './utils.js';
@@ -68,15 +67,17 @@ export class AboutAngie extends React.Component {
 
 		return (
 			<IndexBox className={this.props.className}>
-				<div>
-					{this.renderLinkToDocs()}
-					{angie.config_files ?
-						(
-							<a href="#config_files" id="config-files" className={`${commonStyles.fr}`}>{t('Config Files')}</a>
-						)
-						: null}
-				</div>
+
 				<table className={styles.table}>
+					<tr>
+						<th>
+							{t('Version')}
+							:
+						</th>
+						<td>
+							{this.renderLinkToDocs()}
+						</td>
+					</tr>
 					<tr>
 						<th>
 							{t('Address')}
@@ -96,6 +97,11 @@ export class AboutAngie extends React.Component {
 						</td>
 					</tr>
 				</table>
+				{angie.config_files ?
+					(
+						<p><a href="#config_files" id="config-files">{t('Config Files')}</a></p>
+					)
+					: null}
 			</IndexBox>
 		);
 	}

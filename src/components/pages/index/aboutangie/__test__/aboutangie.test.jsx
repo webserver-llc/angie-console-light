@@ -169,10 +169,10 @@ describe('<AboutAngie IndexPage />', () => {
 		expect(table).toHaveLength(1);
 		// table className
 		expect(table.prop('className')).toBe(styles.table);
-		// table, row 1, cell 2 (angie address
-		expect(table.childAt(0).childAt(1).text()).toBe('localhost');
+		// table, row 2, cell 2 (angie address
+		expect(table.childAt(1).childAt(1).text()).toBe('localhost');
 
-		const tooltip = table.childAt(1).childAt(1).childAt(0);
+		const tooltip = table.childAt(2).childAt(1).childAt(0);
 
 		// tooltip className
 		expect(tooltip.prop('className')).toBe(styles.uptime);
