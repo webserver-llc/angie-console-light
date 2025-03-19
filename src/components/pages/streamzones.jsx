@@ -50,7 +50,7 @@ export class StreamZones extends React.Component {
 							<th className={styles.bdr} />
 							<th>{t('Current')}</th>
 							<th>{t('Total')}</th>
-							<th className={styles.bdr}>{t('Req/s')}</th>
+							<th className={styles.bdr}>{t('Conn/s')}</th>
 							<th>2xx</th>
 							<th>4xx</th>
 							<th>5xx</th>
