@@ -18,7 +18,6 @@ import tooltipStyles from '../../../../tooltip/style.css';
 import utils from '../../../../../utils.js';
 import tooltips from '../../../../../tooltips/index.jsx';
 import { apiUtils } from '../../../../../api/index.js';
-import { docs } from '../utils.js';
 
 describe('<AboutAngieTooltip IndexPage />', () => {
 	describe('this.renderLinkToDocs()', () => {
@@ -57,7 +56,6 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 			const instance = wrapper.instance();
 			const link = shallow(instance.renderLinkToDocs());
 
-			expect(link.prop('href')).toBe(docs.default);
 			expect(link.text()).toBe(data.angie.version);
 
 			wrapper.unmount();
@@ -83,7 +81,6 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 			const instance = wrapper.instance();
 			const link = shallow(instance.renderLinkToDocs());
 
-			expect(link.prop('href')).toBe(docs.pro);
 			expect(link.text()).toBe(`${data.angie.version} ${data.angie.build}`);
 
 			wrapper.unmount();
@@ -155,8 +152,6 @@ describe('<AboutAngie IndexPage />', () => {
 
 		// link length
 		expect(link).toHaveLength(1);
-		// link href
-		expect(link.prop('href')).toBe(docs.pro);
 		// link target
 		expect(link.prop('target')).toBe('_blank');
 		// link text

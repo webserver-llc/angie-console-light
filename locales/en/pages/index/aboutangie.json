@@ -3,5 +3,6 @@
   "Config Files": "Configuration",
   "Address": "Address",
   "Last reload": "Last reload",
-  "Version": "Version"
+  "Version": "Version",
+  "Docs URL": "https://en.angie.software/angie/docs/"
 }
