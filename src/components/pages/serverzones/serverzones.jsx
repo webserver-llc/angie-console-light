@@ -10,23 +10,17 @@
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 
-import utils from '#/utils.js';
-import tooltips from '#/tooltips/index.jsx';
 import {
 	SortableTable,
 	TableSortControl,
 	tableUtils,
 	styles,
 } from '#/components/table';
+import HumanReadableBytes from '#/components/human-readable-bytes/human-readable-bytes.jsx';
 
 class StreamZones extends SortableTable {
 	get SORTING_SETTINGS_KEY() {
 		return 'streamZonesSortOrder';
-	}
-
-	formatReadableBytes(value) {
-		const { t } = this.props;
-		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
 	}
 
 	render() {
@@ -135,10 +129,18 @@ class StreamZones extends SortableTable {
 												{tableUtils.responsesTextWithTooltip(zone.responses['5xx'], codes, '5')}
 											</td>
 											<td className={styles.bdr}>{zone.responses.total}</td>
-											<td className={styles.px60}>{this.formatReadableBytes(zone.sent_s)}</td>
-											<td className={styles.px60}>{this.formatReadableBytes(zone.rcvd_s)}</td>
-											<td className={styles.px60}>{this.formatReadableBytes(zone.data.sent)}</td>
-											<td className={`${styles.px60} ${styles.bdr}`}>{this.formatReadableBytes(zone.data.received)}</td>
+											<td className={styles.px60}>
+												<HumanReadableBytes value={zone.sent_s} />
+											</td>
+											<td className={styles.px60}>
+												<HumanReadableBytes value={zone.rcvd_s} />
+											</td>
+											<td className={styles.px60}>
+												<HumanReadableBytes value={zone.data.sent} />
+											</td>
+											<td className={`${styles.px60} ${styles.bdr}`}>
+												<HumanReadableBytes value={zone.data.received} />
+											</td>
 											<td>{ssl ? ssl.handshaked : '–'}</td>
 											<td>{ssl ? ssl.reuses : '–'}</td>
 											<td>{ssl ? ssl.timedout : '–'}</td>

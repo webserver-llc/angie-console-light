@@ -10,23 +10,17 @@
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 
-import utils from '#/utils.js';
-import tooltips from '#/tooltips/index.jsx';
 import {
 	SortableTable,
 	TableSortControl,
 	tableUtils,
 	styles,
 } from '#/components/table';
+import HumanReadableBytes from '#/components/human-readable-bytes/human-readable-bytes.jsx';
 
 class LocationZones extends SortableTable {
 	get SORTING_SETTINGS_KEY() {
 		return 'locationsSortOrder';
-	}
-
-	formatReadableBytes(value) {
-		const { t } = this.props;
-		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
 	}
 
 	render() {
@@ -116,10 +110,18 @@ class LocationZones extends SortableTable {
 												{tableUtils.responsesTextWithTooltip(location.responses['5xx'], codes, '5')}
 											</td>
 											<td className={styles.bdr}>{location.responses.total}</td>
-											<td className={styles.px60}>{this.formatReadableBytes(location.sent_s)}</td>
-											<td className={styles.px60}>{this.formatReadableBytes(location.rcvd_s)}</td>
-											<td className={styles.px60}>{this.formatReadableBytes(location.data.sent)}</td>
-											<td className={styles.px60}>{this.formatReadableBytes(location.data.received)}</td>
+											<td className={styles.px60}>
+												<HumanReadableBytes value={location.sent_s} />
+											</td>
+											<td className={styles.px60}>
+												<HumanReadableBytes value={location.rcvd_s} />
+											</td>
+											<td className={styles.px60}>
+												<HumanReadableBytes value={location.data.sent} />
+											</td>
+											<td className={styles.px60}>
+												<HumanReadableBytes value={location.data.received} />
+											</td>
 										</tr>
 									);
 								})

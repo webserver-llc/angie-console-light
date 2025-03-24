@@ -12,6 +12,7 @@ import { shallow } from 'enzyme';
 import { StreamZones } from '../streamzones.jsx';
 import styles from '../../table/style.css';
 import utils from '../../../utils';
+import HumanReadableBytes from '#/components/human-readable-bytes/human-readable-bytes';
 
 describe('<StreamZones Page />', () => {
 	describe('render()', () => {
@@ -40,7 +41,7 @@ describe('<StreamZones Page />', () => {
 		it('zones row', () => {
 			jest.spyOn(utils, 'formatReadableBytes').mockClear().mockImplementation(a => a);
 
-			const server_zones = new Map([
+			const server_zones = [
 				['test', {
 					processing: 100,
 					connections: 23,
@@ -66,7 +67,7 @@ describe('<StreamZones Page />', () => {
 					'4xxChanged': false,
 					'5xxChanged': true
 				}]
-			]);
+			];
 			const wrapper = shallow(<StreamZones data={{ server_zones }} />);
 			const rows = wrapper.find('tbody tr');
 			let cells = rows.at(0).find('td');
@@ -106,26 +107,24 @@ describe('<StreamZones Page />', () => {
 			expect(cell.prop('className')).toBe(styles.bdr);
 			// row 1, cell 8, text
 			expect(cell.text()).toBe('86');
+
+			const row = 0;
+			// row 1, cell 9
 			cell = cells.at(8);
-			// row 1, cell 9, className
 			expect(cell.prop('className')).toBe(styles.px60);
-			// row 1, cell 9, text
-			expect(cell.text()).toBe('333');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(server_zones[row][1].sent_s);
+			// row 1, cell 10
 			cell = cells.at(9);
-			// row 1, cell 10, className
 			expect(cell.prop('className')).toBe(styles.px60);
-			// row 1, cell 10, text
-			expect(cell.text()).toBe('0');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(server_zones[row][1].rcvd_s);
+			// row 1, cell 11
 			cell = cells.at(10);
-			// row 1, cell 11, className
 			expect(cell.prop('className')).toBe(styles.px60);
-			// row 1, cell 11, text
-			expect(cell.text()).toBe('950');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(server_zones[row][1].sent);
+			// row 1, cell 12
 			cell = cells.at(11);
-			// row 1, cell 12, className
 			expect(cell.prop('className')).toBe(`${ styles.px60 } ${ styles.bdr }`);
-			// row 1, cell 12, text
-			expect(cell.text()).toBe('3');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(server_zones[row][1].received);
 
 			// TODO: Add tests for SSL stat cells
 

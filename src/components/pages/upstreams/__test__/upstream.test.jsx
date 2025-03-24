@@ -16,6 +16,7 @@ import envUtils from '../../../../env';
 import Upstream from '../upstream.jsx';
 import styles from '../../../table/style.css';
 import { tableUtils } from '#/components/table';
+import HumanReadableBytes from '#/components/human-readable-bytes/human-readable-bytes.jsx';
 
 describe('<Upstream />', () => {
 	const props = {
@@ -245,7 +246,6 @@ describe('<Upstream />', () => {
 			({ id }) => <td id={`getCheckbox_result_${id}`} />
 		);
 		jest.spyOn(utils, 'formatUptime').mockClear().mockImplementation(() => 'time_formatted');
-		jest.spyOn(utils, 'formatReadableBytes').mockClear().mockImplementation(() => 'readable_bytes_formatted');
 		jest.spyOn(utils, 'formatMs').mockClear().mockImplementation(() => 'ms_formatted');
 		jest.spyOn(utils, 'formatLastCheckDate').mockClear().mockImplementation(() => 'ms_formatted');
 		jest.spyOn(tableUtils, 'responsesTextWithTooltip').mockClear().mockImplementation((value) => value);
@@ -404,15 +404,17 @@ describe('<Upstream />', () => {
 		// [peer 1] server_sent_s className
 		expect(tbody.childAt(0).childAt(12).prop('className')).toBe(styles.px60);
 		// [peer 1] server_sent_s
-		expect(tbody.childAt(0).childAt(12).text()).toBe('readable_bytes_formatted');
+		expect(tbody.childAt(0).childAt(12).find(HumanReadableBytes).props().value).toBe(peers[0].server_sent_s);
 		// [peer 1] server_rcvd_s className
 		expect(tbody.childAt(0).childAt(13).prop('className')).toBe(styles.px60);
 		// [peer 1] server_rcvd_s
-		expect(tbody.childAt(0).childAt(13).text()).toBe('readable_bytes_formatted');
+		expect(tbody.childAt(0).childAt(13).find(HumanReadableBytes).props().value).toBe(peers[0].server_rcvd_s);
 		// [peer 1] sent
-		expect(tbody.childAt(0).childAt(14).text()).toBe('readable_bytes_formatted');
+		expect(tbody.childAt(0).childAt(14).find(HumanReadableBytes).props().value).toBe(peers[0].sent);
+
 		// [peer 1] received
-		expect(tbody.childAt(0).childAt(15).text()).toBe('readable_bytes_formatted');
+		expect(tbody.childAt(0).childAt(15).find(HumanReadableBytes).props().value).toBe(peers[0].received);
+
 		// [peer 1] fails
 		expect(tbody.childAt(0).childAt(16).text()).toBe('1');
 		// [peer 1] unavail className
@@ -529,24 +531,6 @@ describe('<Upstream />', () => {
 		expect(utils.formatUptime.mock.calls[2][0]).toBeUndefined();
 		// formatUptime call 3, arg 2
 		expect(utils.formatUptime.mock.calls[2][1]).toBe(true);
-
-		expect(utils.formatReadableBytes).toHaveBeenCalledTimes(12);
-		// formatReadableBytes call 1, arg 1
-		expect(utils.formatReadableBytes.mock.calls[0][0]).toBe(40);
-		// formatReadableBytes call 2, arg 1
-		expect(utils.formatReadableBytes.mock.calls[1][0]).toBe(39);
-		// formatReadableBytes call 3, arg 1
-		expect(utils.formatReadableBytes.mock.calls[2][0]).toBe(400);
-		// formatReadableBytes call 4, arg 1
-		expect(utils.formatReadableBytes.mock.calls[3][0]).toBe(399);
-		expect(utils.formatReadableBytes.mock.calls[4][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[5][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[6][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[7][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[8][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[9][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[10][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[11][0]).toBeUndefined();
 
 		// [editMode = false] edit-peer
 		expect(table.find(`.${styles['edit-peer']}`)).toHaveLength(0);
@@ -711,7 +695,6 @@ describe('<Upstream />', () => {
 		instance.renderEmptyList.mockRestore();
 		instance.getCheckbox.mockRestore();
 		utils.formatUptime.mockRestore();
-		utils.formatReadableBytes.mockRestore();
 		utils.formatMs.mockRestore();
 		utils.formatLastCheckDate.mockRestore();
 		tableUtils.responsesTextWithTooltip.mockRestore();
@@ -789,7 +772,6 @@ describe('<Upstream />', () => {
 			({ id }) => <td id={`getCheckbox_result_${id}`} />
 		);
 		jest.spyOn(utils, 'formatUptime').mockClear().mockImplementation(() => 'time_formatted');
-		jest.spyOn(utils, 'formatReadableBytes').mockClear().mockImplementation(() => 'readable_bytes_formatted');
 		jest.spyOn(utils, 'formatMs').mockClear().mockImplementation(() => 'ms_formatted');
 		jest.spyOn(utils, 'formatLastCheckDate').mockClear().mockImplementation(() => 'ms_formatted');
 		jest.spyOn(tableUtils, 'responsesTextWithTooltip').mockClear().mockImplementation((value) => value);
@@ -819,7 +801,6 @@ describe('<Upstream />', () => {
 		instance.renderEmptyList.mockRestore();
 		instance.getCheckbox.mockRestore();
 		utils.formatUptime.mockRestore();
-		utils.formatReadableBytes.mockRestore();
 		utils.formatMs.mockRestore();
 		utils.formatLastCheckDate.mockRestore();
 		tableUtils.responsesTextWithTooltip.mockRestore();

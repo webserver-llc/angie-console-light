@@ -18,13 +18,9 @@ import LimitConn from './serverzones/limitconn.jsx';
 import utils from '#/utils.js';
 import styles from '../table/style.css';
 import { tableUtils } from '#/components/table';
+import HumanReadableBytes from '#/components/human-readable-bytes/human-readable-bytes.jsx';
 
 export class StreamZones extends React.Component {
-	formatReadableBytes(value) {
-		const { t } = this.props;
-		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
-	}
-
 	render() {
 		const { t, data: {
 			server_zones,
@@ -87,10 +83,18 @@ export class StreamZones extends React.Component {
 											{zone.sessions['5xx']}
 										</td>
 										<td className={styles.bdr}>{zone.sessions.total}</td>
-										<td className={styles.px60}>{this.formatReadableBytes(zone.sent_s)}</td>
-										<td className={styles.px60}>{this.formatReadableBytes(zone.rcvd_s)}</td>
-										<td className={styles.px60}>{this.formatReadableBytes(zone.sent)}</td>
-										<td className={`${styles.px60} ${styles.bdr}`}>{this.formatReadableBytes(zone.received)}</td>
+										<td className={styles.px60}>
+											<HumanReadableBytes value={zone.sent_s} />
+										</td>
+										<td className={styles.px60}>
+											<HumanReadableBytes value={zone.rcvd_s} />
+										</td>
+										<td className={styles.px60}>
+											<HumanReadableBytes value={zone.sent} />
+										</td>
+										<td className={`${styles.px60} ${styles.bdr}`}>
+											<HumanReadableBytes value={zone.received} />
+										</td>
 										<td>{ssl ? ssl.handshakes : '–'}</td>
 										<td>
 											{

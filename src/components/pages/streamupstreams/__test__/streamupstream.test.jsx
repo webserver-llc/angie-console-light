@@ -14,6 +14,7 @@ import UpstreamsList from '../../../upstreams/upstreamslist.jsx';
 import tooltips from '../../../../tooltips/index.jsx';
 import utils from '../../../../utils.js';
 import styles from '../../../table/style.css';
+import HumanReadableBytes from '#/components/human-readable-bytes/human-readable-bytes';
 
 describe('<StreamUpstream />', () => {
 	const props = {
@@ -217,17 +218,17 @@ describe('<StreamUpstream />', () => {
 		// [peer 1] server_sent_s className
 		expect(tbody.childAt(0).childAt(9).prop('className')).toBe(styles.px60);
 		// [peer 1] server_sent_s
-		expect(tbody.childAt(0).childAt(9).text()).toBe('readable_bytes_formatted');
+		expect(tbody.childAt(0).childAt(9).find(HumanReadableBytes).props().value).toBe(peers[0].server_sent_s);
 		// [peer 1] server_rcvd_s className
 		expect(tbody.childAt(0).childAt(10).prop('className')).toBe(styles.px60);
 		// [peer 1] server_rcvd_s
-		expect(tbody.childAt(0).childAt(10).text()).toBe('readable_bytes_formatted');
+		expect(tbody.childAt(0).childAt(10).find(HumanReadableBytes).props().value).toBe(peers[0].server_rcvd_s);
 		// [peer 1] sent
-		expect(tbody.childAt(0).childAt(11).text()).toBe('readable_bytes_formatted');
+		expect(tbody.childAt(0).childAt(11).find(HumanReadableBytes).props().value).toBe(peers[0].sent);
 		// [peer 1] received className
 		expect(tbody.childAt(0).childAt(12).prop('className')).toBe(styles.bdr);
 		// [peer 1] received
-		expect(tbody.childAt(0).childAt(12).text()).toBe('readable_bytes_formatted');
+		expect(tbody.childAt(0).childAt(12).find(HumanReadableBytes).props().value).toBe(peers[0].received);
 		// [peer 1] fails
 		expect(tbody.childAt(0).childAt(13).text()).toBe('1');
 		// [peer 1] unavail
@@ -283,23 +284,19 @@ describe('<StreamUpstream />', () => {
 		// formatUptime call 3, arg 2
 		expect(utils.formatUptime.mock.calls[2][1]).toBe(true);
 
-		expect(utils.formatReadableBytes).toHaveBeenCalledTimes(12);
-		// formatReadableBytes call 1, arg 1
-		expect(utils.formatReadableBytes.mock.calls[0][0]).toBe(40);
-		// formatReadableBytes call 2, arg 1
-		expect(utils.formatReadableBytes.mock.calls[1][0]).toBe(39);
-		// formatReadableBytes call 3, arg 1
-		expect(utils.formatReadableBytes.mock.calls[2][0]).toBe(400);
-		// formatReadableBytes call 4, arg 1
-		expect(utils.formatReadableBytes.mock.calls[3][0]).toBe(399);
-		expect(utils.formatReadableBytes.mock.calls[4][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[5][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[6][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[7][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[8][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[9][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[10][0]).toBeUndefined();
-		expect(utils.formatReadableBytes.mock.calls[11][0]).toBeUndefined();
+		const HumanReadableBytesValues = [
+			peers[0].server_sent_s,
+			peers[0].server_rcvd_s,
+			peers[0].sent,
+			peers[0].received,
+		];
+		const HumanReadableBytesInstances = table.find(HumanReadableBytes);
+
+		HumanReadableBytesValues.forEach((value, i) => {
+			expect(HumanReadableBytesInstances.at(i).props().value).toBe(HumanReadableBytesValues[i]);
+		});
+
+		expect(table.find(HumanReadableBytes)).toHaveLength(12);
 
 		// [editMode = false] edit-peer
 		expect(table.find(`.${styles['edit-peer']}`)).toHaveLength(0);

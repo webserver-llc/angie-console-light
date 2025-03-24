@@ -12,6 +12,7 @@ import { shallow } from 'enzyme';
 import { Caches } from '../index.jsx';
 import tooltips from '../../../../tooltips/index.jsx';
 import styles from '../../../table/style.css';
+import HumanReadableBytes from '#/components/human-readable-bytes/human-readable-bytes';
 
 describe('<Caches Page />', () => {
 	describe('render()', () => {
@@ -75,41 +76,43 @@ describe('<Caches Page />', () => {
 				useTooltip_prop_2: prop_2
 			}));
 
+			const items = [
+				['test_1', {
+					cold: false,
+					slab: 'test_slab_1',
+					zoneSize: 30,
+					max_size: 500,
+					size: 430,
+					warning: false,
+					danger: false,
+					used: 100,
+					traffic: {
+						s_served: 3,
+						s_written: 2,
+						s_bypassed: 1
+					},
+					hit_percents_generic: 10
+				}], ['test_2', {
+					cold: true,
+					slab: 'test_slab_2',
+					zoneSize: undefined,
+					max_size: '501',
+					size: 431,
+					warning: true,
+					danger: true,
+					used: 101,
+					traffic: {
+						s_served: 4,
+						s_written: 3,
+						s_bypassed: 2
+					},
+					hit_percents_generic: 11
+				}]
+			];
+
 			const wrapper = shallow(
 				<Caches data={{
-					caches: new Map([
-						['test_1', {
-							cold: false,
-							slab: 'test_slab_1',
-							zoneSize: 30,
-							max_size: 500,
-							size: 430,
-							warning: false,
-							danger: false,
-							used: 100,
-							traffic: {
-								s_served: 3,
-								s_written: 2,
-								s_bypassed: 1
-							},
-							hit_percents_generic: 10
-						}], ['test_2', {
-							cold: true,
-							slab: 'test_slab_2',
-							zoneSize: undefined,
-							max_size: '501',
-							size: 431,
-							warning: true,
-							danger: true,
-							used: 101,
-							traffic: {
-								s_served: 4,
-								s_written: 3,
-								s_bypassed: 2
-							},
-							hit_percents_generic: 11
-						}]
-					])
+					caches: new Map(items)
 				}}
 				/>
 			);
@@ -145,14 +148,11 @@ describe('<Caches Page />', () => {
 			expect(hintedEl.childAt(0).name()).toBe('ProgressBar');
 			// row 1, cell 3, ProgressBar prop
 			expect(hintedEl.childAt(0).prop('percentage')).toBe(30);
-			// row 1, cell 4, className
-			expect(cells.at(3).prop('className')).toBe(styles.bdr);
+
 			// row 1, cell 4, text
-			expect(cells.at(3).text()).toBe('500 B');
-			// row 1, cell 5, className
-			expect(cells.at(4).prop('className')).toBe(styles.bdr);
+			expect(cells.at(3).find(HumanReadableBytes).props().value).toBe(items[0][1].max_size);
 			// row 1, cell 5, text
-			expect(cells.at(4).text()).toBe('430 B');
+			expect(cells.at(4).find(HumanReadableBytes).props().value).toBe(items[0][1].size);
 			// row 1, cell 6, className
 			expect(cells.at(5).prop('className')).toBe(styles.bdr);
 			// row 1, cell 6, ProgressBar
@@ -166,15 +166,15 @@ describe('<Caches Page />', () => {
 			// row 1, cell 7, className
 			expect(cells.at(6).prop('className')).toBe(styles['right-align']);
 			// row 1, cell 7, text
-			expect(cells.at(6).text()).toBe('3.00 B');
+			expect(cells.at(6).find(HumanReadableBytes).props().value).toBe(items[0][1].traffic.s_served);
 			// row 1, cell 8, className
 			expect(cells.at(7).prop('className')).toBe(styles['right-align']);
 			// row 1, cell 8, text
-			expect(cells.at(7).text()).toBe('2.00 B');
+			expect(cells.at(7).find(HumanReadableBytes).props().value).toBe(items[0][1].traffic.s_written);
 			// row 1, cell 9, className
 			expect(cells.at(8).prop('className')).toBe(`${styles.bdr} ${styles['right-align']}`);
 			// row 1, cell 9, text
-			expect(cells.at(8).text()).toBe('1.00 B');
+			expect(cells.at(8).find(HumanReadableBytes).props().value).toBe(items[0][1].traffic.s_bypassed);
 			// row 1, cell 10, GaugeIndicator
 			expect(cells.at(9).childAt(0).name()).toBe('GaugeIndicator');
 			// row 1, cell 10, GaugeIndicator prop
@@ -217,7 +217,7 @@ describe('<Caches Page />', () => {
 			// row 2, cell 5, className
 			expect(cells.at(4).prop('className')).toBe(styles.bdr);
 			// row 2, cell 5, text
-			expect(cells.at(4).text()).toBe('431 B');
+			expect(cells.at(4).find(HumanReadableBytes).props().value).toBe(items[1][1].size);
 			// row 2, cell 6, className
 			expect(cells.at(5).prop('className')).toBe(styles.bdr);
 			// row 2, cell 6, span
@@ -225,15 +225,15 @@ describe('<Caches Page />', () => {
 			// row 2, cell 7, className
 			expect(cells.at(6).prop('className')).toBe(styles['right-align']);
 			// row 2, cell 7, text
-			expect(cells.at(6).text()).toBe('4.00 B');
+			expect(cells.at(6).find(HumanReadableBytes).props().value).toBe(items[1][1].traffic.s_served);
 			// row 2, cell 8, className
 			expect(cells.at(7).prop('className')).toBe(styles['right-align']);
 			// row 2, cell 8, text
-			expect(cells.at(7).text()).toBe('3.00 B');
+			expect(cells.at(7).find(HumanReadableBytes).props().value).toBe(items[1][1].traffic.s_written);
 			// row 2, cell 9, className
 			expect(cells.at(8).prop('className')).toBe(`${styles.bdr} ${styles['right-align']}`);
 			// row 2, cell 9, text
-			expect(cells.at(8).text()).toBe('2.00 B');
+			expect(cells.at(8).find(HumanReadableBytes).props().value).toBe(items[1][1].traffic.s_bypassed);
 			// row 2, cell 10, GaugeIndicator
 			expect(cells.at(9).childAt(0).name()).toBe('GaugeIndicator');
 			// row 2, cell 10, GaugeIndicator prop
@@ -249,65 +249,67 @@ describe('<Caches Page />', () => {
 				useTooltip_prop_2: prop_2
 			}));
 
+			const items = [
+				['test_1', {
+					cold: false,
+					slab: 'test_slab_1',
+					zoneSize: 30,
+					shards: {
+						'/var/cache/angie/proxy_cache/test_slab_1_1': {
+							size: 1064960,
+							max_size: 16777216,
+							warning: false,
+							danger: false,
+							cold: false
+						},
+						'/var/cache/angie/proxy_cache/test_slab_1_2': {
+							size: 28672,
+							max_size: 16777216,
+							warning: false,
+							danger: false,
+							cold: false
+						}
+					},
+					traffic: {
+						s_served: 3,
+						s_written: 2,
+						s_bypassed: 1
+					},
+					hit_percents_generic: 10
+				}], ['test_2', {
+					cold: true,
+					slab: 'test_slab_2',
+					zoneSize: undefined,
+					shards: {
+						'/var/cache/angie/proxy_cache/test_slab_2_1': {
+							size: 1024960,
+							max_size: 16777216,
+							warning: true,
+							danger: true,
+							used: 100,
+							cold: false
+						},
+						'/var/cache/angie/proxy_cache/test_slab_2_2': {
+							size: 38672,
+							max_size: 16777216,
+							warning: true,
+							danger: true,
+							used: 101,
+							cold: true
+						}
+					},
+					traffic: {
+						s_served: 4,
+						s_written: 3,
+						s_bypassed: 2
+					},
+					hit_percents_generic: 11
+				}]
+			];
+
 			const wrapper = shallow(
 				<Caches data={{
-					caches: new Map([
-						['test_1', {
-							cold: false,
-							slab: 'test_slab_1',
-							zoneSize: 30,
-							shards: {
-								'/var/cache/angie/proxy_cache/test_slab_1_1': {
-									size: 1064960,
-									max_size: 16777216,
-									warning: false,
-									danger: false,
-									cold: false
-								},
-								'/var/cache/angie/proxy_cache/test_slab_1_2': {
-									size: 28672,
-									max_size: 16777216,
-									warning: false,
-									danger: false,
-									cold: false
-								}
-							},
-							traffic: {
-								s_served: 3,
-								s_written: 2,
-								s_bypassed: 1
-							},
-							hit_percents_generic: 10
-						}], ['test_2', {
-							cold: true,
-							slab: 'test_slab_2',
-							zoneSize: undefined,
-							shards: {
-								'/var/cache/angie/proxy_cache/test_slab_2_1': {
-									size: 1024960,
-									max_size: 16777216,
-									warning: true,
-									danger: true,
-									used: 100,
-									cold: false
-								},
-								'/var/cache/angie/proxy_cache/test_slab_2_2': {
-									size: 38672,
-									max_size: 16777216,
-									warning: true,
-									danger: true,
-									used: 101,
-									cold: true
-								}
-							},
-							traffic: {
-								s_served: 4,
-								s_written: 3,
-								s_bypassed: 2
-							},
-							hit_percents_generic: 11
-						}]
-					])
+					caches: new Map(items)
 				}}
 				/>
 			);
@@ -382,9 +384,9 @@ describe('<Caches Page />', () => {
 			// row 1, cell 2, useTooltip arg 2
 			expect(hintElementRow1.prop('useTooltip_prop_2')).toBe('hint');
 			// row 1, cell 3
-			expect(row1.at(2).text()).toBe('16.0 MiB');
+			expect(row1.at(2).find(HumanReadableBytes).props().value).toBe(items[1][1].shards['/var/cache/angie/proxy_cache/test_slab_2_1'].max_size);
 			// row 1, cell 4
-			expect(row1.at(3).text()).toBe('0.98 MiB');
+			expect(row1.at(3).find(HumanReadableBytes).props().value).toBe(items[1][1].shards['/var/cache/angie/proxy_cache/test_slab_2_1'].size);
 			// row 1, cell 5, ProgressBar
 			expect(row1.at(4).childAt(0).name()).toBe('ProgressBar');
 			// row 1, cell 5, ProgressBar warning
@@ -405,9 +407,9 @@ describe('<Caches Page />', () => {
 			// row 2, cell 2, useTooltip arg 2
 			expect(hintElementRow2.prop('useTooltip_prop_2')).toBe('hint');
 			// row 2, cell 3
-			expect(row2.at(2).text()).toBe('16.0 MiB');
+			expect(row2.at(2).find(HumanReadableBytes).props().value).toBe(items[1][1].shards['/var/cache/angie/proxy_cache/test_slab_2_2'].max_size);
 			// row 2, cell 4
-			expect(row2.at(3).text()).toBe('37.8 KiB');
+			expect(row2.at(3).find(HumanReadableBytes).props().value).toBe(items[1][1].shards['/var/cache/angie/proxy_cache/test_slab_2_2'].size);
 			// row 2, cell 5, ProgressBar
 			expect(row2.at(4).childAt(0).name()).toBe('ProgressBar');
 			// row 2, cell 5, ProgressBar warning

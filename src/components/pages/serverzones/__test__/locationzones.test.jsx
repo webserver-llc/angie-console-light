@@ -14,6 +14,7 @@ import Locations from '../locationzones.jsx';
 import { SortableTable, tableUtils, styles } from '#/components/table';
 import utils from '#/utils';
 import tooltips from '#/tooltips/index.jsx';
+import HumanReadableBytes from '#/components/human-readable-bytes/human-readable-bytes';
 
 describe('<Locations />', () => {
 	it('extends SortableTable', () => {
@@ -192,6 +193,12 @@ describe('<Locations />', () => {
 					}
 				}]
 			];
+			const rsExpectedValues = items.flatMap(([, obj]) => [
+				obj.sent_s,
+				obj.rcvd_s,
+				obj.data.sent,
+				obj.data.received,
+			]);
 
 			const wrapper = shallow(
 				<Locations data={new Map(items)} />
@@ -238,26 +245,23 @@ describe('<Locations />', () => {
 			expect(cell.prop('className')).toBe(styles.bdr);
 			// row 1, cell 10, text
 			expect(cell.text()).toBe('506');
+			let row = 0;
+			// row 1, cell 11
 			cell = cells.at(10);
-			// row 1, cell 11, className
 			expect(cell.prop('className')).toBe(styles.px60);
-			// row 1, cell 11, text
-			expect(cell.text()).toBe('formatted_1');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].sent_s);
+			// row 1, cell 12
 			cell = cells.at(11);
-			// row 1, cell 12, className
 			expect(cell.prop('className')).toBe(styles.px60);
-			// row 1, cell 12, text
-			expect(cell.text()).toBe('formatted_2');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].rcvd_s);
+			// row 1, cell 13
 			cell = cells.at(12);
-			// row 1, cell 13, className
 			expect(cell.prop('className')).toBe(styles.px60);
-			// row 1, cell 13, text
-			expect(cell.text()).toBe('formatted_3');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].data.sent);
+			// row 1, cell 14
 			cell = cells.at(13);
-			// row 1, cell 14, className
 			expect(cell.prop('className')).toBe(styles.px60);
-			// row 1, cell 14, text
-			expect(cell.text()).toBe('formatted_4');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].data.received);
 
 			cells = rows.at(1).find('td');
 			// row 2, cells length
@@ -296,26 +300,23 @@ describe('<Locations />', () => {
 			expect(cell.prop('className')).toBe(styles.bdr);
 			// row 2, cell 10, text
 			expect(cell.text()).toBe('5062');
+			row = 1;
 			cell = cells.at(10);
-			// row 2, cell 11, className
+			// row 2, cell 11
 			expect(cell.prop('className')).toBe(styles.px60);
-			// row 2, cell 11, text
-			expect(cell.text()).toBe('formatted_2');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].sent_s);
 			cell = cells.at(11);
-			// row 2, cell 12, className
+			// row 2, cell 12
 			expect(cell.prop('className')).toBe(styles.px60);
-			// row 2, cell 12, text
-			expect(cell.text()).toBe('formatted_3');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].rcvd_s);
 			cell = cells.at(12);
-			// row 2, cell 13, className
+			// row 2, cell 13
 			expect(cell.prop('className')).toBe(styles.px60);
-			// row 2, cell 13, text
-			expect(cell.text()).toBe('formatted_4');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].data.sent);
 			cell = cells.at(13);
-			// row 2, cell 14, className
+			// row 2, cell 14
 			expect(cell.prop('className')).toBe(styles.px60);
-			// row 2, cell 14, text
-			expect(cell.text()).toBe('formatted_5');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].data.received);
 
 			cells = rows.at(2).find('td');
 			// row 3, cells length
@@ -354,26 +355,15 @@ describe('<Locations />', () => {
 			expect(cell.prop('className')).toBe(styles.bdr);
 			// row 3, cell 10, text
 			expect(cell.text()).toBe('2');
+			row = 2;
 			cell = cells.at(10);
-			// row 3, cell 11, className
-			expect(cell.prop('className')).toBe(styles.px60);
-			// row 3, cell 11, text
-			expect(cell.text()).toBe('formatted_3');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].sent_s);
 			cell = cells.at(11);
-			// row 3, cell 12, className
-			expect(cell.prop('className')).toBe(styles.px60);
-			// row 3, cell 12, text
-			expect(cell.text()).toBe('formatted_4');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].rcvd_s);
 			cell = cells.at(12);
-			// row 3, cell 13, className
-			expect(cell.prop('className')).toBe(styles.px60);
-			// row 3, cell 13, text
-			expect(cell.text()).toBe('formatted_5');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].data.sent);
 			cell = cells.at(13);
-			// row 3, cell 14, className
-			expect(cell.prop('className')).toBe(styles.px60);
-			// row 3, cell 14, text
-			expect(cell.text()).toBe('formatted_6');
+			expect(cell.find(HumanReadableBytes).props().value).toBe(items[row][1].data.received);
 
 			expect(tableUtils.responsesTextWithTooltip).toHaveBeenCalledTimes(15);
 			// responsesTextWithTooltip row 1, arg 1, 1xx
@@ -476,31 +466,12 @@ describe('<Locations />', () => {
 			// responsesTextWithTooltip row 3, arg 3, 5xx
 			expect(tableUtils.responsesTextWithTooltip.mock.calls[14][2]).toBe('5');
 
-			expect(utils.formatReadableBytes).toHaveBeenCalledTimes(12);
-			// useTooltip call 1 arg
-			expect(utils.formatReadableBytes.mock.calls[0][0]).toBe(1);
-			// useTooltip call 2 arg
-			expect(utils.formatReadableBytes.mock.calls[1][0]).toBe(2);
-			// useTooltip call 3 arg
-			expect(utils.formatReadableBytes.mock.calls[2][0]).toBe(3);
-			// useTooltip call 4 arg
-			expect(utils.formatReadableBytes.mock.calls[3][0]).toBe(4);
-			// useTooltip call 5 arg
-			expect(utils.formatReadableBytes.mock.calls[4][0]).toBe(2);
-			// useTooltip call 6 arg
-			expect(utils.formatReadableBytes.mock.calls[5][0]).toBe(3);
-			// useTooltip call 7 arg
-			expect(utils.formatReadableBytes.mock.calls[6][0]).toBe(4);
-			// useTooltip call 8 arg
-			expect(utils.formatReadableBytes.mock.calls[7][0]).toBe(5);
-			// useTooltip call 9 arg
-			expect(utils.formatReadableBytes.mock.calls[8][0]).toBe(3);
-			// useTooltip call 10 arg
-			expect(utils.formatReadableBytes.mock.calls[9][0]).toBe(4);
-			// useTooltip call 11 arg
-			expect(utils.formatReadableBytes.mock.calls[10][0]).toBe(5);
-			// useTooltip call 12 arg
-			expect(utils.formatReadableBytes.mock.calls[11][0]).toBe(6);
+			const HumanReadableBytesWrappers = wrapper.find(HumanReadableBytes);
+			expect(HumanReadableBytesWrappers).toHaveLength(12);
+
+			rsExpectedValues.forEach((value, i) => {
+				expect(HumanReadableBytesWrappers.at(i).props().value).toBe(value);
+			});
 
 			utils.formatReadableBytes.mockRestore();
 			tooltips.useTooltip.mockRestore();

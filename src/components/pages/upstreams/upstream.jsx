@@ -20,6 +20,7 @@ import {
 	ConnectionsTooltip,
 } from '#/components/upstreams';
 import tooltips from '#/tooltips/index.jsx';
+import HumanReadableBytes from '#/components/human-readable-bytes/human-readable-bytes.jsx';
 
 class Upstream extends UpstreamsList {
 	constructor(props) {
@@ -44,11 +45,6 @@ class Upstream extends UpstreamsList {
 
 	get FILTERING_SETTINGS_KEY() {
 		return `filtering-http-upstreams-${this.props.name}`;
-	}
-
-	formatReadableBytes(value) {
-		const { t } = this.props;
-		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
 	}
 
 	formatUptime(ms, short = false) {
@@ -386,13 +382,17 @@ class Upstream extends UpstreamsList {
 									</td>
 
 									<td className={styles.px60}>
-										{this.formatReadableBytes(peer.server_sent_s)}
+										<HumanReadableBytes value={peer.server_sent_s} />
 									</td>
 									<td className={styles.px60}>
-										{this.formatReadableBytes(peer.server_rcvd_s)}
+										<HumanReadableBytes value={peer.server_rcvd_s} />
 									</td>
-									<td>{this.formatReadableBytes(peer.sent)}</td>
-									<td>{this.formatReadableBytes(peer.received)}</td>
+									<td>
+										<HumanReadableBytes value={peer.sent} />
+									</td>
+									<td>
+										<HumanReadableBytes value={peer.received} />
+									</td>
 									<td>{peer.fails}</td>
 									<td className={styles.bdr}>{peer.unavail}</td>
 									{configured_health_checks ? (
