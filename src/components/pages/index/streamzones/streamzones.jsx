@@ -14,15 +14,11 @@ import IndexBox from '../indexbox/indexbox.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
 import api from '#/api';
 import mapperStreamServerZones from '../../../../api/mappers/streamServerZones.js';
-import utils from '#/utils.js';
 import { zones } from '#/calculators/stream.js';
 
-export class StreamZones extends React.Component {
-	formatReadableBytes(value) {
-		const { t } = this.props;
-		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
-	}
+import HumanReadableBytes from '../../../human-readable-bytes/human-readable-bytes.jsx';
 
+export class StreamZones extends React.Component {
 	render() {
 		const { props: { t, data, store } } = this;
 		const stats = data.server_zones.__STATS;
@@ -57,13 +53,13 @@ export class StreamZones extends React.Component {
 					{t('In', { ns: 'common' })}
 					:
 					{' '}
-					{stats.traffic.in ? `${this.formatReadableBytes(stats.traffic.in)}/${t('sec', { ns: 'common' })}` : 0}
+					<HumanReadableBytes value={stats.traffic.in} postfix={`/${t('sec', { ns: 'common' })}`} />
 				</p>
 				<p>
 					{t('Out', { ns: 'common' })}
 					:
 					{' '}
-					{stats.traffic.out ? `${this.formatReadableBytes(stats.traffic.out)}/${t('sec', { ns: 'common' })}` : 0}
+					<HumanReadableBytes value={stats.traffic.out} postfix={`/${t('sec', { ns: 'common' })}`} />
 				</p>
 			</IndexBox>
 		);

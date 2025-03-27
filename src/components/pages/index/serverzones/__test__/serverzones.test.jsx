@@ -11,6 +11,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { ServerZones } from '../serverzones.jsx';
 import utils from '../../../../../utils.js';
+import HumanReadableBytes from '#/components/human-readable-bytes/human-readable-bytes.jsx';
 
 describe('<ServerZones IndexPage />', () => {
 	describe('render()', () => {
@@ -80,9 +81,11 @@ describe('<ServerZones IndexPage />', () => {
 			// trafficBlock
 			expect(indexBox.childAt(1).type()).toBe('div');
 			// trafficBlock, row 2, text
-			expect(indexBox.childAt(1).childAt(1).text()).toBe('In: 0');
+			expect(indexBox.childAt(1).childAt(1).text()).toBe(`In: <${HumanReadableBytes.name} />`);
+			expect(indexBox.childAt(1).childAt(1).find(HumanReadableBytes).props().value).toBeUndefined();
 			// trafficBlock, row 3, text
-			expect(indexBox.childAt(1).childAt(2).text()).toBe('Out: 0');
+			expect(indexBox.childAt(1).childAt(2).text()).toBe(`Out: <${HumanReadableBytes.name} />`);
+			expect(indexBox.childAt(1).childAt(2).find(HumanReadableBytes).props().value).toBeUndefined();
 
 			props.data.server_zones.__STATS.traffic = {
 				in: 50,
@@ -91,16 +94,14 @@ describe('<ServerZones IndexPage />', () => {
 			wrapper.setProps(props);
 			indexBox = wrapper.find('IndexBox');
 
-			// trafficBlock, row 2, text
-			expect(indexBox.childAt(1).childAt(1).text()).toBe('In: 50/sec');
-			// trafficBlock, row 3, text
-			expect(indexBox.childAt(1).childAt(2).text()).toBe('Out: 45/sec');
-			// formatReadableBytes called twice
-			expect(utils.formatReadableBytes).toHaveBeenCalledTimes(2);
-			// formatReadableBytes call 1, arg
-			expect(utils.formatReadableBytes.mock.calls[0][0]).toBe(50);
-			// formatReadableBytes call 2, arg
-			expect(utils.formatReadableBytes.mock.calls[1][0]).toBe(45);
+			// traffic in row
+			expect(indexBox.childAt(1).childAt(1).text()).toBe(`In: <${HumanReadableBytes.name} />`);
+			expect(indexBox.childAt(1).childAt(1).find(HumanReadableBytes).props().value).toBe(props.data.server_zones.__STATS.traffic.in);
+			expect(indexBox.childAt(1).childAt(1).find(HumanReadableBytes).props().postfix).toBe('/sec');
+			// traffic out row
+			expect(indexBox.childAt(1).childAt(2).text()).toBe(`Out: <${HumanReadableBytes.name} />`);
+			expect(indexBox.childAt(1).childAt(2).find(HumanReadableBytes).props().value).toBe(props.data.server_zones.__STATS.traffic.out);
+			expect(indexBox.childAt(1).childAt(2).find(HumanReadableBytes).props().postfix).toBe('/sec');
 
 			utils.formatReadableBytes.mockRestore();
 			wrapper.unmount();

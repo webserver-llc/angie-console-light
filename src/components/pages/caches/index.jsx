@@ -17,12 +17,11 @@ import GaugeIndicator from '../../gaugeindicator/gaugeindicator.jsx';
 import Icon from '../../icon/icon.jsx';
 import cacheCalculator from '#/calculators/caches.js';
 import sharedZonesCalculator from '#/calculators/sharedzones.js';
-import utils from '#/utils.js';
 import tooltips from '#/tooltips/index.jsx';
 import { ExpandableTable, styles } from '#/components/table';
 import { CacheStateTooltip, SharedZoneTooltip } from '../tooltips.jsx';
 import cachesStyles from './style.css';
-import { translateReadableBytesUnits } from '../../../utils.js';
+import HumanReadableBytes from '#/components/human-readable-bytes/human-readable-bytes.jsx';
 
 export class Caches extends ExpandableTable {
 	getExpandableItems() {
@@ -43,11 +42,6 @@ export class Caches extends ExpandableTable {
 
 	componentDidMount() {
 		this.handleClickExpandingAll();
-	}
-
-	formatReadableBytes(value, measurementUnit) {
-		const { t } = this.props;
-		return utils.formatReadableBytes(value, measurementUnit, translateReadableBytesUnits({ t }));
 	}
 
 	render() {
@@ -129,7 +123,7 @@ export class Caches extends ExpandableTable {
 							let comp;
 
 							if (typeof cache.max_size === 'number') {
-								comp = this.formatReadableBytes(cache.max_size, 'GB');
+								comp = <HumanReadableBytes value={cache.max_size} measurementUnit="GB" />;
 							} else if (cache.shards) {
 								comp = <span>-</span>;
 							} else {
@@ -173,7 +167,7 @@ export class Caches extends ExpandableTable {
 									</td>
 									<td className={styles.bdr}>
 										{typeof cache.size === 'number' ? (
-											this.formatReadableBytes(cache.size, 'GB')
+											<HumanReadableBytes value={cache.size} measurementUnit="GB" />
 										) : (
 											<span>-</span>
 										)}
@@ -193,13 +187,13 @@ export class Caches extends ExpandableTable {
 											)}
 									</td>
 									<td className={styles['right-align']}>
-										{this.formatReadableBytes(cache.traffic.s_served)}
+										<HumanReadableBytes value={cache.traffic.s_served} />
 									</td>
 									<td className={styles['right-align']}>
-										{this.formatReadableBytes(cache.traffic.s_written)}
+										<HumanReadableBytes value={cache.traffic.s_written} />
 									</td>
 									<td className={`${styles.bdr} ${styles['right-align']}`}>
-										{this.formatReadableBytes(cache.traffic.s_bypassed)}
+										<HumanReadableBytes value={cache.traffic.s_bypassed} />
 									</td>
 									<td>
 										<GaugeIndicator percentage={cache.hit_percents_generic} />
@@ -274,16 +268,13 @@ export class Caches extends ExpandableTable {
 															</td>
 															<td className={styles.bdr}>
 																{typeof shard.max_size === 'number' ? (
-																	this.formatReadableBytes(
-																		shard.max_size,
-																		'GB',
-																	)
+																	<HumanReadableBytes value={shard.max_size} measurementUnit="GB" />
 																) : (
 																	<span>&infin;</span>
 																)}
 															</td>
 															<td className={styles.bdr}>
-																{this.formatReadableBytes(shard.size, 'GB')}
+																<HumanReadableBytes value={shard.size} measurementUnit="GB" />
 															</td>
 															<td className={styles.bdr}>
 																{typeof shard.max_size === 'number' &&
