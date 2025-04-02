@@ -196,6 +196,7 @@ export default class UpstreamsList extends SortableTable {
 					break;
 				case 'unavail':
 				case 'unhealthy':
+				case 'busy':
 					needOrder = 'failed';
 					break;
 				case 'checking':
@@ -346,6 +347,7 @@ export default class UpstreamsList extends SortableTable {
 				if (
 					a.state === 'down' ||
 					a.state === 'unhealthy' ||
+					a.state === 'busy' ||
 					a.state === 'unavail'
 				) {
 					return -1;

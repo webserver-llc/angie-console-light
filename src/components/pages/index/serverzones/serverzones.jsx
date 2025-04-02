@@ -17,14 +17,9 @@ import DataBinder from '../../../databinder/databinder.jsx';
 import api from '#/api';
 import calculateServerZones from '#/calculators/serverzones.js';
 import calculateLocationZones from '#/calculators/locationzones.js';
-import utils from '#/utils.js';
+import HumanReadableBytes from '../../../human-readable-bytes/human-readable-bytes.jsx';
 
 export class ServerZones extends React.Component {
-	formatReadableBytes(value) {
-		const { t } = this.props;
-		return utils.formatReadableBytes(value, undefined, utils.translateReadableBytesUnits({ t }));
-	}
-
 	render() {
 		const { props: { t, data, store } } = this;
 		const statuses = [];
@@ -47,13 +42,13 @@ export class ServerZones extends React.Component {
 						{t('In')}
 						:
 						{' '}
-						{stats.traffic.in ? `${this.formatReadableBytes(stats.traffic.in)}/${t('sec', { ns: 'common' })}` : 0}
+						<HumanReadableBytes value={stats.traffic.in} postfix={`/${t('sec', { ns: 'common' })}`} />
 					</p>
 					<p>
 						{t('Out')}
 						:
 						{' '}
-						{stats.traffic.out ? `${this.formatReadableBytes(stats.traffic.out)}/${t('sec', { ns: 'common' })}` : 0}
+						<HumanReadableBytes value={stats.traffic.out} postfix={`/${t('sec', { ns: 'common' })}`} />
 					</p>
 				</div>
 			);

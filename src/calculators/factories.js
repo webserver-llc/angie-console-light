@@ -53,6 +53,7 @@ export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer) {
 			break;
 		case 'unavail':
 		case 'unhealthy':
+		case 'busy':
 			STATS.servers.failed++;
 			STATS.failures.increment(upstream.name);
 			upstream.stats.failed++;

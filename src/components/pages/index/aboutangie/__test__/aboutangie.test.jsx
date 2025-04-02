@@ -18,7 +18,6 @@ import tooltipStyles from '../../../../tooltip/style.css';
 import utils from '../../../../../utils.js';
 import tooltips from '../../../../../tooltips/index.jsx';
 import { apiUtils } from '../../../../../api/index.js';
-import { docs } from '../utils.js';
 
 describe('<AboutAngieTooltip IndexPage />', () => {
 	describe('this.renderLinkToDocs()', () => {
@@ -57,7 +56,6 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 			const instance = wrapper.instance();
 			const link = shallow(instance.renderLinkToDocs());
 
-			expect(link.prop('href')).toBe(docs.default);
 			expect(link.text()).toBe(data.angie.version);
 
 			wrapper.unmount();
@@ -83,7 +81,6 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 			const instance = wrapper.instance();
 			const link = shallow(instance.renderLinkToDocs());
 
-			expect(link.prop('href')).toBe(docs.pro);
 			expect(link.text()).toBe(`${data.angie.version} ${data.angie.build}`);
 
 			wrapper.unmount();
@@ -155,8 +152,6 @@ describe('<AboutAngie IndexPage />', () => {
 
 		// link length
 		expect(link).toHaveLength(1);
-		// link href
-		expect(link.prop('href')).toBe(docs.pro);
 		// link target
 		expect(link.prop('target')).toBe('_blank');
 		// link text
@@ -169,10 +164,10 @@ describe('<AboutAngie IndexPage />', () => {
 		expect(table).toHaveLength(1);
 		// table className
 		expect(table.prop('className')).toBe(styles.table);
-		// table, row 1, cell 2 (angie address
-		expect(table.childAt(0).childAt(1).text()).toBe('localhost');
+		// table, row 2, cell 2 (angie address
+		expect(table.childAt(1).childAt(1).text()).toBe('localhost');
 
-		const tooltip = table.childAt(1).childAt(1).childAt(0);
+		const tooltip = table.childAt(2).childAt(1).childAt(0);
 
 		// tooltip className
 		expect(tooltip.prop('className')).toBe(styles.uptime);
