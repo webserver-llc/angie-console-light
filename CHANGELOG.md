@@ -1,6 +1,12 @@
 # Changelog
 
-## [v1.7.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.7.0) (2025-03-24)
+
+## [v1.7.1](https://github.com/webserver-llc/angie-console-light/releases/tag/1.7.1) (2025-04-04)
+
+### Fixed
+- Fixed incorrect values in the "HTTP/Location Zones" tables on the "HTTP-Zone" page.
+
+## [v1.7.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.7.0) (2025-04-02)
 
 ### Added
 - Display exact data volumes in bytes on mouse hover 
