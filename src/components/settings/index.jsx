@@ -84,6 +84,7 @@ class Settings extends React.Component {
 		return (
 			<div className={styles.settings}>
 				<h2 className={styles.title}>{t('Options')}</h2>
+				<h6>custom build for Angie ADC</h6>
 
 				<div className={styles.section}>
 					{t('Update every')}
