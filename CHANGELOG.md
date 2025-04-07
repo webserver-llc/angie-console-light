@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.7.2](https://github.com/webserver-llc/angie-console-light/releases/tag/1.7.2) (2025-04-07)
+
+### Fixed
+- Added "busy" option in filter controller on the "HTTP/TCP/UDP Upstreams" pages
 
 ## [v1.7.1](https://github.com/webserver-llc/angie-console-light/releases/tag/1.7.1) (2025-04-04)
 
