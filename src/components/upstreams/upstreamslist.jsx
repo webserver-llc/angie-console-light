@@ -28,6 +28,7 @@ export const FILTER_OPTIONS = {
 	failed: 'Failed',
 	checking: 'Checking',
 	down: 'Down',
+	busy: 'Busy',
 };
 
 export default class UpstreamsList extends SortableTable {

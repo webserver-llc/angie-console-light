@@ -1,6 +1,6 @@
 {
   "name": "angie-console-light",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "Angie Console Light",
   "main": "index.js",
   "scripts": {
