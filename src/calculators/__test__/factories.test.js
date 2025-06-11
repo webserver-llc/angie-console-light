@@ -52,6 +52,7 @@ describe('Calculators – factories', () => {
 						received: 0,
 						max_conns: 0,
 						health_checks: {},
+						response_time: {},
 						state: 'down',
 						responses: {
 							'4xx': 0,
@@ -98,6 +99,7 @@ describe('Calculators – factories', () => {
 			upstream = {
 				name,
 				configured_health_checks: true,
+				configured_response_time: true,
 				stats: {
 					all: 0,
 					up: 0,
@@ -115,6 +117,9 @@ describe('Calculators – factories', () => {
 				max_conns: 10,
 				health_checks: {
 					last_passed: 'passed'
+				},
+				response_time: {
+					header_time: 0, response_time: 0, connect_time: 0, first_byte_time: 0, last_byte_time: 0
 				},
 				state: 'up',
 				responses: {
@@ -183,6 +188,7 @@ describe('Calculators – factories', () => {
 				expect(upstream).toEqual({
 					name: i === 1 ? 'unknown_upstream' : name,
 					configured_health_checks: true,
+					configured_response_time: true,
 					stats: {
 						all: 1,
 						up: 1,
@@ -256,6 +262,7 @@ describe('Calculators – factories', () => {
 			expect(upstream).toEqual({
 				name,
 				configured_health_checks: true,
+				configured_response_time: true,
 				stats: {
 					all: 1,
 					up: 1,
@@ -325,6 +332,7 @@ describe('Calculators – factories', () => {
 			expect(upstream).toEqual({
 				name,
 				configured_health_checks: true,
+				configured_response_time: true,
 				stats: {
 					all: 1,
 					up: 1,
@@ -387,6 +395,7 @@ describe('Calculators – factories', () => {
 			expect(upstream).toEqual({
 				name,
 				configured_health_checks: true,
+				configured_response_time: true,
 				stats: {
 					all: 1,
 					up: 1,
@@ -462,6 +471,7 @@ describe('Calculators – factories', () => {
 			expect(upstream).toEqual({
 				name,
 				configured_health_checks: true,
+				configured_response_time: true,
 				stats: {
 					all: 1,
 					up: 0,
@@ -496,6 +506,7 @@ describe('Calculators – factories', () => {
 			expect(upstream).toEqual({
 				name,
 				configured_health_checks: true,
+				configured_response_time: true,
 				stats: {
 					all: 1,
 					up: 0,
@@ -531,6 +542,7 @@ describe('Calculators – factories', () => {
 			expect(upstream).toEqual({
 				name,
 				configured_health_checks: true,
+				configured_response_time: true,
 				stats: {
 					all: 1,
 					up: 0,
@@ -566,6 +578,7 @@ describe('Calculators – factories', () => {
 			expect(upstream).toEqual({
 				name,
 				configured_health_checks: true,
+				configured_response_time: true,
 				stats: {
 					all: 1,
 					up: 0,
@@ -600,6 +613,7 @@ describe('Calculators – factories', () => {
 			expect(upstream).toEqual({
 				name,
 				configured_health_checks: true,
+				configured_response_time: true,
 				stats: {
 					all: 1,
 					up: 0,

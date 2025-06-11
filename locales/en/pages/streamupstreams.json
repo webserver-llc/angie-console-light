@@ -21,5 +21,9 @@
   "Fails": "Fails",
   "Unavail": "Unavail",
   "Checks": "Checks",
-  "Last": "Last"
+  "Last": "Last",
+  "Response time": "Response time",
+  "Connect": "Connect",
+  "First byte": "First byte",
+  "Response": "Response"
 }

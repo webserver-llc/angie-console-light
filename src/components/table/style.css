@@ -338,7 +338,7 @@ td.status {
 }
 
 .promo-header-cell > span {
-  position: absolute;
+  position: relative;
   font-size: 12px;
   bottom: -10px;
   color: red;

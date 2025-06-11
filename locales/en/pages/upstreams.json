@@ -25,5 +25,8 @@
   "Fails": "Fails",
   "Unavail": "Unavail",
   "Checks": "Checks",
-  "Last": "Last"
+  "Last": "Last",
+  "Response time": "Response time",
+  "Headers": "Headers",
+  "Response": "Response"
 }

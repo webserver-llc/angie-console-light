@@ -81,7 +81,7 @@ class Upstream extends UpstreamsList {
 
 	renderPeers(peers) {
 		const { t } = this.props;
-		const { configured_health_checks } = this.props.upstream;
+		const { configured_health_checks, configured_response_time } = this.props.upstream;
 		return (
 			<table
 				className={`${styles.table} ${styles.wide}${this.state.hoveredColumns ? ` ${styles['hovered-expander']}` : ''
@@ -145,6 +145,15 @@ class Upstream extends UpstreamsList {
 											</span>
 										</th>
 									) : null}
+									{configured_response_time ? (
+										<th colSpan="2" className={styles['promo-header-cell']}>
+											<span>
+												{t('Available only in')}
+												{' '}
+												<span>Angie PRO</span>
+											</span>
+										</th>
+									) : null}
 								</tr>
 							)
 							: null
@@ -173,6 +182,9 @@ class Upstream extends UpstreamsList {
 						<th colSpan="2">{t('Server checks')}</th>
 						{configured_health_checks ? (
 							<th colSpan="3">{t('Health monitors')}</th>
+						) : null}
+						{configured_response_time ? (
+							<th colSpan="2">{t('Response time')}</th>
 						) : null}
 					</tr>
 					<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
@@ -244,8 +256,13 @@ class Upstream extends UpstreamsList {
 							? [
 								<th key="checks">{t('Checks')}</th>,
 								<th key="fails">{t('Fails')}</th>,
-								<th key="last">{t('Last')}</th>,
+								<th key="last" className={styles.bdr}>{t('Last')}</th>,
 							]
+							: null}
+						{configured_response_time ? [
+							<th>{t('Headers')}</th>,
+							<th>{t('Response')}</th>
+						]
 							: null}
 					</tr>
 				</thead>
@@ -402,6 +419,12 @@ class Upstream extends UpstreamsList {
 											<td key="health_checks_last">
 												{this.formatLastCheckDate(peer.health_checks.last)}
 											</td>
+										]
+									) : null}
+									{configured_response_time ? (
+										[
+											<td>{this.formatUptime(peer.response_time.header_time, true)}</td>,
+											<td>{this.formatUptime(peer.response_time.response_time, true)}</td>
 										]
 									) : null}
 								</tr>

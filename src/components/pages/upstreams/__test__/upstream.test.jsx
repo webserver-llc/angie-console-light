@@ -823,6 +823,7 @@ describe('<Upstream />', () => {
 					name="test"
 					upstream={{
 						configured_health_checks: false,
+						configured_response_time: false,
 						peers: []
 					}}
 				/>
@@ -863,6 +864,30 @@ describe('<Upstream />', () => {
 			expect(thead.childAt(1).children()).toHaveLength(7);
 			// head row 3, children length
 			expect(thead.childAt(2).children()).toHaveLength(19);
+		});
+
+		it('configured_response_time = true', () => {
+			const wrapper = shallow(
+				<Upstream
+					name="test"
+					upstream={{
+						configured_response_time: true,
+						peers: []
+					}}
+				/>
+			);
+			const instance = wrapper.instance();
+			const table = shallow(
+				instance.renderPeers([])
+			);
+
+			const thead = table.find('thead');
+			// head row 1, children length
+			expect(thead.childAt(0).children()).toHaveLength(8);
+			// head row 2, children length
+			expect(thead.childAt(1).children()).toHaveLength(7);
+			// head row 3, children length
+			expect(thead.childAt(2).children()).toHaveLength(18);
 		});
 	});
 });

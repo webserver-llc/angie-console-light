@@ -42,6 +42,10 @@ export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer) {
 		upstream.configured_health_checks = !isEmptyObj(peer.health_checks);
 	}
 
+	if (!upstream.configured_response_time) {
+		upstream.configured_response_time = !isEmptyObj(peer.response_time);
+	}
+
 	switch (peer.state) {
 		case 'up':
 			STATS.servers.up++;
@@ -91,6 +95,7 @@ export function handlePeer(upstreamsKey, STATS, previousState, upstream, peer) {
 export function handleUpstreams(upstreamsKey, STATS, previousState, slabs, upstream, name) {
 	upstream.name = name;
 	upstream.configured_health_checks = false;
+	upstream.configured_response_time = false;
 
 	utils.pickZoneSize(upstream, slabs, upstream.zone);
 

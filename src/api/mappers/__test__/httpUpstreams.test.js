@@ -10,9 +10,11 @@
 import mapperHttpUpstreams from '../httpUpstreams';
 
 describe('Mappers - HTTP Upstreams', () => {
-	it('mapperHttpUpstreams()', () => {
-		const angieHttpUpstreams = {
-			'upsteam-red': {
+	let angieHttpUpstreams; let nginxHttpUpstreams;
+
+	beforeEach(() => {
+		angieHttpUpstreams = {
+			'upstream-red': {
 				peers: {
 					'10.11.128.1:80': {
 						server: '10.11.128.1',
@@ -55,8 +57,8 @@ describe('Mappers - HTTP Upstreams', () => {
 				zone: 'upstream-red',
 			},
 		};
-		const nginxHttpUpsreams = {
-			'upsteam-red': {
+		nginxHttpUpstreams = {
+			'upstream-red': {
 				peers: [
 					{
 						id: '10.11.128.1:80',
@@ -95,6 +97,7 @@ describe('Mappers - HTTP Upstreams', () => {
 						downtime: 0,
 						downstart: '2023-08-15T10:38:41Z',
 						health_checks: {},
+						response_time: {},
 						sid: '8c7de8e7900b468ba646cb8a9e8a588b',
 						refs: 0,
 					},
@@ -104,8 +107,27 @@ describe('Mappers - HTTP Upstreams', () => {
 				zone: 'upstream-red',
 			},
 		};
+	});
+
+	it('mapperHttpUpstreams()', () => {
 		expect(mapperHttpUpstreams({})).toBeEmptyObject();
 		// should be correct format
-		expect(mapperHttpUpstreams(angieHttpUpstreams)).toEqual(nginxHttpUpsreams);
+		expect(mapperHttpUpstreams(angieHttpUpstreams)).toEqual(nginxHttpUpstreams);
+	});
+
+	it('response time mapping', () => {
+		angieHttpUpstreams['upstream-red'].peers['10.11.128.1:80'].health.first_byte_time = 1769;
+		angieHttpUpstreams['upstream-red'].peers['10.11.128.1:80'].health.last_byte_time = 1299753;
+		angieHttpUpstreams['upstream-red'].peers['10.11.128.1:80'].health.header_time = 50;
+		angieHttpUpstreams['upstream-red'].peers['10.11.128.1:80'].health.response_time = 100;
+		angieHttpUpstreams['upstream-red'].peers['10.11.128.1:80'].health.connect_time = 200;
+		nginxHttpUpstreams['upstream-red'].peers[0].response_time = {};
+		nginxHttpUpstreams['upstream-red'].peers[0].response_time.first_byte_time = 1769;
+		nginxHttpUpstreams['upstream-red'].peers[0].response_time.last_byte_time = 1299753;
+		nginxHttpUpstreams['upstream-red'].peers[0].response_time.header_time = 50;
+		nginxHttpUpstreams['upstream-red'].peers[0].response_time.response_time = 100;
+		nginxHttpUpstreams['upstream-red'].peers[0].response_time.connect_time = 200;
+
+		expect(mapperHttpUpstreams(angieHttpUpstreams)).toEqual(nginxHttpUpstreams);
 	});
 });

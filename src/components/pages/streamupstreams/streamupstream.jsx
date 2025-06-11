@@ -40,7 +40,8 @@ class StreamUpstream extends UpstreamsList {
 
 	renderPeers(peers) {
 		const { t } = this.props;
-		const { configured_health_checks } = this.props.upstream;
+		const { configured_health_checks, configured_response_time } = this.props.upstream;
+
 		return (
 			<table className={`${styles.table} ${styles.wide}`}>
 				<thead>
@@ -65,7 +66,16 @@ class StreamUpstream extends UpstreamsList {
 										<span>Angie PRO</span>
 									</span>
 								</th>
-							) : null}
+							) : null }
+							{configured_response_time ? (
+								<th colSpan="3" className={styles['promo-header-cell']}>
+									<span>
+										{t('Available only in')}
+										{' '}
+										<span>Angie PRO</span>
+									</span>
+								</th>
+							) : null }
 						</tr>
 					) : null}
 					<tr>
@@ -86,6 +96,9 @@ class StreamUpstream extends UpstreamsList {
 						<th colSpan="2">{t('Server checks')}</th>
 						{configured_health_checks ? (
 							<th colSpan="3">{t('Health monitors')}</th>
+						) : null}
+						{configured_response_time ? (
+							<th colSpan="3">{t('Response time')}</th>
 						) : null}
 					</tr>
 					<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
@@ -120,8 +133,14 @@ class StreamUpstream extends UpstreamsList {
 							? [
 								<th key="checks">{t('Checks')}</th>,
 								<th key="fails">{t('Fails')}</th>,
-								<th key="last">{t('Last')}</th>,
+								<th key="last" className={styles.bdr}>{t('Last')}</th>,
 							]
+							: null}
+						{configured_response_time ? [
+							<th>{t('Connect')}</th>,
+							<th>{t('First byte')}</th>,
+							<th>{t('Response')}</th>
+						]
 							: null}
 					</tr>
 				</thead>
@@ -203,6 +222,13 @@ class StreamUpstream extends UpstreamsList {
 										</td>,
 									]
 									: null}
+								{configured_response_time ? (
+									[
+										<td>{this.formatUptime(peer.response_time.connect_time, true)}</td>,
+										<td>{this.formatUptime(peer.response_time.first_byte_time, true)}</td>,
+										<td>{this.formatUptime(peer.response_time.last_byte_time, true)}</td>
+									]
+								) : null}
 							</tr>
 						))}
 				</tbody>

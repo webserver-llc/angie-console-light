@@ -22,7 +22,18 @@ export default (response) => {
 				state,
 				data: { sent, received },
 				selected: { current, total, last },
-				health: { fails, unavailable, downtime, downstart, probes },
+				health: {
+					fails,
+					unavailable,
+					downtime,
+					downstart,
+					probes,
+					header_time,
+					response_time,
+					connect_time,
+					first_byte_time,
+					last_byte_time,
+				},
 			} = peers[key];
 			peers[key].id = key;
 			peers[key].name = key;
@@ -55,6 +66,14 @@ export default (response) => {
 					last_passed: state !== 'unhealthy',
 				};
 			}
+
+			peers[key].response_time = {};
+			const timingData = { header_time, response_time, connect_time, first_byte_time, last_byte_time };
+
+			if (Object.values(timingData).some(Boolean)) {
+				peers[key].response_time = timingData;
+			}
+
 			result.push(peers[key]);
 		});
 		response[key].peers = result;
