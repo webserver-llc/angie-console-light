@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.8.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.8.0) (2025-04-02)
+## [v1.8.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.8.0) (2025-06-26)
 
 ### Added
 - Display response time metrics for HTTP and TCP/UDP upstreams
