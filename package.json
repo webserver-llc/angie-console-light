@@ -16,7 +16,7 @@
     "start-demo-prod": "yarn clean-dist && NODE_ENV=production FILE_NAME=demo CONSOLE_TYPE=demo webpack-dev-server",
     "test": "jest",
     "test-demo": "CONSOLE_TYPE=demo jest",
-    "spellcheck": "npx cspell-cli -c cspell.config.json"
+    "spellcheck": "npx cspell-cli@8.19.1 -c cspell.config.json"
   },
   "author": "Ivan Poluyanov <ip@nginx.com>",
   "license": "Apache-2.0",
