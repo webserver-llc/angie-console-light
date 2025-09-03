@@ -1,5 +1,5 @@
 {
   "Copy": "Скопировать",
-  "The <2>config_files</2> object is unavailable; check your configuration and ensure the <6>api_config_files</6> directive is enabled.": "Объект <2>config_files</2> не доступен; проверьте конфигурацию и убедитесь, что директива <6>api_config_files</6> включена.",
+  "The <2>config_files</2> object is unavailable; check your configuration and ensure the <6>api_config_files</6> directive is enabled.": "Объект <2>config_files</2> недоступен; проверьте конфигурацию и убедитесь, что директива <6>api_config_files</6> включена.",
   "Config Files": "Конфигурация"
 }
