@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.8.1](https://github.com/webserver-llc/angie-console-light/releases/tag/1.8.1) (2025-09-08)
+
+### Fixed
+- Fixed incorrect terms in Settings and tooltips
+
 ## [v1.8.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.8.0) (2025-06-26)
 
 ### Added
