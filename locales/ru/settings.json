@@ -3,7 +3,7 @@
   "Update every": "Обновлять каждые",
   "sec": "сек.",
   "4xx warnings threshold": "Пороговое значение ошибок для 4xx",
-  "Calculate hit ratio for the past": "Вычислять за последние",
+  "Calculate hit ratio for the past": "Вычислять коэффициент попадания в кэш за последние",
   "Non synced data threshold": "Пороговое значение для несинхронизированных данных",
   "Resolver errors threshold": "Пороговое значение ошибок DNS",
   "Save": "Сохранить",

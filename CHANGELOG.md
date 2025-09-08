@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.8.1](https://github.com/webserver-llc/angie-console-light/releases/tag/1.8.1) (2025-09-08)
+
+### Fixed
+- Fixed incorrect terms in Settings and tooltips
+
 ## [v1.8.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.8.0) (2025-06-26)
 
 ### Added
@@ -47,7 +52,7 @@
 - Added switching the server to the "draining" state in the upstream context
 
 ## [v1.2.1](https://github.com/webserver-llc/angie-console-light/releases/tag/1.2.1) (2023-12-26)
-- Added an active health checks in the Stream context
+- Added an active health probe in the Stream context
 
 ## [v1.2.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.2.0) (2023-12-25)
 - Upstream editing added in the Stream context

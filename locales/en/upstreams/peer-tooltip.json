@@ -1,7 +1,7 @@
 {
   "Failed": "Failed",
-  "Passive health check failed": "Passive health check failed",
-  "Active health check failed": "Active health check failed",
+  "Passive health check failed": "Passive health probe failed",
+  "Active health check failed": "Active health probe failed",
   "Checking": "Checking",
   "Up": "Up",
   "Down": "Down",
