@@ -563,6 +563,26 @@ describe('<UpstreamsList />', () => {
 			tooltips.useTooltip.mockRestore();
 		});
 
+		it('isAngieAdc = true', () => {
+			jest.spyOn(apiUtils, 'isAngieAdc').mockClear().mockImplementation(() => false);
+			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
+				prop_from_useTooltip: true
+			}));
+			const editButton = shallow(instance.renderEditButton());
+
+			// has class
+			expect(editButton.prop('className')).toBe(styles['edit-disable']);
+			// useTooltip called once
+			expect(tooltips.useTooltip).toHaveBeenCalled();
+			// useTooltip call arg
+			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Available only in Angie PRO');
+			// useTooltip call arg
+			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
+
+			apiUtils.isAngieAdc.mockRestore();
+			tooltips.useTooltip.mockRestore();
+		});
+
 		it('isAngiePro = true', () => {
 			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
 			const editButton = shallow(instance.renderEditButton());

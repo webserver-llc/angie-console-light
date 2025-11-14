@@ -307,13 +307,17 @@ export default class UpstreamsList extends SortableTable {
 			);
 		}
 
-		if (!apiUtils.isAngiePro()) {
+		if (apiUtils.isAngieAdc()) {
+			return null;
+		}
+
+		if (apiUtils.isAngiePro()) {
 			return (
 				<span
 					className={
-						styles['edit-disable']
+						this.state.editMode ? styles['edit-active'] : styles.edit
 					}
-					{...tooltips.useTooltip(`${t('Available only in Angie PRO', { ns: 'upstreams.upstreams-list' })}`, 'hint-right')}
+					onClick={this.toggleEditMode}
 				/>
 			);
 		}
@@ -321,9 +325,9 @@ export default class UpstreamsList extends SortableTable {
 		return (
 			<span
 				className={
-					this.state.editMode ? styles['edit-active'] : styles.edit
+					styles['edit-disable']
 				}
-				onClick={this.toggleEditMode}
+				{...tooltips.useTooltip(`${t('Available only in Angie PRO', { ns: 'upstreams.upstreams-list' })}`, 'hint-right')}
 			/>
 		);
 	}
