@@ -88,6 +88,32 @@ describe('<AboutAngieTooltip IndexPage />', () => {
 		});
 	});
 
+	it('ADC URL', () => {
+		jest.spyOn(apiUtils, 'isAngieAdc').mockClear().mockImplementation(() => true);
+
+		const data = {
+			angie: {
+				build: 'ADC',
+				version: '0.0.1',
+				address: 'localhost',
+				load_time: 1599571720025
+			}
+		};
+		const wrapper = shallow(
+			<AboutAngie
+				data={data}
+				className="test"
+			/>
+		);
+		const instance = wrapper.instance();
+		const link = shallow(instance.renderLinkToDocs());
+
+		expect(link.prop('href')).toBe('Docs ADC URL');
+
+		wrapper.unmount();
+		apiUtils.isAngieAdc.mockRestore();
+	});
+
 	it('returning component', () => {
 		jest.spyOn(utils, 'formatDate').mockClear().mockImplementation(() => 'test_formatDate_result');
 

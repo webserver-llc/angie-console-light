@@ -12,7 +12,7 @@ import { withNamespaces } from 'react-i18next';
 
 import IndexBox from '../indexbox/indexbox.jsx';
 import DataBinder from '../../../databinder/databinder.jsx';
-import api from '#/api';
+import api, { apiUtils } from '#/api';
 import utils from '#/utils.js';
 import tooltips from '#/tooltips/index.jsx';
 import styles from './style.css';
@@ -53,8 +53,10 @@ export class AboutAngie extends React.Component {
 			text += ` ${angie.build}`;
 		}
 
+		const docsURLKey = apiUtils.isAngieAdc() ? 'Docs ADC URL' : 'Docs URL';
+
 		return (
-			<a href={t('Docs URL')} target="_blank" className={styles.release} rel="noreferrer">
+			<a href={t(docsURLKey)} target="_blank" className={styles.release} rel="noreferrer">
 				{text}
 			</a>
 		);

@@ -4,5 +4,6 @@
   "Address": "Адрес",
   "Last reload": "Последняя перезагрузка",
   "Version": "Версия",
-  "Docs URL": "https://angie.software/angie/docs/"
+  "Docs URL": "https://angie.software/angie/docs/",
+  "Docs ADC URL": "https://angie.software/adc/docs/"
 }

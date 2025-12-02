@@ -47,14 +47,17 @@ describe('Api', () => {
 	describe('defineAngieVersion()', () => {
 		it('default value', () => {
 			expect(Api.isAngiePro() === false).toBeTruthy();
+			expect(Api.isAngieAdc() === false).toBeTruthy();
 		});
 		it('Pro build', () => {
 			Api.defineAngieVersion('Angie PRO');
 			expect(Api.isAngiePro() === true).toBeTruthy();
+			expect(Api.isAngieAdc() === true).toBeFalsy();
 		});
 		it('ADC build', () => {
 			Api.defineAngieVersion('Angie ADC');
 			expect(Api.isAngiePro() === true).toBeTruthy();
+			expect(Api.isAngieAdc() === true).toBeTruthy();
 		});
 	});
 

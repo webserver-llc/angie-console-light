@@ -42,6 +42,7 @@ export const httpUpstreamsApi = new UpstreamsApi('http');
 export const streamUpstreamsApi = new UpstreamsApi('stream');
 
 export let isAngieProFlag = false;
+let isAngieAdcFlag = false;
 let apiWritePermissions = null;
 
 export const checkWritePermissions = (sendCredentials = false) =>
@@ -63,6 +64,7 @@ export const checkWritePermissions = (sendCredentials = false) =>
 
 export const isWritable = () => apiWritePermissions;
 export const isAngiePro = () => isAngieProFlag;
+export const isAngieAdc = () => isAngieAdcFlag;
 
 export function defineAngieVersion(build) {
 	if (!build || typeof build !== 'string') {
@@ -78,7 +80,7 @@ export function defineAngieVersion(build) {
 	}
 
 	if (build.indexOf('adc') !== -1) {
-		isAngieProFlag = true;
+		isAngieAdcFlag = true;
 		return;
 	}
 
@@ -193,4 +195,5 @@ export const apiUtils = {
 	defineAngieVersion,
 	isWritable,
 	isAngiePro,
+	isAngieAdc,
 };
