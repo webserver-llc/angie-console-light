@@ -563,7 +563,7 @@ describe('<UpstreamsList />', () => {
 			tooltips.useTooltip.mockRestore();
 		});
 
-		it('isAngieAdc = true', () => {
+		it('isAngieAdc = false', () => {
 			jest.spyOn(apiUtils, 'isAngieAdc').mockClear().mockImplementation(() => false);
 			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
 				prop_from_useTooltip: true

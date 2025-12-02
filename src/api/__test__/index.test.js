@@ -47,7 +47,7 @@ describe('Api', () => {
 	describe('defineAngieVersion()', () => {
 		it('default value', () => {
 			expect(Api.isAngiePro() === false).toBeTruthy();
-			expect(Api.isAngiePro() === false).toBeTruthy();
+			expect(Api.isAngieAdc() === false).toBeTruthy();
 		});
 		it('Pro build', () => {
 			Api.defineAngieVersion('Angie PRO');

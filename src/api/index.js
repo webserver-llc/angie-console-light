@@ -80,7 +80,6 @@ export function defineAngieVersion(build) {
 	}
 
 	if (build.indexOf('adc') !== -1) {
-		isAngieProFlag = true;
 		isAngieAdcFlag = true;
 		return;
 	}
