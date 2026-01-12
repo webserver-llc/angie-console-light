@@ -58,7 +58,8 @@
 }
 
 .status_warning,
-.status_checking {
+.status_checking,
+.status_recovering {
   background-color: #ffab08;
   composes: status;
 }

@@ -27,8 +27,10 @@ export const FILTER_OPTIONS = {
 	up: 'Up',
 	failed: 'Failed',
 	checking: 'Checking',
+	recovering: 'Recovering',
 	down: 'Down',
 	busy: 'Busy',
+	idle: 'Idle'
 };
 
 export default class UpstreamsList extends SortableTable {
@@ -201,9 +203,11 @@ export default class UpstreamsList extends SortableTable {
 					needOrder = 'failed';
 					break;
 				case 'checking':
+				case 'recovering':
 					needOrder = 'checking';
 					break;
 				case 'down':
+				case 'idle':
 					needOrder = 'down';
 					break;
 			}

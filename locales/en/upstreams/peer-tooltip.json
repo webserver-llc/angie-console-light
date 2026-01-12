@@ -6,6 +6,9 @@
   "Up": "Up",
   "Down": "Down",
   "Busy": "Busy",
+  "Idle": "Idle",
+  "Recovering": "Recovering",
+  "Draining": "Draining",
   "Type: backup": "Type: backup",
   "Total downtime:": "Total downtime:",
   "Down since:": "Down since:"
