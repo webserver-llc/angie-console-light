@@ -313,6 +313,7 @@ describe('<UpstreamsList />', () => {
 			{ state: 'unhealthy' },
 			{ state: 'busy' },
 			{ state: 'checking' },
+			{ state: 'idle' },
 			{ state: 'down' }
 		];
 		const wrapper = shallow(
@@ -333,7 +334,7 @@ describe('<UpstreamsList />', () => {
 		// checking filtering
 		expect(instance.filterPeers(peers, 'checking')).toEqual([{ state: 'checking' }]);
 		// down filtering
-		expect(instance.filterPeers(peers, 'down')).toEqual([{ state: 'down' }]);
+		expect(instance.filterPeers(peers, 'down')).toEqual([{ state: 'idle' }, { state: 'down' }]);
 		// all filtering
 		expect(instance.filterPeers(peers, 'all')).toEqual(peers);
 
@@ -505,6 +506,7 @@ describe('<UpstreamsList />', () => {
 					{ id: 'test_2', state: 'unavail' },
 					{ id: 'test_3', state: 'unhealthy' },
 					{ id: 'test_4', state: 'checking' },
+					{ id: 'test_4', state: 'idle' },
 					{ id: 'test_5', state: 'down' }
 				],
 				zoneSize: null,
@@ -623,7 +625,8 @@ describe('<UpstreamsList />', () => {
 					{ id: 'test_2', state: 'unavail' },
 					{ id: 'test_3', state: 'unhealthy' },
 					{ id: 'test_4', state: 'checking' },
-					{ id: 'test_5', state: 'down' }
+					{ id: 'test_5', state: 'down' },
+					{ id: 'test_6', state: 'idle' }
 				],
 				zoneSize: null,
 				slab: 'slab_test'
@@ -705,6 +708,8 @@ describe('<UpstreamsList />', () => {
 		expect(instance.renderPeers.mock.calls[0][0][3].id).toBe('test_4');
 		// [1] peers order
 		expect(instance.renderPeers.mock.calls[0][0][4].id).toBe('test_5');
+		// [1] peers order
+		expect(instance.renderPeers.mock.calls[0][0][5].id).toBe('test_6');
 
 		// useTooltip called once
 		expect(tooltips.useTooltip).toHaveBeenCalled();
