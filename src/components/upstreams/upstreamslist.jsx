@@ -29,6 +29,7 @@ export const FILTER_OPTIONS = {
 	checking: 'Checking',
 	recovering: 'Recovering',
 	down: 'Down',
+	draining: 'Draining',
 	busy: 'Busy',
 	idle: 'Idle'
 };
@@ -208,6 +209,7 @@ export default class UpstreamsList extends SortableTable {
 					break;
 				case 'down':
 				case 'idle':
+				case 'draining':
 					needOrder = 'down';
 					break;
 			}

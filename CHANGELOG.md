@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.9.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.9.0) (2026-05-17)
+## [v1.9.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.9.0) (2026-08-13)
 ### Added
 - Added new states for upstreams
 
