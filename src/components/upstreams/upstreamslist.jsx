@@ -291,18 +291,25 @@ export default class UpstreamsList extends SortableTable {
 
 	renderEditButton() {
 		const { t } = this.props;
+		const editLabel = t('Edit', { ns: 'upstreams.upstreams-list' });
+
+		const renderEditContent = () => (
+			<>
+				<span className={styles['edit-icon']} aria-hidden="true" />
+				<span className={styles['edit-text']}>{editLabel}</span>
+			</>
+		);
+
 		if (envUtils.isDemoEnv()) {
 			return (
-				<span
-					className={styles['edit-label']}
-				>
-						<span className={styles['edit-icon']} />
-						<span className={styles['promo-text']}>
-							{t('Editing is only available in Angie PRO', { ns: 'upstreams.upstreams-list' })}
-						</span>
+				<span className={styles['edit-label']}>
+					<span className={styles['edit-icon']} aria-hidden="true" />
+					<span className={styles['promo-text']}>
+						{t('Editing is only available in Angie PRO', { ns: 'upstreams.upstreams-list' })}
 					</span>
-				);
-			}
+				</span>
+			);
+		}
 
 		if (apiUtils.isAngieAdc()) {
 			return null;
@@ -314,20 +321,24 @@ export default class UpstreamsList extends SortableTable {
 					className={
 						this.state.editMode ? styles['edit-active'] : styles.edit
 					}
+					aria-label={editLabel}
 					onClick={this.toggleEditMode}
-				/>
+				>
+					{renderEditContent()}
+				</span>
 			);
 		}
 
 		return (
 			<span
-					className={
-						styles['edit-disable']
-					}
-					{...tooltips.useTooltip(`${t('Editing is only available in Angie PRO', { ns: 'upstreams.upstreams-list' })}`, 'hint-right')}
-				/>
-			);
-		}
+				className={styles['edit-disable']}
+				aria-label={editLabel}
+				{...tooltips.useTooltip(`${t('Editing is only available in Angie PRO', { ns: 'upstreams.upstreams-list' })}`, 'hint-right')}
+			>
+				{renderEditContent()}
+			</span>
+		);
+	}
 
 	render() {
 		const { t, name, upstream } = this.props;

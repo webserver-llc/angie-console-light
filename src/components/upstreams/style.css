@@ -48,13 +48,12 @@
 
 .edit {
   composes: btn;
-  width: 24px;
-  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  padding: 0 10px 0 6px;
   margin: 0 15px 0 20px;
-  background-image: url("/img/pencil.svg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 14px;
+  gap: 4px;
 }
 
 .edit-icon {
@@ -65,11 +64,12 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: 14px;
-  vertical-align: top;
+  flex: none;
 }
 
 .edit-label {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   height: 24px;
   line-height: 24px;
   font-size: 13px;
@@ -79,6 +79,7 @@
   color: #989a9c;
   margin: 0 10px;
   vertical-align: bottom;
+  gap: 4px;
 }
 
 .edit-label .edit-icon {
@@ -89,6 +90,7 @@
   composes: edit;
   background-color: #6e6c6e;
   border-color: #6e6c6e;
+  color: #fff;
 }
 
 .zone-capacity {
@@ -99,16 +101,15 @@
 
 .edit-disable {
   composes: btn;
-  width: 24px;
-  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  padding: 0 10px 0 6px;
   margin: 0 15px 0 20px;
   opacity: 0.8;
-  background-image: url("/img/pencil.svg");
   background-color: #dedede;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 14px;
   cursor: default;
+  gap: 4px;
 }
 
 .btn:hover {
@@ -249,4 +250,12 @@
 
 .promo-text span {
   color: black;
+}
+
+.edit-text {
+  white-space: nowrap;
+}
+
+.edit-active .edit-text {
+  color: #fff;
 }

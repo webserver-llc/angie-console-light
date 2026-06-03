@@ -523,35 +523,41 @@ describe('<UpstreamsList />', () => {
 			wrapper.unmount();
 		});
 
-		it('isDemoEnv = true', () => {
-			jest.spyOn(envUtils, 'isDemoEnv').mockClear().mockImplementation(() => true);
-			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);
-			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
-				prop_from_useTooltip: true
-			}));
-			const editButton = shallow(instance.renderEditButton());
+			it('isDemoEnv = true', () => {
+				jest.spyOn(envUtils, 'isDemoEnv').mockClear().mockImplementation(() => true);
+				jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);
+				jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
+					prop_from_useTooltip: true
+				}));
+				const editButton = shallow(instance.renderEditButton());
 
-			// has class
-			expect(editButton.prop('className')).toBe(styles['edit-label']);
-			// has class
-			expect(editButton.childAt(0).prop('className')).toBe(styles['edit-icon']);
-			// has class
-			expect(editButton.childAt(1).prop('className')).toBe(styles['promo-text']);
+				// has class
+				expect(editButton.prop('className')).toBe(styles['edit-label']);
+				// has class
+				expect(editButton.childAt(0).prop('className')).toBe(styles['edit-icon']);
+				// has class
+				expect(editButton.childAt(1).prop('className')).toBe(styles['promo-text']);
 
-			apiUtils.isAngiePro.mockRestore();
-			envUtils.isDemoEnv.mockRestore();
-			tooltips.useTooltip.mockRestore();
-		});
+				apiUtils.isAngiePro.mockRestore();
+				envUtils.isDemoEnv.mockRestore();
+				tooltips.useTooltip.mockRestore();
+			});
 
-		it('isAngiePro = false', () => {
-			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);
-			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
-				prop_from_useTooltip: true
-			}));
-			const editButton = shallow(instance.renderEditButton());
+			it('isAngiePro = false', () => {
+				jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => false);
+				jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
+					prop_from_useTooltip: true
+				}));
+				const editButton = shallow(instance.renderEditButton());
 
-			// has class
-			expect(editButton.prop('className')).toBe(styles['edit-disable']);
+				// has class
+				expect(editButton.prop('className')).toBe(styles['edit-disable']);
+				// has class
+				expect(editButton.childAt(0).prop('className')).toBe(styles['edit-icon']);
+				// has class
+				expect(editButton.childAt(1).prop('className')).toBe(styles['edit-text']);
+				// has text
+				expect(editButton.childAt(1).text()).toBe('Edit');
 				// useTooltip called once
 				expect(tooltips.useTooltip).toHaveBeenCalled();
 				// useTooltip call arg
@@ -559,19 +565,25 @@ describe('<UpstreamsList />', () => {
 				// useTooltip call arg
 				expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
 
-			apiUtils.isAngiePro.mockRestore();
-			tooltips.useTooltip.mockRestore();
-		});
+				apiUtils.isAngiePro.mockRestore();
+				tooltips.useTooltip.mockRestore();
+			});
 
-		it('isAngieAdc = false', () => {
-			jest.spyOn(apiUtils, 'isAngieAdc').mockClear().mockImplementation(() => false);
-			jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
-				prop_from_useTooltip: true
-			}));
-			const editButton = shallow(instance.renderEditButton());
+			it('isAngieAdc = false', () => {
+				jest.spyOn(apiUtils, 'isAngieAdc').mockClear().mockImplementation(() => false);
+				jest.spyOn(tooltips, 'useTooltip').mockClear().mockImplementation(() => ({
+					prop_from_useTooltip: true
+				}));
+				const editButton = shallow(instance.renderEditButton());
 
-			// has class
-			expect(editButton.prop('className')).toBe(styles['edit-disable']);
+				// has class
+				expect(editButton.prop('className')).toBe(styles['edit-disable']);
+				// has class
+				expect(editButton.childAt(0).prop('className')).toBe(styles['edit-icon']);
+				// has class
+				expect(editButton.childAt(1).prop('className')).toBe(styles['edit-text']);
+				// has text
+				expect(editButton.childAt(1).text()).toBe('Edit');
 				// useTooltip called once
 				expect(tooltips.useTooltip).toHaveBeenCalled();
 				// useTooltip call arg
@@ -579,22 +591,28 @@ describe('<UpstreamsList />', () => {
 				// useTooltip call arg
 				expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
 
-			apiUtils.isAngieAdc.mockRestore();
-			tooltips.useTooltip.mockRestore();
+				apiUtils.isAngieAdc.mockRestore();
+				tooltips.useTooltip.mockRestore();
+			});
+
+			it('isAngiePro = true', () => {
+				jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
+				const editButton = shallow(instance.renderEditButton());
+
+				// has class
+				expect(editButton.prop('className')).toBe(styles.edit);
+				// has class
+				expect(editButton.childAt(0).prop('className')).toBe(styles['edit-icon']);
+				// has class
+				expect(editButton.childAt(1).prop('className')).toBe(styles['edit-text']);
+				// has text
+				expect(editButton.childAt(1).text()).toBe('Edit');
+				// has click handler
+				expect(editButton.prop('onClick').name).toBe('bound toggleEditMode');
+
+				apiUtils.isAngiePro.mockRestore();
+			});
 		});
-
-		it('isAngiePro = true', () => {
-			jest.spyOn(apiUtils, 'isAngiePro').mockClear().mockImplementation(() => true);
-			const editButton = shallow(instance.renderEditButton());
-
-			// has class
-			expect(editButton.prop('className')).toBe(styles.edit);
-			// has click handler
-			expect(editButton.prop('onClick').name).toBe('bound toggleEditMode');
-
-			apiUtils.isAngiePro.mockRestore();
-		});
-	});
 
 	it('render()', () => {
 		const props = {
