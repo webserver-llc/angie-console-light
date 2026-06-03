@@ -296,16 +296,13 @@ export default class UpstreamsList extends SortableTable {
 				<span
 					className={styles['edit-label']}
 				>
-					<span className={styles['edit-icon']} />
-					<span className={styles['promo-text']}>
-						{t('Available only in', { ns: 'upstreams.upstreams-list' })}
-						{' '}
-						<span>Angie PRO</span>
-						&nbsp;
+						<span className={styles['edit-icon']} />
+						<span className={styles['promo-text']}>
+							{t('Editing is only available in Angie PRO', { ns: 'upstreams.upstreams-list' })}
+						</span>
 					</span>
-				</span>
-			);
-		}
+				);
+			}
 
 		if (apiUtils.isAngieAdc()) {
 			return null;
@@ -324,13 +321,13 @@ export default class UpstreamsList extends SortableTable {
 
 		return (
 			<span
-				className={
-					styles['edit-disable']
-				}
-				{...tooltips.useTooltip(`${t('Available only in Angie PRO', { ns: 'upstreams.upstreams-list' })}`, 'hint-right')}
-			/>
-		);
-	}
+					className={
+						styles['edit-disable']
+					}
+					{...tooltips.useTooltip(`${t('Editing is only available in Angie PRO', { ns: 'upstreams.upstreams-list' })}`, 'hint-right')}
+				/>
+			);
+		}
 
 	render() {
 		const { t, name, upstream } = this.props;

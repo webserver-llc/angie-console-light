@@ -552,12 +552,12 @@ describe('<UpstreamsList />', () => {
 
 			// has class
 			expect(editButton.prop('className')).toBe(styles['edit-disable']);
-			// useTooltip called once
-			expect(tooltips.useTooltip).toHaveBeenCalled();
-			// useTooltip call arg
-			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Available only in Angie PRO');
-			// useTooltip call arg
-			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
+				// useTooltip called once
+				expect(tooltips.useTooltip).toHaveBeenCalled();
+				// useTooltip call arg
+				expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Editing is only available in Angie PRO');
+				// useTooltip call arg
+				expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
 
 			apiUtils.isAngiePro.mockRestore();
 			tooltips.useTooltip.mockRestore();
@@ -572,12 +572,12 @@ describe('<UpstreamsList />', () => {
 
 			// has class
 			expect(editButton.prop('className')).toBe(styles['edit-disable']);
-			// useTooltip called once
-			expect(tooltips.useTooltip).toHaveBeenCalled();
-			// useTooltip call arg
-			expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Available only in Angie PRO');
-			// useTooltip call arg
-			expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
+				// useTooltip called once
+				expect(tooltips.useTooltip).toHaveBeenCalled();
+				// useTooltip call arg
+				expect(tooltips.useTooltip.mock.calls[0][0]).toBe('Editing is only available in Angie PRO');
+				// useTooltip call arg
+				expect(tooltips.useTooltip.mock.calls[0][1]).toBe('hint-right');
 
 			apiUtils.isAngieAdc.mockRestore();
 			tooltips.useTooltip.mockRestore();
