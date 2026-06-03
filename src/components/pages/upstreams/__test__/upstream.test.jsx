@@ -837,9 +837,7 @@ describe('<Upstream />', () => {
 			// head row 1, children length
 			expect(thead.childAt(0).children()).toHaveLength(7);
 			// head row 2, children length
-			expect(thead.childAt(1).children()).toHaveLength(6);
-			// head row 3, children length
-			expect(thead.childAt(2).children()).toHaveLength(16);
+			expect(thead.childAt(1).children()).toHaveLength(16);
 		});
 
 		it('configured_health_checks = true', () => {
@@ -861,9 +859,7 @@ describe('<Upstream />', () => {
 			// head row 1, children length
 			expect(thead.childAt(0).children()).toHaveLength(8);
 			// head row 2, children length
-			expect(thead.childAt(1).children()).toHaveLength(7);
-			// head row 3, children length
-			expect(thead.childAt(2).children()).toHaveLength(19);
+			expect(thead.childAt(1).children()).toHaveLength(19);
 		});
 
 		it('configured_response_time = true', () => {
@@ -885,9 +881,7 @@ describe('<Upstream />', () => {
 			// head row 1, children length
 			expect(thead.childAt(0).children()).toHaveLength(8);
 			// head row 2, children length
-			expect(thead.childAt(1).children()).toHaveLength(7);
-			// head row 3, children length
-			expect(thead.childAt(2).children()).toHaveLength(18);
+			expect(thead.childAt(1).children()).toHaveLength(18);
 		});
 	});
 });
