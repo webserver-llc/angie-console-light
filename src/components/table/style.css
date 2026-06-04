@@ -334,19 +334,23 @@ td.status {
 }
 
 .promo-header-cell {
-  position: relative;
+  vertical-align: bottom;
+  text-align: center;
 }
 
-.promo-header-cell > span {
-  position: relative;
-  font-size: 12px;
-  bottom: -10px;
+.promo-header-main {
+  display: block;
+  font-size: inherit;
+  line-height: 18px;
+}
+
+.promo-header-sub {
+  display: block;
+  margin-top: 2px;
   color: red;
+  font-size: 11px;
+  line-height: 13px;
   font-weight: bold;
-}
-
-.promo-header-cell > span > span {
-  color: black;
 }
 
 .firstChild10px th:nth-child(1) {

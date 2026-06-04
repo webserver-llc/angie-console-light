@@ -9,7 +9,8 @@
   "Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names": "Sorry, upstream configuration is not available for the upstreams with non-ascii characters in their names.",
   "No servers found in this upstream group": "No servers found in the upstream group",
   "Available only in": "Available only in",
-  "Available only in Angie PRO": "Available only in Angie PRO",
+  "Editing is only available in Angie PRO": "Editing is only available in Angie PRO",
+  "Edit": "Edit",
   "Edit selected": "Edit selected",
   "Add server": "Add server",
   "Zone": "Zone:"

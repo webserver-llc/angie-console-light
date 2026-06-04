@@ -41,52 +41,27 @@ class StreamUpstream extends UpstreamsList {
 	renderPeers(peers) {
 		const { t } = this.props;
 		const { configured_health_checks, configured_response_time } = this.props.upstream;
+		const isDemoEnv = envUtils.isDemoEnv();
+
+		const renderPromoHeader = (title, colSpan) => (
+			<th colSpan={colSpan} className={styles['promo-header-cell']}>
+				<span className={styles['promo-header-main']}>{t(title)}</span>
+				<span className={styles['promo-header-sub']}>
+					({t('Only in Angie PRO')})
+				</span>
+			</th>
+		);
 
 		return (
 			<table className={`${styles.table} ${styles.wide}`}>
 				<thead>
-					{envUtils.isDemoEnv() ? (
-						<tr>
-							<TableSortControl
-								firstSortLabel={t('Sort by zone - asc')}
-								secondSortLabel={t('Sort by conf order')}
-								rowSpan={3}
-								order={this.state.sortOrder}
-								onChange={this.changeSorting}
-							/>
-							<th colSpan="3">&nbsp;</th>
-							<th colSpan="4" />
-							<th colSpan="4" />
-							<th colSpan="2">&nbsp;</th>
-							{configured_health_checks ? (
-								<th colSpan="3" className={styles['promo-header-cell']}>
-									<span>
-										{t('Available only in')}
-										{' '}
-										<span>Angie PRO</span>
-									</span>
-								</th>
-							) : null }
-							{configured_response_time ? (
-								<th colSpan="3" className={styles['promo-header-cell']}>
-									<span>
-										{t('Available only in')}
-										{' '}
-										<span>Angie PRO</span>
-									</span>
-								</th>
-							) : null }
-						</tr>
-					) : null}
 					<tr>
-						{!envUtils.isDemoEnv() ? (
-							<TableSortControl
-								firstSortLabel={t('Sort by zone - asc')}
-								secondSortLabel={t('Sort by conf order')}
-								order={this.state.sortOrder}
-								onChange={this.changeSorting}
-							/>
-						) : null}
+						<TableSortControl
+							firstSortLabel={t('Sort by zone - asc')}
+							secondSortLabel={t('Sort by conf order')}
+							order={this.state.sortOrder}
+							onChange={this.changeSorting}
+						/>
 
 						{this.getSelectAllCheckbox(peers)}
 
@@ -95,10 +70,14 @@ class StreamUpstream extends UpstreamsList {
 						<th colSpan="4">{t('Traffic')}</th>
 						<th colSpan="2">{t('Server checks')}</th>
 						{configured_health_checks ? (
-							<th colSpan="3">{t('Health monitors')}</th>
+							isDemoEnv
+								? renderPromoHeader('Health monitors', '3')
+								: <th colSpan="3">{t('Health monitors')}</th>
 						) : null}
 						{configured_response_time ? (
-							<th colSpan="3">{t('Response time')}</th>
+							isDemoEnv
+								? renderPromoHeader('Response time', '3')
+								: <th colSpan="3">{t('Response time')}</th>
 						) : null}
 					</tr>
 					<tr className={`${styles['right-align']} ${styles['sub-header']}`}>
