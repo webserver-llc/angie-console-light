@@ -48,6 +48,12 @@ function PeerTooltip({ peer, t }) {
 		state = <span className={styles[`status_${peer.state}`]}>{t('Down')}</span>;
 	} else if (peer.state === 'busy') {
 		state = <span className={styles[`status_${peer.state}`]}>{t('Busy')}</span>;
+	} else if (peer.state === 'draining') {
+		state = <span className={styles[`status_${peer.state}`]}>{t('Draining')}</span>;
+	} else if (peer.state === 'recovering') {
+		state = <span className={styles[`status_${peer.state}`]}>{t('Recovering')}</span>;
+	} else if (peer.state === 'idle') {
+		state = <span className={styles[`status_${peer.state}`]}>{t('Idle')}</span>;
 	} else {
 		state = <span className={styles[`status_${peer.state}`]}>{peer.state}</span>;
 	}

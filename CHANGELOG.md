@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.9.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.9.0) (2026-08-13)
+### Added
+- Added new states for upstreams
+
+## [v1.8.2](https://github.com/webserver-llc/angie-console-light/releases/tag/1.8.2) (2026-01-22)
+### Fixed
+- Fixed the Angie ADC documentation link
+
 ## [v1.8.1](https://github.com/webserver-llc/angie-console-light/releases/tag/1.8.1) (2025-09-08)
 
 ### Fixed
