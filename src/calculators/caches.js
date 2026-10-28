@@ -46,7 +46,7 @@ export const calculateCacheHit = (cache) => {
 	const numerator = first.served - last.served;
 	const denominator = first.served + first.bypassed - last.served - last.bypassed;
 
-	return (denominator !== 0) ? Math.round((numerator / denominator) * 100) : 0;
+	return (denominator !== 0) ? Math.round((numerator / denominator) * 100) : null;
 };
 
 export function handleCache(STATS, slabs, cache, cacheName) {
