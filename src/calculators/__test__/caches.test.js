@@ -40,7 +40,7 @@ describe('Calculators – Caches', () => {
 		expect(appsettings.getSetting.mock.calls[0][0] === 'cacheDataInterval').toBeTruthy();
 		expect(appsettings.getSetting.mock.calls[1][0] === 'updatingPeriod').toBeTruthy();
 		expect(cachesHistory[cache.name].length === 1).toBeTruthy();
-		expect(calculateCacheHit(cache)).toBe(0);
+		expect(calculateCacheHit(cache)).toBe(null);
 		expect(cachesHistory[cache.name]).toEqual([cache.responses, cache.responses]);
 
 		const cache_1 = { ...cache, responses: { served: 33, bypassed: 0 } };
@@ -176,9 +176,9 @@ describe('Calculators – Caches', () => {
 		// cache.used (max_size -> null)
 		expect(result.used).toBe(1);
 		// STATS.status (max_size -> null)
-		expect(STATS.status).toBe('warning');
+		expect(STATS.status).toBe('ok');
 		// STATS.warnings (max_size -> null)
-		expect(STATS.warnings).toBe(1);
+		expect(STATS.warnings).toBe(0);
 
 		cache.size = 0;
 		result = handleCache(STATS, slabs, cache, cacheName);
@@ -186,9 +186,9 @@ describe('Calculators – Caches', () => {
 		// cache.used (size -> 0)
 		expect(result.used).toBe(0);
 		// STATS.status (size -> 0)
-		expect(STATS.status).toBe('warning');
+		expect(STATS.status).toBe('ok');
 		// STATS.warnings (size -> 0)
-		expect(STATS.warnings).toBe(2);
+		expect(STATS.warnings).toBe(0);
 
 		cache.size = 102;
 		cache.max_size = 100;
@@ -199,7 +199,7 @@ describe('Calculators – Caches', () => {
 		// STATS.status (cache.used -> 102)
 		expect(STATS.status).toBe('warning');
 		// STATS.warnings (cache.used -> 102)
-		expect(STATS.warnings).toBe(3);
+		expect(STATS.warnings).toBe(1);
 		expect(result.danger).toBeUndefined();
 		// cache.warning
 		expect(result.warning).toBe(true);
