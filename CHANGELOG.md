@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.9.1](https://github.com/webserver-llc/angie-console-light/releases/tag/1.9.1) (2026-10-28)
+### Fixed
+- Fixed cache zones without traffic always showing a warning.
+
 ## [v1.9.0](https://github.com/webserver-llc/angie-console-light/releases/tag/1.9.0) (2026-08-13)
 ### Added
 - Added new states for upstreams
